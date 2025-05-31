@@ -1,0 +1,52 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "actionscript",
+			"debug": false,
+			"air": "windows",
+			"asconfig": "asconfig.json",
+			"group": "build",
+			"problemMatcher": [],
+			"label": "Adobe AIR: package Windows release (captive runtime) - asconfig.json"
+		},
+		{
+			"type": "actionscript",
+			"debug": true,
+			"asconfig": "asconfig.json",
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"problemMatcher": [],
+			"label": "ActionScript: compile debug - asconfig.json"
+		},
+		{
+			"type": "actionscript",
+			"debug": false,
+			"air": "android",
+			"asconfig": "asconfig.json",
+			"group": "build",
+			"problemMatcher": [],
+			"label": "Adobe AIR: package Android release - asconfig.json"
+		},
+		{
+			"type": "actionscript",
+			"debug": false,
+			"air": "ios",
+			"asconfig": "asconfig.json",
+			"group": "build",
+			"problemMatcher": [],
+			"label": "Adobe AIR: package iOS release - asconfig.json"
+		},
+		{
+			"type": "actionscript",
+			"debug": true,
+			"air": "android",
+			"asconfig": "asconfig.json",
+			"group": "build",
+			"problemMatcher": [],
+			"label": "Adobe AIR: package Android debug - asconfig.json"
+		}
+	]
+}

@@ -1,0 +1,56 @@
+{
+    "version":0.1,
+    "data":[
+        {
+            "name":"SOLARMAX 2",
+            "describe1":"THE ORIGINAL GAME",
+            "icon":"icon192",
+            "team":[
+                {
+                    "id":0,
+                    "color": "0xCCCCCC",
+                    "shipSpeed":50,
+                    "shipAttack":1,
+                    "shipDefence":1,
+                    "captureSpeed":1,
+                    "constructionStrength":1,
+                    "nodeBuild":1,
+                    "nodePop":1
+                },
+                {
+                    "id":1,
+                    "color": "0x5FB6FF",
+                    "shipSpeed":50,
+                    "shipAttack":1,
+                    "shipDefence":1,
+                    "captureSpeed":1,
+                    "constructionStrength":1,
+                    "nodeBuild":1,
+                    "nodePop":1
+                },
+                {}
+            ],
+            "level":[
+                {
+                    "id":0,
+                    "name":"0",
+                    "color":"0x00FF00",
+                    "node":[
+                        {
+                            "tag":0,
+                            "x":352,
+                            "y":472,
+                            "type":"planet",
+                            "size":0.6,
+                            "team":1
+                        },
+                        {}
+                    ]
+                },
+                {}
+            ]
+        },
+        {},
+        {}
+    ]
+}

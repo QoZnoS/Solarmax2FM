@@ -1,0 +1,6 @@
+用VScode打开该文件夹，确保安装了 ActionScript & MXML 和 AS3, MXML, and SWF Extension Pack 插件
+去 https://airsdk.harman.com/ 下一个AIRSDK，然后在settings.json里配置好AIRSDK目录
+终端->运行任务->Adobe AIR: package Windows release (captive runtime) - asconfig.json
+签名密钥是 123
+生成的文件在 bin/Package
+遇到问题请查看https://github.com/BowlerHatLLC/vscode-as3mxml/wiki

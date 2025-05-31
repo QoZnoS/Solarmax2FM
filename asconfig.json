@@ -1,0 +1,77 @@
+{
+	"config": "air",
+	// "config": "airmobile",
+	"compilerOptions": {
+		"source-path": [
+			"src"
+		],
+		"library-path": [
+			"libs"
+		],
+		"output": "bin/Main.swf"
+	},
+	"application": "src/Main-app.xml",
+	"mainClass": "Main",
+	"airOptions": {
+		"windows": {
+			"target": "bundle",
+			"output": "bin/Package",
+			"signingOptions": {
+				"storetype": "PKCS12",
+				"keystore": "1.p12",
+                "tsa": "http://timestamp.apple.com/ts01"
+			}
+		},
+		"mac": {
+			"target": "bundle",
+			"output": "bin/Main.app",
+			"signingOptions": {
+				"storetype": "pkcs12",
+				"keystore": "mac_certificate.p12"
+			}
+		},
+		"android": {
+			"output": "bin/S2.apk",
+			"signingOptions": {
+				"storetype": "pkcs12",
+				"keystore": "1.p12"
+			},
+			"arch": "armv8",
+			"listen": true
+		},
+		"ios": {
+			"output": "bin/S2.ipa",
+			"signingOptions": {
+				"storetype": "pkcs12",
+				"keystore": "1.p12",
+				"provisioning-profile": "file.mobileprovision"
+			}
+		},
+		"files": [
+			{
+				"file": "libs/audio/",
+				"path": "audio/"
+			},
+			{
+				"file": "libs/backgrounds/",
+				"path": "backgrounds/"
+			},
+			{
+				"file": "libs/fonts/",
+				"path": "fonts/"
+			},
+			{
+				"file": "libs/textures/",
+				"path": "textures/"
+			},
+			{
+				"file": "libs/metadata/",
+				"path": "metadata/"
+			},
+			{
+				"file": "libs/icon/",
+				"path": "icon/"
+			}
+		]
+	}
+}

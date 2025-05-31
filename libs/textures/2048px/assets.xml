@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with TexturePacker http://www.codeandweb.com/texturepacker-->
+<!-- $TexturePacker:SmartUpdate:f47c9c76865d6fb2e32eac33c18771c9:c12c012f72bff98f5df4da8282464627:57ef0b4f36012e2dacefebfa7d58e2d4$ -->
+<TextureAtlas imagePath="assets.png">
+    <SubTexture name="barrier" x="944" y="267" width="54" height="54" frameX="-101" frameY="-101" frameWidth="256" frameHeight="256"/>
+    <SubTexture name="barrier_glow" x="859" y="1818" width="90" height="88" frameX="-80" frameY="-81" frameWidth="256" frameHeight="256"/>
+    <SubTexture name="barrier_line" x="944" y="84" width="31" height="62"/>
+    <SubTexture name="barrier_shape" x="944" y="209" width="54" height="54" frameX="-101" frameY="-101" frameWidth="256" frameHeight="256"/>
+    <SubTexture name="btn_close" x="482" y="1912" width="40" height="40"/>
+    <SubTexture name="btn_close2x" x="937" y="1910" width="79" height="81"/>
+    <SubTexture name="btn_menu" x="60" y="2002" width="50" height="40"/>
+    <SubTexture name="btn_menu2x" x="558" y="1900" width="99" height="79"/>
+    <SubTexture name="btn_options2x" x="759" y="1900" width="86" height="86"/>
+    <SubTexture name="btn_pause" x="382" y="1868" width="28" height="40"/>
+    <SubTexture name="btn_pause2x" x="950" y="1174" width="57" height="79"/>
+    <SubTexture name="btn_play1" x="382" y="1824" width="34" height="40"/>
+    <SubTexture name="btn_play12x" x="950" y="1257" width="69" height="78"/>
+    <SubTexture name="btn_play2" x="2" y="2002" width="54" height="40"/>
+    <SubTexture name="btn_play22x" x="746" y="1818" width="109" height="78"/>
+    <SubTexture name="btn_play3" x="944" y="435" width="74" height="40"/>
+    <SubTexture name="btn_play32x" x="774" y="1350" width="149" height="78"/>
+    <SubTexture name="btn_restart" x="979" y="84" width="42" height="43"/>
+    <SubTexture name="btn_restart2x" x="849" y="1910" width="84" height="86"/>
+    <SubTexture name="difficulty_btn01" x="748" y="1688" width="156" height="126"/>
+    <SubTexture name="difficulty_btn02" x="258" y="1688" width="162" height="132"/>
+    <SubTexture name="dilator" x="247" y="1944" width="90" height="86" frameX="-82" frameY="-83" frameWidth="256" frameHeight="256"/>
+    <SubTexture name="dilator_glow" x="258" y="1824" width="120" height="116" frameX="-64" frameY="-65" frameWidth="256" frameHeight="256"/>
+    <SubTexture name="dilator_shape" x="908" y="1688" width="90" height="86" frameX="-83" frameY="-83" frameWidth="256" frameHeight="256"/>
+    <SubTexture name="halo" x="2" y="2" width="682" height="658" frameX="-171" frameY="-171" frameWidth="1024" frameHeight="1024"/>
+    <SubTexture name="planet01" x="770" y="1432" width="252" height="252" frameX="-2" frameY="-2" frameWidth="256" frameHeight="256"/>
+    <SubTexture name="planet02" x="770" y="918" width="252" height="252" frameX="-2" frameY="-2" frameWidth="256" frameHeight="256"/>
+    <SubTexture name="planet03" x="770" y="662" width="252" height="252" frameX="-2" frameY="-2" frameWidth="256" frameHeight="256"/>
+    <SubTexture name="planet04" x="518" y="1176" width="252" height="252" frameX="-2" frameY="-2" frameWidth="256" frameHeight="256"/>
+    <SubTexture name="planet05" x="514" y="1432" width="252" height="252" frameX="-2" frameY="-2" frameWidth="256" frameHeight="256"/>
+    <SubTexture name="planet06" x="2" y="1662" width="252" height="252" frameX="-2" frameY="-2" frameWidth="256" frameHeight="256"/>
+    <SubTexture name="planet07" x="258" y="1432" width="252" height="252" frameX="-2" frameY="-2" frameWidth="256" frameHeight="256"/>
+    <SubTexture name="planet08" x="688" y="258" width="252" height="252" frameX="-2" frameY="-2" frameWidth="256" frameHeight="256"/>
+    <SubTexture name="planet09" x="688" y="2" width="252" height="252" frameX="-2" frameY="-2" frameWidth="256" frameHeight="256"/>
+    <SubTexture name="planet10" x="2" y="1406" width="252" height="252" frameX="-2" frameY="-2" frameWidth="256" frameHeight="256"/>
+    <SubTexture name="planet11" x="514" y="920" width="252" height="252" frameX="-2" frameY="-2" frameWidth="256" frameHeight="256"/>
+    <SubTexture name="planet12" x="514" y="664" width="252" height="252" frameX="-2" frameY="-2" frameWidth="256" frameHeight="256"/>
+    <SubTexture name="planet13" x="262" y="1176" width="252" height="252" frameX="-2" frameY="-2" frameWidth="256" frameHeight="256"/>
+    <SubTexture name="planet14" x="258" y="920" width="252" height="252" frameX="-2" frameY="-2" frameWidth="256" frameHeight="256"/>
+    <SubTexture name="planet15" x="258" y="664" width="252" height="252" frameX="-2" frameY="-2" frameWidth="256" frameHeight="256"/>
+    <SubTexture name="planet16" x="2" y="920" width="252" height="252" frameX="-2" frameY="-2" frameWidth="256" frameHeight="256"/>
+    <SubTexture name="planet_shape" x="2" y="664" width="252" height="252" frameX="-2" frameY="-2" frameWidth="256" frameHeight="256"/>
+    <SubTexture name="quad" x="908" y="1778" width="32" height="32"/>
+    <SubTexture name="quad4x4" x="902" y="648" width="4" height="4"/>
+    <SubTexture name="quad8x4" x="890" y="648" width="8" height="4"/>
+    <SubTexture name="quad8x6" x="878" y="648" width="8" height="6"/>
+    <SubTexture name="quad_16x4glow" x="944" y="150" width="16" height="55"/>
+    <SubTexture name="ship" x="944" y="381" width="50" height="50"/>
+    <SubTexture name="ship_flare" x="2" y="1176" width="256" height="226"/>
+    <SubTexture name="ship_pulse" x="774" y="1174" width="172" height="172"/>
+    <SubTexture name="spot_glow" x="661" y="1963" width="82" height="82"/>
+    <SubTexture name="star" x="944" y="325" width="55" height="52"/>
+    <SubTexture name="star2" x="964" y="150" width="55" height="52"/>
+    <SubTexture name="starbase" x="586" y="1688" width="158" height="108" frameX="-48" frameY="-74" frameWidth="256" frameHeight="256"/>
+    <SubTexture name="starbase_glow" x="688" y="514" width="186" height="144" frameX="-28" frameY="-51" frameWidth="256" frameHeight="256"/>
+    <SubTexture name="starbase_laser" x="424" y="1800" width="130" height="108" frameX="-63" frameY="-74" frameWidth="256" frameHeight="256"/>
+    <SubTexture name="starbase_shape" x="424" y="1688" width="158" height="108" frameX="-49" frameY="-74" frameWidth="256" frameHeight="256"/>
+    <SubTexture name="tower" x="944" y="2" width="78" height="78" frameX="-89" frameY="-89" frameWidth="256" frameHeight="256"/>
+    <SubTexture name="tower_glow" x="133" y="1918" width="110" height="110" frameX="-68" frameY="-69" frameWidth="256" frameHeight="256"/>
+    <SubTexture name="tower_shape" x="927" y="1350" width="78" height="78" frameX="-89" frameY="-89" frameWidth="256" frameHeight="256"/>
+    <SubTexture name="tutorial_arrow" x="661" y="1900" width="94" height="59"/>
+    <SubTexture name="tutorial_arrow2x" x="2" y="1918" width="127" height="80"/>
+    <SubTexture name="warp" x="652" y="1800" width="90" height="96" frameX="-85" frameY="-75" frameWidth="256" frameHeight="256"/>
+    <SubTexture name="warp_glare" x="382" y="1912" width="96" height="59"/>
+    <SubTexture name="warp_glow" x="878" y="514" width="124" height="130" frameX="-62" frameY="-55" frameWidth="256" frameHeight="256"/>
+    <SubTexture name="warp_shape" x="558" y="1800" width="90" height="96" frameX="-86" frameY="-75" frameWidth="256" frameHeight="256"/>
+    <SubTexture name="btn_speed1x" x="1024" y="2" width="55" height="28"/>
+    <SubTexture name="pulsecannon" x="1081" y="2" width="89" height="72" frameX="-84" frameY="-93" frameWidth="256" frameHeight="256"/>
+    <SubTexture name="pulsecannon_glow" x="1024" y="76" width="93" height="76" frameX="-84" frameY="-93" frameWidth="256" frameHeight="256"/>
+    <SubTexture name="pulsecannon_shape" x="1024" y="154" width="93" height="76" frameX="-84" frameY="-93" frameWidth="256" frameHeight="256"/>
+    <SubTexture name="habitat" x="1172" y="2" width="114" height="86" frameX="-72" frameY="-87" frameWidth="256" frameHeight="256"/>
+    <SubTexture name="habitat_glow" x="1119" y="91" width="115" height="87" frameX="-71" frameY="-86" frameWidth="256" frameHeight="256"/>
+    <SubTexture name="habitat_shape" x="1119" y="180" width="115" height="87" frameX="-71" frameY="-86" frameWidth="256" frameHeight="256"/>
+    <SubTexture name="btn_speed2x" x="1288" y="2" width="66" height="28"/>
+    <SubTexture name="btn_speed4x" x="1288" y="34" width="66" height="28"/>
+    <SubTexture name="btn_speed8x" x="1288" y="66" width="66" height="28"/>
+    <SubTexture name="btn_speed0.5x" x="1356" y="2" width="97" height="28"/>
+    <SubTexture name="btn_speed0.25x" x="1356" y="34" width="97" height="28"/>
+    <SubTexture name="btn_speed0.125x" x="1356" y="66" width="97" height="28"/>
+    <SubTexture name="blackhole" x="1024" y="269" width="156" height="99" frameX="-54" frameY="-80" frameWidth="256" frameHeight="256"/>
+    <SubTexture name="blackhole_glow" x="1024" y="371" width="156" height="99" frameX="-54" frameY="-80" frameWidth="256" frameHeight="256"/>
+    <SubTexture name="blackhole_shape" x="1024" y="473" width="156" height="99" frameX="-54" frameY="-80" frameWidth="256" frameHeight="256"/>
+    <SubTexture name="blackhole_pulse" x="1024" y="575" width="256" height="256"/>
+    <SubTexture name="skill_light" x="1024" y="833" width="84" height="84" frameX="-86" frameY="-88" frameWidth="256" frameHeight="256"/>
+    <SubTexture name="skill_glow" x="1024" y="919" width="256" height="128" frameX="0" frameY="-66" frameWidth="256" frameHeight="256"/>
+    <SubTexture name="cloneturret" x="1182" y="269" width="108" height="52" frameX="-74" frameY="-102" frameWidth="256" frameHeight="256"/>
+    <SubTexture name="cloneturret_glow" x="1182" y="323" width="125" height="72" frameX="-64" frameY="-90" frameWidth="256" frameHeight="256"/>
+    <SubTexture name="cloneturret_shape" x="1182" y="397" width="108" height="52" frameX="-74" frameY="-102" frameWidth="256" frameHeight="256"/>
+    <SubTexture name="captureship" x="1236" y="96" width="200" height="129" frameX="-28" frameY="-63" frameWidth="256" frameHeight="256"/>
+    <SubTexture name="captureship_glow" x="1848" y="1919" width="200" height="129" frameX="-28" frameY="-63" frameWidth="256" frameHeight="256"/>
+    <SubTexture name="captureship_shape" x="1292" y="227" width="163" height="90" frameX="-47" frameY="-83" frameWidth="256" frameHeight="256"/>
+</TextureAtlas>
+<!--frame坐标的计算方式：width/2-frameX应在frameWidth/2左右-->

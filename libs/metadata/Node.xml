@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<node>
+    <!-- 没有值的一律默认为0，S*代表Size*，即值与size相关 -->
+    <!-- name: 天体名称，与贴图名称关联 -->
+    <!-- defaultSize: 默认大小 -->
+    <!-- popVal: 人口上限 -->
+    <!-- startVal: 初始人口 -->
+    <!-- buildRate: 生产速度 -->
+    <!-- hpMult: 占领度倍率 -->
+    <!-- scale: 贴图缩放 -->
+    <!-- attackRate: 攻击间隔 -->
+    <!-- attackRange: 攻击范围 -->
+    <!-- attackLast: 攻击持续时间 -->
+    <!-- attackType: 攻击方式 -->
+    <!-- rotation: 天体旋转角度 -->
+    <node id="0" name="planet">
+        <defaultSize>0.3</defaultSize>
+        <popVal>S*100</popVal>
+        <startVal>S*100</startVal>
+        <buildRate>S*2</buildRate>
+        <hpMult>1</hpMult>
+        <scale>1</scale>
+    </node>
+    <node id="1" name="warp">
+        <defaultSize>0.4</defaultSize>
+        <startVal>S*100</startVal>
+        <hpMult>1</hpMult>
+        <scale>1</scale>
+    </node>
+    <node id="2" name="habitat">
+        <defaultSize>0.4</defaultSize>
+        <startVal>S*100</startVal>
+        <buildRate>8</buildRate>
+        <hpMult>1</hpMult>
+        <scale>1</scale>
+    </node>
+    <node id="3" name="barrier">
+        <defaultSize>0.3</defaultSize>
+        <scale>1</scale>
+    </node>
+    <node id="4" name="tower">
+        <defaultSize>0.3</defaultSize>
+        <startVal>S*100</startVal>
+        <attackRate>0.2</attackRate>
+        <attackRange>180</attackRange>
+        <attackType>tower</attackType>
+        <hpMult>2</hpMult>
+        <scale>1</scale>
+    </node>
+    <node id="5" name="dilator">
+        <defaultSize>0.4</defaultSize>
+        <hpMult>4</hpMult>
+        <scale>1</scale>
+    </node>
+    <node id="6" name="starbase">
+        <defaultSize>0.5</defaultSize>
+        <popVal>100</popVal>
+        <startVal>100</startVal>
+        <buildRate>2</buildRate>
+        <attackRate>0.15</attackRate>
+        <attackRange>180</attackRange>
+        <attackType>tower</attackType>
+        <hpMult>2</hpMult>
+        <scale>1</scale>
+    </node>
+    <node id="7" name="pulsecannon">
+        <defaultSize>0.3</defaultSize>
+        <attackRate>5</attackRate>
+        <attackRange>180</attackRange>
+        <attackType>pulsecannon</attackType>
+        <hpMult>1</hpMult>
+        <scale>0.8</scale>
+    </node>
+    <node id="8" name="blackhole">
+        <defaultSize>0.3</defaultSize>
+        <attackRate>10</attackRate>
+        <attackLast>5</attackLast>
+        <attackRange>150</attackRange>
+        <attackType>blackhole</attackType>
+        <hpMult>1</hpMult>
+        <scale>0.7</scale>
+    </node>
+    <node id="9" name="cloneturret">
+        <defaultSize>0.3</defaultSize>
+        <popVal>50</popVal>
+        <attackRate>0.3</attackRate>
+        <attackRange>180</attackRange>
+        <attackType>cloneturret</attackType>
+        <hpMult>3</hpMult>
+        <scale>1.2</scale>
+    </node>
+    <node id="10" name="captureship">
+        <defaultSize>0.3</defaultSize>
+        <attackRate>0.3</attackRate>
+        <attackRange>180</attackRange>
+        <attackType>captureship</attackType>
+        <hpMult>3</hpMult>
+        <scale>0.8</scale>
+    </node>
+</node>
