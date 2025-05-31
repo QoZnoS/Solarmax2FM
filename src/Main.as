@@ -46,7 +46,6 @@
         }
 
         public function load():void {
-            Globals.init(); // trace("I'm alive!")
             Globals.device = getPlatform();
             Globals.margin = 0; // 边距，影响按钮到左右两侧的相对位置
             scaleFactor = 2; // 比例因子，缩放贴图大小，值越大图越小

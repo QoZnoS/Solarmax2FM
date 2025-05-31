@@ -1,10 +1,12 @@
-package {
+package
+{
     import flash.filesystem.File;
     import flash.filesystem.FileStream;
     import starling.errors.AbstractClassError;
     import starling.core.starling_internal;
 
-    public class Globals {
+    public class Globals
+    {
         public static var main:Main;
         public static var level:int = 0; // 关卡
         public static var scaleFactor:Number = 2; // 比例因子
@@ -58,18 +60,20 @@ package {
         public static var nohup:Boolean = false; // 禁用暂停，playerData.txt第二十一项，levelData后第四项
         public static var fleetSliderPosition:int = 1; // 分兵条位置
 
-        public function Globals() {
+        public function Globals()
+        {
             super();
             throw new AbstractClassError();
         }
 
-        public static function init():void {
+        /**
+         * 初始化势力数组
+         */
+        public static function initTeam():void
+        {
             fileStream = new FileStream();
             LevelData.loadExtensions();
-            for each (var dataxml:XML in LevelData.extensions.data) {
-                if (dataxml.@teamCount > teamCount)
-                    teamCount = dataxml.@teamCount;
-            }
+            teamCount = LevelData.extensions.data.(@id == currentData).@teamCount;
             if (teamCount == 7)
                 return;
             // 重置数组
@@ -85,7 +89,8 @@ package {
             teamConstructionStrengths = new Array();
             teamNodeBuilds = new Array();
             teamNodePops = new Array();
-            for (var i:int = 0; i < teamCount; i++) {
+            for (var i:int = 0; i < teamCount; i++)
+            {
                 if (teamColors.length <= i)
                     teamColors.push(0);
                 teamCaps.push(0);
@@ -105,14 +110,20 @@ package {
         }
 
         // 加载存档文件
-        public static function load():void {
+        public static function load():void
+        {
             var _data:String = null; // 字符串，储存存档
             file = File.applicationStorageDirectory.resolvePath("playerData.txt"); // 读取文件playData.txt
-            if (!file.exists) { // 如果文件不存在
+            if (!file.exists)
+            {
+                // 如果文件不存在
                 // 储存默认数据到playerData.txt
                 playerData = [levelReached, soundVolume, musicVolume, transitionSpeed, bgSaturation, textSize, resolution, fullscreen, antialias, kills, losses, colonized, decolonized, nodeslost, additiveGlow, touchControls, levelData, currentDifficulty, blackQuad, currentData, nohup];
                 save(); // 保存存档文件到本地
-            } else { // 如果文件存在
+            }
+            else
+            {
+                // 如果文件存在
                 fileStream.open(file, "read"); // 以只读模式打开文件
                 _data = String(fileStream.readMultiByte(fileStream.bytesAvailable, "utf-8")); // 按utf-8编码读取并转换成字符串
                 fileStream.close(); // 关闭文件
@@ -144,7 +155,8 @@ package {
         }
 
         // 保存存档文件
-        public static function save():void {
+        public static function save():void
+        {
             playerData = [levelReached, soundVolume, musicVolume, transitionSpeed, bgSaturation, textSize, resolution, fullscreen, antialias, kills, losses, colonized, decolonized, nodeslost, additiveGlow, touchControls, levelData, currentDifficulty, blackQuad, currentData, nohup];
             var _data:String = JSON.stringify(playerData); // 将playerData转换为json字符串
             file = File.applicationStorageDirectory.resolvePath("playerData.txt"); // 读取文件playData.txt
