@@ -124,8 +124,8 @@ package starling.utils
                     var texture:Texture = atlas.getTexture(name);
                     if (texture) return texture;
                 }
-                return mTextures["image_not_found"];
             }
+            return mTextures["image_not_found"];
         }
         
         /** Returns all textures that start with a certain string, sorted alphabetically

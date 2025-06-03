@@ -38,7 +38,6 @@ package Menus
       public var menuBtn:MenuButton;
       public var optionsMenu:OptionsMenu;
       public var currentIndex:int;
-      public var nodeTypes:Array;
       public var barrierData:Array; // 三维数组，第一层为关卡，第二层为障碍线，第三层为 [中点X，中点Y，距离，角度]
       public var orbitData:Array; // 三维数组，第一层为关卡，第二层为轨道，第三层为 [中心，距离]
       public var difficultyButtons:Array;
@@ -57,7 +56,6 @@ package Menus
          var i:int = 0;
          dragging = false;
          hoverIndex = -1;
-         nodeTypes = ["planet", "warp", "habitat", "barrier", "tower", "dilator", "starbase", "pulsecannon", "blackhole", "cloneturret", "captureship"];
          super();
          quad = new Quad(2, 2, 16777215);
          quadImage = new Image(Root.assets.getTexture("quad8x4"));
@@ -570,7 +568,8 @@ package Menus
             {
                shapeImage.x = _node[0];
                shapeImage.y = _node[1];
-               shapeImage.texture = Root.assets.getTexture(nodeTypes[_node[2]] + "_shape");
+               var _textureName:String = LevelData.nodeData.node.(@id == _node[2]).@name
+               shapeImage.texture = Root.assets.getTexture(_textureName + "_shape");
                switch (_node[2])
                {
                   case 0:
@@ -612,7 +611,6 @@ package Menus
                drawCircle(_x, _y, 16777215, _distence, _indistence, false, 0.5, 1, 0, 128);
             }
          }
-         preview.blendMode = "add";
          preview.blendMode = "add";
       }
 

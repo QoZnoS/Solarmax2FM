@@ -450,11 +450,13 @@ package Game.Entity.GameEntity {
                         while (_Attack > 0 && _DisAttack.length > 0) // 执行对消直到消除量归零或被攻击方没有飞船
                         {
                             _DisShip = _DisAttack[_DisAttack.length - 1]; // 被攻击飞船
-                            if (_DisShip.hp > _Attack) { // 血量大于攻击势力消除量时
+                            if (_DisShip.hp > _Attack) {
+                                // 血量大于攻击势力消除量时
                                 _DisShip.hp -= _Attack;
                                 _Attack = 0;
                                 break;
-                            } else { // 血量小于消除量时
+                            } else {
+                                // 血量小于消除量时
                                 _Attack -= _DisShip.hp;
                                 _DisAttack.pop();
                                 EntityHandler.destroyShip(_DisShip);
@@ -530,7 +532,7 @@ package Game.Entity.GameEntity {
                 label.visible = (label.color > 0);
             }
             if (Globals.level == 31 && type == 5)
-                return
+                return;
             if (team == 0 && hp == 100)
                 changeTeam(captureTeam); // 中立天体占领度满时变为占领度势力
             if (team != 0 && hp == 0 && winTeam == -1)
@@ -593,13 +595,15 @@ package Game.Entity.GameEntity {
         }
 
         public function changeType(_type:int, _size:Number = -1):void {
-            this.type = _type
-            var get:String = LevelData.nodeData.node.(@id == _type).defaultSize
+            var get:String = LevelData.nodeData.node.(@id == _type).defaultSize;
             this.size = (_size == -1) ? Number(get) : _size;
             // 处理贴图
             image.rotation = halo.rotation = glow.rotation = 0;
-            get = LevelData.nodeData.node.(@id == _type).@name
-            this.name = get
+            get = LevelData.nodeData.node.(@id == _type).@name;
+            this.name = get;
+            if (!get)
+                _type = -1;
+            this.type = _type;
             if (_type == 0) {
                 var _ImageID:String = (int(Math.random() * 16) + 1).toString();
                 if (_ImageID.length == 1)
@@ -619,28 +623,27 @@ package Game.Entity.GameEntity {
             halo.readjustSize();
             halo.scaleY = halo.scaleX = 1;
             halo.pivotY = halo.pivotX = halo.width * 0.5;
-            get = LevelData.nodeData.node.(@id == _type).rotation
+            get = LevelData.nodeData.node.(@id == _type).rotation;
             image.rotation = halo.rotation = glow.rotation = (get.indexOf("S*") != -1) ? Number(get.slice(2)) * size : Number(get);
-            get = LevelData.nodeData.node.(@id == _type).scale
+            get = LevelData.nodeData.node.(@id == _type).scale;
             _type == 0 ? halo.scaleY = halo.scaleX = size * 0.5 : image.scaleX = image.scaleY = halo.scaleX = halo.scaleY = glow.scaleX = glow.scaleY = Number(get);
             // 读取参数
-            get = LevelData.nodeData.node.(@id == _type).startVal
+            get = LevelData.nodeData.node.(@id == _type).startVal;
             startVal = (get.indexOf("S*") != -1) ? Number(get.slice(2)) * size : Number(get);
-            get = LevelData.nodeData.node.(@id == _type).popVal
+            get = LevelData.nodeData.node.(@id == _type).popVal;
             popVal = (get.indexOf("S*") != -1) ? Number(get.slice(2)) * size : Number(get);
-            get = LevelData.nodeData.node.(@id == _type).buildRate
+            get = LevelData.nodeData.node.(@id == _type).buildRate;
             buildRate = (get.indexOf("S*") != -1) ? Number(get.slice(2)) * size : Number(get);
-            get = LevelData.nodeData.node.(@id == _type).hpMult
+            get = LevelData.nodeData.node.(@id == _type).hpMult;
             hpMult = (get.indexOf("S*") != -1) ? Number(get.slice(2)) * size : Number(get);
-            get = LevelData.nodeData.node.(@id == _type).attackRate
+            get = LevelData.nodeData.node.(@id == _type).attackRate;
             var _attackRate:Number = (get.indexOf("S*") != -1) ? Number(get.slice(2)) * size : Number(get);
-            get = LevelData.nodeData.node.(@id == _type).attackRange
+            get = LevelData.nodeData.node.(@id == _type).attackRange;
             var _attackRange:Number = (get.indexOf("S*") != -1) ? Number(get.slice(2)) * size : Number(get);
-            get = LevelData.nodeData.node.(@id == _type).attackLast
+            get = LevelData.nodeData.node.(@id == _type).attackLast;
             var _attackLast:Number = (get.indexOf("S*") != -1) ? Number(get.slice(2)) * size : Number(get);
-            get = LevelData.nodeData.node.(@id == _type).attackType
-            attackStrategy = AttackStrategyFactory.create(get, _attackRate, _attackRange, _attackLast)
-
+            get = LevelData.nodeData.node.(@id == _type).attackType;
+            attackStrategy = AttackStrategyFactory.create(get, _attackRate, _attackRange, _attackLast);
             if (_type == 3)
                 getBarrierLinks(); // 计算障碍链接参数
         }
