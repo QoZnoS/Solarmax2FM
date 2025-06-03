@@ -159,16 +159,16 @@ package Menus
          // #endregion
          // #region AUDIO
          pages[0].push(new TextField(200, 40, "AUDIO", "Downlink18", -1, COLOR));
-         pages[0].push(new TextField(200, 40, "SOUND VOLUME:", "Downlink12", -1, COLOR));
-         audioSlider = new OptionSlider(1);
-         audioSlider.x = 330;
-         audioSlider.init();
-         pages[0].push(audioSlider);
          pages[0].push(new TextField(200, 40, "MUSIC VOLUME:", "Downlink12", -1, COLOR));
          musicSlider = new OptionSlider(1);
          musicSlider.x = 330;
          musicSlider.init();
          pages[0].push(musicSlider);
+         pages[0].push(new TextField(200, 40, "SOUND VOLUME:", "Downlink12", -1, COLOR));
+         audioSlider = new OptionSlider(1);
+         audioSlider.x = 330;
+         audioSlider.init();
+         pages[0].push(audioSlider);
          // #endregion
          // #region GAME
          pages[0].push(new TextField(200, 40, "GAME", "Downlink18", -1, COLOR));
