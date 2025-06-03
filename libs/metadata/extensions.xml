@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <extensions version="1.0">
-    <data id="0" name="SOLARMAX 2" icon="icon192" describe1="THE ORIGINAL GAME">
+    <data id="0" teamCount="7" name="SOLARMAX 2" icon="icon192" describe1="THE ORIGINAL GAME">
         <team id="0" color="13421772" shipSpeed="50" shipAttack="1" shipDefence="1" captureSpeed="1" constructionStrength="1" nodeBuild="1" nodePop="1"/>
         <team id="1" color="6272767" shipSpeed="50" shipAttack="1" shipDefence="1" captureSpeed="1" constructionStrength="1" nodeBuild="1" nodePop="1"/>
         <team id="2" color="16735635" shipSpeed="50" shipAttack="1" shipDefence="1" captureSpeed="1" constructionStrength="1" nodeBuild="1" nodePop="1"/>

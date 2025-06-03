@@ -44,10 +44,8 @@ package {
             this.alpha = 0.9999;
             bgImage = new Image(background);
             addChild(bgImage);
-            progressBar = new ProgressBar(512, 3); // 实例化对象，参数：长512，宽3，类型为原版进度条
-            // 调整位置
+            progressBar = new ProgressBar(512, 3);
             progressBar.x = (background.width - progressBar.width) / 2;
-            // progressBar.y = (background.height - progressBar.height) / 2;   新二代已删除
             progressBar.y = background.height * 0.55;
             addChild(progressBar);
             assets.loadQueue((function():* {
