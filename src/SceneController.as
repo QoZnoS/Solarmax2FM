@@ -29,9 +29,23 @@ package
         public function deInitGameScene():void{
 
         }
-
-        public function initTitleMenu():void{
-
+        /**
+         * 加载标题界面
+         * @param type 0为首次加载，1为通关后加载
+         */
+        public function initTitleMenu(type:int = -1):void{
+            switch(type)
+            {
+                case 0:
+                    titleMenu.firstInit()
+                    break;
+                case 1:
+                    titleMenu.initAfterEnd()
+                    break
+                default:
+                    titleMenu.init()
+                    break;
+            }
         }
 
         public function deInitTitleMenu():void{
@@ -65,9 +79,17 @@ package
 
         /**
          * 退出到标题界面
+         * @param type 0为从关卡退出
          */
-        public function exit2TitleMenu():void{
-
+        public function exit2TitleMenu(type:int = -1):void{
+            switch(type)
+            {
+                case 0:
+                    titleMenu.animateIn()
+                default:
+                    initTitleMenu()
+                    break;
+            }
         }
 
         /**

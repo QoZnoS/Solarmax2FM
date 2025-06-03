@@ -358,7 +358,7 @@ package Game {
         public function quit():void {
             ui.deInit();
             animateOut();
-            dispatchEventWith("menu");
+            scene.exit2TitleMenu(0);
         }
 
         // 解锁下一关，执行animateOut()
@@ -375,7 +375,7 @@ package Game {
                 dispatchEventWith("next");
             } else
                 Globals.save();
-            dispatchEventWith("menu");
+            scene.exit2TitleMenu(0);
         }
 
         // 关卡退出动画，执行hide()

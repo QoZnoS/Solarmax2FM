@@ -194,8 +194,6 @@ package {
 
         public function initGameScene():void {
             gameScene.init();
-            if (!gameScene.hasEventListener("menu"))
-                gameScene.addEventListener("menu", on_menu);
             if (!gameScene.hasEventListener("next"))
                 gameScene.addEventListener("next", on_next);
             if (!gameScene.hasEventListener("end"))
@@ -205,14 +203,8 @@ package {
 
         public function deInitGameScene():void {
             gameScene.deInit();
-            gameScene.removeEventListener("menu", on_menu);
             gameScene.removeEventListener("next", on_next);
             gameScene.removeEventListener("end", on_end);
-        }
-
-        public function on_menu(param1:Event):void {
-            titleMenu.init();
-            titleMenu.animateIn();
         }
 
         public function on_next(param1:Event):void {
