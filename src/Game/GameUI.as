@@ -12,7 +12,7 @@ package Game {
     import starling.text.TextField;
     import Game.Entity.FXHandler;
     import Game.Entity.FX.SelectFade;
-    import Menus.Component.MenuButton;
+    import utils.Component.MenuButton;
 
     public class GameUI {
         // #region 类变量

@@ -1,5 +1,5 @@
 // 设置界面中的文字按钮
-package Menus.Component {
+package utils.Component {
     import flash.geom.Point;
     import starling.display.Quad;
     import starling.display.Sprite;

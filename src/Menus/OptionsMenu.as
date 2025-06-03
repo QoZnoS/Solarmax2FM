@@ -10,8 +10,8 @@ package Menus
    import starling.events.Touch;
    import starling.events.TouchEvent;
    import starling.text.TextField;
-   import Menus.Component.MenuButton;
-   import Menus.Component.OptionButton;
+   import utils.Component.MenuButton;
+   import utils.Component.OptionButton;
 
    public class OptionsMenu extends Sprite
    {
