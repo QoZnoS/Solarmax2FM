@@ -222,7 +222,7 @@ package Menus
             if (level[node][0] != level[k][0] && level[node][1] != level[k][1])
                continue;
             var barrierInfo:Array = calculateBarrierInfo(level[node], level[k]);
-            if (barrierInfo[2] < 180)
+            if (barrierInfo[2] < 170)
             {
                barriers.push(barrierInfo);
             }
