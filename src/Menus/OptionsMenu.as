@@ -53,6 +53,8 @@ package Menus
 
       public var mapPage:int = 0; // 地图页面索引
 
+      private var nicobtn:OptionButton;
+
       public function OptionsMenu(_titleMenu:TitleMenu)
       {
          super();
@@ -61,7 +63,7 @@ package Menus
          sizeStrings = ["SMALL", "MEDIUM", "LARGE"];
          controlStrings = ["MULTI-TOUCH", "TRADITIONAL"];
          fleetSliderPositionStrings = ["LEFT", "DOWN", "RIGHT"];
-         divStrings = [["ORIGINAL", "Downlink18"], ["DESIGN, ART, CODE:", "Downlink12"], ["NICO TUASON", "Downlink12"], ["MUSIC:", "Downlink12"], ["JOHN CAMARA", "Downlink12"], ["PLAYTESTING:", "Downlink12"], ["TERRY TUASON", "Downlink12"], ["MODIFIED", "Downlink18"], ["CODE:", "Downlink12"], ["QoZnoS", "Downlink12"], ["SPECIAL THANKS:", "Downlink18"], ["Solarmax23333", "Downlink12"], ["supercluster", "Downlink12"], ["Solarmax33", "Downlink12"], ["Thirdsister", "Downlink12"]];
+         divStrings = [["ORIGINAL", "Downlink18"], ["DESIGN, ART, CODE:", "Downlink12"], ["NICO TUASON", "Downlink12"], ["MUSIC:", "Downlink12"], ["JOHN CAMARA", "Downlink12"], ["PLAYTESTING:", "Downlink12"], ["TERRY TUASON", "Downlink12"], ["MODIFIED", "Downlink18"], ["CODE:", "Downlink12"], ["QoZnoS", "Downlink12"], ["SPECIAL THANKS:", "Downlink18"], ["Solarmax23333", "Downlink12"], ["supercluster", "Downlink12"], ["Solarmax33", "Downlink12"], ["Thirdsister", "Downlink12"], ["Tuetiedove", "Downlink12"]];
          yesORno = ["YES", "NO"];
          lineHeight = 36;
          COLOR = 16752059;
@@ -330,6 +332,15 @@ package Menus
                }
             }
             pages[2][i].y = _y;
+            if (pages[2][i].text == "NICO TUASON")
+            {
+                nicobtn = new OptionButton("NICO TUASON", COLOR, null)
+                nicobtn.x = pages[2][i].x
+                nicobtn.y = pages[2][i].y
+                pages[2][i].visible = false
+                nicobtn.addEventListener("clicked", invisibleMode)
+                pageLayers[2].addChild(nicobtn)
+            }
          }
          // #endregion
       }
@@ -504,7 +515,7 @@ package Menus
                _dataQuad.addLabel(new TextField(600, 40, LevelData.extensions.data.(@id == i).@describe4, "Downlink12", -1, COLOR), 40, 70);
             _dataQuad.addLabel(new TextField(600, 40, "MAPPER: " + _data[1][0], "Downlink12", -1, COLOR), 40, 90);
             _dataQuad.addImage(new Image(Root.assets.getTexture(LevelData.extensions.data.(@id == i).@icon)));
-            _dataQuad.quad.color = 0;
+            _dataQuad.quad.color = 0x000000;
             _dataQuad.quad.alpha = 0.5;
             _dataQuad.quad.width = _dataQuad.labelBG.width = 768;
             _dataQuad.quad.height = _dataQuad.labelBG.height = 120;
@@ -543,6 +554,14 @@ package Menus
             mapPage++;
       }
       // #endregion
+
+        private function invisibleMode(_click:Event):void
+        {
+            if (title.currentIndex == 0)
+                return
+            var nico:TextField = pages[2][3];
+        }
+
       public function on_tooltip1(_touchEvent:TouchEvent):void
       {
          var _touch:Touch = _touchEvent.getTouch(controls[0].quad);

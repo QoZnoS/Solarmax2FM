@@ -640,13 +640,7 @@ package Game {
                             GS.playMusic("bgm07", false);
                             Starling.juggler.tween(Globals, 10, {"soundMult": 0});
                             ui.deInit();
-                            Starling.juggler.tween(uiLayer, 5, {"alpha": 0});
-                            Starling.juggler.tween(labelLayer, 5, {"alpha": 0,
-                                    "delay": 22});
-                            Starling.juggler.tween(shipsLayer1, 5, {"alpha": 0,
-                                    "delay": 50});
-                            Starling.juggler.tween(shipsLayer2, 5, {"alpha": 0,
-                                    "delay": 50});
+                            invisibleMode();
                         }
                         if (triggers[0] && !triggers[1]) // 阶段二，膨胀动画
                         {
@@ -840,6 +834,16 @@ package Game {
             getBarrierLines();
             addBarriers();
             hideSingleBarriers();
+        }
+
+        public function invisibleMode():void {
+            Starling.juggler.tween(uiLayer, 5, {"alpha": 0});
+            Starling.juggler.tween(labelLayer, 5, {"alpha": 0,
+                    "delay": 22});
+            Starling.juggler.tween(shipsLayer1, 5, {"alpha": 0,
+                    "delay": 50});
+            Starling.juggler.tween(shipsLayer2, 5, {"alpha": 0,
+                    "delay": 50});
         }
 
         // #endregion
