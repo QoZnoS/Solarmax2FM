@@ -6,7 +6,6 @@ package
     import Game.Debug;
 
     public class SceneController{
-        
         public var titleMenu:TitleMenu;
         public var gameScene:GameScene;
         public var endScene:EndScene;
@@ -22,7 +21,7 @@ package
             endScene = _e;
             debug = _d;
         }
-
+        // #region 界面载入载出
         public function initGameScene():void{
 
         }
@@ -46,6 +45,37 @@ package
         public function deInitEndScene():void{
 
         }
+        // #endregion
 
+        // #region 切换界面
+
+        /**
+         * 游玩关卡
+         */
+        public function playMap():void{
+            
+        }
+
+        /**
+         * 编辑关卡
+         */
+        public function editorMap():void{
+
+        }
+
+        /**
+         * 退出到标题界面
+         */
+        public function exit2TitleMenu():void{
+
+        }
+
+        /**
+         * 播放通关动画
+         */
+        public function playEndScene():void{
+
+        }
+        // #endregion
     }
 }
