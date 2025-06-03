@@ -380,6 +380,10 @@ package Game {
 
         // 关卡退出动画，执行hide()
         public function animateOut():void {
+            Starling.juggler.removeTweens(labelLayer)
+            Starling.juggler.removeTweens(shipsLayer1)
+            Starling.juggler.removeTweens(shipsLayer2)
+            Starling.juggler.removeTweens(uiLayer)
             Starling.juggler.tween(gameContainer, Globals.transitionSpeed, {"scaleX": 0.7,
                     "scaleY": 0.7,
                     "y": 354,
