@@ -554,12 +554,23 @@ package Menus
             mapPage++;
       }
       // #endregion
-
+        private var nicoClickTime:int = 0
         private function invisibleMode(_click:Event):void
         {
             if (title.currentIndex == 0)
                 return
-            var nico:TextField = pages[2][3];
+            nicoClickTime += 1;
+            nicobtn.label.color = uint(Math.random()*256*256*256)
+            GS.playClick()
+            if (nicoClickTime == 5)
+            {
+                nicoClickTime = 0;
+                nicobtn.label.color = COLOR;
+                on_menu(null);
+                // 以隐形模式进入关卡...
+                title.loadMap();
+                title.scene.gameScene.invisibleMode();
+            }
         }
 
       public function on_tooltip1(_touchEvent:TouchEvent):void

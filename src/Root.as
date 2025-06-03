@@ -60,10 +60,12 @@ package {
                             LevelData.init();
                             bg = new ScrollingBackground();
                             addChild(bg);
+                            scene = new SceneController()
                             titleMenu = new TitleMenu(scene);
                             gameScene = new GameScene(scene);
                             endScene = new EndScene(scene);
                             debug = new Debug(scene);
+                            scene.init(titleMenu,gameScene, endScene,debug)
                             addChild(titleMenu);
                             addChild(gameScene);
                             addChild(endScene);

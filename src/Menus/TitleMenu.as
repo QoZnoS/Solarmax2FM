@@ -48,7 +48,7 @@ package Menus
       private var downIndex:int;
       private var dragging:Boolean;
       private var hoverIndex:int;
-      private var scene:SceneController
+      public var scene:SceneController
 
       public function TitleMenu(sce:SceneController)
       {
