@@ -623,10 +623,14 @@ package Game.Entity.GameEntity {
         // #endregion
         // #region 改版AI
         public function updateHard(_dt:Number):void {
-            if (Globals.teamCaps[team] == 0 && Globals.teamPops[team] < 40)
-                return; // 上限为0且总飞船数少于40时挂机
             for each (var _Node:Node in game.nodes.active)
-                _Node.getNodeLinks(team);
+            {
+                _Node.getNodeLinks(team); // 计算寻路
+                if (_Node.team == this.team)
+                    continue; // 有己方天体则不认输
+                if (Globals.teamPops[team] < 30)
+                    return // 总兵力不到30认输
+            }
             if (team == 6 && game.nodes.active[0].type == 5)
                 blackDefend(_dt);
             attackV1(_dt);
