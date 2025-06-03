@@ -73,7 +73,7 @@ package Game {
         // #endregion
         public function GameScene(_scene:SceneController) {
             super();
-            this.scene = scene
+            this.scene = _scene
             Utils.game = this;
             FXHandler.game = this;
             EntityHandler.game = this;
@@ -372,7 +372,7 @@ package Game {
             if (Globals.levelReached < Globals.level + 1) {
                 Globals.levelReached = Globals.level + 1;
                 Globals.save();
-                dispatchEventWith("next");
+                scene.exit2TitleMenu(1);
             } else
                 Globals.save();
             scene.exit2TitleMenu(0);
@@ -703,7 +703,7 @@ package Game {
                                         "delay": 40,
                                         "onComplete": hide}); // 天体消失动画
                                 Starling.juggler.delayCall(function():void {
-                                    dispatchEventWith("end"); // 执行Root.as 中的on_end
+                                    scene.playEndScene();
                                 }, 40); // 退回到主界面
                             }
                         }

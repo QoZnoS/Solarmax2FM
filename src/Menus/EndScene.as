@@ -114,7 +114,8 @@ package Menus {
             if (cover.alpha == 1) {
                 if (timer <= 0) {
                     timer = 0;
-                    dispatchEventWith("done");
+                    deInit();
+                    scene.exit2TitleMenu(2);
                 }
             } else if (timer <= 0) {
                 timer = 0;

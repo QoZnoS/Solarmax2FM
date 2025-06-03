@@ -346,6 +346,7 @@ package Menus
          Starling.juggler.removeTweens(previewLayer);
          addEventListener("enterFrame", update);
          touchQuad.addEventListener("touch", on_touch);
+         GS.playMusic("bgm01");
       }
 
       public function commonInit():void

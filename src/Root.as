@@ -194,35 +194,11 @@ package {
 
         public function initGameScene():void {
             gameScene.init();
-            if (!gameScene.hasEventListener("next"))
-                gameScene.addEventListener("next", on_next);
-            if (!gameScene.hasEventListener("end"))
-                gameScene.addEventListener("end", on_end);
             debug.init_game();
         }
 
         public function deInitGameScene():void {
             gameScene.deInit();
-            gameScene.removeEventListener("next", on_next);
-            gameScene.removeEventListener("end", on_end);
-        }
-
-        public function on_next(param1:Event):void {
-            titleMenu.init();
-            titleMenu.animateIn();
-            titleMenu.nextLevel();
-        }
-
-        public function on_end(param1:Event):void {
-            endScene.init();
-            endScene.addEventListener("done", on_end_done);
-        }
-
-        public function on_end_done(param1:Event):void {
-            endScene.removeEventListener("done", on_end_done);
-            endScene.deInit();
-            titleMenu.initAfterEnd();
-            GS.playMusic("bgm01");
         }
 
         public function on_blackQuad(_Event:Event):void {

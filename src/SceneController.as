@@ -79,13 +79,23 @@ package
 
         /**
          * 退出到标题界面
-         * @param type 0为从关卡退出
+         * @param type 0为直接退出关卡，1为从关卡退出且转到下一关，2为从退出动画进入标题界面
          */
         public function exit2TitleMenu(type:int = -1):void{
             switch(type)
             {
                 case 0:
+                    initTitleMenu()
                     titleMenu.animateIn()
+                    break;
+                case 1:
+                    initTitleMenu()
+                    titleMenu.animateIn()
+                    titleMenu.nextLevel()
+                    break;
+                case 2:
+                    initTitleMenu(1);
+                    break;
                 default:
                     initTitleMenu()
                     break;
@@ -96,7 +106,7 @@ package
          * 播放通关动画
          */
         public function playEndScene():void{
-
+            endScene.init();
         }
         // #endregion
     }
