@@ -21,19 +21,19 @@ package
             endScene = _e;
             debug = _d;
         }
-        // #region 界面载入载出
-        public function initGameScene():void{
-
+        // #region 私有方法，界面载入载出
+        private function initGameScene():void{
+            gameScene.init();
         }
 
-        public function deInitGameScene():void{
-
+        private function deInitGameScene():void{
+            gameScene.deInit()
         }
         /**
          * 加载标题界面
          * @param type 0为首次加载，1为通关后加载
          */
-        public function initTitleMenu(type:int = -1):void{
+        private function initTitleMenu(type:int = -1):void{
             switch(type)
             {
                 case 0:
@@ -48,16 +48,16 @@ package
             }
         }
 
-        public function deInitTitleMenu():void{
-
+        private function deInitTitleMenu():void{
+            titleMenu.deInit()
         }
 
-        public function initEndScene():void{
-
+        private function initEndScene():void{
+            endScene.init()
         }
 
-        public function deInitEndScene():void{
-
+        private function deInitEndScene():void{
+            endScene.deInit()
         }
         // #endregion
 
@@ -67,7 +67,8 @@ package
          * 游玩关卡
          */
         public function playMap():void{
-            
+            initGameScene();
+            debug.init_game();
         }
 
         /**
@@ -106,7 +107,7 @@ package
          * 播放通关动画
          */
         public function playEndScene():void{
-            endScene.init();
+            initEndScene();
         }
         // #endregion
     }

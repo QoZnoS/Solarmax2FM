@@ -83,7 +83,6 @@ package {
                             titleMenu.firstInit();
                             addChild(debug);
                             debug.init(gameScene, titleMenu);
-                            titleMenu.addEventListener("start", on_title_start);
                             Starling.current.nativeStage.addEventListener("keyDown", on_key_down);
                             addEventListener("touch", on_blackQuad);
                         }, 0.15);
@@ -172,33 +171,6 @@ package {
             fliter.adjustBrightness(0.1);
             fliter.adjustContrast(0.25);
             this.filter = fliter;
-        }
-
-        public function initTitleMenu():void {
-            titleMenu.init();
-            titleMenu.addEventListener("start", on_title_start);
-        }
-
-        public function deInitTitleMenu():void {
-            titleMenu.deInit();
-            titleMenu.removeEventListener("start", on_title_start);
-        }
-
-        public function on_title_start(param1:Event):void {
-            initGameScene();
-        }
-
-        public function resumeGameScene():void {
-            gameScene.animateIn();
-        }
-
-        public function initGameScene():void {
-            gameScene.init();
-            debug.init_game();
-        }
-
-        public function deInitGameScene():void {
-            gameScene.deInit();
         }
 
         public function on_blackQuad(_Event:Event):void {

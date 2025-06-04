@@ -690,7 +690,7 @@ package Menus
       public function loadMap():void
       {
          Globals.level = currentIndex - 1;
-         dispatchEventWith("start");
+         scene.playMap();
          animateOut();
          GS.playClick();
       }
