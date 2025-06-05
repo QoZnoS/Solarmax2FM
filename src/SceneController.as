@@ -33,9 +33,6 @@ package {
             Starling.current.nativeStage.addEventListener("keyDown", on_key_down);
         }
 
-        public function init():void {
-        }
-
         // #region 处理黑边
         private var blackQuad:Array;
 

@@ -50,7 +50,7 @@ package {
                             scene = new SceneController()
                             addChild(scene);
                             GS.init();
-                        }, 0.15);
+                        }, 0.05);
                     }
                 }; // 声明函数对象
                 return onProgress;
