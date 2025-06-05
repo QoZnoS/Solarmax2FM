@@ -470,6 +470,7 @@ package Menus
          blackBorders.indexOf(_click.target) == 0 ?
             Globals.blackQuad = true :
             Globals.blackQuad = false;
+        title.scene.updateBlackQuad()
       }
 
       public function on_pauseAllow(_click:Event):void
