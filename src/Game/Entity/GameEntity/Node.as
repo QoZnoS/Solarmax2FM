@@ -92,7 +92,6 @@ package Game.Entity.GameEntity {
 
         // #endregion
         public function Node() {
-            var _TextField:TextField = null; // 文本
             drawQuad = new Quad(2, 2, 16777215);
             super();
             var _Color:uint = uint(Globals.teamColors[0]);
@@ -112,9 +111,14 @@ package Game.Entity.GameEntity {
             label.vAlign = label.hAlign = "center";
             label.pivotX = 30;
             label.pivotY = 24;
+            resetArray();
+        }
+
+        private function resetArray():void{
             nodeLinks = [];
             oppNodeLinks = [];
             barrierLinks = []; // 障碍链接数组
+            var _TextField:TextField = null; // 文本
             ships = []; // 第一维储存的每个数组对应一个势力，第二维数组用于储存飞船的引用，一个值指代一个飞船，二维数组的长度表示该天体上该势力的飞船总数
             transitShips = [];
             aiTimers = [];
@@ -132,6 +136,7 @@ package Game.Entity.GameEntity {
                 _TextField.visible = false;
                 labels.push(_TextField);
             }
+
         }
 
         // #region 生成天体 移除天体
@@ -142,6 +147,7 @@ package Game.Entity.GameEntity {
             this.team = _team;
             this.x = _x;
             this.y = _y;
+            resetArray()
             captureTeam = _team; // 占据势力
             hp = 0; // 占领度
             aiValue = 0;
