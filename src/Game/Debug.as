@@ -98,7 +98,7 @@ package Game {
                     game.ui.debug_touch_Node.changeType(3)
                     break;
                 case Keyboard.Z:
-                    title.animateOut()
+                    scene.applyFilter()
                     break;
                 case Keyboard.X:
                     title.init()

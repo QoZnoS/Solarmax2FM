@@ -128,6 +128,7 @@ package {
                     break;
                 case 2:
                     initTitleMenu(1);
+                    applyFilter();
                     break;
                 default:
                     initTitleMenu()
@@ -170,7 +171,7 @@ package {
             var fliter:ColorMatrixFilter = new ColorMatrixFilter();
             fliter.adjustBrightness(0.1);
             fliter.adjustContrast(0.25);
-            this.filter = fliter;
+            parent.filter = fliter;
         }
 
         // #endregion
