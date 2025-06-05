@@ -54,7 +54,6 @@ package {
             blackQuad[0].visible = blackQuad[1].visible = Globals.blackQuad;
         }
         // #endregion
-
         // #region 私有方法，界面载入载出
         private function initGameScene():void {
             gameScene.init();
@@ -95,7 +94,6 @@ package {
         }
 
         // #endregion
-
         // #region 切换界面
 
         /**
@@ -145,7 +143,6 @@ package {
         }
 
         // #endregion
-
         // #region 键盘事件
         public function on_key_down(event:KeyboardEvent):void {
             debug.on_key_down(event.keyCode);
@@ -160,57 +157,8 @@ package {
                     debug.startDebugMode();
                     break;
             }
-            if (gameScene.visible) {
-                switch (event.keyCode) {
-                    case 32: // 对应Spacebar，即空格
-                        if (!Starling.current.isStarted) {
-                            Globals.main.on_resume(null);
-                            break;
-                        }
-                        gameScene.pause();
-                        break;
-                    case 49: // 大键盘上的1
-                    case 97: // 小键盘上的1
-                        gameScene.ui.movePerc = 0.1;
-                        break;
-                    case 50: // 大键盘上的2
-                    case 98: // 小键盘上的2
-                        gameScene.ui.movePerc = 0.2;
-                        break;
-                    case 51:
-                    case 99:
-                        gameScene.ui.movePerc = 0.3;
-                        break;
-                    case 52:
-                    case 100:
-                        gameScene.ui.movePerc = 0.4;
-                        break;
-                    case 53:
-                    case 101:
-                        gameScene.ui.movePerc = 0.5;
-                        break;
-                    case 54:
-                    case 102:
-                        gameScene.ui.movePerc = 0.6;
-                        break;
-                    case 55:
-                    case 103:
-                        gameScene.ui.movePerc = 0.7;
-                        break;
-                    case 56:
-                    case 104:
-                        gameScene.ui.movePerc = 0.8;
-                        break;
-                    case 57:
-                    case 105:
-                        gameScene.ui.movePerc = 0.9;
-                        break;
-                    case 48:
-                    case 96:
-                        gameScene.ui.movePerc = 1;
-                }
-                gameScene.ui.movePercentBar(gameScene.ui.movePerc);
-            }
+            if (gameScene.visible)
+                gameScene.on_key_down(event.keyCode)
             event.preventDefault();
             event.stopImmediatePropagation();
         }

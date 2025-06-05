@@ -16,6 +16,7 @@ package Game {
     import Game.Entity.Utils;
     import Game.Entity.FXHandler;
     import Game.Entity.EntityHandler;
+    import flash.ui.Keyboard;
 
     public class GameScene extends Sprite {
         // #region 类变量
@@ -853,7 +854,6 @@ package Game {
         }
 
         // #endregion
-
         // #region 添加实体
         public function addBarriers():void {
             var _x1:Number = NaN;
@@ -891,7 +891,42 @@ package Game {
                 }
             }
         }
+
         // #endregion
+
+        public function on_key_down(keyCode:int):void {
+            switch (keyCode) {
+                case Keyboard.SPACE: // 对应Spacebar，即空格
+                    Starling.current.isStarted ? pause() : Globals.main.on_resume(null);
+                    break;
+                case Keyboard.NUMBER_1: // 大键盘上的1
+                case Keyboard.NUMBER_2:
+                case Keyboard.NUMBER_3:
+                case Keyboard.NUMBER_4:
+                case Keyboard.NUMBER_5:
+                case Keyboard.NUMBER_6:
+                case Keyboard.NUMBER_7:
+                case Keyboard.NUMBER_8:
+                case Keyboard.NUMBER_9:
+                    ui.movePerc = (keyCode - Keyboard.NUMBER_0) / 10;
+                    break;
+                case Keyboard.NUMPAD_1: // 小键盘上的1
+                case Keyboard.NUMPAD_2:
+                case Keyboard.NUMPAD_3:
+                case Keyboard.NUMPAD_4:
+                case Keyboard.NUMPAD_5:
+                case Keyboard.NUMPAD_6:
+                case Keyboard.NUMPAD_7:
+                case Keyboard.NUMPAD_8:
+                case Keyboard.NUMPAD_9:
+                    ui.movePerc = (keyCode - Keyboard.NUMPAD_0) / 10;
+                    break;
+                case Keyboard.NUMBER_0:
+                case Keyboard.NUMPAD_0:
+                    ui.movePerc = 1;
+            }
+            ui.movePercentBar(ui.movePerc);
+        }
 
     }
 }
