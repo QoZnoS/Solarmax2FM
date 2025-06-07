@@ -68,7 +68,6 @@ package {
         public static function initTeam():void {
             fileStream = new FileStream();
             teamCount = LevelData.extensions.data.(@id == currentData).@teamCount
-            trace(teamCount)
             if (teamCount == 7)
                 return;
             // 重置数组

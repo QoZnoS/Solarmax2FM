@@ -25,6 +25,7 @@ package {
             data = Root.assets.getObject("data") as Array
             loadExtensions()
             Globals.initTeam();
+            resetExtensions();
             if (Globals.device == "Mobile") {
                 currentFile = data[Globals.currentData];
                 maps = currentFile[0];
@@ -82,6 +83,20 @@ package {
                 Globals.teamConstructionStrengths[_team.@id] = String(_team.@constructionStrength) ? _team.@constructionStrength : extensions.data.(@id == 0).team.(@id == 0).@constructionStrength;
                 Globals.teamNodeBuilds[_team.@id] = String(_team.@nodeBuild) ? _team.@nodeBuild : extensions.data.(@id == 0).team.(@id == 0).@nodeBuild;
                 Globals.teamNodePops[_team.@id] = String(_team.@nodePop) ? _team.@nodePop : extensions.data.(@id == 0).team.(@id == 0).@nodePop;
+            }
+        }
+
+        private static function resetExtensions():void {
+            var _data:XMLList = extensions.data.(@id == 0);
+            for each (var _team:XML in _data.team) {
+                Globals.teamColors[_team.@id] = uint(_team.@color);
+                Globals.teamShipSpeeds[_team.@id] = _team.@shipSpeed;
+                Globals.teamShipAttacks[_team.@id] = _team.@shipAttack;
+                Globals.teamShipDefences[_team.@id] = _team.@shipDefence;
+                Globals.teamRepairingSpeeds[_team.@id] = Globals.teamColonizingSpeeds[_team.@id] = Globals.teamDestroyingSpeeds[_team.@id] = Globals.teamDecolonizingSpeeds[_team.@id] = _team.@captureSpeed;
+                Globals.teamConstructionStrengths[_team.@id] = _team.@constructionStrength;
+                Globals.teamNodeBuilds[_team.@id] = _team.@nodeBuild;
+                Globals.teamNodePops[_team.@id] = _team.@nodePop;
             }
         }
     }
