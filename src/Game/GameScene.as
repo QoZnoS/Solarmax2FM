@@ -405,6 +405,10 @@ package Game {
         }
 
         public function restart():void {
+            Starling.juggler.removeTweens(labelLayer)
+            Starling.juggler.removeTweens(shipsLayer1)
+            Starling.juggler.removeTweens(shipsLayer2)
+            Starling.juggler.removeTweens(uiLayer)
             Starling.juggler.tween(this, 0.1, {"alpha": 0,
                     "transition": "easeIn",
                     "onComplete": function():void

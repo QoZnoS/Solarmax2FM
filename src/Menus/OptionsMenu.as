@@ -173,7 +173,7 @@ package Menus
          pages[0].push(audioSlider);
          // #endregion
          // #region GAME
-         pages[0].push(new TextField(200, 40, "V1.1.1    GAME", "Downlink18", -1, COLOR));
+         pages[0].push(new TextField(200, 40, "V1.1.1.1    GAME", "Downlink18", -1, COLOR));
          pages[0].push(new TextField(200, 40, "UI SIZE:", "Downlink12", -1, COLOR));
          textsizes = [];
          for (i = 0; i < sizeStrings.length; i++)
