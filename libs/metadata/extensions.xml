@@ -1,39 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <extensions version="1.0">
     <data id="0" teamCount="7" name="SOLARMAX 2" icon="icon192" describe1="THE ORIGINAL GAME">
-        <team id="0" color="13421772" shipSpeed="50" shipAttack="1" shipDefence="1" captureSpeed="1" constructionStrength="1" nodeBuild="1" nodePop="1"/>
-        <team id="1" color="6272767" shipSpeed="50" shipAttack="1" shipDefence="1" captureSpeed="1" constructionStrength="1" nodeBuild="1" nodePop="1"/>
-        <team id="2" color="16735635" shipSpeed="50" shipAttack="1" shipDefence="1" captureSpeed="1" constructionStrength="1" nodeBuild="1" nodePop="1"/>
-        <team id="3" color="16747610" shipSpeed="50" shipAttack="1" shipDefence="1" captureSpeed="1" constructionStrength="1" nodeBuild="1" nodePop="1"/>
-        <team id="4" color="13303662" shipSpeed="50" shipAttack="1" shipDefence="1" captureSpeed="1" constructionStrength="1" nodeBuild="1" nodePop="1"/>
-        <team id="5" color="10066329" shipSpeed="50" shipAttack="1" shipDefence="1" captureSpeed="1" constructionStrength="1" nodeBuild="1" nodePop="1"/>
-        <team id="6" color="0" shipSpeed="100" shipAttack="1" shipDefence="1" captureSpeed="1" constructionStrength="1" nodeBuild="1" nodePop="1"/>
+        <team id="0" color="0xCCCCCC" shipSpeed="50" shipAttack="1" shipDefence="1" captureSpeed="1" constructionStrength="1" nodeBuild="1" nodePop="1"/>
+        <team id="1" color="0x5FB6FF" shipSpeed="50" shipAttack="1" shipDefence="1" captureSpeed="1" constructionStrength="1" nodeBuild="1" nodePop="1"/>
+        <team id="2" color="0xFF5D93" shipSpeed="50" shipAttack="1" shipDefence="1" captureSpeed="1" constructionStrength="1" nodeBuild="1" nodePop="1"/>
+        <team id="3" color="0xFF8C5A" shipSpeed="50" shipAttack="1" shipDefence="1" captureSpeed="1" constructionStrength="1" nodeBuild="1" nodePop="1"/>
+        <team id="4" color="0xCAFF6E" shipSpeed="50" shipAttack="1" shipDefence="1" captureSpeed="1" constructionStrength="1" nodeBuild="1" nodePop="1"/>
+        <team id="5" color="0x999999" shipSpeed="50" shipAttack="1" shipDefence="1" captureSpeed="1" constructionStrength="1" nodeBuild="1" nodePop="1"/>
+        <team id="6" color="0x000000" shipSpeed="100" shipAttack="1" shipDefence="1" captureSpeed="1" constructionStrength="1" nodeBuild="1" nodePop="1"/>
         <level id="27">
             <node tag="1" startval="50"/>
         </level>
     </data>
     <data id="1" teamCount="8" name="Dark Empire Revival" icon="blackVer" describe1="  This version is based on the abandoned version and adds a new and " describe2="stronger AI version (with difficulty levels referring to hard). As the commander " describe3="of the Dark Empire, you carry all the hopes of the Dark Empire and are ready " describe4="to face powerful enemies, break through the dead end, and defeat them!">
-        <team id="1" color="0" captureSpeed="2" shipSpeed="100"/>
-        <team id="6" color="16777215" nodePop="10000"/>
-        <team id="7" color="6272767"/>
+        <team id="1" color="0x000000" captureSpeed="2" shipSpeed="100"/>
+        <team id="6" color="0xFFFFFF" nodePop="10000"/>
+        <team id="7" color="0x5FB6FF"/>
         <level id="22">
             <team id="1" captureSpeed="50"/>
         </level>
     </data>
     <data id="2" teamCount="8" name="Dark Empire Revival (Abandoned)" icon="blackLegacy" describe1="  This is the first self-made version by the author's third sister,with black as " describe2="the main perspective, featuring a broader and more creative map,and newly " describe3="filled in white as a new special force with new attributes.But in hard AI, some  " describe4="levels may become imbalanced.">
-        <team id="1" color="0" captureSpeed="2" shipSpeed="100"/>
-        <team id="6" color="16777215" nodePop="10000"/>
-        <team id="7" color="6272767"/>
+        <team id="1" color="0x000000" captureSpeed="2" shipSpeed="100"/>
+        <team id="6" color="0xFFFFFF" nodePop="10000"/>
+        <team id="7" color="0x5FB6FF"/>
         <level id="22">
             <team id="1" captureSpeed="50"/>
         </level>
     </data>
     <data id="3" teamCount="9" name="New World" icon="solarmax3" describe1="You have discovered a brand-new area. While exploring this area, you have found many devices that you have never seen before, but they also make you" describe3="feel strangely familiar. Your enemies have also discovered this area. It seems that a new battle is about to begin...">
-        <team id="0" color="13421772" nodePop="0"/>
-        <team id="5" color="10066329" captureSpeed="0.00001"/>
-        <team id="6" color="0" shipSpeed="100" captureSpeed="2" />
-        <team id="7" color="14315734" shipSpeed="50" shipAttack="1" shipDefence="1" captureSpeed="1" constructionStrength="1" nodeBuild="1" nodePop="1" />
-        <team id="8" color="0" captureSpeed="2" shipSpeed="100" />
+        <team id="0" color="0xCCCCCC" nodePop="0"/>
+        <team id="5" color="0x999999" captureSpeed="0.00001"/>
+        <team id="6" color="0x000000" shipSpeed="100" captureSpeed="2" />
+        <team id="7" color="0xDA70D6" shipSpeed="50" shipAttack="1" shipDefence="1" captureSpeed="1" constructionStrength="1" nodeBuild="1" nodePop="1" />
+        <team id="8" color="0x000000" captureSpeed="2" shipSpeed="100" />
     </data>
 </extensions>
 <!-- 可用参数示例-->
