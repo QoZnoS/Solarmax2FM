@@ -55,8 +55,8 @@ package {
         }
         // #endregion
         // #region 私有方法，界面载入载出
-        private function initGameScene():void {
-            gameScene.init();
+        private function initGameScene(seed:uint = 0):void {
+            gameScene.init(seed);
         }
 
         private function deInitGameScene():void {
@@ -99,8 +99,8 @@ package {
         /**
          * 游玩关卡
          */
-        public function playMap():void {
-            initGameScene();
+        public function playMap(seed:uint = 0):void {
+            initGameScene(seed);
             debug.init_game();
         }
 

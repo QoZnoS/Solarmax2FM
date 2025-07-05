@@ -4,6 +4,7 @@ package Game.Entity.GameEntity
    import Game.Entity.GameEntity;
    import starling.display.Image;
    import Game.Entity.FXHandler;
+   import utils.Rng;
 
    public class Ship extends GameEntity
    {
@@ -32,6 +33,8 @@ package Game.Entity.GameEntity
       public var state:int; // 状态数
       public var targetDist:Number; // 到目标的距离
       public var followShip:Ship; // 跟随的飞船
+
+      public var rng:Rng;
       // #endregion
       public function Ship()
       {
@@ -49,12 +52,13 @@ package Game.Entity.GameEntity
          pulse.pivotX = pulse.pivotY = pulse.width * 0.5;
       }
 
-      public function initShip(_GameScene:GameScene, _team:int, _Node:Node, _productionEffect:Boolean = true):void
+      public function initShip(_GameScene:GameScene, _rng:Rng, _team:int, _Node:Node, _productionEffect:Boolean = true):void
       {
          super.init(_GameScene);
          this.team = _team;
          this.node = _Node;
          this.preNode = _Node;
+         this.rng = _rng;
          _Node.ships[_team].push(this);
          image.alpha = 1;
          image.color = Globals.teamColors[_team];
@@ -65,9 +69,9 @@ package Game.Entity.GameEntity
          trailLength = 2;
          pulse.color = image.color;
          pulse.alpha = 0;
-         orbitDist = (40 + Math.random() * 40) * _Node.size * 2;
-         orbitAngle = Math.random() * 3.141592653589793 * 2;
-         orbitSpeed = Math.random() * 0.15 + 0.05;
+         orbitDist = (40 + rng.nextNumber() * 40) * _Node.size * 2;
+         orbitAngle = rng.nextNumber() * 3.141592653589793 * 2;
+         orbitSpeed = rng.nextNumber() * 0.15 + 0.05;
          x = _Node.x + Math.cos(orbitAngle) * orbitDist;
          y = _Node.y + Math.sin(orbitAngle) * orbitDist * 0.15;
          trailLength = 2;
@@ -381,7 +385,7 @@ package Game.Entity.GameEntity
 
       private function resetChargeRate():void // 重置制动速度
       {
-         chargeRate = Math.random() * 6 + 6;
+         chargeRate = rng.nextNumber() * 6 + 6;
       }
       // #endregion
       // #region 绘制贴图
@@ -390,9 +394,9 @@ package Game.Entity.GameEntity
          if (Globals.exOptimization > 1)
          {
             if (node.ships[team].length > 1024)
-               if (Math.random() > 1024/game.ships.active.length)
+               if (rng.nextNumber() > 1024/game.ships.active.length)
                   return;
-            if (Math.random() > 8192/game.ships.active.length)
+            if (rng.nextNumber() > 8192/game.ships.active.length)
                return;
          }
          image.x = x;
@@ -462,8 +466,8 @@ package Game.Entity.GameEntity
          jumpSpeed = Globals.teamShipSpeeds[team];
          this.preNode = this.node;
          this.node = _Node;
-         orbitDist = (40 + Math.random() * 40) * node.size * 2;
-         orbitSpeed = Math.random() * 0.15 + 0.05;
+         orbitDist = (40 + rng.nextNumber() * 40) * node.size * 2;
+         orbitSpeed = rng.nextNumber() * 0.15 + 0.05;
          _x1 = Math.cos(orbitAngle) * orbitDist;
          _y1 = Math.sin(orbitAngle) * orbitDist;
          tx = node.x + _x1;
@@ -520,8 +524,8 @@ package Game.Entity.GameEntity
       {
          this.preNode = this.node;
          this.node = _Node;
-         orbitDist = (40 + Math.random() * 40) * node.size * 2;
-         orbitSpeed = Math.random() * 0.15 + 0.05;
+         orbitDist = (40 + rng.nextNumber() * 40) * node.size * 2;
+         orbitSpeed = rng.nextNumber() * 0.15 + 0.05;
          var _x:Number = Math.cos(orbitAngle) * orbitDist;
          var _y:Number = Math.sin(orbitAngle) * orbitDist;
          tx = node.x + _x;
@@ -572,7 +576,7 @@ package Game.Entity.GameEntity
             // 计算距离，结果带有0~32px的随机误差
             _dx = _Node.x - this.x;
             _dy = _Node.y - this.y;
-            _Distance = Math.sqrt(_dx * _dx + _dy * _dy) + Math.random() * 32;
+            _Distance = Math.sqrt(_dx * _dx + _dy * _dy) + rng.nextNumber() * 32;
             if (_Distance < _closestDist)
             {
                _closestDist = _Distance;

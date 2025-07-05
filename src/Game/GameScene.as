@@ -17,6 +17,7 @@ package Game {
     import Game.Entity.FXHandler;
     import Game.Entity.EntityHandler;
     import flash.ui.Keyboard;
+    import utils.Rng;
 
     public class GameScene extends Sprite {
         // #region 类变量
@@ -68,6 +69,8 @@ package Game {
         public var darkPulse:Image;
         public var bossTimer:Number;
         public var slowMult:Number;
+
+        public var rng:Rng;
 
         private var scene:SceneController
 
@@ -159,16 +162,16 @@ package Game {
         }
 
         // #region 进入关卡
-        public function init():void {
+        public function init(seed:uint = 0):void {
             var i:int = 0;
             var _aiArray:Array = [];
             this.level = Globals.level;
+            this.rng = new Rng(seed)
             _aiArray = nodeIn(); // 生成天体，同时返回需生成的ai
             for (i = 0; i < _aiArray.length; i++) {
                 Globals.currentDifficulty == 3 ? EntityHandler.addAI(_aiArray[i], 4) : EntityHandler.addAI(_aiArray[i], Globals.currentDifficulty - 1); // 为有天体的常规势力添加ai
             }
-            if (Globals.level >= 35) // 为36关黑色设定ai
-            {
+            if (Globals.level >= 35) { // 为36关黑色设定ai
                 Globals.currentDifficulty == 3 ? EntityHandler.addAI(6, 4) : EntityHandler.addAI(6, 3);
                 bossTimer = 0;
             }
@@ -563,7 +566,7 @@ package Game {
                                 _boss = nodes.getReserve() as Node;
                                 if (!_boss)
                                     _boss = new Node();
-                                _boss.initBoss(this, 512, 384);
+                                _boss.initBoss(this, new Rng(rng.nextInt(), Rng.X32), 512, 384);
                                 nodes.addEntity(_boss);
                                 _boss.bossAppear();
                                 triggers[0] = true;

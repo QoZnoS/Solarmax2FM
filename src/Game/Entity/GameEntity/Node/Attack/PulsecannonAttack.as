@@ -23,7 +23,7 @@ package Game.Entity.GameEntity.Node.Attack {
                     for (var j:int = 0; j < 5; j++) {
                         if (ships[i] == 0)
                             break;
-                        ship = Utils.random(ships[i])
+                        ship = node.rng.randomIndex(ships[i])
                         Utils.removeElementFromArray(ships[i], ship);
                         EntityHandler.destroyShip(ship)
                     }

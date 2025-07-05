@@ -101,12 +101,6 @@ package Game.Entity {
         // #endregion
 
         // #region 其他
-        /** 返回数组中的一个随机项
-         * @param _arr 目标数组
-         */
-        public static function random(_arr:Array):* {
-            return _arr[Math.floor(Math.random() * _arr.length)];
-        }
 
         /** 计算两条线的交点
          * @param _p1x _p1y _p2x _p2y 第一条线的两端点

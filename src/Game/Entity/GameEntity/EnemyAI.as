@@ -5,6 +5,7 @@ package Game.Entity.GameEntity {
     import Game.GameScene;
     import Game.Entity.GameEntity;
     import flash.geom.Point;
+    import utils.Rng;
 
     public class EnemyAI extends GameEntity {
 
@@ -21,6 +22,7 @@ package Game.Entity.GameEntity {
         private var resultExit:Point; // 线和圆的第二个交点
 
         public var debugTrace:Array; // 调试输出栏
+        public var rng:Rng;
 
         public function EnemyAI() { // 初始化ai参数
             super();
@@ -30,10 +32,11 @@ package Game.Entity.GameEntity {
             debugTrace = [null, null, null, null, null];
         }
 
-        public function initAI(_GameScene:GameScene, _team:int, _type:int = 1):void {
+        public function initAI(_GameScene:GameScene, _rng:Rng, _team:int, _type:int = 1):void {
             this.init(_GameScene);
             this.team = _team;
             this.type = _type;
+            this.rng = _rng
             actionDelay = 1.5;
             if (_team == 6) // 黑色ai特有反应快
                 actionDelay = 0.25;
@@ -48,11 +51,11 @@ package Game.Entity.GameEntity {
                 return;
             if (actionDelay <= 0) {
                 if (team == 6)
-                    actionDelay = Math.max(0, (3 - Globals.currentDifficulty) * (0.25 + Math.random() * 0.25));
+                    actionDelay = Math.max(0, (3 - Globals.currentDifficulty) * (0.25 + rng.nextNumber() * 0.25));
                 else if (Globals.level == 33 && (team == 3 || team == 4))
-                    actionDelay = Math.max(0, (3 - Globals.currentDifficulty) * (1.5 + Math.random() * 1.5));
+                    actionDelay = Math.max(0, (3 - Globals.currentDifficulty) * (1.5 + rng.nextNumber() * 1.5));
                 else
-                    actionDelay = Math.max(0, (3 - Globals.currentDifficulty) * (1.5 + Math.random() * 1.5));
+                    actionDelay = Math.max(0, (3 - Globals.currentDifficulty) * (1.5 + rng.nextNumber() * 1.5));
             }
             switch (type) { // 通过ai类型决定更新方式
                 case 0:
@@ -154,7 +157,7 @@ package Game.Entity.GameEntity {
                     continue; // 目标条件：不为中立或预测有非己方飞船或己方势力飞船不足100倍size（基本兵力上限）
                 _dx = _Node.x - _CenterX;
                 _dy = _Node.y - _CenterY;
-                _Distance = Math.sqrt(_dx * _dx + _dy * _dy) + Math.random() * 32; // 计算距离，带32px随机数误差
+                _Distance = Math.sqrt(_dx * _dx + _dy * _dy) + rng.nextNumber() * 32; // 计算距离，带32px随机数误差
                 _Strength = _Node.predictedOppStrength(team) - _Node.predictedTeamStrength(team); // 计算敌方强度：预测敌方强度减去预测己方强度
                 _Node.aiValue = _Distance + _Strength; // 计算ai价值：距离加上敌方强度
                 targets.push(_Node);
@@ -239,7 +242,7 @@ package Game.Entity.GameEntity {
                     continue; // 条件3：预测己方强度低于敌方两倍（即可能打不过敌方
                 _dx = _Node.x - _CenterX;
                 _dy = _Node.y - _CenterY;
-                _Distence = Math.sqrt(_dx * _dx + _dy * _dy) + Math.random() * 32;
+                _Distence = Math.sqrt(_dx * _dx + _dy * _dy) + rng.nextNumber() * 32;
                 _Strength = _Node.predictedTeamStrength(team) - _Node.predictedOppStrength(team);
                 _Node.aiValue = _Distence + _Strength;
                 targets.push(_Node);
@@ -290,7 +293,7 @@ package Game.Entity.GameEntity {
                     continue; // 条件：排除己方强度足够且无敌方的天体
                 _dx = _Node.x - _CenterX;
                 _dy = _Node.y - _CenterY;
-                _Distence = Math.sqrt(_dx * _dx + _dy * _dy) + Math.random() * 32;
+                _Distence = Math.sqrt(_dx * _dx + _dy * _dy) + rng.nextNumber() * 32;
                 _Strength = _Node.predictedOppStrength(team) - _Node.predictedTeamStrength(team);
                 _Node.aiValue = _Distence + _Strength;
                 targets.push(_Node);
@@ -441,7 +444,7 @@ package Game.Entity.GameEntity {
                     continue; // 条件2：敌方无兵力或高于己方兵力一半
                 _dx = _Node.x - _CenterX;
                 _dy = _Node.y - _CenterY;
-                _Distence = Math.sqrt(_dx * _dx + _dy * _dy) + Math.random() * 32;
+                _Distence = Math.sqrt(_dx * _dx + _dy * _dy) + rng.nextNumber() * 32;
                 _Strength = _Node.predictedOppStrength(team) - _Node.predictedTeamStrength(team);
                 _Node.aiValue = _Distence + _Strength;
                 targets.push(_Node);
@@ -568,7 +571,7 @@ package Game.Entity.GameEntity {
                         continue; // 排除有敌方但兵力不足己方一半的天体
                     _dx = _Node.x - _CenterX;
                     _dy = _Node.y - _CenterY;
-                    _Distence = Math.sqrt(_dx * _dx + _dy * _dy) + Math.random() * 32;
+                    _Distence = Math.sqrt(_dx * _dx + _dy * _dy) + rng.nextNumber() * 32;
                     _Strength = _Node.predictedOppStrength(team) - _Node.predictedTeamStrength(team);
                     _Node.aiValue = _Distence + _Strength;
                     targets.push(_Node);
@@ -692,7 +695,7 @@ package Game.Entity.GameEntity {
                 return;
             for each (var _senderNode:Node in senders) { // 出兵
                 for each (var _targetNode:Node in targets) { // 先排序
-                    _Distance = calcDistence(_senderNode, _targetNode) + Math.random() * 32;
+                    _Distance = calcDistence(_senderNode, _targetNode) + rng.nextNumber() * 32;
                     _targetNode.aiValue = _Distance * 0.8 + _targetNode.hard_oppAllStrength(team);
                     if (_targetNode.attackStrategy.attackRate != 0)
                         _targetNode.aiValue += getTowerAIValue();

@@ -687,10 +687,10 @@ package Menus
       }
       // #endregion
       // #region 功能函数
-      public function loadMap():void
+      public function loadMap(seed:uint = 0):void
       {
          Globals.level = currentIndex - 1;
-         scene.playMap();
+         scene.playMap(seed);
          animateOut();
          GS.playClick();
       }

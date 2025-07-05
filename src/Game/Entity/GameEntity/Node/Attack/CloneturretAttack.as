@@ -17,7 +17,7 @@ package Game.Entity.GameEntity.Node.Attack {
             var ships:Array = Utils.findShipsInRange(node, false);
             if (ships.length == 0)
                 return;
-            var ship:Ship = Utils.random(ships);
+            var ship:Ship = node.rng.randomIndex(ships);
             var shipCreate:Ship = EntityHandler.addShip(node, node.team, false); // 产生新飞船
             shipCreate.x = node.x;
             shipCreate.y = node.y;

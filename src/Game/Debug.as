@@ -21,6 +21,8 @@ package Game {
 
         public var debugLables:Array; // 调试显示文本
 
+        private var seed:uint;
+
         // #region 初始化
         public function Debug(_scene:SceneController) {
             super();
@@ -34,6 +36,7 @@ package Game {
             fpsCalculator = [0, 0, 0, 0, 0, 0, 0];
             debugLables = [];
             nodeTagLables = [[], [], []];
+            seed = 0;
             addDebugView();
             addEventListener("enterFrame", update);
         }
@@ -118,6 +121,38 @@ package Game {
                     if (_ship)
                         trace(_ship);
                     break;
+                case Keyboard.NUMBER_0:
+                case Keyboard.NUMBER_1:
+                case Keyboard.NUMBER_2:
+                case Keyboard.NUMBER_3:
+                case Keyboard.NUMBER_4:
+                case Keyboard.NUMBER_5:
+                case Keyboard.NUMBER_6:
+                case Keyboard.NUMBER_7:
+                case Keyboard.NUMBER_8:
+                case Keyboard.NUMBER_9:
+                    if(seed > uint.MAX_VALUE/10)
+                        seed = 0
+                    seed = seed*10 + (_keyCode-48);
+                    break;
+                case Keyboard.NUMPAD_0:
+                case Keyboard.NUMPAD_1:
+                case Keyboard.NUMPAD_2:
+                case Keyboard.NUMPAD_3:
+                case Keyboard.NUMPAD_4:
+                case Keyboard.NUMPAD_5:
+                case Keyboard.NUMPAD_6:
+                case Keyboard.NUMPAD_7:
+                case Keyboard.NUMPAD_8:
+                case Keyboard.NUMPAD_9:
+                    if(seed > uint.MAX_VALUE/10)
+                        seed = 0
+                    seed = seed*10 + (_keyCode-96);
+                    break;
+                case Keyboard.ENTER:
+                case Keyboard.NUMPAD_ENTER:
+                    title.loadMap(seed);
+                    break;
                 default:
                     break;
             }
@@ -152,7 +187,7 @@ package Game {
                 debugLables[4].text = game.ais.active[game.ais.active.length - 1].debugTrace[3];
                 debugLables[5].text = game.ais.active[game.ais.active.length - 1].debugTrace[4];
             } else {
-                debugLables[1].text = "test";
+                debugLables[1].text = "seed: " + String(seed);
                 debugLables[2].text = "";
                 debugLables[3].text = "";
                 debugLables[4].text = "";

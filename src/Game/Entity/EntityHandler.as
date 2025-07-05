@@ -4,6 +4,7 @@ package Game.Entity {
     import Game.Entity.GameEntity.*;
     import Game.GameScene;
     import starling.errors.AbstractClassError;
+    import utils.Rng;
 
     public class EntityHandler {
         public static var game:GameScene;
@@ -17,7 +18,8 @@ package Game.Entity {
             var _EnemyAI:EnemyAI = game.ais.getReserve() as EnemyAI;
             if (!_EnemyAI)
                 _EnemyAI = new EnemyAI();
-            _EnemyAI.initAI(game, _team, _type);
+            var rng:Rng = new Rng(game.rng.nextInt(), Rng.X32)
+            _EnemyAI.initAI(game, rng, _team, _type);
             game.ais.addEntity(_EnemyAI);
         }
 
@@ -36,7 +38,8 @@ package Game.Entity {
                 }
                 _orbitNode = game.nodes.active[_orbit];
             }
-            _Node.initNode(game, _x, _y, _type, _size, _team, _orbitNode, _clock, _orbitSpeed);
+            var rng:Rng = new Rng(game.rng.nextInt(), Rng.X32)
+            _Node.initNode(game, rng, _x, _y, _type, _size, _team, _orbitNode, _clock, _orbitSpeed);
             game.nodes.addEntity(_Node);
             _Node.tag = game.nodes.active.length - 1;
             return _Node;
@@ -51,7 +54,8 @@ package Game.Entity {
             var _Ship:Ship = game.ships.getReserve() as Ship;
             if (!_Ship)
                 _Ship = new Ship();
-            _Ship.initShip(game, _team, _Node, _productionEffect);
+            var rng:Rng = new Rng(game.rng.nextInt(), Rng.X0)
+            _Ship.initShip(game, rng, _team, _Node, _productionEffect);
             game.ships.addEntity(_Ship);
             return _Ship;
         }

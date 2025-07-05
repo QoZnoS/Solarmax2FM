@@ -15,7 +15,7 @@ package Game.Entity.GameEntity.Node.Attack {
             var ships:Array = Utils.findShipsInRange(node);
             if (ships.length == 0)
                 return;
-            var ship:Ship = Utils.random(ships);
+            var ship:Ship = node.rng.randomIndex(ships);
             node.fireBeam(ship);
             EntityHandler.destroyShip(ship);
         }

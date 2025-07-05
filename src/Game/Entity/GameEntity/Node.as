@@ -29,6 +29,7 @@ package Game.Entity.GameEntity {
     import Game.Entity.EntityHandler;
     import Game.Entity.Utils;
     import starling.display.BlendMode;
+    import utils.Rng;
 
     public class Node extends GameEntity {
         // #region 类变量
@@ -58,6 +59,8 @@ package Game.Entity.GameEntity {
         public var buildTimer:Number; // 生产计时器
         public var orbitAngle:Number; // 轨道旋转角度
         public var ships:Array; // 第一维储存的每个数组对应一个势力，第二维数组用于储存飞船的引用，一个值指代一个飞船，二维数组的长度表示该天体上该势力的飞船总数
+
+        public var rng:Rng;
         // AI相关变量
         public var aiValue:Number; // ai价值
         public var aiStrength:Number; // ai强度
@@ -140,13 +143,14 @@ package Game.Entity.GameEntity {
         }
 
         // #region 生成天体 移除天体
-        public function initNode(_GameScene:GameScene, _x:Number, _y:Number, _type:int, _size:Number, _team:int, _OrbitNode:Node = null, _Clockwise:Boolean = true, _OrbitSpeed:Number = 0.1):void {
+        public function initNode(_GameScene:GameScene, _rng:Rng, _x:Number, _y:Number, _type:int, _size:Number, _team:int, _OrbitNode:Node = null, _Clockwise:Boolean = true, _OrbitSpeed:Number = 0.1):void {
             super.init(_GameScene);
             this.size = _size;
             this.type = _type;
             this.team = _team;
             this.x = _x;
             this.y = _y;
+            this.rng = _rng;
             resetArray()
             captureTeam = _team; // 占据势力
             hp = 0; // 占领度
@@ -200,12 +204,13 @@ package Game.Entity.GameEntity {
                 transitShips[i] = 0;
         }
 
-        public function initBoss(_GameScene:GameScene, _x:Number, _y:Number):void {
+        public function initBoss(_GameScene:GameScene, _rng:Rng, _x:Number, _y:Number):void {
             var i:int = 0;
             super.init(_GameScene);
             this.size = 0.4;
             this.type = 5;
             this.team = 6;
+            this.rng = _rng;
             captureTeam = 6;
             hp = 100;
             aiValue = 0;
@@ -611,7 +616,7 @@ package Game.Entity.GameEntity {
                 _type = -1;
             this.type = _type;
             if (_type == 0) {
-                var _ImageID:String = (int(Math.random() * 16) + 1).toString();
+                var _ImageID:String = rng.nextRange(1,16).toString();
                 if (_ImageID.length == 1)
                     _ImageID = "0" + _ImageID; // 随机取一个星球贴图的编号
                 image.texture = Root.assets.getTexture("planet" + _ImageID); // 更换星球贴图
