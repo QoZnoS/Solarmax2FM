@@ -10,6 +10,7 @@ package Game {
     import flash.ui.Keyboard;
     import starling.filters.FragmentFilter;
     import starling.filters.ColorMatrixFilter;
+    import utils.Rng
 
     public class Debug extends Sprite {
         public var debug:Boolean; // debug 开启状态
@@ -103,6 +104,10 @@ package Game {
                 case Keyboard.X:
                     title.init()
                     title.animateIn()
+                    break;
+                case Keyboard.F:
+                    var rng:Rng = new Rng();
+                    trace(rng.seed);
                     break;
                 case Keyboard.C:
                     if (game.ui.debug_touch_Node)
