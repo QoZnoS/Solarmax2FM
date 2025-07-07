@@ -13,31 +13,31 @@ package Menus.StartMenus {
 
     public class SettingMenu extends Sprite implements IMenu {
 
-        public const windowStrings:Array = ["FULLSCREEN", "RESIZEABLE WINDOW"]; // 窗口模式文本
-        public const aaStrings:Array = ["0x", "2x", "4x", "8x", "16x"]; // 抗锯齿文本
-        public const sizeStrings:Array = ["SMALL", "MEDIUM", "LARGE"]; // 字体大小文本
-        public const controlStrings:Array = ["MULTI-TOUCH", "TRADITIONAL"]; // 控制方式文本
-        public const fleetSliderPositionStrings:Array = ["LEFT", "DOWN", "RIGHT"]; // 分兵条位置
-        public const yesORno:Array = ["YES", "NO"];
-        public const COLOR:uint = 0xFF9DBB;
+        private const windowStrings:Array = ["FULLSCREEN", "RESIZEABLE WINDOW"]; // 窗口模式文本
+        private const aaStrings:Array = ["0x", "2x", "4x", "8x", "16x"]; // 抗锯齿文本
+        private const sizeStrings:Array = ["SMALL", "MEDIUM", "LARGE"]; // 字体大小文本
+        private const controlStrings:Array = ["MULTI-TOUCH", "TRADITIONAL"]; // 控制方式文本
+        private const fleetSliderPositionStrings:Array = ["LEFT", "DOWN", "RIGHT"]; // 分兵条位置
+        private const yesORno:Array = ["YES", "NO"];
+        private const COLOR:uint = 0xFF9DBB;
 
-        public var fullscreen:Array;
-        public var antialias:Array;
-        public var textsizes:Array;
-        public var controls:Array;
-        public var fleetSliderPositions:Array;
-        public var blackBorders:Array; // 黑边
-        public var pauseAllows:Array; // 允许暂停
-        public var audioSlider:OptionSlider;
-        public var musicSlider:OptionSlider;
-        public var satSlider:OptionSlider;
-        public var resetBtn:OptionButton;
-        public var resetBtn2:OptionButton;
-        public var exitBtn:OptionButton;
-        public var tooltip1:Tooltip;
-        public var tooltip2:Tooltip;
+        private var fullscreen:Array;
+        private var antialias:Array;
+        private var textsizes:Array;
+        private var controls:Array;
+        private var fleetSliderPositions:Array;
+        private var blackBorders:Array; // 黑边
+        private var pauseAllows:Array; // 允许暂停
+        private var audioSlider:OptionSlider;
+        private var musicSlider:OptionSlider;
+        private var satSlider:OptionSlider;
+        private var resetBtn:OptionButton;
+        private var resetBtn2:OptionButton;
+        private var exitBtn:OptionButton;
+        private var tooltip1:Tooltip;
+        private var tooltip2:Tooltip;
 
-        public var components:Array;
+        private var components:Array;
 
         private var title:TitleMenu;
 
@@ -198,14 +198,21 @@ package Menus.StartMenus {
             resetBtn2.alpha = 0;
             audioSlider.update();
             musicSlider.update();
+            this.visible = true
+            Starling.juggler.removeTweens(this);
+            Starling.juggler.tween(this, 0.15, {"alpha": 1});
             addEventListener("enterFrame", update);
         }
 
         public function animateOut():void {
             Starling.juggler.removeTweens(this);
             Starling.juggler.tween(this, 0.15, {"alpha": 0,
-                    "onComplete": this.visible = false});
+                    "onComplete": hide});
             removeEventListener("enterFrame", update);
+        }
+
+        public function hide():void {
+            this.visible = false;
         }
 
         //#region 私有方法
@@ -220,6 +227,7 @@ package Menus.StartMenus {
         private function update(e:EnterFrameEvent):void {
             Globals.soundVolume = audioSlider.total;
             Globals.musicVolume = musicSlider.total;
+            GS.updateTransforms();
         }
 
         private function on_fullscreen(_click:Event):void {
