@@ -65,14 +65,12 @@ package Menus.StartMenus {
             this.visible = true
             Starling.juggler.removeTweens(this);
             Starling.juggler.tween(this, 0.15, {"alpha": 1});
-            addEventListener("enterFrame", update);
         }
 
         public function animateOut():void {
             Starling.juggler.removeTweens(this);
             Starling.juggler.tween(this, 0.15, {"alpha": 0,
                     "onComplete": hide});
-            removeEventListener("enterFrame", update);
         }
 
         public function hide():void {
@@ -86,16 +84,6 @@ package Menus.StartMenus {
             _label.x = _x;
             _label.y = _y;
             this.addChild(_label);
-        }
-
-        private function update():void {
-            if (mapacks.length <= 4)
-                components[2].visible = components[3].visible = false;
-            mapPage == 0 ? components[2].visible = false : components[2].visible = true;
-            mapPage == Math.floor(mapacks.length / 4) ? components[3].visible = false : components[3].visible = true;
-            for (var i:int = 0; i < mapacks.length; i++) {
-                mapPage * 4 <= i && i < mapPage * 4 + 4 ? mapacks[i].visible = true : mapacks[i].visible = false;
-            }
         }
 
         private function on_refresh():void {
@@ -143,6 +131,15 @@ package Menus.StartMenus {
                     _y -= 500;
             }
             mapacks[Globals.currentData].toggle();
+            if (mapacks.length <= 4){
+                components[2].visible = components[3].visible = false;
+                return
+            }
+            mapPage == 0 ? components[2].visible = false : components[2].visible = true;
+            mapPage == Math.floor(mapacks.length / 4) ? components[3].visible = false : components[3].visible = true;
+            for (i = 0; i < mapacks.length; i++) {
+                mapPage * 4 <= i && i < mapPage * 4 + 4 ? mapacks[i].visible = true : mapacks[i].visible = false;
+            }
         }
 
         private function on_choose_map(_click:Event):void {
