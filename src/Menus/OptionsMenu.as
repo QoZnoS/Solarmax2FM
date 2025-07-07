@@ -1,14 +1,9 @@
 // 该类管理整个设置界面
 package Menus {
     import starling.core.Starling;
-    import starling.display.Image;
     import starling.display.Quad;
     import starling.display.Sprite;
-    import starling.events.EnterFrameEvent;
     import starling.events.Event;
-    import starling.events.Touch;
-    import starling.events.TouchEvent;
-    import starling.text.TextField;
     import utils.Component.MenuButton;
     import utils.Component.OptionButton;
     import Menus.StartMenus.IMenu;
@@ -21,9 +16,9 @@ package Menus {
         private var menuBtn:MenuButton;
         private var menus:Vector.<IMenu>;
 
-        private const MAX_PAGE:int = 3
+        private const MAX_PAGE:int = 3;
         private const COLOR:uint = 0xFF9DBB;
-        private const pageName:Array = ["SETTING", "MAPACKS", "STAFF"]
+        private const pageName:Array = ["SETTING", "MAPACKS", "STAFF", "REPLAY"]
         private var pages:Array;
 
         public function OptionsMenu(_titleMenu:TitleMenu) {
@@ -39,16 +34,25 @@ package Menus {
             for (var i:int = 0; i < menus.length; i++) {
                 menus[i].x = menus[i].pivotX = 512;
                 menus[i].y = menus[i].pivotY = 384;
+                menus[i].x += 72;
                 addChild(menus[i] as Sprite);
+                menus[i].animateOut()
             }
+            menus[0].animateIn()
             pages = []
             for (i = 0; i < MAX_PAGE; i++) {
                 pages.push(new OptionButton(pageName[i], COLOR, pages));
                 pages[i].x = 15;
-                pages[i].y = 240 + i*48;
+                pages[i].y = 160 + i*48;
+                pages[i].label.fontName = "Downlink18";
+                pages[i].labelBG.width = pages[i].quad.width = 144;
+                pages[i].labelBG.height = pages[i].quad.height = 36;
+                pages[i].label.x += 4;
+                pages[i].label.y += 4;
                 pages[i].addEventListener("clicked", on_page)
                 addChild(pages[i])
             }
+            pages[0].toggle()
             menuBtn = new MenuButton("btn_menu");
             menuBtn.x = 15 + Globals.margin;
             menuBtn.y = 124;
@@ -76,7 +80,6 @@ package Menus {
             this.visible = false;
         }
 
-        // #region 界面按钮
         public function on_menu(_click:Event):void {
             Globals.save();
             animateOut();
@@ -90,11 +93,6 @@ package Menus {
                 if (!pages[i].toggled && menus[i].visible)
                     menus[i].animateOut()
             }
-        }
-        // #endregion
-
-        public function update(e:EnterFrameEvent):void {
-            
         }
     }
 }

@@ -54,6 +54,7 @@ package Menus.StartMenus {
             _btn.addEventListener("clicked", on_next);
             components.push(_btn);
             this.addChild(_btn);
+            on_refresh();
         }
 
         public function deinit():void {
