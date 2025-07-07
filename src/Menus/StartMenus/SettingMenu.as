@@ -87,7 +87,7 @@ package Menus.StartMenus {
             components.push(audioSlider);
             // #endregion
             // #region GAME
-            components.push(new TextField(200, 40, "V1.1.1.1    GAME", "Downlink18", -1, COLOR));
+            components.push(new TextField(200, 40, "V1.2.0    GAME", "Downlink18", -1, COLOR));
             components.push(new TextField(200, 40, "UI SIZE:", "Downlink12", -1, COLOR));
             textsizes = [];
             for (i = 0; i < sizeStrings.length; i++) {
