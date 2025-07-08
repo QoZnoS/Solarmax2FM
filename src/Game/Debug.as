@@ -38,7 +38,7 @@ package Game {
             nodeTagLables = [[], [], []];
             seed = 0;
             addDebugView();
-            addEventListener("enterFrame", update);
+            // addEventListener("enterFrame", update);
         }
 
         public function addDebugView():void {
@@ -88,7 +88,6 @@ package Game {
                     clear_node(game.ui.debug_touch_Node);
                     break;
                 case Keyboard.E: // +100 飞船
-                    EntityHandler.addAI(1,2)
                     if (game.ui.debug_touch_Node)
                         EntityHandler.addShips(game.ui.debug_touch_Node, 1, 100);
                     break;
@@ -107,10 +106,6 @@ package Game {
                 case Keyboard.X:
                     title.init()
                     title.animateIn()
-                    break;
-                case Keyboard.F:
-                    var rng:Rng = new Rng();
-                    trace(rng.seed);
                     break;
                 case Keyboard.C:
                     if (game.ui.debug_touch_Node)

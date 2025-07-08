@@ -13,14 +13,13 @@ package Game {
     import Game.Entity.FXHandler;
     import Game.Entity.FX.SelectFade;
     import utils.Component.MenuButton;
+    import utils.Drawer;
 
     public class GameUI {
         // #region 类变量
         public var quad:Quad;
         public var dragQuad:Quad;
         public var dragLine:Quad;
-        public var quadImage:Image;
-        public var quadImage2:Image;
         public var barrierImage:Image;
         public var game:GameScene;
         public var touchQuad:Quad;
@@ -50,20 +49,18 @@ package Game {
         public var debug_mouse_x:Number;
         public var debug_mouse_y:Number;
         public var debug_touch_Node:Node;
+        public var drawer:Drawer;
 
         // #endregion
-        public function GameUI() // 构造函数，初始化对象
+        public function GameUI(_drawer:Drawer) // 构造函数，初始化对象
         {
             super();
-            quad = new Quad(10, 10, 16777215);
+            this.drawer = _drawer;
+            quad = new Quad(10, 10, 0xFFFFFF);
             touchQuad = new Quad(1024, 768, 16711680);
             touchQuad.alpha = 0;
             dragQuad = new Quad(10, 10, Globals.teamColors[1]);
             dragLine = new Quad(2, 2, Globals.teamColors[1]);
-            quadImage = new Image(Root.assets.getTexture("quad"));
-            quadImage.adjustVertices();
-            quadImage2 = new Image(Root.assets.getTexture("quad8x4"));
-            quadImage2.adjustVertices();
             var _Color:Number = 16755370;
             popLabel = new TextField(600, 40, "POPULATION : 50 / 50", "Downlink12", -1, _Color);
             popLabel.vAlign = popLabel.hAlign = "center";
@@ -357,12 +354,12 @@ package Game {
             for each (var _Touch:Touch in _TouchArray) {
                 if (_Touch.hoverNode && _Touch.downNodes.length > 0) {
                     _Node1 = _Touch.hoverNode;
-                    FXHandler.addFade(_Node1.x, _Node1.y, _Node1.size, 16777215, 1);
+                    FXHandler.addFade(_Node1.x, _Node1.y, _Node1.size, 0xFFFFFF, 1);
                     for each (_Node2 in _Touch.downNodes) {
                         if (_Node2 == _Node1 || nodesBlocked(_Node2, _Node1))
                             continue;
                         _Node2.sendShips(1, _Node1);
-                        FXHandler.addFade(_Node2.x, _Node2.y, _Node2.size, 16777215, 0);
+                        FXHandler.addFade(_Node2.x, _Node2.y, _Node2.size, 0xFFFFFF, 0);
                     }
                 }
                 _Touch.hoverNode = null;
@@ -446,12 +443,12 @@ package Game {
             var _currentNode:Node = getClosestNode(_x, _y);
             if (!_currentNode)
                 return;
-            FXHandler.addFade(_currentNode.x, _currentNode.y, _currentNode.size, 16777215, 1);
+            FXHandler.addFade(_currentNode.x, _currentNode.y, _currentNode.size, 0xFFFFFF, 1);
             for each (var _Node:Node in selectedNodes) {
                 if (_Node == _currentNode || nodesBlocked(_Node, _currentNode))
                     continue;
                 _Node.sendShips(1, _currentNode);
-                FXHandler.addFade(_Node.x, _Node.y, _Node.size, 16777215, 0);
+                FXHandler.addFade(_Node.x, _Node.y, _Node.size, 0xFFFFFF, 0);
             }
         }
 
@@ -477,7 +474,7 @@ package Game {
             for each (var _Fade:SelectFade in game.fades.active) {
                 _R = 150 * _Fade.size - 4;
                 _voidR = Math.max(0, _R - 3);
-                drawCircle(_Fade.x, _Fade.y, _Fade.color, _R, _voidR, false, _Fade.alpha);
+                drawer.drawCircle(game.uiBatch, _Fade.x, _Fade.y, _Fade.color, _R, _voidR, false, _Fade.alpha);
             }
         }
 
@@ -558,7 +555,7 @@ package Game {
         // #region 绘图工具
         public function drawTouches():void // 绘制常规操作下的定位圈和鼠标线
         {
-            const _Color:uint = 16777215; // #FFFFFF
+            const _Color:uint = 0xFFFFFF; // #FFFFFF
             var _Tx:Number = NaN; // T 表示 touch 触摸点
             var _Ty:Number = NaN;
             var _Block:Point = null;
@@ -572,14 +569,14 @@ package Game {
                 return;
             for each (var _Touch:Touch in touches) {
                 if (_Touch.hoverNode) {
-                    drawCircle(_Touch.hoverNode.x, _Touch.hoverNode.y, Globals.teamColors[_Touch.hoverNode.team], _Touch.hoverNode.lineDist - 4, _Touch.hoverNode.size * 25 * 2, true, 0.5);
+                    drawer.drawCircle(game.uiBatch, _Touch.hoverNode.x, _Touch.hoverNode.y, Globals.teamColors[_Touch.hoverNode.team], _Touch.hoverNode.lineDist - 4, _Touch.hoverNode.size * 25 * 2, true, 0.5);
                     if (_Touch.hoverNode.attackStrategy.attackRate > 0)
-                        drawDashedCircle(_Touch.hoverNode.x, _Touch.hoverNode.y, Globals.teamColors[_Touch.hoverNode.team], _Touch.hoverNode.attackStrategy.attackRange, _Touch.hoverNode.attackStrategy.attackRange - 2, false, 0.5, 1, 0, 256);
+                        drawer.drawDashedCircle(game.uiBatch, _Touch.hoverNode.x, _Touch.hoverNode.y, Globals.teamColors[_Touch.hoverNode.team], _Touch.hoverNode.attackStrategy.attackRange, _Touch.hoverNode.attackStrategy.attackRange - 2, false, 0.5, 1, 0, 256);
                 }
                 if (_Touch.downNodes && _Touch.downNodes.length > 0) // 若已选中天体
                 {
                     for each (var _Node:Node in _Touch.downNodes) {
-                        drawCircle(_Node.x, _Node.y, _Color, _Node.lineDist - 4, _Node.lineDist - 7, false, 0.8);
+                        drawer.drawCircle(game.uiBatch, _Node.x, _Node.y, _Color, _Node.lineDist - 4, _Node.lineDist - 7, false, 0.8);
                         _Tx = _Touch.globalX;
                         _Ty = _Touch.globalY;
                         if (_Touch.hoverNode) // 绘制目标天体的定位圈
@@ -588,9 +585,9 @@ package Game {
                             _Tx = _Touch.hoverNode.x;
                             _Ty = _Touch.hoverNode.y;
                             if (_Block)
-                                drawCircle(_Tx, _Ty, 16724787, _Touch.hoverNode.lineDist - 4, _Touch.hoverNode.lineDist - 7, false, 0.8);
+                                drawer.drawCircle(game.uiBatch, _Tx, _Ty, 0xFF3333, _Touch.hoverNode.lineDist - 4, _Touch.hoverNode.lineDist - 7, false, 0.8);
                             else
-                                drawCircle(_Tx, _Ty, _Color, _Touch.hoverNode.lineDist - 4, _Touch.hoverNode.lineDist - 7, false, 0.8);
+                                drawer.drawCircle(game.uiBatch, _Tx, _Ty, _Color, _Touch.hoverNode.lineDist - 4, _Touch.hoverNode.lineDist - 7, false, 0.8);
                         } else
                             _Block = lineBlocked(_Node.x, _Node.y, _Tx, _Ty);
                         _dx = _Tx - _Node.x;
@@ -607,10 +604,10 @@ package Game {
                             }
                             if (_Block) // 分段绘制鼠标线
                             {
-                                drawLine(_Nx, _Ny, _Block.x, _Block.y, _Color, 3, 0.8);
-                                drawLine(_Block.x, _Block.y, _Tx, _Ty, 16724787, 3, 0.8);
+                                drawer.drawLine(game.uiBatch, _Nx, _Ny, _Block.x, _Block.y, _Color, 3, 0.8);
+                                drawer.drawLine(game.uiBatch, _Block.x, _Block.y, _Tx, _Ty, 0xFF3333, 3, 0.8);
                             } else
-                                drawLine(_Nx, _Ny, _Tx, _Ty, _Color, 3, 0.8);
+                                drawer.drawLine(game.uiBatch, _Nx, _Ny, _Tx, _Ty, _Color, 3, 0.8);
                         }
                     }
                 }
@@ -686,9 +683,9 @@ package Game {
                 _mouseY = (Starling.current.nativeStage.mouseY - Starling.current.viewPort.y) / Starling.contentScaleFactor;
                 _Node2 = getClosestNode(_mouseX, _mouseY);
                 if (_Node2) {
-                    drawCircle(_Node2.x, _Node2.y, Globals.teamColors[_Node2.team], _Node2.lineDist - 4, _Node2.size * 25 * 2, true, 0.5);
+                    drawer.drawCircle(game.uiBatch, _Node2.x, _Node2.y, Globals.teamColors[_Node2.team], _Node2.lineDist - 4, _Node2.size * 25 * 2, true, 0.5);
                     if (_Node2.attackStrategy.attackRate > 0 && _Node2.attackStrategy.attackRange > 0)
-                        drawDashedCircle(_Node2.x, _Node2.y, Globals.teamColors[_Node2.team], _Node2.attackStrategy.attackRange, _Node2.attackStrategy.attackRange - 2, false, 0.5, 1, 0, 256);
+                        drawer.drawDashedCircle(game.uiBatch, _Node2.x, _Node2.y, Globals.teamColors[_Node2.team], _Node2.attackStrategy.attackRange, _Node2.attackStrategy.attackRange - 2, false, 0.5, 1, 0, 256);
                     if (rightDown && selectedNodes.length > 0) {
                         for each (_Node1 in selectedNodes) {
                             _Block = nodesBlocked(_Node1, _Node2);
@@ -703,124 +700,21 @@ package Game {
                                 _x -= Math.cos(_angle) * (_Node2.lineDist - 5);
                                 _y -= Math.sin(_angle) * (_Node2.lineDist - 5);
                                 if (_Block) {
-                                    drawLine(_lx, _ly, _Block.x, _Block.y, 16777215, 3, 0.8);
-                                    drawLine(_Block.x, _Block.y, _x, _y, 16724787, 3, 0.8);
+                                    drawer.drawLine(game.uiBatch, _lx, _ly, _Block.x, _Block.y, 0xFFFFFF, 3, 0.8);
+                                    drawer.drawLine(game.uiBatch, _Block.x, _Block.y, _x, _y, 0xFF3333, 3, 0.8);
                                 } else
-                                    drawLine(_lx, _ly, _x, _y, 16777215, 3, 0.8);
+                                    drawer.drawLine(game.uiBatch, _lx, _ly, _x, _y, 0xFFFFFF, 3, 0.8);
                             }
                         }
                         if (_Block)
-                            drawCircle(_Node2.x, _Node2.y, 16724787, _Node2.lineDist - 4, _Node2.lineDist - 7, false, 0.8);
+                            drawer.drawCircle(game.uiBatch, _Node2.x, _Node2.y, 0xFF3333, _Node2.lineDist - 4, _Node2.lineDist - 7, false, 0.8);
                         else
-                            drawCircle(_Node2.x, _Node2.y, 16777215, _Node2.lineDist - 4, _Node2.lineDist - 7, false, 0.8);
+                            drawer.drawCircle(game.uiBatch, _Node2.x, _Node2.y, 0xFFFFFF, _Node2.lineDist - 4, _Node2.lineDist - 7, false, 0.8);
                     }
                 }
             }
             for each (_Node1 in selectedNodes) {
-                drawCircle(_Node1.x, _Node1.y, 16777215, _Node1.lineDist - 4, _Node1.lineDist - 7, false, 0.8);
-            }
-        }
-
-        public function drawLine(_x1:Number, _y1:Number, _x2:Number, _y2:Number, _Color:uint, _Width:Number = 2, _alpha:Number = 1):void {
-            var _quadImage:Image = quadImage;
-            if (_Width <= 3)
-                _quadImage = quadImage2;
-            _quadImage.color = _Color;
-            _quadImage.setVertexAlpha(2, 1);
-            _quadImage.setVertexAlpha(3, 1);
-            _quadImage.alpha = _alpha;
-            _quadImage.rotation = 0;
-            var _dx:Number = _x2 - _x1;
-            var _dy:Number = _y2 - _y1;
-            var _angle:Number = Math.atan2(_dy, _dx);
-            var _Distance:Number = Math.sqrt(_dx * _dx + _dy * _dy);
-            _quadImage.x = _x1;
-            _quadImage.y = _y1;
-            _quadImage.setVertexPosition(0, 0, 0);
-            _quadImage.setVertexPosition(1, _Distance, 0);
-            _quadImage.setVertexPosition(2, 0, _Width);
-            _quadImage.setVertexPosition(3, _Distance, _Width);
-            _quadImage.rotation = _angle;
-            game.uiBatch.addImage(_quadImage);
-        }
-
-        public function drawDashedLine(_x1:Number, _y1:Number, _x2:Number, _y2:Number, _Color:uint, _Width:Number = 2, _alpha:Number = 1, _StartStep:Number = 0):void {
-            var _Step:int = 0;
-            var _dx:Number = _x2 - _x1;
-            var _dy:Number = _y2 - _y1;
-            var _angle:Number = Math.atan2(_dy, _dx);
-            var _Distance:Number = Math.sqrt(_dx * _dx + _dy * _dy);
-            var _Start:Number = 12 + 12 * _StartStep;
-            var _Ax:Number = _x1 + Math.cos(_angle) * _Start;
-            var _Ay:Number = _y1 + Math.sin(_angle) * _Start;
-            _Step = _Start;
-            while (_Step < _Distance - 12) {
-                _dx = _Ax + Math.cos(_angle) * 12 * 0.5;
-                _dy = _Ay + Math.sin(_angle) * 12 * 0.5;
-                drawLine(_Ax, _Ay, _dx, _dy, _Color, _Width, _alpha);
-                _Step += 12;
-            }
-        }
-
-        public function drawCircle(_x:Number, _y:Number, _Color:uint, _R:Number, _voidR:Number = 0, _mTinted:Boolean = false, _alpha:Number = 1, _quality2:Number = 1, _angle:Number = 0, _quality1:int = 64):void {
-            var _quadImage:Image = quadImage;
-            if (_R - _voidR <= 3)
-                _quadImage = quadImage2;
-            _quadImage.color = _Color;
-            if (_mTinted) {
-                _quadImage.setVertexAlpha(2, 0);
-                _quadImage.setVertexAlpha(3, 0);
-            } else {
-                _quadImage.setVertexAlpha(2, 1);
-                _quadImage.setVertexAlpha(3, 1);
-            }
-            _quadImage.alpha = _alpha;
-            _quadImage.rotation = 0;
-            var _angleStep:Number = 6.283185307179586 / _quality1;
-            var _lineNumber:int = Math.ceil(_quality1 * _quality2);
-            for (var i:int = 0; i < _lineNumber; i++) {
-                _quadImage.x = _x;
-                _quadImage.y = _y;
-                if (i == _lineNumber - 1)
-                    _angleStep = 6.283185307179586 * _quality2 - _angleStep * (_lineNumber - 1);
-                _quadImage.setVertexPosition(0, Math.cos(_angle) * _R, Math.sin(_angle) * _R);
-                _quadImage.setVertexPosition(1, Math.cos(_angle + _angleStep) * _R, Math.sin(_angle + _angleStep) * _R);
-                _quadImage.setVertexPosition(2, Math.cos(_angle) * _voidR, Math.sin(_angle) * _voidR);
-                _quadImage.setVertexPosition(3, Math.cos(_angle + _angleStep) * _voidR, Math.sin(_angle + _angleStep) * _voidR);
-                _quadImage.vertexChanged();
-                game.uiBatch.addImage(_quadImage);
-                _angle += _angleStep;
-            }
-        }
-
-        public function drawDashedCircle(_x:Number, _y:Number, _Color:uint, _R:Number, _voidR:Number = 0, _mTinted:Boolean = false, _alpha:Number = 1, _quality2:Number = 1, _angle:Number = 0, _quality1:int = 64):void {
-            var _quadImage:Image = quadImage;
-            if (_R - _voidR <= 3)
-                _quadImage = quadImage2;
-            _quadImage.color = _Color;
-            if (_mTinted) {
-                _quadImage.setVertexAlpha(2, 0);
-                _quadImage.setVertexAlpha(3, 0);
-            } else {
-                _quadImage.setVertexAlpha(2, 1);
-                _quadImage.setVertexAlpha(3, 1);
-            }
-            _quadImage.alpha = _alpha;
-            _quadImage.rotation = 0;
-            var _angleStep:Number = 6.283185307179586 / _quality1;
-            var _lineNumber:int = Math.ceil(_quality1 * _quality2) * 0.505;
-            for (var i:int = 0; i < _lineNumber; i++) {
-                _quadImage.x = _x;
-                _quadImage.y = _y;
-                if (i == _lineNumber - 1)
-                    _angleStep = 6.283185307179586 * _quality2 - _angleStep * (_lineNumber - 1);
-                _quadImage.setVertexPosition(0, Math.cos(_angle) * _R, Math.sin(_angle) * _R);
-                _quadImage.setVertexPosition(1, Math.cos(_angle + _angleStep) * _R, Math.sin(_angle + _angleStep) * _R);
-                _quadImage.setVertexPosition(2, Math.cos(_angle) * _voidR, Math.sin(_angle) * _voidR);
-                _quadImage.setVertexPosition(3, Math.cos(_angle + _angleStep) * _voidR, Math.sin(_angle + _angleStep) * _voidR);
-                _quadImage.vertexChanged();
-                game.uiBatch.addImage(_quadImage);
-                _angle += _angleStep * 2;
+                drawer.drawCircle(game.uiBatch, _Node1.x, _Node1.y, 0xFFFFFF, _Node1.lineDist - 4, _Node1.lineDist - 7, false, 0.8);
             }
         }
         // #endregion

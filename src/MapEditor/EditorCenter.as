@@ -1,6 +1,7 @@
 package MapEditor
 {
     import starling.display.Sprite;
+    import UI.UIContainer;
 
     /**编辑器中心 */
     public class EditorCenter extends Sprite {

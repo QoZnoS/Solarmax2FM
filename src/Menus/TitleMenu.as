@@ -615,10 +615,6 @@ package Menus
          preview.blendMode = "add";
       }
 
-      public function on_key_down(_key:KeyboardEvent):void // 保留函数
-      {
-      }
-
       public function on_touch(_getTouch:TouchEvent):void
       {
          var _endPoint:Point = null;

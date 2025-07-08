@@ -9,6 +9,7 @@ package {
     import starling.display.Sprite;
     import starling.display.Quad;
     import starling.filters.ColorMatrixFilter;
+    import utils.Drawer;
 
     public class SceneController extends Sprite {
         public var titleMenu:TitleMenu;
@@ -16,9 +17,11 @@ package {
         public var endScene:EndScene;
         public var mapEditor:EditorCenter;
         public var debug:Debug;
+        public var drawer:Drawer;
 
         public function SceneController() {
             super();
+            drawer = new Drawer();
             titleMenu = new TitleMenu(this);
             gameScene = new GameScene(this);
             endScene = new EndScene(this);
@@ -63,8 +66,7 @@ package {
             gameScene.deInit()
         }
 
-        /**
-         * 加载标题界面
+        /**加载标题界面
          * @param type 0为首次加载，1为通关后加载
          */
         private function initTitleMenu(type:int = -1):void {
@@ -96,23 +98,18 @@ package {
         // #endregion
         // #region 切换界面
 
-        /**
-         * 游玩关卡
-         */
+        /**游玩关卡*/
         public function playMap(seed:uint = 0):void {
             initGameScene(seed);
             debug.init_game();
         }
 
-        /**
-         * 编辑关卡
-         */
+        /**编辑关卡*/
         public function editorMap():void {
 
         }
 
-        /**
-         * 退出到标题界面
+        /**退出到标题界面
          * @param type 0为直接退出关卡，1为从关卡退出且转到下一关，2为从退出动画进入标题界面
          */
         public function exit2TitleMenu(type:int = -1):void {
@@ -136,9 +133,7 @@ package {
             }
         }
 
-        /**
-         * 播放通关动画
-         */
+        /**播放通关动画*/
         public function playEndScene():void {
             initEndScene();
         }

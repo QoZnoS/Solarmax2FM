@@ -154,7 +154,7 @@ package Game {
             entities = [ships, nodes, ais, warps, beams, pulses, flashes, barriers, explosions, darkPulses, fades]; // 实体池列表
             triggers = [false, false, false, false, false]; // 特殊事件
             barrierLines = []; // 障碍连接数据
-            ui = new GameUI();
+            ui = new GameUI(scene.drawer);
             tutorial = new TutorialSprite();
             this.alpha = 0;
             this.visible = false;
@@ -437,6 +437,7 @@ package Game {
             for each (var _pool:EntityPool in entities) // 依次执行所有实体的更新函数
                 _pool.update(dt);
             ui.update(dt); // 更新ui
+            scene.debug.update(e)
             shipsBatch1.blendMode = shipsBatch2.blendMode = "add";
             specialEvents(); // 处理特殊关卡的特殊事件
             if (darkPulse.visible)
