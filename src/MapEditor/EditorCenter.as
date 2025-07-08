@@ -10,12 +10,14 @@ package MapEditor
         private var uiContainer:UIContainer;
         private var console:Console;
         public var data:Data;
+        
+        public var scene:SceneController;
 
-        public function EditorCenter(){
+        public function EditorCenter(_scene:SceneController){
             nodeContainer = new NodeContainer()
-            uiContainer = new UIContainer()
             console = new Console()
             data = new Data()
+            this.scene = _scene;
         }
 
         public function init():void{

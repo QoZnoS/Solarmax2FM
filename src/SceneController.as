@@ -10,6 +10,7 @@ package {
     import starling.display.Quad;
     import starling.filters.ColorMatrixFilter;
     import utils.Drawer;
+    import UI.UIContainer;
 
     public class SceneController extends Sprite {
         public var titleMenu:TitleMenu;
@@ -18,6 +19,7 @@ package {
         public var mapEditor:EditorCenter;
         public var debug:Debug;
         public var drawer:Drawer;
+        public var ui:UIContainer;
 
         public function SceneController() {
             super();
@@ -26,19 +28,21 @@ package {
             gameScene = new GameScene(this);
             endScene = new EndScene(this);
             debug = new Debug(this);
+            mapEditor = new EditorCenter(this);
+            ui = new UIContainer(this);
             initTitleMenu(0);
             debug.init(gameScene, titleMenu);
             addChild(titleMenu);
             addChild(gameScene);
             addChild(endScene);
-            initBlackQuad()
+            addChild(ui);
             addChild(debug);
             Starling.current.nativeStage.addEventListener("keyDown", on_key_down);
+            initBlackQuad();
         }
 
         // #region 处理黑边
         private var blackQuad:Array;
-
         private function initBlackQuad():void {
             blackQuad = new Array();
             var quad1:Quad = new Quad(1024, 114, 0);
@@ -102,6 +106,7 @@ package {
         public function playMap(seed:uint = 0):void {
             initGameScene(seed);
             debug.init_game();
+            ui.initLevel();
         }
 
         /**编辑关卡*/
@@ -131,6 +136,7 @@ package {
                     initTitleMenu()
                     break;
             }
+            ui.deinitLevel()
         }
 
         /**播放通关动画*/

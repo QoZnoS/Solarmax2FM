@@ -1,29 +1,16 @@
 // 已完工
 
 package Game {
-    import Game.Entity.GameEntity.Node;
     import flash.events.MouseEvent;
-    import flash.geom.Point;
     import starling.core.Starling;
-    import starling.display.Image;
-    import starling.display.Quad;
-    import starling.events.Touch;
-    import starling.events.TouchEvent;
     import starling.text.TextField;
-    import Game.Entity.FXHandler;
     import Game.Entity.FX.SelectFade;
     import utils.Component.MenuButton;
     import utils.Drawer;
 
     public class GameUI {
         // #region 类变量
-        public var quad:Quad;
-        public var dragQuad:Quad;
-        public var dragLine:Quad;
-        public var barrierImage:Image;
         public var game:GameScene;
-        public var touchQuad:Quad;
-        public var touches:Vector.<Touch>;
         public var movePerc:Number;
         public var fleetSlider:FleetSlider;
         public var sliderMedium:FleetSlider;
@@ -37,18 +24,7 @@ package Game {
         public var restartBtn:MenuButton;
         public var speedBtns:Array;
         public var speedMult:Number;
-        public var selectedNodes:Array;
-        public var down_x:Number;
-        public var down_y:Number;
-        public var drag_x:Number;
-        public var drag_y:Number;
-        public var mouseDown:Boolean;
-        public var dragging:Boolean;
-        public var rightDown:Boolean;
 
-        public var debug_mouse_x:Number;
-        public var debug_mouse_y:Number;
-        public var debug_touch_Node:Node;
         public var drawer:Drawer;
 
         // #endregion
@@ -56,11 +32,6 @@ package Game {
         {
             super();
             this.drawer = _drawer;
-            quad = new Quad(10, 10, 0xFFFFFF);
-            touchQuad = new Quad(1024, 768, 16711680);
-            touchQuad.alpha = 0;
-            dragQuad = new Quad(10, 10, Globals.teamColors[1]);
-            dragLine = new Quad(2, 2, Globals.teamColors[1]);
             var _Color:Number = 16755370;
             popLabel = new TextField(600, 40, "POPULATION : 50 / 50", "Downlink12", -1, _Color);
             popLabel.vAlign = popLabel.hAlign = "center";
@@ -115,7 +86,6 @@ package Game {
                     _SpeedButton.x -= 4;
                 speedBtns.push(_SpeedButton);
             }
-            selectedNodes = [];
         }
 
         // #region 启动游戏界面UI，处理相关控件
@@ -164,8 +134,6 @@ package Game {
             restartBtn.x = pauseBtn.x + pauseBtn.width * 1.1;
             movePerc = 1;
             movePercentBar(movePerc);
-            quad.scaleY = 1;
-            quad.scaleX = 1;
             switch (Globals.fleetSliderPosition) {
                 case 0:
                     sliderVertical.x = 20;
@@ -194,7 +162,6 @@ package Game {
             _GameScene.uiLayer.addChild(popLabel);
             _GameScene.uiLayer.addChild(popLabel2);
             _GameScene.uiLayer.addChild(popLabel3);
-            _GameScene.uiLayer.addChild(touchQuad);
             _GameScene.uiLayer.addChild(fleetSlider);
             _GameScene.uiLayer.addChild(restartBtn);
             _GameScene.uiLayer.addChild(closeBtn);
@@ -217,23 +184,11 @@ package Game {
             speedBtns[2].x = 1024 - speedBtns[2].width + 5 - Globals.margin;
             speedBtns[1].x = speedBtns[2].x - speedBtns[1].width * 0.8 - 9;
             speedBtns[0].x = speedBtns[1].x - speedBtns[0].width * 1.25;
-            mouseDown = false;
-            if (Globals.touchControls)
-                touchQuad.addEventListener("touch", on_touch); // 按操作方式添加事件监听器
-            else {
-                Starling.current.nativeStage.addEventListener("mouseDown", on_mouseDown);
-                Starling.current.nativeStage.addEventListener("mouseMove", on_mouseMove);
-                Starling.current.nativeStage.addEventListener("mouseUp", on_mouseUp);
-                Starling.current.nativeStage.addEventListener("rightMouseDown", on_rightDown);
-                Starling.current.nativeStage.addEventListener("rightMouseUp", on_rightUp);
-            }
             Starling.current.nativeStage.addEventListener("mouseWheel", on_wheel);
         }
 
         public function deInit():void // 移除相关控件
         {
-            if (touches)
-                touches.length = 0;
             fleetSlider.deInit();
             closeBtn.deInit();
             closeBtn.removeEventListener("clicked", on_closeBtn);
@@ -243,15 +198,6 @@ package Game {
             restartBtn.removeEventListener("clicked", on_restartBtn);
             for each (var _SpeedButton:SpeedButton in speedBtns) {
                 _SpeedButton.deInit();
-            }
-            if (Globals.touchControls)
-                touchQuad.removeEventListener("touch", on_touch);
-            else {
-                Starling.current.nativeStage.removeEventListener("mouseDown", on_mouseDown);
-                Starling.current.nativeStage.removeEventListener("mouseMove", on_mouseMove);
-                Starling.current.nativeStage.removeEventListener("mouseUp", on_mouseUp);
-                Starling.current.nativeStage.removeEventListener("rightMouseDown", on_rightDown);
-                Starling.current.nativeStage.removeEventListener("rightMouseUp", on_rightUp);
             }
             Starling.current.nativeStage.removeEventListener("mouseWheel", on_wheel);
         }
@@ -284,175 +230,8 @@ package Game {
         }
 
         // #endregion
-        // #region 常规操作
-        public function on_touch(_TouchEvent:TouchEvent):void // 常规操作下的点击
-        {
-            if (game.alpha < 0.5)
-                return;
-            touchHover(_TouchEvent);
-            touchBegan(_TouchEvent);
-            touchMoved(_TouchEvent);
-            touchEnded(_TouchEvent);
-            touches = _TouchEvent.getTouches(touchQuad);
-        }
 
-        public function touchHover(_TouchEvent:TouchEvent):void // 专用于选中渐变圈
-        {
-            var _TouchArray:Vector.<Touch> = _TouchEvent.getTouches(touchQuad, "hover");
-            if (!_TouchArray)
-                return;
-            for each (var _Touch:Touch in _TouchArray) {
-                _Touch.hoverNode = getClosestNode(_Touch.globalX, _Touch.globalY);
-                debug_mouse_x = _Touch.globalX;
-                debug_mouse_y = _Touch.globalY;
-                debug_touch_Node = _Touch.hoverNode;
-            }
-        }
 
-        public function touchBegan(_TouchEvent:TouchEvent):void // 获取鼠标按下时选中的初始天体
-        {
-            var _TouchArray:Vector.<Touch> = _TouchEvent.getTouches(touchQuad, "began");
-            if (!_TouchArray)
-                return;
-            for each (var _Touch:Touch in _TouchArray) {
-                if (!_Touch.downNodes)
-                    _Touch.downNodes = [];
-                _Touch.downNodes.length = 0;
-                var _Node:Node = getClosestNode(_Touch.globalX, _Touch.globalY);
-                if (_Node && _Touch.downNodes.indexOf(_Node) == -1)
-                    _Touch.downNodes.push(_Node);
-                _Touch.hoverNode = null;
-                if (_Node)
-                    _Touch.hoverNode = _Node;
-            }
-        }
-
-        public function touchMoved(_TouchEvent:TouchEvent):void // 获取鼠标移动中选中的初始天体
-        {
-            var _TouchArray:Vector.<Touch> = _TouchEvent.getTouches(touchQuad, "moved");
-            if (!_TouchArray)
-                return;
-            for each (var _Touch:Touch in _TouchArray) {
-                if (!_Touch.downNodes)
-                    _Touch.downNodes = [];
-                var _Node:Node = getClosestNode(_Touch.globalX, _Touch.globalY);
-                if (_Node && _Touch.downNodes.indexOf(_Node) == -1 && _Touch.downNodes.length == 0)
-                    _Touch.downNodes.push(_Node);
-                _Touch.hoverNode = null;
-                if (_Node)
-                    _Touch.hoverNode = _Node;
-            }
-        }
-
-        public function touchEnded(_TouchEvent:TouchEvent):void // 获取鼠标释放时选中的目标天体，并发送飞船
-        {
-            var _Node1:Node = null;
-            var _Node2:Node = null;
-            var _TouchArray:Vector.<Touch> = _TouchEvent.getTouches(touchQuad, "ended");
-            if (!_TouchArray)
-                return;
-            for each (var _Touch:Touch in _TouchArray) {
-                if (_Touch.hoverNode && _Touch.downNodes.length > 0) {
-                    _Node1 = _Touch.hoverNode;
-                    FXHandler.addFade(_Node1.x, _Node1.y, _Node1.size, 0xFFFFFF, 1);
-                    for each (_Node2 in _Touch.downNodes) {
-                        if (_Node2 == _Node1 || nodesBlocked(_Node2, _Node1))
-                            continue;
-                        _Node2.sendShips(1, _Node1);
-                        FXHandler.addFade(_Node2.x, _Node2.y, _Node2.size, 0xFFFFFF, 0);
-                    }
-                }
-                _Touch.hoverNode = null;
-                if (_Touch.downNodes)
-                    _Touch.downNodes.length = 0;
-            }
-        }
-
-        // #endregion
-        // #region 传统操作
-        public function on_mouseDown(_Mouse:MouseEvent):void // 鼠标左键按下
-        {
-            if (game.alpha < 0.5)
-                return;
-            down_x = (_Mouse.stageX - Starling.current.viewPort.x) / Starling.contentScaleFactor;
-            down_y = (_Mouse.stageY - Starling.current.viewPort.y) / Starling.contentScaleFactor;
-            mouseDown = true;
-            dragging = false;
-        }
-
-        public function on_mouseMove(_Mouse:MouseEvent):void // 鼠标左键拖动（框选天体）
-        {
-            var _dx:Number = NaN;
-            var _dy:Number = NaN;
-            if (game.alpha < 0.5)
-                return;
-            if (!mouseDown)
-                return;
-            drag_x = (_Mouse.stageX - Starling.current.viewPort.x) / Starling.contentScaleFactor;
-            drag_y = (_Mouse.stageY - Starling.current.viewPort.y) / Starling.contentScaleFactor;
-            if (dragging)
-                return;
-            _dx = drag_x - down_x;
-            _dy = drag_y - down_y;
-            if (Math.sqrt(_dx * _dx + _dy * _dy) > 5) {
-                dragging = true;
-                if (!_Mouse.shiftKey)
-                    selectedNodes.length = 0;
-            }
-        }
-
-        public function on_mouseUp(_Mouse:MouseEvent):void // 鼠标左键抬起（选中天体）
-        {
-            var _x:Number = NaN;
-            var _y:Number = NaN;
-            var _Node:Node = null;
-            mouseDown = false;
-            if (game.alpha < 0.5)
-                return;
-            if (dragging)
-                return;
-            _x = (_Mouse.stageX - Starling.current.viewPort.x) / Starling.contentScaleFactor;
-            _y = (_Mouse.stageY - Starling.current.viewPort.y) / Starling.contentScaleFactor;
-            _Node = getClosestNode(_x, _y);
-            if (_Mouse.shiftKey) {
-                if (_Node && selectedNodes.indexOf(_Node) == -1)
-                    selectedNodes.push(_Node);
-                else if (_Node && selectedNodes.indexOf(_Node) != -1)
-                    selectedNodes.splice(selectedNodes.indexOf(_Node), 1);
-            } else {
-                selectedNodes.length = 0;
-                if (_Node)
-                    selectedNodes.push(_Node);
-            }
-        }
-
-        public function on_rightDown(_Mouse:MouseEvent):void // 鼠标右键按下
-        {
-            if (game.alpha < 0.5)
-                return;
-            rightDown = true;
-        }
-
-        public function on_rightUp(_Mouse:MouseEvent):void // 鼠标右键抬起（发送飞船）
-        {
-            rightDown = false;
-            if (game.alpha < 0.5)
-                return;
-            var _x:Number = (_Mouse.stageX - Starling.current.viewPort.x) / Starling.contentScaleFactor;
-            var _y:Number = (_Mouse.stageY - Starling.current.viewPort.y) / Starling.contentScaleFactor;
-            var _currentNode:Node = getClosestNode(_x, _y);
-            if (!_currentNode)
-                return;
-            FXHandler.addFade(_currentNode.x, _currentNode.y, _currentNode.size, 0xFFFFFF, 1);
-            for each (var _Node:Node in selectedNodes) {
-                if (_Node == _currentNode || nodesBlocked(_Node, _currentNode))
-                    continue;
-                _Node.sendShips(1, _currentNode);
-                FXHandler.addFade(_Node.x, _Node.y, _Node.size, 0xFFFFFF, 0);
-            }
-        }
-
-        // #endregion
         // #region 更新
         public function update(_dt:Number):void {
             movePerc = fleetSlider.total;
@@ -465,10 +244,6 @@ package Game {
                 popLabel3.x = 512 + popLabel.textBounds.width * 0.5 + 10;
                 popLabel3.alpha = Math.max(0, popLabel3.alpha - _dt * 0.5);
             }
-            if (Globals.touchControls)
-                drawTouches();
-            else
-                drawMouse();
             var _R:Number = NaN;
             var _voidR:Number = NaN;
             for each (var _Fade:SelectFade in game.fades.active) {
@@ -483,240 +258,6 @@ package Game {
             fleetSlider.update();
         }
 
-        // #endregion
-        // #region 计算工具
-        public function getClosestNode(_x:Number, _y:Number):Node {
-            var _ClosestNode:Node = null;
-            var _dx:Number = NaN;
-            var _dy:Number = NaN;
-            var _Distance:Number = NaN;
-            var _lineDist:Number = NaN;
-            var _ClosestDist:Number = 200;
-            for each (var _Node:Node in game.nodes.active) {
-                if (_Node.type == 3)
-                    continue;
-                _dx = _Node.x - _x;
-                _dy = _Node.y - _y;
-                _Distance = Math.sqrt(_dx * _dx + _dy * _dy);
-                _lineDist = _Node.lineDist;
-                if (_Distance < _lineDist && _Distance < _ClosestDist) {
-                    _ClosestDist = _Distance;
-                    _ClosestNode = _Node;
-                }
-            }
-            return _ClosestNode;
-        }
-
-        public function lineBlocked(_x1:Number, _y1:Number, _x2:Number, _y2:Number):Point {
-            var _Intersection:Point = null;
-            var _bar1:Point = null;
-            var _bar2:Point = null;
-            for each (var _bar:Array in game.barrierLines) {
-                _bar1 = _bar[0];
-                _bar2 = _bar[1];
-                _Intersection = getIntersection(_x1, _y1, _x2, _y2, _bar1.x, _bar1.y, _bar2.x, _bar2.y);
-                if (_Intersection)
-                    return _Intersection;
-            }
-            return null;
-        }
-
-        public function nodesBlocked(_Node1:Node, _Node2:Node):Point // 判断路径是否被拦截并计算拦截点
-        {
-            var _bar1:Point = null;
-            var _bar2:Point = null;
-            var _Intersection:Point = null;
-            if (_Node1.team == 1 && _Node1.type == 1)
-                return null;
-            for each (var _bar:Array in game.barrierLines) {
-                _bar1 = _bar[0];
-                _bar2 = _bar[1];
-                _Intersection = getIntersection(_Node1.x, _Node1.y, _Node2.x, _Node2.y, _bar1.x, _bar1.y, _bar2.x, _bar2.y); // 计算交点
-                if (_Intersection)
-                    return _Intersection;
-            }
-            return null;
-        }
-
-        // 计算交点
-        public function getIntersection(_p1x:Number, _p1y:Number, _p2x:Number, _p2y:Number, _p3x:Number, _p3y:Number, _p4x:Number, _p4y:Number):Point {
-            var _L1dx:Number = _p2x - _p1x;
-            var _L1dy:Number = _p2y - _p1y;
-            var _L2dx:Number = _p4x - _p3x;
-            var _L2dy:Number = _p4y - _p3y;
-            var _Ratio1:Number = (-_L1dy * (_p1x - _p3x) + _L1dx * (_p1y - _p3y)) / (-_L2dx * _L1dy + _L1dx * _L2dy);
-            var _Ratio2:Number = (_L2dx * (_p1y - _p3y) - _L2dy * (_p1x - _p3x)) / (-_L2dx * _L1dy + _L1dx * _L2dy);
-            if (_Ratio1 >= 0 && _Ratio1 <= 1 && _Ratio2 >= 0 && _Ratio2 <= 1)
-                return new Point(_p1x + _Ratio2 * _L1dx, _p1y + _Ratio2 * _L1dy);
-            return null;
-        }
-
-        // #endregion
-        // #region 绘图工具
-        public function drawTouches():void // 绘制常规操作下的定位圈和鼠标线
-        {
-            const _Color:uint = 0xFFFFFF; // #FFFFFF
-            var _Tx:Number = NaN; // T 表示 touch 触摸点
-            var _Ty:Number = NaN;
-            var _Block:Point = null;
-            var _dx:Number = NaN;
-            var _dy:Number = NaN;
-            var _Distance:Number = NaN;
-            var _Angle:Number = NaN;
-            var _Nx:Number = NaN; // N 表示 node 天体
-            var _Ny:Number = NaN;
-            if (!touches)
-                return;
-            for each (var _Touch:Touch in touches) {
-                if (_Touch.hoverNode) {
-                    drawer.drawCircle(game.uiBatch, _Touch.hoverNode.x, _Touch.hoverNode.y, Globals.teamColors[_Touch.hoverNode.team], _Touch.hoverNode.lineDist - 4, _Touch.hoverNode.size * 25 * 2, true, 0.5);
-                    if (_Touch.hoverNode.attackStrategy.attackRate > 0)
-                        drawer.drawDashedCircle(game.uiBatch, _Touch.hoverNode.x, _Touch.hoverNode.y, Globals.teamColors[_Touch.hoverNode.team], _Touch.hoverNode.attackStrategy.attackRange, _Touch.hoverNode.attackStrategy.attackRange - 2, false, 0.5, 1, 0, 256);
-                }
-                if (_Touch.downNodes && _Touch.downNodes.length > 0) // 若已选中天体
-                {
-                    for each (var _Node:Node in _Touch.downNodes) {
-                        drawer.drawCircle(game.uiBatch, _Node.x, _Node.y, _Color, _Node.lineDist - 4, _Node.lineDist - 7, false, 0.8);
-                        _Tx = _Touch.globalX;
-                        _Ty = _Touch.globalY;
-                        if (_Touch.hoverNode) // 绘制目标天体的定位圈
-                        {
-                            _Block = nodesBlocked(_Node, _Touch.hoverNode);
-                            _Tx = _Touch.hoverNode.x;
-                            _Ty = _Touch.hoverNode.y;
-                            if (_Block)
-                                drawer.drawCircle(game.uiBatch, _Tx, _Ty, 0xFF3333, _Touch.hoverNode.lineDist - 4, _Touch.hoverNode.lineDist - 7, false, 0.8);
-                            else
-                                drawer.drawCircle(game.uiBatch, _Tx, _Ty, _Color, _Touch.hoverNode.lineDist - 4, _Touch.hoverNode.lineDist - 7, false, 0.8);
-                        } else
-                            _Block = lineBlocked(_Node.x, _Node.y, _Tx, _Ty);
-                        _dx = _Tx - _Node.x;
-                        _dy = _Ty - _Node.y;
-                        _Distance = Math.sqrt(_dx * _dx + _dy * _dy);
-                        if (_Distance > _Node.lineDist - 5) // 鼠标移出天体定位圈时绘制
-                        {
-                            _Angle = Math.atan2(_dy, _dx);
-                            _Nx = _Node.x + Math.cos(_Angle) * (_Node.lineDist - 5);
-                            _Ny = _Node.y + Math.sin(_Angle) * (_Node.lineDist - 5);
-                            if (_Touch.hoverNode) {
-                                _Tx -= Math.cos(_Angle) * (_Touch.hoverNode.lineDist - 5);
-                                _Ty -= Math.sin(_Angle) * (_Touch.hoverNode.lineDist - 5);
-                            }
-                            if (_Block) // 分段绘制鼠标线
-                            {
-                                drawer.drawLine(game.uiBatch, _Nx, _Ny, _Block.x, _Block.y, _Color, 3, 0.8);
-                                drawer.drawLine(game.uiBatch, _Block.x, _Block.y, _Tx, _Ty, 0xFF3333, 3, 0.8);
-                            } else
-                                drawer.drawLine(game.uiBatch, _Nx, _Ny, _Tx, _Ty, _Color, 3, 0.8);
-                        }
-                    }
-                }
-            }
-        }
-
-        public function drawMouse():void // 绘制传统操作下的选中框定位圈连接线
-        {
-            var _quadtypeX:Number = NaN;
-            var _quadtypeY:Number = NaN;
-            var i:int = 0;
-            var _Node1:Node = null;
-            var _mouseX:Number = NaN;
-            var _mouseY:Number = NaN;
-            var _Node2:Node = null;
-            var _Block:Point = null;
-            var _x:Number = NaN;
-            var _y:Number = NaN;
-            var _dx:Number = NaN;
-            var _dy:Number = NaN;
-            var _angle:Number = NaN;
-            var _lx:Number = NaN;
-            var _ly:Number = NaN;
-            game.mouseBatch.reset();
-            if (mouseDown && dragging) {
-                dragQuad.x = down_x;
-                dragQuad.y = down_y;
-                dragQuad.width = drag_x - down_x;
-                dragQuad.height = drag_y - down_y;
-                dragQuad.alpha = 0.2;
-                game.mouseBatch.addQuad(dragQuad);
-                _quadtypeX = drag_x - down_x > 0 ? 1 : -1;
-                _quadtypeY = drag_y - down_y > 0 ? 1 : -1;
-                dragLine.alpha = 0.5;
-                dragLine.width = (dragQuad.width + 2) * _quadtypeX;
-                dragLine.height = _quadtypeY;
-                dragLine.x = down_x - _quadtypeX;
-                dragLine.y = down_y - _quadtypeY;
-                game.mouseBatch.addQuad(dragLine);
-                dragLine.x = down_x - _quadtypeX;
-                dragLine.y = down_y + dragQuad.height * _quadtypeY;
-                game.mouseBatch.addQuad(dragLine);
-                dragLine.width = _quadtypeX;
-                dragLine.height = dragQuad.height * _quadtypeY;
-                dragLine.x = down_x - _quadtypeX;
-                dragLine.y = down_y;
-                game.mouseBatch.addQuad(dragLine);
-                dragLine.x = down_x + dragQuad.width * _quadtypeX;
-                dragLine.y = down_y;
-                game.mouseBatch.addQuad(dragLine);
-                game.mouseBatch.blendMode = "add";
-                for each (_Node1 in game.nodes.active) {
-                    if (_Node1.ships[1].length == 0 && _Node1.team != 1)
-                        continue;
-                    if (selectedNodes.indexOf(_Node1) != -1)
-                        continue;
-                    if (_quadtypeX > 0 && _quadtypeY > 0) {
-                        if (_Node1.x > down_x && _Node1.x < drag_x && _Node1.y > down_y && _Node1.y < drag_y)
-                            selectedNodes.push(_Node1);
-                    } else if (_quadtypeX > 0 && _quadtypeY < 0) {
-                        if (_Node1.x > down_x && _Node1.x < drag_x && _Node1.y > drag_y && _Node1.y < down_y)
-                            selectedNodes.push(_Node1);
-                    } else if (_quadtypeX < 0 && _quadtypeY > 0) {
-                        if (_Node1.x > drag_x && _Node1.x < down_x && _Node1.y > down_y && _Node1.y < drag_y)
-                            selectedNodes.push(_Node1);
-                    } else if (_quadtypeX < 0 && _quadtypeY < 0) {
-                        if (_Node1.x > drag_x && _Node1.x < down_x && _Node1.y > drag_y && _Node1.y < down_y)
-                            selectedNodes.push(_Node1);
-                    }
-                }
-            } else {
-                _mouseX = (Starling.current.nativeStage.mouseX - Starling.current.viewPort.x) / Starling.contentScaleFactor;
-                _mouseY = (Starling.current.nativeStage.mouseY - Starling.current.viewPort.y) / Starling.contentScaleFactor;
-                _Node2 = getClosestNode(_mouseX, _mouseY);
-                if (_Node2) {
-                    drawer.drawCircle(game.uiBatch, _Node2.x, _Node2.y, Globals.teamColors[_Node2.team], _Node2.lineDist - 4, _Node2.size * 25 * 2, true, 0.5);
-                    if (_Node2.attackStrategy.attackRate > 0 && _Node2.attackStrategy.attackRange > 0)
-                        drawer.drawDashedCircle(game.uiBatch, _Node2.x, _Node2.y, Globals.teamColors[_Node2.team], _Node2.attackStrategy.attackRange, _Node2.attackStrategy.attackRange - 2, false, 0.5, 1, 0, 256);
-                    if (rightDown && selectedNodes.length > 0) {
-                        for each (_Node1 in selectedNodes) {
-                            _Block = nodesBlocked(_Node1, _Node2);
-                            _x = _Node2.x;
-                            _y = _Node2.y;
-                            _dx = _x - _Node1.x;
-                            _dy = _y - _Node1.y;
-                            if (Math.sqrt(_dx * _dx + _dy * _dy) > _Node1.lineDist - 5) {
-                                _angle = Math.atan2(_dy, _dx);
-                                _lx = _Node1.x + Math.cos(_angle) * (_Node1.lineDist - 5);
-                                _ly = _Node1.y + Math.sin(_angle) * (_Node1.lineDist - 5);
-                                _x -= Math.cos(_angle) * (_Node2.lineDist - 5);
-                                _y -= Math.sin(_angle) * (_Node2.lineDist - 5);
-                                if (_Block) {
-                                    drawer.drawLine(game.uiBatch, _lx, _ly, _Block.x, _Block.y, 0xFFFFFF, 3, 0.8);
-                                    drawer.drawLine(game.uiBatch, _Block.x, _Block.y, _x, _y, 0xFF3333, 3, 0.8);
-                                } else
-                                    drawer.drawLine(game.uiBatch, _lx, _ly, _x, _y, 0xFFFFFF, 3, 0.8);
-                            }
-                        }
-                        if (_Block)
-                            drawer.drawCircle(game.uiBatch, _Node2.x, _Node2.y, 0xFF3333, _Node2.lineDist - 4, _Node2.lineDist - 7, false, 0.8);
-                        else
-                            drawer.drawCircle(game.uiBatch, _Node2.x, _Node2.y, 0xFFFFFF, _Node2.lineDist - 4, _Node2.lineDist - 7, false, 0.8);
-                    }
-                }
-            }
-            for each (_Node1 in selectedNodes) {
-                drawer.drawCircle(game.uiBatch, _Node1.x, _Node1.y, 0xFFFFFF, _Node1.lineDist - 4, _Node1.lineDist - 7, false, 0.8);
-            }
-        }
         // #endregion
     }
 }

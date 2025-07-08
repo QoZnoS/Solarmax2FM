@@ -2,7 +2,7 @@ package utils
 {
     import starling.display.Image;
     import starling.display.QuadBatch;
-
+    /**唯一实例，辅助绘图工具 */
     public class Drawer{
         private var _quadImage:Image;
         private var _quadImage2:Image;

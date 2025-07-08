@@ -437,6 +437,7 @@ package Game {
             for each (var _pool:EntityPool in entities) // 依次执行所有实体的更新函数
                 _pool.update(dt);
             ui.update(dt); // 更新ui
+            scene.ui.update();
             scene.debug.update(e)
             shipsBatch1.blendMode = shipsBatch2.blendMode = "add";
             specialEvents(); // 处理特殊关卡的特殊事件

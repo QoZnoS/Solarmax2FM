@@ -84,21 +84,8 @@ package Game {
             switch (_keyCode) {
                 case Keyboard.Q: // Q 启用 Debug 模式，已移至 Root.as 中
                     break;
-                case Keyboard.W:
-                    clear_node(game.ui.debug_touch_Node);
-                    break;
-                case Keyboard.E: // +100 飞船
-                    if (game.ui.debug_touch_Node)
-                        EntityHandler.addShips(game.ui.debug_touch_Node, 1, 100);
-                    break;
-                case Keyboard.R: // 添加特效
-                    game.ui.debug_touch_Node.image.filter = createFilter();
-                    break;
                 case Keyboard.S: // 跳关
                     game.next();
-                    break;
-                case Keyboard.A:
-                    game.ui.debug_touch_Node.changeType(3)
                     break;
                 case Keyboard.Z:
                     scene.applyFilter()
@@ -106,15 +93,6 @@ package Game {
                 case Keyboard.X:
                     title.init()
                     title.animateIn()
-                    break;
-                case Keyboard.C:
-                    if (game.ui.debug_touch_Node)
-                        EntityHandler.addShips(game.ui.debug_touch_Node, 3, 100);
-                    break;
-                case Keyboard.F:
-                    var _ship:Ship = findShipsInRange();
-                    if (_ship)
-                        trace(_ship);
                     break;
                 case Keyboard.NUMBER_0:
                 case Keyboard.NUMBER_1:
@@ -312,22 +290,6 @@ package Game {
                 }
             }
             _Node.changeTeam(0);
-        }
-
-        private function findShipsInRange():Ship {
-            var dx:Number;
-            var dy:Number;
-            var ship:Ship;
-            const range:int = 5;
-            for each (ship in game.ships.active) {
-                dx = ship.x - game.ui.debug_mouse_x;
-                dy = ship.y - game.ui.debug_mouse_y;
-                if (dx > range || dx < -range || dy > range || dy < -range)
-                    continue;
-                if (Math.sqrt(dx * dx + dy * dy) < range)
-                    return ship;
-            }
-            return null;
         }
 
         private function createFilter():ColorMatrixFilter{
