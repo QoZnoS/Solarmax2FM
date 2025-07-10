@@ -5,6 +5,7 @@ package Game.Entity {
     import Game.GameScene;
     import starling.errors.AbstractClassError;
     import utils.Rng;
+    import utils.GS;
 
     public class EntityHandler {
         public static var game:GameScene;

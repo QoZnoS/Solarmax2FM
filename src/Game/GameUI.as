@@ -25,13 +25,10 @@ package Game {
         public var speedBtns:Array;
         public var speedMult:Number;
 
-        public var drawer:Drawer;
-
         // #endregion
-        public function GameUI(_drawer:Drawer) // 构造函数，初始化对象
+        public function GameUI() // 构造函数，初始化对象
         {
             super();
-            this.drawer = _drawer;
             var _Color:Number = 16755370;
             popLabel = new TextField(600, 40, "POPULATION : 50 / 50", "Downlink12", -1, _Color);
             popLabel.vAlign = popLabel.hAlign = "center";
@@ -249,7 +246,7 @@ package Game {
             for each (var _Fade:SelectFade in game.fades.active) {
                 _R = 150 * _Fade.size - 4;
                 _voidR = Math.max(0, _R - 3);
-                drawer.drawCircle(game.uiBatch, _Fade.x, _Fade.y, _Fade.color, _R, _voidR, false, _Fade.alpha);
+                Drawer.drawCircle(game.uiBatch, _Fade.x, _Fade.y, _Fade.color, _R, _voidR, false, _Fade.alpha);
             }
         }
 

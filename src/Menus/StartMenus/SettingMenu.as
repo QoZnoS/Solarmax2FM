@@ -10,6 +10,7 @@ package Menus.StartMenus {
     import starling.events.TouchEvent;
     import starling.events.Touch;
     import starling.events.EnterFrameEvent;
+    import utils.GS;
 
     public class SettingMenu extends Sprite implements IMenu {
 

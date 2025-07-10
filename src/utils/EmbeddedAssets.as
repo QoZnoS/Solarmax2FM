@@ -1,4 +1,4 @@
-package {
+package utils{
     public class EmbeddedAssets {
         [Embed(source = "/_assets/paused.png")]
         public static const paused_png:Class;

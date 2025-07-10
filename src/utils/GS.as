@@ -1,28 +1,24 @@
-// 提供音效相关函数，全静态
-
-package {
+package utils{
     import com.greensock.TweenLite;
     import flash.media.SoundChannel;
     import flash.media.SoundMixer;
     import flash.media.SoundTransform;
     import starling.core.Starling;
-
+    /**全局音频控制类 */
     public class GS {
-        public static var st:SoundTransform;
-        public static var mt:SoundTransform;
-        public static var mute:SoundTransform;
-        public static var timers:Array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-        public static var gap:Number = 0.1;
-        public static var musicChannel:SoundChannel;
-        public static var lastSong:String = "";
-        public static var lastLoop:String = "";
-        public static var lastPosition:Number = 0;
-        public static var musicPaused:Boolean = false;
+        private static var st:SoundTransform;
+        private static var mt:SoundTransform;
+        private static var timers:Array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        private static var gap:Number = 0.1;
+        private static var musicChannel:SoundChannel;
+        private static var lastSong:String = "";
+        private static var lastLoop:String = "";
+        private static var lastPosition:Number = 0;
+        private static var musicPaused:Boolean = false;
 
         public static function init():void {
             st = new SoundTransform(Globals.soundVolume);
             mt = new SoundTransform(Globals.musicVolume);
-            mute = new SoundTransform(0);
         }
 
         public static function update(_dt:Number):void {

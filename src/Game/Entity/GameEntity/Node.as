@@ -30,6 +30,7 @@ package Game.Entity.GameEntity {
     import Game.Entity.Utils;
     import starling.display.BlendMode;
     import utils.Rng;
+    import utils.GS;
 
     public class Node extends GameEntity {
         // #region 类变量
@@ -565,8 +566,10 @@ package Game.Entity.GameEntity {
         // #endregion
         // #region 功能类函数
         public function changeTeam(_team:int):void {
-            if (Globals.level == 35 && type == 5 || this.team == _team)
+            if (Globals.level == 35 && type == 5)
                 return; // 32 36关星核不做处理，自己变自己不做处理
+            if (_team == 0)
+                this.hp = 0;
             var _Nodeteam:int = this.team;
             this.team = _team;
             this.captureTeam = _team;

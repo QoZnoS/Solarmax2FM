@@ -5,6 +5,7 @@ package Game.Entity.GameEntity
    import starling.display.Image;
    import Game.Entity.FXHandler;
    import utils.Rng;
+   import utils.GS;
 
    public class Ship extends GameEntity
    {

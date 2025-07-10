@@ -4,17 +4,21 @@ package utils
     import starling.display.QuadBatch;
     /**唯一实例，辅助绘图工具 */
     public class Drawer{
-        private var _quadImage:Image;
-        private var _quadImage2:Image;
+        private static var _quadImage:Image;
+        private static var _quadImage2:Image;
         
         public function Drawer(){
+            throw new Error("静态类不允许实例化");
+        }
+
+        public static function init():void{
             _quadImage = new Image(Root.assets.getTexture("quad"));
             _quadImage.adjustVertices();
             _quadImage2 = new Image(Root.assets.getTexture("quad8x4"));
             _quadImage2.adjustVertices();
         }
 
-        public function drawLine(layer:QuadBatch, x1:Number, y1:Number, x2:Number, y2:Number, Color:uint, Width:Number = 2, alpha:Number = 1):void {
+        public static function drawLine(layer:QuadBatch, x1:Number, y1:Number, x2:Number, y2:Number, Color:uint, Width:Number = 2, alpha:Number = 1):void {
             var quadImage:Image = _quadImage;
             if (Width <= 3)
                 quadImage = _quadImage2;
@@ -37,7 +41,7 @@ package utils
             layer.addImage(quadImage);
         }
 
-        public function drawDashedLine(layer:QuadBatch, x1:Number, y1:Number, x2:Number, y2:Number, Color:uint, Width:Number = 2, alpha:Number = 1, StartStep:Number = 0):void {
+        public static function drawDashedLine(layer:QuadBatch, x1:Number, y1:Number, x2:Number, y2:Number, Color:uint, Width:Number = 2, alpha:Number = 1, StartStep:Number = 0):void {
             var Step:int = 0;
             var dx:Number = x2 - x1;
             var dy:Number = y2 - y1;
@@ -57,7 +61,7 @@ package utils
             }
         }
 
-        public function drawCircle(layer:QuadBatch, x:Number, y:Number, Color:uint, R:Number, voidR:Number = 0, blur:Boolean = false, alpha:Number = 1, cycleCount:Number = 1, angle:Number = 0, lineCount:int = 64):void {
+        public static function drawCircle(layer:QuadBatch, x:Number, y:Number, Color:uint, R:Number, voidR:Number = 0, blur:Boolean = false, alpha:Number = 1, cycleCount:Number = 1, angle:Number = 0, lineCount:int = 64):void {
             var quadImage:Image = _quadImage;
             if (R - voidR <= 3)
                 quadImage = _quadImage2;
@@ -88,7 +92,7 @@ package utils
             }
         }
 
-        public function drawDashedCircle(layer:QuadBatch, x:Number, y:Number, Color:uint, R:Number, voidR:Number = 0, blur:Boolean = false, alpha:Number = 1, cycleCount:Number = 1, angle:Number = 0, lineCount:int = 64):void {
+        public static function drawDashedCircle(layer:QuadBatch, x:Number, y:Number, Color:uint, R:Number, voidR:Number = 0, blur:Boolean = false, alpha:Number = 1, cycleCount:Number = 1, angle:Number = 0, lineCount:int = 64):void {
             var quadImage:Image = _quadImage;
             if (R - voidR <= 3)
                 quadImage = _quadImage2;

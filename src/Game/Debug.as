@@ -87,6 +87,9 @@ package Game {
                 case Keyboard.S: // 跳关
                     game.next();
                     break;
+                case Keyboard.W:
+                    game.nodes.active[2].changeTeam(0);
+                    break;
                 case Keyboard.Z:
                     scene.applyFilter()
                     break;

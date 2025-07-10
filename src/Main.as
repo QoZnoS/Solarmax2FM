@@ -15,6 +15,8 @@
     import starling.utils.RectangleUtil;
     import starling.utils.Color;
     import flash.display.StageDisplayState;
+    import utils.EmbeddedAssets;
+    import utils.GS;
 
     [SWF(frameRate = "120", backgroundColor = "0x00000")]
     public class Main extends Sprite {

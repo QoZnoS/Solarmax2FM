@@ -18,12 +18,10 @@ package {
         public var endScene:EndScene;
         public var mapEditor:EditorCenter;
         public var debug:Debug;
-        public var drawer:Drawer;
         public var ui:UIContainer;
 
         public function SceneController() {
             super();
-            drawer = new Drawer();
             titleMenu = new TitleMenu(this);
             gameScene = new GameScene(this);
             endScene = new EndScene(this);

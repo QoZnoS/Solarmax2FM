@@ -5,6 +5,7 @@ package utils.Component {
     import starling.display.Sprite;
     import starling.events.Touch;
     import starling.events.TouchEvent;
+    import utils.GS;
 
     public class MenuButton extends Sprite {
         public var quad:Quad;

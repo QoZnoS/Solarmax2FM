@@ -6,6 +6,7 @@ package Game
    import starling.display.Sprite;
    import starling.events.Touch;
    import starling.events.TouchEvent;
+   import utils.GS;
 
    public class SpeedButton extends Sprite
    {

@@ -5,6 +5,7 @@ package Menus.StartMenus {
     import utils.Component.OptionButton;
     import starling.events.Event;
     import starling.core.Starling;
+    import utils.GS;
 
     public class StaffMenu extends Sprite implements IMenu {
 

@@ -5,6 +5,9 @@ package {
     import starling.textures.Texture;
     import starling.utils.AssetManager;
     import utils.ProgressBar;
+    import utils.ScrollingBackground;
+    import utils.GS;
+    import utils.Drawer;
 
     public class Root extends Sprite {
 
@@ -12,7 +15,7 @@ package {
         public static var bg:ScrollingBackground;
 
         private var mActiveScene:Sprite;
-        public var scene:SceneController;
+        private var scene:SceneController;
 
         public function Root() {
             super();
@@ -50,6 +53,7 @@ package {
                             scene = new SceneController()
                             addChild(scene);
                             GS.init();
+                            Drawer.init();
                         }, 0.05);
                     }
                 }; // 声明函数对象

@@ -20,13 +20,11 @@ package UI {
         private var dragging:Boolean;
         private var rightDown:Boolean;
         private var game:GameScene;
-        private var drawer:Drawer;
         public var dragQuad:Quad;
         public var dragLine:Quad;
 
         public function TraditionalCtrlLayer(_game:GameScene) {
             this.game = _game;
-            this.drawer = _game.ui.drawer;
 
             dragQuad = new Quad(10, 10, Globals.teamColors[1]);
             dragLine = new Quad(2, 2, Globals.teamColors[1]);
@@ -118,9 +116,9 @@ package UI {
                 _mouseY = (Starling.current.nativeStage.mouseY - Starling.current.viewPort.y) / Starling.contentScaleFactor;
                 _Node2 = getClosestNode(_mouseX, _mouseY);
                 if (_Node2) {
-                    drawer.drawCircle(game.uiBatch, _Node2.x, _Node2.y, Globals.teamColors[_Node2.team], _Node2.lineDist - 4, _Node2.size * 25 * 2, true, 0.5);
+                    Drawer.drawCircle(game.uiBatch, _Node2.x, _Node2.y, Globals.teamColors[_Node2.team], _Node2.lineDist - 4, _Node2.size * 25 * 2, true, 0.5);
                     if (_Node2.attackStrategy.attackRate > 0 && _Node2.attackStrategy.attackRange > 0)
-                        drawer.drawDashedCircle(game.uiBatch, _Node2.x, _Node2.y, Globals.teamColors[_Node2.team], _Node2.attackStrategy.attackRange, _Node2.attackStrategy.attackRange - 2, false, 0.5, 1, 0, 256);
+                        Drawer.drawDashedCircle(game.uiBatch, _Node2.x, _Node2.y, Globals.teamColors[_Node2.team], _Node2.attackStrategy.attackRange, _Node2.attackStrategy.attackRange - 2, false, 0.5, 1, 0, 256);
                     if (rightDown && selectedNodes.length > 0) {
                         for each (_Node1 in selectedNodes) {
                             _Block = nodesBlocked(_Node1, _Node2);
@@ -135,21 +133,21 @@ package UI {
                                 _x -= Math.cos(_angle) * (_Node2.lineDist - 5);
                                 _y -= Math.sin(_angle) * (_Node2.lineDist - 5);
                                 if (_Block) {
-                                    drawer.drawLine(game.uiBatch, _lx, _ly, _Block.x, _Block.y, 0xFFFFFF, 3, 0.8);
-                                    drawer.drawLine(game.uiBatch, _Block.x, _Block.y, _x, _y, 0xFF3333, 3, 0.8);
+                                    Drawer.drawLine(game.uiBatch, _lx, _ly, _Block.x, _Block.y, 0xFFFFFF, 3, 0.8);
+                                    Drawer.drawLine(game.uiBatch, _Block.x, _Block.y, _x, _y, 0xFF3333, 3, 0.8);
                                 } else
-                                    drawer.drawLine(game.uiBatch, _lx, _ly, _x, _y, 0xFFFFFF, 3, 0.8);
+                                    Drawer.drawLine(game.uiBatch, _lx, _ly, _x, _y, 0xFFFFFF, 3, 0.8);
                             }
                         }
                         if (_Block)
-                            drawer.drawCircle(game.uiBatch, _Node2.x, _Node2.y, 0xFF3333, _Node2.lineDist - 4, _Node2.lineDist - 7, false, 0.8);
+                            Drawer.drawCircle(game.uiBatch, _Node2.x, _Node2.y, 0xFF3333, _Node2.lineDist - 4, _Node2.lineDist - 7, false, 0.8);
                         else
-                            drawer.drawCircle(game.uiBatch, _Node2.x, _Node2.y, 0xFFFFFF, _Node2.lineDist - 4, _Node2.lineDist - 7, false, 0.8);
+                            Drawer.drawCircle(game.uiBatch, _Node2.x, _Node2.y, 0xFFFFFF, _Node2.lineDist - 4, _Node2.lineDist - 7, false, 0.8);
                     }
                 }
             }
             for each (_Node1 in selectedNodes) {
-                drawer.drawCircle(game.uiBatch, _Node1.x, _Node1.y, 0xFFFFFF, _Node1.lineDist - 4, _Node1.lineDist - 7, false, 0.8);
+                Drawer.drawCircle(game.uiBatch, _Node1.x, _Node1.y, 0xFFFFFF, _Node1.lineDist - 4, _Node1.lineDist - 7, false, 0.8);
             }
         }
 

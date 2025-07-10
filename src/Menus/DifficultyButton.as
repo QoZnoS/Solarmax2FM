@@ -8,6 +8,7 @@ package Menus {
     import starling.events.Touch;
     import starling.events.TouchEvent;
     import starling.text.TextField;
+    import utils.GS;
 
     public class DifficultyButton extends Sprite {
         private var label:TextField;

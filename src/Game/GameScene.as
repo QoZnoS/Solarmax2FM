@@ -18,6 +18,7 @@ package Game {
     import Game.Entity.EntityHandler;
     import flash.ui.Keyboard;
     import utils.Rng;
+    import utils.GS;
 
     public class GameScene extends Sprite {
         // #region 类变量
@@ -154,7 +155,7 @@ package Game {
             entities = [ships, nodes, ais, warps, beams, pulses, flashes, barriers, explosions, darkPulses, fades]; // 实体池列表
             triggers = [false, false, false, false, false]; // 特殊事件
             barrierLines = []; // 障碍连接数据
-            ui = new GameUI(scene.drawer);
+            ui = new GameUI();
             tutorial = new TutorialSprite();
             this.alpha = 0;
             this.visible = false;

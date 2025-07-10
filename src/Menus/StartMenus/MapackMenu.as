@@ -149,7 +149,7 @@ package Menus.StartMenus {
             title.getBarrierData();
             title.getOrbitData();
             title.levels.updateLevels();
-            animateOut();
+            title.optionsMenu.animateOut();
         }
 
         private function on_prev(_click:Event):void {

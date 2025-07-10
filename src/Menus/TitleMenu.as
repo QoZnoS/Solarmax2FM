@@ -14,6 +14,7 @@ package Menus
    import starling.events.TouchEvent;
    import starling.text.TextField;
    import utils.Component.MenuButton;
+   import utils.GS;
 
    public class TitleMenu extends Sprite
    {

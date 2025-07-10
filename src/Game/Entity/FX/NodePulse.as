@@ -5,6 +5,7 @@ package Game.Entity.FX
    import Game.Entity.GameEntity;
    import Game.Entity.GameEntity.Node;
    import starling.display.Image;
+   import utils.GS;
    
    public class NodePulse extends GameEntity
    {
