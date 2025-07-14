@@ -20,6 +20,8 @@ package {
         public var debug:Debug;
         public var ui:UIContainer;
 
+        public var speedMult:Number;
+
         public function SceneController() {
             super();
             titleMenu = new TitleMenu(this);
@@ -28,6 +30,7 @@ package {
             debug = new Debug(this);
             mapEditor = new EditorCenter(this);
             ui = new UIContainer(this);
+            speedMult = 1;
             initTitleMenu(0);
             debug.init(gameScene, titleMenu);
             addChild(titleMenu);
@@ -102,9 +105,10 @@ package {
 
         /**游玩关卡*/
         public function playMap(seed:uint = 0):void {
+            speedMult = 1;
+            ui.initLevel();
             initGameScene(seed);
             debug.init_game();
-            ui.initLevel();
         }
 
         /**编辑关卡*/

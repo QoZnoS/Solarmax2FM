@@ -73,7 +73,7 @@ package Game {
 
         public var rng:Rng;
 
-        private var scene:SceneController
+        public var scene:SceneController
 
         // #endregion
         public function GameScene(_scene:SceneController) {
@@ -455,7 +455,7 @@ package Game {
                 slowMult = Math.max(slowMult - _dt * 0.75, 0.1);
                 _dt *= slowMult;
             } else if (!((Globals.level == 31 || Globals.level == 35) && triggers[0]))
-                _dt *= ui.speedMult;
+                _dt *= scene.speedMult;
             return _dt;
         }
 
@@ -500,7 +500,7 @@ package Game {
                     break;
                 case 1:
                     if (!triggers[0])
-                        if (ui.movePerc < 1)
+                        if (scene.ui.btnL.fleetSlider.perc < 1)
                             triggers[0] = true;
                     break;
                 case 31:
@@ -918,7 +918,7 @@ package Game {
                 case Keyboard.NUMBER_7:
                 case Keyboard.NUMBER_8:
                 case Keyboard.NUMBER_9:
-                    ui.movePerc = (keyCode - Keyboard.NUMBER_0) / 10;
+                    scene.ui.btnL.fleetSlider.perc = (keyCode - Keyboard.NUMBER_0) / 10;
                     break;
                 case Keyboard.NUMPAD_1: // 小键盘上的1
                 case Keyboard.NUMPAD_2:
@@ -929,13 +929,12 @@ package Game {
                 case Keyboard.NUMPAD_7:
                 case Keyboard.NUMPAD_8:
                 case Keyboard.NUMPAD_9:
-                    ui.movePerc = (keyCode - Keyboard.NUMPAD_0) / 10;
+                    scene.ui.btnL.fleetSlider.perc = (keyCode - Keyboard.NUMPAD_0) / 10;
                     break;
                 case Keyboard.NUMBER_0:
                 case Keyboard.NUMPAD_0:
-                    ui.movePerc = 1;
+                    scene.ui.btnL.fleetSlider.perc = 1;
             }
-            ui.movePercentBar(ui.movePerc);
         }
 
     }

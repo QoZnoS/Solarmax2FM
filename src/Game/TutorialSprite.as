@@ -73,8 +73,8 @@ package Game {
                     switch (Globals.fleetSliderPosition) {
                         case 0:
                             arrow.rotation = Math.PI;
-                            _x = game.ui.fleetSlider.x + 50;
-                            _y = 384 - game.ui.fleetSlider.touchHeight * 0.5 + game.ui.fleetSlider.boxHeight - 5;
+                            _x = game.scene.ui.btnL.fleetSlider.x + 50;
+                            _y = 384 - game.scene.ui.btnL.fleetSlider.box_y;
                             arrow.x = _x + 20;
                             arrow.y = _y;
                             Starling.juggler.tween(arrow, 1, {"alpha": 0.8,
@@ -92,8 +92,8 @@ package Game {
                             break;
                         case 2:
                             arrow.rotation = 0;
-                            _x = game.ui.fleetSlider.x;
-                            _y = 384 - game.ui.fleetSlider.touchHeight * 0.5 + game.ui.fleetSlider.boxHeight - 5;
+                            _x = game.scene.ui.btnL.fleetSlider.x;
+                            _y = 384 - game.scene.ui.btnL.fleetSlider.box_y;
                             arrow.x = _x - 20;
                             arrow.y = _y;
                             Starling.juggler.tween(arrow, 1, {"alpha": 0.8,
@@ -110,8 +110,8 @@ package Game {
                             loop = Starling.juggler.delayCall(show, 6);
                             break;
                         case 1:
-                            _x = 512 + game.ui.fleetSlider.touchWidth * 0.5 - game.ui.fleetSlider.boxWidth * 0.5;
-                            _y = game.ui.fleetSlider.y - 10;
+                            _x = 512 + game.scene.ui.btnL.fleetSlider.box_x;
+                            _y = game.scene.ui.btnL.fleetSlider.y - 10;
                             arrow.rotation = 1.5707963267948966;
                             arrow.x = _x;
                             arrow.y = _y - 20;

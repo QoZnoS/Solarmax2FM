@@ -17,7 +17,7 @@ package utils.Component {
          * <p>注册方法： <code>btn.addEventListener("clicked", 回调函数)</code>
          * @param _texture 按钮贴图
          */
-        public function MenuButton(_texture:String) {
+        public function MenuButton(_texture:String, _size:Number = 1) {
             super();
             image = new Image(Root.assets.getTexture(_texture));
             image.color = 16755370;
@@ -25,7 +25,7 @@ package utils.Component {
             quad = new Quad(image.width + 20, image.height + 20, 16711680);
             addChild(quad);
             hitPoint = new Point(0, 0);
-            setImage(_texture);
+            setImage(_texture, _size);
         }
 
         public function setImage(_texture:String, _size:Number = 1):void {

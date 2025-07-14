@@ -667,7 +667,7 @@ package Game.Entity.GameEntity {
                 return; // 防止调动飞船到自身
             var _Ship:Ship = null;
             var _warp:Boolean = false; // 是否为传送门
-            var l:int = Math.ceil(ships[_team].length * game.ui.movePerc); // 计算调动的飞船数，Math.ceil()为至少调动1飞船判定
+            var l:int = Math.ceil(ships[_team].length * game.scene.ui.btnL.fleetSlider.perc); // 计算调动的飞船数，Math.ceil()为至少调动1飞船判定
             for (var i:int = 0; i < l; i++) // 遍历每个需调动的飞船
             {
                 _Ship = ships[_team][i];
