@@ -31,10 +31,11 @@ package Menus {
             menus[0] = new SettingMenu(title);
             menus[1] = new MapackMenu(title);
             menus[2] = new StaffMenu(title);
-            for (var i:int = 0; i < menus.length; i++) {
+            for (var i:int = 0; i < MAX_PAGE; i++) {
                 menus[i].x = menus[i].pivotX = 512;
                 menus[i].y = menus[i].pivotY = 384;
-                menus[i].x += 72;
+                if (i != MAX_PAGE - 1)
+                    menus[i].x += 72;
                 addChild(menus[i] as Sprite);
                 menus[i].animateOut()
             }
@@ -46,7 +47,8 @@ package Menus {
                 pages[i].y = 160 + i*48;
                 pages[i].label.fontName = "Downlink18";
                 pages[i].labelBG.width = pages[i].quad.width = 144;
-                pages[i].labelBG.height = pages[i].quad.height = 36;
+                pages[i].labelBG.height = 36;
+                pages[i].quad.height = 48;
                 pages[i].label.x += 4;
                 pages[i].label.y += 4;
                 pages[i].addEventListener("clicked", on_page)
