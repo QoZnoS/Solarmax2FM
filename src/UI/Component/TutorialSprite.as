@@ -1,8 +1,9 @@
-package Game {
+package UI.Component {
     import starling.animation.DelayedCall;
     import starling.core.Starling;
     import starling.display.Image;
     import starling.display.Sprite;
+    import Game.GameScene;
 
     public class TutorialSprite extends Sprite {
         public var game:GameScene;

@@ -4,12 +4,12 @@ package Menus {
     import starling.display.Quad;
     import starling.display.Sprite;
     import starling.events.Event;
-    import utils.Component.MenuButton;
-    import utils.Component.OptionButton;
     import Menus.StartMenus.IMenu;
     import Menus.StartMenus.SettingMenu;
     import Menus.StartMenus.MapackMenu;
     import Menus.StartMenus.StaffMenu;
+    import UI.Component.MenuButton;
+    import UI.Component.OptionButton;
 
     public class OptionsMenu extends Sprite {
         public var title:TitleMenu; // 接入标题类

@@ -1,7 +1,6 @@
 package Menus.StartMenus {
     import starling.display.Sprite;
     import Menus.OptionSlider;
-    import utils.Component.OptionButton;
     import Menus.Tooltip;
     import starling.text.TextField;
     import starling.events.Event;
@@ -11,6 +10,7 @@ package Menus.StartMenus {
     import starling.events.Touch;
     import starling.events.EnterFrameEvent;
     import utils.GS;
+    import UI.Component.OptionButton;
 
     public class SettingMenu extends Sprite implements IMenu {
 

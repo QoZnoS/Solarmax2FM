@@ -1,8 +1,4 @@
-// 已完工
-
 package Game {
-    import flash.events.MouseEvent;
-    import starling.core.Starling;
     import starling.text.TextField;
     import utils.Drawer;
     import Entity.FX.SelectFade;
@@ -71,7 +67,6 @@ package Game {
             _GameScene.uiLayer.addChild(popLabel);
             _GameScene.uiLayer.addChild(popLabel2);
             _GameScene.uiLayer.addChild(popLabel3);
-            var _SpeedButton:SpeedButton = null;
         }
 
         // #endregion

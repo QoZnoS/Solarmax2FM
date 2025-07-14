@@ -1,5 +1,4 @@
-package Game {
-    import flash.geom.Point;
+package UI.Component {
     import starling.display.Quad;
     import starling.display.Sprite;
     import starling.events.Touch;

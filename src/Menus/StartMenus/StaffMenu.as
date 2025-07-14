@@ -2,10 +2,10 @@ package Menus.StartMenus {
     import starling.display.Sprite;
     import Menus.TitleMenu;
     import starling.text.TextField;
-    import utils.Component.OptionButton;
     import starling.events.Event;
     import starling.core.Starling;
     import utils.GS;
+    import UI.Component.OptionButton;
 
     public class StaffMenu extends Sprite implements IMenu {
 

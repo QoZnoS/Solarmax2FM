@@ -1,7 +1,6 @@
 package Menus
 {
    import flash.desktop.NativeApplication;
-   import flash.events.KeyboardEvent;
    import flash.geom.Point;
    import starling.core.Starling;
    import starling.display.Image;
@@ -13,8 +12,8 @@ package Menus
    import starling.events.Touch;
    import starling.events.TouchEvent;
    import starling.text.TextField;
-   import utils.Component.MenuButton;
    import utils.GS;
+   import UI.Component.MenuButton;
 
    public class TitleMenu extends Sprite
    {

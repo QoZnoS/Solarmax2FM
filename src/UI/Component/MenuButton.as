@@ -1,4 +1,4 @@
-package utils.Component {
+package UI.Component {
     import flash.geom.Point;
     import starling.display.Image;
     import starling.display.Quad;

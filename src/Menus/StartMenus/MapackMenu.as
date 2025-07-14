@@ -1,13 +1,12 @@
 package Menus.StartMenus {
     import starling.display.Sprite;
     import Menus.TitleMenu;
-    import utils.Component.MenuButton;
     import starling.text.TextField;
-    import utils.Component.OptionButton;
     import starling.display.Image;
     import starling.events.Event;
-    import air.update.events.UpdateEvent;
     import starling.core.Starling;
+    import UI.Component.MenuButton;
+    import UI.Component.OptionButton;
 
     public class MapackMenu extends Sprite implements IMenu {
 

@@ -19,6 +19,7 @@ package Game {
     import Entity.Node;
     import Entity.Ship;
     import Entity.FXHandler;
+    import UI.Component.TutorialSprite;
 
     public class GameScene extends Sprite {
         // #region 类变量

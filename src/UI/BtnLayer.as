@@ -1,11 +1,11 @@
 package UI {
     import starling.display.Sprite;
-    import utils.Component.MenuButton;
-    import Game.SpeedButton;
-    import Game.FleetSlider;
     import Game.GameScene;
     import starling.core.Starling;
     import flash.events.MouseEvent;
+    import UI.Component.MenuButton;
+    import UI.Component.SpeedButton;
+    import UI.Component.FleetSlider;
 
     public class BtnLayer extends Sprite {
         /**
@@ -129,7 +129,7 @@ package UI {
             game.restart();
         }
 
-        public function on_wheel(_Mouse:MouseEvent):void {
+        private function on_wheel(_Mouse:MouseEvent):void {
             if (game.alpha == 0)
                 return;
             if (_Mouse.delta < 0)
