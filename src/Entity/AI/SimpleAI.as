@@ -1,5 +1,8 @@
 package Entity.AI
 {
-     public class SimpleAI {
+    public class SimpleAI extends BasicAI{
+        public function SimpleAI(){
+            
+        }
     }
 }

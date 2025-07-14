@@ -4,6 +4,8 @@ package UI {
     import Game.SpeedButton;
     import Game.FleetSlider;
     import Game.GameScene;
+    import starling.core.Starling;
+    import flash.events.MouseEvent;
 
     public class BtnLayer extends Sprite {
         /**
@@ -17,8 +19,6 @@ package UI {
         private var game:GameScene;
 
         private var scene:SceneController;
-
-        public var movePerc:Number;
 
         public function BtnLayer(_scene:SceneController) {
             this.scene = _scene
@@ -41,7 +41,7 @@ package UI {
             }
             for (var i:int = 0; i < 3; i++) {
                 var _btn:MenuButton = gameBtn[i]
-                i == 0 ? _btn.x = 15 + Globals.margin : _btn.x = gameBtn[i-1].x + gameBtn[i-1].width * 1.1;
+                i == 0 ? _btn.x = 15 + Globals.margin : _btn.x = gameBtn[i - 1].x + gameBtn[i - 1].width * 1.1;
                 _btn.y = 124;
                 _btn.init();
                 addChild(_btn);
@@ -84,11 +84,11 @@ package UI {
                     fleetSlider.x = 950;
                     break;
                 case 1: // 下
-                    if (Globals.textSize <= 1){
+                    if (Globals.textSize <= 1) {
                         fleetSlider = new FleetSlider(1)
                         fleetSlider.x = 256;
                         fleetSlider.y = 640 - fleetSlider.height * 0.5;
-                    }else{
+                    } else {
                         fleetSlider = new FleetSlider(2)
                         fleetSlider.x = 192;
                         fleetSlider.y = 640 - fleetSlider.height * 0.5;
@@ -96,6 +96,7 @@ package UI {
             }
             fleetSlider.init();
             addChild(fleetSlider);
+            Starling.current.nativeStage.addEventListener("mouseWheel", on_wheel);
             //#endregion
         }
 
@@ -113,6 +114,7 @@ package UI {
             gameBtn[2].removeEventListener("clicked", on_restartBtn);
             fleetSlider.deInit();
             removeChild(fleetSlider)
+            Starling.current.nativeStage.removeEventListener("mouseWheel", on_wheel);
         }
 
         private function on_closeBtn():void {
@@ -126,5 +128,19 @@ package UI {
         private function on_restartBtn():void {
             game.restart();
         }
+
+        public function on_wheel(_Mouse:MouseEvent):void {
+            if (game.alpha == 0)
+                return;
+            if (_Mouse.delta < 0)
+                fleetSlider.perc -= 0.1;
+            else
+                fleetSlider.perc += 0.1;
+            if (fleetSlider.perc < 0)
+                fleetSlider.perc = 0.0001;
+            if (fleetSlider.perc > 1)
+                fleetSlider.perc = 1;
+        }
+
     }
 }

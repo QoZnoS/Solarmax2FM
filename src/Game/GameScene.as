@@ -361,14 +361,12 @@ package Game {
 
         // 移除UI，执行animateOut()
         public function quit():void {
-            ui.deInit();
             animateOut();
             scene.exit2TitleMenu(0);
         }
 
         // 解锁下一关，执行animateOut()
         public function next():void {
-            ui.deInit();
             animateOut();
             if (!Globals.levelData[Globals.level])
                 Globals.levelData.push(0);
@@ -417,7 +415,6 @@ package Game {
                     "transition": "easeIn",
                     "onComplete": function():void
                     {
-                        ui.deInit();
                         deInit();
                         init();
                     }});
@@ -654,7 +651,6 @@ package Game {
                             Globals.save();
                             GS.playMusic("bgm07", false);
                             Starling.juggler.tween(Globals, 10, {"soundMult": 0});
-                            ui.deInit();
                             invisibleMode();
                             Starling.juggler.tween(uiLayer, 5, {"alpha": 0});
                         }

@@ -72,27 +72,6 @@ package Game {
             _GameScene.uiLayer.addChild(popLabel2);
             _GameScene.uiLayer.addChild(popLabel3);
             var _SpeedButton:SpeedButton = null;
-            Starling.current.nativeStage.addEventListener("mouseWheel", on_wheel);
-        }
-
-        public function deInit():void // 移除相关控件
-        {
-            Starling.current.nativeStage.removeEventListener("mouseWheel", on_wheel);
-        }
-
-        public function on_wheel(_Mouse:MouseEvent):void // 鼠标滚轮（控制分兵条）
-        {
-            if (game.alpha == 0)
-                return;
-            // if (_Mouse.delta < 0)
-            //     movePerc -= 0.1;
-            // else
-            //     movePerc += 0.1;
-            // if (movePerc < 0)
-            //     movePerc = 0.0001;
-            // if (movePerc > 1)
-            //     movePerc = 1;
-            // movePercentBar(movePerc);
         }
 
         // #endregion
