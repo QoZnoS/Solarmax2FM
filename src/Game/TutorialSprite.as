@@ -130,8 +130,5 @@ package Game {
                     }
             }
         }
-
-        public function update(_dt:Number):void {
-        }
-    }
+     }
 }

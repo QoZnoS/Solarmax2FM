@@ -2,9 +2,6 @@
    实体池会记录场上的所有实体到对应的active列表中
  */
 package Game {
-    import Game.Entity.FX.*;
-    import Game.Entity.GameEntity.*;
-    import Game.Entity.EntityPool;
     import flash.geom.Point;
     import starling.animation.Juggler;
     import starling.core.Starling;
@@ -13,12 +10,15 @@ package Game {
     import starling.display.QuadBatch;
     import starling.display.Sprite;
     import starling.events.EnterFrameEvent;
-    import Game.Entity.Utils;
-    import Game.Entity.FXHandler;
-    import Game.Entity.EntityHandler;
     import flash.ui.Keyboard;
     import utils.Rng;
     import utils.GS;
+    import Entity.EntityPool;
+    import Entity.Utils;
+    import Entity.EntityHandler;
+    import Entity.Node;
+    import Entity.Ship;
+    import Entity.FXHandler;
 
     public class GameScene extends Sprite {
         // #region 类变量

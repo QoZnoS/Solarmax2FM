@@ -1,11 +1,11 @@
 package Menus {
-    import Game.Entity.EntityPool;
     import starling.display.Image;
     import starling.display.Quad;
     import starling.display.QuadBatch;
     import starling.display.Sprite;
     import starling.events.EnterFrameEvent;
-    import Game.Entity.FX.EndStar;
+    import Entity.EntityPool;
+    import Entity.FX.EndStar;
 
     public class EndScene extends Sprite {
         public var stars:EntityPool;

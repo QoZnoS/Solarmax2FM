@@ -1,5 +1,3 @@
-// 处理分兵条
-
 package Game {
     import flash.geom.Point;
     import starling.display.Quad;

@@ -1,16 +1,14 @@
 ﻿// 这是为改版制作的调试用类，在 Root.as 中实例化
 
 package Game {
-    import Game.Entity.GameEntity.*;
     import Menus.TitleMenu;
     import starling.display.Sprite;
     import starling.events.EnterFrameEvent;
     import starling.text.TextField;
-    import Game.Entity.EntityHandler;
     import flash.ui.Keyboard;
-    import starling.filters.FragmentFilter;
     import starling.filters.ColorMatrixFilter;
-    import utils.Rng
+    import Entity.Node;
+    import Entity.EnemyAI;
 
     public class Debug extends Sprite {
         public var debug:Boolean; // debug 开启状态

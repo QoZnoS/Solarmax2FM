@@ -2,12 +2,12 @@ package UI {
     import starling.display.Sprite;
     import flash.events.MouseEvent;
     import starling.core.Starling;
-    import Game.Entity.GameEntity.Node;
     import flash.geom.Point;
     import Game.GameScene;
     import utils.Drawer;
     import starling.display.Quad;
-    import Game.Entity.FXHandler;
+    import Entity.Node;
+    import Entity.FXHandler;
 
     public class TraditionalCtrlLayer extends Sprite {
 

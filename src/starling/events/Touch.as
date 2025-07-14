@@ -18,7 +18,7 @@ package starling.events
     import starling.utils.MatrixUtil;
     import starling.utils.formatString;
 
-    import Game.Entity.GameEntity.Node;
+    import Entity.Node;
     
     use namespace starling_internal;
 

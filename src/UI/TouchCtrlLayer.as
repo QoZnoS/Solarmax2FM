@@ -1,13 +1,13 @@
 package UI {
     import starling.display.Sprite;
     import starling.events.TouchEvent;
-    import Game.Entity.GameEntity.Node;
-    import Game.Entity.FXHandler;
     import starling.events.Touch;
     import starling.display.Quad;
     import flash.geom.Point;
     import Game.GameScene;
     import utils.Drawer;
+    import Entity.Node;
+    import Entity.FXHandler;
 
     public class TouchCtrlLayer extends Sprite {
         private var touchQuad:Quad;

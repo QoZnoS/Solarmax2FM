@@ -4,9 +4,8 @@ package Game {
     import flash.events.MouseEvent;
     import starling.core.Starling;
     import starling.text.TextField;
-    import Game.Entity.FX.SelectFade;
-    import utils.Component.MenuButton;
     import utils.Drawer;
+    import Entity.FX.SelectFade;
 
     public class GameUI {
         // #region 类变量
