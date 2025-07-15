@@ -8,6 +8,7 @@ package UI {
     import starling.display.Quad;
     import Entity.Node;
     import Entity.FXHandler;
+    import starling.display.QuadBatch;
 
     public class TraditionalCtrlLayer extends Sprite {
 
@@ -20,15 +21,19 @@ package UI {
         private var dragging:Boolean;
         private var rightDown:Boolean;
         private var game:GameScene;
-        public var dragQuad:Quad;
-        public var dragLine:Quad;
+        private var displayBatch:QuadBatch;
+        private var mouseBatch:QuadBatch;
+        private var dragQuad:Quad;
+        private var dragLine:Quad;
 
-        public function TraditionalCtrlLayer(_game:GameScene) {
-            this.game = _game;
-
+        public function TraditionalCtrlLayer(_ui:UIContainer) {
+            this.game = _ui.scene.gameScene;
+            this.displayBatch = _ui.behaviorBatch;
             dragQuad = new Quad(10, 10, Globals.teamColors[1]);
             dragLine = new Quad(2, 2, Globals.teamColors[1]);
             selectedNodes = [];
+            mouseBatch = new QuadBatch();
+            addChild(mouseBatch)
         }
 
 
@@ -49,6 +54,7 @@ package UI {
         }
 
         public function draw():void {
+            mouseBatch.reset();
             var _quadtypeX:Number = NaN;
             var _quadtypeY:Number = NaN;
             var i:int = 0;
@@ -64,14 +70,13 @@ package UI {
             var _angle:Number = NaN;
             var _lx:Number = NaN;
             var _ly:Number = NaN;
-            game.mouseBatch.reset();
             if (mouseDown && dragging) {
                 dragQuad.x = down_x;
                 dragQuad.y = down_y;
                 dragQuad.width = drag_x - down_x;
                 dragQuad.height = drag_y - down_y;
                 dragQuad.alpha = 0.2;
-                game.mouseBatch.addQuad(dragQuad);
+                mouseBatch.addQuad(dragQuad);
                 _quadtypeX = drag_x - down_x > 0 ? 1 : -1;
                 _quadtypeY = drag_y - down_y > 0 ? 1 : -1;
                 dragLine.alpha = 0.5;
@@ -79,19 +84,19 @@ package UI {
                 dragLine.height = _quadtypeY;
                 dragLine.x = down_x - _quadtypeX;
                 dragLine.y = down_y - _quadtypeY;
-                game.mouseBatch.addQuad(dragLine);
+                mouseBatch.addQuad(dragLine);
                 dragLine.x = down_x - _quadtypeX;
                 dragLine.y = down_y + dragQuad.height * _quadtypeY;
-                game.mouseBatch.addQuad(dragLine);
+                mouseBatch.addQuad(dragLine);
                 dragLine.width = _quadtypeX;
                 dragLine.height = dragQuad.height * _quadtypeY;
                 dragLine.x = down_x - _quadtypeX;
                 dragLine.y = down_y;
-                game.mouseBatch.addQuad(dragLine);
+                mouseBatch.addQuad(dragLine);
                 dragLine.x = down_x + dragQuad.width * _quadtypeX;
                 dragLine.y = down_y;
-                game.mouseBatch.addQuad(dragLine);
-                game.mouseBatch.blendMode = "add";
+                mouseBatch.addQuad(dragLine);
+                mouseBatch.blendMode = "add";
                 for each (_Node1 in game.nodes.active) {
                     if (_Node1.ships[1].length == 0 && _Node1.team != 1)
                         continue;
@@ -116,9 +121,9 @@ package UI {
                 _mouseY = (Starling.current.nativeStage.mouseY - Starling.current.viewPort.y) / Starling.contentScaleFactor;
                 _Node2 = getClosestNode(_mouseX, _mouseY);
                 if (_Node2) {
-                    Drawer.drawCircle(game.uiBatch, _Node2.x, _Node2.y, Globals.teamColors[_Node2.team], _Node2.lineDist - 4, _Node2.size * 25 * 2, true, 0.5);
+                    Drawer.drawCircle(displayBatch, _Node2.x, _Node2.y, Globals.teamColors[_Node2.team], _Node2.lineDist - 4, _Node2.size * 25 * 2, true, 0.5);
                     if (_Node2.attackStrategy.attackRate > 0 && _Node2.attackStrategy.attackRange > 0)
-                        Drawer.drawDashedCircle(game.uiBatch, _Node2.x, _Node2.y, Globals.teamColors[_Node2.team], _Node2.attackStrategy.attackRange, _Node2.attackStrategy.attackRange - 2, false, 0.5, 1, 0, 256);
+                        Drawer.drawDashedCircle(displayBatch, _Node2.x, _Node2.y, Globals.teamColors[_Node2.team], _Node2.attackStrategy.attackRange, _Node2.attackStrategy.attackRange - 2, false, 0.5, 1, 0, 256);
                     if (rightDown && selectedNodes.length > 0) {
                         for each (_Node1 in selectedNodes) {
                             _Block = nodesBlocked(_Node1, _Node2);
@@ -133,21 +138,21 @@ package UI {
                                 _x -= Math.cos(_angle) * (_Node2.lineDist - 5);
                                 _y -= Math.sin(_angle) * (_Node2.lineDist - 5);
                                 if (_Block) {
-                                    Drawer.drawLine(game.uiBatch, _lx, _ly, _Block.x, _Block.y, 0xFFFFFF, 3, 0.8);
-                                    Drawer.drawLine(game.uiBatch, _Block.x, _Block.y, _x, _y, 0xFF3333, 3, 0.8);
+                                    Drawer.drawLine(displayBatch, _lx, _ly, _Block.x, _Block.y, 0xFFFFFF, 3, 0.8);
+                                    Drawer.drawLine(displayBatch, _Block.x, _Block.y, _x, _y, 0xFF3333, 3, 0.8);
                                 } else
-                                    Drawer.drawLine(game.uiBatch, _lx, _ly, _x, _y, 0xFFFFFF, 3, 0.8);
+                                    Drawer.drawLine(displayBatch, _lx, _ly, _x, _y, 0xFFFFFF, 3, 0.8);
                             }
                         }
                         if (_Block)
-                            Drawer.drawCircle(game.uiBatch, _Node2.x, _Node2.y, 0xFF3333, _Node2.lineDist - 4, _Node2.lineDist - 7, false, 0.8);
+                            Drawer.drawCircle(displayBatch, _Node2.x, _Node2.y, 0xFF3333, _Node2.lineDist - 4, _Node2.lineDist - 7, false, 0.8);
                         else
-                            Drawer.drawCircle(game.uiBatch, _Node2.x, _Node2.y, 0xFFFFFF, _Node2.lineDist - 4, _Node2.lineDist - 7, false, 0.8);
+                            Drawer.drawCircle(displayBatch, _Node2.x, _Node2.y, 0xFFFFFF, _Node2.lineDist - 4, _Node2.lineDist - 7, false, 0.8);
                     }
                 }
             }
             for each (_Node1 in selectedNodes) {
-                Drawer.drawCircle(game.uiBatch, _Node1.x, _Node1.y, 0xFFFFFF, _Node1.lineDist - 4, _Node1.lineDist - 7, false, 0.8);
+                Drawer.drawCircle(displayBatch, _Node1.x, _Node1.y, 0xFFFFFF, _Node1.lineDist - 4, _Node1.lineDist - 7, false, 0.8);
             }
         }
 

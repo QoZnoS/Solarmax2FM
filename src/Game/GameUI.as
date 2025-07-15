@@ -87,7 +87,7 @@ package Game {
             for each (var _Fade:SelectFade in game.fades.active) {
                 _R = 150 * _Fade.size - 4;
                 _voidR = Math.max(0, _R - 3);
-                Drawer.drawCircle(game.uiBatch, _Fade.x, _Fade.y, _Fade.color, _R, _voidR, false, _Fade.alpha);
+                Drawer.drawCircle(game.scene.ui.behaviorBatch, _Fade.x, _Fade.y, _Fade.color, _R, _voidR, false, _Fade.alpha);
             }
         }
 

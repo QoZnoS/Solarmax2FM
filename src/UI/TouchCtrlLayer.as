@@ -8,14 +8,17 @@ package UI {
     import utils.Drawer;
     import Entity.Node;
     import Entity.FXHandler;
+    import starling.display.QuadBatch;
 
     public class TouchCtrlLayer extends Sprite {
         private var touchQuad:Quad;
+        private var displayBatch:QuadBatch;
         private var touches:Vector.<Touch>;
         private var game:GameScene;
 
-        public function TouchCtrlLayer(_game:GameScene) {
-            this.game = _game;
+        public function TouchCtrlLayer(_ui:UIContainer) {
+            this.game = _ui.scene.gameScene;
+            this.displayBatch = _ui.behaviorBatch;
             touchQuad = new Quad(1024, 768, 16711680);
             touchQuad.alpha = 0;
             addChild(touchQuad)
@@ -44,14 +47,14 @@ package UI {
                 return;
             for each (var _Touch:Touch in touches) {
                 if (_Touch.hoverNode) {
-                    Drawer.drawCircle(game.uiBatch, _Touch.hoverNode.x, _Touch.hoverNode.y, Globals.teamColors[_Touch.hoverNode.team], _Touch.hoverNode.lineDist - 4, _Touch.hoverNode.size * 25 * 2, true, 0.5);
+                    Drawer.drawCircle(displayBatch, _Touch.hoverNode.x, _Touch.hoverNode.y, Globals.teamColors[_Touch.hoverNode.team], _Touch.hoverNode.lineDist - 4, _Touch.hoverNode.size * 25 * 2, true, 0.5);
                     if (_Touch.hoverNode.attackStrategy.attackRate > 0)
-                        Drawer.drawDashedCircle(game.uiBatch, _Touch.hoverNode.x, _Touch.hoverNode.y, Globals.teamColors[_Touch.hoverNode.team], _Touch.hoverNode.attackStrategy.attackRange, _Touch.hoverNode.attackStrategy.attackRange - 2, false, 0.5, 1, 0, 256);
+                        Drawer.drawDashedCircle(displayBatch, _Touch.hoverNode.x, _Touch.hoverNode.y, Globals.teamColors[_Touch.hoverNode.team], _Touch.hoverNode.attackStrategy.attackRange, _Touch.hoverNode.attackStrategy.attackRange - 2, false, 0.5, 1, 0, 256);
                 }
                 if (!(_Touch.downNodes && _Touch.downNodes.length > 0))
                     continue
                 for each (var _Node:Node in _Touch.downNodes) {
-                    Drawer.drawCircle(game.uiBatch, _Node.x, _Node.y, _Color, _Node.lineDist - 4, _Node.lineDist - 7, false, 0.8);
+                    Drawer.drawCircle(displayBatch, _Node.x, _Node.y, _Color, _Node.lineDist - 4, _Node.lineDist - 7, false, 0.8);
                     _Tx = _Touch.globalX;
                     _Ty = _Touch.globalY;
                     if (_Touch.hoverNode) { // 绘制目标天体的定位圈
@@ -59,9 +62,9 @@ package UI {
                         _Tx = _Touch.hoverNode.x;
                         _Ty = _Touch.hoverNode.y;
                         if (_Block)
-                            Drawer.drawCircle(game.uiBatch, _Tx, _Ty, 0xFF3333, _Touch.hoverNode.lineDist - 4, _Touch.hoverNode.lineDist - 7, false, 0.8);
+                            Drawer.drawCircle(displayBatch, _Tx, _Ty, 0xFF3333, _Touch.hoverNode.lineDist - 4, _Touch.hoverNode.lineDist - 7, false, 0.8);
                         else
-                            Drawer.drawCircle(game.uiBatch, _Tx, _Ty, _Color, _Touch.hoverNode.lineDist - 4, _Touch.hoverNode.lineDist - 7, false, 0.8);
+                            Drawer.drawCircle(displayBatch, _Tx, _Ty, _Color, _Touch.hoverNode.lineDist - 4, _Touch.hoverNode.lineDist - 7, false, 0.8);
                     } else
                         _Block = lineBlocked(_Node.x, _Node.y, _Tx, _Ty);
                     _dx = _Tx - _Node.x;
@@ -76,10 +79,10 @@ package UI {
                             _Ty -= Math.sin(_Angle) * (_Touch.hoverNode.lineDist - 5);
                         }
                         if (_Block) { // 分段绘制鼠标线
-                            Drawer.drawLine(game.uiBatch, _Nx, _Ny, _Block.x, _Block.y, _Color, 3, 0.8);
-                            Drawer.drawLine(game.uiBatch, _Block.x, _Block.y, _Tx, _Ty, 0xFF3333, 3, 0.8);
+                            Drawer.drawLine(displayBatch, _Nx, _Ny, _Block.x, _Block.y, _Color, 3, 0.8);
+                            Drawer.drawLine(displayBatch, _Block.x, _Block.y, _Tx, _Ty, 0xFF3333, 3, 0.8);
                         } else
-                            Drawer.drawLine(game.uiBatch, _Nx, _Ny, _Tx, _Ty, _Color, 3, 0.8);
+                            Drawer.drawLine(displayBatch, _Nx, _Ny, _Tx, _Ty, _Color, 3, 0.8);
                     }
                 }
             }

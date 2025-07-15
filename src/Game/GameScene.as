@@ -24,7 +24,6 @@ package Game {
     public class GameScene extends Sprite {
         // #region 类变量
         // 显示层
-        public var gameLayer:Sprite;
         public var gameContainer:Sprite;
         public var blackholePulseLayer:Sprite;
         public var shipsLayer1:Sprite;
@@ -33,7 +32,6 @@ package Game {
         public var nodeGlowLayer2:Sprite;
         public var shipsLayer2:Sprite;
         public var fxLayer:Sprite;
-        public var shapeLayer:Sprite;
         public var labelLayer:Sprite;
         public var uiLayer:Sprite;
         // 
@@ -41,8 +39,6 @@ package Game {
         public var shipsBatch1b:QuadBatch;
         public var shipsBatch2:QuadBatch;
         public var shipsBatch2b:QuadBatch;
-        public var uiBatch:QuadBatch;
-        public var mouseBatch:QuadBatch;
         // 实体池
         public var entities:Array;
         public var ais:EntityPool; // AI
@@ -84,7 +80,6 @@ package Game {
             FXHandler.game = this;
             EntityHandler.game = this;
             // 造一堆实例对象
-            gameLayer = new Sprite();
             gameContainer = new Sprite();
             blackholePulseLayer = new Sprite();
             shipsLayer1 = new Sprite();
@@ -93,26 +88,21 @@ package Game {
             nodeGlowLayer2 = new Sprite();
             shipsLayer2 = new Sprite();
             fxLayer = new Sprite();
-            shapeLayer = new Sprite();
             labelLayer = new Sprite();
             uiLayer = new Sprite();
-            uiBatch = new QuadBatch();
             shipsBatch1 = new QuadBatch();
             shipsBatch1b = new QuadBatch();
             shipsBatch2 = new QuadBatch();
             shipsBatch2b = new QuadBatch();
-            mouseBatch = new QuadBatch();
             // 造一堆可视化对象
-            gameContainer.addChild(gameLayer);
-            gameLayer.addChild(blackholePulseLayer);
-            gameLayer.addChild(shipsLayer1); // 天体之下的飞船图层
-            gameLayer.addChild(nodeLayer); // 天体图层
-            gameLayer.addChild(nodeGlowLayer); // 天体光圈白底图层
-            gameLayer.addChild(nodeGlowLayer2); // 黑色专用光圈白底图层
-            gameLayer.addChild(shipsLayer2); // 天体之上的飞船图层
-            gameLayer.addChild(fxLayer); // 障碍线图层
-            gameLayer.addChild(shapeLayer); // UI图层
-            gameLayer.addChild(labelLayer); // 文本图层
+            gameContainer.addChild(blackholePulseLayer);
+            gameContainer.addChild(shipsLayer1); // 天体之下的飞船图层
+            gameContainer.addChild(nodeLayer); // 天体图层
+            gameContainer.addChild(nodeGlowLayer); // 天体光圈白底图层
+            gameContainer.addChild(nodeGlowLayer2); // 黑色专用光圈白底图层
+            gameContainer.addChild(shipsLayer2); // 天体之上的飞船图层
+            gameContainer.addChild(fxLayer); // 障碍线图层
+            gameContainer.addChild(labelLayer); // 文本图层
             addChild(gameContainer);
             addChild(uiLayer);
             // 通关时的遮罩
@@ -127,8 +117,6 @@ package Game {
             shipsLayer2.addChild(shipsBatch2);
             shipsLayer2.addChild(shipsBatch2b);
             fxLayer.blendMode = "add";
-            shapeLayer.addChild(uiBatch);
-            shapeLayer.addChild(mouseBatch);
             nodeGlowLayer.blendMode = "add";
             uiLayer.blendMode = "add";
             blackholePulseLayer.blendMode = "multiply";
@@ -475,8 +463,6 @@ package Game {
             shipsBatch1b.reset();
             shipsBatch2.reset();
             shipsBatch2b.reset();
-            uiBatch.reset();
-            mouseBatch.reset();
         }
 
         public function specialEvents():void {

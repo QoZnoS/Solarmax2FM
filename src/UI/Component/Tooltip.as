@@ -1,5 +1,5 @@
 // 鼠标悬停在操作方式上出现的文体提示框
-package Menus {
+package UI.Component {
     import starling.display.Quad;
     import starling.display.Sprite;
     import starling.text.TextField;

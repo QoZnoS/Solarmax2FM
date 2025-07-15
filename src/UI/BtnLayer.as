@@ -20,9 +20,9 @@ package UI {
 
         private var scene:SceneController;
 
-        public function BtnLayer(_scene:SceneController) {
-            this.scene = _scene
-            this.game = _scene.gameScene;
+        public function BtnLayer(_ui:UIContainer) {
+            this.scene = _ui.scene
+            this.game = _ui.scene.gameScene;
             gameBtn = new Vector.<MenuButton>(3, true);
             speedBtns = new Vector.<SpeedButton>(3, true);
         }

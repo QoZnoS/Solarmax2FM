@@ -1,4 +1,4 @@
-package Menus {
+package UI.Component {
     import starling.display.Sprite;
     import starling.text.TextField;
 

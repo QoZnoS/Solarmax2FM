@@ -1,6 +1,6 @@
 // 这个类提供难度按钮母版，星星通过在TitleMenu中调用按钮的showStar显示
 
-package Menus {
+package UI.Component {
     import flash.geom.Point;
     import starling.display.Image;
     import starling.display.Quad;

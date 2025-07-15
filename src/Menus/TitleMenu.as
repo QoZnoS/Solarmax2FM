@@ -14,6 +14,8 @@ package Menus
    import starling.text.TextField;
    import utils.GS;
    import UI.Component.MenuButton;
+   import UI.Component.LevelButtons;
+   import UI.Component.DifficultyButton;
 
    public class TitleMenu extends Sprite
    {
@@ -36,7 +38,7 @@ package Menus
       public var quadImage:Image;
       public var shapeImage:Image;
       public var menuBtn:MenuButton;
-      public var optionsMenu:OptionsMenu;
+      public var optionsMenu:StartMenu;
       public var currentIndex:int;
       public var barrierData:Array; // 三维数组，第一层为关卡，第二层为障碍线，第三层为 [中点X，中点Y，距离，角度]
       public var orbitData:Array; // 三维数组，第一层为关卡，第二层为轨道，第三层为 [中心，距离]
@@ -171,7 +173,7 @@ package Menus
          menuBtn.y = 124;
          menuBtn.blendMode = "add";
          addChild(menuBtn);
-         optionsMenu = new OptionsMenu(this);
+         optionsMenu = new StartMenu(this);
          addChild(optionsMenu);
          optionsMenu.visible = false;
          // 这部分是计算内容

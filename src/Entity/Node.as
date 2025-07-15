@@ -1101,7 +1101,7 @@ package Entity {
                 quadImage.setVertexPosition(2, Math.cos(_angle) * _voidR, Math.sin(_angle) * _voidR);
                 quadImage.setVertexPosition(3, Math.cos(_angle + _angleStep) * _voidR, Math.sin(_angle + _angleStep) * _voidR);
                 quadImage.vertexChanged();
-                game.uiBatch.addImage(quadImage);
+                game.scene.ui.behaviorBatch.addImage(quadImage);
                 _angle += _angleStep;
             }
         }

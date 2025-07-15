@@ -1,27 +1,39 @@
 package UI {
     import starling.display.Sprite;
     import starling.core.Starling;
+    import starling.display.QuadBatch;
 
     public class UIContainer extends Sprite {
 
+        public var entityL:EntityLayer;
+        public var behaviorBatch:QuadBatch;
         public var touchCL:TouchCtrlLayer;
-        public var traditionalCL:TraditionalCtrlLayer;
+        public var tradiCL:TraditionalCtrlLayer;
         public var btnL:BtnLayer;
 
-        public var scene:SceneController
+        public var scene:SceneController;
 
         public function UIContainer(_scene:SceneController) {
             this.scene = _scene;
-            touchCL = new TouchCtrlLayer(scene.gameScene);
-            traditionalCL = new TraditionalCtrlLayer(scene.gameScene);
-            btnL = new BtnLayer(scene)
+            entityL = new EntityLayer();
+            behaviorBatch = new QuadBatch();
+            touchCL = new TouchCtrlLayer(this);
+            tradiCL = new TraditionalCtrlLayer(this);
+            btnL = new BtnLayer(this);
 
+            addChild(entityL);
+            addChild(behaviorBatch);
             addChild(touchCL);
-            addChild(traditionalCL);
+            addChild(tradiCL);
             addChild(btnL);
 
             btnL.blendMode = "add";
-            touchCL.visible = traditionalCL.visible = false;
+            touchCL.visible = tradiCL.visible = false;
+
+            entityL.x = entityL.pivotX = 512;
+            entityL.y = entityL.pivotY = 384;
+            behaviorBatch.x = behaviorBatch.pivotX = 512;
+            behaviorBatch.y = behaviorBatch.pivotY = 384;
         }
 
         public function initLevel():void {
@@ -29,20 +41,47 @@ package UI {
                 touchCL.visible = true;
                 touchCL.init();
             } else {
-                traditionalCL.visible = true;
-                traditionalCL.init();
+                tradiCL.visible = true;
+                tradiCL.init();
             }
             btnL.initLevel()
 
-            this.alpha = 0;
-            Starling.juggler.tween(this, Globals.transitionSpeed, {"alpha": 1,
+            entityL.alpha = 0;
+            entityL.scaleX = entityL.scaleY = 0.7;
+            entityL.y = 354;
+            behaviorBatch.alpha = 0;
+            behaviorBatch.scaleX = behaviorBatch.scaleY = 0.7;
+            behaviorBatch.y = 354
+            btnL.alpha = 0;
+            Starling.juggler.tween(entityL, Globals.transitionSpeed, {"alpha": 1,
+                    "scaleX": 1,
+                    "scaleY": 1,
+                    "y": 384,
                     "transition": "easeInOut"});
-
+            Starling.juggler.tween(behaviorBatch, Globals.transitionSpeed, {"alpha": 1,
+                    "scaleX": 1,
+                    "scaleY": 1,
+                    "y": 384,
+                    "transition": "easeInOut"});
+            Starling.juggler.tween(btnL, Globals.transitionSpeed, {"alpha": 1,
+                    "transition": "easeInOut"});
         }
 
         public function deinitLevel():void {
-            Starling.juggler.removeTweens(this)
-            Starling.juggler.tween(this, Globals.transitionSpeed, {"alpha": 0,
+            Starling.juggler.removeTweens(entityL);
+            Starling.juggler.removeTweens(behaviorBatch);
+            Starling.juggler.removeTweens(btnL);
+            Starling.juggler.tween(entityL, Globals.transitionSpeed, {"alpha": 0,
+                    "scaleX": 0.7,
+                    "scaleY": 0.7,
+                    "y": 354,
+                    "transition": "easeInOut"});
+            Starling.juggler.tween(behaviorBatch, Globals.transitionSpeed, {"alpha": 0,
+                    "scaleX": 0.7,
+                    "scaleY": 0.7,
+                    "y": 354,
+                    "transition": "easeInOut"});
+            Starling.juggler.tween(btnL, Globals.transitionSpeed, {"alpha": 0,
                     "onComplete": function():void {
                         btnL.deinitLevel()
                     },
@@ -52,14 +91,14 @@ package UI {
                 touchCL.visible = false;
                 touchCL.deinit();
             } else {
-                traditionalCL.visible = false;
-                traditionalCL.deinit();
+                tradiCL.visible = false;
+                tradiCL.deinit();
             }
-
         }
 
         public function update():void {
-            Globals.touchControls ? touchCL.draw() : traditionalCL.draw();
+            behaviorBatch.reset();
+            Globals.touchControls ? touchCL.draw() : tradiCL.draw();
         }
     }
 }

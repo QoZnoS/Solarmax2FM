@@ -11,7 +11,7 @@ package Menus {
     import UI.Component.MenuButton;
     import UI.Component.OptionButton;
 
-    public class OptionsMenu extends Sprite {
+    public class StartMenu extends Sprite {
         public var title:TitleMenu; // 接入标题类
         private var menuBtn:MenuButton;
         private var menus:Vector.<IMenu>;
@@ -21,7 +21,7 @@ package Menus {
         private const pageName:Array = ["SETTING", "MAPACKS", "STAFF", "REPLAY"]
         private var pages:Array;
 
-        public function OptionsMenu(_titleMenu:TitleMenu) {
+        public function StartMenu(_titleMenu:TitleMenu) {
             super();
             this.title = _titleMenu;
             var bg:Quad = new Quad(1024, 768, 0);

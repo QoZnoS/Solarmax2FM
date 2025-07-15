@@ -1,4 +1,4 @@
-package Menus {
+package UI.Component {
     import flash.geom.Point;
     import starling.display.Quad;
     import starling.display.Sprite;

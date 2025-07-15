@@ -14,7 +14,7 @@ package UI.Component {
         public var hitPoint:Point;
         public var buttonArray:Vector.<SpeedButton>;
         public var toggled:Boolean;
-        public var scene:SceneController;
+        public var scene:SceneController; // 速度变量在scene中修改
 
         public function SpeedButton(_scene:SceneController, _Texture:String, _buttonArray:Vector.<SpeedButton>, _scale:Number = 1) {
             super();
