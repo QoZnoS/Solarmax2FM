@@ -25,7 +25,7 @@ package UI.Component {
          * @param _color 字体颜色
          * @param _buttonArray 包含同条目下全部按钮
          */
-        public function OptionButton(_text:String, _color:uint, _buttonArray:Array) {
+        public function OptionButton(_text:String, _color:uint, _buttonArray:Array = undefined) {
             super();
             this.buttonArray = _buttonArray;
             labelArray = [];

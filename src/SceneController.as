@@ -11,6 +11,7 @@ package {
     import starling.filters.ColorMatrixFilter;
     import utils.Drawer;
     import UI.UIContainer;
+    import utils.Popup;
 
     public class SceneController extends Sprite {
         public var titleMenu:TitleMenu;
@@ -40,6 +41,12 @@ package {
             addChild(debug);
             Starling.current.nativeStage.addEventListener("keyDown", on_key_down);
             initBlackQuad();
+
+            if (Globals.saveVersion == -1){
+                var popup:Popup = new Popup("ERROR");
+                addChild(popup);
+                popup.addLabel("Failed to read the save file: " + Globals.errorMessage);
+            }
         }
 
         // #region 处理黑边

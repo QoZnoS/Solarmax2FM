@@ -58,10 +58,16 @@ package {
         public static var nohup:Boolean = false; // 禁用暂停，playerData.txt第二十一项，levelData后第四项
         public static var fleetSliderPosition:int = 1; // 分兵条位置
 
+        public static const VERSION:int = 120;
+
+        public static var saveVersion:int = VERSION;
+        public static var errorMessage:String;
+
         public function Globals() {
             super();
             throw new AbstractClassError();
         }
+
         /**
          * 初始化势力数组
          */
@@ -107,11 +113,7 @@ package {
             var _data:String = null; // 字符串，储存存档
             file = File.applicationStorageDirectory.resolvePath("playerData.txt"); // 读取文件playData.txt
             fileStream = new FileStream();
-            if (!file.exists) { // 如果文件不存在
-                // 储存默认数据到playerData.txt
-                playerData = [levelReached, soundVolume, musicVolume, transitionSpeed, bgSaturation, textSize, resolution, fullscreen, antialias, kills, losses, colonized, decolonized, nodeslost, additiveGlow, touchControls, levelData, currentDifficulty, blackQuad, currentData, nohup];
-                save(); // 保存存档文件到本地
-            } else { // 如果文件存在
+            try {
                 fileStream.open(file, "read"); // 以只读模式打开文件
                 _data = String(fileStream.readMultiByte(fileStream.bytesAvailable, "utf-8")); // 按utf-8编码读取并转换成字符串
                 fileStream.close(); // 关闭文件
@@ -138,7 +140,17 @@ package {
                 blackQuad = playerData[18];
                 currentData = playerData[19];
                 nohup = playerData[20];
+            } catch (error:Error) {
+                // 储存默认数据到playerData.txt
+                playerData = [levelReached, soundVolume, musicVolume, transitionSpeed, bgSaturation, textSize, resolution, fullscreen, antialias, kills, losses, colonized, decolonized, nodeslost, additiveGlow, touchControls, levelData, currentDifficulty, blackQuad, currentData, nohup];
+                if (!file.exists) { // 如果文件不存在
+                    save(); // 保存存档文件到本地
+                } else { // 如果文件存在
+                    saveVersion = -1;
+                    errorMessage = error.message;
+                }
             }
+            
             main.start(); // 执行main.as中的start()
         }
 
