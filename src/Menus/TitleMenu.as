@@ -300,7 +300,7 @@ package Menus
       {
          for (var k:int = 0; k < orbit.length; k++)
          {
-            if (orbit[k][0] == newOrbit[0] && orbit[k][1] == newOrbit[1])
+            if (orbit[k][0] == newOrbit[0] && Math.abs(orbit[k][1] - newOrbit[1]) < 0.01)
             {
                return;
             }
