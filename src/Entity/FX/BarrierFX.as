@@ -5,7 +5,7 @@ package Entity.FX {
 
     public class BarrierFX extends GameEntity {
 
-        public var image:Image;
+        private var image:Image;
 
         public function BarrierFX() {
             super();

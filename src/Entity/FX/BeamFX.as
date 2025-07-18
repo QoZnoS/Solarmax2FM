@@ -7,28 +7,18 @@ package Entity.FX {
     public class BeamFX extends GameEntity {
 
         public static const STATE_GROW:int = 0;
-
         public static const STATE_SHRINK:int = 1;
 
-        public var x:Number;
-
-        public var y:Number;
-
-        public var size:Number;
-
-        public var angle:Number;
-
-        public var color:uint;
-
-        public var image:Image; // 这是射线
-
-        public var image2:Image; // 这是攻击塔的特效
-
-        public var foreground:Boolean;
-
-        public var type:int;
-
-        public var state:int;
+        private var x:Number;
+        private var y:Number;
+        private var size:Number;
+        private var angle:Number;
+        private var color:uint;
+        private var image:Image; // 这是射线
+        private var image2:Image; // 这是攻击塔的特效
+        private var foreground:Boolean;
+        private var type:int;
+        private var state:int;
 
         public function BeamFX() {
             super();

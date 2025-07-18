@@ -1,5 +1,4 @@
 package Entity {
-
     public class EntityPool {
         /** 活跃实体 */
         public var active:Array;

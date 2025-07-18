@@ -3,9 +3,7 @@ package Entity {
 
     public class GameEntity {
 
-
         public var game:GameScene;
-
         public var active:Boolean;
 
         public function GameEntity() {

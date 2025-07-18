@@ -82,13 +82,6 @@ package Game {
                 popLabel3.x = 512 + popLabel.textBounds.width * 0.5 + 10;
                 popLabel3.alpha = Math.max(0, popLabel3.alpha - _dt * 0.5);
             }
-            var _R:Number = NaN;
-            var _voidR:Number = NaN;
-            for each (var _Fade:SelectFade in game.fades.active) {
-                _R = 150 * _Fade.size - 4;
-                _voidR = Math.max(0, _R - 3);
-                Drawer.drawCircle(game.scene.ui.behaviorBatch, _Fade.x, _Fade.y, _Fade.color, _R, _voidR, false, _Fade.alpha);
-            }
         }
 
         // #endregion
