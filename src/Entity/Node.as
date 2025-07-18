@@ -29,6 +29,7 @@ package Entity {
     import Entity.Utils;
     import utils.Rng;
     import utils.GS;
+    import utils.Drawer;
 
     public class Node extends GameEntity {
         // #region 类变量
@@ -479,7 +480,7 @@ package Entity {
                 for (i = 0; i < _ShipTeam.length; i++) {
                     // 绘制战斗弧
                     _ArcRatio = ships[_ShipTeam[i]].length / _ShipStat;
-                    drawCircle(x, y, Globals.teamColors[_ShipTeam[i]], lineDist, lineDist - 2, false, 1, _ArcRatio - 0.006366197723675814, _ArcAngle + 0.01);
+                    Drawer.drawCircle(game.scene.ui.behaviorBatch, x, y, Globals.teamColors[_ShipTeam[i]], lineDist, lineDist - 2, false, 1, _ArcRatio - 0.006366197723675814, _ArcAngle + 0.01);
                     _ArcAngle += Math.PI * 2 * _ArcRatio;
                     // 修改兵力文本
                     labels[i].x = x + Math.cos(-Math.PI / 2 + i * _LableAngle) * labelDist;
@@ -532,8 +533,8 @@ package Entity {
             if (_capturing || hp != 100 && captureTeam == _captureTeam && team != 0) // 占据状态下显示占领条
             {
                 var _ArcAngle:Number = -Math.PI / 2 - Math.PI * (hp / 100);
-                drawCircle(x, y, Globals.teamColors[captureTeam], lineDist, lineDist - 2, false, 0.1);
-                drawCircle(x, y, Globals.teamColors[captureTeam], lineDist, lineDist - 2, false, 0.7, hp / 100, _ArcAngle);
+                Drawer.drawCircle(game.scene.ui.behaviorBatch,x, y, Globals.teamColors[captureTeam], lineDist, lineDist - 2, false, 0.1);
+                Drawer.drawCircle(game.scene.ui.behaviorBatch,x, y, Globals.teamColors[captureTeam], lineDist, lineDist - 2, false, 0.7, hp / 100, _ArcAngle);
             }
             if (_captureTeam != 0) // 非中立飞船占据显示兵力
             {
@@ -1072,38 +1073,6 @@ package Entity {
         public function fireBeam(_Ship:Ship):void {
             FXHandler.addBeam(this, _Ship); // 播放攻击特效
             GS.playLaser(this.x); // 播放攻击音效
-        }
-
-        public function drawCircle(_x:Number, _y:Number, _Color:uint, _R:Number, _voidR:Number = 0, mTinted:Boolean = false, _alpha:Number = 1, _quality2:Number = 1, _angle:Number = 0, _quality1:int = 64):void {
-            if (!quadImage) {
-                quadImage = new Image(Root.assets.getTexture("quad8x4"));
-                quadImage.adjustVertices();
-            }
-            quadImage.color = _Color;
-            if (mTinted) {
-                quadImage.setVertexAlpha(2, 0);
-                quadImage.setVertexAlpha(3, 0);
-            } else {
-                quadImage.setVertexAlpha(2, 1);
-                quadImage.setVertexAlpha(3, 1);
-            }
-            quadImage.alpha = _alpha;
-            quadImage.rotation = 0;
-            var _angleStep:Number = Math.PI * 2 / _quality1;
-            var _lineNumber:int = Math.ceil(_quality1 * _quality2);
-            for (var i:int = 0; i < _lineNumber; i++) {
-                quadImage.x = _x;
-                quadImage.y = _y;
-                if (i == _lineNumber - 1)
-                    _angleStep = Math.PI * 2 * _quality2 - _angleStep * (_lineNumber - 1);
-                quadImage.setVertexPosition(0, Math.cos(_angle) * _R, Math.sin(_angle) * _R);
-                quadImage.setVertexPosition(1, Math.cos(_angle + _angleStep) * _R, Math.sin(_angle + _angleStep) * _R);
-                quadImage.setVertexPosition(2, Math.cos(_angle) * _voidR, Math.sin(_angle) * _voidR);
-                quadImage.setVertexPosition(3, Math.cos(_angle + _angleStep) * _voidR, Math.sin(_angle + _angleStep) * _voidR);
-                quadImage.vertexChanged();
-                game.scene.ui.behaviorBatch.addImage(quadImage);
-                _angle += _angleStep;
-            }
         }
         // #endregion
     }

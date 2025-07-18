@@ -6,6 +6,7 @@ package Menus {
     import starling.events.EnterFrameEvent;
     import Entity.EntityPool;
     import Entity.FX.EndStar;
+    import utils.Drawer;
 
     public class EndScene extends Sprite {
         public var stars:EntityPool;
@@ -138,37 +139,9 @@ package Menus {
                 _alpha = 0;
             var _quality:int = 8 + pulseSize / 512 * 248;
             batch.reset();
-            drawCircle(512, 384, Globals.teamColors[1], pulseSize, _model, true, _alpha, 1, 0, _quality);
+            Drawer.drawCircle(batch, 512, 384, Globals.teamColors[1], pulseSize, _model, true, _alpha, 1, 0, _quality);
             Globals.teamColors[1] == 0 ? batch.blendMode = "normal" : batch.blendMode = "add";
         }
 
-        // 画圆
-        public function drawCircle(_x:Number, _y:Number, _Color:uint, _R:Number, _voidR:Number = 0, mTinted:Boolean = false, _alpha:Number = 1, _quality2:Number = 1, _angle:Number = 0, _quality1:int = 64):void {
-            quadImage.color = _Color;
-            if (mTinted) {
-                quadImage.setVertexAlpha(2, 0);
-                quadImage.setVertexAlpha(3, 0);
-            } else {
-                quadImage.setVertexAlpha(2, 1);
-                quadImage.setVertexAlpha(3, 1);
-            }
-            quadImage.alpha = _alpha;
-            quadImage.rotation = 0;
-            var _angleStep:Number = 6.283185307179586 / _quality1;
-            var _lineNumber:int = Math.ceil(_quality1 * _quality2);
-            for (var i:int = 0; i < _lineNumber; i++) {
-                quadImage.x = _x;
-                quadImage.y = _y;
-                if (i == _lineNumber - 1)
-                    _angleStep = 6.283185307179586 * _quality2 - _angleStep * (_lineNumber - 1);
-                quadImage.setVertexPosition(0, Math.cos(_angle) * _R, Math.sin(_angle) * _R);
-                quadImage.setVertexPosition(1, Math.cos(_angle + _angleStep) * _R, Math.sin(_angle + _angleStep) * _R);
-                quadImage.setVertexPosition(2, Math.cos(_angle) * _voidR, Math.sin(_angle) * _voidR);
-                quadImage.setVertexPosition(3, Math.cos(_angle + _angleStep) * _voidR, Math.sin(_angle + _angleStep) * _voidR);
-                quadImage.vertexChanged();
-                batch.addImage(quadImage);
-                _angle += _angleStep;
-            }
-        }
     }
 }

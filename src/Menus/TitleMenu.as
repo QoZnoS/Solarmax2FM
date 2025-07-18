@@ -16,6 +16,7 @@ package Menus
    import UI.Component.MenuButton;
    import UI.Component.LevelButtons;
    import UI.Component.DifficultyButton;
+   import utils.Drawer;
 
    public class TitleMenu extends Sprite
    {
@@ -125,7 +126,7 @@ package Menus
          shapeImage = new Image(Root.assets.getTexture("planet_shape"));
          shapeImage.pivotX = shapeImage.pivotY = shapeImage.width * 0.5;
          selector = new QuadBatch();
-         drawSelector(0, 0, 16755370, 48, 46);
+         Drawer.drawCircle(selector, 0, 0, 16755370, 48, 46);
          selector.x = title.x;
          selector.y = levels.y - 1;
          selector.blendMode = "add";
@@ -514,7 +515,7 @@ package Menus
             _voidR = _R - 3;
          if (_voidR < 0)
             _voidR = 0;
-         drawSelector(0, 0, 16755370, _R, _voidR);
+         Drawer.drawCircle(selector, 0, 0, 16755370, _R, _voidR);
          selector.blendMode = "add";
          selector.alpha = _scale * 0.5;
          for each (var _difficultyBtn:DifficultyButton in difficultyButtons)
@@ -611,7 +612,7 @@ package Menus
                _y = Number(_levelData[_orbit[0]][1]);
                _distence = _orbit[1] * _scale + 2;
                _indistence = Math.max(0, _distence - 2);
-               drawCircle(_x, _y, 16777215, _distence, _indistence, false, 0.5, 1, 0, 128);
+               Drawer.drawCircle(preview, _x, _y, 16777215, _distence, _indistence, false, 0.5, 1, 0, 128);
             }
          }
          preview.blendMode = "add";
@@ -702,72 +703,6 @@ package Menus
          var dy:Number = levels.y - _mouseY;
          var distance:Number = dx * dx + dy * dy;
          return (distance < 2304) ? index : -1; // 2304 is 48^2 保证鼠标在关卡按钮附近
-      }
-
-      public function drawCircle(_x:Number, _y:Number, _color:uint, _R:Number, _voidR:Number = 0, mTinted:Boolean = false, _alpha:Number = 1, _quality2:Number = 1, _angle:Number = 0, _quality1:int = 64):void
-      {
-         quadImage.color = _color;
-         if (mTinted)
-         {
-            quadImage.setVertexAlpha(2, 0);
-            quadImage.setVertexAlpha(3, 0);
-         }
-         else
-         {
-            quadImage.setVertexAlpha(2, 1);
-            quadImage.setVertexAlpha(3, 1);
-         }
-         quadImage.alpha = _alpha;
-         quadImage.rotation = 0;
-         var _angleStep:Number = 6.283185307179586 / _quality1;
-         var _lineNumber:int = Math.ceil(_quality1 * _quality2);
-         for (var i:int = 0; i < _lineNumber; i++)
-         {
-            quadImage.x = _x;
-            quadImage.y = _y;
-            if (i == _lineNumber - 1)
-               _angleStep = 6.283185307179586 * _quality2 - _angleStep * (_lineNumber - 1);
-            quadImage.setVertexPosition(0, Math.cos(_angle) * _R, Math.sin(_angle) * _R);
-            quadImage.setVertexPosition(1, Math.cos(_angle + _angleStep) * _R, Math.sin(_angle + _angleStep) * _R);
-            quadImage.setVertexPosition(2, Math.cos(_angle) * _voidR, Math.sin(_angle) * _voidR);
-            quadImage.setVertexPosition(3, Math.cos(_angle + _angleStep) * _voidR, Math.sin(_angle + _angleStep) * _voidR);
-            quadImage.vertexChanged();
-            preview.addImage(quadImage);
-            _angle += _angleStep;
-         }
-      }
-
-      public function drawSelector(_x:Number, _y:Number, _color:uint, _R:Number, _voidR:Number = 0, mTinted:Boolean = false, _alpha:Number = 1, _quality2:Number = 1, _angle:Number = 0, _quality1:int = 64):void
-      {
-         quadImage.color = _color;
-         if (mTinted)
-         {
-            quadImage.setVertexAlpha(2, 0);
-            quadImage.setVertexAlpha(3, 0);
-         }
-         else
-         {
-            quadImage.setVertexAlpha(2, 1);
-            quadImage.setVertexAlpha(3, 1);
-         }
-         quadImage.alpha = _alpha;
-         quadImage.rotation = 0;
-         var _angleStep:Number = 6.283185307179586 / _quality1;
-         var _lineNumber:int = Math.ceil(_quality1 * _quality2);
-         for (var i:int = 0; i < _lineNumber; i++)
-         {
-            quadImage.x = _x;
-            quadImage.y = _y;
-            if (i == _lineNumber - 1)
-               _angleStep = 6.283185307179586 * _quality2 - _angleStep * (_lineNumber - 1);
-            quadImage.setVertexPosition(0, Math.cos(_angle) * _R, Math.sin(_angle) * _R);
-            quadImage.setVertexPosition(1, Math.cos(_angle + _angleStep) * _R, Math.sin(_angle + _angleStep) * _R);
-            quadImage.setVertexPosition(2, Math.cos(_angle) * _voidR, Math.sin(_angle) * _voidR);
-            quadImage.setVertexPosition(3, Math.cos(_angle + _angleStep) * _voidR, Math.sin(_angle + _angleStep) * _voidR);
-            quadImage.vertexChanged();
-            selector.addImage(quadImage);
-            _angle += _angleStep;
-         }
       }
       // #endregion
    }

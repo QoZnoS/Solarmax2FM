@@ -9,7 +9,6 @@ package {
     import starling.display.Sprite;
     import starling.display.Quad;
     import starling.filters.ColorMatrixFilter;
-    import utils.Drawer;
     import UI.UIContainer;
     import utils.Popup;
 

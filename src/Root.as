@@ -47,13 +47,13 @@ package {
                         Starling.juggler.delayCall(function():void {
                             progressBar.removeFromParent(true);
                             removeChildAt(0);
+                            Drawer.init();
                             LevelData.init();
                             bg = new ScrollingBackground();
                             addChild(bg);
                             scene = new SceneController()
                             addChild(scene);
                             GS.init();
-                            Drawer.init();
                         }, 0.05);
                     }
                 }; // 声明函数对象
