@@ -6,9 +6,14 @@ package UI.Component {
     import Game.GameScene;
 
     public class TutorialSprite extends Sprite {
-        public var game:GameScene;
-        public var arrow:Image;
-        public var loop:DelayedCall;
+        public static var TYPE_L1:int = 0;
+        public static var TYPE_L2:int = 1;
+
+        private var game:GameScene;
+        private var arrow:Image;
+        private var loop:DelayedCall;
+        private var layer:Sprite;
+        private var type:int;
 
         public function TutorialSprite() {
             super();
@@ -23,18 +28,20 @@ package UI.Component {
             arrow.color = 16755370;
         }
 
-        public function init(_game:GameScene):void {
+        public function init(_game:GameScene, type:int):void {
             this.game = _game;
+            this.layer = game.scene.ui.btnL;
+            this.type = type;
             arrow.visible = true;
             arrow.alpha = 0;
-            _game.uiLayer.addChild(arrow);
+            layer.addChild(arrow);
             show();
         }
 
         public function deInit():void {
             if (!game)
                 return;
-            game.uiLayer.removeChild(arrow);
+            layer.removeChild(arrow);
             Starling.juggler.removeTweens(arrow);
             if (loop)
                 Starling.juggler.remove(loop);
@@ -51,8 +58,8 @@ package UI.Component {
                 return;
             if (!Globals.touchControls)
                 return;
-            switch (Globals.level) {
-                case 0:
+            switch (type) {
+                case TYPE_L1:
                     arrow.rotation = -1.5707963267948966;
                     arrow.x = _NodeArray[0].x;
                     arrow.y = _NodeArray[0].y + 60;
@@ -70,7 +77,7 @@ package UI.Component {
                             "transition": "easeIn"});
                     loop = Starling.juggler.delayCall(show, 6);
                     break;
-                case 1:
+                case TYPE_L2:
                     switch (Globals.fleetSliderPosition) {
                         case 0:
                             arrow.rotation = Math.PI;

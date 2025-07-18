@@ -64,11 +64,10 @@ package Game {
             popLabel.fontSize = -1;
             popLabel2.fontSize = -1;
             popLabel3.fontSize = -1;
-            _GameScene.uiLayer.addChild(popLabel);
-            _GameScene.uiLayer.addChild(popLabel2);
-            _GameScene.uiLayer.addChild(popLabel3);
+            game.scene.ui.btnL.addChild(popLabel);
+            game.scene.ui.btnL.addChild(popLabel2);
+            game.scene.ui.btnL.addChild(popLabel3);
         }
-
         // #endregion
 
 
@@ -83,7 +82,6 @@ package Game {
                 popLabel3.alpha = Math.max(0, popLabel3.alpha - _dt * 0.5);
             }
         }
-
         // #endregion
     }
 }

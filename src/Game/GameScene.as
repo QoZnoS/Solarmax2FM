@@ -33,7 +33,6 @@ package Game {
         public var shipsLayer2:Sprite;
         public var fxLayer:Sprite;
         public var labelLayer:Sprite;
-        public var uiLayer:Sprite;
         // 
         public var shipsBatch1:QuadBatch;
         public var shipsBatch1b:QuadBatch;
@@ -89,7 +88,6 @@ package Game {
             shipsLayer2 = new Sprite();
             fxLayer = new Sprite();
             labelLayer = new Sprite();
-            uiLayer = new Sprite();
             shipsBatch1 = new QuadBatch();
             shipsBatch1b = new QuadBatch();
             shipsBatch2 = new QuadBatch();
@@ -104,7 +102,6 @@ package Game {
             gameContainer.addChild(fxLayer); // 障碍线图层
             gameContainer.addChild(labelLayer); // 文本图层
             addChild(gameContainer);
-            addChild(uiLayer);
             // 通关时的遮罩
             cover = new Quad(1024, 768, 16777215);
             cover.touchable = false;
@@ -118,7 +115,6 @@ package Game {
             shipsLayer2.addChild(shipsBatch2b);
             fxLayer.blendMode = "add";
             nodeGlowLayer.blendMode = "add";
-            uiLayer.blendMode = "add";
             blackholePulseLayer.blendMode = "multiply";
             gameContainer.x = gameContainer.pivotX = 512;
             gameContainer.y = gameContainer.pivotY = 384;
@@ -169,7 +165,7 @@ package Game {
                 triggers[i] = false; // 重置特殊事件
             // 执行一些初始化函数
             ui.init(this);
-            tutorial.init(this);
+            tutorial.init(this, level);
             getBarrierLines();
             addBarriers();
             hideSingleBarriers();
@@ -179,7 +175,6 @@ package Game {
             this.alpha = 0;
             this.visible = true;
             cover.alpha = 0;
-            uiLayer.alpha = 1;
             labelLayer.alpha = 1;
             shipsLayer1.alpha = 1;
             shipsLayer2.alpha = 1;
@@ -375,7 +370,6 @@ package Game {
             Starling.juggler.removeTweens(labelLayer)
             Starling.juggler.removeTweens(shipsLayer1)
             Starling.juggler.removeTweens(shipsLayer2)
-            Starling.juggler.removeTweens(uiLayer)
             Starling.juggler.tween(gameContainer, Globals.transitionSpeed, {"scaleX": 0.7,
                     "scaleY": 0.7,
                     "y": 354,
@@ -399,7 +393,6 @@ package Game {
             Starling.juggler.removeTweens(labelLayer)
             Starling.juggler.removeTweens(shipsLayer1)
             Starling.juggler.removeTweens(shipsLayer2)
-            Starling.juggler.removeTweens(uiLayer)
             Starling.juggler.tween(this, 0.1, {"alpha": 0,
                     "transition": "easeIn",
                     "onComplete": function():void
@@ -639,7 +632,6 @@ package Game {
                             GS.playMusic("bgm07", false);
                             Starling.juggler.tween(Globals, 10, {"soundMult": 0});
                             invisibleMode();
-                            Starling.juggler.tween(uiLayer, 5, {"alpha": 0});
                         }
                         if (triggers[0] && !triggers[1]) // 阶段二，膨胀动画
                         {
@@ -842,8 +834,8 @@ package Game {
                     "delay": 50});
             Starling.juggler.tween(shipsLayer2, 5, {"alpha": 0,
                     "delay": 50});
-            Starling.juggler.tween(uiLayer, 5, {"alpha": 0,
-                    "delay": 120});
+            // Starling.juggler.tween(uiLayer, 5, {"alpha": 0,
+            //         "delay": 120});
         }
 
         // #endregion
