@@ -25,6 +25,7 @@ package UI {
         private var mouseBatch:QuadBatch;
         private var dragQuad:Quad;
         private var dragLine:Quad;
+        private var convertQuad:Quad;
 
         public function TraditionalCtrlLayer(_ui:UIContainer) {
             this.game = _ui.scene.gameScene;
@@ -33,7 +34,10 @@ package UI {
             dragLine = new Quad(2, 2, Globals.teamColors[1]);
             selectedNodes = [];
             mouseBatch = new QuadBatch();
-            addChild(mouseBatch)
+            addChild(mouseBatch);
+            convertQuad = new Quad(1024, 768, 16711680);
+            convertQuad.alpha = 0;
+            addChild(convertQuad);
         }
 
 
@@ -96,7 +100,8 @@ package UI {
                 dragLine.x = down_x + dragQuad.width * _quadtypeX;
                 dragLine.y = down_y;
                 mouseBatch.addQuad(dragLine);
-                mouseBatch.blendMode = "add";
+                if(dragQuad.color != 0x000000)
+                    mouseBatch.blendMode = "add";
                 for each (_Node1 in game.nodes.active) {
                     if (_Node1.ships[1].length == 0 && _Node1.team != 1)
                         continue;
@@ -156,14 +161,15 @@ package UI {
             }
         }
 
-
-
         public function on_mouseDown(_Mouse:MouseEvent):void // 鼠标左键按下
         {
             if (game.alpha < 0.5)
                 return;
             down_x = (_Mouse.stageX - Starling.current.viewPort.x) / Starling.contentScaleFactor;
             down_y = (_Mouse.stageY - Starling.current.viewPort.y) / Starling.contentScaleFactor;
+            var _localPoint:Point = convertQuad.globalToLocal(new Point(down_x, down_y));
+            down_x = _localPoint.x;
+            down_y = _localPoint.y;
             mouseDown = true;
             dragging = false;
         }
@@ -178,6 +184,9 @@ package UI {
                 return;
             drag_x = (_Mouse.stageX - Starling.current.viewPort.x) / Starling.contentScaleFactor;
             drag_y = (_Mouse.stageY - Starling.current.viewPort.y) / Starling.contentScaleFactor;
+            var _localPoint:Point = convertQuad.globalToLocal(new Point(drag_x, drag_y));
+            drag_x = _localPoint.x;
+            drag_y = _localPoint.y;
             if (dragging)
                 return;
             _dx = drag_x - down_x;
@@ -243,6 +252,7 @@ package UI {
 
         //#region 计算工具
         private function getClosestNode(_x:Number, _y:Number):Node {
+            var _localPoint:Point = convertQuad.globalToLocal(new Point(_x, _y));
             var _ClosestNode:Node = null;
             var _dx:Number = NaN;
             var _dy:Number = NaN;
@@ -252,8 +262,8 @@ package UI {
             for each (var _Node:Node in game.nodes.active) {
                 if (_Node.type == 3)
                     continue;
-                _dx = _Node.x - _x;
-                _dy = _Node.y - _y;
+                _dx = _Node.x - _localPoint.x;
+                _dy = _Node.y - _localPoint.y;
                 _Distance = Math.sqrt(_dx * _dx + _dy * _dy);
                 _lineDist = _Node.lineDist;
                 if (_Distance < _lineDist && _Distance < _ClosestDist) {
