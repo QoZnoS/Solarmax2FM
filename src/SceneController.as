@@ -41,6 +41,9 @@ package {
             Starling.current.nativeStage.addEventListener("keyDown", on_key_down);
             initBlackQuad();
 
+            ui.x = gameScene.x = ui.pivotX = gameScene.pivotX = 512;
+            ui.y = gameScene.y = ui.pivotY = gameScene.pivotY = 384;
+            gameScene.scaleX = gameScene.scaleY = ui.scale = 1;
             if (Globals.saveVersion == -1){
                 var popup:Popup = new Popup("ERROR");
                 addChild(popup);

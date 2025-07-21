@@ -11,6 +11,7 @@ package UI {
     import starling.display.QuadBatch;
 
     public class TouchCtrlLayer extends Sprite {
+        private var convertQuad:Quad; // 转换触点坐标用
         private var touchQuad:Quad;
         private var displayBatch:QuadBatch;
         private var touches:Vector.<Touch>;
@@ -19,9 +20,10 @@ package UI {
         public function TouchCtrlLayer(_ui:UIContainer) {
             this.game = _ui.scene.gameScene;
             this.displayBatch = _ui.behaviorBatch;
-            touchQuad = new Quad(1024, 768, 16711680);
-            touchQuad.alpha = 0;
-            addChild(touchQuad)
+            this.touchQuad = _ui.touchQuad;
+            convertQuad = new Quad(1024, 768, 16711680);
+            convertQuad.alpha = 0;
+            addChild(convertQuad)
         }
 
         public function init():void {
@@ -55,8 +57,9 @@ package UI {
                     continue
                 for each (var _Node:Node in _Touch.downNodes) {
                     Drawer.drawCircle(displayBatch, _Node.x, _Node.y, _Color, _Node.lineDist - 4, _Node.lineDist - 7, false, 0.8);
-                    _Tx = _Touch.globalX;
-                    _Ty = _Touch.globalY;
+                    var _localPoint:Point = convertQuad.globalToLocal(new Point(_Touch.globalX, _Touch.globalY));
+                    _Tx = _localPoint.x;
+                    _Ty = _localPoint.y;
                     if (_Touch.hoverNode) { // 绘制目标天体的定位圈
                         _Block = nodesBlocked(_Node, _Touch.hoverNode);
                         _Tx = _Touch.hoverNode.x;
@@ -103,7 +106,7 @@ package UI {
             if (!_TouchArray)
                 return;
             for each (var _Touch:Touch in _TouchArray) {
-                _Touch.hoverNode = getClosestNode(_Touch.globalX, _Touch.globalY);
+                _Touch.hoverNode = getClosestNode(_Touch);
             }
         }
 
@@ -115,7 +118,7 @@ package UI {
                 if (!_Touch.downNodes)
                     _Touch.downNodes = [];
                 _Touch.downNodes.length = 0;
-                var _Node:Node = getClosestNode(_Touch.globalX, _Touch.globalY);
+                var _Node:Node = getClosestNode(_Touch);
                 if (_Node && _Touch.downNodes.indexOf(_Node) == -1)
                     _Touch.downNodes.push(_Node);
                 _Touch.hoverNode = null;
@@ -131,7 +134,7 @@ package UI {
             for each (var _Touch:Touch in _TouchArray) {
                 if (!_Touch.downNodes)
                     _Touch.downNodes = [];
-                var _Node:Node = getClosestNode(_Touch.globalX, _Touch.globalY);
+                var _Node:Node = getClosestNode(_Touch);
                 if (_Node && _Touch.downNodes.indexOf(_Node) == -1 && _Touch.downNodes.length == 0)
                     _Touch.downNodes.push(_Node);
                 _Touch.hoverNode = null;
@@ -164,7 +167,8 @@ package UI {
         }
 
         //#region 计算工具
-        private function getClosestNode(_x:Number, _y:Number):Node {
+        private function getClosestNode(_Touch:Touch):Node {
+            var _localPoint:Point = convertQuad.globalToLocal(new Point(_Touch.globalX, _Touch.globalY));
             var _ClosestNode:Node = null;
             var _dx:Number = NaN;
             var _dy:Number = NaN;
@@ -174,8 +178,8 @@ package UI {
             for each (var _Node:Node in game.nodes.active) {
                 if (_Node.type == 3)
                     continue;
-                _dx = _Node.x - _x;
-                _dy = _Node.y - _y;
+                _dx = _Node.x - _localPoint.x;
+                _dy = _Node.y - _localPoint.y;
                 _Distance = Math.sqrt(_dx * _dx + _dy * _dy);
                 _lineDist = _Node.lineDist;
                 if (_Distance < _lineDist && _Distance < _ClosestDist) {

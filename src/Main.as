@@ -3,7 +3,6 @@
     import flash.display.Bitmap;
     import flash.display.Shape;
     import flash.display.Sprite;
-    import flash.events.KeyboardEvent;
     import flash.events.MouseEvent;
     import flash.filesystem.File;
     import flash.geom.Rectangle;
@@ -13,8 +12,6 @@
     import starling.textures.Texture;
     import starling.utils.AssetManager;
     import starling.utils.RectangleUtil;
-    import starling.utils.Color;
-    import flash.display.StageDisplayState;
     import utils.EmbeddedAssets;
     import utils.GS;
 
@@ -24,7 +21,7 @@
         private static var Background:Class = EmbeddedAssets.startup_png;
         private static var pause_img:Class = EmbeddedAssets.paused_png;
         private var mStarling:Starling;
-        public var cover:Sprite;
+        private var cover:Sprite;
         private var keyWidth:Number;
         private var screenWidth:Number;
         private var screenHeight:Number;
@@ -256,6 +253,10 @@
             removeChild(cover);
             mStarling.start();
             GS.resumeMusic();
+        }
+
+        public function get starling():Starling{
+            return mStarling;
         }
     }
 }

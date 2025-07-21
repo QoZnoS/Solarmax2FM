@@ -76,6 +76,7 @@ package Game {
                 clear_tag();
         }
 
+        private var pause:Boolean = false;
         public function on_key_down(_keyCode:int):void {
             if (!debug)
                 return;
@@ -94,6 +95,13 @@ package Game {
                 case Keyboard.X:
                     title.init()
                     title.animateIn()
+                    break;
+                case Keyboard.C:
+                    pause = !pause;
+                    if (pause)
+                        Globals.main.starling.stop();
+                    else
+                        Globals.main.starling.start();
                     break;
                 case Keyboard.NUMBER_0:
                 case Keyboard.NUMBER_1:
