@@ -11,14 +11,15 @@ package {
     import starling.filters.ColorMatrixFilter;
     import UI.UIContainer;
     import utils.Popup;
+    import Entity.Node.Interface.AttackStrategyFactory;
 
     public class SceneController extends Sprite {
-        public var titleMenu:TitleMenu;
-        public var gameScene:GameScene;
-        public var endScene:EndScene;
-        public var mapEditor:EditorCenter;
-        public var debug:Debug;
-        public var ui:UIContainer;
+        public var titleMenu:TitleMenu; // 手动单例
+        public var gameScene:GameScene; // 手动单例
+        public var endScene:EndScene; // 手动单例
+        public var mapEditor:EditorCenter; // 手动单例
+        public var debug:Debug; // 自动单例
+        public var ui:UIContainer; // 自动单例
 
         public var speedMult:Number;
 

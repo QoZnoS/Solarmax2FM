@@ -20,6 +20,7 @@ package Game {
     import Entity.Ship;
     import Entity.FXHandler;
     import UI.Component.TutorialSprite;
+    import starling.display.BlendMode;
 
     public class GameScene extends Sprite {
         // #region 类变量
@@ -114,8 +115,8 @@ package Game {
             shipsLayer2.addChild(shipsBatch2);
             shipsLayer2.addChild(shipsBatch2b);
             fxLayer.blendMode = "add";
-            nodeGlowLayer.blendMode = "add";
-            blackholePulseLayer.blendMode = "multiply";
+            nodeGlowLayer.blendMode = BlendMode.ADD;
+            blackholePulseLayer.blendMode = BlendMode.MULTIPLY;
             gameContainer.x = gameContainer.pivotX = 512;
             gameContainer.y = gameContainer.pivotY = 384;
             juggler = new Juggler();

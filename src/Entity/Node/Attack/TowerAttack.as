@@ -5,7 +5,7 @@ package Entity.Node.Attack {
     import Entity.Ship;
     import Entity.EntityHandler;
 
-    public class TowerAttack extends BasicAttack{
+    public class TowerAttack extends BasicAttack {
 
         public function TowerAttack(attackRate:Number, attackRange:Number, attackLast:Number) {
             super(attackRate, attackRange, attackLast)

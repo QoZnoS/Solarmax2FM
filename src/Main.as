@@ -89,7 +89,7 @@
             // 获取应用程序目录并创建 AssetManager
             appDir = File.applicationDirectory;
             assets = new AssetManager(scaleFactor, true);
-            assets.verbose = Capabilities.isDebugger;
+            // assets.verbose = Capabilities.isDebugger;
             // 将音频、字体和纹理资源加入队列
             assets.enqueue(appDir.resolvePath("audio"), appDir.resolvePath("fonts/" + assetDir), appDir.resolvePath("textures/" + assetDir), appDir.resolvePath("metadata"));
             assets.enqueue("backgrounds/" + assetDir + "/bg01.png");

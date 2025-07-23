@@ -64,7 +64,6 @@ package {
         public static var errorMessage:String;
 
         public function Globals() {
-            super();
             throw new AbstractClassError();
         }
 

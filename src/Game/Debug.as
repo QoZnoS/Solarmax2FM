@@ -12,12 +12,14 @@ package Game {
 
     public class Debug extends Sprite {
         public var debug:Boolean; // debug 开启状态
-        public var dt:Number; // 帧时间
         public var game:GameScene; // GameScene 接口
         public var title:TitleMenu; // TitleMenu 接口
         private var scene:SceneController;
 
+        public var dt:Number; // 帧时间
         public var debugLables:Array; // 调试显示文本
+
+        private static var THIS:Debug;
 
         private var seed:uint;
 
@@ -31,12 +33,14 @@ package Game {
             this.game = _gameScene;
             this.title = _titleMenu;
             this.debug = false;
+            THIS = this;
             fpsCalculator = [0, 0, 0, 0, 0, 0, 0];
             debugLables = [];
             nodeTagLables = [[], [], []];
             seed = 0;
             addDebugView();
             // addEventListener("enterFrame", update);
+            // startDebugMode();
         }
 
         public function addDebugView():void {
@@ -173,6 +177,7 @@ package Game {
                 debugLables[2].text = "";
                 debugLables[3].text = "";
                 debugLables[4].text = "";
+                debugLables[5].text = "";
             }
         }
 
@@ -307,5 +312,13 @@ package Game {
             return filter;
         }
         // #endregion
+        public static function test(object:*):void{
+            var len:int = THIS.debugLables.length;
+            for(var i:int = len-1; i > 0; i--)
+            {
+                THIS.debugLables[i].text = THIS.debugLables[i-1].text;
+            }
+            THIS.debugLables[0].text=object;
+        }
     }
 }
