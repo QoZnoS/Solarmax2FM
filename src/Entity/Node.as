@@ -581,17 +581,17 @@ package Entity {
             FXHandler.addPulse(this, Globals.teamColors[_team], 0);
             GS.playCapture(this.x); // 播放占领音效
             if (_Nodeteam != 1 && _team == 1 && popVal > 0) {
-                game.ui.popLabel2.color = 65280;
-                game.ui.popLabel2.alpha = 1;
-                game.ui.popLabel3.color = 3407667;
-                game.ui.popLabel3.alpha = 1;
-                game.ui.popLabel3.text = "+ " + popVal;
+                game.popLabels[1].color = 65280;
+                game.popLabels[1].alpha = 1;
+                game.popLabels[2].color = 3407667;
+                game.popLabels[2].alpha = 1;
+                game.popLabels[2].text = "+ " + popVal;
             } else if (_Nodeteam == 1 && _team != 1 && popVal > 0) {
-                game.ui.popLabel2.color = 16711680;
-                game.ui.popLabel2.alpha = 1;
-                game.ui.popLabel3.color = 16724787;
-                game.ui.popLabel3.alpha = 1;
-                game.ui.popLabel3.text = "- " + popVal;
+                game.popLabels[1].color = 16711680;
+                game.popLabels[1].alpha = 1;
+                game.popLabels[2].color = 16724787;
+                game.popLabels[2].alpha = 1;
+                game.popLabels[2].text = "- " + popVal;
             }
         }
 

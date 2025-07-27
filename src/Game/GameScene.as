@@ -21,6 +21,9 @@ package Game {
     import Entity.FXHandler;
     import UI.Component.TutorialSprite;
     import starling.display.BlendMode;
+    import UI.UIContainer;
+    import starling.text.TextField;
+    import starling.utils.VAlign;
 
     public class GameScene extends Sprite {
         // #region 类变量
@@ -55,7 +58,6 @@ package Game {
         public var fades:EntityPool; // 选中特效
         // 其他
         public var cover:Quad; // 通关时的遮罩
-        public var ui:GameUI;
         public var barrierLines:Array;
         public var tutorial:TutorialSprite;
         public var level:int;
@@ -71,6 +73,8 @@ package Game {
         public var rng:Rng;
 
         public var scene:SceneController
+        public var ui:UIContainer;
+        public var popLabels:Vector.<TextField>;
 
         // #endregion
         public function GameScene(_scene:SceneController) {
@@ -141,15 +145,33 @@ package Game {
             entities = [ships, nodes, ais, warps, beams, pulses, flashes, barriers, explosions, darkPulses, fades]; // 实体池列表
             triggers = [false, false, false, false, false]; // 特殊事件
             barrierLines = []; // 障碍连接数据
-            ui = new GameUI();
             tutorial = new TutorialSprite();
             this.alpha = 0;
             this.visible = false;
             gameOver = true;
+            popLabels = new Vector.<TextField>(3, true);
+            var _Color:Number = 16755370;
+            popLabels[0] = new TextField(600, 40, "POPULATION : 50 / 50", "Downlink12", -1, _Color);
+            popLabels[1] = new TextField(600, 40, "POPULATION : 50 / 50", "Downlink12", -1, _Color);
+            popLabels[2] = new TextField(200, 40, "+ 30", "Downlink12", -1, _Color);
+            for (var i:int = 0; i < 3; i++) {
+                var label:TextField = popLabels[i];
+                label.vAlign = label.hAlign = VAlign.CENTER;
+                label.pivotX = 300;
+                label.pivotY = 20;
+                label.alpha = 0.5;
+                label.x = 512;
+                label.y = 136;
+            }
+            popLabels[1].alpha = 0;
+            popLabels[2].hAlign = "left";
+            popLabels[2].pivotX = 0;
+            popLabels[2].alpha = 0;
         }
 
         // #region 进入关卡
         public function init(seed:uint = 0):void {
+            ui = scene.ui;
             var i:int = 0;
             var _aiArray:Array = [];
             this.level = Globals.level;
@@ -164,8 +186,19 @@ package Game {
             }
             for (i = 0; i < triggers.length; i++)
                 triggers[i] = false; // 重置特殊事件
+            for each (var label:TextField in popLabels) {
+                switch (Globals.textSize) {
+                    case 0:
+                    case 1:
+                        label.fontName = "Downlink12";
+                        break;
+                    case 2:
+                        label.fontName = "Downlink18";
+                }
+                label.fontSize = -1;
+                ui.btnL.addChild(label);
+            }
             // 执行一些初始化函数
-            ui.init(this);
             tutorial.init(this, level);
             getBarrierLines();
             addBarriers();
@@ -412,13 +445,12 @@ package Game {
             GS.update(dt); // 更新音效计时器
             dt *= this.alpha; // wtf？？
             dt = updateSpeed(dt); // 更新游戏速度
-            countTeamCaps(); // 统计兵力
+            countTeamCaps(dt); // 统计兵力
             juggler.advanceTime(dt); // 插件内容，动画相关
             clearGraphics(); // 重置图像
-            scene.ui.update();
+            ui.update();
             for each (var _pool:EntityPool in entities) // 依次执行所有实体的更新函数
                 _pool.update(dt);
-            ui.update(dt); // 更新ui
             scene.debug.update(e)
             shipsBatch1.blendMode = shipsBatch2.blendMode = "add";
             specialEvents(); // 处理特殊关卡的特殊事件
@@ -439,7 +471,7 @@ package Game {
             return _dt;
         }
 
-        public function countTeamCaps():void {
+        public function countTeamCaps(_dt:Number):void {
             for (var _team:int = 0; _team < Globals.teamCount; _team++) {
                 // 重置兵力
                 Globals.teamCaps[_team] = 0;
@@ -450,6 +482,14 @@ package Game {
             for each (var _Ship:Ship in ships.active) // 统计总兵力
                 Globals.teamPops[_Ship.team]++;
             ships.active.length < 1024 ? Globals.exOptimization = 0 : (ships.active.length < 8192 ? Globals.exOptimization = 1 : Globals.exOptimization = 2);
+            
+            popLabels[0].text = popLabels[1].text = "POPULATION : " + Globals.teamPops[1] + " / " + Globals.teamCaps[1];
+            if (popLabels[1].alpha > 0)
+                popLabels[1].alpha = Math.max(0, popLabels[1].alpha - _dt * 0.5);
+            if (popLabels[2].alpha > 0) {
+                popLabels[2].x = 512 + popLabels[0].textBounds.width * 0.5 + 10;
+                popLabels[2].alpha = Math.max(0, popLabels[2].alpha - _dt * 0.5);
+            }
         }
 
         public function clearGraphics():void {
@@ -478,7 +518,7 @@ package Game {
                     break;
                 case 1:
                     if (!triggers[0])
-                        if (scene.ui.btnL.fleetSlider.perc < 1)
+                        if (ui.btnL.fleetSlider.perc < 1)
                             triggers[0] = true;
                     break;
                 case 31:
@@ -894,7 +934,7 @@ package Game {
                 case Keyboard.NUMBER_7:
                 case Keyboard.NUMBER_8:
                 case Keyboard.NUMBER_9:
-                    scene.ui.btnL.fleetSlider.perc = (keyCode - Keyboard.NUMBER_0) / 10;
+                    ui.btnL.fleetSlider.perc = (keyCode - Keyboard.NUMBER_0) / 10;
                     break;
                 case Keyboard.NUMPAD_1: // 小键盘上的1
                 case Keyboard.NUMPAD_2:
@@ -905,11 +945,11 @@ package Game {
                 case Keyboard.NUMPAD_7:
                 case Keyboard.NUMPAD_8:
                 case Keyboard.NUMPAD_9:
-                    scene.ui.btnL.fleetSlider.perc = (keyCode - Keyboard.NUMPAD_0) / 10;
+                    ui.btnL.fleetSlider.perc = (keyCode - Keyboard.NUMPAD_0) / 10;
                     break;
                 case Keyboard.NUMBER_0:
                 case Keyboard.NUMPAD_0:
-                    scene.ui.btnL.fleetSlider.perc = 1;
+                    ui.btnL.fleetSlider.perc = 1;
             }
         }
 

@@ -11,8 +11,8 @@ package Entity.Node.Interface {
 
         /** 存储类型到类路径的映射 */
         private static var _strategyMap:Dictionary = new Dictionary();
-        private static var _ready:Boolean = false;
 
+        private static var _ready:Boolean = false;
         private static function init():void {
             registerStrategy(TOWER, TowerAttack);
             registerStrategy(PULSECANNON, PulsecannonAttack);

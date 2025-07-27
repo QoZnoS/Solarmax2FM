@@ -11,7 +11,6 @@ package {
     import starling.filters.ColorMatrixFilter;
     import UI.UIContainer;
     import utils.Popup;
-    import Entity.Node.Interface.AttackStrategyFactory;
 
     public class SceneController extends Sprite {
         public var titleMenu:TitleMenu; // 手动单例

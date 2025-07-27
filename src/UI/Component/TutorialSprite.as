@@ -30,7 +30,7 @@ package UI.Component {
 
         public function init(_game:GameScene, type:int):void {
             this.game = _game;
-            this.layer = game.scene.ui.btnL;
+            this.layer = game.ui.btnL;
             this.type = type;
             arrow.visible = true;
             arrow.alpha = 0;
@@ -81,8 +81,8 @@ package UI.Component {
                     switch (Globals.fleetSliderPosition) {
                         case 0:
                             arrow.rotation = Math.PI;
-                            _x = game.scene.ui.btnL.fleetSlider.x + 50;
-                            _y = 384 - game.scene.ui.btnL.fleetSlider.box_y;
+                            _x = game.ui.btnL.fleetSlider.x + 50;
+                            _y = 384 - game.ui.btnL.fleetSlider.box_y;
                             arrow.x = _x + 20;
                             arrow.y = _y;
                             Starling.juggler.tween(arrow, 1, {"alpha": 0.8,
@@ -100,8 +100,8 @@ package UI.Component {
                             break;
                         case 2:
                             arrow.rotation = 0;
-                            _x = game.scene.ui.btnL.fleetSlider.x;
-                            _y = 384 - game.scene.ui.btnL.fleetSlider.box_y;
+                            _x = game.ui.btnL.fleetSlider.x;
+                            _y = 384 - game.ui.btnL.fleetSlider.box_y;
                             arrow.x = _x - 20;
                             arrow.y = _y;
                             Starling.juggler.tween(arrow, 1, {"alpha": 0.8,
@@ -118,8 +118,8 @@ package UI.Component {
                             loop = Starling.juggler.delayCall(show, 6);
                             break;
                         case 1:
-                            _x = 512 + game.scene.ui.btnL.fleetSlider.box_x;
-                            _y = game.scene.ui.btnL.fleetSlider.y - 10;
+                            _x = 512 + game.ui.btnL.fleetSlider.box_x;
+                            _y = game.ui.btnL.fleetSlider.y - 10;
                             arrow.rotation = 1.5707963267948966;
                             arrow.x = _x;
                             arrow.y = _y - 20;
