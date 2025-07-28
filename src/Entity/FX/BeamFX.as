@@ -101,18 +101,9 @@ package Entity.FX {
                     break;
             }
             image.rotation = angle;
-            if (image.color == 0) {
-                if (foreground)
-                    game.shipsBatch2b.addImage(image);
-                else
-                    game.shipsBatch1b.addImage(image);
-            } else if (foreground) {
-                game.shipsBatch2.addImage(image);
-                game.shipsBatch2.addImage(image2);
-            } else {
-                game.shipsBatch1.addImage(image);
-                game.shipsBatch1.addImage(image2);
-            }
+            entityL.addImage(image, foreground);
+            if (image.color != 0)
+                entityL.addImage(image2, foreground);
         }
     }
 }

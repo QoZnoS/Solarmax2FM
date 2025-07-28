@@ -27,21 +27,6 @@ package Game {
 
     public class GameScene extends Sprite {
         // #region 类变量
-        // 显示层
-        public var gameContainer:Sprite;
-        public var blackholePulseLayer:Sprite;
-        public var shipsLayer1:Sprite;
-        public var nodeLayer:Sprite;
-        public var nodeGlowLayer:Sprite;
-        public var nodeGlowLayer2:Sprite;
-        public var shipsLayer2:Sprite;
-        public var fxLayer:Sprite;
-        public var labelLayer:Sprite;
-        // 
-        public var shipsBatch1:QuadBatch;
-        public var shipsBatch1b:QuadBatch;
-        public var shipsBatch2:QuadBatch;
-        public var shipsBatch2b:QuadBatch;
         // 实体池
         public var entities:Array;
         public var ais:EntityPool; // AI
@@ -83,53 +68,19 @@ package Game {
             Utils.game = this;
             FXHandler.game = this;
             EntityHandler.game = this;
-            // 造一堆实例对象
-            gameContainer = new Sprite();
-            blackholePulseLayer = new Sprite();
-            shipsLayer1 = new Sprite();
-            nodeLayer = new Sprite();
-            nodeGlowLayer = new Sprite();
-            nodeGlowLayer2 = new Sprite();
-            shipsLayer2 = new Sprite();
-            fxLayer = new Sprite();
-            labelLayer = new Sprite();
-            shipsBatch1 = new QuadBatch();
-            shipsBatch1b = new QuadBatch();
-            shipsBatch2 = new QuadBatch();
-            shipsBatch2b = new QuadBatch();
-            // 造一堆可视化对象
-            gameContainer.addChild(blackholePulseLayer);
-            gameContainer.addChild(shipsLayer1); // 天体之下的飞船图层
-            gameContainer.addChild(nodeLayer); // 天体图层
-            gameContainer.addChild(nodeGlowLayer); // 天体光圈白底图层
-            gameContainer.addChild(nodeGlowLayer2); // 黑色专用光圈白底图层
-            gameContainer.addChild(shipsLayer2); // 天体之上的飞船图层
-            gameContainer.addChild(fxLayer); // 障碍线图层
-            gameContainer.addChild(labelLayer); // 文本图层
-            addChild(gameContainer);
             // 通关时的遮罩
             cover = new Quad(1024, 768, 16777215);
             cover.touchable = false;
-            cover.blendMode = "add";
+            cover.blendMode = BlendMode.ADD;
             cover.alpha = 0;
             addChild(cover);
             // 其他可视化对象
-            shipsLayer1.addChild(shipsBatch1);
-            shipsLayer1.addChild(shipsBatch1b);
-            shipsLayer2.addChild(shipsBatch2);
-            shipsLayer2.addChild(shipsBatch2b);
-            fxLayer.blendMode = "add";
-            nodeGlowLayer.blendMode = BlendMode.ADD;
-            blackholePulseLayer.blendMode = BlendMode.MULTIPLY;
-            gameContainer.x = gameContainer.pivotX = 512;
-            gameContainer.y = gameContainer.pivotY = 384;
             juggler = new Juggler();
             darkPulse = new Image(Root.assets.getTexture("halo"));
             darkPulse.pivotY = darkPulse.pivotX = darkPulse.width * 0.5;
             darkPulse.x = 512;
             darkPulse.y = 384;
             darkPulse.color = 0;
-            nodeGlowLayer2.addChild(darkPulse);
             darkPulse.visible = false;
             ais = new EntityPool();
             nodes = new EntityPool();
@@ -172,6 +123,7 @@ package Game {
         // #region 进入关卡
         public function init(seed:uint = 0):void {
             ui = scene.ui;
+            ui.entityL.addGlow(darkPulse);
             var i:int = 0;
             var _aiArray:Array = [];
             this.level = Globals.level;
@@ -209,9 +161,6 @@ package Game {
             this.alpha = 0;
             this.visible = true;
             cover.alpha = 0;
-            labelLayer.alpha = 1;
-            shipsLayer1.alpha = 1;
-            shipsLayer2.alpha = 1;
             Globals.soundMult = 1;
             gameOver = false;
             gameOverTimer = 3;
@@ -295,58 +244,11 @@ package Game {
         public function animateIn():void {
             this.alpha = 0;
             this.visible = true;
-            gameContainer.scaleY = 0.7; // 动画初始缩放
-            gameContainer.scaleX = 0.7; // 动画初始缩放
-            gameContainer.y = 354;
-            Starling.juggler.tween(gameContainer, Globals.transitionSpeed, {"scaleX": 1,
-                    "scaleY": 1,
-                    "y": 384,
-                    "transition": "easeInOut"});
             Starling.juggler.tween(this, Globals.transitionSpeed, {"alpha": 1,
                     "transition": "easeInOut"});
         }
 
-        public function getBarrierLines():void {
-            var i:int = 0;
-            var j:int = 0;
-            var k:int = 0;
-            var L_1:int = 0;
-            var L_2:int = 0;
-            var L_3:int = 0;
-            var _Node1:Node = null;
-            var _Node2:Node = null;
-            var _Array:Array;
-            var _Exist:Boolean;
-            barrierLines.length = 0; // 清空障碍线数组
-            L_1 = int(nodes.active.length);
-            for (i = 0; i < L_1; i++) {
-                _Node1 = nodes.active[i];
-                if (_Node1.type != 3)
-                    continue;
-                L_2 = int(_Node1.barrierLinks.length); // 该天体需连接的障碍总数
-                for (j = 0; j < L_2; j++) {
-                    if (_Node1.barrierLinks[j] is Node)
-                        _Node2 = _Node1.barrierLinks[j];
-                    else if (_Node1.barrierLinks[j] < L_1)
-                        _Node2 = nodes.active[_Node1.barrierLinks[j]];
-                    if (!_Node1.barrierCostom && _Node2.barrierCostom)
-                        continue;
-                    _Array = [new Point(_Node1.x, _Node1.y), new Point(_Node2.x, _Node2.y)];
-                    L_3 = int(barrierLines.length);
-                    _Exist = false;
-                    for (k = 0; k < L_3; k++)
-                        if (check4same(_Array, barrierLines[k]))
-                            _Exist = true;
-                    if (!_Exist && _Node2.type == 3) {
-                        barrierLines.push(_Array);
-                        _Node1.linked = true;
-                        _Node2.linked = true;
-                    }
-                }
-            }
-        }
-
-        public function check4same(_Array1:Array, _Array2:Array):Boolean {
+        private function check4same(_Array1:Array, _Array2:Array):Boolean {
             var _1:Point = _Array1[0];
             var _2:Point = _Array1[1];
             var _3:Point = _Array2[0];
@@ -358,15 +260,6 @@ package Game {
                 _result = true;
             return _result;
         }
-
-        public function hideSingleBarriers():void {
-            for each (var _Node:Node in nodes.active) {
-                if (_Node.type != 3)
-                    continue;
-                _Node.image.visible = _Node.halo.visible = _Node.linked;
-            }
-        }
-
         // #endregion
         // #region 界面功能
         public function deInit():void {
@@ -374,7 +267,6 @@ package Game {
             for each (var _pool:EntityPool in entities)
                 _pool.deInit();
             removeEventListener("enterFrame", update); // 移除更新帧监听器
-            clearGraphics();
         }
 
         // 移除UI，执行animateOut()
@@ -401,13 +293,6 @@ package Game {
 
         // 关卡退出动画，执行hide()
         public function animateOut():void {
-            Starling.juggler.removeTweens(labelLayer)
-            Starling.juggler.removeTweens(shipsLayer1)
-            Starling.juggler.removeTweens(shipsLayer2)
-            Starling.juggler.tween(gameContainer, Globals.transitionSpeed, {"scaleX": 0.7,
-                    "scaleY": 0.7,
-                    "y": 354,
-                    "transition": "easeInOut"});
             Starling.juggler.tween(this, Globals.transitionSpeed, {"alpha": 0,
                     "onComplete": hide,
                     "transition": "easeInOut"});
@@ -424,9 +309,6 @@ package Game {
         }
 
         public function restart():void {
-            Starling.juggler.removeTweens(labelLayer)
-            Starling.juggler.removeTweens(shipsLayer1)
-            Starling.juggler.removeTweens(shipsLayer2)
             Starling.juggler.tween(this, 0.1, {"alpha": 0,
                     "transition": "easeIn",
                     "onComplete": function():void
@@ -447,12 +329,10 @@ package Game {
             dt = updateSpeed(dt); // 更新游戏速度
             countTeamCaps(dt); // 统计兵力
             juggler.advanceTime(dt); // 插件内容，动画相关
-            clearGraphics(); // 重置图像
             ui.update();
             for each (var _pool:EntityPool in entities) // 依次执行所有实体的更新函数
                 _pool.update(dt);
             scene.debug.update(e)
-            shipsBatch1.blendMode = shipsBatch2.blendMode = "add";
             specialEvents(); // 处理特殊关卡的特殊事件
             if (darkPulse.visible)
                 expandDarkPulse(dt);
@@ -490,13 +370,6 @@ package Game {
                 popLabels[2].x = 512 + popLabels[0].textBounds.width * 0.5 + 10;
                 popLabels[2].alpha = Math.max(0, popLabels[2].alpha - _dt * 0.5);
             }
-        }
-
-        public function clearGraphics():void {
-            shipsBatch1.reset();
-            shipsBatch1b.reset();
-            shipsBatch2.reset();
-            shipsBatch2b.reset();
         }
 
         public function specialEvents():void {
@@ -722,7 +595,7 @@ package Game {
                                 darkPulse.team = 1;
                                 darkPulse.scaleX = darkPulse.scaleY = 0;
                                 darkPulse.visible = true;
-                                Starling.juggler.tween(gameContainer, 25, {"scaleX": 0.01,
+                                Starling.juggler.tween(ui.gameContainer, 25, {"scaleX": 0.01,
                                         "scaleY": 0.01,
                                         "delay": 20,
                                         "transition": "easeInOut"}); // 画面缩小动画
@@ -869,18 +742,18 @@ package Game {
         }
 
         public function invisibleMode():void {
-            Starling.juggler.tween(labelLayer, 5, {"alpha": 0,
-                    "delay": 22});
-            Starling.juggler.tween(shipsLayer1, 5, {"alpha": 0,
-                    "delay": 50});
-            Starling.juggler.tween(shipsLayer2, 5, {"alpha": 0,
-                    "delay": 50});
-            // Starling.juggler.tween(uiLayer, 5, {"alpha": 0,
+            // Starling.juggler.tween(ui.entityL.labelLayer, 5, {"alpha": 0,
+            //         "delay": 22});
+            // Starling.juggler.tween(ui.entityL.shipsLayer1, 5, {"alpha": 0,
+            //         "delay": 50});
+            // Starling.juggler.tween(ui.entityL.shipsLayer2, 5, {"alpha": 0,
+            //         "delay": 50});
+            // Starling.juggler.tween(ui.btnL, 5, {"alpha": 0,
             //         "delay": 120});
         }
 
         // #endregion
-        // #region 添加实体
+        // #region 障碍
         public function addBarriers():void {
             var _x1:Number = NaN;
             var _y1:Number = NaN;
@@ -918,6 +791,53 @@ package Game {
             }
         }
 
+        public function hideSingleBarriers():void {
+            for each (var _Node:Node in nodes.active) {
+                if (_Node.type != 3)
+                    continue;
+                _Node.image.visible = _Node.halo.visible = _Node.linked;
+            }
+        }
+
+        public function getBarrierLines():void {
+            var i:int = 0;
+            var j:int = 0;
+            var k:int = 0;
+            var L_1:int = 0;
+            var L_2:int = 0;
+            var L_3:int = 0;
+            var _Node1:Node = null;
+            var _Node2:Node = null;
+            var _Array:Array;
+            var _Exist:Boolean;
+            barrierLines.length = 0; // 清空障碍线数组
+            L_1 = int(nodes.active.length);
+            for (i = 0; i < L_1; i++) {
+                _Node1 = nodes.active[i];
+                if (_Node1.type != 3)
+                    continue;
+                L_2 = int(_Node1.barrierLinks.length); // 该天体需连接的障碍总数
+                for (j = 0; j < L_2; j++) {
+                    if (_Node1.barrierLinks[j] is Node)
+                        _Node2 = _Node1.barrierLinks[j];
+                    else if (_Node1.barrierLinks[j] < L_1)
+                        _Node2 = nodes.active[_Node1.barrierLinks[j]];
+                    if (!_Node1.barrierCostom && _Node2.barrierCostom)
+                        continue;
+                    _Array = [new Point(_Node1.x, _Node1.y), new Point(_Node2.x, _Node2.y)];
+                    L_3 = int(barrierLines.length);
+                    _Exist = false;
+                    for (k = 0; k < L_3; k++)
+                        if (check4same(_Array, barrierLines[k]))
+                            _Exist = true;
+                    if (!_Exist && _Node2.type == 3) {
+                        barrierLines.push(_Array);
+                        _Node1.linked = true;
+                        _Node2.linked = true;
+                    }
+                }
+            }
+        }
         // #endregion
 
         public function on_key_down(keyCode:int):void {

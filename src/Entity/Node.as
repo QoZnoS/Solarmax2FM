@@ -90,12 +90,9 @@ package Entity {
         public var barrierCostom:Boolean; // 障碍是否为自定义连接
         public var linked:Boolean; // 是否被连接
 
-        private var drawQuad:Quad; // 
-        private var quadImage:Image; // 
 
         // #endregion
         public function Node() {
-            drawQuad = new Quad(2, 2, 16777215);
             super();
             var _Color:uint = uint(Globals.teamColors[0]);
             image = new Image(Root.assets.getTexture("planet01")); // 设定默认天体
@@ -186,18 +183,11 @@ package Entity {
                     orbitSpeed = -1 * _OrbitSpeed;
             } else
                 this.orbitNode = null;
-            _GameScene.nodeLayer.addChild(image);
-            if (halo.color == 0) {
-                _GameScene.nodeGlowLayer2.addChild(halo);
-                _GameScene.nodeGlowLayer2.addChild(glow);
-            } else {
-                _GameScene.nodeGlowLayer.addChild(halo);
-                _GameScene.nodeGlowLayer.addChild(glow);
-            }
-            _GameScene.labelLayer.addChild(label);
+            entityL.addNode(image, halo, glow);
+            entityL.labelLayer.addChild(label);
             var i:int = 0;
             for (i = 0; i < labels.length; i++)
-                _GameScene.labelLayer.addChild(labels[i]);
+                entityL.labelLayer.addChild(labels[i]);
             for (i = 0; i < aiTimers.length; i++)
                 aiTimers[i] = 0;
             for (i = 0; i < transitShips.length; i++)
@@ -239,12 +229,10 @@ package Entity {
             startVal = 300;
             halo.readjustSize();
             halo.pivotX = halo.pivotY = halo.width * 0.5;
-            _GameScene.nodeLayer.addChild(image);
-            _GameScene.nodeGlowLayer2.addChild(halo);
-            _GameScene.nodeGlowLayer2.addChild(glow);
-            _GameScene.labelLayer.addChild(label);
+            entityL.addNode(image, halo, glow);
+            entityL.labelLayer.addChild(label);
             for (i = 0; i < labels.length; i++) {
-                _GameScene.labelLayer.addChild(labels[i]);
+                entityL.labelLayer.addChild(labels[i]);
             }
             for (i = 0; i < aiTimers.length; i++) {
                 aiTimers[i] = 0;
@@ -288,19 +276,11 @@ package Entity {
 
         override public function deInit():void {
             var i:int = 0;
-            game.nodeLayer.removeChild(image); // 移除贴图
-            if (game.nodeGlowLayer.contains(halo))
-                game.nodeGlowLayer.removeChild(halo);
-            if (game.nodeGlowLayer2.contains(halo))
-                game.nodeGlowLayer2.removeChild(halo);
-            if (game.nodeGlowLayer.contains(glow))
-                game.nodeGlowLayer.removeChild(glow);
-            if (game.nodeGlowLayer2.contains(glow))
-                game.nodeGlowLayer2.removeChild(glow);
-            game.labelLayer.removeChild(label); // 移除和平时文本
+            entityL.removeNode(image, halo, glow);
+            entityL.labelLayer.removeChild(label); // 移除和平时文本
             for (i = 0; i < labels.length; i++) // 循环移除和战斗时文本
             {
-                game.labelLayer.removeChild(labels[i]); // 移除文本
+                entityL.labelLayer.removeChild(labels[i]); // 移除文本
             }
             for (i = 0; i < ships.length; i++) // 循环移除每个势力的飞船
             {
@@ -351,7 +331,7 @@ package Entity {
                     glow.alpha = 1;
                     glowing = false;
                     image.color = halo.color = Globals.teamColors[team];
-                    halo.color == 0 ? game.nodeGlowLayer2.addChild(halo) : game.nodeGlowLayer.addChild(halo);
+                    entityL.addGlow(halo);
                 }
             } else if (glow.alpha > 0) // 再归零
             {
@@ -574,10 +554,7 @@ package Entity {
             this.captureTeam = _team;
             glowing = true; // 激活光效
             glow.color = Globals.teamColors[_team]; // 设定光效颜色
-            if (glow.color == 0)
-                game.nodeGlowLayer2.addChild(glow); // 黑色光效区别处理
-            else
-                game.nodeGlowLayer.addChild(glow);
+            entityL.addGlow(glow);
             FXHandler.addPulse(this, Globals.teamColors[_team], 0);
             GS.playCapture(this.x); // 播放占领音效
             if (_Nodeteam != 1 && _team == 1 && popVal > 0) {

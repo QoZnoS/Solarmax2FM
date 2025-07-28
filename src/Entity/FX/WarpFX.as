@@ -73,15 +73,7 @@ package Entity.FX {
             image.scaleY *= 0.5;
             image.alpha = 0.25;
             image.rotation = _angle;
-            if (image.color == 0) {
-                if (foreground)
-                    game.shipsBatch2b.addImage(image);
-                else
-                    game.shipsBatch1b.addImage(image);
-            } else if (foreground)
-                game.shipsBatch2.addImage(image);
-            else
-                game.shipsBatch1.addImage(image);
+            entityL.addImage(image, foreground);
         }
     }
 }

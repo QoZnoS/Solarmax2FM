@@ -50,17 +50,11 @@ package Entity.FX {
             image.color = _Color;
             image.scaleX = image.scaleY = size;
             image.visible = true;
-            if (image.color == 0)
-                _GameScene.nodeGlowLayer2.addChild(image);
-            else
-                _GameScene.nodeGlowLayer.addChild(image);
+            entityL.addGlow(image);
         }
 
         override public function deInit():void {
-            if (image.color == 0)
-                game.nodeGlowLayer2.removeChild(image);
-            else
-                game.nodeGlowLayer.removeChild(image);
+            entityL.removeGlow(image);
         }
 
         override public function update(_dt:Number):void {

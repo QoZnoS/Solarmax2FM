@@ -22,11 +22,7 @@ package Entity.FX {
             image.scaleX = 0.75;
             image.rotation = _Angle;
             image.color = _Color;
-            _GameScene.fxLayer.addChild(image);
-        }
-
-        override public function deInit():void {
-            game.fxLayer.removeChild(image);
+            entityL.fxLayer.addImage(image);
         }
     }
 }

@@ -101,20 +101,13 @@ package Entity.FX {
                     image.rotation = angle;
             }
             if (_type == 4)
-                _GameScene.blackholePulseLayer.addChild(image);
-            else if (image.color == 0)
-                _GameScene.nodeGlowLayer2.addChild(image);
+                entityL.blackholeLayer.addImage(image);
             else
-                _GameScene.nodeGlowLayer.addChild(image);
+                entityL.addGlow(image);
         }
 
         override public function deInit():void {
-            if (game.nodeGlowLayer.contains(image))
-                game.nodeGlowLayer.removeChild(image);
-            if (game.nodeGlowLayer2.contains(image))
-                game.nodeGlowLayer2.removeChild(image);
-            if (game.blackholePulseLayer.contains(image))
-                game.blackholePulseLayer.removeChild(image);
+            entityL.removeGlow(image)
         }
 
         override public function update(_dt:Number):void {

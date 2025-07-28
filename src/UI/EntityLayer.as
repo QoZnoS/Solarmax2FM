@@ -1,37 +1,196 @@
-package UI
-{
+package UI {
     import starling.display.QuadBatch;
     import starling.display.Sprite;
+    import starling.display.BlendMode;
+    import starling.display.Image;
+
     /** 显示天体和飞船 */
-    public class EntityLayer extends Sprite{
+    public class EntityLayer extends Sprite {
+        // 背景ADD混合层
+        private var bgAddBatch:Sprite;
+        private var shipsBGBatchs:Vector.<QuadBatch>; // 天体背后常规飞船
 
-        private var blackholePulseBatch:QuadBatch;
+        // 背景NORMAL混合层
+        private var bgNormalBatch:Sprite;
+        private var shipsBGBatchbs:Vector.<QuadBatch>; // 天体背后黑色飞船
+        private var nodeBatch:Sprite; // 天体
+        private var nodeGlowNormal:Sprite; // 天体光晕(NORMAL部分)
 
-        private var bgAddBatch:QuadBatch;
-        private var shipsBGBatchs:Vector.<QuadBatch>;
-        private var nodeGlow:QuadBatch;
+        // 前景ADD混合层
+        private var fgAddBatch:Sprite;
+        private var nodeGlow:Sprite; // 天体光晕(ADD部分)
+        private var shipsFGBatchs:Vector.<QuadBatch>; // 天体前方常规飞船
+        private var fx:QuadBatch; // 特效
 
-        private var bgNormalBatch:QuadBatch;
-        private var shipsBGBatchbs:Vector.<QuadBatch>;
-        private var nodeBatch:QuadBatch;
-        private var nodeGlowNormal:QuadBatch;
+        // 前景NORMAL混合层
+        private var fgNormalBatch:Sprite;
+        private var shipsFGBatchbs:Vector.<QuadBatch>; // 天体前方黑色飞船
+        private var labels:Sprite; // 标签
 
-        private var fgAddBatch:QuadBatch;
-        private var shipsFGBatchs:Vector.<QuadBatch>;
-        private var fx:QuadBatch;
+        // 特殊效果层
+        private var blackholePulseBatch:QuadBatch; // 黑洞特效
 
-        private var fgNormalBatch:QuadBatch;
-        private var shipsFGBatchbs:Vector.<QuadBatch>;
-        private var labels:QuadBatch;
-
-
-        public function EntityLayer(){
+        public function EntityLayer() {
             blackholePulseBatch = new QuadBatch();
-            bgAddBatch = new QuadBatch();
+            blackholePulseBatch.blendMode = BlendMode.MULTIPLY;
+
+            bgAddBatch = new Sprite();
+            bgAddBatch.blendMode = BlendMode.ADD;
+            shipsBGBatchs = new Vector.<QuadBatch>();
+
+            bgNormalBatch = new Sprite();
+            bgNormalBatch.blendMode = BlendMode.NORMAL;
+            shipsBGBatchbs = new Vector.<QuadBatch>();
+            nodeBatch = new Sprite();
+            nodeGlowNormal = new Sprite();
+
+            fgAddBatch = new Sprite();
+            fgAddBatch.blendMode = BlendMode.ADD;
+            nodeGlow = new Sprite();
+            shipsFGBatchs = new Vector.<QuadBatch>();
+            fx = new QuadBatch();
+
+            fgNormalBatch = new Sprite();
+            fgNormalBatch.blendMode = BlendMode.NORMAL;
+            shipsFGBatchbs = new Vector.<QuadBatch>();
+            labels = new Sprite();
         }
 
-        public function init():void{
+        //#region 加载
+        public function init():void {
+            addChild(blackholePulseBatch);
 
+            addChild(bgAddBatch);
+            shipsBGBatchs.push(new QuadBatch());
+            bgAddBatch.addChild(shipsBGBatchs[0]);
+
+            addChild(bgNormalBatch);
+            shipsBGBatchbs.push(new QuadBatch());
+            bgNormalBatch.addChild(shipsBGBatchbs[0]);
+            bgNormalBatch.addChild(nodeBatch);
+            bgNormalBatch.addChild(nodeGlowNormal);
+
+            addChild(fgAddBatch);
+            fgAddBatch.addChild(nodeGlow);
+            shipsFGBatchs.push(new QuadBatch());
+            fgAddBatch.addChild(shipsFGBatchs[0]);
+            fgAddBatch.addChild(fx);
+
+            addChild(fgNormalBatch);
+            shipsFGBatchbs.push(new QuadBatch());
+            fgNormalBatch.addChild(shipsFGBatchbs[0]);
+            fgNormalBatch.addChild(labels);
         }
+
+        public function deinit():void {
+            disposeBatchVector(shipsBGBatchs);
+            disposeBatchVector(shipsBGBatchbs);
+            disposeBatchVector(shipsFGBatchs);
+            disposeBatchVector(shipsFGBatchbs);
+
+            nodeGlow.dispose();
+            nodeBatch.dispose();
+            nodeGlowNormal.dispose();
+            fx.dispose();
+            labels.dispose();
+            blackholePulseBatch.dispose();
+        }
+
+        public function reset():void{
+            resetBatchVector(shipsBGBatchs);
+            resetBatchVector(shipsBGBatchbs);
+            resetBatchVector(shipsFGBatchs);
+            resetBatchVector(shipsFGBatchbs);
+            fx.reset();
+        }
+
+        private function disposeBatchVector(batches:Vector.<QuadBatch>):void {
+            for each (var batch:QuadBatch in batches)
+                batch.dispose();
+            batches.length = 0;
+        }
+
+        private function resetBatchVector(batches:Vector.<QuadBatch>):void {
+            for each (var batch:QuadBatch in batches)
+                batch.reset();
+        }
+        //#endregion
+        //#region 添加贴图
+        public function addImage(image:Image, foreground:Boolean):void {
+            if (image.color == 0) {
+                if (foreground) {
+                    getEmptyBatch(shipsFGBatchbs, fgNormalBatch).addImage(image);
+                } else {
+                    getEmptyBatch(shipsBGBatchbs, bgNormalBatch).addImage(image);
+                }
+            } else {
+                if (foreground) {
+                    getEmptyBatch(shipsFGBatchs, fgAddBatch).addImage(image);
+                } else {
+                    getEmptyBatch(shipsBGBatchs, bgAddBatch).addImage(image);
+                }
+            }
+        }
+
+        private function getEmptyBatch(batches:Vector.<QuadBatch>, parent:Sprite):QuadBatch {
+            for each (var batch:QuadBatch in batches)
+                if (batch.numQuads <= 2048)
+                    return batch
+            var newBatch:QuadBatch = new QuadBatch();
+            batches.push(newBatch);
+            parent.addChild(newBatch);
+            return newBatch;
+        }
+
+        public function addNode(node:Image, halo:Image, glow:Image):void{
+            nodeBatch.addChild(node);
+            if(halo.color == 0){
+                nodeGlowNormal.addChild(halo);
+                nodeGlowNormal.addChild(glow);
+            }else{
+                nodeGlow.addChild(halo);
+                nodeGlow.addChild(glow);
+            }
+        }
+
+        public function removeNode(node:Image, halo:Image, glow:Image):void{
+            nodeBatch.removeChild(node);
+            if (nodeGlowNormal.contains(halo))
+                nodeGlowNormal.removeChild(halo);
+            if (nodeGlowNormal.contains(glow))
+                nodeGlowNormal.removeChild(glow);
+            if (nodeGlow.contains(halo))
+                nodeGlow.removeChild(halo);
+            if (nodeGlow.contains(glow))
+                nodeGlow.removeChild(glow);
+        }
+
+        public function addGlow(glow:Image):void{
+            if (glow.color == 0)
+                nodeGlowNormal.addChild(glow);
+            else
+                nodeGlow.addChild(glow);
+        }
+
+        public function removeGlow(glow:Image):void{
+            if (nodeGlowNormal.contains(glow))
+                nodeGlowNormal.removeChild(glow);
+            if (nodeGlow.contains(glow))
+                nodeGlow.removeChild(glow);
+        }
+        //#endregion
+        //#region getter
+        public function get blackholeLayer():QuadBatch {
+            return blackholePulseBatch;
+        }
+
+        public function get fxLayer():QuadBatch{
+            return fx;
+        }
+
+        public function get labelLayer():Sprite{
+            return labels;
+        }
+        //#endregion
     }
 }

@@ -5,12 +5,14 @@ package UI {
     import starling.display.Quad;
 
     public class UIContainer extends Sprite {
+        public var gameContainer:Sprite;
 
         public var entityL:EntityLayer;
         private var controlLayer:Sprite;
         public var behaviorBatch:QuadBatch;
         public var touchCL:TouchCtrlLayer;
         public var tradiCL:TraditionalCtrlLayer;
+
         public var btnL:BtnLayer;
         public var touchQuad:Quad;
 
@@ -20,6 +22,7 @@ package UI {
 
         public function UIContainer(_scene:SceneController) {
             this.scene = _scene;
+            gameContainer = new Sprite();
             touchQuad = new Quad(1024, 768, 16711680);
             entityL = new EntityLayer();
             controlLayer = new Sprite();
@@ -28,20 +31,21 @@ package UI {
             tradiCL = new TraditionalCtrlLayer(this);
             btnL = new BtnLayer(this);
 
-            addChild(entityL);
-            addChild(controlLayer);
+            gameContainer.addChild(entityL);
+            gameContainer.addChild(controlLayer);
             controlLayer.addChild(behaviorBatch);
             controlLayer.addChild(touchCL);
             controlLayer.addChild(tradiCL);
+            addChild(gameContainer)
             addChild(touchQuad);
             addChild(btnL);
 
             btnL.blendMode = "add";
-            touchCL.visible = tradiCL.visible = touchQuad.touchable = false;
+            touchCL.visible = tradiCL.visible = touchQuad.touchable = gameContainer.touchable = false;
             touchQuad.alpha = 0;
 
-            controlLayer.x = controlLayer.pivotX = 512;
-            controlLayer.y = controlLayer.pivotY = 384;
+            gameContainer.x = gameContainer.pivotX = 512;
+            gameContainer.y = gameContainer.pivotY = 384;
         }
 
         public function initLevel():void {
@@ -52,14 +56,15 @@ package UI {
                 tradiCL.visible = true;
                 tradiCL.init();
             }
-            btnL.initLevel()
+            btnL.initLevel();
+            entityL.init();
             touchQuad.touchable = true;
 
-            controlLayer.alpha = 0;
-            controlLayer.scaleX = controlLayer.scaleY = _scale-0.3;
-            controlLayer.y = 354;
+            gameContainer.alpha = 0;
+            gameContainer.scaleX = gameContainer.scaleY = _scale-0.3;
+            gameContainer.y = 354;
             btnL.alpha = 0;
-            Starling.juggler.tween(controlLayer, Globals.transitionSpeed, {"alpha": 1,
+            Starling.juggler.tween(gameContainer, Globals.transitionSpeed, {"alpha": 1,
                     "scaleX": _scale,
                     "scaleY": _scale,
                     "y": 384,
@@ -69,9 +74,9 @@ package UI {
         }
 
         public function deinitLevel():void {
-            Starling.juggler.removeTweens(controlLayer);
+            Starling.juggler.removeTweens(gameContainer);
             Starling.juggler.removeTweens(btnL);
-            Starling.juggler.tween(controlLayer, Globals.transitionSpeed, {"alpha": 0,
+            Starling.juggler.tween(gameContainer, Globals.transitionSpeed, {"alpha": 0,
                     "scaleX": _scale-0.3,
                     "scaleY": _scale-0.3,
                     "y": 354,
@@ -89,11 +94,14 @@ package UI {
                 tradiCL.visible = false;
                 tradiCL.deinit();
             }
+            entityL.reset();
+            // entityL.deinit();
             touchQuad.touchable = false;
         }
 
         public function update():void {
             behaviorBatch.reset();
+            entityL.reset();
             Globals.touchControls ? touchCL.draw() : tradiCL.draw();
         }
 

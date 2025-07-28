@@ -5,9 +5,9 @@ package Entity.Node.Attack {
     import Entity.EntityHandler;
     import Entity.Ship;
 
-    public class CloneturrentAttack extends BasicAttack {
+    public class CloneturretAttack extends BasicAttack {
 
-        public function CloneturrentAttack(attackRate:Number, attackRange:Number, attackLast:Number) {
+        public function CloneturretAttack(attackRate:Number, attackRange:Number, attackLast:Number) {
             super(attackRate, attackRange, attackLast);
         }
 

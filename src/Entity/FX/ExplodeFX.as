@@ -56,15 +56,7 @@ package Entity.FX {
                     active = false;
                 }
             }
-            if (image.color == 0) {
-                if (foreground)
-                    game.shipsBatch2b.addImage(image);
-                else
-                    game.shipsBatch1b.addImage(image);
-            } else if (foreground)
-                game.shipsBatch2.addImage(image);
-            else
-                game.shipsBatch1.addImage(image);
+            entityL.addImage(image, foreground);
         }
     }
 }

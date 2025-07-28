@@ -5,6 +5,7 @@ package Entity
    import starling.display.Image;
    import utils.Rng;
    import utils.GS;
+   import starling.display.QuadBatch;
 
    public class Ship extends GameEntity
    {
@@ -35,6 +36,9 @@ package Entity
       public var followShip:Ship; // 跟随的飞船
 
       public var rng:Rng;
+
+      public var currentBatch:QuadBatch;
+      public var prevForeground:Boolean;
       // #endregion
       public function Ship()
       {
@@ -70,7 +74,7 @@ package Entity
          pulse.color = image.color;
          pulse.alpha = 0;
          orbitDist = (40 + rng.nextNumber() * 40) * _Node.size * 2;
-         orbitAngle = rng.nextNumber() * 3.141592653589793 * 2;
+         orbitAngle = rng.nextNumber() * Math.PI * 2;
          orbitSpeed = rng.nextNumber() * 0.15 + 0.05;
          x = _Node.x + Math.cos(orbitAngle) * orbitDist;
          y = _Node.y + Math.sin(orbitAngle) * orbitDist * 0.15;
@@ -87,7 +91,7 @@ package Entity
             pulse.visible = true;
             pulse.scaleX = pulse.scaleY = 1;
          }
-         if (orbitAngle > 0 && orbitAngle < 3.141592653589793)
+         if (orbitAngle > 0 && orbitAngle < Math.PI)
             foreground = true;
          else
             foreground = false;
@@ -154,25 +158,16 @@ package Entity
             }
             trail.width = trailLength;
             trail.rotation = jumpAngle;
-            if (orbitAngle > 0 && orbitAngle < 3.141592653589793)
-               foreground = true; // 判断与天体贴图的图层关系
-            else
-               foreground = false;
+            updateForeground()
             drawTrail();
          }
          if (!node.conflict && !node.capturing)
             hp = Math.min(100, hp + _dt * 50);
          orbitAngle += orbitSpeed * _dt;
-         if (orbitAngle > 6.283185307179586)
-            orbitAngle -= 6.283185307179586;
-         if (orbitAngle < 0)
-            orbitAngle += 6.283185307179586;
+         orbitAngle %= Math.PI * 2
          x = node.x + Math.cos(orbitAngle) * orbitDist;
          y = node.y + Math.sin(orbitAngle) * orbitDist * 0.15;
-         if (orbitAngle > 0 && orbitAngle < 3.141592653589793)
-            foreground = true;
-         else
-            foreground = false;
+         updateForeground()
          drawImage();
          if (pulse.alpha > 0)
             drawPulse();
@@ -189,7 +184,7 @@ package Entity
          }
          image.scaleY = 1 - image.scaleX / 6 * 0.25;
          image.rotation = jumpAngle;
-         if (orbitAngle > 0 && orbitAngle < 3.141592653589793)
+         if (orbitAngle > 0 && orbitAngle < Math.PI)
             foreground = true;
          else
             foreground = false;
@@ -208,7 +203,7 @@ package Entity
             if (warping)
             {
                _foreground = false;
-               if (orbitAngle > 0 && orbitAngle < 3.141592653589793)
+               if (orbitAngle > 0 && orbitAngle < Math.PI)
                   _foreground = true;
                FXHandler.addWarp(x, y, tx, ty, Globals.teamColors[team], _foreground);
                x = tx;
@@ -254,8 +249,8 @@ package Entity
             _Angle = Math.atan2(_dy, _dx);
             _dtime = (_Distance = Math.sqrt(_dx * _dx + _dy * _dy)) / jumpSpeed;
             _dAngle = node.orbitAngle + node.orbitSpeed * _dtime;
-            if (_dAngle > 6.283185307179586)
-               _dAngle -= 6.283185307179586;
+            if (_dAngle > Math.PI * 2)
+               _dAngle -= Math.PI * 2;
             _x2 = node.orbitNode.x + Math.cos(_dAngle) * node.orbitDist;
             _y2 = node.orbitNode.y + Math.sin(_dAngle) * node.orbitDist;
             tx = _x2 + _x1;
@@ -264,8 +259,8 @@ package Entity
             _dy = ty - y;
             _dtime = (_Distance = Math.sqrt(_dx * _dx + _dy * _dy)) / jumpSpeed;
             _dAngle = node.orbitAngle + node.orbitSpeed * _dtime;
-            if (_dAngle > 6.283185307179586)
-               _dAngle -= 6.283185307179586;
+            if (_dAngle > Math.PI * 2)
+               _dAngle -= Math.PI * 2;
             _x2 = node.orbitNode.x + Math.cos(_dAngle) * node.orbitDist;
             _y2 = node.orbitNode.y + Math.sin(_dAngle) * node.orbitDist;
             tx = _x2 + _x1;
@@ -319,10 +314,7 @@ package Entity
          trail.rotation = jumpAngle;
          image.rotation = jumpAngle;
          trail.visible = true;
-         if (orbitAngle > 0 && orbitAngle < 3.141592653589793)
-            foreground = true;
-         else
-            foreground = false;
+         updateForeground()
          drawImage();
          drawTrail();
       }
@@ -389,25 +381,27 @@ package Entity
       }
       // #endregion
       // #region 绘制贴图
+        private function updateForeground():void{
+         if (orbitAngle > 0 && orbitAngle < Math.PI)
+            foreground = true;
+         else
+            foreground = false;
+        }
+
+        private function updateImage():void{
+         image.x = x;
+         image.y = y;
+        }
+
       private function drawImage():void // 绘制贴图
       {
          if (Globals.exOptimization > 1)
-         {
             if (node.ships[team].length > 1024)
                if (rng.nextNumber() > 1024/game.ships.active.length)
                   return;
-            if (rng.nextNumber() > 8192/game.ships.active.length)
-               return;
-         }
          image.x = x;
          image.y = y;
-         image.color == 0 ?
-            (foreground ?
-               game.shipsBatch2b.addImage(image) :
-               game.shipsBatch1b.addImage(image)) :
-            (foreground ?
-               game.shipsBatch2.addImage(image) :
-               game.shipsBatch1.addImage(image));
+         entityL.addImage(image, foreground)
       }
 
       private function drawTrail():void // 绘制拖尾
@@ -416,13 +410,7 @@ package Entity
             return;
          trail.x = x;
          trail.y = y;
-         image.color == 0 ?
-            (foreground ?
-               game.shipsBatch2b.addImage(trail) :
-               game.shipsBatch1b.addImage(trail)) :
-            (foreground ?
-               game.shipsBatch2.addImage(trail) :
-               game.shipsBatch1.addImage(trail));
+         entityL.addImage(trail, foreground)
       }
 
       private function drawPulse():void // 绘制光圈
@@ -431,13 +419,7 @@ package Entity
             return;
          pulse.x = x;
          pulse.y = y;
-         image.color == 0 ?
-            (foreground ?
-               game.shipsBatch2b.addImage(pulse) :
-               game.shipsBatch1b.addImage(pulse)) :
-            (foreground ?
-               game.shipsBatch2.addImage(pulse) :
-               game.shipsBatch1.addImage(pulse));
+         entityL.addImage(pulse, foreground)
       }
       // #endregion
       // #region 其他功能性函数
@@ -480,8 +462,8 @@ package Entity
          {
             _dtime = _Distance / jumpSpeed;
             _dAngle = node.orbitAngle + node.orbitSpeed * _dtime;
-            if (_dAngle > 6.283185307179586)
-               _dAngle -= 6.283185307179586;
+            if (_dAngle > Math.PI * 2)
+               _dAngle -= Math.PI * 2;
             _x2 = node.orbitNode.x + Math.cos(_dAngle) * node.orbitDist;
             _y2 = node.orbitNode.y + Math.sin(_dAngle) * node.orbitDist;
             tx = _x2 + _x1;
@@ -490,8 +472,8 @@ package Entity
             _dy = ty - y;
             _dtime = (_Distance = Math.sqrt(_dx * _dx + _dy * _dy)) / jumpSpeed;
             _dAngle = node.orbitAngle + node.orbitSpeed * _dtime;
-            if (_dAngle > 6.283185307179586)
-               _dAngle -= 6.283185307179586;
+            if (_dAngle > Math.PI * 2)
+               _dAngle -= Math.PI * 2;
             _x2 = node.orbitNode.x + Math.cos(_dAngle) * node.orbitDist;
             _y2 = node.orbitNode.y + Math.sin(_dAngle) * node.orbitDist;
             tx = _x2 + _x1;

@@ -6,7 +6,7 @@ package Entity.Node.Interface {
         public static const TOWER:String = "tower";
         public static const PULSECANNON:String = "pulsecannon";
         public static const BLACKHOLE:String = "blackhole";
-        public static const CLONETURRENT:String = "cloneturrent";
+        public static const CLONETURRET:String = "cloneturret";
         public static const CAPTURESHIP:String = "captureship";
 
         /** 存储类型到类路径的映射 */
@@ -17,7 +17,7 @@ package Entity.Node.Interface {
             registerStrategy(TOWER, TowerAttack);
             registerStrategy(PULSECANNON, PulsecannonAttack);
             registerStrategy(BLACKHOLE, BlackholeAttack);
-            registerStrategy(CLONETURRENT, CloneturrentAttack);
+            registerStrategy(CLONETURRET, CloneturretAttack);
             registerStrategy(CAPTURESHIP, CaptureshipAttack);
 
             _ready = true;
