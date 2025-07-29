@@ -639,26 +639,24 @@ package Entity {
         }
 
         public function sendShips(_team:int, _Node:Node):void {
-            if (_Node == this)
-                return; // 防止调动飞船到自身
-            var _Ship:Ship = null;
-            var _warp:Boolean = false; // 是否为传送门
             var l:int = Math.ceil(ships[_team].length * game.scene.ui.btnL.fleetSlider.perc); // 计算调动的飞船数，Math.ceil()为至少调动1飞船判定
-            for (var i:int = 0; i < l; i++) // 遍历每个需调动的飞船
-            {
-                _Ship = ships[_team][i];
-                if (_Ship.state != 0)
-                    l = Math.min(l + 1, ships[_team].length); // 这里是为了允许快速操作，跳过将要起飞的飞船并将循环次数增加1
-                else
-                    _warp = moveShip(_Ship, _team, _Node);
-            }
-            if (_warp)
-                showWarpPulse(_team); // 展示传送门特效
+            if (_Node == this || l == 0)
+                return;
+            if (!game.rep)
+                Globals.replay[Globals.replay.length-1].push([this.tag, _team, _Node.tag, l])
         }
 
         public function sendAIShips(_team:int, _Node:Node, _ships:int):void {
-            if (_Node == this)
-                return; // 防止调动飞船到自身
+            var _ShipNumber:int = Math.min(_ships, ships[_team].length);
+            if (_Node == this || _ShipNumber == 0)
+                return;
+            if (!game.rep)
+                Globals.replay[Globals.replay.length-1].push([this.tag, _team, _Node.tag, _ShipNumber])
+            if (aiTimers[_team] < 1)
+                aiTimers[_team] = 1;
+        }
+
+        public function moveShips(_team:int, _Node:Node, _ships:int):void{
             var _Ship:Ship = null;
             var _warp:Boolean = false; // 是否为传送门
             var _ShipNumber:int = Math.min(_ships, ships[_team].length);
@@ -670,8 +668,6 @@ package Entity {
                 else
                     _warp = moveShip(_Ship, _team, _Node);
             }
-            if (aiTimers[_team] < 1)
-                aiTimers[_team] = 1;
             if (_warp)
                 showWarpPulse(_team); // 播放传送门特效
         }

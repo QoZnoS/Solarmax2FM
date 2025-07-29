@@ -96,7 +96,6 @@ package Menus.StartMenus {
                 nicoClickTime = 0;
                 nicobtn.label.color = COLOR;
                 title.on_menu(null);
-                // 以隐形模式进入关卡...
                 title.loadMap();
                 title.scene.gameScene.invisibleMode();
             }

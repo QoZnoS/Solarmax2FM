@@ -11,28 +11,28 @@ package Game {
     import Entity.EnemyAI;
 
     public class Debug extends Sprite {
-        public var debug:Boolean; // debug 开启状态
-        public var game:GameScene; // GameScene 接口
-        public var title:TitleMenu; // TitleMenu 接口
-        private var scene:SceneController;
-
-        public var dt:Number; // 帧时间
-        public var debugLables:Array; // 调试显示文本
-
+        private static var debug:Boolean; // debug 开启状态
+        private static var game:GameScene; // GameScene 接口
+        private static var title:TitleMenu; // TitleMenu 接口
+        private static var scene:SceneController;
         private static var THIS:Debug;
+
+        private var dt:Number; // 帧时间
+        private var debugLables:Array; // 调试显示文本
+
 
         private var seed:uint;
 
         // #region 初始化
         public function Debug(_scene:SceneController) {
             super();
-            this.scene = _scene;
+            scene = _scene;
         }
 
         public function init(_gameScene:GameScene, _titleMenu:TitleMenu):void {
-            this.game = _gameScene;
-            this.title = _titleMenu;
-            this.debug = false;
+            game = _gameScene;
+            title = _titleMenu;
+            debug = false;
             THIS = this;
             fpsCalculator = [0, 0, 0, 0, 0, 0, 0];
             debugLables = [];
@@ -43,7 +43,7 @@ package Game {
             // startDebugMode();
         }
 
-        public function addDebugView():void {
+        private function addDebugView():void {
             var _y:Number = 100;
             debugLables.push(new TextField(1000, 40, "DebugView", "Downlink12", -1, 16777215));
             debugLables.push(new TextField(1000, 40, "DebugView", "Downlink12", -1, 16777215));
@@ -66,12 +66,12 @@ package Game {
 
         // #endregion
         // #region 调试函数调用工具
-        public function update(e:EnterFrameEvent):void {
+        public static function update(e:EnterFrameEvent):void {
             if (!debug) {
                 clear_tag();
                 return;
             }
-            dt = e.passedTime;
+            THIS.dt = e.passedTime;
             updateFPS();
             updateDebugLabel();
             if (game.visible)
@@ -81,7 +81,7 @@ package Game {
         }
 
         private var pause:Boolean = false;
-        public function on_key_down(_keyCode:int):void {
+        public static function on_key_down(_keyCode:int):void {
             if (!debug)
                 return;
             switch (_keyCode) {
@@ -91,18 +91,18 @@ package Game {
                     game.next();
                     break;
                 case Keyboard.W:
-                    game.nodes.active[2].changeTeam(0);
+                    trace(Globals.replay)
                     break;
                 case Keyboard.Z:
                     scene.applyFilter()
                     break;
                 case Keyboard.X:
-                    title.init()
-                    title.animateIn()
+                    scene.replayMap();
+                    title.animateOut();
                     break;
                 case Keyboard.C:
-                    pause = !pause;
-                    if (pause)
+                    THIS.pause = !THIS.pause;
+                    if (THIS.pause)
                         Globals.main.starling.stop();
                     else
                         Globals.main.starling.start();
@@ -117,9 +117,9 @@ package Game {
                 case Keyboard.NUMBER_7:
                 case Keyboard.NUMBER_8:
                 case Keyboard.NUMBER_9:
-                    if(seed > uint.MAX_VALUE/10)
-                        seed = 0
-                    seed = seed*10 + (_keyCode-48);
+                    if(THIS.seed > uint.MAX_VALUE/10)
+                        THIS.seed = 0
+                    THIS.seed = THIS.seed*10 + (_keyCode-48);
                     break;
                 case Keyboard.NUMPAD_0:
                 case Keyboard.NUMPAD_1:
@@ -131,13 +131,13 @@ package Game {
                 case Keyboard.NUMPAD_7:
                 case Keyboard.NUMPAD_8:
                 case Keyboard.NUMPAD_9:
-                    if(seed > uint.MAX_VALUE/10)
-                        seed = 0
-                    seed = seed*10 + (_keyCode-96);
+                    if(THIS.seed > uint.MAX_VALUE/10)
+                        THIS.seed = 0
+                    THIS.seed = THIS.seed*10 + (_keyCode-96);
                     break;
                 case Keyboard.ENTER:
                 case Keyboard.NUMPAD_ENTER:
-                    title.loadMap(seed);
+                    title.loadMap(THIS.seed);
                     break;
                 default:
                     break;
@@ -165,56 +165,61 @@ package Game {
 
         // #endregion
         // #region 调试函数，自动触发
-        private function updateDebugLabel():void {
+        private static function updateDebugLabel():void {
             if (game.visible) {
-                debugLables[1].text = game.ais.active[game.ais.active.length - 1].debugTrace[0];
-                debugLables[2].text = game.ais.active[game.ais.active.length - 1].debugTrace[1];
-                debugLables[3].text = game.ais.active[game.ais.active.length - 1].debugTrace[2];
-                debugLables[4].text = game.ais.active[game.ais.active.length - 1].debugTrace[3];
-                debugLables[5].text = game.ais.active[game.ais.active.length - 1].debugTrace[4];
+                THIS.debugLables[1].text = "seed: " + String(THIS.seed);
+                THIS.debugLables[2].text = "";
+                THIS.debugLables[3].text = "";
+                THIS.debugLables[4].text = "";
+                THIS.debugLables[5].text = "";
+                // THIS.debugLables[1].text = game.ais.active[game.ais.active.length - 1].debugTrace[0];
+                // THIS.debugLables[2].text = game.ais.active[game.ais.active.length - 1].debugTrace[1];
+                // THIS.debugLables[3].text = game.ais.active[game.ais.active.length - 1].debugTrace[2];
+                // THIS.debugLables[4].text = game.ais.active[game.ais.active.length - 1].debugTrace[3];
+                // THIS.debugLables[5].text = game.ais.active[game.ais.active.length - 1].debugTrace[4];
             } else {
-                debugLables[1].text = "seed: " + String(seed);
-                debugLables[2].text = "";
-                debugLables[3].text = "";
-                debugLables[4].text = "";
-                debugLables[5].text = "";
+                THIS.debugLables[1].text = "seed: " + String(THIS.seed);
+                THIS.debugLables[2].text = "";
+                THIS.debugLables[3].text = "";
+                THIS.debugLables[4].text = "";
+                THIS.debugLables[5].text = "";
             }
         }
 
-        private var fpsCalculator:Array; // 帧率计算器
-        private function updateFPS():void {
+        private static var fpsCalculator:Array; // 帧率计算器
+        private static function updateFPS():void {
             fpsCalculator[0]++;
             if (fpsCalculator[0] == 6)
                 fpsCalculator[0] -= 5;
-            fpsCalculator[fpsCalculator[0]] = dt;
+            fpsCalculator[fpsCalculator[0]] = THIS.dt;
             fpsCalculator[6] = 1 / ((fpsCalculator[1] + fpsCalculator[2] + fpsCalculator[3] + fpsCalculator[4] + fpsCalculator[5]) / 5);
-            debugLables[0].text = "FPS:" + Math.floor(fpsCalculator[6]);
+            THIS.debugLables[0].text = "FPS:" + Math.floor(fpsCalculator[6]);
         }
 
         private var nodeTagLables:Array; // 显示天体tag和战争占据状态
-        private function updateTag():void {
-            if (game.nodes.active.length != nodeTagLables[0].length)
+        private static function updateTag():void {
+            if (game.nodes.active.length != THIS.nodeTagLables[0].length)
                 init_tag(); // 重置tag
             for each (var _node:Node in game.nodes.active) { // 更新tag位置
-                nodeTagLables[0][_node.tag].x = _node.x - 30 * _node.size - 60;
-                nodeTagLables[0][_node.tag].y = _node.y - 50 * _node.size - 48;
-                nodeTagLables[1][_node.tag].x = _node.x - 60;
-                nodeTagLables[1][_node.tag].y = _node.y + 50 * _node.size - 30;
-                nodeTagLables[2][_node.tag].x = _node.x - 60;
-                nodeTagLables[2][_node.tag].y = _node.y + 50 * _node.size - 30;
+                THIS.nodeTagLables[0][_node.tag].x = _node.x - 30 * _node.size - 60;
+                THIS.nodeTagLables[0][_node.tag].y = _node.y - 50 * _node.size - 48;
+                THIS.nodeTagLables[1][_node.tag].x = _node.x - 60;
+                THIS.nodeTagLables[1][_node.tag].y = _node.y + 50 * _node.size - 30;
+                THIS.nodeTagLables[2][_node.tag].x = _node.x - 60;
+                THIS.nodeTagLables[2][_node.tag].y = _node.y + 50 * _node.size - 30;
                 if (_node.conflict)
-                    nodeTagLables[1][_node.tag].visible = true;
+                    THIS.nodeTagLables[1][_node.tag].visible = true;
                 else
-                    nodeTagLables[1][_node.tag].visible = false;
+                    THIS.nodeTagLables[1][_node.tag].visible = false;
                 if (_node.capturing) {
-                    nodeTagLables[2][_node.tag].visible = true;
-                    nodeTagLables[2][_node.tag].text = "RATE: " + _node.captureRate.toFixed(2);
+                    THIS.nodeTagLables[2][_node.tag].visible = true;
+                    THIS.nodeTagLables[2][_node.tag].text = "RATE: " + _node.captureRate.toFixed(2);
                 } else
-                    nodeTagLables[2][_node.tag].visible = false;
+                    THIS.nodeTagLables[2][_node.tag].visible = false;
             }
         }
 
-        private function init_tag():void { // 重置tag
+        private static function init_tag():void { // 重置tag
             clear_tag();
             for each (var _node:Node in game.nodes.active) {
                 _node.tag = game.nodes.active.indexOf(_node);
@@ -225,8 +230,8 @@ package Game {
                 _label.alpha = 1;
                 _label.touchable = false;
                 _label.visible = true;
-                addChild(_label);
-                nodeTagLables[0].push(_label);
+                THIS.addChild(_label);
+                THIS.nodeTagLables[0].push(_label);
                 _label = new TextField(60, 48, "conflict", "Downlink12", -1, 16777215);
                 _label.vAlign = _label.hAlign = "center";
                 _label.pivotX = -30;
@@ -234,8 +239,8 @@ package Game {
                 _label.alpha = 1;
                 _label.touchable = false;
                 _label.visible = false;
-                addChild(_label);
-                nodeTagLables[1].push(_label);
+                THIS.addChild(_label);
+                THIS.nodeTagLables[1].push(_label);
                 _label = new TextField(60, 48, "capture", "Downlink12", -1, 16777215);
                 _label.vAlign = _label.hAlign = "center";
                 _label.pivotX = -30;
@@ -243,21 +248,21 @@ package Game {
                 _label.alpha = 1;
                 _label.touchable = false;
                 _label.visible = false;
-                addChild(_label);
-                nodeTagLables[2].push(_label);
+                THIS.addChild(_label);
+                THIS.nodeTagLables[2].push(_label);
             }
         }
 
-        private function clear_tag():void { // 清除tag
-            if (nodeTagLables[0].length == 0)
+        private static function clear_tag():void { // 清除tag
+            if (THIS.nodeTagLables[0].length == 0)
                 return;
-            for each (var _array:Array in nodeTagLables) {
+            for each (var _array:Array in THIS.nodeTagLables) {
                 for each (var _label:TextField in _array) {
                     _label.visible = false;
-                    removeChild(_label);
+                    THIS.removeChild(_label);
                 }
             }
-            nodeTagLables = [[], [], []];
+            THIS.nodeTagLables = [[], [], []];
         }
 
         // #endregion

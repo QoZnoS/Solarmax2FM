@@ -312,24 +312,15 @@ package Menus
       // #region 界面载入卸载
       public function init():void
       {
-         Globals.soundMult = 1;
          commonInit();
-         addEventListener("enterFrame", update);
-         touchQuad.addEventListener("touch", on_touch);
       }
 
       public function firstInit():void
       {
-         Globals.soundMult = 1;
          cover.visible = true;
          cover.alpha = 1;
          commonInit();
-         Starling.juggler.delayCall(function():void
-            {
-               addEventListener("enterFrame", update);
-               touchQuad.addEventListener("touch", on_touch);
-               GS.playMusic("bgm01");
-            }, 0.55);
+        GS.playMusic("bgm01");
       }
 
       public function initAfterEnd():void
@@ -347,8 +338,6 @@ package Menus
          commonInit();
          Starling.juggler.removeTweens(this);
          Starling.juggler.removeTweens(previewLayer);
-         addEventListener("enterFrame", update);
-         touchQuad.addEventListener("touch", on_touch);
          GS.playMusic("bgm01");
       }
 
@@ -367,6 +356,8 @@ package Menus
                difficultyButtons[i].toggle();
          }
          updateStarCount();
+         addEventListener("enterFrame", update);
+         touchQuad.addEventListener("touch", on_touch);
       }
 
       public function deInit():void

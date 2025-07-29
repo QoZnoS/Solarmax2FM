@@ -10,13 +10,14 @@ package Menus {
     import Menus.StartMenus.StaffMenu;
     import UI.Component.MenuButton;
     import UI.Component.OptionButton;
+    import Menus.StartMenus.ReplayMenu;
 
     public class StartMenu extends Sprite {
         public var title:TitleMenu; // 接入标题类
         private var menuBtn:MenuButton;
         private var menus:Vector.<IMenu>;
 
-        private const MAX_PAGE:int = 3;
+        private const MAX_PAGE:int = 4;
         private const COLOR:uint = 0xFF9DBB;
         private const pageName:Array = ["SETTING", "MAPACKS", "STAFF", "REPLAY"]
         private var pages:Array;
@@ -31,10 +32,11 @@ package Menus {
             menus[0] = new SettingMenu(title);
             menus[1] = new MapackMenu(title);
             menus[2] = new StaffMenu(title);
+            menus[3] = new ReplayMenu(title);
             for (var i:int = 0; i < MAX_PAGE; i++) {
                 menus[i].x = menus[i].pivotX = 512;
                 menus[i].y = menus[i].pivotY = 384;
-                if (i != MAX_PAGE - 1)
+                if (i == 1 || i == 0)
                     menus[i].x += 72;
                 addChild(menus[i] as Sprite);
                 menus[i].animateOut()

@@ -72,8 +72,8 @@ package {
         }
         // #endregion
         // #region 私有方法，界面载入载出
-        private function initGameScene(seed:uint = 0):void {
-            gameScene.init(seed);
+        private function initGameScene(seed:uint = 0, rep:Boolean = false):void {
+            gameScene.init(seed, rep);
         }
 
         private function deInitGameScene():void {
@@ -120,6 +120,13 @@ package {
             debug.init_game();
         }
 
+        public function replayMap():void {
+            speedMult = 1;
+            ui.initLevel();
+            initGameScene(Globals.replay[0], true);
+            debug.init_game();
+        }
+
         /**编辑关卡*/
         public function editorMap():void {
 
@@ -158,7 +165,7 @@ package {
         // #endregion
         // #region 键盘事件
         public function on_key_down(event:KeyboardEvent):void {
-            debug.on_key_down(event.keyCode);
+            Debug.on_key_down(event.keyCode);
             switch (event.keyCode) {
                 case 27: // 对应Esc键
                     if (titleMenu.visible)

@@ -61,6 +61,8 @@ package Game {
         public var ui:UIContainer;
         public var popLabels:Vector.<TextField>;
 
+        public var rep:Boolean = false;
+
         // #endregion
         public function GameScene(_scene:SceneController) {
             super();
@@ -121,18 +123,27 @@ package Game {
         }
 
         // #region 进入关卡
-        public function init(seed:uint = 0):void {
+        public function init(seed:uint = 0, rep:Boolean = false):void {
             ui = scene.ui;
             ui.entityL.addGlow(darkPulse);
             var i:int = 0;
             var _aiArray:Array = [];
             this.level = Globals.level;
             this.rng = new Rng(seed)
+            this.rep = rep
             _aiArray = nodeIn(); // 生成天体，同时返回需生成的ai
+            if (!rep)
+                Globals.replay = [rng.seed, [0]];
+            else {
+                for(i = 0; i < _aiArray.length; i++)
+                    rng.nextInt();
+                _aiArray = [];
+                Globals.replay.shift();
+            }
             for (i = 0; i < _aiArray.length; i++) {
                 Globals.currentDifficulty == 3 ? EntityHandler.addAI(_aiArray[i], 4) : EntityHandler.addAI(_aiArray[i], Globals.currentDifficulty - 1); // 为有天体的常规势力添加ai
             }
-            if (Globals.level >= 35) { // 为36关黑色设定ai
+            if (Globals.level >= 35 && !rep) { // 为36关黑色设定ai
                 Globals.currentDifficulty == 3 ? EntityHandler.addAI(6, 4) : EntityHandler.addAI(6, 3);
                 bossTimer = 0;
             }
@@ -161,7 +172,6 @@ package Game {
             this.alpha = 0;
             this.visible = true;
             cover.alpha = 0;
-            Globals.soundMult = 1;
             gameOver = false;
             gameOverTimer = 3;
             winningTeam = -1;
@@ -260,6 +270,7 @@ package Game {
                 _result = true;
             return _result;
         }
+
         // #endregion
         // #region 界面功能
         public function deInit():void {
@@ -327,12 +338,37 @@ package Game {
             GS.update(dt); // 更新音效计时器
             dt *= this.alpha; // wtf？？
             dt = updateSpeed(dt); // 更新游戏速度
+            Debug.update(e);
+            var arr:Array;
+            if (Globals.replay.length == 0) {
+                updateGame(dt);
+                return;
+            }
+            if (!rep) {
+                var l:int = Globals.replay[Globals.replay.length - 1].length;
+                for(var i:int = 1; i < l; i++)
+                {
+                    arr = Globals.replay[Globals.replay.length - 1][i];
+                    nodes.active[arr[0]].moveShips(arr[1], nodes.active[arr[2]], arr[3]);
+                }
+                Globals.replay.push([dt]);
+                updateGame(dt);
+            } else {
+                dt = Globals.replay[0].shift();
+                updateGame(dt);
+                for each (arr in Globals.replay[0]) {
+                    nodes.active[arr[0]].moveShips(arr[1], nodes.active[arr[2]], arr[3]);
+                }
+                Globals.replay.shift();
+            }
+        }
+
+        public function updateGame(dt:Number):void {
             countTeamCaps(dt); // 统计兵力
-            juggler.advanceTime(dt); // 插件内容，动画相关
+            juggler.advanceTime(dt);
             ui.update();
             for each (var _pool:EntityPool in entities) // 依次执行所有实体的更新函数
                 _pool.update(dt);
-            scene.debug.update(e)
             specialEvents(); // 处理特殊关卡的特殊事件
             if (darkPulse.visible)
                 expandDarkPulse(dt);
@@ -362,7 +398,7 @@ package Game {
             for each (var _Ship:Ship in ships.active) // 统计总兵力
                 Globals.teamPops[_Ship.team]++;
             ships.active.length < 1024 ? Globals.exOptimization = 0 : (ships.active.length < 8192 ? Globals.exOptimization = 1 : Globals.exOptimization = 2);
-            
+
             popLabels[0].text = popLabels[1].text = "POPULATION : " + Globals.teamPops[1] + " / " + Globals.teamCaps[1];
             if (popLabels[1].alpha > 0)
                 popLabels[1].alpha = Math.max(0, popLabels[1].alpha - _dt * 0.5);
@@ -838,6 +874,7 @@ package Game {
                 }
             }
         }
+
         // #endregion
 
         public function on_key_down(keyCode:int):void {

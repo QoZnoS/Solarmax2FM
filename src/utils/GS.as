@@ -146,7 +146,7 @@ package utils{
         }
 
         public static function playSound(_name:String, _volume:Number = 1, _pan:Number = 0):void {
-            st.volume = _volume * Globals.soundVolume * Globals.soundMult;
+            st.volume = _volume * Globals.soundVolume;
             if (st.volume == 0)
                 return;
             st.pan = _pan;
