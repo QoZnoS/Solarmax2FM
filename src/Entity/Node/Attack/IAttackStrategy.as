@@ -1,4 +1,4 @@
-package Entity.Node.Interface
+package Entity.Node.Attack
 {
     import Entity.Node
     

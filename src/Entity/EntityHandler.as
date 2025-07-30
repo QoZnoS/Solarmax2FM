@@ -6,6 +6,7 @@ package Entity {
     import starling.errors.AbstractClassError;
     import utils.Rng;
     import utils.GS;
+    import Entity.AI.EnemyAIFactory;
 
     public class EntityHandler {
         public static var game:GameScene;
@@ -15,7 +16,7 @@ package Entity {
         }
 
         // #region 添加实体
-        public static function addAI(_team:int, _type:int = 1):void {
+        public static function addAI(_team:int, _type:String = EnemyAIFactory.BASIC):void {
             var _EnemyAI:EnemyAI = game.ais.getReserve() as EnemyAI;
             if (!_EnemyAI)
                 _EnemyAI = new EnemyAI();
@@ -72,7 +73,7 @@ package Entity {
             ship.hp = 0;
             ship.active = false;
         }
-        /** 摧毁飞船，带特效
+        /** 摧毁飞船，内部调用removeShip，外加特效
          * @param ship 
          */
         public static function destroyShip(ship:Ship):void {

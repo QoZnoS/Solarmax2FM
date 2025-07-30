@@ -1,7 +1,4 @@
 package Entity.Node.Attack {
-
-
-    import Entity.Node.Interface.IAttackStrategy;
     import Entity.Node;
 
     public class BasicAttack implements IAttackStrategy {

@@ -24,6 +24,7 @@ package Game {
     import UI.UIContainer;
     import starling.text.TextField;
     import starling.utils.VAlign;
+    import Entity.AI.EnemyAIFactory;
 
     public class GameScene extends Sprite {
         // #region 类变量
@@ -141,10 +142,23 @@ package Game {
                 Globals.replay.shift();
             }
             for (i = 0; i < _aiArray.length; i++) {
-                Globals.currentDifficulty == 3 ? EntityHandler.addAI(_aiArray[i], 4) : EntityHandler.addAI(_aiArray[i], Globals.currentDifficulty - 1); // 为有天体的常规势力添加ai
+                switch(Globals.currentDifficulty)
+                {
+                    case 1:
+                        EntityHandler.addAI(_aiArray[i], EnemyAIFactory.SIMPLE);
+                        break;
+                    case 2:
+                        EntityHandler.addAI(_aiArray[i], EnemyAIFactory.SMART);
+                        break;
+                    case 3:
+                        EntityHandler.addAI(_aiArray[i], EnemyAIFactory.HARD);
+                        break;
+                    default:
+                        break;
+                }
             }
             if (Globals.level >= 35 && !rep) { // 为36关黑色设定ai
-                Globals.currentDifficulty == 3 ? EntityHandler.addAI(6, 4) : EntityHandler.addAI(6, 3);
+                Globals.currentDifficulty == 3 ? EntityHandler.addAI(6, EnemyAIFactory.HARD) : EntityHandler.addAI(6, EnemyAIFactory.FINAL);
                 bossTimer = 0;
             }
             for (i = 0; i < triggers.length; i++)
@@ -471,7 +485,7 @@ package Game {
                             _boss.bossReady();
                             _boss.changeTeam(6);
                             _boss.changeShipsTeam(6);
-                            EntityHandler.addAI(6, 2);
+                            EntityHandler.addAI(6, EnemyAIFactory.DARK);
                             _boss.triggerTimer = 3;
                             darkPulse.team = 6;
                             darkPulse.scaleX = darkPulse.scaleY = 0;
@@ -517,8 +531,8 @@ package Game {
                             else
                                 _bossParam = (Globals.level == 34) ? 400 : 350;
                             EntityHandler.addShips(_boss, 6, _bossParam);
-                            _bossParam = (Globals.currentDifficulty == 3) ? 4 : 2;
-                            EntityHandler.addAI(6, _bossParam);
+                            var _bossAI:String = (Globals.currentDifficulty == 3) ? EnemyAIFactory.HARD : EnemyAIFactory.DARK;
+                            EntityHandler.addAI(6, _bossAI);
                             _boss.triggerTimer = 3;
                             GS.playSound("boss_ready", 1.5);
                         }

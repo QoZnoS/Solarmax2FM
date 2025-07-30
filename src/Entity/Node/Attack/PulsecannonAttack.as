@@ -18,6 +18,8 @@ package Entity.Node.Attack {
             var nodes:Array = Utils.findNodeInRange(_Node);
             var ship:Ship;
             for each (var node:Node in nodes) {
+                if (node == _Node)
+                    continue
                 var ships:Array = Utils.filterShipByStatic(node, 0);
                 for (var i:int = 0; i < Globals.teamCount; i++) {
                     if (i == _Node.team)

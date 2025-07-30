@@ -81,7 +81,74 @@ package Entity {
         // #endregion
 
         // #region AI
+        public static function getLengthInTowerRange(_Node1:Node, _Node2:Node, team:int):Number {
+            var _Node:Node = null;
+            var _start:Point = null;
+            var _end:Point = null;
+            var _current:Point = null;
+            var _Length:Number = 0;
+            var result:Array;
+            var resultInside:Boolean; // 线是否在圆内
+            var resultIntersects:Boolean; // 线和圆是否相交
+            var resultEnter:Point; // 线和圆的第一个交点
+            var resultExit:Point; // 线和圆的第二个交点
+            for each (_Node in game.nodes.active) {
+                if (_Node.team == 0 || _Node.team == team)
+                    continue;
+                if (_Node.type == 4 || _Node.type == 6 || _Node.type == 10) {
+                    _start = new Point(_Node1.x, _Node1.y);
+                    _end = new Point(_Node2.x, _Node2.y);
+                    _current = new Point(_Node.x, _Node.y);
+                    result = lineIntersectCircle(_start, _end, _current, _Node.attackStrategy.attackRange);
+                    resultInside = result[0],resultIntersects = result[1], resultEnter = result[2], resultExit = result[3];
+                    if (resultIntersects) {
+                        if (resultEnter && resultExit)
+                            _Length += Point.distance(resultEnter, resultExit);
+                        else if (resultEnter && !resultExit)
+                            _Length += Point.distance(resultEnter, _end);
+                        else if (!resultEnter && resultExit)
+                            _Length += Point.distance(_start, resultExit);
+                        else
+                            _Length += Point.distance(_start, _end);
+                    } else if (resultInside)
+                        _Length += Point.distance(_start, _end);
+                }
+            }
+            return _Length;
+        }
 
+        public static function lineIntersectCircle(_pointA:Point, _pointB:Point, _circleCenter:Point, _circleRadius:Number = 1):Array { // 判断线与圆的关系并返回交点
+            var _discriminant:Number = NaN;
+            var _intersectionParam1:Number = NaN;
+            var _intersectionParam2:Number = NaN;
+            var resultInside:Boolean = false;
+            var resultIntersects:Boolean = false;
+            var resultEnter:Point = null;
+            var resultExit:Point = null;
+            var _lineSegmentLengthSquared:Number = (_pointB.x - _pointA.x) * (_pointB.x - _pointA.x) + (_pointB.y - _pointA.y) * (_pointB.y - _pointA.y);
+            var _lineConstant:Number = 2 * ((_pointB.x - _pointA.x) * (_pointA.x - _circleCenter.x) + (_pointB.y - _pointA.y) * (_pointA.y - _circleCenter.y));
+            var _circleConstant:Number = _circleCenter.x * _circleCenter.x + _circleCenter.y * _circleCenter.y + _pointA.x * _pointA.x + _pointA.y * _pointA.y - 2 * (_circleCenter.x * _pointA.x + _circleCenter.y * _pointA.y) - _circleRadius * _circleRadius;
+            if (_lineConstant * _lineConstant - 4 * _lineSegmentLengthSquared * _circleConstant <= 0)
+                resultInside = false;
+            else {
+                _discriminant = Math.sqrt(_lineConstant * _lineConstant - 4 * _lineSegmentLengthSquared * _circleConstant);
+                _intersectionParam1 = (-_lineConstant + _discriminant) / (2 * _lineSegmentLengthSquared);
+                _intersectionParam2 = (-_lineConstant - _discriminant) / (2 * _lineSegmentLengthSquared);
+                if ((_intersectionParam1 < 0 || _intersectionParam1 > 1) && (_intersectionParam2 < 0 || _intersectionParam2 > 1)) {
+                    if (_intersectionParam1 < 0 && _intersectionParam2 < 0 || _intersectionParam1 > 1 && _intersectionParam2 > 1)
+                        resultInside = false;
+                    else
+                        resultInside = true;
+                } else {
+                    if (0 <= _intersectionParam2 && _intersectionParam2 <= 1)
+                        resultEnter = Point.interpolate(_pointA, _pointB, 1 - _intersectionParam2);
+                    if (0 <= _intersectionParam1 && _intersectionParam1 <= 1)
+                        resultExit = Point.interpolate(_pointA, _pointB, 1 - _intersectionParam1);
+                    resultIntersects = true;
+                }
+            }
+            return [resultInside, resultIntersects, resultEnter, resultExit]
+        }
         // #endregion
 
         // #region 元素控制
@@ -116,6 +183,29 @@ package Entity {
             var ratio2:Number = (l2dx * (_p1y - _p3y) - l2dy * (_p1x - _p3x)) / (-l2dx * l1dy + l1dx * l2dy);
             if (ratio1 >= 0 && ratio1 <= 1 && ratio2 >= 0 && ratio2 <= 1)
                 return new Point(_p1x + ratio2 * l1dx, _p1y + ratio2 * l1dy);
+            return null;
+        }
+
+        /**判断路径是否被拦截并计算拦截点
+         * @param _Node1 
+         * @param _Node2 
+         * @return Point 或 null
+         */
+        public static function nodesBlocked(_Node1:Node, _Node2:Node):Point {
+            if (_Node1.type == 1)
+                return null; // 对传送门不执行该函数
+            var _bar1:Point = null;
+            var _bar2:Point = null;
+            var _Intersection:Point = null;
+            var i:int = 0;
+            while (i < int(game.barrierLines.length)) {
+                _bar1 = game.barrierLines[i][0];
+                _bar2 = game.barrierLines[i][1];
+                _Intersection = getIntersection(_Node1.x, _Node1.y, _Node2.x, _Node2.y, _bar1.x, _bar1.y, _bar2.x, _bar2.y);
+                if (_Intersection)
+                    return _Intersection;
+                i++;
+            }
             return null;
         }
 

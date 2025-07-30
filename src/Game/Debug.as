@@ -286,12 +286,6 @@ package Game {
             game.ais.active[0].debugTrace[4] = null;
         }
 
-        private function replace_AI():void {
-            for each (var _ai:EnemyAI in game.ais.active) {
-                _ai.type = 4;
-            }
-        }
-
         private function set_expandDarkPulse(_team:int):void {
             game.darkPulse.team = _team;
             game.darkPulse.scaleX = game.darkPulse.scaleY = 0;

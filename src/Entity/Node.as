@@ -22,14 +22,14 @@ package Entity {
     import Entity.GameEntity;
     import flash.geom.Point;
     import starling.display.Image;
-    import starling.display.Quad;
     import starling.text.TextField;
-    import Entity.Node.Interface.*;
     import Entity.EntityHandler;
     import Entity.Utils;
     import utils.Rng;
     import utils.GS;
     import utils.Drawer;
+    import Entity.Node.Attack.IAttackStrategy;
+    import Entity.Node.Attack.AttackStrategyFactory;
 
     public class Node extends GameEntity {
         // #region 类变量
@@ -49,7 +49,6 @@ package Entity {
         public var orbitSpeed:Number; // 轨道运转速度
         public var hpMult:Number; // 占领难度倍率
         public var attackStrategy:IAttackStrategy; // 攻击策略
-        public var stateMachine:IStateMachine; // 状态机
         // 状态变量
         public var hp:Number; // 占领度，中立为0，被任意势力完全占领为100
         public var conflict:Boolean; // 战斗状态，判断天体上是否有战斗
