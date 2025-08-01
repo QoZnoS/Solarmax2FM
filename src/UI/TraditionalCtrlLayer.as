@@ -9,6 +9,8 @@ package UI {
     import Entity.Node;
     import Entity.FXHandler;
     import starling.display.QuadBatch;
+    import Entity.Node.NodeStaticLogic;
+    import Entity.Node.NodeType;
 
     public class TraditionalCtrlLayer extends Sprite {
 
@@ -103,21 +105,21 @@ package UI {
                 if(dragQuad.color != 0x000000)
                     mouseBatch.blendMode = "add";
                 for each (_Node1 in game.nodes.active) {
-                    if (_Node1.ships[1].length == 0 && _Node1.team != 1)
+                    if (_Node1.ships[1].length == 0 && _Node1.nodeData.team != 1)
                         continue;
                     if (selectedNodes.indexOf(_Node1) != -1)
                         continue;
                     if (_quadtypeX > 0 && _quadtypeY > 0) {
-                        if (_Node1.x > down_x && _Node1.x < drag_x && _Node1.y > down_y && _Node1.y < drag_y)
+                        if (_Node1.nodeData.x > down_x && _Node1.nodeData.x < drag_x && _Node1.nodeData.y > down_y && _Node1.nodeData.y < drag_y)
                             selectedNodes.push(_Node1);
                     } else if (_quadtypeX > 0 && _quadtypeY < 0) {
-                        if (_Node1.x > down_x && _Node1.x < drag_x && _Node1.y > drag_y && _Node1.y < down_y)
+                        if (_Node1.nodeData.x > down_x && _Node1.nodeData.x < drag_x && _Node1.nodeData.y > drag_y && _Node1.nodeData.y < down_y)
                             selectedNodes.push(_Node1);
                     } else if (_quadtypeX < 0 && _quadtypeY > 0) {
-                        if (_Node1.x > drag_x && _Node1.x < down_x && _Node1.y > down_y && _Node1.y < drag_y)
+                        if (_Node1.nodeData.x > drag_x && _Node1.nodeData.x < down_x && _Node1.nodeData.y > down_y && _Node1.nodeData.y < drag_y)
                             selectedNodes.push(_Node1);
                     } else if (_quadtypeX < 0 && _quadtypeY < 0) {
-                        if (_Node1.x > drag_x && _Node1.x < down_x && _Node1.y > drag_y && _Node1.y < down_y)
+                        if (_Node1.nodeData.x > drag_x && _Node1.nodeData.x < down_x && _Node1.nodeData.y > drag_y && _Node1.nodeData.y < down_y)
                             selectedNodes.push(_Node1);
                     }
                 }
@@ -126,22 +128,22 @@ package UI {
                 _mouseY = (Starling.current.nativeStage.mouseY - Starling.current.viewPort.y) / Starling.contentScaleFactor;
                 _Node2 = getClosestNode(_mouseX, _mouseY);
                 if (_Node2) {
-                    Drawer.drawCircle(displayBatch, _Node2.x, _Node2.y, Globals.teamColors[_Node2.team], _Node2.lineDist - 4, _Node2.size * 25 * 2, true, 0.5);
+                    Drawer.drawCircle(displayBatch, _Node2.nodeData.x, _Node2.nodeData.y, Globals.teamColors[_Node2.nodeData.team], _Node2.nodeData.lineDist - 4, _Node2.nodeData.size * 25 * 2, true, 0.5);
                     if (_Node2.attackStrategy.attackRate > 0 && _Node2.attackStrategy.attackRange > 0)
-                        Drawer.drawDashedCircle(displayBatch, _Node2.x, _Node2.y, Globals.teamColors[_Node2.team], _Node2.attackStrategy.attackRange, _Node2.attackStrategy.attackRange - 2, false, 0.5, 1, 0, 256);
+                        Drawer.drawDashedCircle(displayBatch, _Node2.nodeData.x, _Node2.nodeData.y, Globals.teamColors[_Node2.nodeData.team], _Node2.attackStrategy.attackRange, _Node2.attackStrategy.attackRange - 2, false, 0.5, 1, 0, 256);
                     if (rightDown && selectedNodes.length > 0) {
                         for each (_Node1 in selectedNodes) {
                             _Block = nodesBlocked(_Node1, _Node2);
-                            _x = _Node2.x;
-                            _y = _Node2.y;
-                            _dx = _x - _Node1.x;
-                            _dy = _y - _Node1.y;
-                            if (Math.sqrt(_dx * _dx + _dy * _dy) > _Node1.lineDist - 5) {
+                            _x = _Node2.nodeData.x;
+                            _y = _Node2.nodeData.y;
+                            _dx = _x - _Node1.nodeData.x;
+                            _dy = _y - _Node1.nodeData.y;
+                            if (Math.sqrt(_dx * _dx + _dy * _dy) > _Node1.nodeData.lineDist - 5) {
                                 _angle = Math.atan2(_dy, _dx);
-                                _lx = _Node1.x + Math.cos(_angle) * (_Node1.lineDist - 5);
-                                _ly = _Node1.y + Math.sin(_angle) * (_Node1.lineDist - 5);
-                                _x -= Math.cos(_angle) * (_Node2.lineDist - 5);
-                                _y -= Math.sin(_angle) * (_Node2.lineDist - 5);
+                                _lx = _Node1.nodeData.x + Math.cos(_angle) * (_Node1.nodeData.lineDist - 5);
+                                _ly = _Node1.nodeData.y + Math.sin(_angle) * (_Node1.nodeData.lineDist - 5);
+                                _x -= Math.cos(_angle) * (_Node2.nodeData.lineDist - 5);
+                                _y -= Math.sin(_angle) * (_Node2.nodeData.lineDist - 5);
                                 if (_Block) {
                                     Drawer.drawLine(displayBatch, _lx, _ly, _Block.x, _Block.y, 0xFFFFFF, 3, 0.8);
                                     Drawer.drawLine(displayBatch, _Block.x, _Block.y, _x, _y, 0xFF3333, 3, 0.8);
@@ -150,14 +152,14 @@ package UI {
                             }
                         }
                         if (_Block)
-                            Drawer.drawCircle(displayBatch, _Node2.x, _Node2.y, 0xFF3333, _Node2.lineDist - 4, _Node2.lineDist - 7, false, 0.8);
+                            Drawer.drawCircle(displayBatch, _Node2.nodeData.x, _Node2.nodeData.y, 0xFF3333, _Node2.nodeData.lineDist - 4, _Node2.nodeData.lineDist - 7, false, 0.8);
                         else
-                            Drawer.drawCircle(displayBatch, _Node2.x, _Node2.y, 0xFFFFFF, _Node2.lineDist - 4, _Node2.lineDist - 7, false, 0.8);
+                            Drawer.drawCircle(displayBatch, _Node2.nodeData.x, _Node2.nodeData.y, 0xFFFFFF, _Node2.nodeData.lineDist - 4, _Node2.nodeData.lineDist - 7, false, 0.8);
                     }
                 }
             }
             for each (_Node1 in selectedNodes) {
-                Drawer.drawCircle(displayBatch, _Node1.x, _Node1.y, 0xFFFFFF, _Node1.lineDist - 4, _Node1.lineDist - 7, false, 0.8);
+                Drawer.drawCircle(displayBatch, _Node1.nodeData.x, _Node1.nodeData.y, 0xFFFFFF, _Node1.nodeData.lineDist - 4, _Node1.nodeData.lineDist - 7, false, 0.8);
             }
         }
 
@@ -240,12 +242,12 @@ package UI {
             var _currentNode:Node = getClosestNode(_x, _y);
             if (!_currentNode)
                 return;
-            FXHandler.addFade(_currentNode.x, _currentNode.y, _currentNode.size, 0xFFFFFF, 1);
+            FXHandler.addFade(_currentNode.nodeData.x, _currentNode.nodeData.y, _currentNode.nodeData.size, 0xFFFFFF, 1);
             for each (var _Node:Node in selectedNodes) {
                 if (_Node == _currentNode || nodesBlocked(_Node, _currentNode))
                     continue;
-                _Node.sendShips(1, _currentNode);
-                FXHandler.addFade(_Node.x, _Node.y, _Node.size, 0xFFFFFF, 0);
+                NodeStaticLogic.sendShips(_Node, 1, _currentNode);
+                FXHandler.addFade(_Node.nodeData.x, _Node.nodeData.y, _Node.nodeData.size, 0xFFFFFF, 0);
             }
         }
 
@@ -260,12 +262,12 @@ package UI {
             var _lineDist:Number = NaN;
             var _ClosestDist:Number = 200;
             for each (var _Node:Node in game.nodes.active) {
-                if (_Node.type == 3)
+                if (_Node.nodeData.type == NodeType.BARRIER)
                     continue;
-                _dx = _Node.x - _localPoint.x;
-                _dy = _Node.y - _localPoint.y;
+                _dx = _Node.nodeData.x - _localPoint.x;
+                _dy = _Node.nodeData.y - _localPoint.y;
                 _Distance = Math.sqrt(_dx * _dx + _dy * _dy);
-                _lineDist = _Node.lineDist;
+                _lineDist = _Node.nodeData.lineDist;
                 if (_Distance < _lineDist && _Distance < _ClosestDist) {
                     _ClosestDist = _Distance;
                     _ClosestNode = _Node;
@@ -279,12 +281,12 @@ package UI {
             var _bar1:Point = null;
             var _bar2:Point = null;
             var _Intersection:Point = null;
-            if (_Node1.team == 1 && _Node1.type == 1)
+            if (_Node1.nodeData.team == 1 && _Node1.nodeData.type == NodeType.WARP)
                 return null;
             for each (var _bar:Array in game.barrierLines) {
                 _bar1 = _bar[0];
                 _bar2 = _bar[1];
-                _Intersection = getIntersection(_Node1.x, _Node1.y, _Node2.x, _Node2.y, _bar1.x, _bar1.y, _bar2.x, _bar2.y); // 计算交点
+                _Intersection = getIntersection(_Node1.nodeData.x, _Node1.nodeData.y, _Node2.nodeData.x, _Node2.nodeData.y, _bar1.x, _bar1.y, _bar2.x, _bar2.y); // 计算交点
                 if (_Intersection)
                     return _Intersection;
             }

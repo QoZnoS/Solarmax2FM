@@ -4,6 +4,8 @@ package UI.Component {
     import starling.display.Image;
     import starling.display.Sprite;
     import Game.GameScene;
+    import Entity.GameEntity;
+    import Entity.Node;
 
     public class TutorialSprite extends Sprite {
         public static var TYPE_L1:int = 0;
@@ -53,7 +55,7 @@ package UI.Component {
         public function show():void {
             var _x:Number = NaN;
             var _y:Number = NaN;
-            var _NodeArray:Array = game.nodes.active;
+            var _NodeArray:Vector.<Node> = Vector.<Node>(game.nodes.active);
             if (game.triggers[0])
                 return;
             if (!Globals.touchControls)
@@ -61,17 +63,17 @@ package UI.Component {
             switch (type) {
                 case TYPE_L1:
                     arrow.rotation = -1.5707963267948966;
-                    arrow.x = _NodeArray[0].x;
-                    arrow.y = _NodeArray[0].y + 60;
+                    arrow.x = _NodeArray[0].nodeData.x;
+                    arrow.y = _NodeArray[0].nodeData.y + 60;
                     Starling.juggler.tween(arrow, 1, {"alpha": 0.8,
-                            "y": _NodeArray[0].y + 30,
+                            "y": _NodeArray[0].nodeData.y + 30,
                             "delay": 1,
                             "transition": "easeOut"});
-                    Starling.juggler.tween(arrow, 2, {"x": _NodeArray[1].x,
-                            "y": _NodeArray[1].y + 10,
+                    Starling.juggler.tween(arrow, 2, {"x": _NodeArray[1].nodeData.x,
+                            "y": _NodeArray[1].nodeData.y + 10,
                             "delay": 2,
                             "transition": "easeInOut"});
-                    Starling.juggler.tween(arrow, 1, {"y": _NodeArray[1].y + 40,
+                    Starling.juggler.tween(arrow, 1, {"y": _NodeArray[1].nodeData.y + 40,
                             "alpha": 0,
                             "delay": 4,
                             "transition": "easeIn"});

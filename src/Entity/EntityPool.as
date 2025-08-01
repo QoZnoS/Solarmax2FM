@@ -1,14 +1,14 @@
 package Entity {
     public class EntityPool {
         /** 活跃实体 */
-        public var active:Array;
+        public var active:Vector.<GameEntity>;
         /** 保留实体 */
-        public var reserve:Array;
+        public var reserve:Vector.<GameEntity>;
 
         public function EntityPool() {
             super();
-            active = [];
-            reserve = [];
+            active = new Vector.<GameEntity>;
+            reserve = new Vector.<GameEntity>;
         }
 
         public function init():void {

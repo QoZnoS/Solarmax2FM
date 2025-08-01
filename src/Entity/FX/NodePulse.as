@@ -28,22 +28,22 @@ package Entity.FX {
 
         public function initPulse(_GameScene:GameScene, _Node:Node, _Color:uint, _type:int, _delay:Number = 0):void {
             super.init(_GameScene);
-            this.x = _Node.x;
-            this.y = _Node.y;
+            this.x = _Node.nodeData.x;
+            this.y = _Node.nodeData.y;
             this.type = _type;
             this.delay = _delay;
             switch (_type) {
                 case 0:
                     size = 0;
-                    maxSize = _Node.size * 2;
+                    maxSize = _Node.nodeData.size * 2;
                     image.alpha = 1;
-                    rate = _Node.size;
+                    rate = _Node.nodeData.size;
                     break;
                 case 1:
-                    size = _Node.size * 1.333;
-                    maxSize = _Node.size * 1.333;
+                    size = _Node.nodeData.size * 1.333;
+                    maxSize = _Node.nodeData.size * 1.333;
                     image.alpha = 0;
-                    rate = _Node.size;
+                    rate = _Node.nodeData.size;
             }
             image.x = x;
             image.y = y;

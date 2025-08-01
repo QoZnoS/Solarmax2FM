@@ -3,6 +3,7 @@ package Entity {
     import Game.GameScene;
     import starling.errors.AbstractClassError;
     import flash.geom.Point;
+    import Entity.Node.NodeType;
 
     public class Utils {
         public static var game:GameScene;
@@ -25,10 +26,10 @@ package Entity {
             for each (ship in game.ships.active) {
                 if (ship.state != 3 || ship.warping)
                     continue;
-                if ((ship.team == _node.team) == _hostile)
+                if ((ship.team == _node.nodeData.team) == _hostile)
                     continue; // 建议势力
-                dx = ship.x - _node.x;
-                dy = ship.y - _node.y;
+                dx = ship.x - _node.nodeData.x;
+                dy = ship.y - _node.nodeData.y;
                 if (dx > _node.attackStrategy.attackRange || dx < -_node.attackStrategy.attackRange || dy > _node.attackStrategy.attackRange || dy < -_node.attackStrategy.attackRange)
                     continue;
                 if (Math.sqrt(dx * dx + dy * dy) < _node.attackStrategy.attackRange)
@@ -47,8 +48,8 @@ package Entity {
             var node:Node;
             var nodeInRange:Array = [];
             for each (node in game.nodes.active) {
-                dx = node.x - _node.x;
-                dy = node.y - _node.y;
+                dx = node.nodeData.x - _node.nodeData.x;
+                dy = node.nodeData.y - _node.nodeData.y;
                 if (dx > _node.attackStrategy.attackRange || dx < -_node.attackStrategy.attackRange || dy > _node.attackStrategy.attackRange || dy < -_node.attackStrategy.attackRange)
                     continue;
                 if (Math.sqrt(dx * dx + dy * dy) < _node.attackStrategy.attackRange)
@@ -93,12 +94,12 @@ package Entity {
             var resultEnter:Point; // 线和圆的第一个交点
             var resultExit:Point; // 线和圆的第二个交点
             for each (_Node in game.nodes.active) {
-                if (_Node.team == 0 || _Node.team == team)
+                if (_Node.nodeData.team == 0 || _Node.nodeData.team == team)
                     continue;
-                if (_Node.type == 4 || _Node.type == 6 || _Node.type == 10) {
-                    _start = new Point(_Node1.x, _Node1.y);
-                    _end = new Point(_Node2.x, _Node2.y);
-                    _current = new Point(_Node.x, _Node.y);
+                if (_Node.nodeData.type == NodeType.TOWER || _Node.nodeData.type == NodeType.STARBASE || _Node.nodeData.type == NodeType.CAPTURESHIP) {
+                    _start = new Point(_Node1.nodeData.x, _Node1.nodeData.y);
+                    _end = new Point(_Node2.nodeData.x, _Node2.nodeData.y);
+                    _current = new Point(_Node.nodeData.x, _Node.nodeData.y);
                     result = lineIntersectCircle(_start, _end, _current, _Node.attackStrategy.attackRange);
                     resultInside = result[0],resultIntersects = result[1], resultEnter = result[2], resultExit = result[3];
                     if (resultIntersects) {
@@ -192,7 +193,7 @@ package Entity {
          * @return Point 或 null
          */
         public static function nodesBlocked(_Node1:Node, _Node2:Node):Point {
-            if (_Node1.type == 1)
+            if (_Node1.nodeData.type == NodeType.WARP)
                 return null; // 对传送门不执行该函数
             var _bar1:Point = null;
             var _bar2:Point = null;
@@ -201,7 +202,7 @@ package Entity {
             while (i < int(game.barrierLines.length)) {
                 _bar1 = game.barrierLines[i][0];
                 _bar2 = game.barrierLines[i][1];
-                _Intersection = getIntersection(_Node1.x, _Node1.y, _Node2.x, _Node2.y, _bar1.x, _bar1.y, _bar2.x, _bar2.y);
+                _Intersection = getIntersection(_Node1.nodeData.x, _Node1.nodeData.y, _Node2.nodeData.x, _Node2.nodeData.y, _bar1.x, _bar1.y, _bar2.x, _bar2.y);
                 if (_Intersection)
                     return _Intersection;
                 i++;

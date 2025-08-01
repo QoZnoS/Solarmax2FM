@@ -3,6 +3,7 @@ package Entity.FX {
     import starling.display.Image;
     import Entity.GameEntity;
     import Entity.Node;
+    import Entity.Node.NodeType;
 
     public class BeamFX extends GameEntity {
 
@@ -17,7 +18,7 @@ package Entity.FX {
         private var image:Image; // 这是射线
         private var image2:Image; // 这是攻击塔的特效
         private var foreground:Boolean;
-        private var type:int;
+        private var type:String;
         private var state:int;
 
         public function BeamFX() {
@@ -50,22 +51,22 @@ package Entity.FX {
             image2.x = x;
             image2.y = y;
             image2.color = _Color;
-            this.type = _node.type;
+            this.type = _node.nodeData.type;
             state = 0;
-            switch (_node.type) // 添加攻击塔特效贴图
+            switch (_node.nodeData.type) // 添加攻击塔特效贴图
             {
-                case 4:
+                case NodeType.TOWER:
                     image2.texture = Root.assets.getTexture("tower_shape");
                     image2.scaleX = image2.scaleY = 0;
                     image2.alpha = 1;
                     break;
-                case 6:
+                case NodeType.STARBASE:
                     image2.texture = Root.assets.getTexture("starbase_laser");
                     image2.scaleX = image2.scaleY = 1;
                     image2.alpha = 0;
                     break;
                 default:
-                    image2.texture = Root.assets.getTexture(_node.name + "_shape");
+                    image2.texture = Root.assets.getTexture(_node.nodeData.type + "_shape");
                     image2.scaleX = image2.scaleY = _node.image.scaleX;
                     image2.alpha = 0;
                     break;

@@ -40,7 +40,7 @@ package Entity.Node.Attack {
             blackhole_angle += dt * Math.PI * 0.5;
             if (blackhole_angle > Math.PI * 2)
                 blackhole_angle -= Math.PI * 2;
-            var color:uint = Globals.teamColors[node.team];
+            var color:uint = Globals.teamColors[node.nodeData.team];
             if (attacking) {
                 if (attackTimer > attackLast - 0.2)
                     FXHandler.addDarkPulse(node, color, 4, 2.5, Transitions.getTransition("easeIn")(attackLast + 0.8 - attackTimer), blackhole_angle);

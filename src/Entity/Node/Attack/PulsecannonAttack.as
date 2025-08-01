@@ -22,7 +22,7 @@ package Entity.Node.Attack {
                     continue
                 var ships:Array = Utils.filterShipByStatic(node, 0);
                 for (var i:int = 0; i < Globals.teamCount; i++) {
-                    if (i == _Node.team)
+                    if (i == _Node.nodeData.team)
                         continue
                     for (var j:int = 0; j < 5; j++) {
                         if (ships[i] == 0)
@@ -33,7 +33,7 @@ package Entity.Node.Attack {
                     }
                 }
             }
-            FXHandler.addDarkPulse(_Node, Globals.teamColors[_Node.team], 3, 25, 50, 0);
+            FXHandler.addDarkPulse(_Node, Globals.teamColors[_Node.nodeData.team], 3, 25, 50, 0);
         }
 
         override public function get attackType():String {

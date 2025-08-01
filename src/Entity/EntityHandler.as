@@ -38,7 +38,7 @@ package Entity {
                     _orbit -= 100;
                     _clock = false;
                 }
-                _orbitNode = game.nodes.active[_orbit];
+                _orbitNode = game.nodes.active[_orbit] as Node;
             }
             var rng:Rng = new Rng(game.rng.nextInt(), Rng.X32)
             _Node.initNode(game, rng, _x, _y, _type, _size, _team, _orbitNode, _clock, _orbitSpeed);

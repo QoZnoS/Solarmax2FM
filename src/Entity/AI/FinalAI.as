@@ -3,6 +3,8 @@ package Entity.AI {
     import utils.Rng;
     import Entity.Node;
     import Entity.Utils;
+    import Entity.Node.NodeStaticLogic;
+    import Entity.Node.NodeType;
 
     public class FinalAI extends BasicAI {
         public function FinalAI(game:GameScene, rng:Rng) {
@@ -31,9 +33,9 @@ package Entity.AI {
             for each (_Node in nodeArray) { // 计算己方天体几何中心
                 _Node.getNodeLinks(team);
                 _Node.getTransitShips(team);
-                if (_Node.team == team) {
-                    _CenterX += _Node.x;
-                    _CenterY += _Node.y;
+                if (_Node.nodeData.team == team) {
+                    _CenterX += _Node.nodeData.x;
+                    _CenterY += _Node.nodeData.y;
                     _NodeCount += 1;
                 }
             }
@@ -44,14 +46,14 @@ package Entity.AI {
                 targets.push(_Node); // 星核受威胁时将其作为唯一目标
             else {
                 for each (_Node in nodeArray) {
-                    if (_Node.team == team || _Node.type == 3)
+                    if (_Node.nodeData.team == team || _Node.nodeData.type == NodeType.BARRIER)
                         continue; // 排除己方天体和障碍
-                    if (_Node.team == 0 && _Node.predictedOppStrength(team) == 0 && _Node.predictedTeamStrength(team) >= _Node.size * 200)
+                    if (_Node.nodeData.team == 0 && _Node.predictedOppStrength(team) == 0 && _Node.predictedTeamStrength(team) >= _Node.nodeData.size * 200)
                         continue; // 排除仅被己方以二倍标准兵力占据的中立天体
                     if (_Node.predictedOppStrength(team) > 0 && _Node.predictedTeamStrength(team) * 0.5 > _Node.predictedOppStrength(team))
                         continue; // 排除有敌方但兵力不足己方一半的天体
-                    _dx = _Node.x - _CenterX;
-                    _dy = _Node.y - _CenterY;
+                    _dx = _Node.nodeData.x - _CenterX;
+                    _dy = _Node.nodeData.y - _CenterY;
                     _Distence = Math.sqrt(_dx * _dx + _dy * _dy) + rng.nextNumber() * 32;
                     _Strength = _Node.predictedOppStrength(team) - _Node.predictedTeamStrength(team);
                     _Node.aiValue = _Distence + _Strength;
@@ -66,9 +68,9 @@ package Entity.AI {
                         continue; // 基本条件：天体AI计时器为0且有己方飞船
                     if (_Node.predictedOppStrength(team) == 0 && _Node.capturing)
                         continue; // 排除被锁星的天体
-                    if (_Node.type == 5 && _Node.conflict)
+                    if (_Node.nodeData.type == NodeType.DILATOR && _Node.conflict)
                         continue; // 排除战争状态的星核
-                    if (_Node.team != team && _Node.predictedTeamStrength(team) > _Node.predictedOppStrength(team))
+                    if (_Node.nodeData.team != team && _Node.predictedTeamStrength(team) > _Node.predictedOppStrength(team))
                         continue; // 排除敌方兵力低于己方的非己方天体
                     if (_Node.predictedOppStrength(team) > 0 && _Node.predictedTeamStrength(team) > _Node.predictedOppStrength(team))
                         continue; // 排除有敌方但兵力低于己方的天体
@@ -86,18 +88,18 @@ package Entity.AI {
                         _Ships = _targetNode.predictedOppStrength(team) * 2 - _targetNode.predictedTeamStrength(team) * 0.5;
                         if (_senderNode.predictedOppStrength(team) > _senderNode.predictedTeamStrength(team))
                             _Ships = _senderNode.teamStrength(team); // 预测出兵天体敌方兵力高于己方兵力时派出全部兵力
-                        if (_Ships < _targetNode.size * 200)
-                            _Ships = _targetNode.size * 200; // 兵力不足目标二倍标准兵力时派出目标二倍标准兵力
+                        if (_Ships < _targetNode.nodeData.size * 200)
+                            _Ships = _targetNode.nodeData.size * 200; // 兵力不足目标二倍标准兵力时派出目标二倍标准兵力
                         _towerAttack = Utils.getLengthInTowerRange(_senderNode, _targetNode, team) / 4.5;
                         _Ships += _towerAttack; // 加上估损
                         if (_towerAttack > 0 && Globals.teamPops[team] < _towerAttack)
                             continue; // 总兵力不足估损时不派兵
                         if (_towerAttack > 0 && _senderNode.teamStrength(team) < _towerAttack * 0.5)
                             continue; // 出兵天体的兵力不足估损的一半时不派兵
-                        if (_senderNode.type == 5)
-                            _senderNode.sendAIShips(team, _targetNode, _senderNode.teamStrength(team) - 150); // 星核特殊出兵机制
+                        if (_senderNode.nodeData.type == NodeType.DILATOR)
+                            NodeStaticLogic.sendAIShips(_senderNode, team, _targetNode, _senderNode.teamStrength(team) - 150); // 星核特殊出兵机制
                         else
-                            _senderNode.sendAIShips(team, _targetNode, _Ships);
+                            NodeStaticLogic.sendAIShips(_senderNode, team, _targetNode, _Ships);
                         return;
                     }
                 }

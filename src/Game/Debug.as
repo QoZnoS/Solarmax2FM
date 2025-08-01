@@ -9,6 +9,8 @@ package Game {
     import starling.filters.ColorMatrixFilter;
     import Entity.Node;
     import Entity.EnemyAI;
+    import flash.utils.Dictionary;
+    import Entity.Node.NodeData;
 
     public class Debug extends Sprite {
         private static var debug:Boolean; // debug 开启状态
@@ -91,7 +93,7 @@ package Game {
                     game.next();
                     break;
                 case Keyboard.W:
-                    trace(Globals.replay)
+                    test();
                     break;
                 case Keyboard.Z:
                     scene.applyFilter()
@@ -201,12 +203,12 @@ package Game {
             if (game.nodes.active.length != THIS.nodeTagLables[0].length)
                 init_tag(); // 重置tag
             for each (var _node:Node in game.nodes.active) { // 更新tag位置
-                THIS.nodeTagLables[0][_node.tag].x = _node.x - 30 * _node.size - 60;
-                THIS.nodeTagLables[0][_node.tag].y = _node.y - 50 * _node.size - 48;
-                THIS.nodeTagLables[1][_node.tag].x = _node.x - 60;
-                THIS.nodeTagLables[1][_node.tag].y = _node.y + 50 * _node.size - 30;
-                THIS.nodeTagLables[2][_node.tag].x = _node.x - 60;
-                THIS.nodeTagLables[2][_node.tag].y = _node.y + 50 * _node.size - 30;
+                THIS.nodeTagLables[0][_node.tag].x = _node.nodeData.x - 30 * _node.nodeData.size - 60;
+                THIS.nodeTagLables[0][_node.tag].y = _node.nodeData.y - 50 * _node.nodeData.size - 48;
+                THIS.nodeTagLables[1][_node.tag].x = _node.nodeData.x - 60;
+                THIS.nodeTagLables[1][_node.tag].y = _node.nodeData.y + 50 * _node.nodeData.size - 30;
+                THIS.nodeTagLables[2][_node.tag].x = _node.nodeData.x - 60;
+                THIS.nodeTagLables[2][_node.tag].y = _node.nodeData.y + 50 * _node.nodeData.size - 30;
                 if (_node.conflict)
                     THIS.nodeTagLables[1][_node.tag].visible = true;
                 else
@@ -267,23 +269,13 @@ package Game {
 
         // #endregion
         // #region 调试函数，手动触发
-        private function set_orbit_node():void {
-            var _dx:Number = game.nodes.active[0].x - game.nodes.active[1].x;
-            var _dy:Number = game.nodes.active[0].y - game.nodes.active[1].y;
-            var _distance:Number = Math.sqrt(_dx * _dx + _dy * _dy);
-            var _angle:Number = Math.atan2(_dy, _dx);
-            game.nodes.active[0].orbitAngle = _angle;
-            game.nodes.active[0].orbitDist = _distance;
-            game.nodes.active[0].orbitSpeed = 0.1;
-            game.nodes.active[0].orbitNode = game.nodes.active[1];
-        }
 
         private function clear_debug_trace():void {
-            game.ais.active[0].debugTrace[0] = null;
-            game.ais.active[0].debugTrace[1] = null;
-            game.ais.active[0].debugTrace[2] = null;
-            game.ais.active[0].debugTrace[3] = null;
-            game.ais.active[0].debugTrace[4] = null;
+            (game.ais.active[0] as EnemyAI).debugTrace[0] = null;
+            (game.ais.active[0] as EnemyAI).debugTrace[1] = null;
+            (game.ais.active[0] as EnemyAI).debugTrace[2] = null;
+            (game.ais.active[0] as EnemyAI).debugTrace[3] = null;
+            (game.ais.active[0] as EnemyAI).debugTrace[4] = null;
         }
 
         private function set_expandDarkPulse(_team:int):void {
@@ -292,32 +284,19 @@ package Game {
             game.darkPulse.visible = true;
         }
 
-        private function clear_node(_Node:Node):void {
-            if (!_Node)
-                return;
-            for each (var arr:Array in _Node.ships) {
-                while (arr.length > 0) {
-                    arr[0].hp = 0;
-                    arr[0].destroy();
-                    arr.shift();
-                }
-            }
-            _Node.changeTeam(0);
-        }
-
         private function createFilter():ColorMatrixFilter{
             var filter:ColorMatrixFilter = new ColorMatrixFilter();
             filter.adjustBrightness(0.5);
             return filter;
         }
         // #endregion
-        public static function test(object:*):void{
-            var len:int = THIS.debugLables.length;
-            for(var i:int = len-1; i > 0; i--)
+        public static function test():void{
+            var arr:Array = [];
+            for each(var node:Node in game.nodes.active)
             {
-                THIS.debugLables[i].text = THIS.debugLables[i-1].text;
+                arr.push(JSON.stringify(node.nodeData));
             }
-            THIS.debugLables[0].text=object;
+            trace(arr);
         }
     }
 }

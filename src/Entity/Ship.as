@@ -6,6 +6,7 @@ package Entity
    import utils.Rng;
    import utils.GS;
    import starling.display.QuadBatch;
+   import Entity.Node.NodeType;
 
    public class Ship extends GameEntity
    {
@@ -73,11 +74,11 @@ package Entity
          trailLength = 2;
          pulse.color = image.color;
          pulse.alpha = 0;
-         orbitDist = (40 + rng.nextNumber() * 40) * _Node.size * 2;
+         orbitDist = (40 + rng.nextNumber() * 40) * _Node.nodeData.size * 2;
          orbitAngle = rng.nextNumber() * Math.PI * 2;
          orbitSpeed = rng.nextNumber() * 0.15 + 0.05;
-         x = _Node.x + Math.cos(orbitAngle) * orbitDist;
-         y = _Node.y + Math.sin(orbitAngle) * orbitDist * 0.15;
+         x = _Node.nodeData.x + Math.cos(orbitAngle) * orbitDist;
+         y = _Node.nodeData.y + Math.sin(orbitAngle) * orbitDist * 0.15;
          trailLength = 2;
          resetChargeRate();
          jumpDist = 0;
@@ -165,8 +166,8 @@ package Entity
             hp = Math.min(100, hp + _dt * 50);
          orbitAngle += orbitSpeed * _dt;
          orbitAngle %= Math.PI * 2
-         x = node.x + Math.cos(orbitAngle) * orbitDist;
-         y = node.y + Math.sin(orbitAngle) * orbitDist * 0.15;
+         x = node.nodeData.x + Math.cos(orbitAngle) * orbitDist;
+         y = node.nodeData.y + Math.sin(orbitAngle) * orbitDist * 0.15;
          updateForeground()
          drawImage();
          if (pulse.alpha > 0)
@@ -242,8 +243,8 @@ package Entity
          {
             _x1 = Math.cos(orbitAngle) * orbitDist;
             _y1 = Math.sin(orbitAngle) * orbitDist;
-            tx = node.x + _x1;
-            ty = node.y + _y1 * 0.15;
+            tx = node.nodeData.x + _x1;
+            ty = node.nodeData.y + _y1 * 0.15;
             _dx = tx - x;
             _dy = ty - y;
             _Angle = Math.atan2(_dy, _dx);
@@ -251,8 +252,8 @@ package Entity
             _dAngle = node.orbitAngle + node.orbitSpeed * _dtime;
             if (_dAngle > Math.PI * 2)
                _dAngle -= Math.PI * 2;
-            _x2 = node.orbitNode.x + Math.cos(_dAngle) * node.orbitDist;
-            _y2 = node.orbitNode.y + Math.sin(_dAngle) * node.orbitDist;
+            _x2 = node.orbitNode.nodeData.x + Math.cos(_dAngle) * node.orbitDist;
+            _y2 = node.orbitNode.nodeData.y + Math.sin(_dAngle) * node.orbitDist;
             tx = _x2 + _x1;
             ty = _y2 + _y1 * 0.15;
             _dx = tx - x;
@@ -261,8 +262,8 @@ package Entity
             _dAngle = node.orbitAngle + node.orbitSpeed * _dtime;
             if (_dAngle > Math.PI * 2)
                _dAngle -= Math.PI * 2;
-            _x2 = node.orbitNode.x + Math.cos(_dAngle) * node.orbitDist;
-            _y2 = node.orbitNode.y + Math.sin(_dAngle) * node.orbitDist;
+            _x2 = node.orbitNode.nodeData.x + Math.cos(_dAngle) * node.orbitDist;
+            _y2 = node.orbitNode.nodeData.y + Math.sin(_dAngle) * node.orbitDist;
             tx = _x2 + _x1;
             ty = _y2 + _y1 * 0.15;
             _dx = tx - x;
@@ -281,8 +282,8 @@ package Entity
          {
             _x1 = Math.cos(orbitAngle) * orbitDist;
             _y1 = Math.sin(orbitAngle) * orbitDist;
-            tx = node.x + _x1;
-            ty = node.y + _y1 * 0.15;
+            tx = node.nodeData.x + _x1;
+            ty = node.nodeData.y + _y1 * 0.15;
             _dx = tx - x;
             _dy = ty - y;
             jumpAngle = _Angle = Math.atan2(_dy, _dx);
@@ -335,8 +336,8 @@ package Entity
             _Angle = Math.atan2(_dy, _dx);
             if (_Distance < 24)
             {
-               _dx = node.x + Math.cos(orbitAngle) * orbitDist - x;
-               _dy = node.y + Math.sin(orbitAngle) * orbitDist * 0.15 - y;
+               _dx = node.nodeData.x + Math.cos(orbitAngle) * orbitDist - x;
+               _dy = node.nodeData.y + Math.sin(orbitAngle) * orbitDist * 0.15 - y;
                jumpAngle = Math.atan2(_dy, _dx);
                jumpSpeed = followShip.jumpSpeed;
                targetDist = Math.sqrt(_dx * _dx + _dy * _dy);
@@ -353,8 +354,8 @@ package Entity
          }
          else
          {
-            _dx = node.x + Math.cos(orbitAngle) * orbitDist - x;
-            _dy = node.y + Math.sin(orbitAngle) * orbitDist * 0.15 - y;
+            _dx = node.nodeData.x + Math.cos(orbitAngle) * orbitDist - x;
+            _dy = node.nodeData.y + Math.sin(orbitAngle) * orbitDist * 0.15 - y;
             _Distance = _dx * _dx + _dy * _dy;
             jumpAngle = Math.atan2(_dy, _dx);
             state = 3;
@@ -448,12 +449,12 @@ package Entity
          jumpSpeed = Globals.teamShipSpeeds[team];
          this.preNode = this.node;
          this.node = _Node;
-         orbitDist = (40 + rng.nextNumber() * 40) * node.size * 2;
+         orbitDist = (40 + rng.nextNumber() * 40) * node.nodeData.size * 2;
          orbitSpeed = rng.nextNumber() * 0.15 + 0.05;
          _x1 = Math.cos(orbitAngle) * orbitDist;
          _y1 = Math.sin(orbitAngle) * orbitDist;
-         tx = node.x + _x1;
-         ty = node.y + _y1 * 0.15;
+         tx = node.nodeData.x + _x1;
+         ty = node.nodeData.y + _y1 * 0.15;
          _dx = tx - x;
          _dy = ty - y;
          jumpAngle = Math.atan2(_dy, _dx);
@@ -464,8 +465,8 @@ package Entity
             _dAngle = node.orbitAngle + node.orbitSpeed * _dtime;
             if (_dAngle > Math.PI * 2)
                _dAngle -= Math.PI * 2;
-            _x2 = node.orbitNode.x + Math.cos(_dAngle) * node.orbitDist;
-            _y2 = node.orbitNode.y + Math.sin(_dAngle) * node.orbitDist;
+            _x2 = node.orbitNode.nodeData.x + Math.cos(_dAngle) * node.orbitDist;
+            _y2 = node.orbitNode.nodeData.y + Math.sin(_dAngle) * node.orbitDist;
             tx = _x2 + _x1;
             ty = _y2 + _y1 * 0.15;
             _dx = tx - x;
@@ -474,8 +475,8 @@ package Entity
             _dAngle = node.orbitAngle + node.orbitSpeed * _dtime;
             if (_dAngle > Math.PI * 2)
                _dAngle -= Math.PI * 2;
-            _x2 = node.orbitNode.x + Math.cos(_dAngle) * node.orbitDist;
-            _y2 = node.orbitNode.y + Math.sin(_dAngle) * node.orbitDist;
+            _x2 = node.orbitNode.nodeData.x + Math.cos(_dAngle) * node.orbitDist;
+            _y2 = node.orbitNode.nodeData.y + Math.sin(_dAngle) * node.orbitDist;
             tx = _x2 + _x1;
             ty = _y2 + _y1 * 0.15;
             _dx = tx - x;
@@ -506,12 +507,12 @@ package Entity
       {
          this.preNode = this.node;
          this.node = _Node;
-         orbitDist = (40 + rng.nextNumber() * 40) * node.size * 2;
+         orbitDist = (40 + rng.nextNumber() * 40) * node.nodeData.size * 2;
          orbitSpeed = rng.nextNumber() * 0.15 + 0.05;
          var _x:Number = Math.cos(orbitAngle) * orbitDist;
          var _y:Number = Math.sin(orbitAngle) * orbitDist;
-         tx = node.x + _x;
-         ty = node.y + _y * 0.15;
+         tx = node.nodeData.x + _x;
+         ty = node.nodeData.y + _y * 0.15;
          var _dx:Number = tx - x;
          var _dy:Number = ty - y;
          jumpAngle = Math.atan2(_dy, _dx);
@@ -553,11 +554,11 @@ package Entity
          {
             if (!_Node.active)
                continue;
-            if (_Node.type == 3)
+            if (_Node.nodeData.type == NodeType.BARRIER)
                continue;
             // 计算距离，结果带有0~32px的随机误差
-            _dx = _Node.x - this.x;
-            _dy = _Node.y - this.y;
+            _dx = _Node.nodeData.x - this.x;
+            _dy = _Node.nodeData.y - this.y;
             _Distance = Math.sqrt(_dx * _dx + _dy * _dy) + rng.nextNumber() * 32;
             if (_Distance < _closestDist)
             {

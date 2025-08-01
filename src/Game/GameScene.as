@@ -25,6 +25,8 @@ package Game {
     import starling.text.TextField;
     import starling.utils.VAlign;
     import Entity.AI.EnemyAIFactory;
+    import Entity.Node.NodeStaticLogic;
+    import Entity.Node.NodeType;
 
     public class GameScene extends Sprite {
         // #region 类变量
@@ -67,7 +69,8 @@ package Game {
         // #endregion
         public function GameScene(_scene:SceneController) {
             super();
-            this.scene = _scene
+            this.scene = _scene;
+            NodeStaticLogic.game = this;
             Utils.game = this;
             FXHandler.game = this;
             EntityHandler.game = this;
@@ -212,19 +215,19 @@ package Game {
                 _NodeData.length >= 7 ? _Node = EntityHandler.addNode(_NodeData[0], _NodeData[1], _NodeData[2], _NodeData[3], _NodeData[4], _NodeData[5], _NodeData[6]) : _Node = EntityHandler.addNode(_NodeData[0], _NodeData[1], _NodeData[2], _NodeData[3], _NodeData[4], _NodeData[5]);
                 if (Globals.level != 31) {
                     // 修改32关之外的天体数据
-                    if (Globals.level == 35 && _Node.team == 6)
+                    if (Globals.level == 35 && _Node.nodeData.team == 6)
                         _Node.startVal = 0; // 36关黑色除星核无初始兵力
-                    if (_Node.type == 5) {
+                    if (_Node.nodeData.type == NodeType.DILATOR) {
                         // 设定星核数据
                         _Node.buildRate = 8;
-                        _Node.popVal = 280;
+                        _Node.nodeData.popVal = 280;
                         _Node.startVal = Globals.currentDifficulty * 75;
                     }
                 }
                 if (_NodeData.length >= 8) // 检验第八项数据(自定义兵力或障碍)
                 {
                     if (_NodeData[7] is Array) {
-                        if (_Node.type == 3) {
+                        if (_Node.nodeData.type == NodeType.BARRIER) {
                             // 障碍
                             _Node.barrierLinks.length = 0;
                             _Node.barrierCostom = true;
@@ -237,7 +240,7 @@ package Game {
                         }
                         _Node.startVal = 0; // 禁用原版初始人口设定
                     } else {
-                        if (_Node.type == 3) {
+                        if (_Node.nodeData.type == NodeType.BARRIER) {
                             // 障碍
                             _Node.barrierLinks.length = 0;
                             _Node.barrierCostom = true;
@@ -259,8 +262,8 @@ package Game {
                             break;
                     }
                 }
-                if (_Node.team > 0 && _Node.startVal > 0)
-                    EntityHandler.addShips(_Node, _Node.team, _Node.startVal); // 为非中立天体添加初始飞船
+                if (_Node.nodeData.team > 0 && _Node.startVal > 0)
+                    EntityHandler.addShips(_Node, _Node.nodeData.team, _Node.startVal); // 为非中立天体添加初始飞船
             }
             return _aiArray;
         }
@@ -363,7 +366,7 @@ package Game {
                 for(var i:int = 1; i < l; i++)
                 {
                     arr = Globals.replay[Globals.replay.length - 1][i];
-                    nodes.active[arr[0]].moveShips(arr[1], nodes.active[arr[2]], arr[3]);
+                    NodeStaticLogic.moveShips(nodes.active[arr[0]], arr[1], nodes.active[arr[2]], arr[3]);
                 }
                 Globals.replay.push([dt]);
                 updateGame(dt);
@@ -371,7 +374,7 @@ package Game {
                 dt = Globals.replay[0].shift();
                 updateGame(dt);
                 for each (arr in Globals.replay[0]) {
-                    nodes.active[arr[0]].moveShips(arr[1], nodes.active[arr[2]], arr[3]);
+                    NodeStaticLogic.moveShips(nodes.active[arr[0]], arr[1], nodes.active[arr[2]], arr[3]);
                 }
                 Globals.replay.shift();
             }
@@ -408,7 +411,7 @@ package Game {
                 Globals.teamPops[_team] = 0;
             }
             for each (var _Node:Node in nodes.active) // 统计兵力上限
-                Globals.teamCaps[_Node.team] += _Node.popVal * Globals.teamNodePops[_Node.team];
+                Globals.teamCaps[_Node.nodeData.team] += _Node.nodeData.popVal * Globals.teamNodePops[_Node.nodeData.team];
             for each (var _Ship:Ship in ships.active) // 统计总兵力
                 Globals.teamPops[_Ship.team]++;
             ships.active.length < 1024 ? Globals.exOptimization = 0 : (ships.active.length < 8192 ? Globals.exOptimization = 1 : Globals.exOptimization = 2);
@@ -436,7 +439,7 @@ package Game {
             {
                 case 0: // 前两关处理教程提示
                     if (!triggers[0])
-                        if (nodes.active[0].ships[1].length < 60)
+                        if ((nodes.active[0] as Node).ships[1].length < 60)
                             triggers[0] = true;
                     break;
                 case 1:
@@ -446,8 +449,8 @@ package Game {
                     break;
                 case 31:
                     if (!triggers[0]) {
-                        _boss = nodes.active[0];
-                        if (_boss.hp == 100) {
+                        _boss = (nodes.active[0] as Node);
+                        if (_boss.nodeData.hp == 100) {
                             triggers[0] = true;
                             _timer = 0;
                             _rate = 0.5;
@@ -479,12 +482,12 @@ package Game {
                         }
                     }
                     if (triggers[0] && !triggers[1]) {
-                        _boss = nodes.active[0];
+                        _boss = nodes.active[0] as Node;
                         if (_boss.triggerTimer == 0) {
                             triggers[1] = true;
                             _boss.bossReady();
-                            _boss.changeTeam(6);
-                            _boss.changeShipsTeam(6);
+                            NodeStaticLogic.changeTeam(_boss, 6);
+                            NodeStaticLogic.changeShipsTeam(_boss, 6);
                             EntityHandler.addAI(6, EnemyAIFactory.DARK);
                             _boss.triggerTimer = 3;
                             darkPulse.team = 6;
@@ -493,7 +496,7 @@ package Game {
                         }
                     }
                     if (triggers[1] && !triggers[2]) {
-                        _boss = nodes.active[0];
+                        _boss = nodes.active[0] as Node;
                         if (_boss.triggerTimer == 0) {
                             triggers[2] = true;
                             _boss.bossDisappear();
@@ -522,7 +525,7 @@ package Game {
                     }
                     if (triggers[0] && !triggers[1]) // 阶段二，生成飞船，添加ai
                     {
-                        _boss = nodes.active[nodes.active.length - 1];
+                        _boss = nodes.active[nodes.active.length - 1] as Node;
                         if (_boss.triggerTimer == 0) {
                             triggers[1] = true;
                             _boss.bossReady();
@@ -539,7 +542,7 @@ package Game {
                     }
                     if (triggers[1] && !triggers[2]) // 阶段三，星核消失动画
                     {
-                        _boss = nodes.active[nodes.active.length - 1];
+                        _boss = nodes.active[nodes.active.length - 1] as Node;
                         if (_boss.triggerTimer == 0) {
                             triggers[2] = true;
                             _boss.bossDisappear();
@@ -548,7 +551,7 @@ package Game {
                     }
                     if (triggers[2] && !triggers[3]) // 阶段四，移除星核
                     {
-                        _boss = nodes.active[nodes.active.length - 1];
+                        _boss = nodes.active[nodes.active.length - 1] as Node;
                         if (_boss.triggerTimer == 0) {
                             triggers[3] = true;
                             _boss.bossHide();
@@ -559,8 +562,8 @@ package Game {
                     break;
                 case 35:
                     if (!gameOver) {
-                        _boss = nodes.active[0];
-                        if (!triggers[0] && _boss.hp == 0) // 阶段一，坍缩动画
+                        _boss = nodes.active[0] as Node;
+                        if (!triggers[0] && _boss.nodeData.hp == 0) // 阶段一，坍缩动画
                         {
                             triggers[0] = true;
                             _timer = 0;
@@ -599,7 +602,7 @@ package Game {
                         }
                         if (triggers[0] && !triggers[1]) // 阶段二，膨胀动画
                         {
-                            _boss = nodes.active[0];
+                            _boss = nodes.active[0] as Node;
                             if (_boss.triggerTimer == 0) {
                                 triggers[1] = true;
                                 _timer = 0;
@@ -635,7 +638,7 @@ package Game {
                         }
                         if (triggers[1] && !triggers[2]) // 阶段三，画面缩小，天体消失，回到主界面
                         {
-                            _boss = nodes.active[0];
+                            _boss = nodes.active[0] as Node;
                             if (_boss.triggerTimer == 0) {
                                 _boss.active = false;
                                 gameOver = true;
@@ -684,15 +687,15 @@ package Game {
                 gameOverTimer = 0.5;
             }
             for each (_Node in nodes.active) {
-                if (_Node.team == _team || _Node.type == 3)
+                if (_Node.nodeData.team == _team || _Node.nodeData.type == NodeType.BARRIER)
                     continue;
-                _x = _Node.x - darkPulse.x;
-                _y = _Node.y - darkPulse.y;
+                _x = _Node.nodeData.x - darkPulse.x;
+                _y = _Node.nodeData.y - darkPulse.y;
                 _Distance = Math.sqrt(_x * _x + _y * _y);
                 if (_Distance < darkPulse.width * 0.25) {
-                    _Node.changeTeam(_team);
-                    _Node.changeShipsTeam(_team);
-                    _Node.hp = 100;
+                    NodeStaticLogic.changeTeam(_Node, _team);
+                    NodeStaticLogic.changeShipsTeam(_Node, _team);
+                    _Node.nodeData.hp = 100;
                 }
             }
             for each (_Ship in ships.active) {
@@ -716,7 +719,7 @@ package Game {
                 {
                     var _ripple:int = 1;
                     for each (var _Node:Node in nodes.active) {
-                        if (_Node.type == 3)
+                        if (_Node.nodeData.type == NodeType.BARRIER)
                             continue;
                         _Node.winPulseTimer = Math.min(_ripple * 0.101, _ripple * 1.5 / nodes.active.length);
                         _Node.winTeam = winningTeam;
@@ -743,7 +746,7 @@ package Game {
                 winningTeam = 1; // 玩家势力获胜
                 gameOver = true; // 不判定游戏继续时，游戏结束
                 for each (_Node in nodes.active)
-                    if (_Node.team != 1 && _Node.type != 3)
+                    if (_Node.nodeData.team != 1 && _Node.nodeData.type != NodeType.BARRIER)
                         gameOver = false;
                 return; // 终止该函数
             }
@@ -766,9 +769,9 @@ package Game {
                 return;
             for each (_Node in nodes.active) // 判断非中立天体上都有获胜势力的飞船
             {
-                if (_Node.team == 0 || _Node.team == i)
+                if (_Node.nodeData.team == 0 || _Node.nodeData.team == i)
                     continue;
-                if (_Node.type == 3 || _Node.type == 5)
+                if (_Node.nodeData.type == NodeType.BARRIER || _Node.nodeData.type == NodeType.DILATOR)
                     continue; // 排除障碍和星核
                 if (_Node.ships[i].length == 0 && i != 0) // 如果天体上没有飞船
                 {
@@ -843,7 +846,7 @@ package Game {
 
         public function hideSingleBarriers():void {
             for each (var _Node:Node in nodes.active) {
-                if (_Node.type != 3)
+                if (_Node.nodeData.type != NodeType.BARRIER)
                     continue;
                 _Node.image.visible = _Node.halo.visible = _Node.linked;
             }
@@ -863,8 +866,8 @@ package Game {
             barrierLines.length = 0; // 清空障碍线数组
             L_1 = int(nodes.active.length);
             for (i = 0; i < L_1; i++) {
-                _Node1 = nodes.active[i];
-                if (_Node1.type != 3)
+                _Node1 = nodes.active[i] as Node;
+                if (_Node1.nodeData.type != NodeType.BARRIER)
                     continue;
                 L_2 = int(_Node1.barrierLinks.length); // 该天体需连接的障碍总数
                 for (j = 0; j < L_2; j++) {
@@ -874,13 +877,13 @@ package Game {
                         _Node2 = nodes.active[_Node1.barrierLinks[j]];
                     if (!_Node1.barrierCostom && _Node2.barrierCostom)
                         continue;
-                    _Array = [new Point(_Node1.x, _Node1.y), new Point(_Node2.x, _Node2.y)];
+                    _Array = [new Point(_Node1.nodeData.x, _Node1.nodeData.y), new Point(_Node2.nodeData.x, _Node2.nodeData.y)];
                     L_3 = int(barrierLines.length);
                     _Exist = false;
                     for (k = 0; k < L_3; k++)
                         if (check4same(_Array, barrierLines[k]))
                             _Exist = true;
-                    if (!_Exist && _Node2.type == 3) {
+                    if (!_Exist && _Node2.nodeData.type == NodeType.BARRIER) {
                         barrierLines.push(_Array);
                         _Node1.linked = true;
                         _Node2.linked = true;

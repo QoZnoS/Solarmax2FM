@@ -14,16 +14,16 @@ package Entity.Node.Attack {
         override public function executeAttack(node:Node, dt:Number):void {
             if (!updateTimer(dt))
                 return;
-            if (Globals.teamPops[node.team] >= Globals.teamCaps[node.team])
+            if (Globals.teamPops[node.nodeData.team] >= Globals.teamCaps[node.nodeData.team])
                 return;
             var ships:Array = Utils.findShipsInRange(node, false);
             if (ships.length == 0)
                 return;
             var ship:Ship = node.rng.randomIndex(ships);
-            var shipCreate:Ship = EntityHandler.addShip(node, node.team, false); // 产生新飞船
-            shipCreate.x = node.x;
-            shipCreate.y = node.y;
-            Utils.removeElementFromArray(node.ships[node.team], shipCreate);
+            var shipCreate:Ship = EntityHandler.addShip(node, node.nodeData.team, false); // 产生新飞船
+            shipCreate.x = node.nodeData.x;
+            shipCreate.y = node.nodeData.y;
+            Utils.removeElementFromArray(node.ships[node.nodeData.team], shipCreate);
             shipCreate.followTo(ship); // 跟随原飞船
         }
 

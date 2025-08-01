@@ -7,6 +7,7 @@ package Menus {
     import Entity.EntityPool;
     import Entity.FX.EndStar;
     import utils.Drawer;
+    import Entity.GameEntity;
 
     public class EndScene extends Sprite {
         public var stars:EntityPool;
@@ -72,8 +73,8 @@ package Menus {
         }
 
         // 检测_EndStar1 距数组每项的距离是否均小于_Distance
-        public function checkProximity(_StarArray:Array, _EndStar1:EndStar, _Distance:Number):Boolean {
-            for each (var _EndStar2:EndStar in _StarArray) {
+        public function checkProximity(_StarVector:Vector.<GameEntity>, _EndStar1:EndStar, _Distance:Number):Boolean {
+            for each (var _EndStar2:EndStar in _StarVector) {
                 if (_EndStar2 == _EndStar1)
                     continue;
                 if (getDistance(_EndStar1, _EndStar2) > _Distance)

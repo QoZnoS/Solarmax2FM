@@ -9,6 +9,8 @@ package UI {
     import Entity.Node;
     import Entity.FXHandler;
     import starling.display.QuadBatch;
+    import Entity.Node.NodeStaticLogic;
+    import Entity.Node.NodeType;
 
     public class TouchCtrlLayer extends Sprite {
         private var convertQuad:Quad; // 转换触点坐标用
@@ -49,37 +51,37 @@ package UI {
                 return;
             for each (var _Touch:Touch in touches) {
                 if (_Touch.hoverNode) {
-                    Drawer.drawCircle(displayBatch, _Touch.hoverNode.x, _Touch.hoverNode.y, Globals.teamColors[_Touch.hoverNode.team], _Touch.hoverNode.lineDist - 4, _Touch.hoverNode.size * 25 * 2, true, 0.5);
+                    Drawer.drawCircle(displayBatch, _Touch.hoverNode.nodeData.x, _Touch.hoverNode.nodeData.y, Globals.teamColors[_Touch.hoverNode.nodeData.team], _Touch.hoverNode.nodeData.lineDist - 4, _Touch.hoverNode.nodeData.size * 25 * 2, true, 0.5);
                     if (_Touch.hoverNode.attackStrategy.attackRate > 0)
-                        Drawer.drawDashedCircle(displayBatch, _Touch.hoverNode.x, _Touch.hoverNode.y, Globals.teamColors[_Touch.hoverNode.team], _Touch.hoverNode.attackStrategy.attackRange, _Touch.hoverNode.attackStrategy.attackRange - 2, false, 0.5, 1, 0, 256);
+                        Drawer.drawDashedCircle(displayBatch, _Touch.hoverNode.nodeData.x, _Touch.hoverNode.nodeData.y, Globals.teamColors[_Touch.hoverNode.nodeData.team], _Touch.hoverNode.attackStrategy.attackRange, _Touch.hoverNode.attackStrategy.attackRange - 2, false, 0.5, 1, 0, 256);
                 }
                 if (!(_Touch.downNodes && _Touch.downNodes.length > 0))
                     continue
                 for each (var _Node:Node in _Touch.downNodes) {
-                    Drawer.drawCircle(displayBatch, _Node.x, _Node.y, _Color, _Node.lineDist - 4, _Node.lineDist - 7, false, 0.8);
+                    Drawer.drawCircle(displayBatch, _Node.nodeData.x, _Node.nodeData.y, _Color, _Node.nodeData.lineDist - 4, _Node.nodeData.lineDist - 7, false, 0.8);
                     var _localPoint:Point = convertQuad.globalToLocal(new Point(_Touch.globalX, _Touch.globalY));
                     _Tx = _localPoint.x;
                     _Ty = _localPoint.y;
                     if (_Touch.hoverNode) { // 绘制目标天体的定位圈
                         _Block = nodesBlocked(_Node, _Touch.hoverNode);
-                        _Tx = _Touch.hoverNode.x;
-                        _Ty = _Touch.hoverNode.y;
+                        _Tx = _Touch.hoverNode.nodeData.x;
+                        _Ty = _Touch.hoverNode.nodeData.y;
                         if (_Block)
-                            Drawer.drawCircle(displayBatch, _Tx, _Ty, 0xFF3333, _Touch.hoverNode.lineDist - 4, _Touch.hoverNode.lineDist - 7, false, 0.8);
+                            Drawer.drawCircle(displayBatch, _Tx, _Ty, 0xFF3333, _Touch.hoverNode.nodeData.lineDist - 4, _Touch.hoverNode.nodeData.lineDist - 7, false, 0.8);
                         else
-                            Drawer.drawCircle(displayBatch, _Tx, _Ty, _Color, _Touch.hoverNode.lineDist - 4, _Touch.hoverNode.lineDist - 7, false, 0.8);
+                            Drawer.drawCircle(displayBatch, _Tx, _Ty, _Color, _Touch.hoverNode.nodeData.lineDist - 4, _Touch.hoverNode.nodeData.lineDist - 7, false, 0.8);
                     } else
-                        _Block = lineBlocked(_Node.x, _Node.y, _Tx, _Ty);
-                    _dx = _Tx - _Node.x;
-                    _dy = _Ty - _Node.y;
+                        _Block = lineBlocked(_Node.nodeData.x, _Node.nodeData.y, _Tx, _Ty);
+                    _dx = _Tx - _Node.nodeData.x;
+                    _dy = _Ty - _Node.nodeData.y;
                     _Distance = Math.sqrt(_dx * _dx + _dy * _dy);
-                    if (_Distance > _Node.lineDist - 5) { // 鼠标移出天体定位圈时绘制
+                    if (_Distance > _Node.nodeData.lineDist - 5) { // 鼠标移出天体定位圈时绘制
                         _Angle = Math.atan2(_dy, _dx);
-                        _Nx = _Node.x + Math.cos(_Angle) * (_Node.lineDist - 5);
-                        _Ny = _Node.y + Math.sin(_Angle) * (_Node.lineDist - 5);
+                        _Nx = _Node.nodeData.x + Math.cos(_Angle) * (_Node.nodeData.lineDist - 5);
+                        _Ny = _Node.nodeData.y + Math.sin(_Angle) * (_Node.nodeData.lineDist - 5);
                         if (_Touch.hoverNode) {
-                            _Tx -= Math.cos(_Angle) * (_Touch.hoverNode.lineDist - 5);
-                            _Ty -= Math.sin(_Angle) * (_Touch.hoverNode.lineDist - 5);
+                            _Tx -= Math.cos(_Angle) * (_Touch.hoverNode.nodeData.lineDist - 5);
+                            _Ty -= Math.sin(_Angle) * (_Touch.hoverNode.nodeData.lineDist - 5);
                         }
                         if (_Block) { // 分段绘制鼠标线
                             Drawer.drawLine(displayBatch, _Nx, _Ny, _Block.x, _Block.y, _Color, 3, 0.8);
@@ -152,12 +154,12 @@ package UI {
             for each (var _Touch:Touch in _TouchArray) {
                 if (_Touch.hoverNode && _Touch.downNodes.length > 0) {
                     _Node1 = _Touch.hoverNode;
-                    FXHandler.addFade(_Node1.x, _Node1.y, _Node1.size, 0xFFFFFF, 1);
+                    FXHandler.addFade(_Node1.nodeData.x, _Node1.nodeData.y, _Node1.nodeData.size, 0xFFFFFF, 1);
                     for each (_Node2 in _Touch.downNodes) {
                         if (_Node2 == _Node1 || nodesBlocked(_Node2, _Node1))
                             continue;
-                        _Node2.sendShips(1, _Node1);
-                        FXHandler.addFade(_Node2.x, _Node2.y, _Node2.size, 0xFFFFFF, 0);
+                        NodeStaticLogic.sendShips(_Node2, 1, _Node1);
+                        FXHandler.addFade(_Node2.nodeData.x, _Node2.nodeData.y, _Node2.nodeData.size, 0xFFFFFF, 0);
                     }
                 }
                 _Touch.hoverNode = null;
@@ -176,12 +178,12 @@ package UI {
             var _lineDist:Number = NaN;
             var _ClosestDist:Number = 200;
             for each (var _Node:Node in game.nodes.active) {
-                if (_Node.type == 3)
+                if (_Node.nodeData.type == NodeType.BARRIER)
                     continue;
-                _dx = _Node.x - _localPoint.x;
-                _dy = _Node.y - _localPoint.y;
+                _dx = _Node.nodeData.x - _localPoint.x;
+                _dy = _Node.nodeData.y - _localPoint.y;
                 _Distance = Math.sqrt(_dx * _dx + _dy * _dy);
-                _lineDist = _Node.lineDist;
+                _lineDist = _Node.nodeData.lineDist;
                 if (_Distance < _lineDist && _Distance < _ClosestDist) {
                     _ClosestDist = _Distance;
                     _ClosestNode = _Node;
@@ -195,12 +197,12 @@ package UI {
             var _bar1:Point = null;
             var _bar2:Point = null;
             var _Intersection:Point = null;
-            if (_Node1.team == 1 && _Node1.type == 1)
+            if (_Node1.nodeData.team == 1 && _Node1.nodeData.type == NodeType.WARP)
                 return null;
             for each (var _bar:Array in game.barrierLines) {
                 _bar1 = _bar[0];
                 _bar2 = _bar[1];
-                _Intersection = getIntersection(_Node1.x, _Node1.y, _Node2.x, _Node2.y, _bar1.x, _bar1.y, _bar2.x, _bar2.y); // 计算交点
+                _Intersection = getIntersection(_Node1.nodeData.x, _Node1.nodeData.y, _Node2.nodeData.x, _Node2.nodeData.y, _bar1.x, _bar1.y, _bar2.x, _bar2.y); // 计算交点
                 if (_Intersection)
                     return _Intersection;
             }

@@ -60,8 +60,8 @@ package Entity.FX {
             image.scaleX = image.scaleY = 1;
             image.pivotX = image.pivotY = image.width * 0.5;
             image.color = _Color;
-            this.x = _Node.x;
-            this.y = _Node.y;
+            this.x = _Node.nodeData.x;
+            this.y = _Node.nodeData.y;
             this.type = _type;
             this.maxSize = _maxSize;
             this.rate = _rate;

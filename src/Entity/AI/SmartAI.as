@@ -3,6 +3,8 @@ package Entity.AI {
     import utils.Rng;
     import Entity.Node;
     import Entity.Utils;
+    import Entity.Node.NodeStaticLogic;
+    import Entity.Node.NodeType;
 
     public class SmartAI extends BasicAI {
         public function SmartAI(game:GameScene, rng:Rng) {
@@ -33,9 +35,9 @@ package Entity.AI {
             for each (_Node in nodeArray) {
                 _Node.getNodeLinks(team);
                 _Node.getTransitShips(team);
-                if (_Node.team == team) {
-                    _CenterX += _Node.x;
-                    _CenterY += _Node.y;
+                if (_Node.nodeData.team == team) {
+                    _CenterX += _Node.nodeData.x;
+                    _CenterY += _Node.nodeData.y;
                     _NodeCount += 1;
                 }
             }
@@ -44,20 +46,20 @@ package Entity.AI {
             // #region 防御
             targets.length = 0;
             for each (_Node in nodeArray) { // 计算目标天体
-                if (team == 6 && _Node.type == 5 && _Node.teamStrength(team) > 0) {
+                if (team == 6 && _Node.nodeData.type == NodeType.DILATOR && _Node.teamStrength(team) > 0) {
                     _Node.unloadShips();
                     return;
                 }
-                if (team == 6 || _Node.type == 3 || _Node.type == 5)
+                if (team == 6 || _Node.nodeData.type == NodeType.BARRIER || _Node.nodeData.type == NodeType.DILATOR)
                     continue; // ？排除障碍星核
-                if (_Node.team != team && _Node.predictedTeamStrength(team) == 0)
+                if (_Node.nodeData.team != team && _Node.predictedTeamStrength(team) == 0)
                     continue; // 条件1：为己方天体或有己方飞船（包括飞行中的）
                 if (_Node.predictedOppStrength(team) == 0)
                     continue; // 条件2：有敌方
                 if (_Node.predictedTeamStrength(team) > _Node.predictedOppStrength(team) * 2)
                     continue; // 条件3：预测己方强度低于敌方两倍（即可能打不过敌方
-                _dx = _Node.x - _CenterX;
-                _dy = _Node.y - _CenterY;
+                _dx = _Node.nodeData.x - _CenterX;
+                _dy = _Node.nodeData.y - _CenterY;
                 _Distence = Math.sqrt(_dx * _dx + _dy * _dy) + rng.nextNumber() * 32;
                 _Strength = _Node.predictedTeamStrength(team) - _Node.predictedOppStrength(team);
                 _Node.aiValue = _Distence + _Strength;
@@ -69,7 +71,7 @@ package Entity.AI {
                 for each (_Node in nodeArray) { // 计算出兵天体
                     if (_Node.aiTimers[team] > 0 || _Node.teamStrength(team) == 0)
                         continue; // 基本条件：该天体己方ai倒计时为0且该天体己方强度不为0
-                    if (_Node.team != team && _Node.predictedTeamStrength(team) > _Node.predictedOppStrength(team))
+                    if (_Node.nodeData.team != team && _Node.predictedTeamStrength(team) > _Node.predictedOppStrength(team))
                         continue; // 条件：是己方天体或预测己方强度低于敌方
                     if (_Node.predictedOppStrength(team) > 0 && _Node.predictedTeamStrength(team) > _Node.predictedOppStrength(team))
                         continue; // 条件：没有敌方或预测己方强度低于敌方
@@ -94,7 +96,7 @@ package Entity.AI {
                         // if (Globals.level == 34 && _targetNode.x == 912 && _targetNode.y == 544)
                         // trace("defending");
                         // traceDebug("defending       " + _senderNode.x + "." + _senderNode.y + "  to  " + _targetNode.x + "." + _targetNode.y + "  ships:  " + _Ships);
-                        _senderNode.sendAIShips(team, _targetNode, _Ships);
+                        NodeStaticLogic.sendAIShips(_senderNode, team, _targetNode, _Ships);
                         return;
                     }
                 }
@@ -103,12 +105,12 @@ package Entity.AI {
             // #region 进攻
             targets.length = 0;
             for each (_Node in nodeArray) { // 计算目标天体
-                if (_Node.team == team || _Node.type == 3 || _Node.type == 5)
+                if (_Node.nodeData.team == team || _Node.nodeData.type == NodeType.BARRIER || _Node.nodeData.type == NodeType.DILATOR)
                     continue; // 基本条件：不为己方天体和障碍星核
-                if (_Node.predictedOppStrength(team) == 0 && _Node.predictedTeamStrength(team) > _Node.size * 150)
+                if (_Node.predictedOppStrength(team) == 0 && _Node.predictedTeamStrength(team) > _Node.nodeData.size * 150)
                     continue; // 条件：排除己方强度足够且无敌方的天体
-                _dx = _Node.x - _CenterX;
-                _dy = _Node.y - _CenterY;
+                _dx = _Node.nodeData.x - _CenterX;
+                _dy = _Node.nodeData.y - _CenterY;
                 _Distence = Math.sqrt(_dx * _dx + _dy * _dy) + rng.nextNumber() * 32;
                 _Strength = _Node.predictedOppStrength(team) - _Node.predictedTeamStrength(team);
                 _Node.aiValue = _Distence + _Strength;
@@ -122,7 +124,7 @@ package Entity.AI {
                         continue; // 基本条件：该天体己方ai倒计时为0且该天体己方强度不为0
                     if (_Node.predictedOppStrength(team) == 0 && _Node.capturing)
                         continue; // 条件：天体不被己方占据
-                    if (_Node.team != team && _Node.predictedTeamStrength(team) > _Node.predictedOppStrength(team))
+                    if (_Node.nodeData.team != team && _Node.predictedTeamStrength(team) > _Node.predictedOppStrength(team))
                         continue; // 条件：是己方天体或预测己方强度低于敌方
                     if (_Node.predictedOppStrength(team) > 0 && _Node.predictedTeamStrength(team) > _Node.predictedOppStrength(team))
                         continue; // 条件：没有敌方或预测己方强度低于敌方
@@ -140,8 +142,8 @@ package Entity.AI {
                         _Ships = _targetNode.predictedOppStrength(team) * 2 - _targetNode.predictedTeamStrength(team) * 0.5;
                         if (_senderNode.predictedOppStrength(team) > _senderNode.predictedTeamStrength(team))
                             _Ships = _senderNode.teamStrength(team); // 预测敌方强度大于己方时，派出全部飞船
-                        if (_Ships < _targetNode.size * 200)
-                            _Ships = _targetNode.size * 200; // 飞船数不应低于目标的二倍标准兵力
+                        if (_Ships < _targetNode.nodeData.size * 200)
+                            _Ships = _targetNode.nodeData.size * 200; // 飞船数不应低于目标的二倍标准兵力
                         _towerAttack = Utils.getLengthInTowerRange(_senderNode, _targetNode, team) / 4.5; // 计算估损
                         _Ships += _towerAttack; // 为飞船数加上估损
                         if (_towerAttack > 0 && Globals.teamPops[team] < _towerAttack)
@@ -154,7 +156,7 @@ package Entity.AI {
                         // if (Globals.level == 34 && _targetNode.x == 912 && _targetNode.y == 544)
                         // trace("attacking");
                         // traceDebug("attacking       " + _senderNode.x + "." + _senderNode.y + "  to  " + _targetNode.x + "." + _targetNode.y + "  ships:  " + _Ships);
-                        _senderNode.sendAIShips(team, _targetNode, _Ships);
+                        NodeStaticLogic.sendAIShips(_senderNode, team, _targetNode, _Ships);
                         return;
                     }
                 }
@@ -163,14 +165,14 @@ package Entity.AI {
             // #region 聚兵
             senders.length = 0;
             for each (_Node in nodeArray) { // 计算出兵天体
-                if (_Node.team != team && _Node.predictedOppStrength(team) == 0 && _Node.teamStrength(team) > 0)
+                if (_Node.nodeData.team != team && _Node.predictedOppStrength(team) == 0 && _Node.teamStrength(team) > 0)
                     continue; // 条件：没在锁星
                 if (_Node.predictedOppStrength(team) > 0 && _Node.predictedTeamStrength(team) > _Node.predictedOppStrength(team))
                     continue; // 条件：无敌方或打不过敌方
                 _Node.aiStrength = -_Node.teamStrength(team) - _Node.oppStrength(team); // 计算己方和最强方的飞船总数
                 _Node.aiValue = -_Node.oppNodeLinks.length; // 按路径数计算价值
-                if (_Node.type == 1)
-                    _Node.aiValue--; // 炮塔权重提高
+                if (_Node.nodeData.type == NodeType.WARP)
+                    _Node.aiValue--; // 传送权重提高
                 senders.push(_Node);
             }
             senders.sortOn("aiStrength", 16); // 依飞船强度从小到大对出兵天体进行排序
@@ -178,12 +180,12 @@ package Entity.AI {
                 targets.length = 0;
                 for each (_Node in nodeArray) { // 计算目标天体
                     _Node.getOppLinks(team);
-                    if (_Node.type == 3 || _Node.type == 5)
+                    if (_Node.nodeData.type == NodeType.BARRIER || _Node.nodeData.type == NodeType.DILATOR)
                         continue; // 排除障碍星核
                     _Node.aiValue = -_Node.oppNodeLinks.length; // 按路径数计算价值
-                    if (_Node.type == 1)
-                        _Node.aiValue--; // 炮塔权重提高
-                    if (Globals.level == 31 && _Node.type == 6)
+                    if (_Node.nodeData.type == NodeType.WARP)
+                        _Node.aiValue--; // 传送权重提高
+                    if (Globals.level == 31 && _Node.nodeData.type == NodeType.STARBASE)
                         _Node.aiValue--; // 32关堡垒权重提高
                     targets.push(_Node);
                 }
@@ -208,7 +210,7 @@ package Entity.AI {
                         // trace("repositioning");
                         // if (_Ships != 0)
                         //     traceDebug("repositioning   " + _senderNode.x + "." + _senderNode.y + "  to  " + _targetNode.x + "." + _targetNode.y + "  ships:  " + _Ships);
-                        _senderNode.sendAIShips(team, _targetNode, _Ships);
+                        NodeStaticLogic.sendAIShips(_senderNode, team, _targetNode, _Ships);
                         return;
                     }
                 }

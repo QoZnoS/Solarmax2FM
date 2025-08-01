@@ -30,27 +30,21 @@ package Entity {
     import utils.Drawer;
     import Entity.Node.Attack.IAttackStrategy;
     import Entity.Node.Attack.AttackStrategyFactory;
+    import Entity.Node.NodeStaticLogic;
+    import Entity.Node.NodeData;
+    import Entity.Node.NodeType;
 
     public class Node extends GameEntity {
         // #region 类变量
         // 基本变量
-        public var x:Number; // 坐标x
-        public var y:Number; // 坐标y
-        public var team:int; // 势力
-        public var size:Number; // 大小
-        public var type:int; // 类型
-        public var name:String; // 类型名称
         public var tag:int; // 标记符，debug用
         public var startVal:int; // 初始人口
-        public var popVal:int; // 人口上限
         public var buildRate:Number; // 生产速度，生产时间的倒数
         public var orbitNode:Node; // 轨道中心天体
         public var orbitDist:Number; // 轨道半径
         public var orbitSpeed:Number; // 轨道运转速度
-        public var hpMult:Number; // 占领难度倍率
         public var attackStrategy:IAttackStrategy; // 攻击策略
         // 状态变量
-        public var hp:Number; // 占领度，中立为0，被任意势力完全占领为100
         public var conflict:Boolean; // 战斗状态，判断天体上是否有战斗
         public var capturing:Boolean; // 占据状态
         public var captureTeam:int; // 占领条势力
@@ -82,26 +76,25 @@ package Entity {
         public var triggerTimer:Number; // 用于特殊事件
         public var labelDist:Number; // 文本圈大小
         // 其他变量
-        public var lineDist:Number; // 选中圈大小
-        public var touchDist:Number; // 传统操作模式下的选中圈大小
         public var winTeam:int; // 获胜势力，游戏结束后在 GameScene.as 中统一
         public var barrierLinks:Array; // 障碍连接数组
         public var barrierCostom:Boolean; // 障碍是否为自定义连接
         public var linked:Boolean; // 是否被连接
 
+        public var nodeData:NodeData;
 
         // #endregion
         public function Node() {
             super();
-            var _Color:uint = uint(Globals.teamColors[0]);
+            var color:uint = uint(Globals.teamColors[0]);
             image = new Image(Root.assets.getTexture("planet01")); // 设定默认天体
             image.pivotX = image.pivotY = image.width * 0.5;
             image.scaleX = image.scaleY = 0.5;
-            image.color = _Color;
+            image.color = color;
             halo = new Image(Root.assets.getTexture("halo"));
             halo.pivotX = halo.pivotY = halo.width * 0.5;
             halo.scaleX = halo.scaleY = image.scaleY;
-            halo.color = _Color;
+            halo.color = color;
             halo.alpha = 0.75;
             glow = new Image(Root.assets.getTexture("planet_shape"));
             glow.pivotX = glow.pivotY = glow.width * 0.5;
@@ -110,14 +103,13 @@ package Entity {
             label.vAlign = label.hAlign = "center";
             label.pivotX = 30;
             label.pivotY = 24;
-            resetArray();
-        }
-
-        private function resetArray():void{
             nodeLinks = [];
             oppNodeLinks = [];
             barrierLinks = []; // 障碍链接数组
-            var _TextField:TextField = null; // 文本
+        }
+
+        private function resetArray():void{
+            var textField:TextField = null; // 文本
             ships = []; // 第一维储存的每个数组对应一个势力，第二维数组用于储存飞船的引用，一个值指代一个飞船，二维数组的长度表示该天体上该势力的飞船总数
             transitShips = [];
             aiTimers = [];
@@ -128,12 +120,12 @@ package Entity {
                 transitShips.push(0);
                 aiTimers.push(0);
                 warps.push(false);
-                _TextField = new TextField(60, 48, "00", "Downlink12", -1, Globals.teamColors[i]);
-                _TextField.vAlign = _TextField.hAlign = "center";
-                _TextField.pivotX = 30;
-                _TextField.pivotY = 24;
-                _TextField.visible = false;
-                labels.push(_TextField);
+                textField = new TextField(60, 48, "00", "Downlink12", -1, Globals.teamColors[i]);
+                textField.vAlign = textField.hAlign = "center";
+                textField.pivotX = 30;
+                textField.pivotY = 24;
+                textField.visible = false;
+                labels.push(textField);
             }
 
         }
@@ -141,18 +133,19 @@ package Entity {
         // #region 生成天体 移除天体
         public function initNode(_GameScene:GameScene, _rng:Rng, _x:Number, _y:Number, _type:int, _size:Number, _team:int, _OrbitNode:Node = null, _Clockwise:Boolean = true, _OrbitSpeed:Number = 0.1):void {
             super.init(_GameScene);
-            this.size = _size;
-            this.type = _type;
-            this.team = _team;
-            this.x = _x;
-            this.y = _y;
+            nodeData = new NodeData(true);
+            nodeData.size = _size;
+            nodeData.type = NodeType.switchType(_type);
+            nodeData.team = _team;
+            nodeData.x = _x;
+            nodeData.y = _y;
             this.rng = _rng;
             resetArray()
             captureTeam = _team; // 占据势力
-            hp = 0; // 占领度
+            nodeData.hp = 0; // 占领度
             aiValue = 0;
             if (_team > 0)
-                hp = 100; // 设定非中立天体默认占领度为100
+                nodeData.hp = 100; // 设定非中立天体默认占领度为100
             buildTimer = 1; // 生产计时器
             triggerTimer = 0;
             winPulseTimer = 0;
@@ -160,21 +153,21 @@ package Entity {
             updateLabelSizes();
             image.visible = halo.visible = glow.visible = true;
             glow.alpha = 0;
-            image.x = halo.x = glow.x = label.x = this.x;
-            image.y = halo.y = glow.y = label.y = this.y;
+            image.x = halo.x = glow.x = label.x = nodeData.x;
+            image.y = halo.y = glow.y = label.y = nodeData.y;
             image.color = halo.color = label.color = Globals.teamColors[_team];
             label.y += 50 * _size;
             label.x += 30 * _size;
             barrierCostom = false;
             linked = false;
             glowing = false;
-            changeType(_type, _size);
+            NodeStaticLogic.changeType(this, NodeType.switchType(_type), _size);
             var _dx:Number = NaN;
             var _dy:Number = NaN;
             if (_OrbitNode) {
                 this.orbitNode = _OrbitNode;
-                _dx = this.x - _OrbitNode.x;
-                _dy = this.y - _OrbitNode.y;
+                _dx = nodeData.x - _OrbitNode.nodeData.x;
+                _dy = nodeData.y - _OrbitNode.nodeData.y;
                 orbitDist = Math.sqrt(_dx * _dx + _dy * _dy);
                 orbitAngle = Math.atan2(_dy, _dx);
                 orbitSpeed = _OrbitSpeed;
@@ -196,12 +189,13 @@ package Entity {
         public function initBoss(_GameScene:GameScene, _rng:Rng, _x:Number, _y:Number):void {
             var i:int = 0;
             super.init(_GameScene);
-            this.size = 0.4;
-            this.type = 5;
-            this.team = 6;
+            nodeData = new NodeData(true);
+            nodeData.size = 0.4;
+            nodeData.type = NodeType.DILATOR;
+            nodeData.team = 6;
             this.rng = _rng;
             captureTeam = 6;
-            hp = 100;
+            nodeData.hp = 100;
             aiValue = 0;
             buildTimer = 1;
             startVal = 0;
@@ -209,21 +203,21 @@ package Entity {
             winPulseTimer = 0;
             winTeam = -1;
             updateLabelSizes();
-            this.x = _x;
-            this.y = _y;
+            nodeData.x = _x;
+            nodeData.y = _y;
             image.visible = halo.visible = glow.visible = true;
-            image.x = halo.x = label.x = glow.x = this.x;
-            image.y = halo.y = label.y = glow.y = this.y;
+            image.x = halo.x = label.x = glow.x = nodeData.x;
+            image.y = halo.y = label.y = glow.y = nodeData.y;
             image.scaleX = image.scaleY = halo.scaleX = halo.scaleY = glow.scaleX = glow.scaleY = 1;
-            image.color = halo.color = glow.color = label.color = Globals.teamColors[team];
-            label.y += 50 * size;
-            label.x += 30 * size;
-            lineDist = 150 * size;
-            labelDist = 180 * size;
+            image.color = halo.color = glow.color = label.color = Globals.teamColors[nodeData.team];
+            label.y += 50 * nodeData.size;
+            label.x += 30 * nodeData.size;
+            nodeData.lineDist = 150 * nodeData.size;
+            labelDist = 180 * nodeData.size;
             orbitNode = null;
             linked = false;
-            changeType(5, 0.4);
-            popVal = 0;
+            NodeStaticLogic.changeType(this, NodeType.DILATOR, 0.4);
+            nodeData.popVal = 0;
             buildRate = 0;
             startVal = 300;
             halo.readjustSize();
@@ -329,7 +323,7 @@ package Entity {
                 {
                     glow.alpha = 1;
                     glowing = false;
-                    image.color = halo.color = Globals.teamColors[team];
+                    image.color = halo.color = Globals.teamColors[nodeData.team];
                     entityL.addGlow(halo);
                 }
             } else if (glow.alpha > 0) // 再归零
@@ -357,15 +351,15 @@ package Entity {
             orbitAngle += orbitSpeed * _dt; // 将轨道角度加上轨道速度*游戏速度
             if (orbitAngle > Math.PI * 2)
                 orbitAngle -= Math.PI * 2; // 重置角度
-            this.x = orbitNode.x + Math.cos(orbitAngle) * orbitDist; // 计算更新后的x坐标
-            this.y = orbitNode.y + Math.sin(orbitAngle) * orbitDist; // 计算更新后的y坐标
+            nodeData.x = orbitNode.nodeData.x + Math.cos(orbitAngle) * orbitDist; // 计算更新后的x坐标
+            nodeData.y = orbitNode.nodeData.y + Math.sin(orbitAngle) * orbitDist; // 计算更新后的y坐标
         }
 
         public function updateImagePositions():void {
-            image.x = halo.x = glow.x = x;
-            image.y = halo.y = glow.y = y;
-            label.x = x + 30 * size;
-            label.y = y + 50 * size;
+            image.x = halo.x = glow.x = nodeData.x;
+            image.y = halo.y = glow.y = nodeData.y;
+            label.x = nodeData.x + 30 * nodeData.size;
+            label.y = nodeData.y + 50 * nodeData.size;
         }
 
         public function updateTimer(_dt:Number):void {
@@ -379,12 +373,12 @@ package Entity {
             if (winPulseTimer > 0) {
                 winPulseTimer = Math.max(0, winPulseTimer - _dt);
                 if (winPulseTimer == 0)
-                    changeTeam(winTeam);
+                    NodeStaticLogic.changeTeam(this, winTeam);
             }
         }
 
         public function updateAttack(_dt:Number):void {
-            if (team == 0 && Globals.level != 31)
+            if (nodeData.team == 0 && Globals.level != 31)
                 return; // 排除32关以外的中立和无范围天体
             if (attackStrategy.attackType != "basic")
                 attackStrategy.executeAttack(this, _dt);
@@ -459,11 +453,11 @@ package Entity {
                 for (i = 0; i < _ShipTeam.length; i++) {
                     // 绘制战斗弧
                     _ArcRatio = ships[_ShipTeam[i]].length / _ShipStat;
-                    Drawer.drawCircle(game.scene.ui.behaviorBatch, x, y, Globals.teamColors[_ShipTeam[i]], lineDist, lineDist - 2, false, 1, _ArcRatio - 0.006366197723675814, _ArcAngle + 0.01);
+                    Drawer.drawCircle(game.scene.ui.behaviorBatch, nodeData.x, nodeData.y, Globals.teamColors[_ShipTeam[i]], nodeData.lineDist, nodeData.lineDist - 2, false, 1, _ArcRatio - 0.006366197723675814, _ArcAngle + 0.01);
                     _ArcAngle += Math.PI * 2 * _ArcRatio;
                     // 修改兵力文本
-                    labels[i].x = x + Math.cos(-Math.PI / 2 + i * _LableAngle) * labelDist;
-                    labels[i].y = y + Math.sin(-Math.PI / 2 + i * _LableAngle) * labelDist;
+                    labels[i].x = nodeData.x + Math.cos(-Math.PI / 2 + i * _LableAngle) * labelDist;
+                    labels[i].y = nodeData.y + Math.sin(-Math.PI / 2 + i * _LableAngle) * labelDist;
                     labels[i].text = ships[_ShipTeam[i]].length.toString();
                     labels[i].color = Globals.teamColors[_ShipTeam[i]];
                     if (labels[i].color > 0)
@@ -484,36 +478,36 @@ package Entity {
             for (var i:int = 0; i < ships.length; i++) // 判定占据状态，计算占据势力
             {
                 if (ships[i].length > 0) {
-                    if (i != team)
+                    if (i != nodeData.team)
                         _capturing = true;
                     _captureTeam = i;
-                    if (team == 0 && hp == 0)
+                    if (nodeData.team == 0 && nodeData.hp == 0)
                         captureTeam = _captureTeam;
                     break;
                 }
             }
-            captureRate = ships[_captureTeam].length / (size * 100) * 10;
-            captureRate /= hpMult * Globals.teamConstructionStrengths[team]; // 计算占领速度加权
-            if (Globals.level > 31 && Globals.level < 35 && type == 5)
+            captureRate = ships[_captureTeam].length / (nodeData.size * 100) * 10;
+            captureRate /= nodeData.hpMult * Globals.teamConstructionStrengths[nodeData.team]; // 计算占领速度加权
+            if (Globals.level > 31 && Globals.level < 35 && nodeData.type == NodeType.DILATOR)
                 captureRate = 0; // 禁止 33 34 35 星核被占领
             captureRate = Math.min(captureRate, 100); // 防止占领速度超过100
-            if (this.team == 0) // 特殊化中立占领度
+            if (nodeData.team == 0) // 特殊化中立占领度
             {
                 if (captureTeam == _captureTeam)
-                    hp = Math.min(hp + Globals.teamColonizingSpeeds[_captureTeam] * captureRate * _dt, 100); // 占领条同占据势力则增加占领度
+                    nodeData.hp = Math.min(nodeData.hp + Globals.teamColonizingSpeeds[_captureTeam] * captureRate * _dt, 100); // 占领条同占据势力则增加占领度
                 else
-                    hp = Math.max(0, hp - Globals.teamDecolonizingSpeeds[_captureTeam] * captureRate * _dt); // 否则减少占领度
+                    nodeData.hp = Math.max(0, nodeData.hp - Globals.teamDecolonizingSpeeds[_captureTeam] * captureRate * _dt); // 否则减少占领度
             } else {
                 if (captureTeam == _captureTeam)
-                    hp = Math.min(hp + Globals.teamRepairingSpeeds[_captureTeam] * captureRate * _dt, 100); // 占领条同占据势力则增加占领度
+                    nodeData.hp = Math.min(nodeData.hp + Globals.teamRepairingSpeeds[_captureTeam] * captureRate * _dt, 100); // 占领条同占据势力则增加占领度
                 else
-                    hp = Math.max(0, hp - Globals.teamDestroyingSpeeds[_captureTeam] * captureRate * _dt); // 否则减少占领度
+                    nodeData.hp = Math.max(0, nodeData.hp - Globals.teamDestroyingSpeeds[_captureTeam] * captureRate * _dt); // 否则减少占领度
             }
-            if (_capturing || hp != 100 && captureTeam == _captureTeam && team != 0) // 占据状态下显示占领条
+            if (_capturing || nodeData.hp != 100 && captureTeam == _captureTeam && nodeData.team != 0) // 占据状态下显示占领条
             {
-                var _ArcAngle:Number = -Math.PI / 2 - Math.PI * (hp / 100);
-                Drawer.drawCircle(game.scene.ui.behaviorBatch,x, y, Globals.teamColors[captureTeam], lineDist, lineDist - 2, false, 0.1);
-                Drawer.drawCircle(game.scene.ui.behaviorBatch,x, y, Globals.teamColors[captureTeam], lineDist, lineDist - 2, false, 0.7, hp / 100, _ArcAngle);
+                var _ArcAngle:Number = -Math.PI / 2 - Math.PI * (nodeData.hp / 100);
+                Drawer.drawCircle(game.scene.ui.behaviorBatch,nodeData.x, nodeData.y, Globals.teamColors[captureTeam], nodeData.lineDist, nodeData.lineDist - 2, false, 0.1);
+                Drawer.drawCircle(game.scene.ui.behaviorBatch,nodeData.x, nodeData.y, Globals.teamColors[captureTeam], nodeData.lineDist, nodeData.lineDist - 2, false, 0.7, nodeData.hp / 100, _ArcAngle);
             }
             if (_captureTeam != 0) // 非中立飞船占据显示兵力
             {
@@ -521,164 +515,23 @@ package Entity {
                 label.color = Globals.teamColors[_captureTeam];
                 label.visible = (label.color > 0);
             }
-            if (Globals.level == 31 && type == 5)
+            if (Globals.level == 31 && nodeData.type == NodeType.DILATOR)
                 return;
-            if (team == 0 && hp == 100)
-                changeTeam(captureTeam); // 中立天体占领度满时变为占领度势力
-            if (team != 0 && hp == 0 && winTeam == -1)
-                changeTeam(0); // 非中立天体占领度空时变为中立
+            if (nodeData.team == 0 && nodeData.hp == 100)
+                NodeStaticLogic.changeTeam(this, captureTeam); // 中立天体占领度满时变为占领度势力
+            if (nodeData.team != 0 && nodeData.hp == 0 && winTeam == -1)
+                NodeStaticLogic.changeTeam(this, 0); // 非中立天体占领度空时变为中立
             capturing = _capturing;
         }
 
         public function updateBuild(_dt:Number):void {
-            if (team == 0 || Globals.teamPops[team] >= Globals.teamCaps[team] || capturing || conflict && ships[team].length == 0)
+            if (nodeData.team == 0 || Globals.teamPops[nodeData.team] >= Globals.teamCaps[nodeData.team] || capturing || conflict && ships[nodeData.team].length == 0)
                 return; // 不产兵条件：中立/兵力到上限/被占据/战争状态没自己兵
-            buildTimer -= buildRate * Globals.teamNodeBuilds[team] * _dt; // 计算生产计时器
+            buildTimer -= buildRate * Globals.teamNodeBuilds[nodeData.team] * _dt; // 计算生产计时器
             while (buildTimer <= 0) // 计时结束时
             {
                 buildTimer += 1; // 重置倒计时
-                EntityHandler.addShip(this, team); // 生产飞船
-            }
-        }
-
-        // #endregion
-        // #region 功能类函数
-        public function changeTeam(_team:int):void {
-            if (Globals.level == 35 && type == 5)
-                return; // 32 36关星核不做处理，自己变自己不做处理
-            if (_team == 0)
-                this.hp = 0;
-            var _Nodeteam:int = this.team;
-            this.team = _team;
-            this.captureTeam = _team;
-            glowing = true; // 激活光效
-            glow.color = Globals.teamColors[_team]; // 设定光效颜色
-            entityL.addGlow(glow);
-            FXHandler.addPulse(this, Globals.teamColors[_team], 0);
-            GS.playCapture(this.x); // 播放占领音效
-            if (_Nodeteam != 1 && _team == 1 && popVal > 0) {
-                game.popLabels[1].color = 65280;
-                game.popLabels[1].alpha = 1;
-                game.popLabels[2].color = 3407667;
-                game.popLabels[2].alpha = 1;
-                game.popLabels[2].text = "+ " + popVal;
-            } else if (_Nodeteam == 1 && _team != 1 && popVal > 0) {
-                game.popLabels[1].color = 16711680;
-                game.popLabels[1].alpha = 1;
-                game.popLabels[2].color = 16724787;
-                game.popLabels[2].alpha = 1;
-                game.popLabels[2].text = "- " + popVal;
-            }
-        }
-
-        public function changeShipsTeam(_team:int):void {
-            var _Ship:Ship = null;
-            for (var i:int = 0; i < ships.length; i++) {
-                if (i == _team)
-                    continue;
-                while (ships[i].length > 0) {
-                    _Ship = ships[i].pop();
-                    _Ship.changeTeam(_team);
-                }
-            }
-        }
-
-        public function changeType(_type:int, _size:Number = -1):void {
-            var get:String = LevelData.nodeData.node.(@id == _type).defaultSize;
-            this.size = (_size == -1) ? Number(get) : _size;
-            // 处理贴图
-            image.rotation = halo.rotation = glow.rotation = 0;
-            get = LevelData.nodeData.node.(@id == _type).@name;
-            this.name = get;
-            if (!get)
-                _type = -1;
-            this.type = _type;
-            if (_type == 0) {
-                var _ImageID:String = rng.nextRange(1,16).toString();
-                if (_ImageID.length == 1)
-                    _ImageID = "0" + _ImageID; // 随机取一个星球贴图的编号
-                image.texture = Root.assets.getTexture("planet" + _ImageID); // 更换星球贴图
-                halo.texture = Root.assets.getTexture("halo"); // 更换光圈
-                glow.texture = Root.assets.getTexture("planet_shape"); // 更换星球光效
-                image.scaleX = image.scaleY = glow.scaleX = glow.scaleY = _size;
-            } else {
-                image.texture = Root.assets.getTexture(get); // 更换星球贴图
-                halo.texture = Root.assets.getTexture(get + "_glow"); // 更换光圈
-                glow.texture = Root.assets.getTexture(get + "_shape"); // 更换星球光效
-            }
-            labelDist = 180 * size; // 计算文本圈大小
-            lineDist = 150 * size; // 计算选中圈大小
-            touchDist = size < 0.5 ? lineDist + (1 - size * 2) * 50 : lineDist; // 计算传统操作模式下的天体选中圈
-            halo.readjustSize();
-            halo.scaleY = halo.scaleX = 1;
-            halo.pivotY = halo.pivotX = halo.width * 0.5;
-            get = LevelData.nodeData.node.(@id == _type).rotation;
-            image.rotation = halo.rotation = glow.rotation = (get.indexOf("S*") != -1) ? Number(get.slice(2)) * size : Number(get);
-            get = LevelData.nodeData.node.(@id == _type).scale;
-            _type == 0 ? halo.scaleY = halo.scaleX = size * 0.5 : image.scaleX = image.scaleY = halo.scaleX = halo.scaleY = glow.scaleX = glow.scaleY = Number(get);
-            // 读取参数
-            get = LevelData.nodeData.node.(@id == _type).startVal;
-            startVal = (get.indexOf("S*") != -1) ? Number(get.slice(2)) * size : Number(get);
-            get = LevelData.nodeData.node.(@id == _type).popVal;
-            popVal = (get.indexOf("S*") != -1) ? Number(get.slice(2)) * size : Number(get);
-            get = LevelData.nodeData.node.(@id == _type).buildRate;
-            buildRate = (get.indexOf("S*") != -1) ? Number(get.slice(2)) * size : Number(get);
-            get = LevelData.nodeData.node.(@id == _type).hpMult;
-            hpMult = (get.indexOf("S*") != -1) ? Number(get.slice(2)) * size : Number(get);
-            get = LevelData.nodeData.node.(@id == _type).attackRate;
-            var _attackRate:Number = (get.indexOf("S*") != -1) ? Number(get.slice(2)) * size : Number(get);
-            get = LevelData.nodeData.node.(@id == _type).attackRange;
-            var _attackRange:Number = (get.indexOf("S*") != -1) ? Number(get.slice(2)) * size : Number(get);
-            get = LevelData.nodeData.node.(@id == _type).attackLast;
-            var _attackLast:Number = (get.indexOf("S*") != -1) ? Number(get.slice(2)) * size : Number(get);
-            get = LevelData.nodeData.node.(@id == _type).attackType;
-            attackStrategy = AttackStrategyFactory.create(get, _attackRate, _attackRange, _attackLast);
-            if (_type == 3)
-                getBarrierLinks(); // 计算障碍链接参数
-        }
-
-        public function sendShips(_team:int, _Node:Node):void {
-            var l:int = Math.ceil(ships[_team].length * game.scene.ui.btnL.fleetSlider.perc); // 计算调动的飞船数，Math.ceil()为至少调动1飞船判定
-            if (_Node == this || l == 0)
-                return;
-            if (!game.rep)
-                Globals.replay[Globals.replay.length-1].push([this.tag, _team, _Node.tag, l])
-        }
-
-        public function sendAIShips(_team:int, _Node:Node, _ships:int):void {
-            var _ShipNumber:int = Math.min(_ships, ships[_team].length);
-            if (_Node == this || _ShipNumber == 0)
-                return;
-            if (!game.rep)
-                Globals.replay[Globals.replay.length-1].push([this.tag, _team, _Node.tag, _ShipNumber])
-            if (aiTimers[_team] < 1)
-                aiTimers[_team] = 1;
-        }
-
-        public function moveShips(_team:int, _Node:Node, _ships:int):void{
-            var _Ship:Ship = null;
-            var _warp:Boolean = false; // 是否为传送门
-            var _ShipNumber:int = Math.min(_ships, ships[_team].length);
-            for (var i:int = 0; i < _ShipNumber; i++) // 遍历每个需调动的飞船
-            {
-                _Ship = ships[_team][i];
-                if (_Ship.state != 0)
-                    _ShipNumber = Math.min(_ShipNumber + 1, ships[_team].length); // 这里是为了允许快速操作，跳过将要起飞的飞船并将循环次数增加1
-                else
-                    _warp = moveShip(_Ship, _team, _Node);
-            }
-            if (_warp)
-                showWarpPulse(_team); // 播放传送门特效
-        }
-
-        // 控制飞船移动并返回是否为传送门
-        private function moveShip(_Ship:Ship, _team:int, _Node:Node):Boolean {
-            if (type == 1 && _team == this.team) {
-                _Ship.warpTo(_Node);
-                return true;
-            } else {
-                _Ship.moveTo(_Node);
-                return false;
+                EntityHandler.addShip(this, nodeData.team); // 生产飞船
             }
         }
 
@@ -692,25 +545,25 @@ package Entity {
             var _dy:Number = NaN;
             var _Distance:Number = NaN;
             var _Ship:Number = NaN;
-            var _NodeArray:Array = game.nodes.active;
+            var _NodeArray:Vector.<Node> = Vector.<Node>(game.nodes.active);
             var _targetNode:Array = [];
             var _ShipArray:Array = [];
             for each (_Node in game.nodes.active) // 按距离计算每个目标天体的价值
             {
-                if (_Node != this && _Node.type != 3) {
-                    _dx = _Node.x - this.x;
-                    _dy = _Node.y - this.y;
+                if (_Node != this && _Node.nodeData.type != NodeType.BARRIER) {
+                    _dx = _Node.nodeData.x - this.nodeData.x;
+                    _dy = _Node.nodeData.y - this.nodeData.y;
                     _Distance = Math.sqrt(_dx * _dx + _dy * _dy);
                     _Node.aiValue = _Distance;
                     _targetNode.push(_Node);
                 }
             }
             _targetNode.sortOn("aiValue", 16); // 按价值从小到大对目标天体排序
-            var _ShipCount:int = int(ships[team].length);
+            var _ShipCount:int = int(ships[nodeData.team].length);
             for each (_Node in _targetNode) {
-                _Ship = _Node.predictedOppStrength(team) * 2 - _Node.predictedTeamStrength(team) * 0.5; // 飞船数：非己方预测强度二倍减去己方预测强度一半
-                if (_Ship < _Node.size * 200)
-                    _Ship = _Node.size * 200; // 不足200倍size时补齐到200倍size
+                _Ship = _Node.predictedOppStrength(nodeData.team) * 2 - _Node.predictedTeamStrength(nodeData.team) * 0.5; // 飞船数：非己方预测强度二倍减去己方预测强度一半
+                if (_Ship < _Node.nodeData.size * 200)
+                    _Ship = _Node.nodeData.size * 200; // 不足200倍size时补齐到200倍size
                 if (_Ship < _ShipCount) // 未达到总飞船数时，从总飞船数中抽去这部分飞船
                 {
                     _ShipCount -= _Ship;
@@ -727,7 +580,7 @@ package Entity {
                     break; // 总飞船数耗尽时跳出循环
             }
             for (var i:int = 0; i < _ShipArray.length; i++) {
-                sendAIShips(team, _targetNode[i], _ShipArray[i]);
+                NodeStaticLogic.sendAIShips(this, nodeData.team, _targetNode[i], _ShipArray[i]);
             }
         }
 
@@ -763,7 +616,7 @@ package Entity {
                 if (i == _team)
                     continue;
                 _Strength = ships[i].length + transitShips[i];
-                if (this.buildRate > 0 && this.team == i)
+                if (this.buildRate > 0 && nodeData.team == i)
                     _Strength *= 1.25;
                 if (_Strength > _preStrength)
                     _preStrength = _Strength;
@@ -779,7 +632,7 @@ package Entity {
         // 预测该势力可能的强度
         public function predictedTeamStrength(_team:int):int {
             var _Strength:Number = ships[_team].length + transitShips[_team];
-            if (this.buildRate > 0 && _team == this.team)
+            if (this.buildRate > 0 && _team == nodeData.team)
                 _Strength *= 1.25;
             return _Strength;
         }
@@ -790,7 +643,7 @@ package Entity {
             for each (var _Node:Node in nodeLinks) {
                 if (_Node == this)
                     continue;
-                if (_Node.team == 0 || _Node.team != _team || _Node.predictedOppStrength(_team) > 0)
+                if (_Node.nodeData.team == 0 || _Node.nodeData.team != _team || _Node.predictedOppStrength(_team) > 0)
                     oppNodeLinks.push(_Node);
             }
         }
@@ -877,9 +730,9 @@ package Entity {
         public function getNodeLinks(_team:int):void {
             nodeLinks.length = 0;
             for each (var _Node:Node in game.nodes.active) {
-                if (_Node == this || _Node.type == 3 || (_Node.type == 5 && Globals.level != 35))
+                if (_Node == this || _Node.nodeData.type == NodeType.BARRIER || (_Node.nodeData.type == NodeType.DILATOR && Globals.level != 35))
                     continue;
-                if (nodesBlocked(this, _Node) == null || this.type == 1 && this.team == _team)
+                if (nodesBlocked(this, _Node) == null || nodeData.type == NodeType.WARP && nodeData.team == _team)
                     nodeLinks.push(_Node);
             }
         }
@@ -895,7 +748,7 @@ package Entity {
             for (var i:int = 0; i < l; i++) {
                 _bar1 = game.barrierLines[i][0];
                 _bar2 = game.barrierLines[i][1];
-                _Intersection = Utils.getIntersection(_Node1.x, _Node1.y, _Node2.x, _Node2.y, _bar1.x, _bar1.y, _bar2.x, _bar2.y); // 计算交点
+                _Intersection = Utils.getIntersection(_Node1.nodeData.x, _Node1.nodeData.y, _Node2.nodeData.x, _Node2.nodeData.y, _bar1.x, _bar1.y, _bar2.x, _bar2.y); // 计算交点
                 if (_Intersection)
                     return _Intersection;
             }
@@ -907,12 +760,12 @@ package Entity {
             var _dx:Number = NaN;
             var _dy:Number = NaN;
             for each (var _Node:Node in game.nodes.active) {
-                if (_Node == this || _Node.type != 3)
+                if (_Node == this || _Node.nodeData.type != NodeType.BARRIER)
                     continue;
-                if (_Node.x != this.x && _Node.y != this.y)
+                if (_Node.nodeData.x != nodeData.x && _Node.nodeData.y != nodeData.y)
                     continue; // 横纵坐标至少有一个相等
-                _dx = _Node.x - this.x;
-                _dy = _Node.y - this.y;
+                _dx = _Node.nodeData.x - nodeData.x;
+                _dy = _Node.nodeData.y - nodeData.y;
                 if (Math.sqrt(_dx * _dx + _dy * _dy) < 180)
                     barrierLinks.push(_Node);
             }
@@ -1024,13 +877,13 @@ package Entity {
                 _maxSize *= 0.8;
             }
             FXHandler.addDarkPulse(this, Globals.teamColors[_team], 2, 2, 2, 0);
-            GS.playWarpCharge(this.x);
+            GS.playWarpCharge(nodeData.x);
         }
 
         public function showWarpArrive(_team:int):void {
             var _rate:Number = 2;
             var _angle:Number = 1.5707963267948966;
-            var _maxSize:Number = this.size * 2;
+            var _maxSize:Number = nodeData.size * 2;
             FXHandler.addDarkPulse(this, Globals.teamColors[_team], 0, _maxSize, _rate, _angle, 0);
             _angle += 2.0943951023931953;
             FXHandler.addDarkPulse(this, Globals.teamColors[_team], 0, _maxSize, _rate, _angle, 0);
@@ -1039,12 +892,12 @@ package Entity {
             _angle += 2.0943951023931953;
             _rate *= 1.1;
             _maxSize *= 1.2;
-            FXHandler.addDarkPulse(this, Globals.teamColors[_team], 3, 18 * this.size, 28 * this.size, 0);
+            FXHandler.addDarkPulse(this, Globals.teamColors[_team], 3, 18 * nodeData.size, 28 * nodeData.size, 0);
         }
 
         public function fireBeam(_Ship:Ship):void {
             FXHandler.addBeam(this, _Ship); // 播放攻击特效
-            GS.playLaser(this.x); // 播放攻击音效
+            GS.playLaser(nodeData.x); // 播放攻击音效
         }
         // #endregion
     }

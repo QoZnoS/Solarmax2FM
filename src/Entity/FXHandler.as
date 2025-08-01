@@ -35,7 +35,7 @@ package Entity
             var _BeamFX:BeamFX = game.beams.getReserve() as BeamFX;
             if (!_BeamFX)
                 _BeamFX = new BeamFX();
-            _BeamFX.initBeam(game, _Node.x, _Node.y, _Ship.x, _Ship.y, Globals.teamColors[_Node.team], _Node);
+            _BeamFX.initBeam(game, _Node.nodeData.x, _Node.nodeData.y, _Ship.x, _Ship.y, Globals.teamColors[_Node.nodeData.team], _Node);
             game.beams.addEntity(_BeamFX);
         }
 

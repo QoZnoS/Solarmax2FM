@@ -2,10 +2,11 @@ package Entity.AI {
     import Game.GameScene;
     import utils.Rng;
     import Entity.GameEntity;
+    import Entity.Node;
 
     public class BasicAI extends GameEntity implements IEnemyAI {
         private var _team:int;
-        private var _nodes:Array;
+        private var _nodes:Vector.<Node>;
         private var _rng:Rng;
 
         public var targets:Array;
@@ -16,7 +17,7 @@ package Entity.AI {
         }
 
         public function initAI(game:GameScene, rng:Rng):void {
-            this._nodes = game.nodes.active;
+            this._nodes = Vector.<Node>(game.nodes.active);
             this._rng = rng;
             targets = [];
             senders = [];
@@ -54,7 +55,7 @@ package Entity.AI {
             this._team = team;
         }
 
-        public function get nodeArray():Array {
+        public function get nodeArray():Vector.<Node> {
             return _nodes;
         }
 

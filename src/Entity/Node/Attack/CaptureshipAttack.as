@@ -14,7 +14,7 @@ package Entity.Node.Attack {
         }
 
         override public function executeAttack(node:Node, dt:Number):void {
-            capturing = (Globals.teamPops[node.team] < Globals.teamCaps[node.team])
+            capturing = (Globals.teamPops[node.nodeData.team] < Globals.teamCaps[node.nodeData.team])
             if (!updateTimer(dt))
                 return;
             var ships:Array = Utils.findShipsInRange(node);
@@ -24,9 +24,9 @@ package Entity.Node.Attack {
                     EntityHandler.destroyShip(ship)
                 } else {
                     ship.hp = 100; // 回满血量
-                    ship.team = node.team;
+                    ship.team = node.nodeData.team;
                     ship.moveTo(node, true);
-                    ship.image.color = Globals.teamColors[node.team];
+                    ship.image.color = Globals.teamColors[node.nodeData.team];
                     ship.trail.color = node.image.color;
                     ship.pulse.color = node.image.color;
                 }
