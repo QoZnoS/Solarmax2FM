@@ -4,12 +4,99 @@ package Entity {
     import starling.errors.AbstractClassError;
     import flash.geom.Point;
     import Entity.Node.NodeType;
+    import Entity.FX.WarpFX;
+    import Entity.FX.BeamFX;
+    import Entity.FX.NodePulse;
+    import Entity.FX.FlashFX;
+    import Entity.FX.BarrierFX;
+    import Entity.FX.DarkPulse;
+    import Entity.FX.SelectFade;
 
-    public class Utils {
+    public class EntityContainer {
         public static var game:GameScene;
+        public static var INDEX_SHIPS:int = 0;
+        public static var INDEX_NODES:int = 1;
+        public static var INDEX_AIS:int = 2;
+        public static var INDEX_WARPS:int = 3;
+        public static var INDEX_BEAMS:int = 4;
+        public static var INDEX_PULSES:int = 5;
+        public static var INDEX_FLASHES:int = 6;
+        public static var INDEX_BARRIERS:int = 7;
+        public static var INDEX_EXPLOSIONS:int = 8;
+        public static var INDEX_DARKPLUSES:int = 9;
+        public static var INDEX_FADES:int = 10;
 
-        public function Utils() {
+        private static var _entityPools:Vector.<EntityPool>;
+        private static const _ENTITY_POOL_COUNT:int = 11;
+        private static var _ready:Boolean = false;
+
+        public function EntityContainer() {
             throw new AbstractClassError();
+        }
+
+        public static function init():void{
+            _entityPools = new Vector.<EntityPool>(11, true);
+            for(var i:int = 0; i < _ENTITY_POOL_COUNT; i++)
+                _entityPools[i] = new EntityPool();
+            _ready = true;
+        }
+
+        public static function get entityPool():Vector.<EntityPool>{
+            if (!_ready)
+                init();
+            return _entityPools;
+        }
+
+        public static function get ships():Vector.<Ship>{
+            return Vector.<Ship>(_entityPools[INDEX_SHIPS].active);
+        }
+
+        public static function get nodes():Vector.<Node>{
+            return Vector.<Node>(_entityPools[INDEX_NODES].active);
+        }
+
+        public static function get ais():Vector.<EnemyAI>{
+            return Vector.<EnemyAI>(_entityPools[INDEX_AIS].active);
+        }
+
+        public static function get warps():Vector.<WarpFX>{
+            return Vector.<WarpFX>(_entityPools[INDEX_WARPS].active);
+        }
+
+        public static function get beams():Vector.<BeamFX>{
+            return Vector.<BeamFX>(_entityPools[INDEX_BEAMS].active);
+        }
+
+        public static function get pulses():Vector.<NodePulse>{
+            return Vector.<NodePulse>(_entityPools[INDEX_PULSES].active);
+        }
+
+        public static function get flashes():Vector.<FlashFX>{
+            return Vector.<FlashFX>(_entityPools[INDEX_FLASHES].active);
+        }
+
+        public static function get barriers():Vector.<BarrierFX>{
+            return Vector.<BarrierFX>(_entityPools[INDEX_BARRIERS].active);
+        }
+
+        public static function get darkPulses():Vector.<DarkPulse>{
+            return Vector.<DarkPulse>(_entityPools[INDEX_DARKPLUSES].active);
+        }
+
+        public static function get fades():Vector.<SelectFade>{
+            return Vector.<SelectFade>(_entityPools[INDEX_FADES].active);
+        }
+
+        public static function addEntity(index:int, entity:GameEntity):void{
+            if (!_ready)
+                init();
+            _entityPools[index].addEntity(entity);
+        }
+
+        public static function getReserve(index:int):GameEntity{
+            if (!_ready)
+                init();
+            return _entityPools[index].getReserve();
         }
 
         // #region 天体
@@ -23,7 +110,7 @@ package Entity {
             var dy:Number;
             var ship:Ship;
             var shipinRange:Array = [];
-            for each (ship in game.ships.active) {
+            for each (ship in ships) {
                 if (ship.state != 3 || ship.warping)
                     continue;
                 if ((ship.team == _node.nodeData.team) == _hostile)
@@ -47,7 +134,7 @@ package Entity {
             var dy:Number;
             var node:Node;
             var nodeInRange:Array = [];
-            for each (node in game.nodes.active) {
+            for each (node in nodes) {
                 dx = node.nodeData.x - _node.nodeData.x;
                 dy = node.nodeData.y - _node.nodeData.y;
                 if (dx > _node.attackStrategy.attackRange || dx < -_node.attackStrategy.attackRange || dy > _node.attackStrategy.attackRange || dy < -_node.attackStrategy.attackRange)
@@ -93,7 +180,7 @@ package Entity {
             var resultIntersects:Boolean; // 线和圆是否相交
             var resultEnter:Point; // 线和圆的第一个交点
             var resultExit:Point; // 线和圆的第二个交点
-            for each (_Node in game.nodes.active) {
+            for each (_Node in nodes) {
                 if (_Node.nodeData.team == 0 || _Node.nodeData.team == team)
                     continue;
                 if (_Node.nodeData.type == NodeType.TOWER || _Node.nodeData.type == NodeType.STARBASE || _Node.nodeData.type == NodeType.CAPTURESHIP) {

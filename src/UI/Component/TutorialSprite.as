@@ -6,6 +6,7 @@ package UI.Component {
     import Game.GameScene;
     import Entity.GameEntity;
     import Entity.Node;
+    import Entity.EntityContainer;
 
     public class TutorialSprite extends Sprite {
         public static var TYPE_L1:int = 0;
@@ -55,7 +56,7 @@ package UI.Component {
         public function show():void {
             var _x:Number = NaN;
             var _y:Number = NaN;
-            var _NodeArray:Vector.<Node> = Vector.<Node>(game.nodes.active);
+            var _NodeArray:Vector.<Node> = EntityContainer.nodes;
             if (game.triggers[0])
                 return;
             if (!Globals.touchControls)

@@ -2,13 +2,13 @@ package Entity.Node.States {
     import flash.utils.Dictionary;
 
     public class NodeStateFactory {
-        /**中立天体状态 */
+        /** 中立天体状态 */
         public static const IDLE:String = "idle";
-        /**战争状态 */
+        /** 战争状态 */
         public static const CONFLICT:String = "conflict";
-        /**占据状态 */
+        /** 占据状态 */
         public static const CAPTURE:String = "capture";
-        /**生成状态 */
+        /** 生产状态 */
         public static const BUILD:String = "build";
 
         /** 存储类型到类路径的映射 */
@@ -44,6 +44,14 @@ package Entity.Node.States {
                 }
             }
             return new NodeIdleState();
+        }
+
+        public static function get statePool():Vector.<INodeState> {
+            var _statePool:Vector.<INodeState> = new Vector.<INodeState>;
+            for each (var key:String in _stateMap) {
+                _statePool.push(create(key));
+            }
+            return _statePool;
         }
     }
 }

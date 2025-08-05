@@ -2,10 +2,11 @@ package Entity.Node.Attack {
     import starling.animation.Transitions;
     import Entity.Node.Attack.BasicAttack;
     import Entity.Node;
-    import Entity.Utils;
+    import Entity.EntityContainer;
     import Entity.Ship;
     import Entity.EntityHandler;
     import Entity.FXHandler;
+    import Entity.EntityContainer;
 
     public class BlackholeAttack extends BasicAttack {
 
@@ -20,7 +21,7 @@ package Entity.Node.Attack {
             updateFX(node, dt);
             if (!attacking)
                 return;
-            var ships:Array = Utils.findShipsInRange(node);
+            var ships:Array = EntityContainer.findShipsInRange(node);
             for each (var ship:Ship in ships) {
                 EntityHandler.destroyShip(ship);
             }

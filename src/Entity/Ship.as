@@ -7,6 +7,7 @@ package Entity
    import utils.GS;
    import starling.display.QuadBatch;
    import Entity.Node.NodeType;
+   import MapEditor.EditorCenter;
 
    public class Ship extends GameEntity
    {
@@ -396,10 +397,10 @@ package Entity
 
       private function drawImage():void // 绘制贴图
       {
-         if (Globals.exOptimization > 1)
-            if (node.ships[team].length > 1024)
-               if (rng.nextNumber() > 1024/game.ships.active.length)
-                  return;
+        //  if (Globals.exOptimization > 1)
+        //     if (node.ships[team].length > 1024)
+        //        if (rng.nextNumber() > 1024/game.ships.active.length)
+        //           return;
          image.x = x;
          image.y = y;
          entityL.addImage(image, foreground)
@@ -550,7 +551,7 @@ package Entity
          var _dy:Number = NaN;
          var _Distance:Number = NaN;
          var _closestDist:Number = 99999;
-         for each (var _Node:Node in game.nodes.active)
+         for each (var _Node:Node in EntityContainer.nodes)
          {
             if (!_Node.active)
                continue;

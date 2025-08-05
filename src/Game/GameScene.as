@@ -14,7 +14,7 @@ package Game {
     import utils.Rng;
     import utils.GS;
     import Entity.EntityPool;
-    import Entity.Utils;
+    import Entity.EntityContainer;
     import Entity.EntityHandler;
     import Entity.Node;
     import Entity.Ship;
@@ -27,23 +27,10 @@ package Game {
     import Entity.AI.EnemyAIFactory;
     import Entity.Node.NodeStaticLogic;
     import Entity.Node.NodeType;
+    import Entity.EntityContainer;
 
     public class GameScene extends Sprite {
         // #region 类变量
-        // 实体池
-        public var entities:Array;
-        public var ais:EntityPool; // AI
-        public var nodes:EntityPool; // 天体
-        public var ships:EntityPool; // 飞船
-        public var ases:EntityPool;
-        public var warps:EntityPool; // 传送门特效
-        public var beams:EntityPool; // 攻击塔射线
-        public var pulses:EntityPool; // 波
-        public var flashes:EntityPool; // 飞船爆炸光效
-        public var barriers:EntityPool; // 障碍线
-        public var explosions:EntityPool; // 飞船爆炸特效
-        public var darkPulses:EntityPool; // 通用特效
-        public var fades:EntityPool; // 选中特效
         // 其他
         public var cover:Quad; // 通关时的遮罩
         public var barrierLines:Array;
@@ -71,7 +58,7 @@ package Game {
             super();
             this.scene = _scene;
             NodeStaticLogic.game = this;
-            Utils.game = this;
+            EntityContainer.game = this;
             FXHandler.game = this;
             EntityHandler.game = this;
             // 通关时的遮罩
@@ -88,18 +75,6 @@ package Game {
             darkPulse.y = 384;
             darkPulse.color = 0;
             darkPulse.visible = false;
-            ais = new EntityPool();
-            nodes = new EntityPool();
-            ships = new EntityPool();
-            warps = new EntityPool();
-            beams = new EntityPool();
-            pulses = new EntityPool();
-            flashes = new EntityPool();
-            barriers = new EntityPool();
-            explosions = new EntityPool();
-            darkPulses = new EntityPool();
-            fades = new EntityPool();
-            entities = [ships, nodes, ais, warps, beams, pulses, flashes, barriers, explosions, darkPulses, fades]; // 实体池列表
             triggers = [false, false, false, false, false]; // 特殊事件
             barrierLines = []; // 障碍连接数据
             tutorial = new TutorialSprite();
@@ -292,7 +267,7 @@ package Game {
         // #region 界面功能
         public function deInit():void {
             tutorial.deInit();
-            for each (var _pool:EntityPool in entities)
+            for each (var _pool:EntityPool in EntityContainer.entityPool)
                 _pool.deInit();
             removeEventListener("enterFrame", update); // 移除更新帧监听器
         }
@@ -366,7 +341,7 @@ package Game {
                 for(var i:int = 1; i < l; i++)
                 {
                     arr = Globals.replay[Globals.replay.length - 1][i];
-                    NodeStaticLogic.moveShips(nodes.active[arr[0]], arr[1], nodes.active[arr[2]], arr[3]);
+                    NodeStaticLogic.moveShips(EntityContainer.nodes[arr[0]], arr[1], EntityContainer.nodes[arr[2]], arr[3]);
                 }
                 Globals.replay.push([dt]);
                 updateGame(dt);
@@ -374,7 +349,7 @@ package Game {
                 dt = Globals.replay[0].shift();
                 updateGame(dt);
                 for each (arr in Globals.replay[0]) {
-                    NodeStaticLogic.moveShips(nodes.active[arr[0]], arr[1], nodes.active[arr[2]], arr[3]);
+                    NodeStaticLogic.moveShips(EntityContainer.nodes[arr[0]], arr[1], EntityContainer.nodes[arr[2]], arr[3]);
                 }
                 Globals.replay.shift();
             }
@@ -384,7 +359,7 @@ package Game {
             countTeamCaps(dt); // 统计兵力
             juggler.advanceTime(dt);
             ui.update();
-            for each (var _pool:EntityPool in entities) // 依次执行所有实体的更新函数
+            for each (var _pool:EntityPool in EntityContainer.entityPool) // 依次执行所有实体的更新函数
                 _pool.update(dt);
             specialEvents(); // 处理特殊关卡的特殊事件
             if (darkPulse.visible)
@@ -410,11 +385,11 @@ package Game {
                 Globals.teamCaps[_team] = 0;
                 Globals.teamPops[_team] = 0;
             }
-            for each (var _Node:Node in nodes.active) // 统计兵力上限
+            for each (var _Node:Node in EntityContainer.nodes) // 统计兵力上限
                 Globals.teamCaps[_Node.nodeData.team] += _Node.nodeData.popVal * Globals.teamNodePops[_Node.nodeData.team];
-            for each (var _Ship:Ship in ships.active) // 统计总兵力
+            for each (var _Ship:Ship in EntityContainer.ships) // 统计总兵力
                 Globals.teamPops[_Ship.team]++;
-            ships.active.length < 1024 ? Globals.exOptimization = 0 : (ships.active.length < 8192 ? Globals.exOptimization = 1 : Globals.exOptimization = 2);
+            EntityContainer.ships.length < 1024 ? Globals.exOptimization = 0 : (EntityContainer.ships.length < 8192 ? Globals.exOptimization = 1 : Globals.exOptimization = 2);
 
             popLabels[0].text = popLabels[1].text = "POPULATION : " + Globals.teamPops[1] + " / " + Globals.teamCaps[1];
             if (popLabels[1].alpha > 0)
@@ -439,7 +414,7 @@ package Game {
             {
                 case 0: // 前两关处理教程提示
                     if (!triggers[0])
-                        if ((nodes.active[0] as Node).ships[1].length < 60)
+                        if (EntityContainer.nodes[0].ships[1].length < 60)
                             triggers[0] = true;
                     break;
                 case 1:
@@ -449,7 +424,7 @@ package Game {
                     break;
                 case 31:
                     if (!triggers[0]) {
-                        _boss = (nodes.active[0] as Node);
+                        _boss = EntityContainer.nodes[0];
                         if (_boss.nodeData.hp == 100) {
                             triggers[0] = true;
                             _timer = 0;
@@ -482,7 +457,7 @@ package Game {
                         }
                     }
                     if (triggers[0] && !triggers[1]) {
-                        _boss = nodes.active[0] as Node;
+                        _boss = EntityContainer.nodes[0];
                         if (_boss.triggerTimer == 0) {
                             triggers[1] = true;
                             _boss.bossReady();
@@ -496,7 +471,7 @@ package Game {
                         }
                     }
                     if (triggers[1] && !triggers[2]) {
-                        _boss = nodes.active[0] as Node;
+                        _boss = EntityContainer.nodes[0];
                         if (_boss.triggerTimer == 0) {
                             triggers[2] = true;
                             _boss.bossDisappear();
@@ -510,11 +485,11 @@ package Game {
                     {
                         for (i = 0; i < Globals.teamCaps.length; i++) {
                             if (Globals.teamCaps[i] > 220 && Globals.teamPops[i] > 220) {
-                                _boss = nodes.getReserve() as Node;
+                                _boss = EntityContainer.getReserve(EntityContainer.INDEX_NODES) as Node;
                                 if (!_boss)
                                     _boss = new Node();
                                 _boss.initBoss(this, new Rng(rng.nextInt(), Rng.X32), 512, 384);
-                                nodes.addEntity(_boss);
+                                EntityContainer.addEntity(EntityContainer.INDEX_NODES, _boss);
                                 _boss.bossAppear();
                                 triggers[0] = true;
                                 GS.fadeOutMusic(2);
@@ -525,7 +500,7 @@ package Game {
                     }
                     if (triggers[0] && !triggers[1]) // 阶段二，生成飞船，添加ai
                     {
-                        _boss = nodes.active[nodes.active.length - 1] as Node;
+                        _boss = EntityContainer.nodes[EntityContainer.nodes.length - 1] as Node;
                         if (_boss.triggerTimer == 0) {
                             triggers[1] = true;
                             _boss.bossReady();
@@ -542,7 +517,7 @@ package Game {
                     }
                     if (triggers[1] && !triggers[2]) // 阶段三，星核消失动画
                     {
-                        _boss = nodes.active[nodes.active.length - 1] as Node;
+                        _boss = EntityContainer.nodes[EntityContainer.nodes.length - 1] as Node;
                         if (_boss.triggerTimer == 0) {
                             triggers[2] = true;
                             _boss.bossDisappear();
@@ -551,7 +526,7 @@ package Game {
                     }
                     if (triggers[2] && !triggers[3]) // 阶段四，移除星核
                     {
-                        _boss = nodes.active[nodes.active.length - 1] as Node;
+                        _boss = EntityContainer.nodes[EntityContainer.nodes.length - 1] as Node;
                         if (_boss.triggerTimer == 0) {
                             triggers[3] = true;
                             _boss.bossHide();
@@ -562,7 +537,7 @@ package Game {
                     break;
                 case 35:
                     if (!gameOver) {
-                        _boss = nodes.active[0] as Node;
+                        _boss = EntityContainer.nodes[0];
                         if (!triggers[0] && _boss.nodeData.hp == 0) // 阶段一，坍缩动画
                         {
                             triggers[0] = true;
@@ -602,7 +577,7 @@ package Game {
                         }
                         if (triggers[0] && !triggers[1]) // 阶段二，膨胀动画
                         {
-                            _boss = nodes.active[0] as Node;
+                            _boss = EntityContainer.nodes[0];
                             if (_boss.triggerTimer == 0) {
                                 triggers[1] = true;
                                 _timer = 0;
@@ -638,7 +613,7 @@ package Game {
                         }
                         if (triggers[1] && !triggers[2]) // 阶段三，画面缩小，天体消失，回到主界面
                         {
-                            _boss = nodes.active[0] as Node;
+                            _boss = EntityContainer.nodes[0];
                             if (_boss.triggerTimer == 0) {
                                 _boss.active = false;
                                 gameOver = true;
@@ -686,7 +661,7 @@ package Game {
                 winningTeam = 1;
                 gameOverTimer = 0.5;
             }
-            for each (_Node in nodes.active) {
+            for each (_Node in EntityContainer.nodes) {
                 if (_Node.nodeData.team == _team || _Node.nodeData.type == NodeType.BARRIER)
                     continue;
                 _x = _Node.nodeData.x - darkPulse.x;
@@ -698,7 +673,7 @@ package Game {
                     _Node.nodeData.hp = 100;
                 }
             }
-            for each (_Ship in ships.active) {
+            for each (_Ship in EntityContainer.ships) {
                 if (_Ship.team == _team)
                     continue;
                 _x = _Ship.x - darkPulse.x;
@@ -718,10 +693,10 @@ package Game {
                 if (gameOver) // 处理游戏结束时的动画
                 {
                     var _ripple:int = 1;
-                    for each (var _Node:Node in nodes.active) {
+                    for each (var _Node:Node in EntityContainer.nodes) {
                         if (_Node.nodeData.type == NodeType.BARRIER)
                             continue;
-                        _Node.winPulseTimer = Math.min(_ripple * 0.101, _ripple * 1.5 / nodes.active.length);
+                        _Node.winPulseTimer = Math.min(_ripple * 0.101, _ripple * 1.5 / EntityContainer.nodes.length);
                         _Node.winTeam = winningTeam;
                         _ripple++;
                     }
@@ -745,7 +720,7 @@ package Game {
             {
                 winningTeam = 1; // 玩家势力获胜
                 gameOver = true; // 不判定游戏继续时，游戏结束
-                for each (_Node in nodes.active)
+                for each (_Node in EntityContainer.nodes)
                     if (_Node.nodeData.team != 1 && _Node.nodeData.type != NodeType.BARRIER)
                         gameOver = false;
                 return; // 终止该函数
@@ -767,7 +742,7 @@ package Game {
             }
             if (gameOver == false)
                 return;
-            for each (_Node in nodes.active) // 判断非中立天体上都有获胜势力的飞船
+            for each (_Node in EntityContainer.nodes) // 判断非中立天体上都有获胜势力的飞船
             {
                 if (_Node.nodeData.team == 0 || _Node.nodeData.team == i)
                     continue;
@@ -788,7 +763,7 @@ package Game {
         }
 
         public function updateBarrier():void {
-            barriers.deInit();
+            EntityContainer.entityPool[EntityContainer.INDEX_BARRIERS].deInit();
             getBarrierLines();
             addBarriers();
             hideSingleBarriers();
@@ -845,7 +820,7 @@ package Game {
         }
 
         public function hideSingleBarriers():void {
-            for each (var _Node:Node in nodes.active) {
+            for each (var _Node:Node in EntityContainer.nodes) {
                 if (_Node.nodeData.type != NodeType.BARRIER)
                     continue;
                 _Node.image.visible = _Node.halo.visible = _Node.linked;
@@ -864,9 +839,9 @@ package Game {
             var _Array:Array;
             var _Exist:Boolean;
             barrierLines.length = 0; // 清空障碍线数组
-            L_1 = int(nodes.active.length);
+            L_1 = int(EntityContainer.nodes.length);
             for (i = 0; i < L_1; i++) {
-                _Node1 = nodes.active[i] as Node;
+                _Node1 = EntityContainer.nodes[i];
                 if (_Node1.nodeData.type != NodeType.BARRIER)
                     continue;
                 L_2 = int(_Node1.barrierLinks.length); // 该天体需连接的障碍总数
@@ -874,7 +849,7 @@ package Game {
                     if (_Node1.barrierLinks[j] is Node)
                         _Node2 = _Node1.barrierLinks[j];
                     else if (_Node1.barrierLinks[j] < L_1)
-                        _Node2 = nodes.active[_Node1.barrierLinks[j]];
+                        _Node2 = EntityContainer.nodes[_Node1.barrierLinks[j]];
                     if (!_Node1.barrierCostom && _Node2.barrierCostom)
                         continue;
                     _Array = [new Point(_Node1.nodeData.x, _Node1.nodeData.y), new Point(_Node2.nodeData.x, _Node2.nodeData.y)];

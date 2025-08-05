@@ -11,6 +11,7 @@ package UI {
     import starling.display.QuadBatch;
     import Entity.Node.NodeStaticLogic;
     import Entity.Node.NodeType;
+    import Entity.EntityContainer;
 
     public class TraditionalCtrlLayer extends Sprite {
 
@@ -104,7 +105,7 @@ package UI {
                 mouseBatch.addQuad(dragLine);
                 if(dragQuad.color != 0x000000)
                     mouseBatch.blendMode = "add";
-                for each (_Node1 in game.nodes.active) {
+                for each (_Node1 in EntityContainer.nodes) {
                     if (_Node1.ships[1].length == 0 && _Node1.nodeData.team != 1)
                         continue;
                     if (selectedNodes.indexOf(_Node1) != -1)
@@ -261,7 +262,7 @@ package UI {
             var _Distance:Number = NaN;
             var _lineDist:Number = NaN;
             var _ClosestDist:Number = 200;
-            for each (var _Node:Node in game.nodes.active) {
+            for each (var _Node:Node in EntityContainer.nodes) {
                 if (_Node.nodeData.type == NodeType.BARRIER)
                     continue;
                 _dx = _Node.nodeData.x - _localPoint.x;

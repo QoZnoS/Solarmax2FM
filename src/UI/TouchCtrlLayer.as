@@ -11,6 +11,7 @@ package UI {
     import starling.display.QuadBatch;
     import Entity.Node.NodeStaticLogic;
     import Entity.Node.NodeType;
+    import Entity.EntityContainer;
 
     public class TouchCtrlLayer extends Sprite {
         private var convertQuad:Quad; // 转换触点坐标用
@@ -177,7 +178,7 @@ package UI {
             var _Distance:Number = NaN;
             var _lineDist:Number = NaN;
             var _ClosestDist:Number = 200;
-            for each (var _Node:Node in game.nodes.active) {
+            for each (var _Node:Node in EntityContainer.nodes) {
                 if (_Node.nodeData.type == NodeType.BARRIER)
                     continue;
                 _dx = _Node.nodeData.x - _localPoint.x;

@@ -4,9 +4,9 @@ package Entity.AI
     import utils.Rng;
     import Entity.Node;
     import flash.geom.Point;
-    import Entity.Utils;
     import Entity.Node.NodeStaticLogic;
     import Entity.Node.NodeType;
+    import Entity.EntityContainer;
 
     public class HardAI extends BasicAI
     {
@@ -348,7 +348,7 @@ package Entity.AI
                     _start = new Point(_Node1.nodeData.x, _Node1.nodeData.y);
                     _end = new Point(_Node2.nodeData.x, _Node2.nodeData.y);
                     _current = new Point(_Node.nodeData.x, _Node.nodeData.y);
-                    result = Utils.lineIntersectCircle(_start, _end, _current, _Node.attackStrategy.attackRange);
+                    result = EntityContainer.lineIntersectCircle(_start, _end, _current, _Node.attackStrategy.attackRange);
                     resultInside = result[0], resultIntersects = result[1], resultEnter = result[2], resultExit = result[3];
                     if (resultIntersects)
                     {

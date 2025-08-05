@@ -17,7 +17,6 @@ package Entity.Node {
             node.label.y = node.nodeData.y + 50 * node.nodeData.size;
         }
 
-
         public static function changeTeam(node:Node, team:int):void {
             if (Globals.level == 35 && node.nodeData.type == NodeType.DILATOR)
                 return; // 32 36关星核不做处理，自己变自己不做处理
@@ -90,7 +89,7 @@ package Entity.Node {
             // 读取参数
             get = LevelData.nodeData.node.(@name == type).startVal;
             node.startVal = (get.indexOf("S*") != -1) ? Number(get.slice(2)) * size : Number(get);
-            get = LevelData.nodeData.node.(@name == type).node.popVal;
+            get = LevelData.nodeData.node.(@name == type).popVal;
             node.nodeData.popVal = (get.indexOf("S*") != -1) ? Number(get.slice(2)) * size : Number(get);
             get = LevelData.nodeData.node.(@name == type).buildRate;
             node.buildRate = (get.indexOf("S*") != -1) ? Number(get.slice(2)) * size : Number(get);

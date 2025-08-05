@@ -1,9 +1,10 @@
 package Entity.Node.Attack {
 
     import Entity.Node;
-    import Entity.Utils;
+    import Entity.EntityContainer;
     import Entity.EntityHandler;
     import Entity.Ship;
+    import Entity.EntityContainer;
 
     public class CloneturretAttack extends BasicAttack {
 
@@ -16,14 +17,14 @@ package Entity.Node.Attack {
                 return;
             if (Globals.teamPops[node.nodeData.team] >= Globals.teamCaps[node.nodeData.team])
                 return;
-            var ships:Array = Utils.findShipsInRange(node, false);
+            var ships:Array = EntityContainer.findShipsInRange(node, false);
             if (ships.length == 0)
                 return;
             var ship:Ship = node.rng.randomIndex(ships);
             var shipCreate:Ship = EntityHandler.addShip(node, node.nodeData.team, false); // 产生新飞船
             shipCreate.x = node.nodeData.x;
             shipCreate.y = node.nodeData.y;
-            Utils.removeElementFromArray(node.ships[node.nodeData.team], shipCreate);
+            EntityContainer.removeElementFromArray(node.ships[node.nodeData.team], shipCreate);
             shipCreate.followTo(ship); // 跟随原飞船
         }
 

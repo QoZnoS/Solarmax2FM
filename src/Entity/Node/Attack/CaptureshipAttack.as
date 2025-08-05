@@ -1,9 +1,10 @@
 package Entity.Node.Attack {
 
     import Entity.Node;
-    import Entity.Utils;
+    import Entity.EntityContainer;
     import Entity.Ship;
     import Entity.EntityHandler;
+    import Entity.EntityContainer;
 
     public class CaptureshipAttack extends BasicAttack {
 
@@ -17,7 +18,7 @@ package Entity.Node.Attack {
             capturing = (Globals.teamPops[node.nodeData.team] < Globals.teamCaps[node.nodeData.team])
             if (!updateTimer(dt))
                 return;
-            var ships:Array = Utils.findShipsInRange(node);
+            var ships:Array = EntityContainer.findShipsInRange(node);
             if (ships.length > 0) {
                 var ship:Ship = node.rng.randomIndex(ships)
                 if (!capturing) {

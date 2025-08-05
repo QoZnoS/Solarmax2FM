@@ -2,9 +2,10 @@ package Entity.AI {
     import Game.GameScene;
     import utils.Rng;
     import Entity.Node;
-    import Entity.Utils;
+    import Entity.EntityContainer;
     import Entity.Node.NodeStaticLogic;
     import Entity.Node.NodeType;
+    import Entity.EntityContainer;
 
     public class SmartAI extends BasicAI {
         public function SmartAI(game:GameScene, rng:Rng) {
@@ -87,7 +88,7 @@ package Entity.AI {
                             continue; // 出兵条件：出兵天体的强度和目标天体的预测强度之和高于目标天体的预测敌方强度
                         // 飞船数：目标天体上预测敌方强度的二倍减去预测己方强度
                         _Ships = _targetNode.predictedOppStrength(team) * 2 - _targetNode.predictedTeamStrength(team);
-                        _towerAttack = Utils.getLengthInTowerRange(_senderNode, _targetNode, team) / 4.5; // 估算经过攻击天体损失的兵力（估损
+                        _towerAttack = EntityContainer.getLengthInTowerRange(_senderNode, _targetNode, team) / 4.5; // 估算经过攻击天体损失的兵力（估损
                         _Ships += _towerAttack; // 为飞船数加上估损
                         if (_towerAttack > 0 && Globals.teamPops[team] < _towerAttack)
                             continue; // 条件：没有经过攻击天体或总兵力多于估损
@@ -144,7 +145,7 @@ package Entity.AI {
                             _Ships = _senderNode.teamStrength(team); // 预测敌方强度大于己方时，派出全部飞船
                         if (_Ships < _targetNode.nodeData.size * 200)
                             _Ships = _targetNode.nodeData.size * 200; // 飞船数不应低于目标的二倍标准兵力
-                        _towerAttack = Utils.getLengthInTowerRange(_senderNode, _targetNode, team) / 4.5; // 计算估损
+                        _towerAttack = EntityContainer.getLengthInTowerRange(_senderNode, _targetNode, team) / 4.5; // 计算估损
                         _Ships += _towerAttack; // 为飞船数加上估损
                         if (_towerAttack > 0 && Globals.teamPops[team] < _towerAttack)
                             continue; // 总兵力不足估损时不派兵
@@ -197,7 +198,7 @@ package Entity.AI {
                         if (_targetNode.aiValue >= _senderNode.aiValue)
                             continue; // 条件：目标天体价值高于出兵天体价值
                         _Ships = _senderNode.teamStrength(team); // 派出全部飞船
-                        _towerAttack = Utils.getLengthInTowerRange(_senderNode, _targetNode, team) / 4.5;
+                        _towerAttack = EntityContainer.getLengthInTowerRange(_senderNode, _targetNode, team) / 4.5;
                         _Ships += _towerAttack; // 为飞船数加上估损
                         if (_towerAttack > 0 && Globals.teamPops[team] < _towerAttack)
                             continue; // 条件：总兵力不足估损时不派兵

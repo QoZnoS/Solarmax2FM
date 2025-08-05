@@ -1,10 +1,10 @@
 package Entity.AI {
     import Game.GameScene;
     import utils.Rng;
-    import Entity.Utils;
     import Entity.Node;
     import Entity.Node.NodeStaticLogic;
     import Entity.Node.NodeType;
+    import Entity.EntityContainer;
 
     public class DarkAI extends BasicAI {
         public function DarkAI(game:GameScene, rng:Rng) {
@@ -93,7 +93,7 @@ package Entity.AI {
                             _Ships = _senderNode.teamStrength(team); // 预测出兵天体敌方兵力高于己方兵力时派出全部兵力
                         if (_Ships < _targetNode.nodeData.size * 200)
                             _Ships = _targetNode.nodeData.size * 200; // 兵力不足目标二倍标准兵力时派出目标二倍标准兵力
-                        _towerAttack = Utils.getLengthInTowerRange(_senderNode, _targetNode, team) / 4.5;
+                        _towerAttack = EntityContainer.getLengthInTowerRange(_senderNode, _targetNode, team) / 4.5;
                         _Ships += _towerAttack; // 加上估损
                         if (_towerAttack > 0 && Globals.teamPops[team] < _towerAttack)
                             continue; // 总兵力不足估损时不派兵
@@ -135,7 +135,7 @@ package Entity.AI {
                         if (_targetNode.aiValue >= _senderNode.aiValue)
                             continue; // 条件：目标天体价值高于出兵天体价值
                         _Ships = _senderNode.teamStrength(team); // 派出该天体全部兵力
-                        _towerAttack = Utils.getLengthInTowerRange(_senderNode, _targetNode, team) / 4.5;
+                        _towerAttack = EntityContainer.getLengthInTowerRange(_senderNode, _targetNode, team) / 4.5;
                         _Ships += _towerAttack; // 加上估损
                         if (_towerAttack > 0 && Globals.teamPops[team] < _towerAttack)
                             continue; // 总兵力不足估损时不派兵

@@ -1,33 +1,36 @@
-package Entity.Node.States
-{
+package Entity.Node.States {
     import Entity.Node;
 
-    public class NodeIdleState implements INodeState
-    {
-        public function NodeIdleState()
-        {
-            
+    public class NodeIdleState implements INodeState {
+        public function NodeIdleState() {
+
         }
 
-        public function update(node:Node, dt:Number):void
+        public function update(node:Node, dt:Number):void {
+        }
+
+        public function checkStart(node:Node):void
         {
         	throw new Error("Method not implemented.");
         }
 
-        public function checkEnter(node:Node):Boolean
+        public function checkEnd(node:Node):void
         {
-        	return true;
+        	throw new Error("Method not implemented.");
         }
 
-        public function checkExit(node:Node):Boolean
+        public function toJSON(k:String):*
         {
-        	return true;
+        	throw new Error("Method not implemented.");
         }
 
-        public function get stateType():String
-        {
-        	return NodeStateFactory.IDLE;
+        public function get stateType():String {
+            return NodeStateFactory.IDLE;
         }
 
+        public function get enable():Boolean
+        {
+        	throw new Error("Method not implemented.");
+        }
     }
 }

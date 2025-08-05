@@ -12,7 +12,10 @@ package Entity.Node {
         public static const BLACKHOLE:String = "blackhole";
         public static const CLONETURRET:String = "cloneturret";
         public static const CAPTURESHIP:String = "captureship";
-
+        /**仅用于兼容部分原版函数
+         * @param type 
+         * @return 
+         */
         public static function switchType(type:int):String {
             switch (type) {
                 case 0:

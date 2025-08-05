@@ -1,10 +1,11 @@
 package Entity.AI {
     import Entity.Node;
     import Game.GameScene;
-    import Entity.Utils;
+    import Entity.EntityContainer;
     import utils.Rng;
     import Entity.Node.NodeStaticLogic;
     import Entity.Node.NodeType;
+    import Entity.EntityContainer;
 
     public class SimpleAI extends BasicAI {
 
@@ -75,7 +76,7 @@ package Entity.AI {
                 // trace("defend senders: " + senders.length);
                 for each (_targetNode in targets) { // 防守判定
                     for each (_senderNode in senders) {
-                        if (_senderNode == _targetNode || Utils.nodesBlocked(_senderNode, _targetNode))
+                        if (_senderNode == _targetNode || EntityContainer.nodesBlocked(_senderNode, _targetNode))
                             continue; // 基本条件：出兵天体和目标天体不为同一个，且二者之间没有被拦截
                         if (_senderNode.teamStrength(team) + _targetNode.predictedTeamStrength(team) <= _targetNode.predictedOppStrength(team))
                             continue; // 出兵条件：出兵天体的强度和目标天体的预测强度之和高于目标天体的预测敌方强度
@@ -120,7 +121,7 @@ package Entity.AI {
                 // trace("attack senders: " + senders.length);
                 for each (_targetNode in targets) { // 进攻判定
                     for each (_senderNode in senders) {
-                        if (_senderNode == _targetNode || Utils.nodesBlocked(_senderNode, _targetNode))
+                        if (_senderNode == _targetNode || EntityContainer.nodesBlocked(_senderNode, _targetNode))
                             continue; // 基本条件：出兵天体和目标天体不为同一个，且二者之间没有被拦截
                         if (_senderNode.teamStrength(team) + _targetNode.predictedTeamStrength(team) <= _targetNode.predictedOppStrength(team))
                             continue; // 出兵条件：出兵天体的强度和目标天体的预测强度之和高于目标天体的预测敌方强度

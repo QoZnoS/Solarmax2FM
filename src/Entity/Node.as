@@ -24,7 +24,7 @@ package Entity {
     import starling.display.Image;
     import starling.text.TextField;
     import Entity.EntityHandler;
-    import Entity.Utils;
+    import Entity.EntityContainer;
     import utils.Rng;
     import utils.GS;
     import utils.Drawer;
@@ -545,10 +545,10 @@ package Entity {
             var _dy:Number = NaN;
             var _Distance:Number = NaN;
             var _Ship:Number = NaN;
-            var _NodeArray:Vector.<Node> = Vector.<Node>(game.nodes.active);
+            var _NodeArray:Vector.<Node> = EntityContainer.nodes;
             var _targetNode:Array = [];
             var _ShipArray:Array = [];
-            for each (_Node in game.nodes.active) // 按距离计算每个目标天体的价值
+            for each (_Node in _NodeArray) // 按距离计算每个目标天体的价值
             {
                 if (_Node != this && _Node.nodeData.type != NodeType.BARRIER) {
                     _dx = _Node.nodeData.x - this.nodeData.x;
@@ -588,7 +588,7 @@ package Entity {
         public function getTransitShips(_team:int):void {
             for (var i:int = 0; i < transitShips.length; i++) // 重置数组
                 transitShips[i] = 0;
-            for each (var _Ship:Ship in game.ships.active) {
+            for each (var _Ship:Ship in EntityContainer.ships) {
                 if (!(_Ship.node == this && _Ship.state == 3))
                     continue; // 飞船在飞行中且飞向自身
                 if (_Ship.team == _team || _Ship.jumpDist > 50)
@@ -657,7 +657,7 @@ package Entity {
             for (var i:int = 0; i < Globals.teamCount; i++) {
                 _ships.push([]);
             }
-            for each (var _Ship:Ship in game.ships.active) {
+            for each (var _Ship:Ship in EntityContainer.ships) {
                 if (_Ship.state == 0 || _Ship.node != this)
                     continue; // 排除未起飞的和不飞向自身的飞船
                 _ships[_Ship.team].push(_Ship);
@@ -684,7 +684,7 @@ package Entity {
         // 返回自身综合强度
         public function hard_AllStrength(_team:int):int {
             var _Strength:int = 0;
-            for each (var _Ship:Ship in game.ships.active) {
+            for each (var _Ship:Ship in EntityContainer.ships) {
                 if (_Ship.node == this && _Ship.team == _team)
                     _Strength++;
             }
@@ -697,7 +697,7 @@ package Entity {
             for (var i:int = 0; i < Globals.teamCount; i++) {
                 _ships.push([]);
             }
-            for each (var _Ship:Ship in game.ships.active) {
+            for each (var _Ship:Ship in EntityContainer.ships) {
                 if (_Ship.node == this && _Ship.team != _team)
                     _ships[_Ship.team].push(_Ship);
             }
@@ -711,7 +711,7 @@ package Entity {
             for (var i:int = 0; i < Globals.teamCount; i++) {
                 _ships.push([]);
             }
-            for each (var _Ship:Ship in game.ships.active) {
+            for each (var _Ship:Ship in EntityContainer.ships) {
                 if (_Ship.node != this || _Ship.team == _team)
                     continue; // 排除不飞向自身的飞船和己方飞船
                 if (_Ship.targetDist / _Ship.jumpSpeed < 1 || _Ship.state == 0)
@@ -729,7 +729,7 @@ package Entity {
         // 计算指定势力可到达的天体
         public function getNodeLinks(_team:int):void {
             nodeLinks.length = 0;
-            for each (var _Node:Node in game.nodes.active) {
+            for each (var _Node:Node in EntityContainer.nodes) {
                 if (_Node == this || _Node.nodeData.type == NodeType.BARRIER || (_Node.nodeData.type == NodeType.DILATOR && Globals.level != 35))
                     continue;
                 if (nodesBlocked(this, _Node) == null || nodeData.type == NodeType.WARP && nodeData.team == _team)
@@ -748,7 +748,7 @@ package Entity {
             for (var i:int = 0; i < l; i++) {
                 _bar1 = game.barrierLines[i][0];
                 _bar2 = game.barrierLines[i][1];
-                _Intersection = Utils.getIntersection(_Node1.nodeData.x, _Node1.nodeData.y, _Node2.nodeData.x, _Node2.nodeData.y, _bar1.x, _bar1.y, _bar2.x, _bar2.y); // 计算交点
+                _Intersection = EntityContainer.getIntersection(_Node1.nodeData.x, _Node1.nodeData.y, _Node2.nodeData.x, _Node2.nodeData.y, _bar1.x, _bar1.y, _bar2.x, _bar2.y); // 计算交点
                 if (_Intersection)
                     return _Intersection;
             }
@@ -759,7 +759,7 @@ package Entity {
         public function getBarrierLinks():void {
             var _dx:Number = NaN;
             var _dy:Number = NaN;
-            for each (var _Node:Node in game.nodes.active) {
+            for each (var _Node:Node in EntityContainer.nodes) {
                 if (_Node == this || _Node.nodeData.type != NodeType.BARRIER)
                     continue;
                 if (_Node.nodeData.x != nodeData.x && _Node.nodeData.y != nodeData.y)

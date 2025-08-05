@@ -11,6 +11,7 @@ package Game {
     import Entity.EnemyAI;
     import flash.utils.Dictionary;
     import Entity.Node.NodeData;
+    import Entity.EntityContainer;
 
     public class Debug extends Sprite {
         private static var debug:Boolean; // debug 开启状态
@@ -174,11 +175,11 @@ package Game {
                 THIS.debugLables[3].text = "";
                 THIS.debugLables[4].text = "";
                 THIS.debugLables[5].text = "";
-                // THIS.debugLables[1].text = game.ais.active[game.ais.active.length - 1].debugTrace[0];
-                // THIS.debugLables[2].text = game.ais.active[game.ais.active.length - 1].debugTrace[1];
-                // THIS.debugLables[3].text = game.ais.active[game.ais.active.length - 1].debugTrace[2];
-                // THIS.debugLables[4].text = game.ais.active[game.ais.active.length - 1].debugTrace[3];
-                // THIS.debugLables[5].text = game.ais.active[game.ais.active.length - 1].debugTrace[4];
+                // THIS.debugLables[1].text = EntityContainer.ais[EntityContainer.ais.length - 1].debugTrace[0];
+                // THIS.debugLables[2].text = EntityContainer.ais[EntityContainer.ais.length - 1].debugTrace[1];
+                // THIS.debugLables[3].text = EntityContainer.ais[EntityContainer.ais.length - 1].debugTrace[2];
+                // THIS.debugLables[4].text = EntityContainer.ais[EntityContainer.ais.length - 1].debugTrace[3];
+                // THIS.debugLables[5].text = EntityContainer.ais[EntityContainer.ais.length - 1].debugTrace[4];
             } else {
                 THIS.debugLables[1].text = "seed: " + String(THIS.seed);
                 THIS.debugLables[2].text = "";
@@ -200,9 +201,9 @@ package Game {
 
         private var nodeTagLables:Array; // 显示天体tag和战争占据状态
         private static function updateTag():void {
-            if (game.nodes.active.length != THIS.nodeTagLables[0].length)
+            if (EntityContainer.nodes.length != THIS.nodeTagLables[0].length)
                 init_tag(); // 重置tag
-            for each (var _node:Node in game.nodes.active) { // 更新tag位置
+            for each (var _node:Node in EntityContainer.nodes) { // 更新tag位置
                 THIS.nodeTagLables[0][_node.tag].x = _node.nodeData.x - 30 * _node.nodeData.size - 60;
                 THIS.nodeTagLables[0][_node.tag].y = _node.nodeData.y - 50 * _node.nodeData.size - 48;
                 THIS.nodeTagLables[1][_node.tag].x = _node.nodeData.x - 60;
@@ -223,8 +224,8 @@ package Game {
 
         private static function init_tag():void { // 重置tag
             clear_tag();
-            for each (var _node:Node in game.nodes.active) {
-                _node.tag = game.nodes.active.indexOf(_node);
+            for each (var _node:Node in EntityContainer.nodes) {
+                _node.tag = EntityContainer.nodes.indexOf(_node);
                 var _label:TextField = new TextField(60, 48, String(_node.tag), "Downlink12", -1, 16777215);
                 _label.vAlign = _label.hAlign = "center";
                 _label.pivotX = -30;
@@ -271,11 +272,11 @@ package Game {
         // #region 调试函数，手动触发
 
         private function clear_debug_trace():void {
-            (game.ais.active[0] as EnemyAI).debugTrace[0] = null;
-            (game.ais.active[0] as EnemyAI).debugTrace[1] = null;
-            (game.ais.active[0] as EnemyAI).debugTrace[2] = null;
-            (game.ais.active[0] as EnemyAI).debugTrace[3] = null;
-            (game.ais.active[0] as EnemyAI).debugTrace[4] = null;
+            (EntityContainer.ais[0] as EnemyAI).debugTrace[0] = null;
+            (EntityContainer.ais[0] as EnemyAI).debugTrace[1] = null;
+            (EntityContainer.ais[0] as EnemyAI).debugTrace[2] = null;
+            (EntityContainer.ais[0] as EnemyAI).debugTrace[3] = null;
+            (EntityContainer.ais[0] as EnemyAI).debugTrace[4] = null;
         }
 
         private function set_expandDarkPulse(_team:int):void {
@@ -292,7 +293,7 @@ package Game {
         // #endregion
         public static function test():void{
             var arr:Array = [];
-            for each(var node:Node in game.nodes.active)
+            for each(var node:Node in EntityContainer.nodes)
             {
                 arr.push(JSON.stringify(node.nodeData));
             }

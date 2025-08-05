@@ -1,10 +1,11 @@
 package Entity.Node.Attack {
 
     import Entity.Node;
-    import Entity.Utils;
+    import Entity.EntityContainer;
     import Entity.Ship;
     import Entity.EntityHandler;
     import Entity.FXHandler;
+    import Entity.EntityContainer;
 
     public class PulsecannonAttack extends BasicAttack {
 
@@ -15,12 +16,12 @@ package Entity.Node.Attack {
         override public function executeAttack(_Node:Node, dt:Number):void {
             if (!updateTimer(dt))
                 return;
-            var nodes:Array = Utils.findNodeInRange(_Node);
+            var nodes:Array = EntityContainer.findNodeInRange(_Node);
             var ship:Ship;
             for each (var node:Node in nodes) {
                 if (node == _Node)
                     continue
-                var ships:Array = Utils.filterShipByStatic(node, 0);
+                var ships:Array = EntityContainer.filterShipByStatic(node, 0);
                 for (var i:int = 0; i < Globals.teamCount; i++) {
                     if (i == _Node.nodeData.team)
                         continue
@@ -28,7 +29,7 @@ package Entity.Node.Attack {
                         if (ships[i] == 0)
                             break;
                         ship = node.rng.randomIndex(ships[i])
-                        Utils.removeElementFromArray(ships[i], ship);
+                        EntityContainer.removeElementFromArray(ships[i], ship);
                         EntityHandler.destroyShip(ship)
                     }
                 }
