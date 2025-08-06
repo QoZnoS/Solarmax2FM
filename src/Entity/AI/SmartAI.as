@@ -34,7 +34,6 @@ package Entity.AI {
             var _CenterY:Number = 0;
             var _NodeCount:Number = 0;
             for each (_Node in nodeArray) {
-                _Node.getNodeLinks(team);
                 _Node.getTransitShips(team);
                 if (_Node.nodeData.team == team) {
                     _CenterX += _Node.nodeData.x;
@@ -82,7 +81,7 @@ package Entity.AI {
                 senders.sortOn("aiStrength", 16); // 依己方强度从小到大对出兵天体进行排序（由于强度记录的是相反数，此时看绝对值则是从大到小
                 for each (_targetNode in targets) {
                     for each (_senderNode in senders) {
-                        if (_senderNode == _targetNode || _senderNode.nodeLinks.indexOf(_targetNode) == -1)
+                        if (_senderNode == _targetNode || _senderNode.nodeLinks[team].indexOf(_targetNode) == -1)
                             continue; // 基本条件：出兵天体和目标天体不为同一个，且二者之间没有被拦截
                         if (_senderNode.teamStrength(team) + _targetNode.predictedTeamStrength(team) < _targetNode.predictedOppStrength(team))
                             continue; // 出兵条件：出兵天体的强度和目标天体的预测强度之和高于目标天体的预测敌方强度
@@ -123,7 +122,7 @@ package Entity.AI {
                 for each (_Node in nodeArray) { // 计算出兵天体
                     if (_Node.aiTimers[team] > 0 || _Node.teamStrength(team) == 0)
                         continue; // 基本条件：该天体己方ai倒计时为0且该天体己方强度不为0
-                    if (_Node.predictedOppStrength(team) == 0 && _Node.capturing)
+                    if (_Node.predictedOppStrength(team) == 0 && _Node.nodeData.capturing)
                         continue; // 条件：天体不被己方占据
                     if (_Node.nodeData.team != team && _Node.predictedTeamStrength(team) > _Node.predictedOppStrength(team))
                         continue; // 条件：是己方天体或预测己方强度低于敌方
@@ -135,7 +134,7 @@ package Entity.AI {
                 senders.sortOn("aiStrength", 16);
                 for each (_targetNode in targets) {
                     for each (_senderNode in senders) {
-                        if (_senderNode == _targetNode || _senderNode.nodeLinks.indexOf(_targetNode) == -1)
+                        if (_senderNode == _targetNode || _senderNode.nodeLinks[team].indexOf(_targetNode) == -1)
                             continue; // 基本条件：出兵天体和目标天体不为同一个，且二者之间没有被拦截
                         if (_senderNode.teamStrength(team) + _targetNode.predictedTeamStrength(team) <= _targetNode.predictedOppStrength(team))
                             continue; // 出兵条件：出兵天体和目标天体的己方综合强度高于目标天体的预测敌方强度
@@ -193,7 +192,7 @@ package Entity.AI {
                 targets.sortOn("aiValue", 16);
                 for each (_targetNode in targets) {
                     for each (_senderNode in senders) {
-                        if (_senderNode == _targetNode || _senderNode.nodeLinks.indexOf(_targetNode) == -1)
+                        if (_senderNode == _targetNode || _senderNode.nodeLinks[team].indexOf(_targetNode) == -1)
                             continue; // 基本条件：出兵天体和目标天体不为同一个，且二者之间没有被拦截
                         if (_targetNode.aiValue >= _senderNode.aiValue)
                             continue; // 条件：目标天体价值高于出兵天体价值

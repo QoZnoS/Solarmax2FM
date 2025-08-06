@@ -21,7 +21,7 @@ package Entity.Node.Attack {
             updateFX(node, dt);
             if (!attacking)
                 return;
-            var ships:Array = EntityContainer.findShipsInRange(node);
+            var ships:Vector.<Ship> = EntityContainer.findShipsInRange(node);
             for each (var ship:Ship in ships) {
                 EntityHandler.destroyShip(ship);
             }

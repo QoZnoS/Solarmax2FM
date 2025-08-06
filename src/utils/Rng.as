@@ -11,12 +11,11 @@ package utils {
         public static const X32:String = "Xorshift32";
         public static const X0:String = "LCG";
 
-        public function Rng(seed:uint = 0,type:String = X128) {
+        public function Rng(seed:uint = 0, type:String = X128) {
             if (seed == 0)
                 seed = uint(Math.random() * uint.MAX_VALUE)
             _seed = seed
-            switch(type)
-            {
+            switch (type) {
                 case X128:
                     generator = new Xorshift128(seed)
                     break;
@@ -49,14 +48,21 @@ package utils {
          * 生成 [min, max] 范围的整数
          */
         public function nextRange(min:int, max:int):int {
-            return generator.nextRange(min,max)
+            return generator.nextRange(min, max)
         }
 
         /**
          * 返回数组中的一个随机项
          */
-        public function randomIndex(arr:Array):* {
-            return arr[nextRange(0, arr.length-1)];
+        public function randomIndex(arr:Object):* {
+            try {
+                var len:int = arr.length;
+                if (len == 0)
+                    return null;
+                return arr[nextRange(0, len - 1)];
+            } catch (error:Error) {
+                throw error;
+            }
         }
 
         public function get seed():uint {

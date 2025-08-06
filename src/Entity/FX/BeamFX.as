@@ -67,7 +67,7 @@ package Entity.FX {
                     break;
                 default:
                     image2.texture = Root.assets.getTexture(_node.nodeData.type + "_shape");
-                    image2.scaleX = image2.scaleY = _node.image.scaleX;
+                    image2.scaleX = image2.scaleY = _node.moveState.image.scaleX;
                     image2.alpha = 0;
                     break;
             }

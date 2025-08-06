@@ -21,15 +21,15 @@ package Entity.Node.Attack {
             for each (var node:Node in nodes) {
                 if (node == _Node)
                     continue
-                var ships:Array = EntityContainer.filterShipByStatic(node, 0);
+                var ships:Vector.<Vector.<Ship>> = EntityContainer.filterShipByStatic(node, 0);
                 for (var i:int = 0; i < Globals.teamCount; i++) {
                     if (i == _Node.nodeData.team)
                         continue
                     for (var j:int = 0; j < 5; j++) {
-                        if (ships[i] == 0)
+                        if (ships[i].length == 0)
                             break;
                         ship = node.rng.randomIndex(ships[i])
-                        EntityContainer.removeElementFromArray(ships[i], ship);
+                        EntityContainer.removeShipFromVector(ships[i], ship);
                         EntityHandler.destroyShip(ship)
                     }
                 }

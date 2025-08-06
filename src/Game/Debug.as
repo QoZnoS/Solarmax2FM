@@ -210,13 +210,13 @@ package Game {
                 THIS.nodeTagLables[1][_node.tag].y = _node.nodeData.y + 50 * _node.nodeData.size - 30;
                 THIS.nodeTagLables[2][_node.tag].x = _node.nodeData.x - 60;
                 THIS.nodeTagLables[2][_node.tag].y = _node.nodeData.y + 50 * _node.nodeData.size - 30;
-                if (_node.conflict)
+                if (_node.nodeData.conflict)
                     THIS.nodeTagLables[1][_node.tag].visible = true;
                 else
                     THIS.nodeTagLables[1][_node.tag].visible = false;
-                if (_node.capturing) {
+                if (_node.nodeData.capturing) {
                     THIS.nodeTagLables[2][_node.tag].visible = true;
-                    THIS.nodeTagLables[2][_node.tag].text = "RATE: " + _node.captureRate.toFixed(2);
+                    THIS.nodeTagLables[2][_node.tag].text = "RATE: " + _node.captureState.captureRate.toFixed(2);
                 } else
                     THIS.nodeTagLables[2][_node.tag].visible = false;
             }

@@ -2,7 +2,6 @@ package {
     import flash.filesystem.File;
     import flash.filesystem.FileStream;
     import starling.errors.AbstractClassError;
-    import starling.core.starling_internal;
     import flash.utils.Dictionary;
 
     public class Globals {

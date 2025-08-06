@@ -194,7 +194,7 @@ package Game {
                         _Node.startVal = 0; // 36关黑色除星核无初始兵力
                     if (_Node.nodeData.type == NodeType.DILATOR) {
                         // 设定星核数据
-                        _Node.buildRate = 8;
+                        _Node.buildState.buildRate = 8;
                         _Node.nodeData.popVal = 280;
                         _Node.startVal = Globals.currentDifficulty * 75;
                     }
@@ -696,8 +696,7 @@ package Game {
                     for each (var _Node:Node in EntityContainer.nodes) {
                         if (_Node.nodeData.type == NodeType.BARRIER)
                             continue;
-                        _Node.winPulseTimer = Math.min(_ripple * 0.101, _ripple * 1.5 / EntityContainer.nodes.length);
-                        _Node.winTeam = winningTeam;
+                        _Node.basicState.winPulseTimer = Math.min(_ripple * 0.101, _ripple * 2.5 / EntityContainer.nodes.length);
                         _ripple++;
                     }
                     cover.color = Globals.teamColors[winningTeam];
@@ -753,13 +752,15 @@ package Game {
                     gameOver = false; // 游戏继续
                     return;
                 }
-                if (i == 0 && _Node.buildRate != 0) // 都没飞船也都产不了兵判中立赢
+                if (i == 0 && _Node.buildState.buildRate != 0) // 都没飞船也都产不了兵判中立赢
                 {
                     gameOver = false; // 游戏继续
                     return;
                 }
             }
             winningTeam = i;
+            if (!gameOver)
+                winningTeam = -1;
         }
 
         public function updateBarrier():void {
@@ -823,7 +824,7 @@ package Game {
             for each (var _Node:Node in EntityContainer.nodes) {
                 if (_Node.nodeData.type != NodeType.BARRIER)
                     continue;
-                _Node.image.visible = _Node.halo.visible = _Node.linked;
+                _Node.moveState.image.visible = _Node.moveState.halo.visible = _Node.linked;
             }
         }
 

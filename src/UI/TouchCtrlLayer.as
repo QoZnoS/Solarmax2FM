@@ -53,8 +53,8 @@ package UI {
             for each (var _Touch:Touch in touches) {
                 if (_Touch.hoverNode) {
                     Drawer.drawCircle(displayBatch, _Touch.hoverNode.nodeData.x, _Touch.hoverNode.nodeData.y, Globals.teamColors[_Touch.hoverNode.nodeData.team], _Touch.hoverNode.nodeData.lineDist - 4, _Touch.hoverNode.nodeData.size * 25 * 2, true, 0.5);
-                    if (_Touch.hoverNode.attackStrategy.attackRate > 0)
-                        Drawer.drawDashedCircle(displayBatch, _Touch.hoverNode.nodeData.x, _Touch.hoverNode.nodeData.y, Globals.teamColors[_Touch.hoverNode.nodeData.team], _Touch.hoverNode.attackStrategy.attackRange, _Touch.hoverNode.attackStrategy.attackRange - 2, false, 0.5, 1, 0, 256);
+                    if (_Touch.hoverNode.attackState.attackRate > 0)
+                        Drawer.drawDashedCircle(displayBatch, _Touch.hoverNode.nodeData.x, _Touch.hoverNode.nodeData.y, Globals.teamColors[_Touch.hoverNode.nodeData.team], _Touch.hoverNode.attackState.attackRange, _Touch.hoverNode.attackState.attackRange - 2, false, 0.5, 1, 0, 256);
                 }
                 if (!(_Touch.downNodes && _Touch.downNodes.length > 0))
                     continue

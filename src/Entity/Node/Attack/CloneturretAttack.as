@@ -17,14 +17,14 @@ package Entity.Node.Attack {
                 return;
             if (Globals.teamPops[node.nodeData.team] >= Globals.teamCaps[node.nodeData.team])
                 return;
-            var ships:Array = EntityContainer.findShipsInRange(node, false);
+            var ships:Vector.<Ship> = EntityContainer.findShipsInRange(node, false);
             if (ships.length == 0)
                 return;
             var ship:Ship = node.rng.randomIndex(ships);
             var shipCreate:Ship = EntityHandler.addShip(node, node.nodeData.team, false); // 产生新飞船
             shipCreate.x = node.nodeData.x;
             shipCreate.y = node.nodeData.y;
-            EntityContainer.removeElementFromArray(node.ships[node.nodeData.team], shipCreate);
+            EntityContainer.removeShipFromVector(node.ships[node.nodeData.team], shipCreate);
             shipCreate.followTo(ship); // 跟随原飞船
         }
 

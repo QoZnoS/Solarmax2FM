@@ -27,7 +27,6 @@ package Entity.AI
             var surrender:Boolean = true;
             for each (var _Node:Node in nodeArray)
             {
-                _Node.getNodeLinks(team); // 计算寻路
                 if (_Node.nodeData.team == this.team)
                     surrender = false; // 有己方天体则不认输
             }
@@ -48,7 +47,7 @@ package Entity.AI
                 // 计算出兵天体
                 if (!senderCheckBasic(_Node))
                     continue;
-                if (_Node.hard_oppAllStrength(team) != 0 || _Node.conflict)
+                if (_Node.hard_oppAllStrength(team) != 0 || _Node.nodeData.conflict)
                 {
                     // (预)战争状态
                     if (_Node.hard_teamStrength(team) * 0.6 > _Node.hard_oppAllStrength(team))
@@ -67,9 +66,9 @@ package Entity.AI
                     }
                     continue;
                 }
-                if (_Node.capturing)
+                if (_Node.nodeData.capturing)
                 {
-                    if (_Node.nodeData.team == 0 && (100 - _Node.nodeData.hp) / _Node.captureRate < 0.5 && _Node.nodeData.type != NodeType.WARP)
+                    if (_Node.nodeData.team == 0 && (100 - _Node.nodeData.hp) / _Node.captureState.captureRate < 0.5 && _Node.nodeData.type != NodeType.WARP)
                     {
                         senders.push(_Node); // 提前出兵
                         _Node.senderType = "attack"; // 类型：正常出兵
@@ -97,7 +96,7 @@ package Entity.AI
                     }
                     continue;
                 }
-                if (_Node.nodeData.team == 0 && _Node.capturing && _Node.captureTeam == team && (100 - _Node.nodeData.hp) / _Node.captureRate < _Node.aiValue / 50)
+                if (_Node.nodeData.team == 0 && _Node.nodeData.capturing && _Node.captureState.captureTeam == team && (100 - _Node.nodeData.hp) / _Node.captureState.captureRate < _Node.aiValue / 50)
                     continue; // 不向快占完的天体派兵
                 if (_Node.nodeData.team == team && _Node.nodeData.type != NodeType.WARP)
                     continue; // 除传送门不向己方天体派兵
@@ -114,7 +113,7 @@ package Entity.AI
                     // 先排序
                     _Distance = calcDistence(_senderNode, _targetNode) + rng.nextNumber() * 32;
                     _targetNode.aiValue = _Distance * 0.8 + _targetNode.hard_oppAllStrength(team);
-                    if (_targetNode.attackStrategy.attackRate != 0)
+                    if (_targetNode.attackState.attackRate != 0)
                         _targetNode.aiValue += getTowerAIValue();
                     if (_targetNode.nodeData.type == NodeType.STARBASE)
                         _targetNode.aiValue -= Globals.teamCaps[0];
@@ -151,7 +150,7 @@ package Entity.AI
                         else
                             _Ships = Math.min(_Ships, Math.floor(_targetNode.hard_oppAllStrength(team) * 2.4 - _targetNode.hard_AllStrength(team)) + 4); // 加强黑色分兵
                     }
-                    _Ships = Math.max(_Ships, ((hard_distance(_senderNode, _targetNode) * _targetNode.buildRate / 50) * 1.2 + 3));
+                    _Ships = Math.max(_Ships, ((hard_distance(_senderNode, _targetNode) * _targetNode.buildState.buildRate / 50) * 1.2 + 3));
                     _towerAttack = hard_getTowerAttack(_senderNode, _targetClose);
                     if (_towerAttack > 0 && _Ships < _towerAttack + 30)
                         continue; // 派出的兵力不超估损30兵时不派兵
@@ -168,7 +167,7 @@ package Entity.AI
         {
             // 回防
             var _boss:Node = nodeArray[0];
-            if (_boss.conflict || _boss.capturing)
+            if (_boss.nodeData.conflict || _boss.nodeData.capturing)
             {
                 for each (var _Node:Node in nodeArray)
                 {
@@ -203,7 +202,7 @@ package Entity.AI
                 return false;
             if (_senderNode.nodeData.type == NodeType.WARP && _senderNode.nodeData.team == team)
                 return true;
-            else if (_senderNode.nodeLinks.indexOf(_targetNode) != -1)
+            else if (_senderNode.nodeLinks[team].indexOf(_targetNode) != -1)
                 return true;
             return false;
         }
@@ -227,7 +226,7 @@ package Entity.AI
             {
                 _warpValue += _Node.nodeData.popVal;
                 if (_Node.nodeData.team != 0 && _Node.nodeData.team != team)
-                    _warpValue -= _Node.attackStrategy.attackRange * 3.5;
+                    _warpValue -= _Node.attackState.attackRange * 3.5;
             }
             return _warpValue;
         }
@@ -235,11 +234,11 @@ package Entity.AI
         public function breadthFirstSearch(_startNode:Node, _targetNode:Node):Node
         {
             // 广度优先搜索，寻路算法
-            clearbreadthFirstSearch();
             if (_startNode == _targetNode)
                 return null;
             if (moveCheckBasic(_startNode, _targetNode))
                 return _targetNode;
+            clearbreadthFirstSearch();
             var _queue:Array = new Array();
             _queue.push(_startNode);
             var _visited:Array = new Array();
@@ -247,7 +246,7 @@ package Entity.AI
             while (_queue.length > 0)
             {
                 var _current:Node = _queue.shift();
-                for each (var _next:Node in _current.nodeLinks)
+                for each (var _next:Node in _current.nodeLinks[team])
                 {
                     if (_visited.indexOf(_next) != -1)
                         continue;
@@ -287,7 +286,7 @@ package Entity.AI
             while (_queue.length > 0)
             {
                 var _current:Node = _queue.shift();
-                for each (var _next:Node in _current.nodeLinks)
+                for each (var _next:Node in _current.nodeLinks[team])
                 {
                     if (_visited.indexOf(_next) != -1)
                         continue;
@@ -313,13 +312,11 @@ package Entity.AI
             return 9999;
         }
 
+        // 清除广度优先搜索父节点
         public function clearbreadthFirstSearch():void
         {
-            // 清除广度优先搜索父节点
             for each (var _Node:Node in nodeArray)
-            {
                 _Node.breadthFirstSearchNode = null;
-            }
         }
 
         public function hard_getTowerAttack(_Node1:Node, _Node2:Node):Number
@@ -343,12 +340,12 @@ package Entity.AI
                 _Length = 0;
                 if (_Node.nodeData.team == 0 || _Node.nodeData.team == team)
                     continue;
-                if (_Node.attackStrategy.attackRange != 0)
+                if (_Node.attackState.attackRange != 0)
                 {
                     _start = new Point(_Node1.nodeData.x, _Node1.nodeData.y);
                     _end = new Point(_Node2.nodeData.x, _Node2.nodeData.y);
                     _current = new Point(_Node.nodeData.x, _Node.nodeData.y);
-                    result = EntityContainer.lineIntersectCircle(_start, _end, _current, _Node.attackStrategy.attackRange);
+                    result = EntityContainer.lineIntersectCircle(_start, _end, _current, _Node.attackState.attackRange);
                     resultInside = result[0], resultIntersects = result[1], resultEnter = result[2], resultExit = result[3];
                     if (resultIntersects)
                     {
@@ -361,7 +358,7 @@ package Entity.AI
                     else if (resultInside)
                         _Length += Point.distance(_start, _end);
                     if (_Node.nodeData.type == NodeType.TOWER || _Node.nodeData.type == NodeType.STARBASE || _Node.nodeData.type == NodeType.CAPTURESHIP)
-                        _towerAttack += (_Length / Globals.teamShipSpeeds[team]) / _Node.attackStrategy.attackRate;
+                        _towerAttack += (_Length / Globals.teamShipSpeeds[team]) / _Node.attackState.attackRate;
                 }
             }
             return Math.floor(_towerAttack);

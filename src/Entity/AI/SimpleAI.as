@@ -67,7 +67,7 @@ package Entity.AI {
                 for each (_Node in _NodeArray) { // 统计出兵天体
                     if (_Node.aiTimers[team] > 0 || _Node.teamStrength(team) == 0)
                         continue; // 基本条件：该天体己方ai倒计时为0且该天体己方强度不为0
-                    if (_Node.conflict && _Node.predictedTeamStrength(team) > _Node.predictedOppStrength(team))
+                    if (_Node.nodeData.conflict && _Node.predictedTeamStrength(team) > _Node.predictedOppStrength(team))
                         continue; // 条件：没有战争或预测己方强度低于敌方
                     _Node.aiStrength = -_Node.teamStrength(team); // 将该天体己方强度记为飞船数的相反数
                     senders.push(_Node);
@@ -112,7 +112,7 @@ package Entity.AI {
                 for each (_Node in _NodeArray) { // 统计出兵天体
                     if (_Node.aiTimers[team] > 0 || _Node.teamStrength(team) == 0)
                         continue; // 基本条件：该天体己方ai倒计时为0且该天体己方强度不为0
-                    if (_Node.conflict && _Node.predictedTeamStrength(team) > _Node.predictedOppStrength(team))
+                    if (_Node.nodeData.conflict && _Node.predictedTeamStrength(team) > _Node.predictedOppStrength(team))
                         continue; // 出兵条件：天体上没有战争或预测敌方强度高于预测己方强度
                     _Node.aiStrength = -_Node.teamStrength(team); // 将该天体己方强度记为飞船数的相反数
                     senders.push(_Node);

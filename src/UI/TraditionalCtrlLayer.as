@@ -130,8 +130,8 @@ package UI {
                 _Node2 = getClosestNode(_mouseX, _mouseY);
                 if (_Node2) {
                     Drawer.drawCircle(displayBatch, _Node2.nodeData.x, _Node2.nodeData.y, Globals.teamColors[_Node2.nodeData.team], _Node2.nodeData.lineDist - 4, _Node2.nodeData.size * 25 * 2, true, 0.5);
-                    if (_Node2.attackStrategy.attackRate > 0 && _Node2.attackStrategy.attackRange > 0)
-                        Drawer.drawDashedCircle(displayBatch, _Node2.nodeData.x, _Node2.nodeData.y, Globals.teamColors[_Node2.nodeData.team], _Node2.attackStrategy.attackRange, _Node2.attackStrategy.attackRange - 2, false, 0.5, 1, 0, 256);
+                    if (_Node2.attackState.attackRate > 0 && _Node2.attackState.attackRange > 0)
+                        Drawer.drawDashedCircle(displayBatch, _Node2.nodeData.x, _Node2.nodeData.y, Globals.teamColors[_Node2.nodeData.team], _Node2.attackState.attackRange, _Node2.attackState.attackRange - 2, false, 0.5, 1, 0, 256);
                     if (rightDown && selectedNodes.length > 0) {
                         for each (_Node1 in selectedNodes) {
                             _Block = nodesBlocked(_Node1, _Node2);

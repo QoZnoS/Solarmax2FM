@@ -68,8 +68,8 @@ package Entity {
          * @param ship 
          */
         public static function removeShip(ship:Ship):void {
-            EntityContainer.removeElementFromArray(ship.node.ships[ship.team], ship)
-            EntityContainer.removeElementFromArray(ship.preNode.ships[ship.team], ship)
+            EntityContainer.removeShipFromVector(ship.node.ships[ship.team], ship)
+            EntityContainer.removeShipFromVector(ship.preNode.ships[ship.team], ship)
             ship.hp = 0;
             ship.active = false;
         }

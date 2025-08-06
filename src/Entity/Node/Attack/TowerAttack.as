@@ -15,7 +15,7 @@ package Entity.Node.Attack {
         override public function executeAttack(node:Node, dt:Number):void {
             if (!updateTimer(dt))
                 return;
-            var ships:Array = EntityContainer.findShipsInRange(node);
+            var ships:Vector.<Ship> = EntityContainer.findShipsInRange(node);
             if (ships.length == 0)
                 return;
             var ship:Ship = node.rng.randomIndex(ships);

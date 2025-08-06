@@ -163,7 +163,7 @@ package Entity
             updateForeground()
             drawTrail();
          }
-         if (!node.conflict && !node.capturing)
+         if (!node.nodeData.conflict && !node.nodeData.capturing)
             hp = Math.min(100, hp + _dt * 50);
          orbitAngle += orbitSpeed * _dt;
          orbitAngle %= Math.PI * 2
@@ -213,7 +213,7 @@ package Entity
                node.ships[team].push(this);
                if (node.aiTimers[team] < 0.1)
                   node.aiTimers[team] = 0.1;
-               node.warps[team] = true;
+               node.basicState.warps[team] = true;
                state = 0;
                GS.playWarp(this.x);
             }
@@ -240,7 +240,7 @@ package Entity
          var _x2:Number = NaN;
          var _y2:Number = NaN;
          jumpSpeed += _dt * Globals.teamShipSpeeds[team] / 12.5;
-         if (node.orbitNode)
+         if (node.moveState.orbitNode)
          {
             _x1 = Math.cos(orbitAngle) * orbitDist;
             _y1 = Math.sin(orbitAngle) * orbitDist;
@@ -250,21 +250,21 @@ package Entity
             _dy = ty - y;
             _Angle = Math.atan2(_dy, _dx);
             _dtime = (_Distance = Math.sqrt(_dx * _dx + _dy * _dy)) / jumpSpeed;
-            _dAngle = node.orbitAngle + node.orbitSpeed * _dtime;
+            _dAngle = node.moveState.orbitAngle + node.moveState.orbitSpeed * _dtime;
             if (_dAngle > Math.PI * 2)
                _dAngle -= Math.PI * 2;
-            _x2 = node.orbitNode.nodeData.x + Math.cos(_dAngle) * node.orbitDist;
-            _y2 = node.orbitNode.nodeData.y + Math.sin(_dAngle) * node.orbitDist;
+            _x2 = node.moveState.orbitNode.nodeData.x + Math.cos(_dAngle) * node.moveState.orbitDist;
+            _y2 = node.moveState.orbitNode.nodeData.y + Math.sin(_dAngle) * node.moveState.orbitDist;
             tx = _x2 + _x1;
             ty = _y2 + _y1 * 0.15;
             _dx = tx - x;
             _dy = ty - y;
             _dtime = (_Distance = Math.sqrt(_dx * _dx + _dy * _dy)) / jumpSpeed;
-            _dAngle = node.orbitAngle + node.orbitSpeed * _dtime;
+            _dAngle = node.moveState.orbitAngle + node.moveState.orbitSpeed * _dtime;
             if (_dAngle > Math.PI * 2)
                _dAngle -= Math.PI * 2;
-            _x2 = node.orbitNode.nodeData.x + Math.cos(_dAngle) * node.orbitDist;
-            _y2 = node.orbitNode.nodeData.y + Math.sin(_dAngle) * node.orbitDist;
+            _x2 = node.moveState.orbitNode.nodeData.x + Math.cos(_dAngle) * node.moveState.orbitDist;
+            _y2 = node.moveState.orbitNode.nodeData.y + Math.sin(_dAngle) * node.moveState.orbitDist;
             tx = _x2 + _x1;
             ty = _y2 + _y1 * 0.15;
             _dx = tx - x;
@@ -460,24 +460,24 @@ package Entity
          _dy = ty - y;
          jumpAngle = Math.atan2(_dy, _dx);
          targetDist = _Distance = Math.sqrt(_dx * _dx + _dy * _dy);
-         if (node.orbitNode)
+         if (node.moveState.orbitNode)
          {
             _dtime = _Distance / jumpSpeed;
-            _dAngle = node.orbitAngle + node.orbitSpeed * _dtime;
+            _dAngle = node.moveState.orbitAngle + node.moveState.orbitSpeed * _dtime;
             if (_dAngle > Math.PI * 2)
                _dAngle -= Math.PI * 2;
-            _x2 = node.orbitNode.nodeData.x + Math.cos(_dAngle) * node.orbitDist;
-            _y2 = node.orbitNode.nodeData.y + Math.sin(_dAngle) * node.orbitDist;
+            _x2 = node.moveState.orbitNode.nodeData.x + Math.cos(_dAngle) * node.moveState.orbitDist;
+            _y2 = node.moveState.orbitNode.nodeData.y + Math.sin(_dAngle) * node.moveState.orbitDist;
             tx = _x2 + _x1;
             ty = _y2 + _y1 * 0.15;
             _dx = tx - x;
             _dy = ty - y;
             _dtime = (_Distance = Math.sqrt(_dx * _dx + _dy * _dy)) / jumpSpeed;
-            _dAngle = node.orbitAngle + node.orbitSpeed * _dtime;
+            _dAngle = node.moveState.orbitAngle + node.moveState.orbitSpeed * _dtime;
             if (_dAngle > Math.PI * 2)
                _dAngle -= Math.PI * 2;
-            _x2 = node.orbitNode.nodeData.x + Math.cos(_dAngle) * node.orbitDist;
-            _y2 = node.orbitNode.nodeData.y + Math.sin(_dAngle) * node.orbitDist;
+            _x2 = node.moveState.orbitNode.nodeData.x + Math.cos(_dAngle) * node.moveState.orbitDist;
+            _y2 = node.moveState.orbitNode.nodeData.y + Math.sin(_dAngle) * node.moveState.orbitDist;
             tx = _x2 + _x1;
             ty = _y2 + _y1 * 0.15;
             _dx = tx - x;

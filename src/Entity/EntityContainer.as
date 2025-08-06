@@ -30,6 +30,7 @@ package Entity {
         private static const _ENTITY_POOL_COUNT:int = 11;
         private static var _ready:Boolean = false;
 
+        // #region 实体池
         public function EntityContainer() {
             throw new AbstractClassError();
         }
@@ -98,18 +99,19 @@ package Entity {
                 init();
             return _entityPools[index].getReserve();
         }
-
+        // #endregion
+        
         // #region 天体
         /** 搜寻范围内飞行中的飞船
          * @param _node 目标天体
          * @param _hostile 是否为敌对势力
          * @return 飞船数组
          */
-        public static function findShipsInRange(_node:Node, _hostile:Boolean = true):Array {
+        public static function findShipsInRange(_node:Node, _hostile:Boolean = true):Vector.<Ship> {
             var dx:Number;
             var dy:Number;
             var ship:Ship;
-            var shipinRange:Array = [];
+            var shipinRange:Vector.<Ship> = new Vector.<Ship>;
             for each (ship in ships) {
                 if (ship.state != 3 || ship.warping)
                     continue;
@@ -117,9 +119,9 @@ package Entity {
                     continue; // 建议势力
                 dx = ship.x - _node.nodeData.x;
                 dy = ship.y - _node.nodeData.y;
-                if (dx > _node.attackStrategy.attackRange || dx < -_node.attackStrategy.attackRange || dy > _node.attackStrategy.attackRange || dy < -_node.attackStrategy.attackRange)
+                if (dx > _node.attackState.attackRange || dx < -_node.attackState.attackRange || dy > _node.attackState.attackRange || dy < -_node.attackState.attackRange)
                     continue;
-                if (Math.sqrt(dx * dx + dy * dy) < _node.attackStrategy.attackRange)
+                if (Math.sqrt(dx * dx + dy * dy) < _node.attackState.attackRange)
                     shipinRange.push(ship);
             }
             return shipinRange;
@@ -137,9 +139,9 @@ package Entity {
             for each (node in nodes) {
                 dx = node.nodeData.x - _node.nodeData.x;
                 dy = node.nodeData.y - _node.nodeData.y;
-                if (dx > _node.attackStrategy.attackRange || dx < -_node.attackStrategy.attackRange || dy > _node.attackStrategy.attackRange || dy < -_node.attackStrategy.attackRange)
+                if (dx > _node.attackState.attackRange || dx < -_node.attackState.attackRange || dy > _node.attackState.attackRange || dy < -_node.attackState.attackRange)
                     continue;
-                if (Math.sqrt(dx * dx + dy * dy) < _node.attackStrategy.attackRange)
+                if (Math.sqrt(dx * dx + dy * dy) < _node.attackState.attackRange)
                     nodeInRange.push(node);
             }
             return nodeInRange;
@@ -150,10 +152,10 @@ package Entity {
          * @param _state 目标状态
          * @return 二层数组
          */
-        public static function filterShipByStatic(_node:Node, _state:int):Array {
-            var ships:Array = [];
-            for each (var shipArr:Array in _node.ships) {
-                var filterArr:Array = [];
+        public static function filterShipByStatic(_node:Node, _state:int):Vector.<Vector.<Ship>> {
+            var ships:Vector.<Vector.<Ship>> = new Vector.<Vector.<Ship>>;
+            for each (var shipArr:Vector.<Ship> in _node.ships) {
+                var filterArr:Vector.<Ship> = new Vector.<Ship>;
                 for each (var ship:Ship in shipArr) {
                     if (ship.state == _state)
                         filterArr.push(ship);
@@ -165,6 +167,11 @@ package Entity {
         // #endregion
 
         // #region 飞船
+        public static function removeShipFromVector(vec:Vector.<Ship>, ship:Ship):void {
+            for (var i:int = vec.length - 1; i >= 0; i--)
+                if (vec[i] == ship)
+                    vec.splice(i, 1);
+        }
 
         // #endregion
 
@@ -187,7 +194,7 @@ package Entity {
                     _start = new Point(_Node1.nodeData.x, _Node1.nodeData.y);
                     _end = new Point(_Node2.nodeData.x, _Node2.nodeData.y);
                     _current = new Point(_Node.nodeData.x, _Node.nodeData.y);
-                    result = lineIntersectCircle(_start, _end, _current, _Node.attackStrategy.attackRange);
+                    result = lineIntersectCircle(_start, _end, _current, _Node.attackState.attackRange);
                     resultInside = result[0],resultIntersects = result[1], resultEnter = result[2], resultExit = result[3];
                     if (resultIntersects) {
                         if (resultEnter && resultExit)

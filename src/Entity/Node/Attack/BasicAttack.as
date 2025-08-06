@@ -76,5 +76,6 @@ package Entity.Node.Attack {
             return _attack;
         }
         // #endregion
+
     }
 }

@@ -10,11 +10,36 @@ package Entity.Node {
     public class NodeStaticLogic {
         public static var game:GameScene;
 
-        public static function updateImagePositions(node:Node):void {
-            node.image.x = node.halo.x = node.glow.x = node.nodeData.x;
-            node.image.y = node.halo.y = node.glow.y = node.nodeData.y;
-            node.label.x = node.nodeData.x + 30 * node.nodeData.size;
-            node.label.y = node.nodeData.y + 50 * node.nodeData.size;
+        public static function updateLabelSizes(node:Node):void {
+            var i:int = 0;
+            switch (Globals.textSize) // 读取文本大小设置
+            {
+                case 0: // 大小设置为0
+                    node.moveState.label.fontName = "Downlink10"; // 切换和平状态下的字体图
+                    node.moveState.label.fontSize = -1; // 默认大小
+                    for (i = 0; i < node.moveState.labels.length; i++) // 设定战斗状态下每个势力的文本
+                    {
+                        node.moveState.labels[i].fontName = "Downlink10";
+                        node.moveState.labels[i].fontSize = -1;
+                    }
+                    break;
+                case 1: // 大小设置为1
+                    node.moveState.label.fontName = "Downlink12";
+                    node.moveState.label.fontSize = -1;
+                    for (i = 0; i < node.moveState.labels.length; i++) {
+                        node.moveState.labels[i].fontName = "Downlink12";
+                        node.moveState.labels[i].fontSize = -1;
+                    }
+                    break;
+                case 2: // 大小设置为2
+                    node.moveState.label.fontName = "Downlink18";
+                    node.moveState.label.fontSize = -1;
+                    for (i = 0; i < node.moveState.labels.length; i++) {
+                        node.moveState.labels[i].fontName = "Downlink18";
+                        node.moveState.labels[i].fontSize = -1;
+                    }
+                    return;
+            }
         }
 
         public static function changeTeam(node:Node, team:int):void {
@@ -24,10 +49,10 @@ package Entity.Node {
                 node.nodeData.hp = 0;
             var Nodeteam:int = node.nodeData.team;
             node.nodeData.team = team;
-            node.captureTeam = team;
-            node.glowing = true; // 激活光效
-            node.glow.color = Globals.teamColors[team]; // 设定光效颜色
-            node.entityL.addGlow(node.glow);
+            node.nodeData.captureTeam = team;
+            node.moveState.glowing = true; // 激活光效
+            node.moveState.glow.color = Globals.teamColors[team]; // 设定光效颜色
+            node.entityL.addGlow(node.moveState.glow);
             FXHandler.addPulse(node, Globals.teamColors[team], 0);
             GS.playCapture(node.nodeData.x); // 播放占领音效
             if (Nodeteam != 1 && team == 1 && node.nodeData.popVal > 0) {
@@ -61,38 +86,38 @@ package Entity.Node {
             var get:String = LevelData.nodeData.node.(@id == type).defaultSize;
             node.nodeData.size = (size == -1) ? Number(get) : size;
             // 处理贴图
-            node.image.rotation = node.halo.rotation = node.glow.rotation = 0;
+            node.moveState.image.rotation = node.moveState.halo.rotation = node.moveState.glow.rotation = 0;
             node.nodeData.type = type;
             if (type == NodeType.PLANET) {
                 var ImageID:String = node.rng.nextRange(1, 16).toString();
                 if (ImageID.length == 1)
                     ImageID = "0" + ImageID; // 随机取一个星球贴图的编号
-                node.image.texture = Root.assets.getTexture("planet" + ImageID); // 更换星球贴图
-                node.halo.texture = Root.assets.getTexture("halo"); // 更换光圈
-                node.glow.texture = Root.assets.getTexture("planet_shape"); // 更换星球光效
-                node.image.scaleX = node.image.scaleY = node.glow.scaleX = node.glow.scaleY = size;
+                node.moveState.image.texture = Root.assets.getTexture("planet" + ImageID); // 更换星球贴图
+                node.moveState.halo.texture = Root.assets.getTexture("halo"); // 更换光圈
+                node.moveState.glow.texture = Root.assets.getTexture("planet_shape"); // 更换星球光效
+                node.moveState.image.scaleX = node.moveState.image.scaleY = node.moveState.glow.scaleX = node.moveState.glow.scaleY = size;
             } else {
-                node.image.texture = Root.assets.getTexture(type); // 更换星球贴图
-                node.halo.texture = Root.assets.getTexture(type + "_glow"); // 更换光圈
-                node.glow.texture = Root.assets.getTexture(type + "_shape"); // 更换星球光效
+                node.moveState.image.texture = Root.assets.getTexture(type); // 更换星球贴图
+                node.moveState.halo.texture = Root.assets.getTexture(type + "_glow"); // 更换光圈
+                node.moveState.glow.texture = Root.assets.getTexture(type + "_shape"); // 更换星球光效
             }
-            node.labelDist = 180 * size; // 计算文本圈大小
+            node.moveState.labelDist = 180 * size; // 计算文本圈大小
             node.nodeData.lineDist = 150 * size; // 计算选中圈大小
             node.nodeData.touchDist = size < 0.5 ? node.nodeData.lineDist + (1 - size * 2) * 50 : node.nodeData.lineDist; // 计算传统操作模式下的天体选中圈
-            node.halo.readjustSize();
-            node.halo.scaleY = node.halo.scaleX = 1;
-            node.halo.pivotY = node.halo.pivotX = node.halo.width * 0.5;
+            node.moveState.halo.readjustSize();
+            node.moveState.halo.scaleY = node.moveState.halo.scaleX = 1;
+            node.moveState.halo.pivotY = node.moveState.halo.pivotX = node.moveState.halo.width * 0.5;
             get = LevelData.nodeData.node.(@name == type).rotation;
-            node.image.rotation = node.halo.rotation = node.glow.rotation = (get.indexOf("S*") != -1) ? Number(get.slice(2)) * size : Number(get);
+            node.moveState.image.rotation = node.moveState.halo.rotation = node.moveState.glow.rotation = (get.indexOf("S*") != -1) ? Number(get.slice(2)) * size : Number(get);
             get = LevelData.nodeData.node.(@name == type).scale;
-            type == NodeType.PLANET ? node.halo.scaleY = node.halo.scaleX = size * 0.5 : node.image.scaleX = node.image.scaleY = node.halo.scaleX = node.halo.scaleY = node.glow.scaleX = node.glow.scaleY = Number(get);
+            type == NodeType.PLANET ? node.moveState.halo.scaleY = node.moveState.halo.scaleX = size * 0.5 : node.moveState.image.scaleX = node.moveState.image.scaleY = node.moveState.halo.scaleX = node.moveState.halo.scaleY = node.moveState.glow.scaleX = node.moveState.glow.scaleY = Number(get);
             // 读取参数
             get = LevelData.nodeData.node.(@name == type).startVal;
             node.startVal = (get.indexOf("S*") != -1) ? Number(get.slice(2)) * size : Number(get);
             get = LevelData.nodeData.node.(@name == type).popVal;
             node.nodeData.popVal = (get.indexOf("S*") != -1) ? Number(get.slice(2)) * size : Number(get);
             get = LevelData.nodeData.node.(@name == type).buildRate;
-            node.buildRate = (get.indexOf("S*") != -1) ? Number(get.slice(2)) * size : Number(get);
+            node.buildState.buildRate = (get.indexOf("S*") != -1) ? Number(get.slice(2)) * size : Number(get);
             get = LevelData.nodeData.node.(@name == type).hpMult;
             node.nodeData.hpMult = (get.indexOf("S*") != -1) ? Number(get.slice(2)) * size : Number(get);
             get = LevelData.nodeData.node.(@name == type).attackRate;
@@ -102,7 +127,7 @@ package Entity.Node {
             get = LevelData.nodeData.node.(@name == type).attackLast;
             var attackLast:Number = (get.indexOf("S*") != -1) ? Number(get.slice(2)) * size : Number(get);
             get = LevelData.nodeData.node.(@name == type).attackType;
-            node.attackStrategy = AttackStrategyFactory.create(get, attackRate, attackRange, attackLast);
+            node.attackState.attackStrategy = AttackStrategyFactory.create(get, attackRate, attackRange, attackLast);
             if (type == NodeType.BARRIER)
                 node.getBarrierLinks(); // 计算障碍链接参数
         }
@@ -138,7 +163,7 @@ package Entity.Node {
                     warp = moveShip(node, ship, team, targetNode);
             }
             if (warp)
-                node.showWarpPulse(team); // 播放传送门特效
+                showWarpPulse(node, team); // 播放传送门特效
         }
 
         private static function moveShip(node:Node, ship:Ship, team:int, targetNode:Node):Boolean {
@@ -150,5 +175,50 @@ package Entity.Node {
                 return false;
             }
         }
+
+        public static function showWarpPulse(node:Node, team:int):void {
+            var _delay:Number = 0;
+            var _rate:Number = 2.6;
+            var _delayStep:Number = 0.12;
+            var _angle:Number = 1.5707963267948966;
+            var _maxSize:Number = 1;
+            for (var i:int = 0; i < 3; i++) {
+                FXHandler.addDarkPulse(node, Globals.teamColors[team], 1, _maxSize, _rate, _angle, _delay);
+                _delay += _delayStep;
+                _angle += 2.0943951023931953;
+                FXHandler.addDarkPulse(node, Globals.teamColors[team], 1, _maxSize, _rate, _angle, _delay);
+                _delay += _delayStep;
+                _angle += 2.0943951023931953;
+                FXHandler.addDarkPulse(node, Globals.teamColors[team], 1, _maxSize, _rate, _angle, _delay);
+                _delay += _delayStep;
+                _angle += 2.0943951023931953;
+                _rate *= 1.1;
+                _delayStep *= 0.9;
+                _maxSize *= 0.8;
+            }
+            FXHandler.addDarkPulse(node, Globals.teamColors[team], 2, 2, 2, 0);
+            GS.playWarpCharge(node.nodeData.x);
+        }
+
+        public static function showWarpArrive(node:Node, team:int):void {
+            var rate:Number = 2;
+            var angle:Number = 1.5707963267948966;
+            var maxSize:Number = node.nodeData.size * 2;
+            FXHandler.addDarkPulse(node, Globals.teamColors[team], 0, maxSize, rate, angle, 0);
+            angle += 2.0943951023931953;
+            FXHandler.addDarkPulse(node, Globals.teamColors[team], 0, maxSize, rate, angle, 0);
+            angle += 2.0943951023931953;
+            FXHandler.addDarkPulse(node, Globals.teamColors[team], 0, maxSize, rate, angle, 0);
+            angle += 2.0943951023931953;
+            rate *= 1.1;
+            maxSize *= 1.2;
+            FXHandler.addDarkPulse(node, Globals.teamColors[team], 3, 18 * node.nodeData.size, 28 * node.nodeData.size, 0);
+        }
+
+
+
+
+
+
     }
 }

@@ -1,9 +1,14 @@
 package Entity.Node.States {
+    import Entity.Node;
     import flash.utils.Dictionary;
 
     public class NodeStateFactory {
-        /** 中立天体状态 */
-        public static const IDLE:String = "idle";
+        /** 处理杂项 */
+        public static const BASIC:String = "basic";
+        /** 处理移动和贴图 */
+        public static const MOVE:String = "move";
+        /** 攻击状态 */
+        public static const ATTACK:String = "attack";
         /** 战争状态 */
         public static const CONFLICT:String = "conflict";
         /** 占据状态 */
@@ -17,7 +22,12 @@ package Entity.Node.States {
         private static var _ready:Boolean = false;
 
         private static function init():void {
-            registerState(IDLE, NodeIdleState);
+            registerState(BASIC, NodeBasicState);
+            registerState(MOVE, NodeMoveState);
+            registerState(ATTACK, NodeAttackState);
+            registerState(CONFLICT, NodeConflictState);
+            registerState(CAPTURE, NodeCaptureState);
+            registerState(BUILD, NodeBuildState);
 
             _ready = true;
         }
@@ -31,25 +41,26 @@ package Entity.Node.States {
             _stateMap[type] = stateClass;
         }
 
-        public static function create(type:String):INodeState {
+        public static function create(type:String, node:Node):INodeState {
             if (!_ready)
                 init();
             var stateClass:Class = _stateMap[type] as Class;
-
             if (stateClass) {
                 try {
-                    return new stateClass();
+                    return new stateClass(node);
                 } catch (e:Error) {
                     trace("Error creating State for type", type, ":", e.message);
                 }
             }
-            return new NodeIdleState();
+            return null;
         }
 
-        public static function get statePool():Vector.<INodeState> {
-            var _statePool:Vector.<INodeState> = new Vector.<INodeState>;
-            for each (var key:String in _stateMap) {
-                _statePool.push(create(key));
+        public static function createStatePool(node:Node):Dictionary {
+            if (!_ready)
+                init();
+            var _statePool:Dictionary = new Dictionary;
+            for (var key:String in _stateMap) {
+                _statePool[key] = create(key, node);
             }
             return _statePool;
         }

@@ -18,9 +18,9 @@ package Entity.Node.Attack {
             capturing = (Globals.teamPops[node.nodeData.team] < Globals.teamCaps[node.nodeData.team])
             if (!updateTimer(dt))
                 return;
-            var ships:Array = EntityContainer.findShipsInRange(node);
+            var ships:Vector.<Ship> = EntityContainer.findShipsInRange(node);
             if (ships.length > 0) {
-                var ship:Ship = node.rng.randomIndex(ships)
+                var ship:Ship = node.rng.randomIndex(ships);
                 if (!capturing) {
                     EntityHandler.destroyShip(ship)
                 } else {
@@ -28,8 +28,8 @@ package Entity.Node.Attack {
                     ship.team = node.nodeData.team;
                     ship.moveTo(node, true);
                     ship.image.color = Globals.teamColors[node.nodeData.team];
-                    ship.trail.color = node.image.color;
-                    ship.pulse.color = node.image.color;
+                    ship.trail.color = node.moveState.image.color;
+                    ship.pulse.color = node.moveState.image.color;
                 }
                 node.fireBeam(ship);
             }
