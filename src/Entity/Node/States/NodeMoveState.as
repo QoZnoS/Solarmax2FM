@@ -98,10 +98,10 @@ package Entity.Node.States {
         public function updateGrow(dt:Number):void {
             if (glowing) { // 处理势力改变时的光效，先亮度拉满
                 glow.alpha += dt * 4; // 不透明度增加
-                if (glow.alpha >= 1) { // 亮度满时换贴图颜色
+                if (glow.alpha >= 1 || glow.visible == false) { // 亮度满时换贴图颜色
                     glow.alpha = 1;
                     glowing = false;
-                    image.color = halo.color = Globals.teamColors[nodeData.team];
+                    image.color = halo.color = glow.color = Globals.teamColors[nodeData.team];
                     entityL.addGlow(halo);
                 }
             } else if (glow.alpha > 0) { // 再归零

@@ -97,6 +97,7 @@ package UI {
         }
 
         public function reset():void{
+            blackholeLayer.reset();
             resetBatchVector(shipsBGBatchs);
             resetBatchVector(shipsBGBatchbs);
             resetBatchVector(shipsFGBatchs);

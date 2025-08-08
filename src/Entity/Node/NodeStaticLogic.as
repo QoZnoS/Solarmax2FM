@@ -51,10 +51,12 @@ package Entity.Node {
                 node.nodeData.hp = 100;
             var Nodeteam:int = node.nodeData.team;
             node.nodeData.team = team;
-            node.nodeData.captureTeam = team;
+            node.captureState.captureTeam = team;
+            node.moveState.glowing = true; // 激活光效
+            node.moveState.glow.visible = false;
             if (!pulseEffect) 
                 return
-            node.moveState.glowing = true; // 激活光效
+            node.moveState.glow.visible = true;
             node.moveState.glow.color = Globals.teamColors[team]; // 设定光效颜色
             node.entityL.addGlow(node.moveState.glow);
             FXHandler.addPulse(node, Globals.teamColors[team], 0);

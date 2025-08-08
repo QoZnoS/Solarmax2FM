@@ -107,7 +107,7 @@ package Entity.FX {
         }
 
         override public function deInit():void {
-            entityL.removeGlow(image)
+            entityL.removeGlow(image);
         }
 
         override public function update(_dt:Number):void {
