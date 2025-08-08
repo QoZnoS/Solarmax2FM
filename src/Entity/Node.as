@@ -87,15 +87,12 @@ package Entity {
             nodeData = new NodeData(true);
             nodeData.size = _size;
             nodeData.type = NodeType.switchType(_type);
-            nodeData.team = _team;
+            NodeStaticLogic.changeTeam(this, _team, false)
             nodeData.x = _x;
             nodeData.y = _y;
             this.rng = _rng;
             resetArray()
-            nodeData.hp = 0; // 占领度
             aiValue = 0;
-            if (_team > 0)
-                nodeData.hp = 100; // 设定非中立天体默认占领度为100
             triggerTimer = 0;
             NodeStaticLogic.updateLabelSizes(this);
             barrierCostom = false;
@@ -149,6 +146,8 @@ package Entity {
             barrierLinks.length = 0;
             nodeLinks.length = 0;
             oppNodeLinks.length = 0;
+            for each(var state:INodeState in statePool)
+                state.deinit();
         }
 
         // #endregion

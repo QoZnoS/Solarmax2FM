@@ -42,14 +42,18 @@ package Entity.Node {
             }
         }
 
-        public static function changeTeam(node:Node, team:int):void {
+        public static function changeTeam(node:Node, team:int, pulseEffect:Boolean = true):void {
             if (Globals.level == 35 && node.nodeData.type == NodeType.DILATOR)
                 return; // 32 36关星核不做处理，自己变自己不做处理
             if (team == 0)
                 node.nodeData.hp = 0;
+            else
+                node.nodeData.hp = 100;
             var Nodeteam:int = node.nodeData.team;
             node.nodeData.team = team;
             node.nodeData.captureTeam = team;
+            if (!pulseEffect) 
+                return
             node.moveState.glowing = true; // 激活光效
             node.moveState.glow.color = Globals.teamColors[team]; // 设定光效颜色
             node.entityL.addGlow(node.moveState.glow);

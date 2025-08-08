@@ -151,7 +151,5 @@ package Entity.Node.States {
         public function get stateType():String {
             return NodeStateFactory.MOVE;
         }
-
-
     }
 }

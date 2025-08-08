@@ -18,6 +18,7 @@ package Entity.Node.States {
             for (var i:int = 0; i < Globals.teamCount; i++) {
                 warps.push(false);
             }
+            winPulseTimer = 0;
         }
 
         public function deinit():void {
