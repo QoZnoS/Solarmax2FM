@@ -84,7 +84,7 @@ package Entity.Node.States {
         }
 
         private function updateBattleUI():void {
-            var currentAngle:Number = START_ANGLE;
+            var currentAngle:Number = START_ANGLE - Math.PI * ships[activeTeams[0]].length / totalShips;
             var labelAngleStep:Number = Math.PI * 2 / activeTeams.length;
             for (var i:int = 0; i < activeTeams.length; i++) {
                 var teamId:int = activeTeams[i];
