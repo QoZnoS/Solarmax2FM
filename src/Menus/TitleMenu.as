@@ -679,6 +679,7 @@ package Menus
       // #region 功能函数
       public function loadMap(seed:uint = 0):void
       {
+            Starling.juggler.advanceTime(Globals.transitionSpeed)
          Globals.level = currentIndex - 1;
          scene.playMap(seed);
          animateOut();

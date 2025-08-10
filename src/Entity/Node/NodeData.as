@@ -18,8 +18,8 @@ package Entity.Node {
         public var lineDist:Number; // 选中圈大小
         public var touchDist:Number; // 传统操作模式下的选中圈大小
         
-        public var startShips:Array; // 开局飞船，每一项对于各势力飞船数
-        public var barrierLinks:Array; // 障碍连接数组，储存相连天体tag
+        public var startShips:Vector.<int>; // 开局飞船，每一项对于各势力飞船数
+        public var barrierLinks:Vector.<int>; // 障碍连接数组，储存相连天体tag
         public var barrierCostom:Boolean; // 障碍是否为自定义连接
         public var conflict:Boolean; // 战斗状态，判断天体上是否有战斗
         public var capturing:Boolean; // 占据状态

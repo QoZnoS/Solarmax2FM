@@ -40,7 +40,6 @@ package Game {
         public var gameOverTimer:Number;
         public var winningTeam:int;
         public var triggers:Array;
-        public var juggler:Juggler;
         public var darkPulse:Image;
         public var bossTimer:Number;
         public var slowMult:Number;
@@ -68,7 +67,6 @@ package Game {
             cover.alpha = 0;
             addChild(cover);
             // 其他可视化对象
-            juggler = new Juggler();
             darkPulse = new Image(Root.assets.getTexture("halo"));
             darkPulse.pivotY = darkPulse.pivotX = darkPulse.width * 0.5;
             darkPulse.x = 512;
@@ -186,7 +184,7 @@ package Game {
             var _aiArray:Array = [];
             for each (var _NodeData:Array in _Level) {
                 // 处理每个天体
-                _NodeData.length >= 7 ? _Node = EntityHandler.addNode(_NodeData[0], _NodeData[1], _NodeData[2], _NodeData[3], _NodeData[4], _NodeData[5], _NodeData[6]) : _Node = EntityHandler.addNode(_NodeData[0], _NodeData[1], _NodeData[2], _NodeData[3], _NodeData[4], _NodeData[5]);
+                _NodeData.length >= 7 ? _Node = EntityHandler.addNodebyArr(_NodeData[0], _NodeData[1], _NodeData[2], _NodeData[3], _NodeData[4], _NodeData[5], _NodeData[6]) : _Node = EntityHandler.addNodebyArr(_NodeData[0], _NodeData[1], _NodeData[2], _NodeData[3], _NodeData[4], _NodeData[5]);
                 if (Globals.level != 31) {
                     // 修改32关之外的天体数据
                     if (Globals.level == 35 && _Node.nodeData.team == 6)
@@ -327,7 +325,7 @@ package Game {
             if (this.alpha == 0)
                 return;
             GS.update(dt); // 更新音效计时器
-            dt *= this.alpha; // wtf？？
+            dt *= this.alpha; // 速度随能见度变化
             dt = updateSpeed(dt); // 更新游戏速度
             Debug.update(e);
             var arr:Array;
@@ -356,7 +354,6 @@ package Game {
 
         public function updateGame(dt:Number):void {
             countTeamCaps(dt); // 统计兵力
-            juggler.advanceTime(dt);
             ui.update();
             for each (var _pool:EntityPool in EntityContainer.entityPool) // 依次执行所有实体的更新函数
                 _pool.update(dt);
@@ -451,7 +448,6 @@ package Game {
                             FXHandler.addDarkPulse(_boss, 0, 2, 2.5, 0.75, 0, _timer - 5.5);
                             FXHandler.addDarkPulse(_boss, 0, 2, 2.5, 1, 0, _timer - 4.5);
                             _boss.triggerTimer = _timer - 3;
-                            Starling.juggler.tween(Globals, 5, {"soundMult": 0});
                             GS.playMusic("bgm_dark", false);
                         }
                     }
@@ -571,7 +567,6 @@ package Game {
                                 Globals.levelData[Globals.level] = Globals.currentDifficulty;
                             Globals.save();
                             GS.playMusic("bgm07", false);
-                            Starling.juggler.tween(Globals, 10, {"soundMult": 0});
                             invisibleMode();
                         }
                         if (triggers[0] && !triggers[1]) // 阶段二，膨胀动画

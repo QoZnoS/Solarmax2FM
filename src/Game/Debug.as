@@ -9,8 +9,6 @@ package Game {
     import starling.filters.ColorMatrixFilter;
     import Entity.Node;
     import Entity.EnemyAI;
-    import flash.utils.Dictionary;
-    import Entity.Node.NodeData;
     import Entity.EntityContainer;
 
     public class Debug extends Sprite {

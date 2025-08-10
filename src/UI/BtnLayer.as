@@ -28,6 +28,7 @@ package UI {
         }
 
         public function initLevel():void {
+            touchable = true;
             //#region 界面按钮
             if (Globals.textSize <= 1) {
                 gameBtn[0] = new MenuButton("btn_close");
@@ -118,6 +119,8 @@ package UI {
         }
 
         private function on_closeBtn():void {
+            touchable = false;
+            Starling.juggler.advanceTime(Globals.transitionSpeed)
             game.quit();
         }
 
@@ -126,6 +129,7 @@ package UI {
         }
 
         private function on_restartBtn():void {
+            // Starling.juggler.advanceTime(Globals.transitionSpeed)
             game.restart();
         }
 

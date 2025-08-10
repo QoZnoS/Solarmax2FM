@@ -25,7 +25,7 @@ package Entity {
             EntityContainer.addEntity(EntityContainer.INDEX_AIS, _EnemyAI);
         }
 
-        public static function addNode(_x:Number, _y:Number, _type:int, _size:Number, _team:Number, _orbit:int, _orbitSpeed:Number = 0.1):Node {
+        public static function addNodebyArr(_x:Number, _y:Number, _type:int, _size:Number, _team:Number, _orbit:int, _orbitSpeed:Number = 0.1):Node {
             var _clock:Boolean = false; // 轨道方向，true为顺时针，false为逆时针
             var _Node:Node = EntityContainer.getReserve(EntityContainer.INDEX_NODES) as Node; // 天体对象
             if (!_Node)

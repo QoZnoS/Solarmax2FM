@@ -5,7 +5,6 @@ package {
     import Game.Debug;
     import starling.core.Starling;
     import flash.events.KeyboardEvent;
-    import MapEditor.EditorCenter;
     import starling.display.Sprite;
     import starling.display.Quad;
     import starling.filters.ColorMatrixFilter;
@@ -16,7 +15,6 @@ package {
         public var titleMenu:TitleMenu; // 手动单例
         public var gameScene:GameScene; // 手动单例
         public var endScene:EndScene; // 手动单例
-        public var mapEditor:EditorCenter; // 手动单例
         public var debug:Debug; // 自动单例
         public var ui:UIContainer; // 自动单例
 
@@ -28,7 +26,6 @@ package {
             gameScene = new GameScene(this);
             endScene = new EndScene(this);
             debug = new Debug(this);
-            mapEditor = new EditorCenter(this);
             ui = new UIContainer(this);
             speedMult = 1;
             initTitleMenu(0);

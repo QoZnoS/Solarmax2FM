@@ -7,7 +7,6 @@ package Entity
    import utils.GS;
    import starling.display.QuadBatch;
    import Entity.Node.NodeType;
-   import MapEditor.EditorCenter;
 
    public class Ship extends GameEntity
    {
