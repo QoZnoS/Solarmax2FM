@@ -1,5 +1,4 @@
 package Entity.AI {
-    import Game.GameScene;
     import utils.Rng;
     import Entity.Node;
     import Entity.EntityContainer;
@@ -8,8 +7,8 @@ package Entity.AI {
     import Entity.EntityContainer;
 
     public class SmartAI extends BasicAI {
-        public function SmartAI(game:GameScene, rng:Rng) {
-            super(game, rng)
+        public function SmartAI(rng:Rng) {
+            super(rng)
         }
 
         override public function update(dt:Number):void {

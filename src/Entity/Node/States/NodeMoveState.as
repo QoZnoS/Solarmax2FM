@@ -60,6 +60,12 @@ package Entity.Node.States {
                 entityL.labelLayer.addChild(labels[i]);
             entityL.addNode(image, halo, glow);
             entityL.labelLayer.addChild(label);
+            if (orbitNode) {
+                var dx:Number = nodeData.x - orbitNode.nodeData.x;
+                var dy:Number = nodeData.y - orbitNode.nodeData.y;
+                orbitDist = Math.sqrt(dx * dx + dy * dy);
+                orbitAngle = Math.atan2(dy, dx);
+            }
         }
 
         public function deinit():void {
@@ -67,6 +73,7 @@ package Entity.Node.States {
             entityL.labelLayer.removeChild(label);
             for (var i:int = 0; i < labels.length; i++)
                 entityL.labelLayer.removeChild(labels[i]);
+            orbitNode = null;
         }
 
         // #region update

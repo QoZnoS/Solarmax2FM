@@ -9,8 +9,8 @@ package Entity.AI {
 
     public class SimpleAI extends BasicAI {
 
-        public function SimpleAI(game:GameScene, rng:Rng) {
-            super(game, rng)
+        public function SimpleAI(rng:Rng) {
+            super(rng)
         }
 
         override public function update(dt:Number):void {

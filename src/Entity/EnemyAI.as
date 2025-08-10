@@ -20,7 +20,7 @@ package Entity {
 
         public function initAI(_GameScene:GameScene, rng:Rng, team:int, type:String):void {
             this.init(_GameScene);
-            ai = EnemyAIFactory.create(type, game, rng);
+            ai = EnemyAIFactory.create(type, rng);
             ai.team = team;
         }
 

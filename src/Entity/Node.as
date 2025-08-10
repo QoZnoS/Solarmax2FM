@@ -90,6 +90,11 @@ package Entity {
             NodeStaticLogic.changeTeam(this, _team, false)
             nodeData.x = _x;
             nodeData.y = _y;
+            moveState.orbitNode = _OrbitNode;
+            if (_Clockwise)
+                moveState.orbitSpeed = _OrbitSpeed;
+            else
+                moveState.orbitSpeed = -_OrbitSpeed;
             this.rng = _rng;
             resetArray()
             aiValue = 0;

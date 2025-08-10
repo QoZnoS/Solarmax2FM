@@ -91,8 +91,8 @@ package Entity.Node.States {
         private function updateCaptureUI(capturingTeam:int):void {
             if (shouldDrawCaptureArc()) {
                 var arcAngle:Number = START_ANGLE - Math.PI * (nodeData.hp / MAX_HP);
-                Drawer.drawCircle(node.game.scene.ui.behaviorBatch, nodeData.x, nodeData.y, Globals.teamColors[captureTeam], nodeData.lineDist, nodeData.lineDist - 2, false, 0.1);
-                Drawer.drawCircle(node.game.scene.ui.behaviorBatch, nodeData.x, nodeData.y, Globals.teamColors[captureTeam], nodeData.lineDist, nodeData.lineDist - 2, false, 0.7, nodeData.hp / MAX_HP, arcAngle);
+                Drawer.drawCircle(node.behaviorB, nodeData.x, nodeData.y, Globals.teamColors[captureTeam], nodeData.lineDist, nodeData.lineDist - 2, false, 0.1);
+                Drawer.drawCircle(node.behaviorB, nodeData.x, nodeData.y, Globals.teamColors[captureTeam], nodeData.lineDist, nodeData.lineDist - 2, false, 0.7, nodeData.hp / MAX_HP, arcAngle);
             }
             node.moveState.updateCaptureLabel(capturingTeam, ships[capturingTeam].length);
         }

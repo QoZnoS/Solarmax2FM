@@ -1,5 +1,4 @@
 package Entity.AI {
-    import Game.GameScene;
     import utils.Rng;
     import Entity.Node;
     import Entity.Node.NodeStaticLogic;
@@ -7,8 +6,8 @@ package Entity.AI {
     import Entity.EntityContainer;
 
     public class DarkAI extends BasicAI {
-        public function DarkAI(game:GameScene, rng:Rng) {
-            super(game, rng)
+        public function DarkAI(rng:Rng) {
+            super(rng)
         }
 
         override public function update(dt:Number):void {

@@ -1,5 +1,4 @@
 package Entity.AI {
-    import Game.GameScene;
     import utils.Rng;
     import Entity.GameEntity;
     import Entity.Node;
@@ -13,11 +12,11 @@ package Entity.AI {
         public var targets:Array;
         public var senders:Array;
 
-        public function BasicAI(game:GameScene, rng:Rng) {
-            initAI(game, rng)
+        public function BasicAI(rng:Rng) {
+            initAI(rng)
         }
 
-        public function initAI(game:GameScene, rng:Rng):void {
+        public function initAI(rng:Rng):void {
             this._nodes = EntityContainer.nodes;
             this._rng = rng;
             targets = [];

@@ -36,7 +36,7 @@ package Entity.AI {
             _aiMap[type] = aiClass;
         }
 
-        public static function create(type:String, game:GameScene, rng:Rng):IEnemyAI {
+        public static function create(type:String, rng:Rng):IEnemyAI {
             if (!_ready)
                 init();
 
@@ -44,12 +44,12 @@ package Entity.AI {
 
             if (aiClass) {
                 try {
-                    return new aiClass(game, rng);
+                    return new aiClass(rng);
                 } catch (e:Error) {
                     trace("Error creating AI for type", type, ":", e.message);
                 }
             }
-            return new BasicAI(game, rng);
+            return new BasicAI(rng);
         }
     }
 }
