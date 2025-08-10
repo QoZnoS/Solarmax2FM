@@ -167,10 +167,8 @@ package Entity {
 
         public function updateTimer(_dt:Number):void {
             for (var i:int = 0; i < aiTimers.length; i++) // 计算AI计时器
-            {
                 if (aiTimers[i] > 0)
                     aiTimers[i] = Math.max(0, aiTimers[i] - _dt);
-            }
             if (triggerTimer > 0)
                 triggerTimer = Math.max(0, triggerTimer - _dt);
         }

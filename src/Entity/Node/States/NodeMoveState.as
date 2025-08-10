@@ -58,6 +58,7 @@ package Entity.Node.States {
             }
             for (i = 0; i < labels.length; i++)
                 entityL.labelLayer.addChild(labels[i]);
+            image.visible = halo.visible = true;
             entityL.addNode(image, halo, glow);
             entityL.labelLayer.addChild(label);
             if (orbitNode) {

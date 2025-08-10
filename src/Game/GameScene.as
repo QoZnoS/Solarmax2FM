@@ -157,7 +157,6 @@ package Game {
             tutorial.init(this, level);
             getBarrierLines();
             addBarriers();
-            hideSingleBarriers();
             if (darkPulse)
                 darkPulse.visible = false;
             // 重置一些变量
