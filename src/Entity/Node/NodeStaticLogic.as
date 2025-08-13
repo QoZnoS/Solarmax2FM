@@ -49,7 +49,7 @@ package Entity.Node {
                 node.nodeData.hp = 0;
             else
                 node.nodeData.hp = 100;
-            var Nodeteam:int = node.nodeData.team;
+            var nodeTeam:int = node.nodeData.team;
             node.nodeData.team = team;
             node.captureState.captureTeam = team;
             node.moveState.glowing = true; // 激活光效
@@ -61,13 +61,13 @@ package Entity.Node {
             node.entityL.addGlow(node.moveState.glow);
             FXHandler.addPulse(node, Globals.teamColors[team], 0);
             GS.playCapture(node.nodeData.x); // 播放占领音效
-            if (Nodeteam != 1 && team == 1 && node.nodeData.popVal > 0) {
+            if (nodeTeam != Globals.playTeam && team == Globals.playTeam && node.nodeData.popVal > 0) {
                 game.popLabels[1].color = 65280;
                 game.popLabels[1].alpha = 1;
                 game.popLabels[2].color = 3407667;
                 game.popLabels[2].alpha = 1;
                 game.popLabels[2].text = "+ " + node.nodeData.popVal;
-            } else if (Nodeteam == 1 && team != 1 && node.nodeData.popVal > 0) {
+            } else if (nodeTeam == Globals.playTeam && team != Globals.playTeam && node.nodeData.popVal > 0) {
                 game.popLabels[1].color = 16711680;
                 game.popLabels[1].alpha = 1;
                 game.popLabels[2].color = 16724787;
@@ -114,28 +114,32 @@ package Entity.Node {
             node.moveState.halo.scaleY = node.moveState.halo.scaleX = 1;
             node.moveState.halo.pivotY = node.moveState.halo.pivotX = node.moveState.halo.width * 0.5;
             get = LevelData.nodeData.node.(@name == type).rotation;
-            node.moveState.image.rotation = node.moveState.halo.rotation = node.moveState.glow.rotation = (get.indexOf("S*") != -1) ? Number(get.slice(2)) * size : Number(get);
+            node.moveState.image.rotation = node.moveState.halo.rotation = node.moveState.glow.rotation = sliceGet(get, size);
             get = LevelData.nodeData.node.(@name == type).scale;
             type == NodeType.PLANET ? node.moveState.halo.scaleY = node.moveState.halo.scaleX = size * 0.5 : node.moveState.image.scaleX = node.moveState.image.scaleY = node.moveState.halo.scaleX = node.moveState.halo.scaleY = node.moveState.glow.scaleX = node.moveState.glow.scaleY = Number(get);
             // 读取参数
             get = LevelData.nodeData.node.(@name == type).startVal;
-            node.startVal = (get.indexOf("S*") != -1) ? Number(get.slice(2)) * size : Number(get);
+            node.startVal = sliceGet(get, size);
             get = LevelData.nodeData.node.(@name == type).popVal;
-            node.nodeData.popVal = (get.indexOf("S*") != -1) ? Number(get.slice(2)) * size : Number(get);
+            node.nodeData.popVal = sliceGet(get, size);
             get = LevelData.nodeData.node.(@name == type).buildRate;
-            node.buildState.buildRate = (get.indexOf("S*") != -1) ? Number(get.slice(2)) * size : Number(get);
+            node.buildState.buildRate = sliceGet(get, size);
             get = LevelData.nodeData.node.(@name == type).hpMult;
-            node.nodeData.hpMult = (get.indexOf("S*") != -1) ? Number(get.slice(2)) * size : Number(get);
+            node.nodeData.hpMult = sliceGet(get, size);
             get = LevelData.nodeData.node.(@name == type).attackRate;
-            var attackRate:Number = (get.indexOf("S*") != -1) ? Number(get.slice(2)) * size : Number(get);
+            var attackRate:Number = sliceGet(get, size);
             get = LevelData.nodeData.node.(@name == type).attackRange;
-            var attackRange:Number = (get.indexOf("S*") != -1) ? Number(get.slice(2)) * size : Number(get);
+            var attackRange:Number = sliceGet(get, size);
             get = LevelData.nodeData.node.(@name == type).attackLast;
-            var attackLast:Number = (get.indexOf("S*") != -1) ? Number(get.slice(2)) * size : Number(get);
+            var attackLast:Number = sliceGet(get, size);
             get = LevelData.nodeData.node.(@name == type).attackType;
             node.attackState.attackStrategy = AttackStrategyFactory.create(get, attackRate, attackRange, attackLast);
             if (type == NodeType.BARRIER)
                 node.getBarrierLinks(); // 计算障碍链接参数
+        }
+
+        private static function sliceGet(get:String, size:Number):Number{
+            return (get.indexOf("S*") != -1) ? Number(get.slice(2)) * size : Number(get);
         }
 
         public static function sendShips(node:Node, team:int, targetNode:Node):void {

@@ -29,7 +29,7 @@ package Game {
     import Entity.Node.NodeType;
     import Entity.EntityContainer;
 
-    public class GameScene extends Sprite {
+    public class GameScene extends BasicScene {
         // #region 类变量
         // 其他
         public var cover:Quad; // 通关时的遮罩
@@ -89,9 +89,10 @@ package Game {
                 label.vAlign = label.hAlign = VAlign.CENTER;
                 label.pivotX = 300;
                 label.pivotY = 20;
-                label.alpha = 0.5;
+                label.alpha = 0.8;
                 label.x = 512;
                 label.y = 136;
+                label.touchable = false;
             }
             popLabels[1].alpha = 0;
             popLabels[2].hAlign = "left";
@@ -100,7 +101,7 @@ package Game {
         }
 
         // #region 进入关卡
-        public function init(seed:uint = 0, rep:Boolean = false):void {
+        override public function init(seed:uint = 0, rep:Boolean = false):void {
             ui = scene.ui;
             ui.entityL.addGlow(darkPulse);
             var i:int = 0;
@@ -148,9 +149,14 @@ package Game {
                     case 2:
                         label.fontName = "Downlink18";
                 }
+                label.color = Globals.teamColors[Globals.playTeam];
                 label.fontSize = -1;
-                ui.btnL.addChild(label);
+                if (label.color == 0)
+                    ui.btnL.normalLayer.addChild(label);
+                else
+                    ui.btnL.addLayer.addChild(label);
             }
+            // ui.btnL.color = Globals.teamColors[Globals.playTeam];
             // 执行一些初始化函数
             tutorial.init(this, level);
             getBarrierLines();
@@ -225,7 +231,7 @@ package Game {
                     // 写入具有常规ai的势力，此处检验势力是否已写入，避免重复写入
                     switch (_NodeData[4]) {
                         case 0: // 排除中立势力
-                        case 1: // 排除玩家势力
+                        case Globals.playTeam: // 排除玩家势力
                         case 5: // 排除灰色势力
                         case 6: // 排除黑色势力
                             break;
@@ -240,7 +246,7 @@ package Game {
             return _aiArray;
         }
 
-        public function animateIn():void {
+        override public function animateIn():void {
             this.alpha = 0;
             this.visible = true;
             Starling.juggler.tween(this, Globals.transitionSpeed, {"alpha": 1,
@@ -267,6 +273,12 @@ package Game {
             for each (var _pool:EntityPool in EntityContainer.entityPool)
                 _pool.deInit();
             removeEventListener("enterFrame", update); // 移除更新帧监听器
+            for each (var label:TextField in popLabels) {
+                if (label.color == 0)
+                    ui.btnL.normalLayer.removeChild(label);
+                else
+                    ui.btnL.addLayer.removeChild(label);
+            }
         }
 
         // 移除UI，执行animateOut()
@@ -292,7 +304,7 @@ package Game {
         }
 
         // 关卡退出动画，执行hide()
-        public function animateOut():void {
+        override public function animateOut():void {
             Starling.juggler.tween(this, Globals.transitionSpeed, {"alpha": 0,
                     "onComplete": hide,
                     "transition": "easeInOut"});
@@ -320,7 +332,7 @@ package Game {
 
         // #endregion
         // #region 逐帧更新
-        public function update(e:EnterFrameEvent):void {
+        override public function update(e:EnterFrameEvent):void {
             var dt:Number = e.passedTime;
             if (this.alpha == 0)
                 return;
@@ -387,7 +399,7 @@ package Game {
                 Globals.teamPops[_Ship.team]++;
             EntityContainer.ships.length < 1024 ? Globals.exOptimization = 0 : (EntityContainer.ships.length < 8192 ? Globals.exOptimization = 1 : Globals.exOptimization = 2);
 
-            popLabels[0].text = popLabels[1].text = "POPULATION : " + Globals.teamPops[1] + " / " + Globals.teamCaps[1];
+            popLabels[0].text = popLabels[1].text = "POPULATION : " + Globals.teamPops[Globals.playTeam] + " / " + Globals.teamCaps[Globals.playTeam];
             if (popLabels[1].alpha > 0)
                 popLabels[1].alpha = Math.max(0, popLabels[1].alpha - _dt * 0.5);
             if (popLabels[2].alpha > 0) {
@@ -473,9 +485,7 @@ package Game {
                         }
                     }
                     break;
-                case 32:
-                case 33:
-                case 34:
+                case 32,33,34:
                     if (!triggers[0]) // 阶段一，生成星核
                     {
                         for (i = 0; i < Globals.teamCaps.length; i++) {
@@ -711,10 +721,10 @@ package Game {
             var _Node:Node = null;
             if (Globals.level == 0) // 第一关的特殊通关条件：非障碍天体均被玩家占领
             {
-                winningTeam = 1; // 玩家势力获胜
+                winningTeam = Globals.playTeam; // 玩家势力获胜
                 gameOver = true; // 不判定游戏继续时，游戏结束
                 for each (_Node in EntityContainer.nodes)
-                    if (_Node.nodeData.team != 1 && _Node.nodeData.type != NodeType.BARRIER)
+                    if (_Node.nodeData.team != Globals.playTeam && _Node.nodeData.type != NodeType.BARRIER)
                         gameOver = false;
                 return; // 终止该函数
             }

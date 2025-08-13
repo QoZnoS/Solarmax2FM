@@ -81,5 +81,9 @@ package UI.Component {
                     }
             }
         }
+
+        public function set color(value:uint):void{
+            image.color = value;
+        }
     }
 }

@@ -6,6 +6,8 @@ package UI {
     import UI.Component.MenuButton;
     import UI.Component.SpeedButton;
     import UI.Component.FleetSlider;
+    import starling.display.BlendMode;
+    import UI.Component.OptionButton;
 
     public class BtnLayer extends Sprite {
         /**
@@ -16,6 +18,9 @@ package UI {
         private var speedBtns:Vector.<SpeedButton>;
         public var fleetSlider:FleetSlider;
 
+        public var addLayer:Sprite;
+        public var normalLayer:Sprite;
+
         private var game:GameScene;
 
         private var scene:SceneController;
@@ -25,6 +30,10 @@ package UI {
             this.game = _ui.scene.gameScene;
             gameBtn = new Vector.<MenuButton>(3, true);
             speedBtns = new Vector.<SpeedButton>(3, true);
+            addLayer = new Sprite;
+            addLayer.blendMode = BlendMode.ADD;
+            normalLayer = new Sprite;
+            normalLayer.blendMode = BlendMode.NORMAL;
         }
 
         public function initLevel():void {
@@ -45,7 +54,7 @@ package UI {
                 i == 0 ? _btn.x = 15 + Globals.margin : _btn.x = gameBtn[i - 1].x + gameBtn[i - 1].width * 1.1;
                 _btn.y = 124;
                 _btn.init();
-                addChild(_btn);
+                addLayer.addChild(_btn);
             }
             gameBtn[0].addEventListener("clicked", on_closeBtn);
             gameBtn[1].addEventListener("clicked", on_pauseBtn);
@@ -65,7 +74,7 @@ package UI {
                     _SpeedBtn.toggled = true;
                     _SpeedBtn.image.alpha = 0.6;
                 }
-                addChild(_SpeedBtn);
+                addLayer.addChild(_SpeedBtn);
                 speedBtns[i] = _SpeedBtn;
             }
             speedBtns[2].x = 1024 - speedBtns[2].width + 5 - Globals.margin;
@@ -96,26 +105,30 @@ package UI {
                     }
             }
             fleetSlider.init();
-            addChild(fleetSlider);
+            addLayer.addChild(fleetSlider);
             Starling.current.nativeStage.addEventListener("mouseWheel", on_wheel);
+            addChild(addLayer);
+            addChild(normalLayer);
             //#endregion
         }
 
         public function deinitLevel():void {
             for each (var _btn:MenuButton in gameBtn) {
                 _btn.deInit();
-                removeChild(_btn);
+                addLayer.removeChild(_btn);
             }
             for each (var _SpeedBtn:SpeedButton in speedBtns) {
                 _SpeedBtn.deInit();
-                removeChild(_SpeedBtn);
+                addLayer.removeChild(_SpeedBtn);
             }
             gameBtn[0].removeEventListener("clicked", on_closeBtn);
             gameBtn[1].removeEventListener("clicked", on_pauseBtn);
             gameBtn[2].removeEventListener("clicked", on_restartBtn);
             fleetSlider.deInit();
-            removeChild(fleetSlider)
+            addLayer.removeChild(fleetSlider)
             Starling.current.nativeStage.removeEventListener("mouseWheel", on_wheel);
+            removeChild(addLayer);
+            removeChild(normalLayer);
         }
 
         private function on_closeBtn():void {
@@ -129,7 +142,6 @@ package UI {
         }
 
         private function on_restartBtn():void {
-            // Starling.juggler.advanceTime(Globals.transitionSpeed)
             game.restart();
         }
 
@@ -144,6 +156,14 @@ package UI {
                 fleetSlider.perc = 0.0001;
             if (fleetSlider.perc > 1)
                 fleetSlider.perc = 1;
+        }
+
+        public function set color(value:uint):void{
+            for each(var mBtn:MenuButton in gameBtn)
+                mBtn.color = value;
+            for each(var sBtn:SpeedButton in speedBtns)
+                sBtn.color = value;
+            fleetSlider.color = value;
         }
 
     }

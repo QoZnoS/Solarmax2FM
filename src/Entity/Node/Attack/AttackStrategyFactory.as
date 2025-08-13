@@ -1,5 +1,4 @@
 package Entity.Node.Attack {
-    import Entity.Node.Attack.*;
     import flash.utils.Dictionary;
 
     public class AttackStrategyFactory {

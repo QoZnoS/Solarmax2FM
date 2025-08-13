@@ -174,5 +174,10 @@ package UI.Component {
         public function get box_x():Number{
             return _touchWidth * 0.5 - _boxWidth * 0.5;
         }
+
+        public function set color(value:uint):void{
+            _boxQuad1.color = _boxQuad2.color = _boxQuad3.color = _boxQuad4.color = value;
+            _quad1.color = _quad2.color = _label.color = value;
+        }
     }
 }

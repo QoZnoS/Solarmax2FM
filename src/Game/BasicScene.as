@@ -1,29 +1,35 @@
 package Game {
 
     import starling.display.Sprite;
+    import Game.VictoryType.IVictoryType;
+    import Game.LoseType.ILoseType;
+    import starling.events.EnterFrameEvent;
 
-    public class BasicScene extends Sprite implements IScene{
+    public class BasicScene extends Sprite {
+
+        public var victoryType:IVictoryType;
+        public var loseType:ILoseType;
+
         public function BasicScene() {
 
         }
 
-        public function init():void{
+        public function init(seed:uint = 0, rep:Boolean = false):void {
+
+        }
+
+        public function deinit():void {
             
         }
 
-        public function deinit():void
-        {
-        	throw new Error("Method not implemented.");
+        public function update(e:EnterFrameEvent):void{
+
         }
 
-        public function animateIn():void
-        {
-        	throw new Error("Method not implemented.");
+        public function animateIn():void {
         }
 
-        public function animateOut():void
-        {
-        	throw new Error("Method not implemented.");
+        public function animateOut():void {
         }
     }
 }

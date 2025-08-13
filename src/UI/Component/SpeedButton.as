@@ -125,5 +125,9 @@ package UI.Component {
                 buttonArray[2].image.alpha = 0.8;
             }
         }
+
+        public function set color(value:uint):void{
+            image.color = value;
+        }
     }
 }

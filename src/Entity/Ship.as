@@ -40,6 +40,8 @@ package Entity
 
       public var currentBatch:QuadBatch;
       public var prevForeground:Boolean;
+
+      private var frame:int;
       // #endregion
       public function Ship()
       {
@@ -59,6 +61,7 @@ package Entity
 
       public function initShip(_GameScene:GameScene, _rng:Rng, _team:int, _Node:Node, _productionEffect:Boolean = true):void
       {
+        frame = 0;
          super.init(_GameScene);
          this.team = _team;
          this.node = _Node;
@@ -107,6 +110,7 @@ package Entity
       // #region 更新
       override public function update(_dt:Number):void // 更新
       {
+        frame++;
          switch (state) // 按状态决定更新方式
          {
             case 0: // 在天体上
@@ -272,13 +276,7 @@ package Entity
             targetDist = _Distance;
             _Angle = Math.atan2(_dy, _dx);
          }
-         else if(!Globals.isApril_Fools)
-         {
-            targetDist -= jumpSpeed * _dt;
-            _Distance = targetDist;
-            _Angle = jumpAngle;
-         }
-         else
+         else if(Globals.isApril_Fools)
          {
             _x1 = Math.cos(orbitAngle) * orbitDist;
             _y1 = Math.sin(orbitAngle) * orbitDist;
@@ -289,6 +287,12 @@ package Entity
             jumpAngle = _Angle = Math.atan2(_dy, _dx);
             targetDist = _Distance = _dx * _dx + _dy * _dy;
          }
+         else
+         {
+            targetDist -= jumpSpeed * _dt;
+            _Distance = targetDist;
+            _Angle = jumpAngle;
+         }
          if (_Distance > jumpSpeed * _dt)
          {
             x += Math.cos(_Angle) * jumpSpeed * _dt;
@@ -297,6 +301,10 @@ package Entity
          }
          else
          {
+            _x1 = Math.cos(orbitAngle) * orbitDist;
+            _y1 = Math.sin(orbitAngle) * orbitDist;
+            tx = node.nodeData.x + _x1;
+            ty = node.nodeData.y + _y1 * 0.15;
             x = tx;
             y = ty;
             node.ships[team].push(this);
@@ -328,13 +336,15 @@ package Entity
          var _dy:Number = NaN;
          var _Distance:Number = NaN;
          var _Angle:Number = NaN;
+         var moved:Number;
          if (followShip.active && !followShip.warping)
          {
             _dx = followShip.x - x;
             _dy = followShip.y - y;
             _Distance = _dx * _dx + _dy * _dy;
             _Angle = Math.atan2(_dy, _dx);
-            if (_Distance < 24)
+            moved = followShip.jumpSpeed * 5 * _dt;
+            if (_Distance < moved * moved)
             {
                _dx = node.nodeData.x + Math.cos(orbitAngle) * orbitDist - x;
                _dy = node.nodeData.y + Math.sin(orbitAngle) * orbitDist * 0.15 - y;
@@ -346,8 +356,8 @@ package Entity
             }
             else
             {
-               x += Math.cos(_Angle) * (followShip.jumpSpeed * 5 + _Distance / 50) * _dt;
-               y += Math.sin(_Angle) * (followShip.jumpSpeed * 5 + _Distance / 50) * _dt;
+               x += Math.cos(_Angle) * moved;
+               y += Math.sin(_Angle) * moved;
                jumpSpeed = followShip.jumpSpeed;
                jumpAngle = _Angle;
             }

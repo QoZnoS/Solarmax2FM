@@ -194,7 +194,7 @@ package Entity {
                 for each (var _Node:Node in EntityContainer.nodes) {
                     if (_Node == this || _Node.nodeData.type == NodeType.BARRIER || (_Node.nodeData.type == NodeType.DILATOR && Globals.level != 35))
                         continue;
-                    if (nodeData.type == NodeType.WARP && nodeData.team == i){
+                    if (nodeData.type == NodeType.WARP && nodeData.team == i && i != 0){
                         nodeLinks[i].push(_Node);
                         continue;
                     }

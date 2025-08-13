@@ -247,7 +247,7 @@ package UI {
             for each (var _Node:Node in selectedNodes) {
                 if (_Node == _currentNode || nodesBlocked(_Node, _currentNode))
                     continue;
-                NodeStaticLogic.sendShips(_Node, 1, _currentNode);
+                NodeStaticLogic.sendShips(_Node, Globals.playTeam, _currentNode);
                 FXHandler.addFade(_Node.nodeData.x, _Node.nodeData.y, _Node.nodeData.size, 0xFFFFFF, 0);
             }
         }
@@ -282,7 +282,7 @@ package UI {
             var _bar1:Point = null;
             var _bar2:Point = null;
             var _Intersection:Point = null;
-            if (_Node1.nodeData.team == 1 && _Node1.nodeData.type == NodeType.WARP)
+            if (_Node1.nodeData.team == Globals.playTeam && _Node1.nodeData.type == NodeType.WARP)
                 return null;
             for each (var _bar:Array in game.barrierLines) {
                 _bar1 = _bar[0];

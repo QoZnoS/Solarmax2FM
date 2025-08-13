@@ -1,5 +1,4 @@
 package Entity.Node {
-
     public class NodeType {
         public static const PLANET:String = "planet";
         public static const WARP:String = "warp";

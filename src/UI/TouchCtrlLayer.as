@@ -159,7 +159,7 @@ package UI {
                     for each (_Node2 in _Touch.downNodes) {
                         if (_Node2 == _Node1 || nodesBlocked(_Node2, _Node1))
                             continue;
-                        NodeStaticLogic.sendShips(_Node2, 1, _Node1);
+                        NodeStaticLogic.sendShips(_Node2, Globals.playTeam, _Node1);
                         FXHandler.addFade(_Node2.nodeData.x, _Node2.nodeData.y, _Node2.nodeData.size, 0xFFFFFF, 0);
                     }
                 }
@@ -198,7 +198,7 @@ package UI {
             var _bar1:Point = null;
             var _bar2:Point = null;
             var _Intersection:Point = null;
-            if (_Node1.nodeData.team == 1 && _Node1.nodeData.type == NodeType.WARP)
+            if (_Node1.nodeData.team == Globals.playTeam && _Node1.nodeData.type == NodeType.WARP)
                 return null;
             for each (var _bar:Array in game.barrierLines) {
                 _bar1 = _bar[0];

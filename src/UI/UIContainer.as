@@ -3,6 +3,7 @@ package UI {
     import starling.core.Starling;
     import starling.display.QuadBatch;
     import starling.display.Quad;
+    import starling.display.BlendMode;
 
     public class UIContainer extends Sprite {
         public var gameContainer:Sprite;
@@ -40,7 +41,6 @@ package UI {
             addChild(touchQuad);
             addChild(btnL);
 
-            btnL.blendMode = "add";
             touchCL.visible = tradiCL.visible = touchQuad.touchable = gameContainer.touchable = false;
             touchQuad.alpha = 0;
 
@@ -95,7 +95,6 @@ package UI {
                 tradiCL.deinit();
             }
             entityL.reset();
-            // entityL.deinit();
             touchQuad.touchable = false;
         }
 
