@@ -26,7 +26,7 @@ package {
         public static var teamNodeBuilds:Array = [1, 1, 1, 1, 1, 1, 1]; // 生产速度倍率
         public static var teamNodePops:Array = [1, 1, 1, 1, 1, 1, 1]; // 飞船上限倍率
         public static var teamCount:int = 7; // 势力数上限
-        public static var playTeam:int = 0; // 玩家势力
+        public static var playerTeam:int = 0; // 玩家势力
         public static var exOptimization:int = 0; // 优化等级
         public static var isApril_Fools:Boolean = false; // 是否为愚人节
 

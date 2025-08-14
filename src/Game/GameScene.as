@@ -149,14 +149,14 @@ package Game {
                     case 2:
                         label.fontName = "Downlink18";
                 }
-                label.color = Globals.teamColors[Globals.playTeam];
+                label.color = Globals.teamColors[Globals.playerTeam];
                 label.fontSize = -1;
                 if (label.color == 0)
                     ui.btnL.normalLayer.addChild(label);
                 else
                     ui.btnL.addLayer.addChild(label);
             }
-            // ui.btnL.color = Globals.teamColors[Globals.playTeam];
+            // ui.btnL.color = Globals.teamColors[Globals.playerTeam];
             // 执行一些初始化函数
             tutorial.init(this, level);
             getBarrierLines();
@@ -231,7 +231,7 @@ package Game {
                     // 写入具有常规ai的势力，此处检验势力是否已写入，避免重复写入
                     switch (_NodeData[4]) {
                         case 0: // 排除中立势力
-                        case Globals.playTeam: // 排除玩家势力
+                        case Globals.playerTeam: // 排除玩家势力
                         case 5: // 排除灰色势力
                         case 6: // 排除黑色势力
                             break;
@@ -399,7 +399,7 @@ package Game {
                 Globals.teamPops[_Ship.team]++;
             EntityContainer.ships.length < 1024 ? Globals.exOptimization = 0 : (EntityContainer.ships.length < 8192 ? Globals.exOptimization = 1 : Globals.exOptimization = 2);
 
-            popLabels[0].text = popLabels[1].text = "POPULATION : " + Globals.teamPops[Globals.playTeam] + " / " + Globals.teamCaps[Globals.playTeam];
+            popLabels[0].text = popLabels[1].text = "POPULATION : " + Globals.teamPops[Globals.playerTeam] + " / " + Globals.teamCaps[Globals.playerTeam];
             if (popLabels[1].alpha > 0)
                 popLabels[1].alpha = Math.max(0, popLabels[1].alpha - _dt * 0.5);
             if (popLabels[2].alpha > 0) {
@@ -721,10 +721,10 @@ package Game {
             var _Node:Node = null;
             if (Globals.level == 0) // 第一关的特殊通关条件：非障碍天体均被玩家占领
             {
-                winningTeam = Globals.playTeam; // 玩家势力获胜
+                winningTeam = Globals.playerTeam; // 玩家势力获胜
                 gameOver = true; // 不判定游戏继续时，游戏结束
                 for each (_Node in EntityContainer.nodes)
-                    if (_Node.nodeData.team != Globals.playTeam && _Node.nodeData.type != NodeType.BARRIER)
+                    if (_Node.nodeData.team != Globals.playerTeam && _Node.nodeData.type != NodeType.BARRIER)
                         gameOver = false;
                 return; // 终止该函数
             }

@@ -61,13 +61,13 @@ package Entity.Node {
             node.entityL.addGlow(node.moveState.glow);
             FXHandler.addPulse(node, Globals.teamColors[team], 0);
             GS.playCapture(node.nodeData.x); // 播放占领音效
-            if (nodeTeam != Globals.playTeam && team == Globals.playTeam && node.nodeData.popVal > 0) {
+            if (nodeTeam != Globals.playerTeam && team == Globals.playerTeam && node.nodeData.popVal > 0) {
                 game.popLabels[1].color = 65280;
                 game.popLabels[1].alpha = 1;
                 game.popLabels[2].color = 3407667;
                 game.popLabels[2].alpha = 1;
                 game.popLabels[2].text = "+ " + node.nodeData.popVal;
-            } else if (nodeTeam == Globals.playTeam && team != Globals.playTeam && node.nodeData.popVal > 0) {
+            } else if (nodeTeam == Globals.playerTeam && team != Globals.playerTeam && node.nodeData.popVal > 0) {
                 game.popLabels[1].color = 16711680;
                 game.popLabels[1].alpha = 1;
                 game.popLabels[2].color = 16724787;

@@ -64,7 +64,8 @@ package UI {
                     _Tx = _localPoint.x;
                     _Ty = _localPoint.y;
                     if (_Touch.hoverNode) { // 绘制目标天体的定位圈
-                        _Block = nodesBlocked(_Node, _Touch.hoverNode);
+                        if (_Touch.hoverNode.nodeData.team == Globals.playerTeam)
+                            _Block = EntityContainer.nodesBlocked(_Node, _Touch.hoverNode);
                         _Tx = _Touch.hoverNode.nodeData.x;
                         _Ty = _Touch.hoverNode.nodeData.y;
                         if (_Block)
@@ -157,9 +158,9 @@ package UI {
                     _Node1 = _Touch.hoverNode;
                     FXHandler.addFade(_Node1.nodeData.x, _Node1.nodeData.y, _Node1.nodeData.size, 0xFFFFFF, 1);
                     for each (_Node2 in _Touch.downNodes) {
-                        if (_Node2 == _Node1 || nodesBlocked(_Node2, _Node1))
+                        if (_Node2 == _Node1 || _Node2.nodeLinks[Globals.playerTeam].includes(_Node1))
                             continue;
-                        NodeStaticLogic.sendShips(_Node2, Globals.playTeam, _Node1);
+                        NodeStaticLogic.sendShips(_Node2, Globals.playerTeam, _Node1);
                         FXHandler.addFade(_Node2.nodeData.x, _Node2.nodeData.y, _Node2.nodeData.size, 0xFFFFFF, 0);
                     }
                 }
@@ -193,35 +194,6 @@ package UI {
             return _ClosestNode;
         }
 
-        /**判断路径是否被拦截并计算拦截点*/
-        private function nodesBlocked(_Node1:Node, _Node2:Node):Point {
-            var _bar1:Point = null;
-            var _bar2:Point = null;
-            var _Intersection:Point = null;
-            if (_Node1.nodeData.team == Globals.playTeam && _Node1.nodeData.type == NodeType.WARP)
-                return null;
-            for each (var _bar:Array in game.barrierLines) {
-                _bar1 = _bar[0];
-                _bar2 = _bar[1];
-                _Intersection = getIntersection(_Node1.nodeData.x, _Node1.nodeData.y, _Node2.nodeData.x, _Node2.nodeData.y, _bar1.x, _bar1.y, _bar2.x, _bar2.y); // 计算交点
-                if (_Intersection)
-                    return _Intersection;
-            }
-            return null;
-        }
-
-        private function getIntersection(_p1x:Number, _p1y:Number, _p2x:Number, _p2y:Number, _p3x:Number, _p3y:Number, _p4x:Number, _p4y:Number):Point {
-            var _L1dx:Number = _p2x - _p1x;
-            var _L1dy:Number = _p2y - _p1y;
-            var _L2dx:Number = _p4x - _p3x;
-            var _L2dy:Number = _p4y - _p3y;
-            var _Ratio1:Number = (-_L1dy * (_p1x - _p3x) + _L1dx * (_p1y - _p3y)) / (-_L2dx * _L1dy + _L1dx * _L2dy);
-            var _Ratio2:Number = (_L2dx * (_p1y - _p3y) - _L2dy * (_p1x - _p3x)) / (-_L2dx * _L1dy + _L1dx * _L2dy);
-            if (_Ratio1 >= 0 && _Ratio1 <= 1 && _Ratio2 >= 0 && _Ratio2 <= 1)
-                return new Point(_p1x + _Ratio2 * _L1dx, _p1y + _Ratio2 * _L1dy);
-            return null;
-        }
-
         private function lineBlocked(_x1:Number, _y1:Number, _x2:Number, _y2:Number):Point {
             var _Intersection:Point = null;
             var _bar1:Point = null;
@@ -229,7 +201,7 @@ package UI {
             for each (var _bar:Array in game.barrierLines) {
                 _bar1 = _bar[0];
                 _bar2 = _bar[1];
-                _Intersection = getIntersection(_x1, _y1, _x2, _y2, _bar1.x, _bar1.y, _bar2.x, _bar2.y);
+                _Intersection = EntityContainer.getIntersection(_x1, _y1, _x2, _y2, _bar1.x, _bar1.y, _bar2.x, _bar2.y);
                 if (_Intersection)
                     return _Intersection;
             }
