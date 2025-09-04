@@ -5,10 +5,10 @@ package Entity.Node.States {
     import Entity.Node.NodeData;
     import Entity.EntityContainer;
     import UI.EntityLayer;
+    import UI.UIContainer;
 
     public class NodeMoveState implements INodeState {
         public var node:Node;
-        public var entityL:EntityLayer;
         public var nodeData:NodeData;
         public var glow:Image; // 光效图片
         public var image:Image; // 天体图片
@@ -44,7 +44,6 @@ package Entity.Node.States {
         }
 
         public function init():void {
-            this.entityL = node.entityL;
             this.nodeData = node.nodeData;
             labels.length = 0;
             var textField:TextField;
@@ -57,10 +56,10 @@ package Entity.Node.States {
                 labels.push(textField);
             }
             for (i = 0; i < labels.length; i++)
-                entityL.labelLayer.addChild(labels[i]);
+                UIContainer.entityLayer.labelLayer.addChild(labels[i]);
             image.visible = halo.visible = true;
-            entityL.addNode(image, halo, glow);
-            entityL.labelLayer.addChild(label);
+            UIContainer.entityLayer.addNode(image, halo, glow);
+            UIContainer.entityLayer.labelLayer.addChild(label);
             if (orbitNode) {
                 var dx:Number = nodeData.x - orbitNode.nodeData.x;
                 var dy:Number = nodeData.y - orbitNode.nodeData.y;
@@ -70,10 +69,10 @@ package Entity.Node.States {
         }
 
         public function deinit():void {
-            entityL.removeNode(image, halo, glow);
-            entityL.labelLayer.removeChild(label);
+            UIContainer.entityLayer.removeNode(image, halo, glow);
+            UIContainer.entityLayer.labelLayer.removeChild(label);
             for (var i:int = 0; i < labels.length; i++)
-                entityL.labelLayer.removeChild(labels[i]);
+                UIContainer.entityLayer.labelLayer.removeChild(labels[i]);
             orbitNode = null;
         }
 
@@ -110,7 +109,7 @@ package Entity.Node.States {
                     glow.alpha = 1;
                     glowing = false;
                     image.color = halo.color = glow.color = Globals.teamColors[nodeData.team];
-                    entityL.addGlow(halo);
+                    UIContainer.entityLayer.addGlow(halo);
                 }
             } else if (glow.alpha > 0) { // 再归零
                 glow.alpha -= dt * 2; // 不透明度减少

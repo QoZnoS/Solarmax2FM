@@ -4,6 +4,7 @@ package Entity.Node.States {
     import Entity.EntityHandler;
     import utils.Drawer;
     import Entity.Ship;
+    import UI.UIContainer;
 
     public class NodeConflictState implements INodeState {
 
@@ -90,7 +91,7 @@ package Entity.Node.States {
                 var teamId:int = activeTeams[i];
                 var shipCount:int = ships[teamId].length;
                 var arcRatio:Number = shipCount / totalShips;
-                Drawer.drawCircle(node.behaviorB, nodeData.x, nodeData.y, Globals.teamColors[teamId], nodeData.lineDist, nodeData.lineDist - 2, false, 1, arcRatio - ARC_ADJUSTMENT, currentAngle + 0.01);
+                Drawer.drawCircle(UIContainer.behaviorBatch, nodeData.x, nodeData.y, Globals.teamColors[teamId], nodeData.lineDist, nodeData.lineDist - 2, false, 1, arcRatio - ARC_ADJUSTMENT, currentAngle + 0.01);
                 var labelAngle:Number = START_ANGLE + i * labelAngleStep;
                 node.moveState.updateConflictLabel(teamId, labelAngle, shipCount);
                 currentAngle += Math.PI * 2 * arcRatio;

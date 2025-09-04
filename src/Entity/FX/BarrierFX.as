@@ -2,6 +2,7 @@ package Entity.FX {
     import Game.GameScene;
     import starling.display.Image;
     import Entity.GameEntity;
+    import UI.UIContainer;
 
     public class BarrierFX extends GameEntity {
 
@@ -22,7 +23,7 @@ package Entity.FX {
             image.scaleX = 0.75;
             image.rotation = _Angle;
             image.color = _Color;
-            entityL.fxLayer.addImage(image);
+            UIContainer.entityLayer.fxLayer.addImage(image);
         }
     }
 }

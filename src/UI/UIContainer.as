@@ -7,18 +7,18 @@ package UI {
     public class UIContainer extends Sprite {
         public var gameContainer:Sprite;
 
-        public var entityL:EntityLayer;
-        private var controlLayer:Sprite;
-        public var behaviorBatch:QuadBatch;
-        public var touchCL:TouchCtrlLayer;
-        public var tradiCL:TraditionalCtrlLayer;
+        private var entityL:EntityLayer;
+        private var controlL:Sprite;
+        private var behaviorB:QuadBatch;
+        private var touchCL:TouchCtrlLayer;
+        private var tradiCL:TraditionalCtrlLayer;
 
         public var btnL:BtnLayer;
         public var touchQuad:Quad;
 
         public var scene:SceneController;
-        public static var ui:UIContainer;
 
+        private static var ui:UIContainer;
         private var _scale:Number
 
         public function UIContainer(_scene:SceneController) {
@@ -27,17 +27,17 @@ package UI {
             gameContainer = new Sprite();
             touchQuad = new Quad(1024, 768, 16711680);
             entityL = new EntityLayer();
-            controlLayer = new Sprite();
-            behaviorBatch = new QuadBatch();
+            controlL = new Sprite();
+            behaviorB = new QuadBatch();
             touchCL = new TouchCtrlLayer(this);
             tradiCL = new TraditionalCtrlLayer(this);
             btnL = new BtnLayer(this);
 
             gameContainer.addChild(entityL);
-            gameContainer.addChild(controlLayer);
-            controlLayer.addChild(behaviorBatch);
-            controlLayer.addChild(touchCL);
-            controlLayer.addChild(tradiCL);
+            gameContainer.addChild(controlL);
+            controlL.addChild(behaviorB);
+            controlL.addChild(touchCL);
+            controlL.addChild(tradiCL);
             addChild(gameContainer)
             addChild(touchQuad);
             addChild(btnL);
@@ -100,13 +100,21 @@ package UI {
         }
 
         public function update():void {
-            behaviorBatch.reset();
+            behaviorB.reset();
             entityL.reset();
             Globals.touchControls ? touchCL.draw() : tradiCL.draw();
         }
 
         public function set scale(_scale:Number):void{
             this._scale = _scale;
+        }
+
+        public static function get behaviorBatch():QuadBatch{
+            return ui.behaviorB;
+        }
+
+        public static function get entityLayer():EntityLayer{
+            return ui.entityL;
         }
     }
 }

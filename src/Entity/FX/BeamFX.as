@@ -4,6 +4,7 @@ package Entity.FX {
     import Entity.GameEntity;
     import Entity.Node;
     import Entity.Node.NodeType;
+    import UI.UIContainer;
 
     public class BeamFX extends GameEntity {
 
@@ -102,9 +103,9 @@ package Entity.FX {
                     break;
             }
             image.rotation = angle;
-            entityL.addImage(image, foreground);
+            UIContainer.entityLayer.addImage(image, foreground);
             if (image.color != 0)
-                entityL.addImage(image2, foreground);
+                UIContainer.entityLayer.addImage(image2, foreground);
         }
     }
 }

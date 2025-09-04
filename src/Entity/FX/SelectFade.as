@@ -3,6 +3,7 @@ package Entity.FX {
     import Game.GameScene;
     import Entity.GameEntity;
     import utils.Drawer;
+    import UI.UIContainer;
 
     public class SelectFade extends GameEntity {
 
@@ -45,7 +46,7 @@ package Entity.FX {
             }
             var _R:Number = 150 * size - 4;
             var _voidR:Number = Math.max(0, _R - 3);
-            Drawer.drawCircle(behaviorB, x, y, color, _R, _voidR, false, alpha);
+            Drawer.drawCircle(UIContainer.behaviorBatch, x, y, color, _R, _voidR, false, alpha);
         }
     }
 }

@@ -104,7 +104,7 @@ package Game {
         // #region 进入关卡
         override public function init(seed:uint = 0, rep:Boolean = false):void {
             ui = scene.ui;
-            ui.entityL.addGlow(darkPulse);
+            UIContainer.entityLayer.addGlow(darkPulse);
             var i:int = 0;
             var _aiArray:Array = [];
             this.level = Globals.level;

@@ -2,6 +2,7 @@ package Entity.FX {
     import Game.GameScene;
     import starling.display.Image;
     import Entity.GameEntity;
+    import UI.UIContainer;
 
     public class WarpFX extends GameEntity {
 
@@ -73,7 +74,7 @@ package Entity.FX {
             image.scaleY *= 0.5;
             image.alpha = 0.25;
             image.rotation = _angle;
-            entityL.addImage(image, foreground);
+            UIContainer.entityLayer.addImage(image, foreground);
         }
     }
 }

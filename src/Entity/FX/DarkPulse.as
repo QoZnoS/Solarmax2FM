@@ -6,6 +6,7 @@ package Entity.FX {
     import Entity.Node;
     import starling.display.Image;
     import Entity.GameEntity;
+    import UI.UIContainer;
 
     public class DarkPulse extends GameEntity {
         public static const TYPE_GROW:int = 0;
@@ -101,13 +102,13 @@ package Entity.FX {
                     image.rotation = angle;
             }
             if (_type == 4)
-                entityL.blackholeLayer.addImage(image);
+                UIContainer.entityLayer.blackholeLayer.addImage(image);
             else
-                entityL.addGlow(image);
+                UIContainer.entityLayer.addGlow(image);
         }
 
         override public function deInit():void {
-            entityL.removeGlow(image);
+            UIContainer.entityLayer.removeGlow(image);
         }
 
         override public function update(_dt:Number):void {

@@ -5,6 +5,7 @@ package Entity.Node {
     import Game.GameScene;
     import Entity.Ship;
     import Entity.Node.Attack.AttackStrategyFactory;
+    import UI.UIContainer;
 
     /** 静态类，函数均与dt无关 */
     public class NodeStaticLogic {
@@ -58,7 +59,7 @@ package Entity.Node {
                 return
             node.moveState.glow.visible = true;
             node.moveState.glow.color = Globals.teamColors[team]; // 设定光效颜色
-            node.entityL.addGlow(node.moveState.glow);
+            UIContainer.entityLayer.addGlow(node.moveState.glow);
             FXHandler.addPulse(node, Globals.teamColors[team], 0);
             GS.playCapture(node.nodeData.x); // 播放占领音效
             if (nodeTeam != Globals.playerTeam && team == Globals.playerTeam && node.nodeData.popVal > 0) {

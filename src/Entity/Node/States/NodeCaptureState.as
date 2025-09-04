@@ -5,6 +5,7 @@ package Entity.Node.States {
     import Entity.Node.NodeType;
     import utils.Drawer;
     import Entity.Node.NodeStaticLogic;
+    import UI.UIContainer;
 
     public class NodeCaptureState implements INodeState {
 
@@ -91,8 +92,8 @@ package Entity.Node.States {
         private function updateCaptureUI(capturingTeam:int):void {
             if (shouldDrawCaptureArc()) {
                 var arcAngle:Number = START_ANGLE - Math.PI * (nodeData.hp / MAX_HP);
-                Drawer.drawCircle(node.behaviorB, nodeData.x, nodeData.y, Globals.teamColors[captureTeam], nodeData.lineDist, nodeData.lineDist - 2, false, 0.1);
-                Drawer.drawCircle(node.behaviorB, nodeData.x, nodeData.y, Globals.teamColors[captureTeam], nodeData.lineDist, nodeData.lineDist - 2, false, 0.7, nodeData.hp / MAX_HP, arcAngle);
+                Drawer.drawCircle(UIContainer.behaviorBatch, nodeData.x, nodeData.y, Globals.teamColors[captureTeam], nodeData.lineDist, nodeData.lineDist - 2, false, 0.1);
+                Drawer.drawCircle(UIContainer.behaviorBatch, nodeData.x, nodeData.y, Globals.teamColors[captureTeam], nodeData.lineDist, nodeData.lineDist - 2, false, 0.7, nodeData.hp / MAX_HP, arcAngle);
             }
             node.moveState.updateCaptureLabel(capturingTeam, ships[capturingTeam].length);
         }

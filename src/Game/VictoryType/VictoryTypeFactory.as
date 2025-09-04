@@ -24,7 +24,7 @@ package Game.VictoryType {
         /** 注册自定义Victory类型
          * @param type 自定义类型标识符
          * @param typeClass Victory类引用
-         * <p>示例：<code>VictoryTypeFactory.registerAI("customType", CustomVictory);</code>
+         * <p>示例：<code>VictoryTypeFactory.registerType("customType", CustomVictory);</code>
          */
         public static function registerType(type:String, typeClass:Class):void {
             _typeMap[type] = typeClass;

@@ -7,6 +7,7 @@ package Entity
    import utils.GS;
    import starling.display.QuadBatch;
    import Entity.Node.NodeType;
+   import UI.UIContainer;
 
    public class Ship extends GameEntity
    {
@@ -412,7 +413,7 @@ package Entity
         //           return;
          image.x = x;
          image.y = y;
-         entityL.addImage(image, foreground)
+         UIContainer.entityLayer.addImage(image, foreground)
       }
 
       private function drawTrail():void // 绘制拖尾
@@ -421,7 +422,7 @@ package Entity
             return;
          trail.x = x;
          trail.y = y;
-         entityL.addImage(trail, foreground)
+         UIContainer.entityLayer.addImage(trail, foreground)
       }
 
       private function drawPulse():void // 绘制光圈
@@ -430,7 +431,7 @@ package Entity
             return;
          pulse.x = x;
          pulse.y = y;
-         entityL.addImage(pulse, foreground)
+         UIContainer.entityLayer.addImage(pulse, foreground)
       }
       // #endregion
       // #region 其他功能性函数

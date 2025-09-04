@@ -22,7 +22,7 @@ package UI {
 
         public function TouchCtrlLayer(_ui:UIContainer) {
             this.game = _ui.scene.gameScene;
-            this.displayBatch = _ui.behaviorBatch;
+            this.displayBatch = UIContainer.behaviorBatch;
             this.touchQuad = _ui.touchQuad;
             convertQuad = new Quad(1024, 768, 16711680);
             convertQuad.alpha = 0;

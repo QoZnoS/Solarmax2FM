@@ -11,7 +11,7 @@ package Game.VictoryType {
         private var time:Number;
         private var textField:TextField;
         private var background:Quad;
-
+        //未完成，不应使用，文字应用特殊事件处理图层
         public function TimeVictory(trigger:Object) {
             time = trigger as Number;
             background = new Quad(80, 26, 0xFFFFFF);
@@ -23,8 +23,8 @@ package Game.VictoryType {
             textField.y = 140;
             textField.hAlign = HAlign.CENTER;
             textField.vAlign = VAlign.CENTER
-            UIContainer.ui.entityL.addChildAt(background, 0);
-            UIContainer.ui.entityL.addChildAt(textField, 1);
+            UIContainer.entityLayer.addChildAt(background, 0);
+            UIContainer.entityLayer.addChildAt(textField, 1);
         }
 
         public function update(dt:Number):int {
@@ -32,7 +32,7 @@ package Game.VictoryType {
             var text:String = timeToString(time);
             textField.text = text;
             if (time <= 0){
-                UIContainer.ui.entityL.removeChild(textField);
+                UIContainer.entityLayer.removeChild(textField);
                 return Globals.playerTeam;
             }
             return -1;

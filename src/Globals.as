@@ -49,7 +49,7 @@ package {
         public static var nohup:Boolean = false; // 禁用暂停，playerData.txt第二十一项，levelData后第四项
         public static var fleetSliderPosition:int = 1; // 分兵条位置
 
-        public static const VERSION:int = 250904;
+        public static const VERSION:int = 250905;
 
         public static var saveVersion:int = VERSION;
         public static var errorMessage:String;

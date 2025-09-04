@@ -1,8 +1,8 @@
 package Game.SpecialEvent
 {
-    public class VictorySE
+    public class GameEndSE
     {
-        public function VictorySE()
+        public function GameEndSE()
         {
             
         }

@@ -32,7 +32,7 @@ package UI {
 
         public function TraditionalCtrlLayer(_ui:UIContainer) {
             this.game = _ui.scene.gameScene;
-            this.displayBatch = _ui.behaviorBatch;
+            this.displayBatch = UIContainer.behaviorBatch;
             dragQuad = new Quad(10, 10, Globals.teamColors[1]);
             dragLine = new Quad(2, 2, Globals.teamColors[1]);
             selectedNodes = [];
