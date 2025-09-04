@@ -246,7 +246,7 @@ package UI {
                 return;
             FXHandler.addFade(_currentNode.nodeData.x, _currentNode.nodeData.y, _currentNode.nodeData.size, 0xFFFFFF, 1);
             for each (var _Node:Node in selectedNodes) {
-                if (_Node == _currentNode || _Node.nodeLinks[Globals.playerTeam].includes(_currentNode))
+                if (_Node == _currentNode || !_Node.nodeLinks[Globals.playerTeam].includes(_currentNode))
                     continue;
                 NodeStaticLogic.sendShips(_Node, Globals.playerTeam, _currentNode);
                 FXHandler.addFade(_Node.nodeData.x, _Node.nodeData.y, _Node.nodeData.size, 0xFFFFFF, 0);

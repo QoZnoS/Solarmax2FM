@@ -43,8 +43,8 @@ package Entity.Node {
         }
 
         public static function changeTeam(node:Node, team:int, pulseEffect:Boolean = true):void {
-            if (Globals.level == 35 && node.nodeData.type == NodeType.DILATOR)
-                return; // 32 36关星核不做处理，自己变自己不做处理
+            // if (Globals.level == 35 && node.nodeData.type == NodeType.DILATOR)
+            //     return; // 32 36关星核不做处理，自己变自己不做处理
             if (team == 0)
                 node.nodeData.hp = 0;
             else

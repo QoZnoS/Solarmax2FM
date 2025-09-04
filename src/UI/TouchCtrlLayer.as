@@ -158,7 +158,7 @@ package UI {
                     _Node1 = _Touch.hoverNode;
                     FXHandler.addFade(_Node1.nodeData.x, _Node1.nodeData.y, _Node1.nodeData.size, 0xFFFFFF, 1);
                     for each (_Node2 in _Touch.downNodes) {
-                        if (_Node2 == _Node1 || _Node2.nodeLinks[Globals.playerTeam].includes(_Node1))
+                        if (_Node2 == _Node1 || !_Node2.nodeLinks[Globals.playerTeam].includes(_Node1))
                             continue;
                         NodeStaticLogic.sendShips(_Node2, Globals.playerTeam, _Node1);
                         FXHandler.addFade(_Node2.nodeData.x, _Node2.nodeData.y, _Node2.nodeData.size, 0xFFFFFF, 0);

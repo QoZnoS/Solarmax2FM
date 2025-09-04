@@ -34,8 +34,8 @@ package Entity.Node.States {
 
         /**注册自定义类型
          * @param type
-         * @param classPath
-         * <p><code>AttackStateFactory.registerState("invisible", NodeInvisibleState);</code>
+         * @param stateClass
+         * <p><code>NodeStateFactory.registerState("invisible", NodeInvisibleState);</code>
          */
         public static function registerState(type:String, stateClass:Class):void {
             _stateMap[type] = stateClass;

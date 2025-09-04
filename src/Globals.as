@@ -26,7 +26,7 @@ package {
         public static var teamNodeBuilds:Array = [1, 1, 1, 1, 1, 1, 1]; // 生产速度倍率
         public static var teamNodePops:Array = [1, 1, 1, 1, 1, 1, 1]; // 飞船上限倍率
         public static var teamCount:int = 7; // 势力数上限
-        public static var playerTeam:int = 0; // 玩家势力
+        public static var playerTeam:int = 1; // 玩家势力
         public static var exOptimization:int = 0; // 优化等级
         public static var isApril_Fools:Boolean = false; // 是否为愚人节
 
@@ -49,7 +49,7 @@ package {
         public static var nohup:Boolean = false; // 禁用暂停，playerData.txt第二十一项，levelData后第四项
         public static var fleetSliderPosition:int = 1; // 分兵条位置
 
-        public static const VERSION:int = 250728;
+        public static const VERSION:int = 250904;
 
         public static var saveVersion:int = VERSION;
         public static var errorMessage:String;

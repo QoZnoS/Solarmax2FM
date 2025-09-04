@@ -3,7 +3,6 @@ package UI {
     import starling.core.Starling;
     import starling.display.QuadBatch;
     import starling.display.Quad;
-    import starling.display.BlendMode;
 
     public class UIContainer extends Sprite {
         public var gameContainer:Sprite;
@@ -18,11 +17,13 @@ package UI {
         public var touchQuad:Quad;
 
         public var scene:SceneController;
+        public static var ui:UIContainer;
 
         private var _scale:Number
 
         public function UIContainer(_scene:SceneController) {
             this.scene = _scene;
+            ui = this;
             gameContainer = new Sprite();
             touchQuad = new Quad(1024, 768, 16711680);
             entityL = new EntityLayer();

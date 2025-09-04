@@ -1,5 +1,4 @@
 package Entity.AI {
-    import Game.GameScene;
     import flash.utils.Dictionary;
     import utils.Rng;
 

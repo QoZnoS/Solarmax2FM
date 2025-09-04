@@ -28,6 +28,7 @@ package Game {
     import Entity.Node.NodeStaticLogic;
     import Entity.Node.NodeType;
     import Entity.EntityContainer;
+    import Game.VictoryType.VictoryTypeFactory;
 
     public class GameScene extends BasicScene {
         // #region 类变量
@@ -181,6 +182,7 @@ package Game {
                 GS.playMusic("bgm06");
             addEventListener("enterFrame", update); // 添加帧监听器，每帧执行一次update
             animateIn(); // 播放关卡进入动画
+            victoryType = VictoryTypeFactory.create(VictoryTypeFactory.NORMAL_TYPE);
         }
 
         // 生成天体并返回需添加的ai
@@ -691,7 +693,8 @@ package Game {
         public function updateGameOver(_dt:Number):void {
             if (!gameOver) // 通关判断
             {
-                checkWinningTeam();
+                winningTeam = victoryType.update(_dt);
+                gameOver = (winningTeam != -1)
                 if (Globals.level == 31)
                     gameOver = false; // 32关禁用常规通关判定
                 if (gameOver) // 处理游戏结束时的动画
@@ -712,59 +715,8 @@ package Game {
             } else if (gameOverTimer > 0) {
                 gameOverTimer -= _dt;
                 if (gameOverTimer <= 0)
-                    winningTeam == 1 ? next() : quit();
+                    winningTeam == Globals.playerTeam ? next() : quit();
             }
-        }
-
-        public function checkWinningTeam():void {
-            var i:int = 0;
-            var _Node:Node = null;
-            if (Globals.level == 0) // 第一关的特殊通关条件：非障碍天体均被玩家占领
-            {
-                winningTeam = Globals.playerTeam; // 玩家势力获胜
-                gameOver = true; // 不判定游戏继续时，游戏结束
-                for each (_Node in EntityContainer.nodes)
-                    if (_Node.nodeData.team != Globals.playerTeam && _Node.nodeData.type != NodeType.BARRIER)
-                        gameOver = false;
-                return; // 终止该函数
-            }
-            for (i = 0; i < Globals.teamCount; i++) // 判断场上的飞船仅剩一方势力
-            {
-                gameOver = true;
-                for (var j:int = 0; j < Globals.teamCount; j++) {
-                    if (i == j)
-                        continue;
-                    if (Globals.teamPops[j] > 0) // 该其他势力有飞船时
-                    {
-                        gameOver = false;
-                        break; // 结束内循环
-                    }
-                }
-                if (gameOver == true)
-                    break;
-            }
-            if (gameOver == false)
-                return;
-            for each (_Node in EntityContainer.nodes) // 判断非中立天体上都有获胜势力的飞船
-            {
-                if (_Node.nodeData.team == 0 || _Node.nodeData.team == i)
-                    continue;
-                if (_Node.nodeData.type == NodeType.BARRIER || _Node.nodeData.type == NodeType.DILATOR)
-                    continue; // 排除障碍和星核
-                if (_Node.ships[i].length == 0 && i != 0) // 如果天体上没有飞船
-                {
-                    gameOver = false; // 游戏继续
-                    return;
-                }
-                if (i == 0 && _Node.buildState.buildRate != 0) // 都没飞船也都产不了兵判中立赢
-                {
-                    gameOver = false; // 游戏继续
-                    return;
-                }
-            }
-            winningTeam = i;
-            if (!gameOver)
-                winningTeam = -1;
         }
 
         public function updateBarrier():void {

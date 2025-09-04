@@ -259,10 +259,6 @@ package Entity {
         }
         // #endregion
 
-        // #region 绘图
-
-        // #endregion
-
         // #region 其他
 
         /** 计算两条线的交点

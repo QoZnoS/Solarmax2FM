@@ -121,6 +121,7 @@ package Entity {
             nodeData.team = 6;
             this.rng = _rng;
             nodeData.hp = 100;
+            resetArray()
             aiValue = 0;
             startVal = 0;
             triggerTimer = 0;
