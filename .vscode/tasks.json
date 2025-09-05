@@ -47,6 +47,48 @@
 			"group": "build",
 			"problemMatcher": [],
 			"label": "Adobe AIR: package Android debug - asconfig.json"
-		}
+		},
+        {
+          "label": "Build Nightly Version",
+          "type": "shell",
+          "command": "python",
+          "args": ["${workspaceFolder}/libs/其他文档/update_version.py"],
+          "group": "build",
+          "presentation": {
+            "echo": true,
+            "reveal": "always",
+            "focus": false,
+            "panel": "shared"
+          },
+          "problemMatcher": []
+        },
+        {
+          "label": "Pack Texture Assets",
+          "type": "shell",
+          "command": "python",
+          "args": [
+            "${workspaceFolder}/libs/其他文档/Texture/workspace/repacker.py",
+            "${workspaceFolder}/libs/其他文档/Texture/workspace/assets",
+            "${workspaceFolder}/libs/textures/2048px"
+            ],
+          "group": "build",
+          "presentation": {
+            "echo": true,
+            "reveal": "always",
+            "focus": false,
+            "panel": "shared"
+          },
+          "problemMatcher": []
+        },
+        {
+          "label": "Full Nightly Build",
+          "dependsOrder": "sequence",
+          "dependsOn": [
+            "Pack Texture Assets",
+            "Build Nightly Version",
+            "Adobe AIR: package Windows release (captive runtime) - asconfig.json"
+          ],
+          "problemMatcher": []
+        }
 	]
 }
