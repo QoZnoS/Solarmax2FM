@@ -69,7 +69,7 @@ package Entity.AI {
                 for each (_Node in nodeArray) { // 计算出兵天体
                     if (_Node.aiTimers[team] > 0 || _Node.teamStrength(team) == 0)
                         continue; // 基本条件：天体AI计时器为0且有己方飞船
-                    if (_Node.predictedOppStrength(team) == 0 && _Node.nodeData.capturing)
+                    if (_Node.predictedOppStrength(team) == 0 && _Node.capturing)
                         continue; // 条件1：没在锁星
                     if (_Node.nodeData.team != team && _Node.predictedTeamStrength(team) > _Node.predictedOppStrength(team))
                         continue; // 条件2：为己方天体或己方兵力不足敌方
@@ -106,7 +106,7 @@ package Entity.AI {
             // #region 聚兵
             senders.length = 0;
             for each (_Node in nodeArray) { // 计算出兵天体
-                if (_Node.nodeData.team != team || _Node.nodeData.conflict)
+                if (_Node.nodeData.team != team || _Node.conflict)
                     continue; // 条件：为己方天体且无战争
                 _Node.aiValue = -_Node.teamStrength(team);
                 senders.push(_Node);

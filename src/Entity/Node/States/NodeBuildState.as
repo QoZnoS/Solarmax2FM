@@ -37,7 +37,7 @@ package Entity.Node.States {
         }
 
         public function get enable():Boolean {
-            return !(nodeData.team == 0 || Globals.teamPops[nodeData.team] >= Globals.teamCaps[nodeData.team] || nodeData.capturing || nodeData.conflict && node.ships[nodeData.team].length == 0)
+            return !(nodeData.team == 0 || Globals.teamPops[nodeData.team] >= Globals.teamCaps[nodeData.team] || node.capturing || node.conflict && node.ships[nodeData.team].length == 0)
         }
 
         public function get stateType():String {

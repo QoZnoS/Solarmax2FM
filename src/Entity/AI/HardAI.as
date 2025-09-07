@@ -40,7 +40,7 @@ package Entity.AI {
                 // 计算出兵天体
                 if (!senderCheckBasic(_Node))
                     continue;
-                if (_Node.hard_oppAllStrength(team) != 0 || _Node.nodeData.conflict) {
+                if (_Node.hard_oppAllStrength(team) != 0 || _Node.conflict) {
                     // (预)战争状态
                     if (_Node.hard_teamStrength(team) * 0.6 > _Node.hard_oppAllStrength(team)) {
                         if (_Node.nodeData.team != team && _Node.hard_teamStrength(team) < _Node.nodeData.size * 200)
@@ -55,7 +55,7 @@ package Entity.AI {
                     }
                     continue;
                 }
-                if (_Node.nodeData.capturing) {
+                if (_Node.capturing) {
                     if (_Node.nodeData.team == 0 && (100 - _Node.nodeData.hp) / _Node.captureState.captureRate < 0.5 && _Node.nodeData.type != NodeType.WARP) {
                         senders.push(_Node); // 提前出兵
                         _Node.senderType = "attack"; // 类型：正常出兵
@@ -80,7 +80,7 @@ package Entity.AI {
                     }
                     continue;
                 }
-                if (_Node.nodeData.team == 0 && _Node.nodeData.capturing && _Node.captureState.captureTeam == team && (100 - _Node.nodeData.hp) / _Node.captureState.captureRate < _Node.aiValue / 50)
+                if (_Node.nodeData.team == 0 && _Node.capturing && _Node.captureState.captureTeam == team && (100 - _Node.nodeData.hp) / _Node.captureState.captureRate < _Node.aiValue / 50)
                     continue; // 不向快占完的天体派兵
                 if (_Node.nodeData.team == team && _Node.nodeData.type != NodeType.WARP)
                     continue; // 除传送门不向己方天体派兵
@@ -145,7 +145,7 @@ package Entity.AI {
         public function blackDefend():void {
             // 回防
             var _boss:Node = nodeArray[0];
-            if (_boss.nodeData.conflict || _boss.nodeData.capturing) {
+            if (_boss.conflict || _boss.capturing) {
                 for each (var _Node:Node in nodeArray) {
                     if (!senderCheckBasic(_Node) || !moveCheckBasic(_Node, _boss))
                         continue;

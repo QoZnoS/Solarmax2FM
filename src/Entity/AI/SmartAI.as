@@ -121,7 +121,7 @@ package Entity.AI {
                 for each (_Node in nodeArray) { // 计算出兵天体
                     if (_Node.aiTimers[team] > 0 || _Node.teamStrength(team) == 0)
                         continue; // 基本条件：该天体己方ai倒计时为0且该天体己方强度不为0
-                    if (_Node.predictedOppStrength(team) == 0 && _Node.nodeData.capturing)
+                    if (_Node.predictedOppStrength(team) == 0 && _Node.capturing)
                         continue; // 条件：天体不被己方占据
                     if (_Node.nodeData.team != team && _Node.predictedTeamStrength(team) > _Node.predictedOppStrength(team))
                         continue; // 条件：是己方天体或预测己方强度低于敌方

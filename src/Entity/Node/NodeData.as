@@ -13,20 +13,22 @@ package Entity.Node {
         public var size:Number; // 大小
         public var type:String; // 类型
         public var popVal:int; // 人口上限
+        public var startShips:Vector.<int>; // 开局飞船，每一项对于各势力飞船数
+        public var barrierLinks:Vector.<int>; // 障碍连接数组，储存相连天体tag
+        public var orbitNode:int; // 轨道中心天体
+        public var orbitSpeed:Number; // 轨道运转速度
+
         public var hp:Number; // 占领度，中立为0，被任意势力完全占领为100
         public var hpMult:Number; // 占领难度倍率
         public var lineDist:Number; // 选中圈大小
         public var touchDist:Number; // 传统操作模式下的选中圈大小
-        
-        public var startShips:Vector.<int>; // 开局飞船，每一项对于各势力飞船数
-        public var barrierLinks:Vector.<int>; // 障碍连接数组，储存相连天体tag
-        public var barrierCostom:Boolean; // 障碍是否为自定义连接
-        public var conflict:Boolean; // 战斗状态，判断天体上是否有战斗
-        public var capturing:Boolean; // 占据状态
 
         public function NodeData(weakKeys:Boolean = false) {
             super(weakKeys);
-            addSerializableProp();
+            addSerializableProp("x","y","team","size","type","popVal","startShips","barrierLinks","orbitNode","orbitSpeed");
+
+            startShips = new Vector.<int>(Globals.teamCount);
+            barrierLinks = new Vector.<int>;
         }
 
         //#region 序列化
@@ -60,7 +62,6 @@ package Entity.Node {
 
         public function toJSON(k:String):* {
             var output:Object = {};
-
             var keys:Array = [];
             for (var key:String in this)
                 keys.push(key);
@@ -73,11 +74,10 @@ package Entity.Node {
                     keys.push(accName);
             }
 
-            for each (var prop:String in keys) {
-                if (_serializableProps[prop] === true && !(this[prop] is Function)) {
+            for each (var prop:String in keys)
+                if (_serializableProps[prop] === true && !(this[prop] is Function))
                     output[prop] = this[prop];
-                }
-            }
+
             return output;
         }
         //#endregion

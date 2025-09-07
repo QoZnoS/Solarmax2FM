@@ -120,7 +120,8 @@ package Entity.Node {
             type == NodeType.PLANET ? node.moveState.halo.scaleY = node.moveState.halo.scaleX = size * 0.5 : node.moveState.image.scaleX = node.moveState.image.scaleY = node.moveState.halo.scaleX = node.moveState.halo.scaleY = node.moveState.glow.scaleX = node.moveState.glow.scaleY = Number(get);
             // 读取参数
             get = LevelData.nodeData.node.(@name == type).startVal;
-            node.startVal = sliceGet(get, size);
+            if (node.nodeData.team != 0)
+                node.nodeData.startShips[node.nodeData.team] = sliceGet(get, size);
             get = LevelData.nodeData.node.(@name == type).popVal;
             node.nodeData.popVal = sliceGet(get, size);
             get = LevelData.nodeData.node.(@name == type).buildRate;

@@ -64,9 +64,9 @@ package Entity.AI {
                 for each (_Node in nodeArray) { // 计算出兵天体
                     if (_Node.aiTimers[team] > 0 || _Node.teamStrength(team) == 0)
                         continue; // 基本条件：天体AI计时器为0且有己方飞船
-                    if (_Node.predictedOppStrength(team) == 0 && _Node.nodeData.capturing)
+                    if (_Node.predictedOppStrength(team) == 0 && _Node.capturing)
                         continue; // 排除被锁星的天体
-                    if (_Node.nodeData.type == NodeType.DILATOR && _Node.nodeData.conflict)
+                    if (_Node.nodeData.type == NodeType.DILATOR && _Node.conflict)
                         continue; // 排除战争状态的星核
                     if (_Node.nodeData.team != team && _Node.predictedTeamStrength(team) > _Node.predictedOppStrength(team))
                         continue; // 排除敌方兵力低于己方的非己方天体

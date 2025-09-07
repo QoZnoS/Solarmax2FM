@@ -44,13 +44,13 @@ package Entity.Node.States {
             for (var teamId:int = 0; teamId < ships.length; teamId++) {
                 if (ships[teamId].length == 0)
                     continue;
-                nodeData.capturing = (teamId != nodeData.team);
+                node.capturing = (teamId != nodeData.team);
                 capturingTeam = teamId;
                 if (nodeData.team == NEUTRAL_TEAM && nodeData.hp == 0)
                     captureTeam = teamId;
                 return true;
             }
-            return nodeData.capturing = false;
+            return node.capturing = false;
         }
 
         private function calculateCaptureRate(capturingTeam:int):Number {
@@ -99,7 +99,7 @@ package Entity.Node.States {
         }
 
         private function shouldDrawCaptureArc():Boolean {
-            return nodeData.capturing || (nodeData.hp != MAX_HP && captureTeam == capturingTeam && nodeData.team != NEUTRAL_TEAM);
+            return node.capturing || (nodeData.hp != MAX_HP && captureTeam == capturingTeam && nodeData.team != NEUTRAL_TEAM);
         }
 
         private function processTeamChange(capturingTeam:int):void {
@@ -122,8 +122,8 @@ package Entity.Node.States {
         }
 
         public function get enable():Boolean {
-            if (nodeData.conflict)
-                return nodeData.capturing = false;
+            if (node.conflict)
+                return node.capturing = false;
             else
                 return checkCaptureState();
         }

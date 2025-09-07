@@ -103,8 +103,8 @@ package Entity.Node.States {
         }
 
         public function get enable():Boolean {
-            nodeData.conflict = statTeam();
-            return nodeData.conflict;
+            node.conflict = statTeam();
+            return node.conflict;
         }
 
         public function get stateType():String {

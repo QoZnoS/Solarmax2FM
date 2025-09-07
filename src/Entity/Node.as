@@ -36,7 +36,6 @@ package Entity {
         // #region 类变量
         // 基本变量
         public var tag:int; // 标记符，debug用
-        public var startVal:int; // 初始人口
         public var statePool:Dictionary;
         // 状态变量
         public var ships:Vector.<Vector.<Ship>>; // 第一维储存的每个数组对应一个势力，第二维数组用于储存飞船的引用，一个值指代一个飞船，二维数组的长度表示该天体上该势力的飞船总数
@@ -54,9 +53,10 @@ package Entity {
         // 贴图相关变量
         public var triggerTimer:Number; // 用于特殊事件
         // 其他变量
-        public var barrierLinks:Array; // 障碍连接数组
         public var barrierCostom:Boolean; // 障碍是否为自定义连接
         public var linked:Boolean; // 是否被连接
+        public var conflict:Boolean; // 战斗状态，判断天体上是否有战斗
+        public var capturing:Boolean; // 占据状态
 
         public var nodeData:NodeData;
 
@@ -65,7 +65,6 @@ package Entity {
             super();
             nodeLinks = new Vector.<Vector.<Node>>;
             oppNodeLinks = [];
-            barrierLinks = []; // 障碍链接数组
             statePool = NodeStateFactory.createStatePool(this);
         }
 
@@ -86,15 +85,18 @@ package Entity {
             super.init(_GameScene);
             nodeData = new NodeData(true);
             nodeData.size = _size;
-            nodeData.type = NodeType.switchType(_type);
             NodeStaticLogic.changeTeam(this, _team, false)
+            nodeData.type = NodeType.switchType(_type);
             nodeData.x = _x;
             nodeData.y = _y;
-            moveState.orbitNode = _OrbitNode;
-            if (_Clockwise)
-                moveState.orbitSpeed = _OrbitSpeed;
+            if (_OrbitNode)
+                nodeData.orbitNode = _OrbitNode.tag;
             else
-                moveState.orbitSpeed = -_OrbitSpeed;
+                nodeData.orbitNode = -1;
+            if (_Clockwise)
+                nodeData.orbitSpeed = _OrbitSpeed;
+            else
+                nodeData.orbitSpeed = -_OrbitSpeed;
             this.rng = _rng;
             resetArray()
             aiValue = 0;
@@ -123,7 +125,6 @@ package Entity {
             nodeData.hp = 100;
             resetArray()
             aiValue = 0;
-            startVal = 0;
             triggerTimer = 0;
             NodeStaticLogic.updateLabelSizes(this);
             nodeData.x = _x;
@@ -132,7 +133,7 @@ package Entity {
             linked = false;
             NodeStaticLogic.changeType(this, NodeType.DILATOR, 0.4);
             nodeData.popVal = 0;
-            startVal = 300;
+            nodeData.startShips[6] = 300;
             for (i = 0; i < aiTimers.length; i++) {
                 aiTimers[i] = 0;
             }
@@ -149,7 +150,6 @@ package Entity {
                 transitShips[i] = 0;
             }
             // 移除其他参数
-            barrierLinks.length = 0;
             nodeLinks.length = 0;
             oppNodeLinks.length = 0;
             for each(var state:INodeState in statePool)
@@ -406,7 +406,7 @@ package Entity {
                 _dx = _Node.nodeData.x - nodeData.x;
                 _dy = _Node.nodeData.y - nodeData.y;
                 if (Math.sqrt(_dx * _dx + _dy * _dy) < 180)
-                    barrierLinks.push(_Node);
+                    nodeData.barrierLinks.push(_Node.tag);
             }
         }
         // #region 特效与绘图

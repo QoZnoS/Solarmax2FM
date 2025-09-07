@@ -167,7 +167,7 @@ package Entity
             updateForeground()
             drawTrail();
          }
-         if (!node.nodeData.conflict && !node.nodeData.capturing)
+         if (!node.conflict && !node.capturing)
             hp = Math.min(100, hp + _dt * 50);
          orbitAngle += orbitSpeed * _dt;
          orbitAngle %= Math.PI * 2

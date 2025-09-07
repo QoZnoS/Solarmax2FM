@@ -6,6 +6,7 @@ package Entity.Node.States {
     import Entity.EntityContainer;
     import UI.EntityLayer;
     import UI.UIContainer;
+    import Entity.EntityHandler;
 
     public class NodeMoveState implements INodeState {
         public var node:Node;
@@ -45,6 +46,8 @@ package Entity.Node.States {
 
         public function init():void {
             this.nodeData = node.nodeData;
+            if (nodeData.orbitNode != -1)
+                orbitNode = EntityContainer.nodes[nodeData.orbitNode]
             labels.length = 0;
             var textField:TextField;
             for (var i:int = 0; i < Globals.teamCount; i++) {
@@ -78,6 +81,9 @@ package Entity.Node.States {
 
         // #region update
         public function update(dt:Number):void {
+            if (nodeData.orbitNode != -1)
+                orbitNode = EntityContainer.nodes[nodeData.orbitNode];
+            orbitSpeed = nodeData.orbitSpeed;
             updateImagePositions();
             label.visible = false;
             for (var i:int = 0; i < labels.length; i++)
