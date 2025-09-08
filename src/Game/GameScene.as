@@ -187,7 +187,7 @@ package Game {
         // 生成天体并返回需添加的ai
         public function nodeIn():Array {
             var node:Node = null;
-            var levelDate:Array = LevelData.maps[level];
+            var levelDate:Array = LevelData.maps[Globals.level];
             var aiArray:Array = [];
             for each (var nodeData:Array in levelDate) {
                 // 处理每个天体

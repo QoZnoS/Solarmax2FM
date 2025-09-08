@@ -16,54 +16,55 @@ package Entity {
         }
 
         // #region 添加实体
-        public static function addAI(_team:int, _type:String = EnemyAIFactory.BASIC):void {
-            var _EnemyAI:EnemyAI = EntityContainer.getReserve(EntityContainer.INDEX_AIS) as EnemyAI;
-            if (!_EnemyAI)
-                _EnemyAI = new EnemyAI();
+        public static function addAI(team:int, type:String = EnemyAIFactory.BASIC):void {
+            var enemyAI:EnemyAI = EntityContainer.getReserve(EntityContainer.INDEX_AIS) as EnemyAI;
+            if (!enemyAI)
+                enemyAI = new EnemyAI();
             var rng:Rng = new Rng(game.rng.nextInt(), Rng.X32)
-            _EnemyAI.initAI(game, rng, _team, _type);
-            EntityContainer.addEntity(EntityContainer.INDEX_AIS, _EnemyAI);
+            enemyAI.initAI(game, rng, team, type);
+            EntityContainer.addEntity(EntityContainer.INDEX_AIS, enemyAI);
         }
 
-        public static function addNodebyArr(_x:Number, _y:Number, _type:int, _size:Number, _team:Number, _orbit:int, _orbitSpeed:Number = 0.1):Node {
-            var _clock:Boolean = false; // 轨道方向，true为顺时针，false为逆时针
-            var _Node:Node = EntityContainer.getReserve(EntityContainer.INDEX_NODES) as Node; // 天体对象
-            if (!_Node)
-                _Node = new Node();
-            var _orbitNode:Node = null; // 轨道中心天体对象
-            if (_orbit > -1) // 轨道判断
+        public static function addNodebyArr(x:Number, y:Number, type:int, size:Number, team:Number, orbit:int, orbitSpeed:Number = 0.1):Node {
+            var clock:Boolean = false; // 轨道方向，true为顺时针，false为逆时针
+            var node:Node = EntityContainer.getReserve(EntityContainer.INDEX_NODES) as Node; // 天体对象
+            if (!node)
+                node = new Node();
+            var orbitNode:Node = null; // 轨道中心天体对象
+            if (orbit > -1) // 轨道判断
             {
-                _clock = true;
-                if (_orbit >= 100) {
-                    _orbit -= 100;
-                    _clock = false;
+                clock = true;
+                if (orbit >= 100) {
+                    orbit -= 100;
+                    clock = false;
                 }
-                _orbitNode = EntityContainer.nodes[_orbit] as Node;
+                orbitNode = EntityContainer.nodes[orbit] as Node;
             }
             var rng:Rng = new Rng(game.rng.nextInt(), Rng.X32)
-            _Node.initNode(game, rng, _x, _y, _type, _size, _team, _orbitNode, _clock, _orbitSpeed);
-            EntityContainer.addEntity(EntityContainer.INDEX_NODES, _Node);
-            _Node.tag = EntityContainer.nodes.length - 1;
-            return _Node;
+            node.initNode(game, rng, x, y, type, size, team, orbitNode, clock, orbitSpeed);
+            EntityContainer.addEntity(EntityContainer.INDEX_NODES, node);
+            node.tag = EntityContainer.nodes.length - 1;
+            return node;
         }
 
-        public static function addShips(_Node:Node, _team:int, _Number:int):void {
-            for (var i:int = 0; i < _Number; i++)
-                addShip(_Node, _team, false);
+        public static function addShips(node:Node, team:int, number:int):void {
+            for (var i:int = 0; i < number; i++)
+                addShip(node, team, false);
         }
 
-        public static function addShip(_Node:Node, _team:int, _productionEffect:Boolean = true):Ship {
-            var _Ship:Ship = EntityContainer.getReserve(EntityContainer.INDEX_SHIPS) as Ship;
-            if (!_Ship)
-                _Ship = new Ship();
+        public static function addShip(node:Node, team:int, _productionEffect:Boolean = true):Ship {
+            var ship:Ship = EntityContainer.getReserve(EntityContainer.INDEX_SHIPS) as Ship;
+            if (!ship)
+                ship = new Ship();
             var rng:Rng = new Rng(game.rng.nextInt(), Rng.X0)
-            _Ship.initShip(game, rng, _team, _Node, _productionEffect);
-            EntityContainer.addEntity(EntityContainer.INDEX_SHIPS, _Ship);
-            return _Ship;
+            ship.initShip(game, rng, team, node, _productionEffect);
+            EntityContainer.addEntity(EntityContainer.INDEX_SHIPS, ship);
+            return ship;
         }
         // #endregion 
 
         // #region 删除实体
+
         /** 移除飞船，不带特效
          * @param ship 
          */
@@ -73,6 +74,7 @@ package Entity {
             ship.hp = 0;
             ship.active = false;
         }
+
         /** 摧毁飞船，内部调用removeShip，外加特效
          * @param ship 
          */
@@ -87,6 +89,7 @@ package Entity {
             FXHandler.addFlash(ship.x, ship.y, Globals.teamColors[ship.team], foreground);
             FXHandler.addExplosion(ship.x, ship.y, Globals.teamColors[ship.team], foreground);
         }
+
         // #endregion
     }
 }

@@ -10,6 +10,7 @@ package Game {
     import Entity.Node;
     import Entity.EnemyAI;
     import Entity.EntityContainer;
+    import utils.Rng;
 
     public class Debug extends Sprite {
         private static var debug:Boolean; // debug 开启状态
@@ -290,12 +291,48 @@ package Game {
         }
         // #endregion
         public static function test():void{
-            var arr:Array = [];
-            for each(var node:Node in EntityContainer.nodes)
+            var output:Array = [];
+            var len:int = LevelData.difficulty.length;
+            game.rng = new Rng()
+            for(var i:int = 0; i < len; i++)
             {
-                arr.push(JSON.stringify(node.nodeData));
+                Globals.level = i;
+                game.nodeIn()
+                var name:String = (i < 10) ? ("0" + i.toString()) : i.toString();
+                var color:uint = getLevelColor(i)
+                var arr:Array = [];
+                var levelData:Object = {
+                    "name":name,
+                    "color":color,
+                    "node":arr
+                }
+                for each(var node:Node in EntityContainer.nodes)
+                {
+                    arr.push(JSON.stringify(node.nodeData));
+                }
+                game.deInit()
+                output.push(levelData)
             }
-            trace(arr);
+            trace(JSON.stringify(output));
+        }
+
+        private static function getLevelColor(_difficulty:int):uint {
+            if (_difficulty >= LevelData.difficulty.length)
+                return 16755370;
+            switch (LevelData.difficulty[_difficulty]) {
+                case 1:
+                    return 65280; // Green
+                case 2:
+                    return 255; // Blue
+                case 3:
+                    return 16776960; // Yellow
+                case 4:
+                    return 16711680; // Red
+                case 5:
+                    return 0; // Black
+                default:
+                    return 16755370; // Default color
+            }
         }
     }
 }

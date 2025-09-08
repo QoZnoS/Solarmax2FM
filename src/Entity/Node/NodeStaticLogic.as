@@ -11,6 +11,11 @@ package Entity.Node {
     public class NodeStaticLogic {
         public static var game:GameScene;
 
+        // #region 控制天体
+
+        /**修改天体上的UI大小
+         * @param node
+         */
         public static function updateLabelSizes(node:Node):void {
             var i:int = 0;
             switch (Globals.textSize) // 读取文本大小设置
@@ -18,8 +23,8 @@ package Entity.Node {
                 case 0: // 大小设置为0
                     node.moveState.label.fontName = "Downlink10"; // 切换和平状态下的字体图
                     node.moveState.label.fontSize = -1; // 默认大小
-                    for (i = 0; i < node.moveState.labels.length; i++) // 设定战斗状态下每个势力的文本
-                    {
+                    for (i = 0; i < node.moveState.labels.length; i++) {
+                        // 设定战斗状态下每个势力的文本
                         node.moveState.labels[i].fontName = "Downlink10";
                         node.moveState.labels[i].fontSize = -1;
                     }
@@ -43,9 +48,14 @@ package Entity.Node {
             }
         }
 
+        /**修改天体势力
+         * @param node 目标天体
+         * @param team 目标势力
+         * @param pulseEffect 是否播放占领特效
+         */
         public static function changeTeam(node:Node, team:int, pulseEffect:Boolean = true):void {
             // if (Globals.level == 35 && node.nodeData.type == NodeType.DILATOR)
-            //     return; // 32 36关星核不做处理，自己变自己不做处理
+            // return; // 32 36关星核不做处理，自己变自己不做处理
             if (team == 0)
                 node.nodeData.hp = 0;
             else
@@ -55,8 +65,8 @@ package Entity.Node {
             node.captureState.captureTeam = team;
             node.moveState.glowing = true; // 激活光效
             node.moveState.glow.visible = false;
-            if (!pulseEffect) 
-                return
+            if (!pulseEffect)
+                return;
             node.moveState.glow.visible = true;
             node.moveState.glow.color = Globals.teamColors[team]; // 设定光效颜色
             UIContainer.entityLayer.addGlow(node.moveState.glow);
@@ -77,6 +87,10 @@ package Entity.Node {
             }
         }
 
+        /**修改天体上所有飞船的势力（待改）
+         * @param node 目标天体
+         * @param team 目标势力
+         */
         public static function changeShipsTeam(node:Node, team:int):void {
             var ship:Ship = null;
             for (var i:int = 0; i < node.ships.length; i++) {
@@ -89,6 +103,11 @@ package Entity.Node {
             }
         }
 
+        /**修改天体类型
+         * @param node 目标天体
+         * @param type 目标类型
+         * @param size 目标大小
+         */
         public static function changeType(node:Node, type:String, size:Number = -1):void {
             var get:String = LevelData.nodeData.node.(@id == type).defaultSize;
             node.nodeData.size = (size == -1) ? Number(get) : size;
@@ -140,46 +159,72 @@ package Entity.Node {
                 node.getBarrierLinks(); // 计算障碍链接参数
         }
 
-        private static function sliceGet(get:String, size:Number):Number{
+        private static function sliceGet(get:String, size:Number):Number {
             return (get.indexOf("S*") != -1) ? Number(get.slice(2)) * size : Number(get);
         }
 
+        // #endregion
+        // #region 控制飞船
+
+        /**派出玩家飞船
+         * @param node 起点
+         * @param team 势力
+         * @param targetNode 终点
+         */
         public static function sendShips(node:Node, team:int, targetNode:Node):void {
             var l:int = Math.ceil(node.ships[team].length * game.scene.ui.btnL.fleetSlider.perc); // 计算调动的飞船数，Math.ceil()为至少调动1飞船判定
             if (targetNode == node || l == 0)
                 return;
             if (!game.rep)
-                Globals.replay[Globals.replay.length - 1].push([node.tag, team, targetNode.tag, l])
+                Globals.replay[Globals.replay.length - 1].push([node.tag, team, targetNode.tag, l]);
         }
 
+        /**派出AI飞船
+         * @param node 起点
+         * @param team 势力
+         * @param targetNode 终点
+         * @param ships 派出的飞船数
+         */
         public static function sendAIShips(node:Node, team:int, targetNode:Node, ships:int):void {
             var shipNumber:int = Math.min(ships, node.ships[team].length);
             if (targetNode == node || shipNumber == 0)
                 return;
             if (!game.rep)
-                Globals.replay[Globals.replay.length - 1].push([node.tag, team, targetNode.tag, shipNumber])
+                Globals.replay[Globals.replay.length - 1].push([node.tag, team, targetNode.tag, shipNumber]);
             if (node.aiTimers[team] < 1)
                 node.aiTimers[team] = 1;
         }
 
+        /**发送飞船
+         * @param node 起点
+         * @param team 目标势力
+         * @param targetNode 终点
+         * @param ships 飞船数
+         */
         public static function moveShips(node:Node, team:int, targetNode:Node, ships:int):void {
             var ship:Ship = null;
             var warp:Boolean = false; // 是否为传送门
             var ShipNumber:int = Math.min(ships, node.ships[team].length);
-            for (var i:int = 0; i < ShipNumber; i++) // 遍历每个需调动的飞船
-            {
+            for (var i:int = 0; i < ShipNumber; i++) {
+                // 遍历每个需调动的飞船
                 ship = node.ships[team][i];
                 if (ship.state != 0)
                     ShipNumber = Math.min(ShipNumber + 1, node.ships[team].length); // 这里是为了允许快速操作，跳过将要起飞的飞船并将循环次数增加1
                 else
-                    warp = moveShip(node, ship, team, targetNode);
+                    warp = moveShip(node, ship, targetNode);
             }
             if (warp)
                 showWarpPulse(node, team); // 播放传送门特效
         }
 
-        private static function moveShip(node:Node, ship:Ship, team:int, targetNode:Node):Boolean {
-            if (node.nodeData.type == NodeType.WARP && team == node.nodeData.team) {
+        /**发送单个飞船
+         * @param node 起点
+         * @param ship 目标飞船
+         * @param targetNode 终点
+         * @return 是否为传送门
+         */
+        private static function moveShip(node:Node, ship:Ship, targetNode:Node):Boolean {
+            if (node.nodeData.type == NodeType.WARP && ship.team == node.nodeData.team) {
                 ship.warpTo(targetNode);
                 return true;
             } else {
@@ -188,6 +233,13 @@ package Entity.Node {
             }
         }
 
+        // #endregion
+        // #region 播放特效
+
+        /**播放传送起点特效
+         * @param node 目标天体
+         * @param team 特效颜色势力
+         */
         public static function showWarpPulse(node:Node, team:int):void {
             var _delay:Number = 0;
             var _rate:Number = 2.6;
@@ -212,6 +264,10 @@ package Entity.Node {
             GS.playWarpCharge(node.nodeData.x);
         }
 
+        /**播放传送终点特效
+         * @param node 目标天体
+         * @param team 特效颜色势力
+         */
         public static function showWarpArrive(node:Node, team:int):void {
             var rate:Number = 2;
             var angle:Number = 1.5707963267948966;
@@ -227,10 +283,7 @@ package Entity.Node {
             FXHandler.addDarkPulse(node, Globals.teamColors[team], 3, 18 * node.nodeData.size, 28 * node.nodeData.size, 0);
         }
 
-
-
-
-
+        // #endregion
 
     }
 }
