@@ -81,7 +81,7 @@ package Entity {
         }
 
         // #region 生成天体 移除天体
-        public function initNode(_GameScene:GameScene, _rng:Rng, _x:Number, _y:Number, _type:int, _size:Number, _team:int, _OrbitNode:Node = null, _Clockwise:Boolean = true, _OrbitSpeed:Number = 0.1):void {
+        public function oldInitNode(_GameScene:GameScene, _rng:Rng, _x:Number, _y:Number, _type:int, _size:Number, _team:int, _OrbitNode:Node = null, _Clockwise:Boolean = true, _OrbitSpeed:Number = 0.1):void {
             super.init(_GameScene);
             nodeData = new NodeData(true);
             nodeData.size = _size;
@@ -105,6 +105,27 @@ package Entity {
             barrierCostom = false;
             linked = false;
             NodeStaticLogic.changeType(this, NodeType.switchType(_type), _size);
+            var i:int = 0;
+            for (i = 0; i < aiTimers.length; i++)
+                aiTimers[i] = 0;
+            for (i = 0; i < transitShips.length; i++)
+                transitShips[i] = 0;
+            for each(var state:INodeState in statePool)
+                state.init()
+        }
+
+        public function initNode(gameScene:GameScene, rng:Rng, data:Object):void {
+            super.init(gameScene);
+            nodeData = NodeData.deserialize(data);
+            NodeStaticLogic.changeTeam(this, nodeData.team, false)
+            this.rng = rng;
+            resetArray()
+            aiValue = 0;
+            triggerTimer = 0;
+            NodeStaticLogic.updateLabelSizes(this);
+            NodeStaticLogic.changeType(this, nodeData.type, nodeData.size);
+            barrierCostom = false;
+            linked = false;
             var i:int = 0;
             for (i = 0; i < aiTimers.length; i++)
                 aiTimers[i] = 0;

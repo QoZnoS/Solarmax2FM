@@ -14,6 +14,8 @@ package {
         public static var extensions:XML;
         public static var data:Array;
 
+        public static var level:Object; // level.json
+
         public function LevelData() {
             super();
         }
@@ -21,9 +23,10 @@ package {
         // 加载文件
         public static function init():void {
             fileStream = new FileStream();
-            nodeData = Root.assets.getXml("Node")
-            data = Root.assets.getObject("data") as Array
-            loadExtensions()
+            nodeData = Root.assets.getXml("Node");
+            data = Root.assets.getObject("data") as Array;
+            level = Root.assets.getObject("level");
+            loadExtensions();
             Globals.initTeam();
             resetExtensions();
             if (Globals.device == "Mobile") {

@@ -297,7 +297,6 @@ package Game {
             for(var i:int = 0; i < len; i++)
             {
                 Globals.level = i;
-                game.nodeIn()
                 var name:String = (i < 10) ? ("0" + i.toString()) : i.toString();
                 var color:uint = getLevelColor(i)
                 var arr:Array = [];

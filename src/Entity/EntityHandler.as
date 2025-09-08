@@ -41,7 +41,18 @@ package Entity {
                 orbitNode = EntityContainer.nodes[orbit] as Node;
             }
             var rng:Rng = new Rng(game.rng.nextInt(), Rng.X32)
-            node.initNode(game, rng, x, y, type, size, team, orbitNode, clock, orbitSpeed);
+            node.oldInitNode(game, rng, x, y, type, size, team, orbitNode, clock, orbitSpeed);
+            EntityContainer.addEntity(EntityContainer.INDEX_NODES, node);
+            node.tag = EntityContainer.nodes.length - 1;
+            return node;
+        }
+
+        public static function addNodebyJson(data:Object):Node {
+            var node:Node = EntityContainer.getReserve(EntityContainer.INDEX_NODES) as Node;
+            if (!node)
+                node = new Node();
+            var rng:Rng = new Rng(game.rng.nextInt(), Rng.X32)
+            node.initNode(game, rng, data);
             EntityContainer.addEntity(EntityContainer.INDEX_NODES, node);
             node.tag = EntityContainer.nodes.length - 1;
             return node;

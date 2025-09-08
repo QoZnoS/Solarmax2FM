@@ -25,7 +25,7 @@ package Entity.Node {
 
         public function NodeData(weakKeys:Boolean = false) {
             super(weakKeys);
-            addSerializableProp("x","y","team","size","type","popVal","startShips","barrierLinks","orbitNode","orbitSpeed");
+            addSerializableProp("x", "y", "team", "size", "type", "popVal", "startShips", "barrierLinks", "orbitNode", "orbitSpeed");
 
             startShips = new Vector.<int>(Globals.teamCount);
             barrierLinks = new Vector.<int>;
@@ -79,6 +79,21 @@ package Entity.Node {
                     output[prop] = this[prop];
 
             return output;
+        }
+
+        public static function deserialize(obj:Object):NodeData {
+            var nodeData:NodeData = new NodeData();
+            for (var prop:String in obj) {
+                if (prop === "startShips" || prop === "barrierLinks") {
+                    var array:Array = obj[prop] as Array;
+                    var vector:Vector.<int> = new Vector.<int>();
+                    for (var i:int = 0; i < array.length; i++)
+                        vector.push(int(array[i]));
+                    nodeData[prop] = vector;
+                } else
+                    nodeData[prop] = obj[prop];
+            }
+            return nodeData;
         }
         //#endregion
     }

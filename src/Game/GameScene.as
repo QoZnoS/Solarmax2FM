@@ -110,7 +110,7 @@ package Game {
             this.level = Globals.level;
             this.rng = new Rng(seed)
             this.rep = rep
-            aiArray = nodeIn(); // 生成天体，同时返回需生成的ai
+            aiArray = nodeIn(LevelData.level.data[Globals.currentData].level[Globals.level].node as Array); // 生成天体，同时返回需生成的ai
             if (!rep)
                 Globals.replay = [rng.seed, [0]];
             else {
@@ -185,7 +185,7 @@ package Game {
         }
 
         // 生成天体并返回需添加的ai
-        public function nodeIn():Array {
+        public function oldNodeIn():Array {
             var node:Node = null;
             var levelDate:Array = LevelData.maps[Globals.level];
             var aiArray:Array = [];
@@ -241,6 +241,26 @@ package Game {
                         default:
                             aiArray.push(nodeData[4]);
                             break;
+                    }
+                }
+            }
+            return aiArray;
+        }
+
+        public function nodeIn(nodes:Array):Array {
+            var aiArray:Array = [];
+            for each(var nodeData:Object in nodes)
+            {
+                var node:Node = EntityHandler.addNodebyJson(nodeData);
+                if (Globals.level != 31) {
+                    // 修改32关之外的天体数据
+                    if (Globals.level == 35 && node.nodeData.team == 6)
+                        node.nodeData.startShips[6] = 0; // 36关黑色除星核无初始兵力
+                    if (node.nodeData.type == NodeType.DILATOR) {
+                        // 设定星核数据
+                        node.buildState.buildRate = 8;
+                        node.nodeData.popVal = 280;
+                        node.nodeData.startShips[6] = Globals.currentDifficulty * 75;
                     }
                 }
             }
