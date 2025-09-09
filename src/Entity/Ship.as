@@ -565,7 +565,7 @@ package Entity
          {
             if (!_Node.active)
                continue;
-            if (_Node.nodeData.type == NodeType.BARRIER)
+            if (_Node.nodeData.isUntouchable)
                continue;
             // 计算距离，结果带有0~32px的随机误差
             _dx = _Node.nodeData.x - this.x;

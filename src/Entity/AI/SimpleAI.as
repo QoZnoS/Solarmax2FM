@@ -51,7 +51,7 @@ package Entity.AI {
                     continue; // 条件1：为己方天体或有己方飞船（包括飞行中的
                 if (_Node.predictedTeamStrength(team) > _Node.predictedOppStrength(team) * 2)
                     continue; // 条件2：预测己方强度低于敌方两倍（即可能打不过敌方
-                if (_Node.nodeData.type == NodeType.BARRIER)
+                if (_Node.nodeData.isUntouchable)
                     continue; // 排除障碍
                 _dx = _Node.nodeData.x - _CenterX;
                 _dy = _Node.nodeData.y - _CenterY;
@@ -93,7 +93,7 @@ package Entity.AI {
             // #region 进攻部分
             targets.length = 0;
             for each (_Node in _NodeArray) { // 计算目标天体
-                if (_Node.nodeData.team == team || _Node.nodeData.type == NodeType.BARRIER || _Node.nodeData.type == NodeType.DILATOR)
+                if (_Node.nodeData.team == team || _Node.nodeData.isUntouchable || _Node.nodeData.isAIinvisible)
                     continue; // 基本条件：不为己方天体且不为障碍星核
                 if (_Node.nodeData.team == 0 && _Node.predictedOppStrength(team) == 0 && _Node.predictedTeamStrength(team) > _Node.nodeData.size * 100)
                     continue; // 目标条件：不为中立或预测有非己方飞船或己方势力飞船不足100倍size（基本兵力上限）

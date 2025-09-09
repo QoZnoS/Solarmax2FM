@@ -53,7 +53,6 @@ package Entity {
         // 贴图相关变量
         public var triggerTimer:Number; // 用于特殊事件
         // 其他变量
-        public var barrierCostom:Boolean; // 障碍是否为自定义连接
         public var linked:Boolean; // 是否被连接
         public var conflict:Boolean; // 战斗状态，判断天体上是否有战斗
         public var capturing:Boolean; // 占据状态
@@ -102,7 +101,6 @@ package Entity {
             aiValue = 0;
             triggerTimer = 0;
             NodeStaticLogic.updateLabelSizes(this);
-            barrierCostom = false;
             linked = false;
             NodeStaticLogic.changeType(this, NodeType.switchType(_type), _size);
             var i:int = 0;
@@ -124,7 +122,6 @@ package Entity {
             triggerTimer = 0;
             NodeStaticLogic.updateLabelSizes(this);
             NodeStaticLogic.changeType(this, nodeData.type, nodeData.size);
-            barrierCostom = false;
             linked = false;
             var i:int = 0;
             for (i = 0; i < aiTimers.length; i++)
@@ -201,7 +198,7 @@ package Entity {
         }
         
         public function updateNodeLinks():void {
-            if (nodeData.type == NodeType.BARRIER)
+            if (nodeData.isUntouchable)
                 return;
             nodeLinks.length = Globals.teamCount;
             for (var i:int = 0; i < Globals.teamCount; i++) {
@@ -209,14 +206,14 @@ package Entity {
                     nodeLinks[i] = new Vector.<Node>;
                 else
                     nodeLinks[i].length = 0;
-                if (i != 0 && !(i == nodeData.team && nodeData.type == NodeType.WARP)){
+                if (i != 0 && !(i == nodeData.team && nodeData.isWarp)){
                     nodeLinks[i] = nodeLinks[0].concat();
                     continue;
                 }
                 for each (var _Node:Node in EntityContainer.nodes) {
-                    if (_Node == this || _Node.nodeData.type == NodeType.BARRIER || (_Node.nodeData.type == NodeType.DILATOR && Globals.level != 35))
+                    if (_Node == this || _Node.nodeData.isUntouchable || (_Node.nodeData.type == NodeType.DILATOR && Globals.level != 35))
                         continue;
-                    if (nodeData.type == NodeType.WARP && nodeData.team == i && i != 0){
+                    if (nodeData.isWarp && nodeData.team == i && i != 0){
                         nodeLinks[i].push(_Node);
                         continue;
                     }
@@ -241,7 +238,7 @@ package Entity {
             var _ShipArray:Array = [];
             for each (_Node in _NodeArray) // 按距离计算每个目标天体的价值
             {
-                if (_Node != this && _Node.nodeData.type != NodeType.BARRIER) {
+                if (_Node != this && !_Node.nodeData.isUntouchable) {
                     _dx = _Node.nodeData.x - this.nodeData.x;
                     _dy = _Node.nodeData.y - this.nodeData.y;
                     _Distance = Math.sqrt(_dx * _dx + _dy * _dy);
@@ -420,7 +417,7 @@ package Entity {
             var _dx:Number = NaN;
             var _dy:Number = NaN;
             for each (var _Node:Node in EntityContainer.nodes) {
-                if (_Node == this || _Node.nodeData.type != NodeType.BARRIER)
+                if (_Node == this || !_Node.nodeData.isBarrier)
                     continue;
                 if (_Node.nodeData.x != nodeData.x && _Node.nodeData.y != nodeData.y)
                     continue; // 横纵坐标至少有一个相等

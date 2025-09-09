@@ -44,7 +44,7 @@ package Entity.AI {
                 targets.push(_Node); // 星核受威胁时将其作为唯一目标
             else {
                 for each (_Node in nodeArray) {
-                    if (_Node.nodeData.team == team || _Node.nodeData.type == NodeType.BARRIER)
+                    if (_Node.nodeData.team == team || _Node.nodeData.isUntouchable)
                         continue; // 排除己方天体和障碍
                     if (_Node.nodeData.team == 0 && _Node.predictedOppStrength(team) == 0 && _Node.predictedTeamStrength(team) >= _Node.nodeData.size * 200)
                         continue; // 排除仅被己方以二倍标准兵力占据的中立天体

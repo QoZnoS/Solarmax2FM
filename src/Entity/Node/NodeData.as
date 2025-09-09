@@ -18,6 +18,11 @@ package Entity.Node {
         public var orbitNode:int; // 轨道中心天体
         public var orbitSpeed:Number; // 轨道运转速度
 
+        public var isBarrier:Boolean = false; // 启用障碍
+        public var isWarp:Boolean = false; // 启用传送
+        public var isUntouchable:Boolean = false; // 不可选中
+        public var isAIinvisible:Boolean = false; // AI不可见
+
         public var hp:Number; // 占领度，中立为0，被任意势力完全占领为100
         public var hpMult:Number; // 占领难度倍率
         public var lineDist:Number; // 选中圈大小

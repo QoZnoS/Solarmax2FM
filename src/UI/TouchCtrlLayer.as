@@ -180,7 +180,7 @@ package UI {
             var _lineDist:Number = NaN;
             var _ClosestDist:Number = 200;
             for each (var _Node:Node in EntityContainer.nodes) {
-                if (_Node.nodeData.type == NodeType.BARRIER)
+                if (_Node.nodeData.isUntouchable)
                     continue;
                 _dx = _Node.nodeData.x - _localPoint.x;
                 _dy = _Node.nodeData.y - _localPoint.y;

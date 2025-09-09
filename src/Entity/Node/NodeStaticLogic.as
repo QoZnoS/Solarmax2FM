@@ -155,8 +155,14 @@ package Entity.Node {
             var attackLast:Number = sliceGet(get, size);
             get = LevelData.nodeData.node.(@name == type).attackType;
             node.attackState.attackStrategy = AttackStrategyFactory.create(get, attackRate, attackRange, attackLast);
-            if (type == NodeType.BARRIER)
-                node.getBarrierLinks(); // 计算障碍链接参数
+            get = LevelData.nodeData.node.(@name == type).isBarrier;
+            node.nodeData.isBarrier = (get == "true");
+            get = LevelData.nodeData.node.(@name == type).isWarp;
+            node.nodeData.isWarp = (get == "true");
+            get = LevelData.nodeData.node.(@name == type).isUntouchable;
+            node.nodeData.isUntouchable = (get == "true");
+            get = LevelData.nodeData.node.(@name == type).isAIinvisible;
+            node.nodeData.isAIinvisible = (get == "true");
         }
 
         private static function sliceGet(get:String, size:Number):Number {
@@ -224,7 +230,7 @@ package Entity.Node {
          * @return 是否为传送门
          */
         private static function moveShip(node:Node, ship:Ship, targetNode:Node):Boolean {
-            if (node.nodeData.type == NodeType.WARP && ship.team == node.nodeData.team) {
+            if (node.nodeData.isWarp && ship.team == node.nodeData.team) {
                 ship.warpTo(targetNode);
                 return true;
             } else {

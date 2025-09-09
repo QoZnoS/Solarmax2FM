@@ -22,7 +22,7 @@ package Game.VictoryType {
             // 验证所有天体被占据
             for each (var node:Node in EntityContainer.nodes) {
                 var nodeData:NodeData = node.nodeData;
-                if (nodeData.type == NodeType.BARRIER || nodeData.type == NodeType.DILATOR)
+                if (nodeData.isUntouchable || nodeData.type == NodeType.DILATOR)
                     continue;
                 if (nodeData.team == 0 || nodeData.team == winTeam)
                     continue;

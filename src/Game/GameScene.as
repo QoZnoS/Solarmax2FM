@@ -184,83 +184,27 @@ package Game {
             victoryType = VictoryTypeFactory.create(VictoryTypeFactory.NORMAL_TYPE);
         }
 
-        // 生成天体并返回需添加的ai
-        public function oldNodeIn():Array {
-            var node:Node = null;
-            var levelDate:Array = LevelData.maps[Globals.level];
+        public function nodeIn(nodes:Array):Array {
             var aiArray:Array = [];
-            for each (var nodeData:Array in levelDate) {
-                // 处理每个天体
-                nodeData.length >= 7 ? node = EntityHandler.addNodebyArr(nodeData[0], nodeData[1], nodeData[2], nodeData[3], nodeData[4], nodeData[5], nodeData[6]) : node = EntityHandler.addNodebyArr(nodeData[0], nodeData[1], nodeData[2], nodeData[3], nodeData[4], nodeData[5]);
-                if (Globals.level != 31) {
-                    // 修改32关之外的天体数据
-                    if (Globals.level == 35 && node.nodeData.team == 6)
-                        node.nodeData.startShips[6] = 0; // 36关黑色除星核无初始兵力
-                    if (node.nodeData.type == NodeType.DILATOR) {
-                        // 设定星核数据
-                        node.buildState.buildRate = 8;
-                        node.nodeData.popVal = 280;
-                        node.nodeData.startShips[6] = Globals.currentDifficulty * 75;
-                    }
-                }
-                if (nodeData.length >= 8) // 检验第八项数据(自定义兵力或障碍)
+            for each(var nodeData:Object in nodes)
+            {
+                var node:Node = EntityHandler.addNodebyJson(nodeData);
+                for(var i:int = 0; i < nodeData.startShips.length; i++)
                 {
-                    if (nodeData[7] is Array) {
-                        if (node.nodeData.type == NodeType.BARRIER) {
-                            // 障碍
-                            node.nodeData.barrierLinks.length = 0;
-                            node.barrierCostom = true;
-                            for each (var _Barrier:int in nodeData[7])
-                                node.nodeData.barrierLinks.push(_Barrier);
-                        } else {
-                            // 兵力
-                            for (var i:int = 0; i < nodeData[7].length; i++) {
-                                EntityHandler.addShips(node, i, nodeData[7][i]);
-                                node.nodeData.startShips[i] = nodeData[7][i];
-                            }
-                        }
-                    } else {
-                        if (node.nodeData.type == NodeType.BARRIER) {
-                            // 障碍
-                            node.nodeData.barrierLinks.length = 0;
-                            node.barrierCostom = true;
-                            node.nodeData.barrierLinks.push(nodeData[7]);
-                        } else
-                            node.nodeData.startShips[node.nodeData.team] = int(nodeData[7]); // 设定初始人口为该参数
-                    }
-                }else if(node.nodeData.team != 0)
-                    EntityHandler.addShips(node, node.nodeData.team, node.nodeData.startShips[node.nodeData.team]);
-                if (aiArray.indexOf(nodeData[4]) == -1) {
+                    EntityHandler.addShips(node, i, nodeData.startShips[i]);
+                    node.nodeData.startShips[i] = nodeData.startShips[i];
+                }
+                if (aiArray.indexOf(nodeData.team) == -1) {
                     // 写入具有常规ai的势力，此处检验势力是否已写入，避免重复写入
-                    switch (nodeData[4]) {
+                    switch (nodeData.team) {
                         case 0: // 排除中立势力
                         case Globals.playerTeam: // 排除玩家势力
                         case 5: // 排除灰色势力
                         case 6: // 排除黑色势力
                             break;
                         default:
-                            aiArray.push(nodeData[4]);
+                            aiArray.push(nodeData.team);
                             break;
-                    }
-                }
-            }
-            return aiArray;
-        }
-
-        public function nodeIn(nodes:Array):Array {
-            var aiArray:Array = [];
-            for each(var nodeData:Object in nodes)
-            {
-                var node:Node = EntityHandler.addNodebyJson(nodeData);
-                if (Globals.level != 31) {
-                    // 修改32关之外的天体数据
-                    if (Globals.level == 35 && node.nodeData.team == 6)
-                        node.nodeData.startShips[6] = 0; // 36关黑色除星核无初始兵力
-                    if (node.nodeData.type == NodeType.DILATOR) {
-                        // 设定星核数据
-                        node.buildState.buildRate = 8;
-                        node.nodeData.popVal = 280;
-                        node.nodeData.startShips[6] = Globals.currentDifficulty * 75;
                     }
                 }
             }
@@ -686,7 +630,7 @@ package Game {
                 gameOverTimer = 0.5;
             }
             for each (node in EntityContainer.nodes) {
-                if (node.nodeData.team == _team || node.nodeData.type == NodeType.BARRIER)
+                if (node.nodeData.team == _team || node.nodeData.isUntouchable)
                     continue;
                 _x = node.nodeData.x - darkPulse.x;
                 _y = node.nodeData.y - darkPulse.y;
@@ -719,7 +663,7 @@ package Game {
                 {
                     var _ripple:int = 1;
                     for each (var node:Node in EntityContainer.nodes) {
-                        if (node.nodeData.type == NodeType.BARRIER)
+                        if (node.nodeData.isUntouchable)
                             continue;
                         node.basicState.winPulseTimer = Math.min(_ripple * 0.101, _ripple * 2.5 / EntityContainer.nodes.length);
                         _ripple++;
@@ -739,7 +683,6 @@ package Game {
 
         public function updateBarrier():void {
             EntityContainer.entityPool[EntityContainer.INDEX_BARRIERS].deInit();
-            getBarrierLines();
             addBarriers();
             hideSingleBarriers();
         }
@@ -796,7 +739,7 @@ package Game {
 
         public function hideSingleBarriers():void {
             for each (var node:Node in EntityContainer.nodes) {
-                if (node.nodeData.type != NodeType.BARRIER)
+                if (!node.nodeData.isBarrier)
                     continue;
                 node.moveState.image.visible = node.moveState.halo.visible = node.linked;
             }
@@ -817,21 +760,19 @@ package Game {
             L_1 = int(EntityContainer.nodes.length);
             for (i = 0; i < L_1; i++) {
                 _Node1 = EntityContainer.nodes[i];
-                if (_Node1.nodeData.type != NodeType.BARRIER)
+                if (!_Node1.nodeData.isBarrier)
                     continue;
                 L_2 = int(_Node1.nodeData.barrierLinks.length); // 该天体需连接的障碍总数
                 for (j = 0; j < L_2; j++) {
                     if (_Node1.nodeData.barrierLinks[j] < L_1)
                         _Node2 = EntityContainer.nodes[_Node1.nodeData.barrierLinks[j]];
-                    if (!_Node1.barrierCostom && _Node2.barrierCostom)
-                        continue;
                     _Array = [new Point(_Node1.nodeData.x, _Node1.nodeData.y), new Point(_Node2.nodeData.x, _Node2.nodeData.y)];
                     L_3 = int(barrierLines.length);
                     _Exist = false;
                     for (k = 0; k < L_3; k++)
                         if (check4same(_Array, barrierLines[k]))
                             _Exist = true;
-                    if (!_Exist && _Node2.nodeData.type == NodeType.BARRIER) {
+                    if (!_Exist && _Node2.nodeData.isBarrier) {
                         barrierLines.push(_Array);
                         _Node1.linked = true;
                         _Node2.linked = true;

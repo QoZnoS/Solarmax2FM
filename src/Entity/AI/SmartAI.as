@@ -49,7 +49,7 @@ package Entity.AI {
                     _Node.unloadShips();
                     return;
                 }
-                if (team == 6 || _Node.nodeData.type == NodeType.BARRIER || _Node.nodeData.type == NodeType.DILATOR)
+                if (team == 6 || _Node.nodeData.isUntouchable || _Node.nodeData.isAIinvisible)
                     continue; // ？排除障碍星核
                 if (_Node.nodeData.team != team && _Node.predictedTeamStrength(team) == 0)
                     continue; // 条件1：为己方天体或有己方飞船（包括飞行中的）
@@ -104,7 +104,7 @@ package Entity.AI {
             // #region 进攻
             targets.length = 0;
             for each (_Node in nodeArray) { // 计算目标天体
-                if (_Node.nodeData.team == team || _Node.nodeData.type == NodeType.BARRIER || _Node.nodeData.type == NodeType.DILATOR)
+                if (_Node.nodeData.team == team || _Node.nodeData.isUntouchable || _Node.nodeData.isAIinvisible)
                     continue; // 基本条件：不为己方天体和障碍星核
                 if (_Node.predictedOppStrength(team) == 0 && _Node.predictedTeamStrength(team) > _Node.nodeData.size * 150)
                     continue; // 条件：排除己方强度足够且无敌方的天体
@@ -170,7 +170,7 @@ package Entity.AI {
                     continue; // 条件：无敌方或打不过敌方
                 _Node.aiStrength = -_Node.teamStrength(team) - _Node.oppStrength(team); // 计算己方和最强方的飞船总数
                 _Node.aiValue = -_Node.oppNodeLinks.length; // 按路径数计算价值
-                if (_Node.nodeData.type == NodeType.WARP)
+                if (_Node.nodeData.isWarp)
                     _Node.aiValue--; // 传送权重提高
                 senders.push(_Node);
             }
@@ -179,10 +179,10 @@ package Entity.AI {
                 targets.length = 0;
                 for each (_Node in nodeArray) { // 计算目标天体
                     _Node.getOppLinks(team);
-                    if (_Node.nodeData.type == NodeType.BARRIER || _Node.nodeData.type == NodeType.DILATOR)
+                    if (_Node.nodeData.isUntouchable || _Node.nodeData.isAIinvisible)
                         continue; // 排除障碍星核
                     _Node.aiValue = -_Node.oppNodeLinks.length; // 按路径数计算价值
-                    if (_Node.nodeData.type == NodeType.WARP)
+                    if (_Node.nodeData.isWarp)
                         _Node.aiValue--; // 传送权重提高
                     if (Globals.level == 31 && _Node.nodeData.type == NodeType.STARBASE)
                         _Node.aiValue--; // 32关堡垒权重提高

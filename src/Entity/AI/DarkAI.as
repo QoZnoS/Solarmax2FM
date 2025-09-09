@@ -50,7 +50,7 @@ package Entity.AI {
             // #region 进攻
             targets.length = 0;
             for each (_Node in nodeArray) { // 计算目标天体
-                if (_Node.nodeData.team == team || _Node.nodeData.type == NodeType.BARRIER || _Node.nodeData.type == NodeType.DILATOR)
+                if (_Node.nodeData.team == team || _Node.nodeData.isUntouchable || _Node.nodeData.isAIinvisible)
                     continue; // 排除己方天体和星核障碍
                 if (_Node.predictedOppStrength(team) == 0 && _Node.predictedTeamStrength(team) > _Node.nodeData.size * 200)
                     continue; // 条件1：天体未被己方以二倍标准兵力占据
@@ -116,10 +116,10 @@ package Entity.AI {
                 targets.length = 0;
                 for each (_Node in nodeArray) { // 计算目标天体
                     _Node.getOppLinks(team);
-                    if (_Node.nodeData.type == NodeType.BARRIER || _Node.nodeData.type == NodeType.DILATOR)
+                    if (_Node.nodeData.isUntouchable || _Node.nodeData.isAIinvisible)
                         continue; // 排除星核障碍
                     _Node.aiValue = -_Node.oppNodeLinks.length; // 按路径数计算价值
-                    if (_Node.nodeData.type == NodeType.WARP)
+                    if (_Node.nodeData.isWarp)
                         _Node.aiValue--; // 提高传送权重
                     if (Globals.level == 31 && _Node.nodeData.type == NodeType.STARBASE)
                         _Node.aiValue--; // 32关堡垒权重提高

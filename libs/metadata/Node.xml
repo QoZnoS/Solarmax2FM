@@ -24,6 +24,7 @@
     <node id="1" name="warp">
         <defaultSize>0.4</defaultSize>
         <startVal>S*100</startVal>
+        <isWarp>true</isWarp>
         <hpMult>1</hpMult>
         <scale>1</scale>
     </node>
@@ -36,6 +37,8 @@
     </node>
     <node id="3" name="barrier">
         <defaultSize>0.3</defaultSize>
+        <isBarrier>true</isBarrier>
+        <isUntouchable>true</isUntouchable>
         <scale>1</scale>
     </node>
     <node id="4" name="tower">
@@ -49,6 +52,9 @@
     </node>
     <node id="5" name="dilator">
         <defaultSize>0.4</defaultSize>
+        <popVal>280</popVal>
+        <buildRate>8</buildRate>
+        <isAIinvisible>true</isAIinvisible>
         <hpMult>4</hpMult>
         <scale>1</scale>
     </node>

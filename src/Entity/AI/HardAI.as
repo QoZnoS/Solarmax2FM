@@ -56,7 +56,7 @@ package Entity.AI {
                     continue;
                 }
                 if (_Node.capturing) {
-                    if (_Node.nodeData.team == 0 && (100 - _Node.nodeData.hp) / _Node.captureState.captureRate < 0.5 && _Node.nodeData.type != NodeType.WARP) {
+                    if (_Node.nodeData.team == 0 && (100 - _Node.nodeData.hp) / _Node.captureState.captureRate < 0.5 && !_Node.nodeData.isWarp) {
                         senders.push(_Node); // 提前出兵
                         _Node.senderType = "attack"; // 类型：正常出兵
                     }
@@ -82,7 +82,7 @@ package Entity.AI {
                 }
                 if (_Node.nodeData.team == 0 && _Node.capturing && _Node.captureState.captureTeam == team && (100 - _Node.nodeData.hp) / _Node.captureState.captureRate < _Node.aiValue / 50)
                     continue; // 不向快占完的天体派兵
-                if (_Node.nodeData.team == team && _Node.nodeData.type != NodeType.WARP)
+                if (_Node.nodeData.team == team && !_Node.nodeData.isWarp)
                     continue; // 除传送门不向己方天体派兵
                 targets.push(_Node);
                 _Node.targetType = "attack"; // 类型：正常目标
@@ -99,7 +99,7 @@ package Entity.AI {
                         _targetNode.aiValue += getTowerAIValue();
                     if (_targetNode.nodeData.type == NodeType.STARBASE)
                         _targetNode.aiValue -= Globals.teamCaps[0];
-                    if (_targetNode.nodeData.type == NodeType.WARP)
+                    if (_targetNode.nodeData.isWarp)
                         _targetNode.aiValue += getWarpAIValue();
                     var _targetClose:Node = breadthFirstSearch(_senderNode, _targetNode);
                     if (!_targetClose)
@@ -113,7 +113,7 @@ package Entity.AI {
                     _targetClose = breadthFirstSearch(_senderNode, _targetNode);
                     if (!_targetClose)
                         continue;
-                    if (_targetClose.nodeData.type == NodeType.WARP && _senderNode.nodeData.type == NodeType.WARP && _senderNode.nodeData.team == team)
+                    if (_targetClose.nodeData.isWarp && _senderNode.nodeData.isWarp && _senderNode.nodeData.team == team)
                         continue; // 避免传送门之间反复横跳
                     var _Ships:Number = _senderNode.hard_teamStrength(team);
                     if (_senderNode.senderType == "overflow") {
@@ -164,7 +164,7 @@ package Entity.AI {
 
         public function targetCheckBasic(_Node:Node):Boolean {
             // 判断能否作为目标天体
-            if (_Node.nodeData.type == NodeType.BARRIER || _Node.nodeData.type == NodeType.DILATOR)
+            if (_Node.nodeData.isUntouchable || _Node.nodeData.isAIinvisible)
                 return false;
             return true;
         }
@@ -173,7 +173,7 @@ package Entity.AI {
             // 移动判断
             if (_senderNode == _targetNode)
                 return false;
-            if (_senderNode.nodeData.type == NodeType.WARP && _senderNode.nodeData.team == team)
+            if (_senderNode.nodeData.isWarp && _senderNode.nodeData.team == team)
                 return true;
             else if (_senderNode.nodeLinks[team].indexOf(_targetNode) != -1)
                 return true;
@@ -288,7 +288,7 @@ package Entity.AI {
             var resultIntersects:Boolean; // 线和圆是否相交
             var resultEnter:Point; // 线和圆的第一个交点
             var resultExit:Point; // 线和圆的第二个交点
-            if (_Node1.nodeData.type == NodeType.WARP && _Node1.nodeData.team == team)
+            if (_Node1.nodeData.isWarp && _Node1.nodeData.team == team)
                 return 0; // 对传送门不执行该函数
             for each (_Node in nodeArray) {
                 _Length = 0;
