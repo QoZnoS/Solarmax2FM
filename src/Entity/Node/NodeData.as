@@ -1,6 +1,5 @@
 package Entity.Node {
     import flash.utils.Dictionary;
-    import Entity.Node;
 
     public dynamic class NodeData extends Dictionary {
 
@@ -26,7 +25,6 @@ package Entity.Node {
         public var hp:Number; // 占领度，中立为0，被任意势力完全占领为100
         public var hpMult:Number; // 占领难度倍率
         public var lineDist:Number; // 选中圈大小
-        public var touchDist:Number; // 传统操作模式下的选中圈大小
 
         public function NodeData(weakKeys:Boolean = false) {
             super(weakKeys);

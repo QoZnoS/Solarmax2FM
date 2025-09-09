@@ -128,8 +128,8 @@ package Entity.Node {
                 node.moveState.glow.texture = Root.assets.getTexture(type + "_shape"); // 更换星球光效
             }
             node.moveState.labelDist = 180 * size; // 计算文本圈大小
-            node.nodeData.lineDist = 150 * size; // 计算选中圈大小
-            node.nodeData.touchDist = size < 0.5 ? node.nodeData.lineDist + (1 - size * 2) * 50 : node.nodeData.lineDist; // 计算传统操作模式下的天体选中圈
+            if (!node.nodeData.lineDist)
+                node.nodeData.lineDist = 150 * size; // 计算选中圈大小
             node.moveState.halo.readjustSize();
             node.moveState.halo.scaleY = node.moveState.halo.scaleX = 1;
             node.moveState.halo.pivotY = node.moveState.halo.pivotX = node.moveState.halo.width * 0.5;
@@ -142,11 +142,13 @@ package Entity.Node {
             if (node.nodeData.team != 0)
                 node.nodeData.startShips[node.nodeData.team] = sliceGet(get, size);
             get = LevelData.nodeData.node.(@name == type).popVal;
-            node.nodeData.popVal = sliceGet(get, size);
+            if (!node.nodeData.popVal)
+                node.nodeData.popVal = sliceGet(get, size);
             get = LevelData.nodeData.node.(@name == type).buildRate;
             node.buildState.buildRate = sliceGet(get, size);
             get = LevelData.nodeData.node.(@name == type).hpMult;
-            node.nodeData.hpMult = sliceGet(get, size);
+            if (!node.nodeData.hpMult)
+                node.nodeData.hpMult = sliceGet(get, size);
             get = LevelData.nodeData.node.(@name == type).attackRate;
             var attackRate:Number = sliceGet(get, size);
             get = LevelData.nodeData.node.(@name == type).attackRange;
@@ -156,13 +158,17 @@ package Entity.Node {
             get = LevelData.nodeData.node.(@name == type).attackType;
             node.attackState.attackStrategy = AttackStrategyFactory.create(get, attackRate, attackRange, attackLast);
             get = LevelData.nodeData.node.(@name == type).isBarrier;
-            node.nodeData.isBarrier = (get == "true");
+            if (!node.nodeData.isBarrier)
+                node.nodeData.isBarrier = (get == "true");
             get = LevelData.nodeData.node.(@name == type).isWarp;
-            node.nodeData.isWarp = (get == "true");
+            if (!node.nodeData.isWarp)
+                node.nodeData.isWarp = (get == "true");
             get = LevelData.nodeData.node.(@name == type).isUntouchable;
-            node.nodeData.isUntouchable = (get == "true");
+            if (!node.nodeData.isUntouchable)
+                node.nodeData.isUntouchable = (get == "true");
             get = LevelData.nodeData.node.(@name == type).isAIinvisible;
-            node.nodeData.isAIinvisible = (get == "true");
+            if (!node.nodeData.isAIinvisible)
+                node.nodeData.isAIinvisible = (get == "true");
         }
 
         private static function sliceGet(get:String, size:Number):Number {

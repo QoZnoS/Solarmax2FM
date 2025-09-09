@@ -114,14 +114,14 @@ package Entity {
 
         public function initNode(gameScene:GameScene, rng:Rng, data:Object):void {
             super.init(gameScene);
-            nodeData = NodeData.deserialize(data);
-            NodeStaticLogic.changeTeam(this, nodeData.team, false)
             this.rng = rng;
             resetArray()
+            nodeData = NodeData.deserialize(data);
+            NodeStaticLogic.changeTeam(this, nodeData.team, false)
+            NodeStaticLogic.changeType(this, nodeData.type, nodeData.size);
+            NodeStaticLogic.updateLabelSizes(this);
             aiValue = 0;
             triggerTimer = 0;
-            NodeStaticLogic.updateLabelSizes(this);
-            NodeStaticLogic.changeType(this, nodeData.type, nodeData.size);
             linked = false;
             var i:int = 0;
             for (i = 0; i < aiTimers.length; i++)
