@@ -188,7 +188,7 @@ package Game {
             var aiArray:Array = [];
             for each(var nodeData:Object in nodes)
             {
-                var node:Node = EntityHandler.addNodebyJson(nodeData);
+                var node:Node = EntityHandler.addNode(nodeData);
                 for(var i:int = 0; i < nodeData.startShips.length; i++)
                 {
                     EntityHandler.addShips(node, i, nodeData.startShips[i]);

@@ -25,29 +25,7 @@ package Entity {
             EntityContainer.addEntity(EntityContainer.INDEX_AIS, enemyAI);
         }
 
-        public static function addNodebyArr(x:Number, y:Number, type:int, size:Number, team:Number, orbit:int, orbitSpeed:Number = 0.1):Node {
-            var clock:Boolean = false; // 轨道方向，true为顺时针，false为逆时针
-            var node:Node = EntityContainer.getReserve(EntityContainer.INDEX_NODES) as Node; // 天体对象
-            if (!node)
-                node = new Node();
-            var orbitNode:Node = null; // 轨道中心天体对象
-            if (orbit > -1) // 轨道判断
-            {
-                clock = true;
-                if (orbit >= 100) {
-                    orbit -= 100;
-                    clock = false;
-                }
-                orbitNode = EntityContainer.nodes[orbit] as Node;
-            }
-            var rng:Rng = new Rng(game.rng.nextInt(), Rng.X32)
-            node.oldInitNode(game, rng, x, y, type, size, team, orbitNode, clock, orbitSpeed);
-            EntityContainer.addEntity(EntityContainer.INDEX_NODES, node);
-            node.tag = EntityContainer.nodes.length - 1;
-            return node;
-        }
-
-        public static function addNodebyJson(data:Object):Node {
+        public static function addNode(data:Object):Node{
             var node:Node = EntityContainer.getReserve(EntityContainer.INDEX_NODES) as Node;
             if (!node)
                 node = new Node();

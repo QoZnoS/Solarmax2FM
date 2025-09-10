@@ -14,7 +14,7 @@ package Entity.Node {
         public var popVal:int; // 人口上限
         public var startShips:Vector.<int>; // 开局飞船，每一项对于各势力飞船数
         public var barrierLinks:Vector.<int>; // 障碍连接数组，储存相连天体tag
-        public var orbitNode:int; // 轨道中心天体
+        public var orbitNode:int = -1; // 轨道中心天体
         public var orbitSpeed:Number; // 轨道运转速度
 
         public var isBarrier:Boolean = false; // 启用障碍
@@ -84,19 +84,17 @@ package Entity.Node {
             return output;
         }
 
-        public static function deserialize(obj:Object):NodeData {
-            var nodeData:NodeData = new NodeData();
+        public function deserialize(obj:Object):void {
             for (var prop:String in obj) {
                 if (prop === "startShips" || prop === "barrierLinks") {
                     var array:Array = obj[prop] as Array;
                     var vector:Vector.<int> = new Vector.<int>();
                     for (var i:int = 0; i < array.length; i++)
                         vector.push(int(array[i]));
-                    nodeData[prop] = vector;
+                    this[prop] = vector;
                 } else
-                    nodeData[prop] = obj[prop];
+                    this[prop] = obj[prop];
             }
-            return nodeData;
         }
         //#endregion
     }

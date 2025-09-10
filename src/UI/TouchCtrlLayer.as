@@ -64,8 +64,7 @@ package UI {
                     _Tx = _localPoint.x;
                     _Ty = _localPoint.y;
                     if (_Touch.hoverNode) { // 绘制目标天体的定位圈
-                        if (_Touch.hoverNode.nodeData.team == Globals.playerTeam)
-                            _Block = EntityContainer.nodesBlocked(_Node, _Touch.hoverNode);
+                        _Block = EntityContainer.nodesBlocked(_Node, _Touch.hoverNode);
                         _Tx = _Touch.hoverNode.nodeData.x;
                         _Ty = _Touch.hoverNode.nodeData.y;
                         if (_Block)

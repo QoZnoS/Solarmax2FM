@@ -171,6 +171,22 @@ package Entity.Node {
                 node.nodeData.isAIinvisible = (get == "true");
         }
 
+        public static function changeSize(node:Node, size:Number):void {
+            node.nodeData.size = size;
+            node.moveState.labelDist = 180 * size; // 计算文本圈大小
+            node.nodeData.lineDist = 150 * size; // 计算选中圈大小
+            node.moveState.halo.readjustSize();
+            node.moveState.halo.scaleY = node.moveState.halo.scaleX = 1;
+            node.moveState.halo.pivotY = node.moveState.halo.pivotX = node.moveState.halo.width * 0.5;
+            var get:Number = LevelData.nodeData.node.(@name == node.nodeData.type).scale;
+            if (node.nodeData.type == NodeType.PLANET) {
+                node.moveState.halo.scaleY = node.moveState.halo.scaleX = size * 0.5;
+                node.moveState.image.scaleX = node.moveState.image.scaleY = node.moveState.glow.scaleX = node.moveState.glow.scaleY = size;
+            } else {
+                node.moveState.image.scaleX = node.moveState.image.scaleY = node.moveState.halo.scaleX = node.moveState.halo.scaleY = node.moveState.glow.scaleX = node.moveState.glow.scaleY = Number(get);
+            }
+        }
+
         private static function sliceGet(get:String, size:Number):Number {
             return (get.indexOf("S*") != -1) ? Number(get.slice(2)) * size : Number(get);
         }

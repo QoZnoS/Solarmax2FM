@@ -115,11 +115,12 @@ package Entity {
         public function initNode(gameScene:GameScene, rng:Rng, data:Object):void {
             super.init(gameScene);
             this.rng = rng;
-            resetArray()
-            nodeData = NodeData.deserialize(data);
-            NodeStaticLogic.changeTeam(this, nodeData.team, false)
-            NodeStaticLogic.changeType(this, nodeData.type, nodeData.size);
+            resetArray();
+            nodeData = new NodeData(true);
+            NodeStaticLogic.changeType(this, data.type, data.size);
+            NodeStaticLogic.changeTeam(this, data.team, false);
             NodeStaticLogic.updateLabelSizes(this);
+            nodeData.deserialize(data);
             aiValue = 0;
             triggerTimer = 0;
             linked = false;
@@ -129,7 +130,7 @@ package Entity {
             for (i = 0; i < transitShips.length; i++)
                 transitShips[i] = 0;
             for each(var state:INodeState in statePool)
-                state.init()
+                state.init();
         }
 
         public function initBoss(_GameScene:GameScene, _rng:Rng, _x:Number, _y:Number):void {
