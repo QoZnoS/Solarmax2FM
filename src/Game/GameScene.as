@@ -286,8 +286,9 @@ package Game {
         }
 
         public function restart():void {
-            Starling.juggler.tween(this, 0.1, {"alpha": 0,
-                    "transition": "easeIn",
+            scene.ui.restartLevel();
+            Starling.juggler.removeTweens(this);
+            Starling.juggler.tween(this, Globals.transitionSpeed / 2, {
                     "onComplete": function():void
                     {
                         deInit();

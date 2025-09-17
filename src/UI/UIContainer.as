@@ -99,6 +99,21 @@ package UI {
             touchQuad.touchable = false;
         }
 
+        public function restartLevel():void {
+            Starling.juggler.removeTweens(gameContainer);
+            Starling.juggler.tween(gameContainer, Globals.transitionSpeed / 2, {"alpha": 0,
+                    "scaleX": _scale-0.15,
+                    "scaleY": _scale-0.15,
+                    "y": 354,
+                    "transition": "easeIn"});
+            Starling.juggler.tween(gameContainer, Globals.transitionSpeed / 2, {"delay": Globals.transitionSpeed / 2,
+                    "alpha": 1,
+                    "scaleX": _scale,
+                    "scaleY": _scale,
+                    "y": 384,
+                    "transition": "easeOut"});
+        }
+
         public function update():void {
             behaviorB.reset();
             entityL.reset();
