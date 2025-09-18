@@ -3,12 +3,9 @@
  */
 package Game {
     import flash.geom.Point;
-    import starling.animation.Juggler;
     import starling.core.Starling;
     import starling.display.Image;
     import starling.display.Quad;
-    import starling.display.QuadBatch;
-    import starling.display.Sprite;
     import starling.events.EnterFrameEvent;
     import flash.ui.Keyboard;
     import utils.Rng;
@@ -19,28 +16,26 @@ package Game {
     import Entity.Node;
     import Entity.Ship;
     import Entity.FXHandler;
-    import UI.Component.TutorialSprite;
     import starling.display.BlendMode;
     import UI.UIContainer;
     import starling.text.TextField;
     import starling.utils.VAlign;
     import Entity.AI.EnemyAIFactory;
     import Entity.Node.NodeStaticLogic;
-    import Entity.Node.NodeType;
     import Entity.EntityContainer;
     import Game.VictoryType.VictoryTypeFactory;
+    import Game.SpecialEvent.ISpecialEvent;
+    import Game.SpecialEvent.SpecialEventFactory;
 
     public class GameScene extends BasicScene {
         // #region 类变量
         // 其他
         public var cover:Quad; // 通关时的遮罩
         public var barrierLines:Array;
-        public var tutorial:TutorialSprite;
         public var level:int;
         public var gameOver:Boolean;
         public var gameOverTimer:Number;
         public var winningTeam:int;
-        public var triggers:Array;
         public var darkPulse:Image;
         public var bossTimer:Number;
         public var slowMult:Number;
@@ -52,6 +47,8 @@ package Game {
         public var popLabels:Vector.<TextField>;
 
         public var rep:Boolean = false;
+
+        public var specialEvents:Vector.<ISpecialEvent>;
 
         // #endregion
         public function GameScene(_scene:SceneController) {
@@ -74,9 +71,7 @@ package Game {
             darkPulse.y = 384;
             darkPulse.color = 0;
             darkPulse.visible = false;
-            triggers = [false, false, false, false, false]; // 特殊事件
             barrierLines = []; // 障碍连接数据
-            tutorial = new TutorialSprite();
             this.alpha = 0;
             this.visible = false;
             gameOver = true;
@@ -108,9 +103,10 @@ package Game {
             var i:int = 0;
             var aiArray:Array = [];
             this.level = Globals.level;
-            this.rng = new Rng(seed)
-            this.rep = rep
-            aiArray = nodeIn(LevelData.level.data[Globals.currentData].level[Globals.level].node as Array); // 生成天体，同时返回需生成的ai
+            this.rng = new Rng(seed);
+            this.rep = rep;
+            var levelData:Object = LevelData.level.data[Globals.currentData].level[Globals.level];
+            aiArray = nodeIn(levelData.node as Array); // 生成天体，同时返回需生成的ai
             if (!rep)
                 Globals.replay = [rng.seed, [0]];
             else {
@@ -138,8 +134,6 @@ package Game {
                 Globals.currentDifficulty == 3 ? EntityHandler.addAI(6, EnemyAIFactory.HARD) : EntityHandler.addAI(6, EnemyAIFactory.FINAL);
                 bossTimer = 0;
             }
-            for (i = 0; i < triggers.length; i++)
-                triggers[i] = false; // 重置特殊事件
             for each (var label:TextField in popLabels) {
                 switch (Globals.textSize) {
                     case 0:
@@ -158,7 +152,6 @@ package Game {
             }
             // ui.btnL.color = Globals.teamColors[Globals.playerTeam];
             // 执行一些初始化函数
-            tutorial.init(this, level);
             getBarrierLines();
             addBarriers();
             if (darkPulse)
@@ -170,18 +163,21 @@ package Game {
             gameOver = false;
             gameOverTimer = 3;
             winningTeam = -1;
-            // 以下部分决定bgm的播放
-            if (Globals.level < 9)
-                GS.playMusic("bgm02");
-            else if (Globals.level < 23)
-                GS.playMusic("bgm04");
-            else if (Globals.level < 32)
-                GS.playMusic("bgm05");
+
+            if (levelData.bgm)
+                GS.playMusic(levelData.bgm);
             else
-                GS.playMusic("bgm06");
+                GS.playMusic("bgm02");
+            victoryType = VictoryTypeFactory.create(VictoryTypeFactory.NONE_TYPE);
+            specialEvents = new Vector.<ISpecialEvent>();
+            for each (var seData:Object in (levelData.specialEvents as Array)) {
+                var se:ISpecialEvent = SpecialEventFactory.create(seData.type, seData.trigger);
+                se.game = this;
+                specialEvents.push(se);
+            }
+
             addEventListener("enterFrame", update); // 添加帧监听器，每帧执行一次update
             animateIn(); // 播放关卡进入动画
-            victoryType = VictoryTypeFactory.create(VictoryTypeFactory.NORMAL_TYPE);
         }
 
         public function nodeIn(nodes:Array):Array {
@@ -234,9 +230,10 @@ package Game {
         // #endregion
         // #region 界面功能
         public function deInit():void {
-            tutorial.deInit();
-            for each (var _pool:EntityPool in EntityContainer.entityPool)
-                _pool.deInit();
+            for each (var pool:EntityPool in EntityContainer.entityPool)
+                pool.deInit();
+            for each (var se:ISpecialEvent in specialEvents)
+                se.deinit();
             removeEventListener("enterFrame", update); // 移除更新帧监听器
             for each (var label:TextField in popLabels) {
                 if (label.color == 0)
@@ -332,9 +329,11 @@ package Game {
         public function updateGame(dt:Number):void {
             countTeamCaps(dt); // 统计兵力
             ui.update();
-            for each (var _pool:EntityPool in EntityContainer.entityPool) // 依次执行所有实体的更新函数
-                _pool.update(dt);
-            specialEvents(); // 处理特殊关卡的特殊事件
+            for each (var pool:EntityPool in EntityContainer.entityPool) // 依次执行所有实体的更新函数
+                pool.update(dt);
+            winningTeam = victoryType.update(dt);
+            for each (var se:ISpecialEvent in specialEvents) // 依次执行所有特殊事件的更新函数
+                se.update(dt);
             if (darkPulse.visible)
                 expandDarkPulse(dt);
             if (Globals.level != 35)
@@ -342,287 +341,277 @@ package Game {
             updateBarrier();
         }
 
-        public function updateSpeed(_dt:Number):Number {
+        public function updateSpeed(dt:Number):Number {
             if (Globals.level == 35 && gameOver) {
                 // 36关通关时
-                slowMult = Math.max(slowMult - _dt * 0.75, 0.1);
-                _dt *= slowMult;
-            } else if (!((Globals.level == 31 || Globals.level == 35) && triggers[0]))
-                _dt *= scene.speedMult;
-            return _dt;
+                slowMult = Math.max(slowMult - dt * 0.75, 0.1);
+                dt *= slowMult;
+            } else if (!(Globals.level == 31 || Globals.level == 35))
+                dt *= scene.speedMult;
+            return dt;
         }
 
-        public function countTeamCaps(_dt:Number):void {
-            for (var _team:int = 0; _team < Globals.teamCount; _team++) {
+        public function countTeamCaps(dt:Number):void {
+            for (var team:int = 0; team < Globals.teamCount; team++) {
                 // 重置兵力
-                Globals.teamCaps[_team] = 0;
-                Globals.teamPops[_team] = 0;
+                Globals.teamCaps[team] = 0;
+                Globals.teamPops[team] = 0;
             }
             for each (var node:Node in EntityContainer.nodes) // 统计兵力上限
                 Globals.teamCaps[node.nodeData.team] += node.nodeData.popVal * Globals.teamNodePops[node.nodeData.team];
-            for each (var _Ship:Ship in EntityContainer.ships) // 统计总兵力
-                Globals.teamPops[_Ship.team]++;
+            for each (var ship:Ship in EntityContainer.ships) // 统计总兵力
+                Globals.teamPops[ship.team]++;
             EntityContainer.ships.length < 1024 ? Globals.exOptimization = 0 : (EntityContainer.ships.length < 8192 ? Globals.exOptimization = 1 : Globals.exOptimization = 2);
 
             popLabels[0].text = popLabels[1].text = "POPULATION : " + Globals.teamPops[Globals.playerTeam] + " / " + Globals.teamCaps[Globals.playerTeam];
             if (popLabels[1].alpha > 0)
-                popLabels[1].alpha = Math.max(0, popLabels[1].alpha - _dt * 0.5);
+                popLabels[1].alpha = Math.max(0, popLabels[1].alpha - dt * 0.5);
             if (popLabels[2].alpha > 0) {
                 popLabels[2].x = 512 + popLabels[0].textBounds.width * 0.5 + 10;
-                popLabels[2].alpha = Math.max(0, popLabels[2].alpha - _dt * 0.5);
+                popLabels[2].alpha = Math.max(0, popLabels[2].alpha - dt * 0.5);
             }
         }
 
-        public function specialEvents():void {
-            var i:int;
-            var _boss:Node;
-            var _timer:Number;
-            var _rate:Number;
-            var _addTime:Number;
-            var _angle:Number;
-            var _angleStep:Number;
-            var _size:Number;
-            var _bossParam:int;
-            switch (Globals.level) // 处理特殊关卡的特殊事件
-            {
-                case 0: // 前两关处理教程提示
-                    if (!triggers[0])
-                        if (EntityContainer.nodes[0].ships[1].length < 60)
-                            triggers[0] = true;
-                    break;
-                case 1:
-                    if (!triggers[0])
-                        if (ui.btnL.fleetSlider.perc < 1)
-                            triggers[0] = true;
-                    break;
-                case 31:
-                    if (!triggers[0]) {
-                        _boss = EntityContainer.nodes[0];
-                        if (_boss.nodeData.hp == 100) {
-                            triggers[0] = true;
-                            _timer = 0;
-                            _rate = 0.5;
-                            _addTime = 1;
-                            _angle = 1.5707963267948966;
-                            _angleStep = 2.0943951023931953;
-                            _size = 2;
-                            for (i = 0; i < 64; i++) {
-                                FXHandler.addDarkPulse(_boss, 0, 1, _size, _rate, _angle, _timer);
-                                _timer += _addTime;
-                                _angle += _angleStep;
-                                FXHandler.addDarkPulse(_boss, 0, 1, _size, _rate, _angle, _timer);
-                                _timer += _addTime;
-                                _angle += _angleStep;
-                                FXHandler.addDarkPulse(_boss, 0, 1, _size, _rate, _angle, _timer);
-                                _timer += _addTime;
-                                _angle += _angleStep;
-                                if (i < 20) {
-                                    _rate *= 1.1;
-                                    _addTime *= 0.85;
-                                }
-                                _size *= 0.975;
-                            }
-                            FXHandler.addDarkPulse(_boss, 0, 2, 2.5, 0.75, 0, _timer - 5.5);
-                            FXHandler.addDarkPulse(_boss, 0, 2, 2.5, 1, 0, _timer - 4.5);
-                            _boss.triggerTimer = _timer - 3;
-                            GS.playMusic("bgm_dark", false);
-                        }
-                    }
-                    if (triggers[0] && !triggers[1]) {
-                        _boss = EntityContainer.nodes[0];
-                        if (_boss.triggerTimer == 0) {
-                            triggers[1] = true;
-                            _boss.bossReady();
-                            NodeStaticLogic.changeTeam(_boss, 6);
-                            NodeStaticLogic.changeShipsTeam(_boss, 6);
-                            EntityHandler.addAI(6, EnemyAIFactory.DARK);
-                            _boss.triggerTimer = 3;
-                            darkPulse.team = 6;
-                            darkPulse.scaleX = darkPulse.scaleY = 0;
-                            darkPulse.visible = true;
-                        }
-                    }
-                    if (triggers[1] && !triggers[2]) {
-                        _boss = EntityContainer.nodes[0];
-                        if (_boss.triggerTimer == 0) {
-                            triggers[2] = true;
-                            _boss.bossDisappear();
-                        }
-                    }
-                    break;
-                case 32, 33, 34:
-                    if (!triggers[0]) // 阶段一，生成星核
-                    {
-                        for (i = 0; i < Globals.teamCaps.length; i++) {
-                            if (Globals.teamCaps[i] > 220 && Globals.teamPops[i] > 220) {
-                                _boss = EntityContainer.getReserve(EntityContainer.INDEX_NODES) as Node;
-                                if (!_boss)
-                                    _boss = new Node();
-                                _boss.initBoss(this, new Rng(rng.nextInt(), Rng.X32), 512, 384);
-                                EntityContainer.addEntity(EntityContainer.INDEX_NODES, _boss);
-                                _boss.bossAppear();
-                                triggers[0] = true;
-                                GS.fadeOutMusic(2);
-                                GS.playSound("boss_appear");
-                                break;
-                            }
-                        }
-                    }
-                    if (triggers[0] && !triggers[1]) // 阶段二，生成飞船，添加ai
-                    {
-                        _boss = EntityContainer.nodes[EntityContainer.nodes.length - 1] as Node;
-                        if (_boss.triggerTimer == 0) {
-                            triggers[1] = true;
-                            _boss.bossReady();
-                            if (Globals.currentDifficulty != 3)
-                                _bossParam = (Globals.level == 33) ? 320 : 350;
-                            else
-                                _bossParam = (Globals.level == 34) ? 400 : 350;
-                            EntityHandler.addShips(_boss, 6, _bossParam);
-                            var _bossAI:String = (Globals.currentDifficulty == 3) ? EnemyAIFactory.HARD : EnemyAIFactory.DARK;
-                            EntityHandler.addAI(6, _bossAI);
-                            _boss.triggerTimer = 3;
-                            GS.playSound("boss_ready", 1.5);
-                        }
-                    }
-                    if (triggers[1] && !triggers[2]) // 阶段三，星核消失动画
-                    {
-                        _boss = EntityContainer.nodes[EntityContainer.nodes.length - 1] as Node;
-                        if (_boss.triggerTimer == 0) {
-                            triggers[2] = true;
-                            _boss.bossDisappear();
-                            GS.playSound("boss_reverse");
-                        }
-                    }
-                    if (triggers[2] && !triggers[3]) // 阶段四，移除星核
-                    {
-                        _boss = EntityContainer.nodes[EntityContainer.nodes.length - 1] as Node;
-                        if (_boss.triggerTimer == 0) {
-                            triggers[3] = true;
-                            _boss.bossHide();
-                            _boss.active = false;
-                            GS.playMusic("bgm06");
-                        }
-                    }
-                    break;
-                case 35:
-                    if (!gameOver) {
-                        _boss = EntityContainer.nodes[0];
-                        if (!triggers[0] && _boss.nodeData.hp == 0) // 阶段一，坍缩动画
-                        {
-                            triggers[0] = true;
-                            _timer = 0;
-                            _rate = 0.5;
-                            _addTime = 1;
-                            _angle = 1.5707963267948966;
-                            _angleStep = 2.0943951023931953;
-                            _size = 2;
-                            for (i = 0; i < 64; i++) {
-                                FXHandler.addDarkPulse(_boss, Globals.teamColors[1], 1, _size, _rate, _angle, _timer);
-                                _timer += _addTime;
-                                _angle += _angleStep;
-                                FXHandler.addDarkPulse(_boss, Globals.teamColors[1], 1, _size, _rate, _angle, _timer);
-                                _timer += _addTime;
-                                _angle += _angleStep;
-                                FXHandler.addDarkPulse(_boss, Globals.teamColors[1], 1, _size, _rate, _angle, _timer);
-                                _timer += _addTime;
-                                _angle += _angleStep;
-                                if (i < 20) {
-                                    _rate *= 1.1;
-                                    _addTime *= 0.85;
-                                }
-                                _size *= 0.975;
-                            }
-                            FXHandler.addDarkPulse(_boss, Globals.teamColors[1], 2, 2.5, 0.75, 0, _timer - 5.5);
-                            FXHandler.addDarkPulse(_boss, Globals.teamColors[1], 2, 2.5, 1, 0, _timer - 4.5);
-                            _boss.triggerTimer = _timer - 2.5;
-                            if (Globals.levelReached == 35)
-                                Globals.levelReached = 36;
-                            if (Globals.levelData[Globals.level] < Globals.currentDifficulty)
-                                Globals.levelData[Globals.level] = Globals.currentDifficulty;
-                            Globals.save();
-                            GS.playMusic("bgm07", false);
-                            invisibleMode();
-                        }
-                        if (triggers[0] && !triggers[1]) // 阶段二，膨胀动画
-                        {
-                            _boss = EntityContainer.nodes[0];
-                            if (_boss.triggerTimer == 0) {
-                                triggers[1] = true;
-                                _timer = 0;
-                                _rate = 2;
-                                _addTime = 0.15;
-                                _angle = 1.5707963267948966;
-                                _angleStep = 2.0943951023931953;
-                                _size = 1.75;
-                                for (i = 0; i < 9; i++) {
-                                    FXHandler.addDarkPulse(_boss, Globals.teamColors[1], 0, _size, _rate, _angle, _timer);
-                                    _timer += _addTime;
-                                    _angle += _angleStep;
-                                    FXHandler.addDarkPulse(_boss, Globals.teamColors[1], 0, _size, _rate, _angle, _timer);
-                                    _timer += _addTime;
-                                    _angle += _angleStep;
-                                    FXHandler.addDarkPulse(_boss, Globals.teamColors[1], 0, _size, _rate, _angle, _timer);
-                                    _timer += _addTime;
-                                    _angle += _angleStep;
-                                    _size *= 1.2;
-                                }
-                                FXHandler.addDarkPulse(_boss, Globals.teamColors[1], 3, 20, 5, 0, _timer - 3.5);
-                                FXHandler.addDarkPulse(_boss, Globals.teamColors[1], 3, 25, 10, 0, _timer - 3.5);
-                                FXHandler.addDarkPulse(_boss, Globals.teamColors[1], 3, 30, 15, 0, _timer - 3.5);
-                                FXHandler.addDarkPulse(_boss, Globals.teamColors[1], 3, 40, 20, 0, _timer - 4);
-                                FXHandler.addDarkPulse(_boss, Globals.teamColors[1], 3, 50, 25, 0, _timer - 4);
-                                FXHandler.addDarkPulse(_boss, Globals.teamColors[1], 3, 60, 30, 0, _timer - 4);
-                                FXHandler.addDarkPulse(_boss, Globals.teamColors[1], 3, 50, 20, 0, _timer - 3);
-                                FXHandler.addDarkPulse(_boss, Globals.teamColors[1], 3, 60, 30, 0, _timer - 2);
-                                FXHandler.addDarkPulse(_boss, Globals.teamColors[1], 3, 50, 6, 0, _timer - 2);
-                                FXHandler.addDarkPulse(_boss, Globals.teamColors[1], 3, 60, 8, 0, _timer - 2);
-                                _boss.triggerTimer = _timer - 3.5;
-                            }
-                        }
-                        if (triggers[1] && !triggers[2]) // 阶段三，画面缩小，天体消失，回到主界面
-                        {
-                            _boss = EntityContainer.nodes[0];
-                            if (_boss.triggerTimer == 0) {
-                                _boss.active = false;
-                                gameOver = true;
-                                gameOverTimer = 1;
-                                slowMult = 1;
-                                triggers[2] = true;
-                                darkPulse.team = 1;
-                                darkPulse.scaleX = darkPulse.scaleY = 0;
-                                darkPulse.visible = true;
-                                Starling.juggler.tween(ui.gameContainer, 25, {"scaleX": 0.01,
-                                        "scaleY": 0.01,
-                                        "delay": 20,
-                                        "transition": "easeInOut"}); // 画面缩小动画
-                                Starling.juggler.tween(this, 5, {"alpha": 0,
-                                        "delay": 40,
-                                        "onComplete": hide}); // 天体消失动画
-                                Starling.juggler.delayCall(function():void {
-                                    scene.playEndScene();
-                                }, 40); // 退回到主界面
-                            }
-                        }
-                        if (triggers[2] && gameOver) {
-                        }
-                    }
-                    break;
-                default:
-                    return;
-            }
-        }
+        // public function specialEvents():void {
+        //     var i:int;
+        //     var _boss:Node;
+        //     var _timer:Number;
+        //     var _rate:Number;
+        //     var _addTime:Number;
+        //     var _angle:Number;
+        //     var _angleStep:Number;
+        //     var _size:Number;
+        //     var _bossParam:int;
+        //     switch (Globals.level) // 处理特殊关卡的特殊事件
+        //     {
+        //         case 31:
+        //             if (!triggers[0]) {
+        //                 _boss = EntityContainer.nodes[0];
+        //                 if (_boss.nodeData.hp == 100) {
+        //                     triggers[0] = true;
+        //                     _timer = 0;
+        //                     _rate = 0.5;
+        //                     _addTime = 1;
+        //                     _angle = 1.5707963267948966;
+        //                     _angleStep = 2.0943951023931953;
+        //                     _size = 2;
+        //                     for (i = 0; i < 64; i++) {
+        //                         FXHandler.addDarkPulse(_boss, 0, 1, _size, _rate, _angle, _timer);
+        //                         _timer += _addTime;
+        //                         _angle += _angleStep;
+        //                         FXHandler.addDarkPulse(_boss, 0, 1, _size, _rate, _angle, _timer);
+        //                         _timer += _addTime;
+        //                         _angle += _angleStep;
+        //                         FXHandler.addDarkPulse(_boss, 0, 1, _size, _rate, _angle, _timer);
+        //                         _timer += _addTime;
+        //                         _angle += _angleStep;
+        //                         if (i < 20) {
+        //                             _rate *= 1.1;
+        //                             _addTime *= 0.85;
+        //                         }
+        //                         _size *= 0.975;
+        //                     }
+        //                     FXHandler.addDarkPulse(_boss, 0, 2, 2.5, 0.75, 0, _timer - 5.5);
+        //                     FXHandler.addDarkPulse(_boss, 0, 2, 2.5, 1, 0, _timer - 4.5);
+        //                     _boss.triggerTimer = _timer - 3;
+        //                     GS.playMusic("bgm_dark", false);
+        //                 }
+        //             }
+        //             if (triggers[0] && !triggers[1]) {
+        //                 _boss = EntityContainer.nodes[0];
+        //                 if (_boss.triggerTimer == 0) {
+        //                     triggers[1] = true;
+        //                     _boss.bossReady();
+        //                     NodeStaticLogic.changeTeam(_boss, 6);
+        //                     NodeStaticLogic.changeShipsTeam(_boss, 6);
+        //                     EntityHandler.addAI(6, EnemyAIFactory.DARK);
+        //                     _boss.triggerTimer = 3;
+        //                     darkPulse.team = 6;
+        //                     darkPulse.scaleX = darkPulse.scaleY = 0;
+        //                     darkPulse.visible = true;
+        //                 }
+        //             }
+        //             if (triggers[1] && !triggers[2]) {
+        //                 _boss = EntityContainer.nodes[0];
+        //                 if (_boss.triggerTimer == 0) {
+        //                     triggers[2] = true;
+        //                     _boss.bossDisappear();
+        //                 }
+        //             }
+        //             break;
+        //         case 32, 33, 34:
+        //             if (!triggers[0]) // 阶段一，生成星核
+        //             {
+        //                 for (i = 0; i < Globals.teamCaps.length; i++) {
+        //                     if (Globals.teamCaps[i] > 220 && Globals.teamPops[i] > 220) {
+        //                         _boss = EntityContainer.getReserve(EntityContainer.INDEXnODES) as Node;
+        //                         if (!_boss)
+        //                             _boss = new Node();
+        //                         _boss.initBoss(this, new Rng(rng.nextInt(), Rng.X32), 512, 384);
+        //                         EntityContainer.addEntity(EntityContainer.INDEXnODES, _boss);
+        //                         _boss.bossAppear();
+        //                         triggers[0] = true;
+        //                         GS.fadeOutMusic(2);
+        //                         GS.playSound("boss_appear");
+        //                         break;
+        //                     }
+        //                 }
+        //             }
+        //             if (triggers[0] && !triggers[1]) // 阶段二，生成飞船，添加ai
+        //             {
+        //                 _boss = EntityContainer.nodes[EntityContainer.nodes.length - 1] as Node;
+        //                 if (_boss.triggerTimer == 0) {
+        //                     triggers[1] = true;
+        //                     _boss.bossReady();
+        //                     if (Globals.currentDifficulty != 3)
+        //                         _bossParam = (Globals.level == 33) ? 320 : 350;
+        //                     else
+        //                         _bossParam = (Globals.level == 34) ? 400 : 350;
+        //                     EntityHandler.addShips(_boss, 6, _bossParam);
+        //                     var _bossAI:String = (Globals.currentDifficulty == 3) ? EnemyAIFactory.HARD : EnemyAIFactory.DARK;
+        //                     EntityHandler.addAI(6, _bossAI);
+        //                     _boss.triggerTimer = 3;
+        //                     GS.playSound("boss_ready", 1.5);
+        //                 }
+        //             }
+        //             if (triggers[1] && !triggers[2]) // 阶段三，星核消失动画
+        //             {
+        //                 _boss = EntityContainer.nodes[EntityContainer.nodes.length - 1] as Node;
+        //                 if (_boss.triggerTimer == 0) {
+        //                     triggers[2] = true;
+        //                     _boss.bossDisappear();
+        //                     GS.playSound("boss_reverse");
+        //                 }
+        //             }
+        //             if (triggers[2] && !triggers[3]) // 阶段四，移除星核
+        //             {
+        //                 _boss = EntityContainer.nodes[EntityContainer.nodes.length - 1] as Node;
+        //                 if (_boss.triggerTimer == 0) {
+        //                     triggers[3] = true;
+        //                     _boss.bossHide();
+        //                     _boss.active = false;
+        //                     GS.playMusic("bgm06");
+        //                 }
+        //             }
+        //             break;
+        //         case 35:
+        //             if (!gameOver) {
+        //                 _boss = EntityContainer.nodes[0];
+        //                 if (!triggers[0] && _boss.nodeData.hp == 0) // 阶段一，坍缩动画
+        //                 {
+        //                     triggers[0] = true;
+        //                     _timer = 0;
+        //                     _rate = 0.5;
+        //                     _addTime = 1;
+        //                     _angle = 1.5707963267948966;
+        //                     _angleStep = 2.0943951023931953;
+        //                     _size = 2;
+        //                     for (i = 0; i < 64; i++) {
+        //                         FXHandler.addDarkPulse(_boss, Globals.teamColors[1], 1, _size, _rate, _angle, _timer);
+        //                         _timer += _addTime;
+        //                         _angle += _angleStep;
+        //                         FXHandler.addDarkPulse(_boss, Globals.teamColors[1], 1, _size, _rate, _angle, _timer);
+        //                         _timer += _addTime;
+        //                         _angle += _angleStep;
+        //                         FXHandler.addDarkPulse(_boss, Globals.teamColors[1], 1, _size, _rate, _angle, _timer);
+        //                         _timer += _addTime;
+        //                         _angle += _angleStep;
+        //                         if (i < 20) {
+        //                             _rate *= 1.1;
+        //                             _addTime *= 0.85;
+        //                         }
+        //                         _size *= 0.975;
+        //                     }
+        //                     FXHandler.addDarkPulse(_boss, Globals.teamColors[1], 2, 2.5, 0.75, 0, _timer - 5.5);
+        //                     FXHandler.addDarkPulse(_boss, Globals.teamColors[1], 2, 2.5, 1, 0, _timer - 4.5);
+        //                     _boss.triggerTimer = _timer - 2.5;
+        //                     if (Globals.levelReached == 35)
+        //                         Globals.levelReached = 36;
+        //                     if (Globals.levelData[Globals.level] < Globals.currentDifficulty)
+        //                         Globals.levelData[Globals.level] = Globals.currentDifficulty;
+        //                     Globals.save();
+        //                     GS.playMusic("bgm07", false);
+        //                     invisibleMode();
+        //                 }
+        //                 if (triggers[0] && !triggers[1]) // 阶段二，膨胀动画
+        //                 {
+        //                     _boss = EntityContainer.nodes[0];
+        //                     if (_boss.triggerTimer == 0) {
+        //                         triggers[1] = true;
+        //                         _timer = 0;
+        //                         _rate = 2;
+        //                         _addTime = 0.15;
+        //                         _angle = 1.5707963267948966;
+        //                         _angleStep = 2.0943951023931953;
+        //                         _size = 1.75;
+        //                         for (i = 0; i < 9; i++) {
+        //                             FXHandler.addDarkPulse(_boss, Globals.teamColors[1], 0, _size, _rate, _angle, _timer);
+        //                             _timer += _addTime;
+        //                             _angle += _angleStep;
+        //                             FXHandler.addDarkPulse(_boss, Globals.teamColors[1], 0, _size, _rate, _angle, _timer);
+        //                             _timer += _addTime;
+        //                             _angle += _angleStep;
+        //                             FXHandler.addDarkPulse(_boss, Globals.teamColors[1], 0, _size, _rate, _angle, _timer);
+        //                             _timer += _addTime;
+        //                             _angle += _angleStep;
+        //                             _size *= 1.2;
+        //                         }
+        //                         FXHandler.addDarkPulse(_boss, Globals.teamColors[1], 3, 20, 5, 0, _timer - 3.5);
+        //                         FXHandler.addDarkPulse(_boss, Globals.teamColors[1], 3, 25, 10, 0, _timer - 3.5);
+        //                         FXHandler.addDarkPulse(_boss, Globals.teamColors[1], 3, 30, 15, 0, _timer - 3.5);
+        //                         FXHandler.addDarkPulse(_boss, Globals.teamColors[1], 3, 40, 20, 0, _timer - 4);
+        //                         FXHandler.addDarkPulse(_boss, Globals.teamColors[1], 3, 50, 25, 0, _timer - 4);
+        //                         FXHandler.addDarkPulse(_boss, Globals.teamColors[1], 3, 60, 30, 0, _timer - 4);
+        //                         FXHandler.addDarkPulse(_boss, Globals.teamColors[1], 3, 50, 20, 0, _timer - 3);
+        //                         FXHandler.addDarkPulse(_boss, Globals.teamColors[1], 3, 60, 30, 0, _timer - 2);
+        //                         FXHandler.addDarkPulse(_boss, Globals.teamColors[1], 3, 50, 6, 0, _timer - 2);
+        //                         FXHandler.addDarkPulse(_boss, Globals.teamColors[1], 3, 60, 8, 0, _timer - 2);
+        //                         _boss.triggerTimer = _timer - 3.5;
+        //                     }
+        //                 }
+        //                 if (triggers[1] && !triggers[2]) // 阶段三，画面缩小，天体消失，回到主界面
+        //                 {
+        //                     _boss = EntityContainer.nodes[0];
+        //                     if (_boss.triggerTimer == 0) {
+        //                         _boss.active = false;
+        //                         gameOver = true;
+        //                         gameOverTimer = 1;
+        //                         slowMult = 1;
+        //                         triggers[2] = true;
+        //                         darkPulse.team = 1;
+        //                         darkPulse.scaleX = darkPulse.scaleY = 0;
+        //                         darkPulse.visible = true;
+        //                         Starling.juggler.tween(ui.gameContainer, 25, {"scaleX": 0.01,
+        //                                 "scaleY": 0.01,
+        //                                 "delay": 20,
+        //                                 "transition": "easeInOut"}); // 画面缩小动画
+        //                         Starling.juggler.tween(this, 5, {"alpha": 0,
+        //                                 "delay": 40,
+        //                                 "onComplete": hide}); // 天体消失动画
+        //                         Starling.juggler.delayCall(function():void {
+        //                             scene.playEndScene();
+        //                         }, 40); // 退回到主界面
+        //                     }
+        //                 }
+        //                 if (triggers[2] && gameOver) {
+        //                 }
+        //             }
+        //             break;
+        //         default:
+        //             return;
+        //     }
+        // }
 
-        public function expandDarkPulse(_dt:Number):void {
-            var _team:int = darkPulse.team;
+        public function expandDarkPulse(dt:Number):void {
+            var team:int = darkPulse.team;
             var node:Node = null;
-            var _x:Number = NaN;
-            var _y:Number = NaN;
-            var _Distance:Number = NaN;
-            var _Ship:Ship = null;
-            darkPulse.color = Globals.teamColors[_team];
+            var x:Number = NaN;
+            var y:Number = NaN;
+            var distance:Number = NaN;
+            var ship:Ship = null;
+            darkPulse.color = Globals.teamColors[team];
             darkPulse.color == 0 ? darkPulse.blendMode = "normal" : darkPulse.blendMode = "add";
-            _team == 1 ? darkPulse.scaleX += _dt * 2 : darkPulse.scaleX += _dt * 0.5;
+            team == 1 ? darkPulse.scaleX += dt * 2 : darkPulse.scaleX += dt * 0.5;
             darkPulse.scaleY = darkPulse.scaleX;
             if (darkPulse.width > 3072) {
                 darkPulse.visible = false;
@@ -631,32 +620,31 @@ package Game {
                 gameOverTimer = 0.5;
             }
             for each (node in EntityContainer.nodes) {
-                if (node.nodeData.team == _team || node.nodeData.isUntouchable)
+                if (node.nodeData.team == team || node.nodeData.isUntouchable)
                     continue;
-                _x = node.nodeData.x - darkPulse.x;
-                _y = node.nodeData.y - darkPulse.y;
-                _Distance = Math.sqrt(_x * _x + _y * _y);
-                if (_Distance < darkPulse.width * 0.25) {
-                    NodeStaticLogic.changeTeam(node, _team);
-                    NodeStaticLogic.changeShipsTeam(node, _team);
+                x = node.nodeData.x - darkPulse.x;
+                y = node.nodeData.y - darkPulse.y;
+                distance = Math.sqrt(x * x + y * y);
+                if (distance < darkPulse.width * 0.25) {
+                    NodeStaticLogic.changeTeam(node, team);
+                    NodeStaticLogic.changeShipsTeam(node, team);
                     node.nodeData.hp = 100;
                 }
             }
-            for each (_Ship in EntityContainer.ships) {
-                if (_Ship.team == _team)
+            for each (ship in EntityContainer.ships) {
+                if (ship.team == team)
                     continue;
-                _x = _Ship.x - darkPulse.x;
-                _y = _Ship.y - darkPulse.y;
-                _Distance = Math.sqrt(_x * _x + _y * _y);
-                if (_Distance < darkPulse.width * 0.25)
-                    _Ship.changeTeam(_team);
+                x = ship.x - darkPulse.x;
+                y = ship.y - darkPulse.y;
+                distance = Math.sqrt(x * x + y * y);
+                if (distance < darkPulse.width * 0.25)
+                    ship.changeTeam(team);
             }
         }
 
-        public function updateGameOver(_dt:Number):void {
+        public function updateGameOver(dt:Number):void {
             if (!gameOver) // 通关判断
             {
-                winningTeam = victoryType.update(_dt);
                 gameOver = (winningTeam != -1)
                 if (Globals.level == 31)
                     gameOver = false; // 32关禁用常规通关判定
@@ -676,7 +664,7 @@ package Game {
                             "delay": 1});
                 }
             } else if (gameOverTimer > 0) {
-                gameOverTimer -= _dt;
+                gameOverTimer -= dt;
                 if (gameOverTimer <= 0)
                     winningTeam == Globals.playerTeam ? next() : quit();
             }
@@ -702,38 +690,38 @@ package Game {
         // #endregion
         // #region 障碍
         public function addBarriers():void {
-            var _x1:Number = NaN;
-            var _y1:Number = NaN;
-            var _x2:Number = NaN;
-            var _y2:Number = NaN;
-            var _dx:Number = NaN;
-            var _dy:Number = NaN;
-            var _Angle:Number = NaN;
-            var _Distance:Number = NaN;
-            var _x3:Number = NaN;
-            var _y3:Number = NaN;
-            var _space:Number = 8;
-            var _dspace:int = 0;
+            var x1:Number = NaN;
+            var y1:Number = NaN;
+            var x2:Number = NaN;
+            var y2:Number = NaN;
+            var dx:Number = NaN;
+            var dy:Number = NaN;
+            var angle:Number = NaN;
+            var distance:Number = NaN;
+            var x3:Number = NaN;
+            var y3:Number = NaN;
+            var space:Number = 8;
+            var dspace:int = 0;
             for each (var _barrierArray:Array in barrierLines) {
-                _x1 = Number(_barrierArray[0].x);
-                _y1 = Number(_barrierArray[0].y);
-                _x2 = Number(_barrierArray[1].x);
-                _y2 = Number(_barrierArray[1].y);
-                _space = 8; // 贴图间距
-                _dx = _x2 - _x1;
-                _dy = _y2 - _y1;
-                _Angle = Math.atan2(_dy, _dx);
-                _Distance = Math.sqrt(_dx * _dx + _dy * _dy);
-                _x3 = _x1 + Math.cos(_Angle) * _space;
-                _y3 = _y1 + Math.sin(_Angle) * _space;
-                _dspace = int(_space);
-                while (_dspace < int(Math.floor(_Distance))) {
-                    _dx = _x3 + Math.cos(_Angle) * _space * 0.5;
-                    _dy = _y3 + Math.sin(_Angle) * _space * 0.5;
-                    FXHandler.addBarrier(_x3, _y3, _Angle, 16729156);
-                    _x3 += Math.cos(_Angle) * _space;
-                    _y3 += Math.sin(_Angle) * _space;
-                    _dspace += int(_space);
+                x1 = Number(_barrierArray[0].x);
+                y1 = Number(_barrierArray[0].y);
+                x2 = Number(_barrierArray[1].x);
+                y2 = Number(_barrierArray[1].y);
+                space = 8; // 贴图间距
+                dx = x2 - x1;
+                dy = y2 - y1;
+                angle = Math.atan2(dy, dx);
+                distance = Math.sqrt(dx * dx + dy * dy);
+                x3 = x1 + Math.cos(angle) * space;
+                y3 = y1 + Math.sin(angle) * space;
+                dspace = int(space);
+                while (dspace < int(Math.floor(distance))) {
+                    dx = x3 + Math.cos(angle) * space * 0.5;
+                    dy = y3 + Math.sin(angle) * space * 0.5;
+                    FXHandler.addBarrier(x3, y3, angle, 16729156);
+                    x3 += Math.cos(angle) * space;
+                    y3 += Math.sin(angle) * space;
+                    dspace += int(space);
                 }
             }
         }
@@ -753,30 +741,30 @@ package Game {
             var L_1:int = 0;
             var L_2:int = 0;
             var L_3:int = 0;
-            var _Node1:Node = null;
-            var _Node2:Node = null;
-            var _Array:Array;
-            var _Exist:Boolean;
+            var node1:Node = null;
+            var node2:Node = null;
+            var array:Array;
+            var exist:Boolean;
             barrierLines.length = 0; // 清空障碍线数组
             L_1 = int(EntityContainer.nodes.length);
             for (i = 0; i < L_1; i++) {
-                _Node1 = EntityContainer.nodes[i];
-                if (!_Node1.nodeData.isBarrier)
+                node1 = EntityContainer.nodes[i];
+                if (!node1.nodeData.isBarrier)
                     continue;
-                L_2 = int(_Node1.nodeData.barrierLinks.length); // 该天体需连接的障碍总数
+                L_2 = int(node1.nodeData.barrierLinks.length); // 该天体需连接的障碍总数
                 for (j = 0; j < L_2; j++) {
-                    if (_Node1.nodeData.barrierLinks[j] < L_1)
-                        _Node2 = EntityContainer.nodes[_Node1.nodeData.barrierLinks[j]];
-                    _Array = [new Point(_Node1.nodeData.x, _Node1.nodeData.y), new Point(_Node2.nodeData.x, _Node2.nodeData.y)];
+                    if (node1.nodeData.barrierLinks[j] < L_1)
+                        node2 = EntityContainer.nodes[node1.nodeData.barrierLinks[j]];
+                    array = [new Point(node1.nodeData.x, node1.nodeData.y), new Point(node2.nodeData.x, node2.nodeData.y)];
                     L_3 = int(barrierLines.length);
-                    _Exist = false;
+                    exist = false;
                     for (k = 0; k < L_3; k++)
-                        if (check4same(_Array, barrierLines[k]))
-                            _Exist = true;
-                    if (!_Exist && _Node2.nodeData.isBarrier) {
-                        barrierLines.push(_Array);
-                        _Node1.linked = true;
-                        _Node2.linked = true;
+                        if (check4same(array, barrierLines[k]))
+                            exist = true;
+                    if (!exist && node2.nodeData.isBarrier) {
+                        barrierLines.push(array);
+                        node1.linked = true;
+                        node2.linked = true;
                     }
                 }
             }

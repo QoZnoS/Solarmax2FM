@@ -7,7 +7,6 @@ package UI {
     import UI.Component.SpeedButton;
     import UI.Component.FleetSlider;
     import starling.display.BlendMode;
-    import UI.Component.OptionButton;
 
     public class BtnLayer extends Sprite {
         /**
@@ -133,7 +132,7 @@ package UI {
 
         private function on_closeBtn():void {
             touchable = false;
-            Starling.juggler.advanceTime(Globals.transitionSpeed)
+            Starling.juggler.removeTweens(game);
             game.quit();
         }
 

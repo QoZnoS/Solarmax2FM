@@ -398,14 +398,14 @@ package Menus
          this.visible = true;
          Starling.juggler.removeTweens(this);
          Starling.juggler.removeTweens(previewLayer);
+         Starling.juggler.tween(this, Globals.transitionSpeed, {
+                  "alpha": 1,
+                  "transition": "easeInOut"
+               });
          Starling.juggler.tween(previewLayer, Globals.transitionSpeed, {
                   "y": 354,
                   "scaleX": 0.7,
                   "scaleY": 0.7,
-                  "transition": "easeInOut"
-               });
-         Starling.juggler.tween(this, Globals.transitionSpeed, {
-                  "alpha": 1,
                   "transition": "easeInOut"
                });
       }
@@ -679,7 +679,7 @@ package Menus
       // #region 功能函数
       public function loadMap(seed:uint = 0):void
       {
-            Starling.juggler.advanceTime(Globals.transitionSpeed)
+            Starling.juggler.advanceTime(Globals.transitionSpeed);
          Globals.level = currentIndex - 1;
          scene.playMap(seed);
          animateOut();

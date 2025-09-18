@@ -131,5 +131,9 @@ package UI {
         public static function get entityLayer():EntityLayer{
             return ui.entityL;
         }
+
+        public static function get btnLayer():BtnLayer{
+            return ui.btnL;
+        }
     }
 }

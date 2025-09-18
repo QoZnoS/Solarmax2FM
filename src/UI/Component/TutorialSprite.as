@@ -3,20 +3,20 @@ package UI.Component {
     import starling.core.Starling;
     import starling.display.Image;
     import starling.display.Sprite;
-    import Game.GameScene;
-    import Entity.GameEntity;
     import Entity.Node;
     import Entity.EntityContainer;
+    import UI.BtnLayer;
+    import UI.UIContainer;
 
     public class TutorialSprite extends Sprite {
-        public static var TYPE_L1:int = 0;
-        public static var TYPE_L2:int = 1;
+        public static var TYPE_END:int = 0;
+        public static var TYPE_L1:int = 1;
+        public static var TYPE_L2:int = 2;
 
-        private var game:GameScene;
         private var arrow:Image;
         private var loop:DelayedCall;
-        private var layer:Sprite;
-        private var type:int;
+        private var layer:BtnLayer;
+        public var type:int;
 
         public function TutorialSprite() {
             super();
@@ -31,9 +31,8 @@ package UI.Component {
             arrow.color = 16755370;
         }
 
-        public function init(_game:GameScene, type:int):void {
-            this.game = _game;
-            this.layer = game.ui.btnL;
+        public function init(type:int):void {
+            this.layer = UIContainer.btnLayer;
             this.type = type;
             arrow.visible = true;
             arrow.alpha = 0;
@@ -42,8 +41,6 @@ package UI.Component {
         }
 
         public function deInit():void {
-            if (!game)
-                return;
             layer.removeChild(arrow);
             Starling.juggler.removeTweens(arrow);
             if (loop)
@@ -54,92 +51,103 @@ package UI.Component {
         }
 
         public function show():void {
-            var _x:Number = NaN;
-            var _y:Number = NaN;
-            var _NodeArray:Vector.<Node> = EntityContainer.nodes;
-            if (game.triggers[0])
-                return;
             if (!Globals.touchControls)
                 return;
             switch (type) {
                 case TYPE_L1:
-                    arrow.rotation = -1.5707963267948966;
-                    arrow.x = _NodeArray[0].nodeData.x;
-                    arrow.y = _NodeArray[0].nodeData.y + 60;
+                    showL1();
+                    break;
+                case TYPE_L2:
+                    showL2();
+                    break;
+                default:
+                    deInit();
+            }
+        }
+
+        private function showL1():void {
+            var x:Number = NaN;
+            var y:Number = NaN;
+            var nodeArray:Vector.<Node> = EntityContainer.nodes;
+            arrow.rotation = -1.5707963267948966;
+            arrow.x = nodeArray[0].nodeData.x;
+            arrow.y = nodeArray[0].nodeData.y + 60;
+            Starling.juggler.tween(arrow, 1, {"alpha": 0.8,
+                    "y": nodeArray[0].nodeData.y + 30,
+                    "delay": 1,
+                    "transition": "easeOut"});
+            Starling.juggler.tween(arrow, 2, {"x": nodeArray[1].nodeData.x,
+                    "y": nodeArray[1].nodeData.y + 10,
+                    "delay": 2,
+                    "transition": "easeInOut"});
+            Starling.juggler.tween(arrow, 1, {"y": nodeArray[1].nodeData.y + 40,
+                    "alpha": 0,
+                    "delay": 4,
+                    "transition": "easeIn"});
+            loop = Starling.juggler.delayCall(show, 6);
+        }
+
+        private function showL2():void {
+            var x:Number = NaN;
+            var y:Number = NaN;
+            switch (Globals.fleetSliderPosition) {
+                case 0:
+                    arrow.rotation = Math.PI;
+                    x = layer.fleetSlider.x + 50;
+                    y = 384 - layer.fleetSlider.box_y;
+                    arrow.x = x + 20;
+                    arrow.y = y;
                     Starling.juggler.tween(arrow, 1, {"alpha": 0.8,
-                            "y": _NodeArray[0].nodeData.y + 30,
+                            "x": x,
                             "delay": 1,
                             "transition": "easeOut"});
-                    Starling.juggler.tween(arrow, 2, {"x": _NodeArray[1].nodeData.x,
-                            "y": _NodeArray[1].nodeData.y + 10,
+                    Starling.juggler.tween(arrow, 2, {"y": 389,
                             "delay": 2,
                             "transition": "easeInOut"});
-                    Starling.juggler.tween(arrow, 1, {"y": _NodeArray[1].nodeData.y + 40,
+                    Starling.juggler.tween(arrow, 1, {"x": x + 20,
                             "alpha": 0,
                             "delay": 4,
                             "transition": "easeIn"});
                     loop = Starling.juggler.delayCall(show, 6);
                     break;
-                case TYPE_L2:
-                    switch (Globals.fleetSliderPosition) {
-                        case 0:
-                            arrow.rotation = Math.PI;
-                            _x = game.ui.btnL.fleetSlider.x + 50;
-                            _y = 384 - game.ui.btnL.fleetSlider.box_y;
-                            arrow.x = _x + 20;
-                            arrow.y = _y;
-                            Starling.juggler.tween(arrow, 1, {"alpha": 0.8,
-                                    "x": _x,
-                                    "delay": 1,
-                                    "transition": "easeOut"});
-                            Starling.juggler.tween(arrow, 2, {"y": 389,
-                                    "delay": 2,
-                                    "transition": "easeInOut"});
-                            Starling.juggler.tween(arrow, 1, {"x": _x + 20,
-                                    "alpha": 0,
-                                    "delay": 4,
-                                    "transition": "easeIn"});
-                            loop = Starling.juggler.delayCall(show, 6);
-                            break;
-                        case 2:
-                            arrow.rotation = 0;
-                            _x = game.ui.btnL.fleetSlider.x;
-                            _y = 384 - game.ui.btnL.fleetSlider.box_y;
-                            arrow.x = _x - 20;
-                            arrow.y = _y;
-                            Starling.juggler.tween(arrow, 1, {"alpha": 0.8,
-                                    "x": _x,
-                                    "delay": 1,
-                                    "transition": "easeOut"});
-                            Starling.juggler.tween(arrow, 2, {"y": 389,
-                                    "delay": 2,
-                                    "transition": "easeInOut"});
-                            Starling.juggler.tween(arrow, 1, {"x": _x - 20,
-                                    "alpha": 0,
-                                    "delay": 4,
-                                    "transition": "easeIn"});
-                            loop = Starling.juggler.delayCall(show, 6);
-                            break;
-                        case 1:
-                            _x = 512 + game.ui.btnL.fleetSlider.box_x;
-                            _y = game.ui.btnL.fleetSlider.y - 10;
-                            arrow.rotation = 1.5707963267948966;
-                            arrow.x = _x;
-                            arrow.y = _y - 20;
-                            Starling.juggler.tween(arrow, 1, {"alpha": 0.8,
-                                    "y": _y,
-                                    "delay": 1,
-                                    "transition": "easeOut"});
-                            Starling.juggler.tween(arrow, 2, {"x": 512,
-                                    "delay": 2,
-                                    "transition": "easeInOut"});
-                            Starling.juggler.tween(arrow, 1, {"y": _y - 20,
-                                    "alpha": 0,
-                                    "delay": 4,
-                                    "transition": "easeIn"});
-                            loop = Starling.juggler.delayCall(show, 6);
-                    }
+                case 2:
+                    arrow.rotation = 0;
+                    x = layer.fleetSlider.x;
+                    y = 384 - layer.fleetSlider.box_y;
+                    arrow.x = x - 20;
+                    arrow.y = y;
+                    Starling.juggler.tween(arrow, 1, {"alpha": 0.8,
+                            "x": x,
+                            "delay": 1,
+                            "transition": "easeOut"});
+                    Starling.juggler.tween(arrow, 2, {"y": 389,
+                            "delay": 2,
+                            "transition": "easeInOut"});
+                    Starling.juggler.tween(arrow, 1, {"x": x - 20,
+                            "alpha": 0,
+                            "delay": 4,
+                            "transition": "easeIn"});
+                    loop = Starling.juggler.delayCall(show, 6);
+                    break;
+                case 1:
+                    x = 512 + layer.fleetSlider.box_x;
+                    y = layer.fleetSlider.y - 10;
+                    arrow.rotation = 1.5707963267948966;
+                    arrow.x = x;
+                    arrow.y = y - 20;
+                    Starling.juggler.tween(arrow, 1, {"alpha": 0.8,
+                            "y": y,
+                            "delay": 1,
+                            "transition": "easeOut"});
+                    Starling.juggler.tween(arrow, 2, {"x": 512,
+                            "delay": 2,
+                            "transition": "easeInOut"});
+                    Starling.juggler.tween(arrow, 1, {"y": y - 20,
+                            "alpha": 0,
+                            "delay": 4,
+                            "transition": "easeIn"});
+                    loop = Starling.juggler.delayCall(show, 6);
             }
         }
-     }
+    }
 }

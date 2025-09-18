@@ -6,7 +6,7 @@ package Game.SpecialEvent {
         /** 原版1关提示 */
         public static var MOVE_GUIDE:String = "MoveGuide";
         /** 原版2关提示 */
-        public static var FLEET_SLITER:String = "FleetSlider";
+        public static var FLEET_SLIDER_GUIDE:String = "FleetSliderGuide";
         /** 原版32关演出 */
         public static var DARKNESS_FALLS:String = "DarknessFalls";
         /** 原版33~35黑色出场 */
@@ -20,6 +20,8 @@ package Game.SpecialEvent {
         private static var _ready:Boolean = false;
 
         private static function init():void {
+            registerType(MOVE_GUIDE, MoveGuideSE);
+            registerType(FLEET_SLIDER_GUIDE, FleetSliderGuideSE);
 
             _ready = true;
         }

@@ -1,36 +1,30 @@
 package Game.SpecialEvent {
     import UI.Component.TutorialSprite;
-    import Entity.EntityContainer;
+    import UI.UIContainer;
     import Game.GameScene;
-    import Entity.Node;
 
-    public class MoveGuideSE implements ISpecialEvent {
+    public class FleetSliderGuideSE implements ISpecialEvent {
         private static const STATE_START:int = 0;
         private static const STATE_END:int = 1;
 
         private var tutorial:TutorialSprite;
         private var state:int;
-        private var gameScene:GameScene;
 
-        public function MoveGuideSE(trigger:Object) {
+        public function FleetSliderGuideSE(trigger:Object) {
             tutorial = new TutorialSprite();
-            tutorial.init(TutorialSprite.TYPE_L1);
+            tutorial.init(TutorialSprite.TYPE_L2);
             state = STATE_START;
         }
 
         public function update(dt:Number):void {
             switch (state) {
                 case STATE_START:
-                    if (EntityContainer.nodes[0].ships[1].length < 60) {
+                    if (UIContainer.btnLayer.fleetSlider.perc < 1) {
                         state = STATE_END;
                         tutorial.type = TutorialSprite.TYPE_END;
                     }
                     break;
                 case STATE_END:
-                    for each (var node:Node in EntityContainer.nodes)
-                        if (node.nodeData.team != Globals.playerTeam)
-                            return;
-                    gameScene.winningTeam = Globals.playerTeam;
                     break;
             }
         }
@@ -42,11 +36,10 @@ package Game.SpecialEvent {
         }
 
         public function get type():String {
-            return SpecialEventFactory.MOVE_GUIDE;
+            return SpecialEventFactory.FLEET_SLIDER_GUIDE;
         }
 
         public function set game(value:GameScene):void {
-            gameScene = value;
         }
     }
 }
