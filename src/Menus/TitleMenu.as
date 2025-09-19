@@ -17,6 +17,7 @@ package Menus
    import UI.Component.LevelButtons;
    import UI.Component.DifficultyButton;
    import utils.Drawer;
+   import UI.UIContainer;
 
    public class TitleMenu extends Sprite
    {
@@ -404,8 +405,8 @@ package Menus
                });
          Starling.juggler.tween(previewLayer, Globals.transitionSpeed, {
                   "y": 354,
-                  "scaleX": 0.7,
-                  "scaleY": 0.7,
+                  "scaleX": UIContainer.scale * 0.7,
+                  "scaleY": UIContainer.scale * 0.7,
                   "transition": "easeInOut"
                });
       }
@@ -417,8 +418,8 @@ package Menus
          Starling.juggler.removeTweens(previewLayer);
          Starling.juggler.tween(previewLayer, Globals.transitionSpeed, {
                   "y": 384,
-                  "scaleX": 1,
-                  "scaleY": 1,
+                  "scaleX": UIContainer.scale,
+                  "scaleY": UIContainer.scale,
                   "transition": "easeInOut"
                });
          Starling.juggler.tween(this, Globals.transitionSpeed, {
@@ -605,6 +606,11 @@ package Menus
                _indistence = Math.max(0, _distence - 2);
                Drawer.drawCircle(preview, _x, _y, 16777215, _distence, _indistence, false, 0.5, 1, 0, 128);
             }
+            _scale = LevelData.level.data[Globals.currentData].level[currentIndex - 1].gameScale;
+            if (_scale)
+                previewLayer.scaleX = previewLayer.scaleY = _scale * 0.7;
+            else
+                previewLayer.scaleX = previewLayer.scaleY = 0.7;
          }
          preview.blendMode = "add";
       }

@@ -168,7 +168,10 @@ package Game {
                 GS.playMusic(levelData.bgm);
             else
                 GS.playMusic("bgm02");
-            victoryType = VictoryTypeFactory.create(VictoryTypeFactory.NONE_TYPE);
+            if (levelData.victoryCondition)
+                victoryType = VictoryTypeFactory.create(levelData.victoryCondition);
+            else
+                victoryType = VictoryTypeFactory.create(VictoryTypeFactory.NORMAL_TYPE);
             specialEvents = new Vector.<ISpecialEvent>();
             for each (var seData:Object in (levelData.specialEvents as Array)) {
                 var se:ISpecialEvent = SpecialEventFactory.create(seData.type, seData.trigger);

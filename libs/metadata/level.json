@@ -84,6 +84,7 @@
                             "barrierLinks": []
                         }
                     ],
+                    "gameScale": 1,
                     "bgm": "bgm02"
                 },
                 {
@@ -8188,6 +8189,14 @@
                             "barrierLinks": []
                         }
                     ],
+                    "specialEvents": [
+                        {
+                            "type": "MoveGuide"
+                        }
+                    ],
+                    "victoryCondition": {
+                        "type": "None"
+                    },
                     "name": "01",
                     "color": "0xFFAAAA",
                     "bgm": "bgm02"
@@ -8256,6 +8265,12 @@
                                 0
                             ],
                             "barrierLinks": []
+                        }
+                    ],
+                    "specialEvents": [
+                        {
+                            "type": "FleetSliderGuide",
+                            "trigger": {}
                         }
                     ],
                     "name": "02",
@@ -27601,6 +27616,14 @@
                             "barrierLinks": []
                         }
                     ],
+                    "specialEvents": [
+                        {
+                            "type": "MoveGuide"
+                        }
+                    ],
+                    "victoryCondition": {
+                        "type": "None"
+                    },
                     "name": "01",
                     "color": "0xFFAAAA",
                     "bgm": "bgm02"
@@ -27669,6 +27692,12 @@
                             "orbitNode": -1,
                             "team": 2,
                             "barrierLinks": []
+                        }
+                    ],
+                    "specialEvents": [
+                        {
+                            "type": "FleetSliderGuide",
+                            "trigger": {}
                         }
                     ],
                     "name": "02",
@@ -46881,6 +46910,14 @@
                             "barrierLinks": []
                         }
                     ],
+                    "specialEvents": [
+                        {
+                            "type": "MoveGuide"
+                        }
+                    ],
+                    "victoryCondition": {
+                        "type": "None"
+                    },
                     "name": "01",
                     "color": "0xFFAAAA",
                     "bgm": "bgm02"
@@ -47109,6 +47146,12 @@
                                 7,
                                 8
                             ]
+                        }
+                    ],
+                    "specialEvents": [
+                        {
+                            "type": "FleetSliderGuide",
+                            "trigger": {}
                         }
                     ],
                     "name": "02",

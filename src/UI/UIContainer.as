@@ -50,6 +50,10 @@ package UI {
         }
 
         public function initLevel():void {
+            if (LevelData.level.data[Globals.currentData].level[Globals.level].gameScale)
+                _scale = LevelData.level.data[Globals.currentData].level[Globals.level].gameScale;
+            else
+                _scale = 1;
             if (Globals.touchControls) {
                 touchCL.visible = true;
                 touchCL.init();
@@ -62,7 +66,7 @@ package UI {
             touchQuad.touchable = true;
 
             gameContainer.alpha = 0;
-            gameContainer.scaleX = gameContainer.scaleY = _scale-0.3;
+            gameContainer.scaleX = gameContainer.scaleY = _scale * 0.7;
             gameContainer.y = 354;
             btnL.alpha = 0;
             Starling.juggler.tween(gameContainer, Globals.transitionSpeed, {"alpha": 1,
@@ -78,8 +82,8 @@ package UI {
             Starling.juggler.removeTweens(gameContainer);
             Starling.juggler.removeTweens(btnL);
             Starling.juggler.tween(gameContainer, Globals.transitionSpeed, {"alpha": 0,
-                    "scaleX": _scale-0.3,
-                    "scaleY": _scale-0.3,
+                    "scaleX": _scale * 0.7,
+                    "scaleY": _scale * 0.7,
                     "y": 354,
                     "transition": "easeInOut"});
             Starling.juggler.tween(btnL, Globals.transitionSpeed, {"alpha": 0,
@@ -122,6 +126,10 @@ package UI {
 
         public function set scale(_scale:Number):void{
             this._scale = _scale;
+        }
+
+        public static function get scale():Number{
+            return ui._scale;
         }
 
         public static function get behaviorBatch():QuadBatch{
