@@ -19,25 +19,6 @@ package UI.Component {
             updateLevels();
         }
 
-        private function getLevelColor(_difficulty:int):int {
-            if (_difficulty >= LevelData.difficulty.length)
-                return 16755370;
-            switch (LevelData.difficulty[_difficulty]) {
-                case 1:
-                    return 65280; // Green
-                case 2:
-                    return 255; // Blue
-                case 3:
-                    return 16776960; // Yellow
-                case 4:
-                    return 16711680; // Red
-                case 5:
-                    return 0; // Black
-                default:
-                    return 16755370; // Default color
-            }
-        }
-
         public function updateSize():void {
             const _FONT_SIZES:Array = ["Downlink12", "Downlink16", "Downlink20"];
             var _fontName:String = _FONT_SIZES[Globals.textSize];
@@ -65,15 +46,16 @@ package UI.Component {
                 removeChild(buttons[i]);
                 buttons.pop();
             }
-            for (i = 1; i <= LevelData.maps.length; i++) {
-                var _levelText:String = (i < 10) ? ("0" + i.toString()) : i.toString();
-                var _buttonColor:int = getLevelColor(i);
-                var _levelBtn:TextField = new TextField(100, 40, _levelText, "Downlink16", -1, _buttonColor);
+            var levelData:Object = LevelData.level.data[Globals.currentData].level;
+            for (i = 0; i < levelData.length; i++) {
+                var _levelText:String = levelData[i].name ? levelData[i].name : ((i + 1 < 10) ? ("0" + (i + 1).toString()) : (i + 1).toString());
+                var _buttonColor:uint = levelData[i].color ? levelData[i].color : 0xFFAAAA;
+                var _levelBtn:TextField = new TextField(100, 200, _levelText, "Downlink16", -1, _buttonColor);
                 _levelBtn.pivotX = 50;
-                _levelBtn.pivotY = 20;
+                _levelBtn.pivotY = 100;
                 _levelBtn.alpha = 0.6;
                 _buttonColor == 0 ? _levelBtn.blendMode = "normal" : _levelBtn.blendMode = "add";
-                _levelBtn.x = i * 120;
+                _levelBtn.x = (i + 1) * 120;
                 addChild(_levelBtn);
                 buttons.push(_levelBtn);
             }
