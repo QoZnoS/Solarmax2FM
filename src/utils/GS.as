@@ -141,7 +141,8 @@ package utils{
             Starling.juggler.tween(transform, 0.5, {"volume": Globals.musicVolume,
                     "onUpdate": function():void
                     {
-                        musicChannel.soundTransform = transform;
+                        if (musicChannel)
+                            musicChannel.soundTransform = transform;
                     }});
         }
 

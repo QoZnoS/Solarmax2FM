@@ -10,7 +10,7 @@ package Game.SpecialEvent {
 
         private var tutorial:TutorialSprite;
         private var state:int;
-        private var gameScene:GameScene;
+        private var _game:GameScene;
 
         public function MoveGuideSE(trigger:Object) {
             tutorial = new TutorialSprite();
@@ -30,7 +30,7 @@ package Game.SpecialEvent {
                     for each (var node:Node in EntityContainer.nodes)
                         if (node.nodeData.team != Globals.playerTeam)
                             return;
-                    gameScene.winningTeam = Globals.playerTeam;
+                    _game.winningTeam = Globals.playerTeam;
                     break;
             }
         }
@@ -46,7 +46,7 @@ package Game.SpecialEvent {
         }
 
         public function set game(value:GameScene):void {
-            gameScene = value;
+            _game = value;
         }
     }
 }

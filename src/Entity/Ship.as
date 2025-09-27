@@ -543,7 +543,10 @@ package Entity
          warping = true;
          GS.playJumpCharge(this.x);
       }
-
+        /**
+         * 不建议使用
+         * @param _team 
+         */
       public function changeTeam(_team:int):void // 改变飞船势力
       {
          this.team = _team;

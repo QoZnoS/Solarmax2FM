@@ -5991,6 +5991,18 @@
                 {
                     "name": "32",
                     "color": "0x00FF00",
+                    "specialEvents": [
+                        {
+                            "type": "DarknessFalls",
+                            "trigger": {
+                                "nodeTag": 0,
+                                "targetTeam": 6
+                            }
+                        }
+                    ],
+                    "victoryCondition": {
+                        "type": "None"
+                    },
                     "node": [
                         {
                             "orbitSpeed": -0.1,

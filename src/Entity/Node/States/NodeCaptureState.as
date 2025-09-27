@@ -12,8 +12,8 @@ package Entity.Node.States {
         private var node:Node;
         private var nodeData:NodeData;
         private var ships:Vector.<Vector.<Ship>>;
-        public var captureTeam:int; // 占领条势力
         private var capturingTeam:int; // 占据势力
+        public var captureTeam:int; // 占领条势力
         public var captureRate:Number; // 占领速度
 
         public function NodeCaptureState(node:Node) {
@@ -29,10 +29,10 @@ package Entity.Node.States {
         }
 
         public function update(dt:Number):void {
+            processTeamChange(capturingTeam);
             captureRate = calculateCaptureRate(capturingTeam);
             updateNodeHP(capturingTeam, captureRate, dt);
             updateCaptureUI(capturingTeam);
-            processTeamChange(capturingTeam);
         }
 
         private static const MAX_HP:Number = 100;
@@ -103,18 +103,10 @@ package Entity.Node.States {
         }
 
         private function processTeamChange(capturingTeam:int):void {
-            // 特殊关卡跳过团队变更
-            if (Globals.level == 31 && nodeData.type == NodeType.DILATOR)
-                return;
-
-            // 中立天体完全占领
-            if (nodeData.team == NEUTRAL_TEAM && nodeData.hp == MAX_HP) {
-                NodeStaticLogic.changeTeam(node, captureTeam);
-            }
-            // 非中立天体完全失去占领
-            else if (nodeData.team != NEUTRAL_TEAM && nodeData.hp == 0 && node.game.winningTeam == -1) {
-                NodeStaticLogic.changeTeam(node, NEUTRAL_TEAM);
-            }
+            if (nodeData.team == NEUTRAL_TEAM && nodeData.hp == MAX_HP)
+                NodeStaticLogic.changeTeam(node, captureTeam); // 中立天体完全占领
+            else if (nodeData.team != NEUTRAL_TEAM && nodeData.hp == 0 && node.game.winningTeam == -1)
+                NodeStaticLogic.changeTeam(node, NEUTRAL_TEAM);// 非中立天体完全失去占领
         }
 
         public function toJSON(k:String):* {

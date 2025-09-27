@@ -22,6 +22,7 @@ package Game.SpecialEvent {
         private static function init():void {
             registerType(MOVE_GUIDE, MoveGuideSE);
             registerType(FLEET_SLIDER_GUIDE, FleetSliderGuideSE);
+            registerType(DARKNESS_FALLS, DarknessFallsSE);
 
             _ready = true;
         }

@@ -65,12 +65,6 @@ package Game {
             cover.alpha = 0;
             addChild(cover);
             // 其他可视化对象
-            darkPulse = new Image(Root.assets.getTexture("halo"));
-            darkPulse.pivotY = darkPulse.pivotX = darkPulse.width * 0.5;
-            darkPulse.x = 512;
-            darkPulse.y = 384;
-            darkPulse.color = 0;
-            darkPulse.visible = false;
             barrierLines = []; // 障碍连接数据
             this.alpha = 0;
             this.visible = false;
@@ -99,7 +93,6 @@ package Game {
         // #region 进入关卡
         override public function init(seed:uint = 0, rep:Boolean = false):void {
             ui = scene.ui;
-            UIContainer.entityLayer.addGlow(darkPulse);
             var i:int = 0;
             var aiArray:Array = [];
             this.level = Globals.level;
@@ -173,7 +166,7 @@ package Game {
             else
                 victoryType = VictoryTypeFactory.create(VictoryTypeFactory.NORMAL_TYPE);
             specialEvents = new Vector.<ISpecialEvent>();
-            for each (var seData:Object in (levelData.specialEvents as Array)) {
+            for each (var seData:Object in(levelData.specialEvents as Array)) {
                 var se:ISpecialEvent = SpecialEventFactory.create(seData.type, seData.trigger);
                 se.game = this;
                 specialEvents.push(se);
@@ -185,11 +178,9 @@ package Game {
 
         public function nodeIn(nodes:Array):Array {
             var aiArray:Array = [];
-            for each(var nodeData:Object in nodes)
-            {
+            for each (var nodeData:Object in nodes) {
                 var node:Node = EntityHandler.addNode(nodeData);
-                for(var i:int = 0; i < nodeData.startShips.length; i++)
-                {
+                for (var i:int = 0; i < nodeData.startShips.length; i++) {
                     EntityHandler.addShips(node, i, nodeData.startShips[i]);
                     node.nodeData.startShips[i] = nodeData.startShips[i];
                 }
@@ -288,12 +279,11 @@ package Game {
         public function restart():void {
             scene.ui.restartLevel();
             Starling.juggler.removeTweens(this);
-            Starling.juggler.tween(this, Globals.transitionSpeed / 2, {
-                    "onComplete": function():void
-                    {
-                        deInit();
-                        init();
-                    }});
+            Starling.juggler.tween(this, Globals.transitionSpeed / 2, {"onComplete": function():void
+            {
+                deInit();
+                init();
+            }});
         }
 
         // #endregion
@@ -337,10 +327,7 @@ package Game {
             winningTeam = victoryType.update(dt);
             for each (var se:ISpecialEvent in specialEvents) // 依次执行所有特殊事件的更新函数
                 se.update(dt);
-            if (darkPulse.visible)
-                expandDarkPulse(dt);
-            if (Globals.level != 35)
-                updateGameOver(dt);
+            updateGameOver(dt);
             updateBarrier();
         }
 
@@ -349,7 +336,7 @@ package Game {
                 // 36关通关时
                 slowMult = Math.max(slowMult - dt * 0.75, 0.1);
                 dt *= slowMult;
-            } else if (!(Globals.level == 31 || Globals.level == 35))
+            } else
                 dt *= scene.speedMult;
             return dt;
         }
@@ -387,61 +374,6 @@ package Game {
         //     var _bossParam:int;
         //     switch (Globals.level) // 处理特殊关卡的特殊事件
         //     {
-        //         case 31:
-        //             if (!triggers[0]) {
-        //                 _boss = EntityContainer.nodes[0];
-        //                 if (_boss.nodeData.hp == 100) {
-        //                     triggers[0] = true;
-        //                     _timer = 0;
-        //                     _rate = 0.5;
-        //                     _addTime = 1;
-        //                     _angle = 1.5707963267948966;
-        //                     _angleStep = 2.0943951023931953;
-        //                     _size = 2;
-        //                     for (i = 0; i < 64; i++) {
-        //                         FXHandler.addDarkPulse(_boss, 0, 1, _size, _rate, _angle, _timer);
-        //                         _timer += _addTime;
-        //                         _angle += _angleStep;
-        //                         FXHandler.addDarkPulse(_boss, 0, 1, _size, _rate, _angle, _timer);
-        //                         _timer += _addTime;
-        //                         _angle += _angleStep;
-        //                         FXHandler.addDarkPulse(_boss, 0, 1, _size, _rate, _angle, _timer);
-        //                         _timer += _addTime;
-        //                         _angle += _angleStep;
-        //                         if (i < 20) {
-        //                             _rate *= 1.1;
-        //                             _addTime *= 0.85;
-        //                         }
-        //                         _size *= 0.975;
-        //                     }
-        //                     FXHandler.addDarkPulse(_boss, 0, 2, 2.5, 0.75, 0, _timer - 5.5);
-        //                     FXHandler.addDarkPulse(_boss, 0, 2, 2.5, 1, 0, _timer - 4.5);
-        //                     _boss.triggerTimer = _timer - 3;
-        //                     GS.playMusic("bgm_dark", false);
-        //                 }
-        //             }
-        //             if (triggers[0] && !triggers[1]) {
-        //                 _boss = EntityContainer.nodes[0];
-        //                 if (_boss.triggerTimer == 0) {
-        //                     triggers[1] = true;
-        //                     _boss.bossReady();
-        //                     NodeStaticLogic.changeTeam(_boss, 6);
-        //                     NodeStaticLogic.changeShipsTeam(_boss, 6);
-        //                     EntityHandler.addAI(6, EnemyAIFactory.DARK);
-        //                     _boss.triggerTimer = 3;
-        //                     darkPulse.team = 6;
-        //                     darkPulse.scaleX = darkPulse.scaleY = 0;
-        //                     darkPulse.visible = true;
-        //                 }
-        //             }
-        //             if (triggers[1] && !triggers[2]) {
-        //                 _boss = EntityContainer.nodes[0];
-        //                 if (_boss.triggerTimer == 0) {
-        //                     triggers[2] = true;
-        //                     _boss.bossDisappear();
-        //                 }
-        //             }
-        //             break;
         //         case 32, 33, 34:
         //             if (!triggers[0]) // 阶段一，生成星核
         //             {
@@ -648,11 +580,8 @@ package Game {
         public function updateGameOver(dt:Number):void {
             if (!gameOver) // 通关判断
             {
-                gameOver = (winningTeam != -1)
-                if (Globals.level == 31)
-                    gameOver = false; // 32关禁用常规通关判定
-                if (gameOver) // 处理游戏结束时的动画
-                {
+                gameOver = (winningTeam != -1);
+                if (gameOver) { // 处理游戏结束时的动画
                     var _ripple:int = 1;
                     for each (var node:Node in EntityContainer.nodes) {
                         if (node.nodeData.isUntouchable)
