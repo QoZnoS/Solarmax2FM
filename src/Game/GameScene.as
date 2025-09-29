@@ -180,10 +180,8 @@ package Game {
             var aiArray:Array = [];
             for each (var nodeData:Object in nodes) {
                 var node:Node = EntityHandler.addNode(nodeData);
-                for (var i:int = 0; i < nodeData.startShips.length; i++) {
-                    EntityHandler.addShips(node, i, nodeData.startShips[i]);
-                    node.nodeData.startShips[i] = nodeData.startShips[i];
-                }
+                for (var i:int = 0; i < node.nodeData.startShips.length; i++)
+                    EntityHandler.addShips(node, i, node.nodeData.startShips[i]);
                 if (aiArray.indexOf(nodeData.team) == -1) {
                     // 写入具有常规ai的势力，此处检验势力是否已写入，避免重复写入
                     switch (nodeData.team) {

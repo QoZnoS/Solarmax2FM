@@ -322,6 +322,23 @@ package Entity {
             return fliterArr;
         }
 
+        /** 安全访问 XML 数据
+         * <p>尝试访问指定路径的 XML 数据，若失败则返回默认值或抛出错误
+         * @param xmlData 目标 XML 数据
+         * @param path 访问路径
+         * @param defaultValue 默认值
+         * @return 访问结果
+         */
+        public static function safeXMLAccess(xmlData:XML, path:String, defaultValue:XMLList = null):XMLList {
+            try {
+                return xmlData..*.(name().localName == path);
+            } catch (error:Error) {
+                if (defaultValue != null)
+                    return defaultValue;
+                throw error;
+            }
+        }
+
         // #endregion
     }
 }

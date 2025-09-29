@@ -185,7 +185,7 @@ package Menus {
             getMoreInfoTexts();
         }
 
-        private function getMoreInfoTexts():void {
+        public function getMoreInfoTexts():void {
             var infoText:TextField = null;
             var levelData:Object = LevelData.level.data[Globals.currentData].level;
             for (var i:int = 0; i < levelData.length; i++) {

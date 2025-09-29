@@ -95,6 +95,11 @@ package Entity.Node {
                 } else
                     this[prop] = obj[prop];
             }
+
+            if (!this.startShips)
+                this.startShips = new Vector.<int>(Globals.teamCount);
+            if (!this.barrierLinks)
+                this.barrierLinks = new Vector.<int>();
         }
         //#endregion
     }

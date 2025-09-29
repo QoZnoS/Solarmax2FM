@@ -133,34 +133,6 @@ package Entity {
                 state.init();
         }
 
-        public function initBoss(_GameScene:GameScene, _rng:Rng, _x:Number, _y:Number):void {
-            var i:int = 0;
-            super.init(_GameScene);
-            nodeData = new NodeData(true);
-            nodeData.size = 0.4;
-            nodeData.type = NodeType.DILATOR;
-            nodeData.team = 6;
-            this.rng = _rng;
-            nodeData.hp = 100;
-            resetArray()
-            aiValue = 0;
-            triggerTimer = 0;
-            NodeStaticLogic.updateLabelSizes(this);
-            nodeData.x = _x;
-            nodeData.y = _y;
-            nodeData.lineDist = 150 * nodeData.size;
-            linked = false;
-            NodeStaticLogic.changeType(this, NodeType.DILATOR, 0.4);
-            nodeData.popVal = 0;
-            nodeData.startShips[6] = 300;
-            for (i = 0; i < aiTimers.length; i++) {
-                aiTimers[i] = 0;
-            }
-            for (i = 0; i < transitShips.length; i++) {
-                transitShips[i] = 0;
-            }
-        }
-
         override public function deInit():void {
             var i:int = 0;
             for (i = 0; i < ships.length; i++) // 循环移除每个势力的飞船
@@ -199,7 +171,7 @@ package Entity {
         }
         
         public function updateNodeLinks():void {
-            if (nodeData.isUntouchable)
+            if (nodeData.isBarrier)
                 return;
             nodeLinks.length = Globals.teamCount;
             for (var i:int = 0; i < Globals.teamCount; i++) {
@@ -212,7 +184,7 @@ package Entity {
                     continue;
                 }
                 for each (var _Node:Node in EntityContainer.nodes) {
-                    if (_Node == this || _Node.nodeData.isUntouchable)
+                    if (_Node == this || _Node.nodeData.isBarrier)
                         continue;
                     if (nodeData.isWarp && nodeData.team == i && i != 0){
                         nodeLinks[i].push(_Node);
@@ -454,6 +426,52 @@ package Entity {
             }
             FXHandler.addDarkPulse(this, 0, 2, 2, 2, 0, _delay - 0.75);
             FXHandler.addDarkPulse(this, 0, 2, 2, 2, 0, _delay - 0.4);
+            triggerTimer = _delay;
+        }
+
+        public function bossReady():void {
+            moveState.image.visible = true;
+            moveState.halo.visible = true;
+            moveState.glow.visible = true;
+            var _delay:Number = 0;
+            var _angle:Number = 1.5707963267948966;
+            var _maxSize:Number = 1;
+            for (var i:int = 0; i < 3; i++) {
+                FXHandler.addDarkPulse(this, 0, 0, _maxSize, 2, _angle, _delay);
+                _delay += 0.05;
+                _angle += 2.0943951023931953;
+                FXHandler.addDarkPulse(this, 0, 0, _maxSize, 2, _angle, _delay);
+                _delay += 0.05;
+                _angle += 2.0943951023931953;
+                FXHandler.addDarkPulse(this, 0, 0, _maxSize, 2, _angle, _delay);
+                _delay += 0.05;
+                _angle += 2.0943951023931953;
+                _maxSize *= 1.5;
+            }
+            aiTimers[6] = 0.5;
+        }
+
+        public function bossDisappear():void {
+            var _delay:Number = 0;
+            var _rate:Number = 1;
+            var _delayStep:Number = 0.5;
+            var _angle:Number = 1.5707963267948966;
+            var _maxSize:Number = 2;
+            for (var i:int = 0; i < 12; i++) {
+                FXHandler.addDarkPulse(this, 0, 1, _maxSize, _rate, _angle, _delay);
+                _delay += _delayStep;
+                _angle += 2.0943951023931953;
+                FXHandler.addDarkPulse(this, 0, 1, _maxSize, _rate, _angle, _delay);
+                _delay += _delayStep;
+                _angle += 2.0943951023931953;
+                FXHandler.addDarkPulse(this, 0, 1, _maxSize, _rate, _angle, _delay);
+                _delay += _delayStep;
+                _angle += 2.0943951023931953;
+                _rate *= 1.5;
+                _delayStep *= 0.5;
+                _maxSize *= 0.7;
+            }
+            FXHandler.addDarkPulse(this, 0, 2, 2, 2, 0, _delay - 0.75);
             triggerTimer = _delay;
         }
 

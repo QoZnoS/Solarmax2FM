@@ -25,7 +25,7 @@ package Entity {
             EntityContainer.addEntity(EntityContainer.INDEX_AIS, enemyAI);
         }
 
-        public static function addNode(data:Object):Node{
+        public static function addNode(data:Object):Node {
             var node:Node = EntityContainer.getReserve(EntityContainer.INDEX_NODES) as Node;
             if (!node)
                 node = new Node();
@@ -50,12 +50,26 @@ package Entity {
             EntityContainer.addEntity(EntityContainer.INDEX_SHIPS, ship);
             return ship;
         }
+
         // #endregion 
 
         // #region 删除实体
 
+        public static function removeNode(node:Node):void {
+            for (var i:int = 0; i < Globals.teamCount; i++) {
+                for each (var ship:Ship in node.ships[i]) {
+                    ship.hp = 0;
+                    ship.active = false;
+                }
+            }
+            node.moveState.image.visible = false;
+            node.moveState.halo.visible = false;
+            node.moveState.glow.visible = false;
+            node.active = false;
+        }
+
         /** 移除飞船，不带特效
-         * @param ship 
+         * @param ship
          */
         public static function removeShip(ship:Ship):void {
             EntityContainer.removeShipFromVector(ship.node.ships[ship.team], ship)
@@ -65,7 +79,7 @@ package Entity {
         }
 
         /** 摧毁飞船，内部调用removeShip，外加特效
-         * @param ship 
+         * @param ship
          */
         public static function destroyShip(ship:Ship):void {
             removeShip(ship);
@@ -80,5 +94,16 @@ package Entity {
         }
 
         // #endregion
+
+        /** 检查是否已有该势力的AI
+         * @param team 势力编号
+         * @return Boolean 是否已有该势力AI
+         */
+        public static function hadAI(team:int):Boolean {
+            for each (var ai:EnemyAI in EntityContainer.ais)
+                if (ai.team == team)
+                    return true;
+            return false;
+        }
     }
 }

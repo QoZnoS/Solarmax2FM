@@ -19,72 +19,69 @@ package Game.SpecialEvent {
 
         private var _game:GameScene;
         private var state:int;
-        private var dilator:Node;
+        private var triggerNode:Node;
         private var triggerTimer:Number;
         private var darkPulse:Image;
         private var targetTeam:int;
 
         public function DarknessFallsSE(trigger:Object) {
             state = 0;
-            dilator = EntityContainer.nodes[trigger.nodeTag];
+            triggerNode = EntityContainer.nodes[trigger.nodeTag];
             targetTeam = trigger.targetTeam;
             darkPulse = new Image(Root.assets.getTexture("halo"));
             darkPulse.pivotY = darkPulse.pivotX = darkPulse.width * 0.5;
-            darkPulse.x = dilator.nodeData.x;
-            darkPulse.y = dilator.nodeData.y;
+            darkPulse.x = triggerNode.nodeData.x;
+            darkPulse.y = triggerNode.nodeData.y;
             darkPulse.visible = false;
             UIContainer.entityLayer.addGlow(darkPulse);
         }
 
         public function update(dt:Number):void {
-            var time:Number = 0;
-            var timeStep:Number = 1;
+            var delay:Number = 0;
+            var delayStep:Number = 1;
             var rate:Number = 0.5;
             var angle:Number = Math.PI / 2;
             var angleStep:Number = Math.PI * 2 / 3;
-            var size:Number = 2;
-            var delay:Number = 0;
             var maxSize:Number = 1;
             var color:uint = Globals.teamColors[targetTeam];
-            switch(state)
-            {
+            switch (state) {
                 case STATE_START:
-                    if (dilator.nodeData.hp != 100)
+                    if (triggerNode.nodeData.hp != 100)
                         break;
                     state = STATE_BOSSIN;
-                    dilator.nodeData.hp = 99.99; // 天体满占领度但不占领特效
+                    triggerNode.nodeData.hp = 99.99; // 天体满占领度但不占领特效
                     triggerTimer = 24.34106748146577 - 3; // 24.34106748146577为动画的总时间
 
                     // 播放动画
-                    time = 0;
-                    timeStep = 1;
+                    delay = 0;
+                    delayStep = 1;
                     rate = 0.5;
                     angle = Math.PI / 2;
                     angleStep = Math.PI * 2 / 3;
-                    size = 2;
+                    maxSize = 2;
                     for (var i:int = 0; i < 64; i++) {
-                        FXHandler.addDarkPulse(dilator, color, 1, size, rate, angle, time);
-                        time += timeStep;
+                        FXHandler.addDarkPulse(triggerNode, color, 1, maxSize, rate, angle, delay);
+                        delay += delayStep;
                         angle += angleStep;
-                        FXHandler.addDarkPulse(dilator, color, 1, size, rate, angle, time);
-                        time += timeStep;
+                        FXHandler.addDarkPulse(triggerNode, color, 1, maxSize, rate, angle, delay);
+                        delay += delayStep;
                         angle += angleStep;
-                        FXHandler.addDarkPulse(dilator, color, 1, size, rate, angle, time);
-                        time += timeStep;
+                        FXHandler.addDarkPulse(triggerNode, color, 1, maxSize, rate, angle, delay);
+                        delay += delayStep;
                         angle += angleStep;
                         if (i < 20) {
                             rate *= 1.1;
-                            timeStep *= 0.85;
+                            delayStep *= 0.85;
                         }
-                        size *= 0.975;
+                        maxSize *= 0.975;
                     }
-                    FXHandler.addDarkPulse(dilator, color, 2, 2.5, 0.75, 0, time - 5.5);
-                    FXHandler.addDarkPulse(dilator, color, 2, 2.5, 1, 0, time - 4.5);
+                    FXHandler.addDarkPulse(triggerNode, color, 2, 2.5, 0.75, 0, delay - 5.5);
+                    FXHandler.addDarkPulse(triggerNode, color, 2, 2.5, 1, 0, delay - 4.5);
                     GS.playMusic("bgm_dark", false);
                     break;
 
                 case STATE_BOSSIN:
-                    dilator.nodeData.hp = 99.99; // 天体满占领度但不占领特效
+                    triggerNode.nodeData.hp = 99.99; // 天体满占领度但不占领特效
                     _game.scene.speedMult = 1; // 锁定速度
                     triggerTimer -= dt;
                     if (triggerTimer > 0)
@@ -92,8 +89,8 @@ package Game.SpecialEvent {
                     state = STATE_BOSSOUT;
 
                     // 黑色出场
-                    NodeStaticLogic.changeTeam(dilator, 6);
-                    NodeStaticLogic.changeShipsTeam(dilator, 6);
+                    NodeStaticLogic.changeTeam(triggerNode, 6);
+                    NodeStaticLogic.changeShipsTeam(triggerNode, 6);
                     EntityHandler.addAI(6, EnemyAIFactory.DARK);
                     darkPulse.scaleX = darkPulse.scaleY = 0;
                     darkPulse.visible = true;
@@ -101,21 +98,22 @@ package Game.SpecialEvent {
 
                     // 特效
                     delay = 0;
+                    delayStep = 0.05;
                     angle = Math.PI / 2;
                     maxSize = 1;
                     for (i = 0; i < 3; i++) {
-                        FXHandler.addDarkPulse(dilator, color, 0, maxSize, 2, angle, delay);
-                        delay += 0.05;
+                        FXHandler.addDarkPulse(triggerNode, color, 0, maxSize, 2, angle, delay);
+                        delay += delayStep;
                         angle += Math.PI * 2 / 3;
-                        FXHandler.addDarkPulse(dilator, color, 0, maxSize, 2, angle, delay);
-                        delay += 0.05;
+                        FXHandler.addDarkPulse(triggerNode, color, 0, maxSize, 2, angle, delay);
+                        delay += delayStep;
                         angle += Math.PI * 2 / 3;
-                        FXHandler.addDarkPulse(dilator, color, 0, maxSize, 2, angle, delay);
-                        delay += 0.05;
+                        FXHandler.addDarkPulse(triggerNode, color, 0, maxSize, 2, angle, delay);
+                        delay += delayStep;
                         angle += Math.PI * 2 / 3;
                         maxSize *= 1.5;
                     }
-                    dilator.aiTimers[6] = 0.5;
+                    triggerNode.aiTimers[6] = 0.5;
                     break;
 
                 case STATE_BOSSOUT:

@@ -89,6 +89,7 @@ package Menus.StartMenus {
             LevelData.init();
             title.getBarrierData();
             title.getOrbitData();
+            title.getMoreInfoTexts();
             title.levels.updateLevels();
             var _dataQuad:OptionButton;
             if (mapacks.length != 0) {
@@ -147,6 +148,7 @@ package Menus.StartMenus {
             LevelData.init();
             title.getBarrierData();
             title.getOrbitData();
+            title.getMoreInfoTexts();
             title.levels.updateLevels();
             title.optionsMenu.animateOut();
         }

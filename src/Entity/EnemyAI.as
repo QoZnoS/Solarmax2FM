@@ -39,5 +39,9 @@ package Entity {
             debugTrace.pop();
         }
         // #endregion
+
+        public function get team():int {
+            return ai.team;
+        }
     }
 }

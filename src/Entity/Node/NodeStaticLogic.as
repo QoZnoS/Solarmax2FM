@@ -108,17 +108,18 @@ package Entity.Node {
          * @param type 目标类型
          * @param size 目标大小
          */
-        public static function changeType(node:Node, type:String, size:Number = -1):void {
-            var get:String = LevelData.nodeData.node.(@id == type).defaultSize;
-            node.nodeData.size = (size == -1) ? Number(get) : size;
+        public static function changeType(node:Node, type:String, size:Number = NaN):void {
+            var nodeConfig:XMLList = LevelData.nodeData.node.(@name == type);
+            var get:String = LevelData.nodeData.node.(@name == type).defaultSize;
+            size = node.nodeData.size = isNaN(size) ? Number(get) : size;
             // 处理贴图
             node.moveState.image.rotation = node.moveState.halo.rotation = node.moveState.glow.rotation = 0;
             node.nodeData.type = type;
             if (type == NodeType.PLANET) {
-                var ImageID:String = node.rng.nextRange(1, 16).toString();
-                if (ImageID.length == 1)
-                    ImageID = "0" + ImageID; // 随机取一个星球贴图的编号
-                node.moveState.image.texture = Root.assets.getTexture("planet" + ImageID); // 更换星球贴图
+                var imageID:String = node.rng.nextRange(1, 16).toString();
+                if (imageID.length == 1)
+                    imageID = "0" + imageID; // 随机取一个星球贴图的编号
+                node.moveState.image.texture = Root.assets.getTexture("planet" + imageID); // 更换星球贴图
                 node.moveState.halo.texture = Root.assets.getTexture("halo"); // 更换光圈
                 node.moveState.glow.texture = Root.assets.getTexture("planet_shape"); // 更换星球光效
                 node.moveState.image.scaleX = node.moveState.image.scaleY = node.moveState.glow.scaleX = node.moveState.glow.scaleY = size;
