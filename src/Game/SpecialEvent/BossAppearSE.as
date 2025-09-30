@@ -79,7 +79,7 @@ package Game.SpecialEvent {
                     var bossAI:String = (Globals.currentDifficulty == 3) ? EnemyAIFactory.HARD : EnemyAIFactory.DARK;
                     for (i = 0; i < triggerNode.nodeData.startShips.length; i++){
                         EntityHandler.addShips(triggerNode, i, triggerNode.nodeData.startShips[i]);
-                        if (!EntityHandler.hadAI(i))
+                        if (!EntityHandler.hadAI(i) && triggerNode.nodeData.startShips[i] != 0)
                             EntityHandler.addAI(i, bossAI);
                     }
 
@@ -88,11 +88,11 @@ package Game.SpecialEvent {
                     triggerNode.moveState.halo.visible = true;
                     triggerNode.moveState.glow.visible = true;
                     delay = 0;
-                    delayStep = 1;
-                    rate = 0.5;
+                    delayStep = 0.05;
+                    rate = 2;
                     angle = Math.PI / 2;
-                    maxSize = 2;
-                    for (i = 0; i < 64; i++) {
+                    maxSize = 1;
+                    for (i = 0; i < 3; i++) {
                         FXHandler.addDarkPulse(triggerNode, color, 1, maxSize, rate, angle, delay);
                         delay += delayStep;
                         angle += angleStep;
@@ -102,20 +102,15 @@ package Game.SpecialEvent {
                         FXHandler.addDarkPulse(triggerNode, color, 1, maxSize, rate, angle, delay);
                         delay += delayStep;
                         angle += angleStep;
-                        if (i < 20) {
-                            rate *= 1.1;
-                            delayStep *= 0.85;
-                        }
-                        maxSize *= 0.975;
+                        maxSize *= 1.5;
                     }
-                    FXHandler.addDarkPulse(triggerNode, color, 2, 2.5, 0.75, 0, delay - 5.5);
-                    FXHandler.addDarkPulse(triggerNode, color, 2, 2.5, 1, 0, delay - 4.5);
                     GS.playSound("boss_ready", 1.5);
                     break;
                 case STATE_READY_DISAPPEAR:
                     triggerTimer -= dt;
                     if (triggerTimer > 0)
                         break;
+                    triggerNode.unloadShips();
                     state = STATE_DISAPPEAR;
                     triggerTimer = 2.999267578125;
 
@@ -125,20 +120,20 @@ package Game.SpecialEvent {
                     angle = Math.PI / 2;
                     maxSize = 2;
                     for (i = 0; i < 12; i++) {
-                        FXHandler.addDarkPulse(triggerNode, 0, 1, maxSize, rate, angle, delay);
+                        FXHandler.addDarkPulse(triggerNode, color, 1, maxSize, rate, angle, delay);
                         delay += delayStep;
                         angle += angleStep;
-                        FXHandler.addDarkPulse(triggerNode, 0, 1, maxSize, rate, angle, delay);
+                        FXHandler.addDarkPulse(triggerNode, color, 1, maxSize, rate, angle, delay);
                         delay += delayStep;
                         angle += angleStep;
-                        FXHandler.addDarkPulse(triggerNode, 0, 1, maxSize, rate, angle, delay);
+                        FXHandler.addDarkPulse(triggerNode, color, 1, maxSize, rate, angle, delay);
                         delay += delayStep;
                         angle += angleStep;
                         rate *= 1.5;
                         delayStep *= 0.5;
                         maxSize *= 0.7;
                     }
-                    FXHandler.addDarkPulse(triggerNode, 0, 2, 2, 2, 0, delay - 0.75);
+                    FXHandler.addDarkPulse(triggerNode, color, 2, 2, 2, 0, delay - 0.75);
                     GS.playSound("boss_reverse");
                     break;
                 case STATE_DISAPPEAR:

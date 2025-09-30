@@ -64,14 +64,15 @@ package UI {
                     _Tx = _localPoint.x;
                     _Ty = _localPoint.y;
                     if (_Touch.hoverNode) { // 绘制目标天体的定位圈
-                        _Block = EntityContainer.nodesBlocked(_Node, _Touch.hoverNode);
+                        if (!(_Node.nodeData.isWarp && _Node.nodeData.team == Globals.playerTeam))
+                            _Block = EntityContainer.nodesBlocked(_Node, _Touch.hoverNode);
                         _Tx = _Touch.hoverNode.nodeData.x;
                         _Ty = _Touch.hoverNode.nodeData.y;
                         if (_Block)
                             Drawer.drawCircle(displayBatch, _Tx, _Ty, 0xFF3333, _Touch.hoverNode.nodeData.lineDist - 4, _Touch.hoverNode.nodeData.lineDist - 7, false, 0.8);
                         else
                             Drawer.drawCircle(displayBatch, _Tx, _Ty, _Color, _Touch.hoverNode.nodeData.lineDist - 4, _Touch.hoverNode.nodeData.lineDist - 7, false, 0.8);
-                    } else
+                    } else if (!(_Node.nodeData.isWarp && _Node.nodeData.team == Globals.playerTeam))
                         _Block = lineBlocked(_Node.nodeData.x, _Node.nodeData.y, _Tx, _Ty);
                     _dx = _Tx - _Node.nodeData.x;
                     _dy = _Ty - _Node.nodeData.y;

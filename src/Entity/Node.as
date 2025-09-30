@@ -184,7 +184,7 @@ package Entity {
                     continue;
                 }
                 for each (var _Node:Node in EntityContainer.nodes) {
-                    if (_Node == this || _Node.nodeData.isBarrier)
+                    if (_Node == this || _Node.nodeData.isUntouchable)
                         continue;
                     if (nodeData.isWarp && nodeData.team == i && i != 0){
                         nodeLinks[i].push(_Node);
@@ -401,86 +401,6 @@ package Entity {
             }
         }
         // #region 特效与绘图
-        public function bossAppear():void {
-            moveState.image.visible = false;
-            moveState.halo.visible = false;
-            moveState.glow.visible = false;
-            var _delay:Number = 0;
-            var _rate:Number = 1;
-            var _delayStep:Number = 0.5;
-            var _angle:Number = 1.5707963267948966;
-            var _maxSize:Number = 2;
-            for (var i:int = 0; i < 24; i++) {
-                FXHandler.addDarkPulse(this, 0, 1, _maxSize, _rate, _angle, _delay);
-                _delay += _delayStep;
-                _angle += 2.0943951023931953;
-                FXHandler.addDarkPulse(this, 0, 1, _maxSize, _rate, _angle, _delay);
-                _delay += _delayStep;
-                _angle += 2.0943951023931953;
-                FXHandler.addDarkPulse(this, 0, 1, _maxSize, _rate, _angle, _delay);
-                _delay += _delayStep;
-                _angle += 2.0943951023931953;
-                _rate *= 1.15;
-                _delayStep *= 0.75;
-                _maxSize *= 0.9;
-            }
-            FXHandler.addDarkPulse(this, 0, 2, 2, 2, 0, _delay - 0.75);
-            FXHandler.addDarkPulse(this, 0, 2, 2, 2, 0, _delay - 0.4);
-            triggerTimer = _delay;
-        }
-
-        public function bossReady():void {
-            moveState.image.visible = true;
-            moveState.halo.visible = true;
-            moveState.glow.visible = true;
-            var _delay:Number = 0;
-            var _angle:Number = 1.5707963267948966;
-            var _maxSize:Number = 1;
-            for (var i:int = 0; i < 3; i++) {
-                FXHandler.addDarkPulse(this, 0, 0, _maxSize, 2, _angle, _delay);
-                _delay += 0.05;
-                _angle += 2.0943951023931953;
-                FXHandler.addDarkPulse(this, 0, 0, _maxSize, 2, _angle, _delay);
-                _delay += 0.05;
-                _angle += 2.0943951023931953;
-                FXHandler.addDarkPulse(this, 0, 0, _maxSize, 2, _angle, _delay);
-                _delay += 0.05;
-                _angle += 2.0943951023931953;
-                _maxSize *= 1.5;
-            }
-            aiTimers[6] = 0.5;
-        }
-
-        public function bossDisappear():void {
-            var _delay:Number = 0;
-            var _rate:Number = 1;
-            var _delayStep:Number = 0.5;
-            var _angle:Number = 1.5707963267948966;
-            var _maxSize:Number = 2;
-            for (var i:int = 0; i < 12; i++) {
-                FXHandler.addDarkPulse(this, 0, 1, _maxSize, _rate, _angle, _delay);
-                _delay += _delayStep;
-                _angle += 2.0943951023931953;
-                FXHandler.addDarkPulse(this, 0, 1, _maxSize, _rate, _angle, _delay);
-                _delay += _delayStep;
-                _angle += 2.0943951023931953;
-                FXHandler.addDarkPulse(this, 0, 1, _maxSize, _rate, _angle, _delay);
-                _delay += _delayStep;
-                _angle += 2.0943951023931953;
-                _rate *= 1.5;
-                _delayStep *= 0.5;
-                _maxSize *= 0.7;
-            }
-            FXHandler.addDarkPulse(this, 0, 2, 2, 2, 0, _delay - 0.75);
-            triggerTimer = _delay;
-        }
-
-        public function bossHide():void {
-            moveState.image.visible = false;
-            moveState.halo.visible = false;
-            moveState.glow.visible = false;
-            active = false;
-        }
 
         public function fireBeam(_Ship:Ship):void {
             FXHandler.addBeam(this, _Ship); // 播放攻击特效

@@ -73,20 +73,21 @@ package Entity.Node.States {
             if (nodeData.team == NEUTRAL_TEAM) { // 中立天体占领逻辑
                 if (captureTeam == capturingTeam) {
                     hpChange = Globals.teamColonizingSpeeds[capturingTeam] * captureRate * dt;
-                    nodeData.hp = Math.min(nodeData.hp + hpChange, MAX_HP);
+                    nodeData.hp = nodeData.hp + hpChange;
                 } else {
                     hpChange = Globals.teamDecolonizingSpeeds[capturingTeam] * captureRate * dt;
-                    nodeData.hp = Math.max(0, nodeData.hp - hpChange);
+                    nodeData.hp = nodeData.hp - hpChange;
                 }
             } else { // 非中立天体占领逻辑
                 if (captureTeam == capturingTeam) {
                     hpChange = Globals.teamRepairingSpeeds[capturingTeam] * captureRate * dt;
-                    nodeData.hp = Math.min(nodeData.hp + hpChange, MAX_HP);
+                    nodeData.hp = nodeData.hp + hpChange;
                 } else {
                     hpChange = Globals.teamDestroyingSpeeds[capturingTeam] * captureRate * dt;
-                    nodeData.hp = Math.max(0, nodeData.hp - hpChange);
+                    nodeData.hp = nodeData.hp - hpChange;
                 }
             }
+            nodeData.hp = Math.max(0, Math.min(MAX_HP, nodeData.hp));
         }
 
         private function updateCaptureUI(capturingTeam:int):void {

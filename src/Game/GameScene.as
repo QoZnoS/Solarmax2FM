@@ -303,7 +303,11 @@ package Game {
                 var l:int = Globals.replay[Globals.replay.length - 1].length;
                 for (var i:int = 1; i < l; i++) {
                     arr = Globals.replay[Globals.replay.length - 1][i];
-                    NodeStaticLogic.moveShips(EntityContainer.nodes[arr[0]], arr[1], EntityContainer.nodes[arr[2]], arr[3]);
+                    try {
+                        NodeStaticLogic.moveShips(EntityContainer.nodes[arr[0]], arr[1], EntityContainer.nodes[arr[2]], arr[3]);
+                    } catch (error:Error) {
+                        Globals.replay[Globals.replay.length - 1].removeAt(i);
+                    }
                 }
                 Globals.replay.push([dt]);
                 updateGame(dt);
@@ -372,61 +376,6 @@ package Game {
         //     var _bossParam:int;
         //     switch (Globals.level) // 处理特殊关卡的特殊事件
         //     {
-        //         case 32, 33, 34:
-        //             if (!triggers[0]) // 阶段一，生成星核
-        //             {
-        //                 for (i = 0; i < Globals.teamCaps.length; i++) {
-        //                     if (Globals.teamCaps[i] > 220 && Globals.teamPops[i] > 220) {
-        //                         _boss = EntityContainer.getReserve(EntityContainer.INDEXnODES) as Node;
-        //                         if (!_boss)
-        //                             _boss = new Node();
-        //                         _boss.initBoss(this, new Rng(rng.nextInt(), Rng.X32), 512, 384);
-        //                         EntityContainer.addEntity(EntityContainer.INDEXnODES, _boss);
-        //                         _boss.bossAppear();
-        //                         triggers[0] = true;
-        //                         GS.fadeOutMusic(2);
-        //                         GS.playSound("boss_appear");
-        //                         break;
-        //                     }
-        //                 }
-        //             }
-        //             if (triggers[0] && !triggers[1]) // 阶段二，生成飞船，添加ai
-        //             {
-        //                 _boss = EntityContainer.nodes[EntityContainer.nodes.length - 1] as Node;
-        //                 if (_boss.triggerTimer == 0) {
-        //                     triggers[1] = true;
-        //                     _boss.bossReady();
-        //                     if (Globals.currentDifficulty != 3)
-        //                         _bossParam = (Globals.level == 33) ? 320 : 350;
-        //                     else
-        //                         _bossParam = (Globals.level == 34) ? 400 : 350;
-        //                     EntityHandler.addShips(_boss, 6, _bossParam);
-        //                     var _bossAI:String = (Globals.currentDifficulty == 3) ? EnemyAIFactory.HARD : EnemyAIFactory.DARK;
-        //                     EntityHandler.addAI(6, _bossAI);
-        //                     _boss.triggerTimer = 3;
-        //                     GS.playSound("boss_ready", 1.5);
-        //                 }
-        //             }
-        //             if (triggers[1] && !triggers[2]) // 阶段三，星核消失动画
-        //             {
-        //                 _boss = EntityContainer.nodes[EntityContainer.nodes.length - 1] as Node;
-        //                 if (_boss.triggerTimer == 0) {
-        //                     triggers[2] = true;
-        //                     _boss.bossDisappear();
-        //                     GS.playSound("boss_reverse");
-        //                 }
-        //             }
-        //             if (triggers[2] && !triggers[3]) // 阶段四，移除星核
-        //             {
-        //                 _boss = EntityContainer.nodes[EntityContainer.nodes.length - 1] as Node;
-        //                 if (_boss.triggerTimer == 0) {
-        //                     triggers[3] = true;
-        //                     _boss.bossHide();
-        //                     _boss.active = false;
-        //                     GS.playMusic("bgm06");
-        //                 }
-        //             }
-        //             break;
         //         case 35:
         //             if (!gameOver) {
         //                 _boss = EntityContainer.nodes[0];

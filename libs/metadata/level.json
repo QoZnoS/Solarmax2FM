@@ -128,7 +128,7 @@
                 },
                 {
                     "name": "03",
-                    "color": "0xFFAAAA",
+                    "color": "0x00FF00",
                     "node": [
                         {
                             "team": 1,
@@ -744,7 +744,7 @@
                 },
                 {
                     "name": "12",
-                    "color": "0x00FF00",
+                    "color": "0xFFAAAA",
                     "node": [
                         {
                             "x": 600,
@@ -801,7 +801,7 @@
                 },
                 {
                     "name": "13",
-                    "color": "0xFFAAAA",
+                    "color": "0x0000FF",
                     "node": [
                         {
                             "x": 512,
@@ -1016,7 +1016,7 @@
                 },
                 {
                     "name": "15",
-                    "color": "0x0000FF",
+                    "color": "0x00FF00",
                     "node": [
                         {
                             "x": 352,
@@ -1385,7 +1385,7 @@
                 },
                 {
                     "name": "19",
-                    "color": "0x00FF00",
+                    "color": "0x0000FF",
                     "node": [
                         {
                             "x": 512,
@@ -1522,7 +1522,7 @@
                 },
                 {
                     "name": "20",
-                    "color": "0x0000FF",
+                    "color": "0x00FF00",
                     "node": [
                         {
                             "x": 512,
@@ -1841,7 +1841,7 @@
                 },
                 {
                     "name": "24",
-                    "color": "0x00FF00",
+                    "color": "0x0000FF",
                     "node": [
                         {
                             "team": 1,
@@ -2051,7 +2051,7 @@
                 },
                 {
                     "name": "26",
-                    "color": "0x0000FF",
+                    "color": "0x00FF00",
                     "node": [
                         {
                             "team": 1,
@@ -2311,7 +2311,7 @@
                 },
                 {
                     "name": "28",
-                    "color": "0x00FF00",
+                    "color": "0xFFFF00",
                     "node": [
                         {
                             "x": 512,
@@ -2403,7 +2403,7 @@
                 },
                 {
                     "name": "29",
-                    "color": "0xFFFF00",
+                    "color": "0x0000FF",
                     "node": [
                         {
                             "x": 512,
@@ -2649,7 +2649,7 @@
                 },
                 {
                     "name": "31",
-                    "color": "0x0000FF",
+                    "color": "0x00FF00",
                     "node": [
                         {
                             "x": 368,
@@ -2782,7 +2782,7 @@
                 },
                 {
                     "name": "32",
-                    "color": "0x00FF00",
+                    "color": "0xFFAAAA",
                     "specialEvents": [
                         {
                             "type": "DarknessFalls",
@@ -2972,12 +2972,12 @@
                 },
                 {
                     "name": "33",
-                    "color": "0xFFAAAA",
+                    "color": "0x0000FF",
                     "specialEvents": [
                         {
                             "type": "BossAppear",
                             "trigger": {
-                                "ships": 220,
+                                "ships": 180,
                                 "node": {
                                     "x": 512,
                                     "y": 384,
@@ -2990,7 +2990,103 @@
                                         0,
                                         0,
                                         0,
-                                        350
+                                        220
+                                    ],
+                                    "popVal": 0,
+                                    "isUntouchable": true,
+                                    "isAIinvisible": true
+                                }
+                            }
+                        },
+                        {
+                            "type": "BossAppear",
+                            "trigger": {
+                                "ships": 240,
+                                "node": {
+                                    "x": 482,
+                                    "y": 414,
+                                    "type": "warp",
+                                    "team": 2,
+                                    "startShips": [
+                                        0,
+                                        0,
+                                        240,
+                                        0,
+                                        0,
+                                        0,
+                                        0
+                                    ],
+                                    "popVal": 0,
+                                    "isUntouchable": true,
+                                    "isAIinvisible": true
+                                }
+                            }
+                        },
+                        {
+                            "type": "BossAppear",
+                            "trigger": {
+                                "ships": 240,
+                                "node": {
+                                    "x": 542,
+                                    "y": 354,
+                                    "type": "warp",
+                                    "team": 3,
+                                    "startShips": [
+                                        0,
+                                        0,
+                                        0,
+                                        240,
+                                        0,
+                                        0,
+                                        0
+                                    ],
+                                    "popVal": 0,
+                                    "isUntouchable": true,
+                                    "isAIinvisible": true
+                                }
+                            }
+                        },
+                        {
+                            "type": "BossAppear",
+                            "trigger": {
+                                "ships": 300,
+                                "node": {
+                                    "x": 512,
+                                    "y": 384,
+                                    "type": "warp",
+                                    "team": 4,
+                                    "startShips": [
+                                        0,
+                                        0,
+                                        0,
+                                        0,
+                                        320,
+                                        0,
+                                        0
+                                    ],
+                                    "popVal": 0,
+                                    "isUntouchable": true,
+                                    "isAIinvisible": true
+                                }
+                            }
+                        },
+                        {
+                            "type": "BossAppear",
+                            "trigger": {
+                                "ships": 370,
+                                "node": {
+                                    "x": 512,
+                                    "y": 384,
+                                    "type": "warp",
+                                    "team": 6,
+                                    "startShips": [
+                                        0,
+                                        0,
+                                        0,
+                                        0,
+                                        0,
+                                        0,
+                                        420
                                     ],
                                     "popVal": 0,
                                     "isUntouchable": true,
@@ -3205,7 +3301,7 @@
                 },
                 {
                     "name": "34",
-                    "color": "0x0000FF",
+                    "color": "0xFFFF00",
                     "node": [
                         {
                             "x": 512,
@@ -4264,7 +4360,7 @@
                         }
                     ],
                     "name": "02",
-                    "color": "0xFFAAAA",
+                    "color": "0x00FF00",
                     "bgm": "bgm02"
                 },
                 {
@@ -4401,7 +4497,7 @@
                         }
                     ],
                     "name": "04",
-                    "color": "0x00FF00",
+                    "color": "0x0000FF",
                     "bgm": "bgm02"
                 },
                 {
@@ -4467,7 +4563,7 @@
                         }
                     ],
                     "name": "05",
-                    "color": "0x0000FF",
+                    "color": "0x00FF00",
                     "bgm": "bgm02"
                 },
                 {
@@ -4616,7 +4712,7 @@
                         }
                     ],
                     "name": "06",
-                    "color": "0x00FF00",
+                    "color": "0x0000FF",
                     "bgm": "bgm02"
                 },
                 {
@@ -4750,7 +4846,7 @@
                         }
                     ],
                     "name": "07",
-                    "color": "0x0000FF",
+                    "color": "0x00FF00",
                     "bgm": "bgm02"
                 },
                 {
@@ -5038,7 +5134,7 @@
                         }
                     ],
                     "name": "09",
-                    "color": "0x00FF00",
+                    "color": "0x0000FF",
                     "bgm": "bgm04"
                 },
                 {
@@ -5172,7 +5268,7 @@
                         }
                     ],
                     "name": "10",
-                    "color": "0x0000FF",
+                    "color": "0x00FF00",
                     "bgm": "bgm04"
                 },
                 {
@@ -5380,7 +5476,7 @@
                         }
                     ],
                     "name": "12",
-                    "color": "0x00FF00",
+                    "color": "0x0000FF",
                     "bgm": "bgm04"
                 },
                 {
@@ -5567,7 +5663,7 @@
                         }
                     ],
                     "name": "13",
-                    "color": "0x0000FF",
+                    "color": "0x00FF00",
                     "bgm": "bgm04"
                 },
                 {
@@ -5652,7 +5748,7 @@
                         }
                     ],
                     "name": "14",
-                    "color": "0x00FF00",
+                    "color": "0x0000FF",
                     "bgm": "bgm04"
                 },
                 {
@@ -5721,7 +5817,7 @@
                         }
                     ],
                     "name": "15",
-                    "color": "0x0000FF",
+                    "color": "0x00FF00",
                     "bgm": "bgm04"
                 },
                 {
@@ -5812,7 +5908,7 @@
                         }
                     ],
                     "name": "16",
-                    "color": "0x00FF00",
+                    "color": "0x0000FF",
                     "bgm": "bgm04"
                 },
                 {
@@ -5975,7 +6071,7 @@
                         }
                     ],
                     "name": "17",
-                    "color": "0x0000FF",
+                    "color": "0x00FF00",
                     "bgm": "bgm04"
                 },
                 {
@@ -6482,7 +6578,7 @@
                         }
                     ],
                     "name": "19",
-                    "color": "0x00FF00",
+                    "color": "0xFFFF00",
                     "bgm": "bgm04"
                 },
                 {
@@ -6636,7 +6732,7 @@
                         }
                     ],
                     "name": "20",
-                    "color": "0xFFFF00",
+                    "color": "0x00FF00",
                     "bgm": "bgm04"
                 },
                 {
@@ -6962,7 +7058,7 @@
                         }
                     ],
                     "name": "23",
-                    "color": "0x00FF00",
+                    "color": "0x0000FF",
                     "bgm": "bgm05"
                 },
                 {
@@ -7192,7 +7288,7 @@
                         }
                     ],
                     "name": "24",
-                    "color": "0x0000FF",
+                    "color": "0x00FF00",
                     "bgm": "bgm05"
                 },
                 {
@@ -8743,7 +8839,7 @@
                         }
                     ],
                     "name": "28",
-                    "color": "0x00FF00",
+                    "color": "0xFFFF00",
                     "bgm": "bgm05"
                 },
                 {
@@ -9036,7 +9132,7 @@
                         }
                     ],
                     "name": "29",
-                    "color": "0xFFFF00",
+                    "color": "0x0000FF",
                     "bgm": "bgm05"
                 },
                 {
@@ -9127,7 +9223,7 @@
                         }
                     ],
                     "name": "30",
-                    "color": "0x0000FF",
+                    "color": "0x00FF00",
                     "bgm": "bgm05"
                 },
                 {
@@ -9299,7 +9395,7 @@
                         }
                     ],
                     "name": "31",
-                    "color": "0x00FF00",
+                    "color": "0x0000FF",
                     "bgm": "bgm05"
                 },
                 {
@@ -9877,7 +9973,7 @@
                         }
                     ],
                     "name": "32",
-                    "color": "0x0000FF",
+                    "color": "0xFFAAAA",
                     "bgm": "bgm06"
                 },
                 {
@@ -10172,7 +10268,7 @@
                         }
                     ],
                     "name": "33",
-                    "color": "0xFFAAAA",
+                    "color": "0x00FF00",
                     "bgm": "bgm06"
                 },
                 {
@@ -10694,7 +10790,7 @@
                         }
                     ],
                     "name": "35",
-                    "color": "0x00FF00",
+                    "color": "0xFF0000",
                     "bgm": "bgm06"
                 },
                 {
@@ -11242,7 +11338,7 @@
                         }
                     ],
                     "name": "36",
-                    "color": "0xFF0000",
+                    "color": "0xFFFF00",
                     "bgm": "bgm06"
                 },
                 {
@@ -11806,7 +11902,7 @@
                         }
                     ],
                     "name": "37",
-                    "color": "0xFFFF00",
+                    "color": "0x00FF00",
                     "bgm": "bgm06"
                 },
                 {
@@ -13026,7 +13122,7 @@
                         }
                     ],
                     "name": "02",
-                    "color": "0xFFAAAA",
+                    "color": "0x00FF00",
                     "bgm": "bgm02"
                 },
                 {
@@ -13163,7 +13259,7 @@
                         }
                     ],
                     "name": "04",
-                    "color": "0x00FF00",
+                    "color": "0x0000FF",
                     "bgm": "bgm02"
                 },
                 {
@@ -13229,7 +13325,7 @@
                         }
                     ],
                     "name": "05",
-                    "color": "0x0000FF",
+                    "color": "0x00FF00",
                     "bgm": "bgm02"
                 },
                 {
@@ -13378,7 +13474,7 @@
                         }
                     ],
                     "name": "06",
-                    "color": "0x00FF00",
+                    "color": "0x0000FF",
                     "bgm": "bgm02"
                 },
                 {
@@ -13512,7 +13608,7 @@
                         }
                     ],
                     "name": "07",
-                    "color": "0x0000FF",
+                    "color": "0x00FF00",
                     "bgm": "bgm02"
                 },
                 {
@@ -13800,7 +13896,7 @@
                         }
                     ],
                     "name": "09",
-                    "color": "0x00FF00",
+                    "color": "0x0000FF",
                     "bgm": "bgm04"
                 },
                 {
@@ -13934,7 +14030,7 @@
                         }
                     ],
                     "name": "10",
-                    "color": "0x0000FF",
+                    "color": "0x00FF00",
                     "bgm": "bgm04"
                 },
                 {
@@ -14142,7 +14238,7 @@
                         }
                     ],
                     "name": "12",
-                    "color": "0x00FF00",
+                    "color": "0x0000FF",
                     "bgm": "bgm04"
                 },
                 {
@@ -14359,7 +14455,7 @@
                         }
                     ],
                     "name": "13",
-                    "color": "0x0000FF",
+                    "color": "0x00FF00",
                     "bgm": "bgm04"
                 },
                 {
@@ -14444,7 +14540,7 @@
                         }
                     ],
                     "name": "14",
-                    "color": "0x00FF00",
+                    "color": "0xFFFF00",
                     "bgm": "bgm04"
                 },
                 {
@@ -14513,7 +14609,7 @@
                         }
                     ],
                     "name": "15",
-                    "color": "0xFFFF00",
+                    "color": "0x00FF00",
                     "bgm": "bgm04"
                 },
                 {
@@ -14684,7 +14780,7 @@
                         }
                     ],
                     "name": "16",
-                    "color": "0x00FF00",
+                    "color": "0xFFFF00",
                     "bgm": "bgm04"
                 },
                 {
@@ -14867,7 +14963,7 @@
                         }
                     ],
                     "name": "17",
-                    "color": "0xFFFF00",
+                    "color": "0x0000FF",
                     "bgm": "bgm04"
                 },
                 {
@@ -15374,7 +15470,7 @@
                         }
                     ],
                     "name": "19",
-                    "color": "0x0000FF",
+                    "color": "0xFFFF00",
                     "bgm": "bgm04"
                 },
                 {
@@ -15528,7 +15624,7 @@
                         }
                     ],
                     "name": "20",
-                    "color": "0xFFFF00",
+                    "color": "0x00FF00",
                     "bgm": "bgm04"
                 },
                 {
@@ -16957,7 +17053,7 @@
                         }
                     ],
                     "name": "26",
-                    "color": "0x00FF00",
+                    "color": "0xFFFF00",
                     "bgm": "bgm05"
                 },
                 {
@@ -17249,7 +17345,7 @@
                         }
                     ],
                     "name": "27",
-                    "color": "0xFFFF00",
+                    "color": "0x0000FF",
                     "bgm": "bgm05"
                 },
                 {
@@ -17639,7 +17735,7 @@
                         }
                     ],
                     "name": "28",
-                    "color": "0x0000FF",
+                    "color": "0xFF0000",
                     "bgm": "bgm05"
                 },
                 {
@@ -17932,7 +18028,7 @@
                         }
                     ],
                     "name": "29",
-                    "color": "0xFF0000",
+                    "color": "0x0000FF",
                     "bgm": "bgm05"
                 },
                 {
@@ -18023,7 +18119,7 @@
                         }
                     ],
                     "name": "30",
-                    "color": "0x0000FF",
+                    "color": "0x00FF00",
                     "bgm": "bgm05"
                 },
                 {
@@ -18195,7 +18291,7 @@
                         }
                     ],
                     "name": "31",
-                    "color": "0x00FF00",
+                    "color": "0x0000FF",
                     "bgm": "bgm05"
                 },
                 {
@@ -18643,7 +18739,7 @@
                         }
                     ],
                     "name": "32",
-                    "color": "0x0000FF",
+                    "color": "0xFFAAAA",
                     "bgm": "bgm06"
                 },
                 {
@@ -18938,7 +19034,7 @@
                         }
                     ],
                     "name": "33",
-                    "color": "0xFFAAAA",
+                    "color": "0x00FF00",
                     "bgm": "bgm06"
                 },
                 {
@@ -19423,7 +19519,7 @@
                         }
                     ],
                     "name": "35",
-                    "color": "0x00FF00",
+                    "color": "0xFF0000",
                     "bgm": "bgm06"
                 },
                 {
@@ -19894,7 +19990,7 @@
                         }
                     ],
                     "name": "36",
-                    "color": "0xFF0000",
+                    "color": "0x000000",
                     "bgm": "bgm06"
                 },
                 {
@@ -20458,7 +20554,7 @@
                         }
                     ],
                     "name": "37",
-                    "color": "0x000000",
+                    "color": "0x0000FF",
                     "bgm": "bgm06"
                 },
                 {
@@ -20938,7 +21034,7 @@
                         }
                     ],
                     "name": "38",
-                    "color": "0x0000FF",
+                    "color": "0x00FF00",
                     "bgm": "bgm06"
                 },
                 {
@@ -21723,7 +21819,7 @@
                         }
                     ],
                     "name": "02",
-                    "color": "0xFFAAAA",
+                    "color": "0x00FF00",
                     "bgm": "bgm02"
                 },
                 {
@@ -21772,7 +21868,7 @@
                         }
                     ],
                     "name": "03",
-                    "color": "0x00FF00",
+                    "color": "0xFFAAAA",
                     "bgm": "bgm02"
                 },
                 {
@@ -21945,7 +22041,7 @@
                         }
                     ],
                     "name": "05",
-                    "color": "0xFFAAAA",
+                    "color": "0x00FF00",
                     "bgm": "bgm02"
                 },
                 {
@@ -22286,7 +22382,7 @@
                         }
                     ],
                     "name": "07",
-                    "color": "0x00FF00",
+                    "color": "0x0000FF",
                     "bgm": "bgm02"
                 },
                 {
@@ -22338,7 +22434,7 @@
                         }
                     ],
                     "name": "08",
-                    "color": "0x0000FF",
+                    "color": "0x00FF00",
                     "bgm": "bgm02"
                 },
                 {
@@ -23034,7 +23130,7 @@
                         }
                     ],
                     "name": "15",
-                    "color": "0x00FF00",
+                    "color": "0x0000FF",
                     "bgm": "bgm04"
                 },
                 {
@@ -23258,7 +23354,7 @@
                         }
                     ],
                     "name": "16",
-                    "color": "0x0000FF",
+                    "color": "0x00FF00",
                     "bgm": "bgm04"
                 },
                 {
@@ -23607,7 +23703,7 @@
                         }
                     ],
                     "name": "17",
-                    "color": "0x00FF00",
+                    "color": "0x0000FF",
                     "bgm": "bgm04"
                 },
                 {
@@ -23668,7 +23764,7 @@
                         }
                     ],
                     "name": "18",
-                    "color": "0x0000FF",
+                    "color": "0x00FF00",
                     "bgm": "bgm04"
                 },
                 {
@@ -23745,7 +23841,7 @@
                         }
                     ],
                     "name": "19",
-                    "color": "0x00FF00",
+                    "color": "0x0000FF",
                     "bgm": "bgm04"
                 },
                 {
@@ -24153,7 +24249,7 @@
                         }
                     ],
                     "name": "21",
-                    "color": "0x0000FF",
+                    "color": "0x00FF00",
                     "bgm": "bgm04"
                 },
                 {
@@ -25231,7 +25327,7 @@
                         }
                     ],
                     "name": "25",
-                    "color": "0x00FF00",
+                    "color": "0x0000FF",
                     "bgm": "bgm05"
                 },
                 {
@@ -25496,7 +25592,7 @@
                         }
                     ],
                     "name": "26",
-                    "color": "0x0000FF",
+                    "color": "0xFFFF00",
                     "bgm": "bgm05"
                 },
                 {
@@ -26846,7 +26942,7 @@
                         }
                     ],
                     "name": "32",
-                    "color": "0xFFFF00",
+                    "color": "0x0000FF",
                     "bgm": "bgm06"
                 },
                 {
@@ -27309,7 +27405,7 @@
                         }
                     ],
                     "name": "33",
-                    "color": "0x0000FF",
+                    "color": "0xFFFF00",
                     "bgm": "bgm06"
                 },
                 {
@@ -28843,7 +28939,7 @@
                         }
                     ],
                     "name": "37",
-                    "color": "0xFFFF00",
+                    "color": "0xFF0000",
                     "bgm": "bgm06"
                 },
                 {

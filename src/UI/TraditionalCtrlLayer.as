@@ -134,7 +134,7 @@ package UI {
                         Drawer.drawDashedCircle(displayBatch, _Node2.nodeData.x, _Node2.nodeData.y, Globals.teamColors[_Node2.nodeData.team], _Node2.attackState.attackRange, _Node2.attackState.attackRange - 2, false, 0.5, 1, 0, 256);
                     if (rightDown && selectedNodes.length > 0) {
                         for each (_Node1 in selectedNodes) {
-                            if (_Node1.nodeData.team == Globals.playerTeam)
+                            if (!(_Node1.nodeData.isWarp && _Node1.nodeData.team == Globals.playerTeam))
                                 _Block = EntityContainer.nodesBlocked(_Node1, _Node2);
                             _x = _Node2.nodeData.x;
                             _y = _Node2.nodeData.y;
@@ -160,9 +160,8 @@ package UI {
                     }
                 }
             }
-            for each (_Node1 in selectedNodes) {
+            for each (_Node1 in selectedNodes)
                 Drawer.drawCircle(displayBatch, _Node1.nodeData.x, _Node1.nodeData.y, 0xFFFFFF, _Node1.nodeData.lineDist - 4, _Node1.nodeData.lineDist - 7, false, 0.8);
-            }
         }
 
         public function on_mouseDown(_Mouse:MouseEvent):void // 鼠标左键按下
