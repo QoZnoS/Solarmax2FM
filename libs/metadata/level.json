@@ -2973,7 +2973,13 @@
                 {
                     "name": "33",
                     "color": "0x0000FF",
+                    "victoryCondition": {
+                        "type": "None"
+                    },
                     "specialEvents": [
+                        {
+                            "type": "MoveGuide"
+                        },
                         {
                             "type": "BossAppear",
                             "trigger": {

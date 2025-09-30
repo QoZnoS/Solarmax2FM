@@ -105,17 +105,17 @@ package UI {
 
         public function restartLevel():void {
             Starling.juggler.removeTweens(gameContainer);
-            Starling.juggler.tween(gameContainer, Globals.transitionSpeed / 2, {"alpha": 0,
-                    "scaleX": _scale-0.15,
-                    "scaleY": _scale-0.15,
+            Starling.juggler.tween(gameContainer, Globals.transitionSpeed / 5, {"alpha": 0,
+                    "scaleX": _scale - 0.15,
+                    "scaleY": _scale - 0.15,
                     "y": 354,
                     "transition": "easeIn"});
-            Starling.juggler.tween(gameContainer, Globals.transitionSpeed / 2, {"delay": Globals.transitionSpeed / 2,
+            Starling.juggler.tween(gameContainer, Globals.transitionSpeed / 5 * 4, {"delay": Globals.transitionSpeed / 5,
                     "alpha": 1,
                     "scaleX": _scale,
                     "scaleY": _scale,
                     "y": 384,
-                    "transition": "easeOut"});
+                    "transition": "easeInOut"});
         }
 
         public function update():void {
@@ -124,23 +124,23 @@ package UI {
             Globals.touchControls ? touchCL.draw() : tradiCL.draw();
         }
 
-        public function set scale(_scale:Number):void{
+        public function set scale(_scale:Number):void {
             this._scale = _scale;
         }
 
-        public static function get scale():Number{
+        public static function get scale():Number {
             return ui._scale;
         }
 
-        public static function get behaviorBatch():QuadBatch{
+        public static function get behaviorBatch():QuadBatch {
             return ui.behaviorB;
         }
 
-        public static function get entityLayer():EntityLayer{
+        public static function get entityLayer():EntityLayer {
             return ui.entityL;
         }
 
-        public static function get btnLayer():BtnLayer{
+        public static function get btnLayer():BtnLayer {
             return ui.btnL;
         }
     }

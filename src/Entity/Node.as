@@ -108,7 +108,7 @@ package Entity {
                 aiTimers[i] = 0;
             for (i = 0; i < transitShips.length; i++)
                 transitShips[i] = 0;
-            for each(var state:INodeState in statePool)
+            for each (var state:INodeState in statePool)
                 state.init()
         }
 
@@ -129,7 +129,7 @@ package Entity {
                 aiTimers[i] = 0;
             for (i = 0; i < transitShips.length; i++)
                 transitShips[i] = 0;
-            for each(var state:INodeState in statePool)
+            for each (var state:INodeState in statePool)
                 state.init();
         }
 
@@ -143,14 +143,14 @@ package Entity {
             // 移除其他参数
             nodeLinks.length = 0;
             oppNodeLinks.length = 0;
-            for each(var state:INodeState in statePool)
+            for each (var state:INodeState in statePool)
                 state.deinit();
         }
 
         // #endregion
         // #region 更新
         override public function update(dt:Number):void {
-            for each(var state:INodeState in statePool)
+            for each (var state:INodeState in statePool)
                 if (state.enable)
                     state.update(dt);
             updateTimer(dt); // 更新各种计时器
@@ -169,7 +169,7 @@ package Entity {
             if (nodeData.team == 0 && Globals.level != 31)
                 return; // 排除32关以外的中立和无范围天体
         }
-        
+
         public function updateNodeLinks():void {
             if (nodeData.isBarrier)
                 return;
@@ -179,14 +179,14 @@ package Entity {
                     nodeLinks[i] = new Vector.<Node>;
                 else
                     nodeLinks[i].length = 0;
-                if (i != 0 && !(i == nodeData.team && nodeData.isWarp)){
+                if (i != 0 && !(i == nodeData.team && nodeData.isWarp)) {
                     nodeLinks[i] = nodeLinks[0].concat();
                     continue;
                 }
                 for each (var _Node:Node in EntityContainer.nodes) {
                     if (_Node == this || _Node.nodeData.isUntouchable)
                         continue;
-                    if (nodeData.isWarp && nodeData.team == i && i != 0){
+                    if (nodeData.isWarp && nodeData.team == i && i != 0) {
                         nodeLinks[i].push(_Node);
                         continue;
                     }
@@ -209,8 +209,7 @@ package Entity {
             var _NodeArray:Vector.<Node> = EntityContainer.nodes;
             var _targetNode:Array = [];
             var _ShipArray:Array = [];
-            for each (_Node in _NodeArray) // 按距离计算每个目标天体的价值
-            {
+            for each (_Node in _NodeArray) { // 按距离计算每个目标天体的价值
                 if (_Node != this && !_Node.nodeData.isUntouchable) {
                     _dx = _Node.nodeData.x - this.nodeData.x;
                     _dy = _Node.nodeData.y - this.nodeData.y;
@@ -225,12 +224,10 @@ package Entity {
                 _Ship = _Node.predictedOppStrength(nodeData.team) * 2 - _Node.predictedTeamStrength(nodeData.team) * 0.5; // 飞船数：非己方预测强度二倍减去己方预测强度一半
                 if (_Ship < _Node.nodeData.size * 200)
                     _Ship = _Node.nodeData.size * 200; // 不足200倍size时补齐到200倍size
-                if (_Ship < _ShipCount) // 未达到总飞船数时，从总飞船数中抽去这部分飞船
-                {
+                if (_Ship < _ShipCount) { // 未达到总飞船数时，从总飞船数中抽去这部分飞船
                     _ShipCount -= _Ship;
                     _ShipArray.push(_Ship);
-                } else // 达到或超过总飞船数时
-                {
+                } else { // 达到或超过总飞船数时
                     if (_ShipArray.length > 0)
                         _ShipArray[_ShipArray.length - 1] += _ShipCount; // 将剩余飞船加在最后一项
                     else
@@ -240,9 +237,8 @@ package Entity {
                 if (_ShipCount == 0)
                     break; // 总飞船数耗尽时跳出循环
             }
-            for (var i:int = 0; i < _ShipArray.length; i++) {
+            for (var i:int = 0; i < _ShipArray.length; i++)
                 NodeStaticLogic.sendAIShips(this, nodeData.team, _targetNode[i], _ShipArray[i]);
-            }
         }
 
         // 统计飞向自身的飞船，包括指定势力的和移动距离大于50px的
@@ -400,35 +396,37 @@ package Entity {
                     nodeData.barrierLinks.push(_Node.tag);
             }
         }
+
         // #region 特效与绘图
 
         public function fireBeam(_Ship:Ship):void {
             FXHandler.addBeam(this, _Ship); // 播放攻击特效
             GS.playLaser(nodeData.x); // 播放攻击音效
         }
+
         // #endregion
 
-        public function get basicState():NodeBasicState{
+        public function get basicState():NodeBasicState {
             return statePool[NodeStateFactory.BASIC] as NodeBasicState;
         }
 
-        public function get moveState():NodeMoveState{
+        public function get moveState():NodeMoveState {
             return statePool[NodeStateFactory.MOVE] as NodeMoveState;
         }
 
-        public function get attackState():NodeAttackState{
+        public function get attackState():NodeAttackState {
             return statePool[NodeStateFactory.ATTACK] as NodeAttackState;
         }
 
-        public function get conflictState():NodeConflictState{
-            return statePool[NodeStateFactory.CONFLICT] as NodeConflictState; 
+        public function get conflictState():NodeConflictState {
+            return statePool[NodeStateFactory.CONFLICT] as NodeConflictState;
         }
 
-        public function get captureState():NodeCaptureState{
+        public function get captureState():NodeCaptureState {
             return statePool[NodeStateFactory.CAPTURE] as NodeCaptureState;
         }
 
-        public function get buildState():NodeBuildState{
+        public function get buildState():NodeBuildState {
             return statePool[NodeStateFactory.BUILD] as NodeBuildState;
         }
     }

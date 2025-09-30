@@ -87,11 +87,13 @@ package utils{
                 Starling.juggler.tween(transform, time, {"volume": 0,
                         "onUpdate": function():void
                         {
-                            musicChannel.soundTransform = transform;
+                            if (musicChannel)
+                                musicChannel.soundTransform = transform;
                         },
                         "onComplete": function():void
                         {
-                            musicChannel.stop();
+                            if (musicChannel)
+                                musicChannel.stop();
                         }});
                 lastSong = "";
             }

@@ -110,7 +110,6 @@ package Game.SpecialEvent {
                     triggerTimer -= dt;
                     if (triggerTimer > 0)
                         break;
-                    triggerNode.unloadShips();
                     state = STATE_DISAPPEAR;
                     triggerTimer = 2.999267578125;
 
@@ -138,6 +137,7 @@ package Game.SpecialEvent {
                     break;
                 case STATE_DISAPPEAR:
                     triggerTimer -= dt;
+                    triggerNode.unloadShips();
                     if (triggerTimer > 0)
                         break;
                     state = STATE_END;
@@ -151,7 +151,7 @@ package Game.SpecialEvent {
 
         private function checkAppearCondition():Boolean {
             for (var i:int = 0; i < Globals.teamCount; i++) {
-                if (Globals.teamPops[i] > triggerShips)
+                if (Globals.teamPops[i] > triggerShips && Globals.teamCaps[i] > triggerShips)
                     return true;
             }
             return false;
