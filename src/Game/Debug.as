@@ -41,8 +41,8 @@ package Game {
             nodeTagLables = [[], [], []];
             seed = 0;
             addDebugView();
-            // addEventListener("enterFrame", update);
-            // startDebugMode();
+            addEventListener("enterFrame", update);
+            startDebugMode();
         }
 
         private function addDebugView():void {
@@ -76,10 +76,10 @@ package Game {
             THIS.dt = e.passedTime;
             updateFPS();
             updateDebugLabel();
-            if (game.visible)
-                updateTag();
-            else
-                clear_tag();
+            // if (game.visible)
+            //     updateTag();
+            // else
+            //     clear_tag();
         }
 
         private var pause:Boolean = false;
@@ -169,7 +169,7 @@ package Game {
         // #region 调试函数，自动触发
         private static function updateDebugLabel():void {
             if (game.visible) {
-                THIS.debugLables[1].text = "seed: " + String(THIS.seed);
+                THIS.debugLables[1].text = "seed: " + String(game.rng.seed);
                 THIS.debugLables[2].text = "";
                 THIS.debugLables[3].text = "";
                 THIS.debugLables[4].text = "";
@@ -291,47 +291,6 @@ package Game {
         }
         // #endregion
         public static function test():void{
-            var output:Array = [];
-            var len:int = LevelData.difficulty.length;
-            game.rng = new Rng()
-            for(var i:int = 0; i < len; i++)
-            {
-                Globals.level = i;
-                var name:String = (i < 10) ? ("0" + i.toString()) : i.toString();
-                var color:uint = getLevelColor(i)
-                var arr:Array = [];
-                var levelData:Object = {
-                    "name":name,
-                    "color":color,
-                    "node":arr
-                }
-                for each(var node:Node in EntityContainer.nodes)
-                {
-                    arr.push(JSON.stringify(node.nodeData));
-                }
-                game.deInit()
-                output.push(levelData)
-            }
-            trace(JSON.stringify(output));
-        }
-
-        private static function getLevelColor(_difficulty:int):uint {
-            if (_difficulty >= LevelData.difficulty.length)
-                return 16755370;
-            switch (LevelData.difficulty[_difficulty]) {
-                case 1:
-                    return 65280; // Green
-                case 2:
-                    return 255; // Blue
-                case 3:
-                    return 16776960; // Yellow
-                case 4:
-                    return 16711680; // Red
-                case 5:
-                    return 0; // Black
-                default:
-                    return 16755370; // Default color
-            }
         }
     }
 }

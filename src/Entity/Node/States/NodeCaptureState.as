@@ -58,14 +58,7 @@ package Entity.Node.States {
             var rate:Number = (ships[capturingTeam].length / (nodeData.size * 100)) * CAPTURE_RATE_MULTIPLIER;
             // 应用占领速度加权
             rate /= nodeData.hpMult * Globals.teamConstructionStrengths[nodeData.team];
-            // 特殊关卡禁止占领
-            if (shouldBlockCapture())
-                return 0;
             return Math.min(rate, MAX_HP);
-        }
-
-        private function shouldBlockCapture():Boolean {
-            return (Globals.level > 31 && Globals.level < 35 && nodeData.type == NodeType.DILATOR);
         }
 
         private function updateNodeHP(capturingTeam:int, captureRate:Number, dt:Number):void {

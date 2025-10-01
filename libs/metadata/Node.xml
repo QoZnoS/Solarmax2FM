@@ -13,6 +13,10 @@
     <!-- attackLast: 攻击持续时间 -->
     <!-- attackType: 攻击方式 -->
     <!-- rotation: 天体旋转角度 -->
+    <!-- isBarrier：是否启用障碍 -->
+    <!-- isWarp：是否启用传送 -->
+    <!-- isUntouchable：是否可点击 -->
+    <!-- isAIinvisible：是否AI不可见 -->
     <node id="0" name="planet">
         <defaultSize>0.3</defaultSize>
         <popVal>S*100</popVal>
@@ -39,6 +43,7 @@
         <defaultSize>0.3</defaultSize>
         <isBarrier>true</isBarrier>
         <isUntouchable>true</isUntouchable>
+        <isAIinvisible>true</isAIinvisible>
         <scale>1</scale>
     </node>
     <node id="4" name="tower">

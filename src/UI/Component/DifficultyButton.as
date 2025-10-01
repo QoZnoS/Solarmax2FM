@@ -11,6 +11,8 @@ package UI.Component {
     import utils.GS;
 
     public class DifficultyButton extends Sprite {
+        public static const btnText:Array = ["EASY", "NORMAL", "HARD"]
+
         private var label:TextField;
         private var icon:Image;
         private var bg:Image;
@@ -39,8 +41,7 @@ package UI.Component {
             icon.alpha = 0.4;
             addChild(icon);
             starred = false;
-            var _btnText:Array = ["EASY", "NORMAL", "HARD"];
-            label = new TextField(bg.width, 40, _btnText[_difficulty], "Downlink12", -1, 0xFFAAAA);
+            label = new TextField(bg.width, 40, btnText[_difficulty], "Downlink12", -1, 0xFFAAAA);
             label.pivotX = bg.width * 0.5;
             label.pivotY = 20;
             label.y = -15;

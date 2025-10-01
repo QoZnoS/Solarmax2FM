@@ -20,6 +20,7 @@ package Menus {
     import starling.utils.HAlign;
     import starling.utils.VAlign;
     import starling.display.BlendMode;
+    import Entity.Node.NodeType;
 
     public class TitleMenu extends Sprite {
         public var cover:Quad; // 进入游戏和通关36时的白光遮罩
@@ -187,7 +188,7 @@ package Menus {
 
         public function getMoreInfoTexts():void {
             var infoText:TextField = null;
-            var levelData:Object = LevelData.level.data[Globals.currentData].level;
+            var levelData:Array = LevelData.level;
             for (var i:int = 0; i < levelData.length; i++) {
                 var text:String = "";
                 infoText = new TextField(400, 100, text, "Downlink18", -1, 16755370);
@@ -209,52 +210,46 @@ package Menus {
         // #region 障碍轨道计算器
         public function getBarrierData():void {
             barrierData = [];
-            for (var i:int = 0; i < LevelData.maps.length; i++) {
+            var levelList:Array = LevelData.level
+            for (var i:int = 0; i < levelList.length; i++) {
                 var barriers:Array = [];
-                var level:Array = LevelData.maps[i];
-                var levelLength:int = level.length;
-                for (var j:int = 0; j < levelLength; j++) {
-                    if (level[j][2] != 3)
+                var levelNode:Array = levelList[i].node;
+                var nodeLength:int = levelNode.length;
+                for (var j:int = 0; j < nodeLength; j++) {
+                    if (!levelNode[j].barrierLinks)
                         continue;
-                    if (level[j].length >= 8)
-                        processCustomBarrier(level, j, barriers);
-                    else
-                        processRegularBarrier(level, j, levelLength, barriers);
+                    if ("isBarrier" in levelNode[j]) {
+                        if (levelNode[j].isBarrier == false)
+                            continue;
+                    } else if (!NodeType.isBarrier(levelNode[j].type))
+                        continue;
+                    processBarrier(levelNode, j, barriers);
                 }
                 barrierData.push(barriers);
             }
         }
 
-        private function processCustomBarrier(level:Array, node:int, barriers:Array):void {
-            var connectedBarriers:Array = level[node][7] is Array ? level[node][7] : [int(level[node][7])];
+        private function processBarrier(level:Array, node:int, barriers:Array):void {
+            var connectedBarriers:Array = level[node].barrierLinks is Array ? level[node].barrierLinks : [int(level[node].barrierLinks)];
             for (var k:int = 0; k < connectedBarriers.length; k++) {
                 var connectedIndex:int = connectedBarriers[k];
-                if (level[connectedIndex][2] != 3)
+                if ("isBarrier" in level[connectedIndex]) {
+                    if (level[connectedIndex].isBarrier == false)
+                        continue;
+                } else if (!NodeType.isBarrier(level[connectedIndex].type))
                     continue;
                 var barrierInfo:Array = calculateBarrierInfo(level[node], level[connectedIndex]);
                 addUniqueBarrier(barriers, barrierInfo);
             }
         }
 
-        private function processRegularBarrier(level:Array, node:int, levelLength:int, barriers:Array):void {
-            for (var k:int = node + 1; k < levelLength; k++) {
-                if (level[k][2] != 3 || level[k].length > 7)
-                    continue;
-                if (level[node][0] != level[k][0] && level[node][1] != level[k][1])
-                    continue;
-                var barrierInfo:Array = calculateBarrierInfo(level[node], level[k]);
-                if (barrierInfo[2] < 170)
-                    barriers.push(barrierInfo);
-            }
-        }
-
-        private function calculateBarrierInfo(barrier1:Array, barrier2:Array):Array {
-            var dx:Number = barrier2[0] - barrier1[0];
-            var dy:Number = barrier2[1] - barrier1[1];
+        private function calculateBarrierInfo(barrier1:Object, barrier2:Object):Array {
+            var dx:Number = barrier2.x - barrier1.x;
+            var dy:Number = barrier2.y - barrier1.y;
             var distance:Number = Math.sqrt(dx * dx + dy * dy);
             var angle:Number = Math.atan2(dy, dx);
-            var midX:Number = barrier1[0] + Math.cos(angle) * distance * 0.5;
-            var midY:Number = barrier1[1] + Math.sin(angle) * distance * 0.5;
+            var midX:Number = barrier1.x + Math.cos(angle) * distance * 0.5;
+            var midY:Number = barrier1.y + Math.sin(angle) * distance * 0.5;
             return [midX, midY, distance - 10, angle];
         }
 
@@ -265,36 +260,24 @@ package Menus {
             barriers.push(newBarrier);
         }
 
-        public function check4same(_Array1:Array, _Array2:Array):Boolean // 用于障碍线查重
-        {
-            var _1:Number = _Array1[0];
-            var _2:Number = _Array2[0];
-            var _3:Number = _Array1[1];
-            var _4:Number = _Array2[1];
-            var _5:Number = _Array1[2];
-            var _6:Number = _Array2[2];
-            var _7:Number = _Array1[3];
-            var _8:Number = _Array2[3];
-            var _result:Boolean = false;
-            if (_1 == _2 && _3 == _4 && _5 == _6 && _7 == _8)
-                _result = true;
-            return _result;
+        private function check4same(array1:Array, array2:Array):Boolean { // 用于障碍线查重
+            if (array1[0] == array2[0] && array1[1] == array2[1] && array1[2] == array2[2] && array1[3] == array2[3])
+                return true;
+            return false;
         }
 
         public function getOrbitData():void {
             orbitData = [];
-            for (var i:int = 0; i < LevelData.maps.length; i++) {
+            for (var i:int = 0; i < LevelData.level.length; i++) {
                 var orbit:Array = [];
-                var level:Array = LevelData.maps[i];
-                var levelLength:int = level.length;
-                for (var j:int = 0; j < levelLength; j++) {
-                    var orbitNode:int = int(level[j][5]);
-                    if (orbitNode == -1)
+                var nodeData:Array = LevelData.level[i].node;
+                var nodeLength:int = nodeData.length;
+                for (var j:int = 0; j < nodeLength; j++) {
+                    var orbitNode:int = nodeData[j].orbitNode;
+                    if (!("orbitNode" in nodeData[j]) || nodeData[j].orbitNode == -1)
                         continue;
-                    if (orbitNode >= 100)
-                        orbitNode -= 100;
-                    var dx:Number = level[j][0] - level[orbitNode][0];
-                    var dy:Number = level[j][1] - level[orbitNode][1];
+                    var dx:Number = nodeData[j].x - nodeData[orbitNode].x;
+                    var dy:Number = nodeData[j].y - nodeData[orbitNode].y;
                     var distance:Number = Math.sqrt(dx * dx + dy * dy);
                     addUniqueOrbit(orbit, [orbitNode, distance]);
                 }
@@ -348,7 +331,7 @@ package Menus {
             for (var i:int = 0; i < difficultyButtons.length; i++) {
                 difficultyButtons[i].init();
                 difficultyButtons[i].addEventListener("clicked", on_difficultyButton);
-                if (i == Globals.currentDifficulty - 1)
+                if (i == Globals.difficultyInt - 1)
                     difficultyButtons[i].toggle();
             }
             updateStarCount();
@@ -380,7 +363,8 @@ package Menus {
         }
 
         public function on_difficultyButton(_click:Event):void {
-            Globals.currentDifficulty = difficultyButtons.indexOf(_click.target) + 1;
+            Globals.currentDifficulty = DifficultyButton.btnText[difficultyButtons.indexOf(_click.target)].toLowerCase();
+            LevelData.updateLevelData();
         }
 
         public function animateIn():void {
@@ -415,7 +399,7 @@ package Menus {
         }
 
         public function nextLevel():void {
-            if (Globals.level == LevelData.maps.length - 1)
+            if (Globals.level == LevelData.level.length - 1)
                 return;
             Starling.juggler.delayCall(function():void {
                 currentIndex = Globals.level + 2;
@@ -442,8 +426,8 @@ package Menus {
         // #endregion
         // #region 更新
         public function update(e:EnterFrameEvent):void {
-            var _x:Number = NaN;
-            var _y:Number = NaN;
+            var x:Number = NaN;
+            var y:Number = NaN;
             var _R:Number = NaN;
             var _voidR:Number = NaN;
             var _dt:Number = e.passedTime;
@@ -463,16 +447,16 @@ package Menus {
                     levels.x += (_targetX - (levels.x - 512)) * 0.1;
                 }
             }
-            var _minX:Number = 512 - levels.width + 100 + (LevelData.maps.length - (Math.min(Globals.levelReached, LevelData.maps.length - 1) + 1)) * 120;
+            var _minX:Number = 512 - levels.width + 100 + (LevelData.level.length - (Math.min(Globals.levelReached, LevelData.level.length - 1) + 1)) * 120;
             levels.x = Math.max(_minX, Math.min(512, levels.x));
             levels.update(_dt, hoverIndex);
             currentIndex = -Math.round((levels.x - 512) / 120);
-            var _scale:Number = (levels.x - 512) / -(levels.width - 100);
-            Root.bg.setX(Root.bg.x + (-_scale * 1024 * 3 - Root.bg.x) * 0.05);
+            var scale:Number = (levels.x - 512) / -(levels.width - 100);
+            Root.bg.setX(Root.bg.x + (-scale * 1024 * 3 - Root.bg.x) * 0.05);
             updatePreview();
             selector.reset();
-            _scale = 1 - Math.abs(levels.x + currentIndex * 120 - 512) / 60;
-            _R = 48 * _scale;
+            scale = 1 - Math.abs(levels.x + currentIndex * 120 - 512) / 60;
+            _R = 48 * scale;
             _voidR = _R - 2;
             if (Globals.textSize == 2)
                 _voidR = _R - 3;
@@ -480,10 +464,10 @@ package Menus {
                 _voidR = 0;
             Drawer.drawCircle(selector, 0, 0, 16755370, _R, _voidR);
             selector.blendMode = "add";
-            selector.alpha = _scale * 0.5;
+            selector.alpha = scale * 0.5;
             for each (var _difficultyBtn:DifficultyButton in difficultyButtons) {
                 if (currentIndex > 0)
-                    _difficultyBtn.scaleX = _difficultyBtn.scaleY = _difficultyBtn.alpha = _scale;
+                    _difficultyBtn.scaleX = _difficultyBtn.scaleY = _difficultyBtn.alpha = scale;
                 else
                     _difficultyBtn.scaleX = _difficultyBtn.scaleY = _difficultyBtn.alpha = 0;
                 if (Globals.levelData[currentIndex - 1] > 0 && difficultyButtons.indexOf(_difficultyBtn) + 1 <= Globals.levelData[currentIndex - 1])
@@ -514,37 +498,27 @@ package Menus {
             previewQuad.reset();
             for each (var infoText:TextField in infoTexts)
                 infoText.visible = false;
-            if (currentIndex > 0 && LevelData.maps[currentIndex - 1]) {
-                var _data:Array = null;
-                var _orbit:Array = null;
-                var _x:Number = NaN;
-                var _y:Number = NaN;
-                var _distence:Number = NaN;
-                var _indistence:Number = NaN;
-                var _scale:Number = 1 - Math.abs(levels.x + currentIndex * 120 - 512) / 60;
-                var _levelData:Array = LevelData.maps[currentIndex - 1];
-                for each (var _node:Array in _levelData) {
-                    shapeImage.x = _node[0];
-                    shapeImage.y = _node[1];
-                    var _textureName:String = LevelData.nodeData.node.(@id == _node[2]).@name
-                    shapeImage.texture = Root.assets.getTexture(_textureName + "_shape");
-                    switch (_node[2]) {
-                        case 0:
-                            shapeImage.scaleX = shapeImage.scaleY = _node[3] * _scale;
-                            break;
-                        case 7:
-                            shapeImage.scaleX = shapeImage.scaleY = 0.8 * _scale;
-                            break;
-                        case 8:
-                            shapeImage.scaleX = shapeImage.scaleY = 0.75 * _scale;
-                            break;
-                        case 10:
-                            shapeImage.scaleX = shapeImage.scaleY = 0.8 * _scale;
-                            break;
-                        default:
-                            shapeImage.scaleX = shapeImage.scaleY = _scale;
-                    }
-                    shapeImage.color = Globals.teamColors[_node[4]];
+            if (currentIndex > 0 && LevelData.level[currentIndex - 1]) {
+                var orbit:Array = null;
+                var x:Number = NaN;
+                var y:Number = NaN;
+                var distence:Number = NaN;
+                var inDistence:Number = NaN;
+                var scale:Number = 1 - Math.abs(levels.x + currentIndex * 120 - 512) / 60;
+                var levelData:Object = LevelData.level[currentIndex - 1];
+                for each (var node:Object in levelData.node) {
+                    shapeImage.x = node.x;
+                    shapeImage.y = node.y;
+                    var textureName:String = node.type;
+                    shapeImage.texture = Root.assets.getTexture(textureName + "_shape");
+                    if (node.type == NodeType.PLANET)
+                        shapeImage.scaleX = shapeImage.scaleY = node.size ? node.size * scale : 0.3 * scale;
+                    else
+                        shapeImage.scaleX = shapeImage.scaleY = NodeType.getDefaultScale(node.type, node.size) * scale;
+                    if (node.team)
+                        shapeImage.color = Globals.teamColors[node.team];
+                    else
+                        shapeImage.color = Globals.teamColors[0];
                     if (shapeImage.color == 0)
                         preview2.addImage(shapeImage);
                     else
@@ -552,28 +526,28 @@ package Menus {
                 }
                 for each (var _barrier:Array in barrierData[currentIndex - 1]) {
                     bQuad.rotation = 0;
-                    bQuad.width = _barrier[2] * _scale;
+                    bQuad.width = _barrier[2] * scale;
                     bQuad.x = _barrier[0];
                     bQuad.y = _barrier[1];
                     bQuad.rotation = _barrier[3];
                     previewQuad.addQuad(bQuad);
                 }
-                for each (_orbit in orbitData[currentIndex - 1]) {
-                    _x = Number(_levelData[_orbit[0]][0]);
-                    _y = Number(_levelData[_orbit[0]][1]);
-                    _distence = _orbit[1] * _scale + 2;
-                    _indistence = Math.max(0, _distence - 2);
-                    Drawer.drawCircle(preview, _x, _y, 16777215, _distence, _indistence, false, 0.5, 1, 0, 128);
+                for each (orbit in orbitData[currentIndex - 1]) {
+                    x = Number(levelData.node[orbit[0]].x);
+                    y = Number(levelData.node[orbit[0]].y);
+                    distence = orbit[1] * scale + 2;
+                    inDistence = Math.max(0, distence - 2);
+                    Drawer.drawCircle(preview, x, y, 16777215, distence, inDistence, false, 0.5, 1, 0, 128);
                 }
 
                 var info:TextField = infoTexts[currentIndex - 1];
                 info.visible = true;
-                info.alpha = 0.5 * _scale;
-                info.scaleX = info.scaleY = _scale;
+                info.alpha = 0.5 * scale;
+                info.scaleX = info.scaleY = scale;
 
-                _scale = LevelData.level.data[Globals.currentData].level[currentIndex - 1].gameScale;
-                if (_scale)
-                    previewLayer.scaleX = previewLayer.scaleY = _scale * 0.7;
+                scale = LevelData.level[currentIndex - 1].gameScale;
+                if (scale)
+                    previewLayer.scaleX = previewLayer.scaleY = scale * 0.7;
                 else
                     previewLayer.scaleX = previewLayer.scaleY = 0.7;
             }
@@ -608,7 +582,7 @@ package Menus {
                         if (downIndex > 0 && downIndex == currentIndex)
                             loadMap();
                         else {
-                            _level = Math.min(Globals.levelReached, LevelData.maps.length - 1);
+                            _level = Math.min(Globals.levelReached, LevelData.level.length - 1);
                             if (downIndex <= _level + 1)
                                 scrollTo(downIndex);
                         }
@@ -627,7 +601,7 @@ package Menus {
         }
 
         public function scrollToCurrent():void {
-            var _levelReached:int = Math.min(Globals.levelReached, LevelData.maps.length - 1);
+            var _levelReached:int = Math.min(Globals.levelReached, LevelData.level.length - 1);
             if (_levelReached > 0) {
                 scrollTo(_levelReached + 1, Globals.transitionSpeed);
                 currentIndex = _levelReached + 1;

@@ -76,7 +76,7 @@ package Game.SpecialEvent {
                     triggerTimer = 3;
 
                     // 生成飞船和AI
-                    var bossAI:String = (Globals.currentDifficulty == 3) ? EnemyAIFactory.HARD : EnemyAIFactory.DARK;
+                    var bossAI:String = (Globals.difficultyInt == 3) ? EnemyAIFactory.HARD : EnemyAIFactory.DARK;
                     for (i = 0; i < triggerNode.nodeData.startShips.length; i++){
                         EntityHandler.addShips(triggerNode, i, triggerNode.nodeData.startShips[i]);
                         if (!EntityHandler.hadAI(i) && triggerNode.nodeData.startShips[i] != 0)

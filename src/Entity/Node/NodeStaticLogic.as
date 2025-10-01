@@ -109,9 +109,7 @@ package Entity.Node {
          * @param size 目标大小
          */
         public static function changeType(node:Node, type:String, size:Number = NaN):void {
-            var nodeConfig:XMLList = LevelData.nodeData.node.(@name == type);
-            var get:String = LevelData.nodeData.node.(@name == type).defaultSize;
-            size = node.nodeData.size = isNaN(size) ? Number(get) : size;
+            size = node.nodeData.size = isNaN(size) ? NodeType.getDefaultSize(type) : size;
             // 处理贴图
             node.moveState.image.rotation = node.moveState.halo.rotation = node.moveState.glow.rotation = 0;
             node.nodeData.type = type;
@@ -134,42 +132,28 @@ package Entity.Node {
             node.moveState.halo.readjustSize();
             node.moveState.halo.scaleY = node.moveState.halo.scaleX = 1;
             node.moveState.halo.pivotY = node.moveState.halo.pivotX = node.moveState.halo.width * 0.5;
-            get = LevelData.nodeData.node.(@name == type).rotation;
-            node.moveState.image.rotation = node.moveState.halo.rotation = node.moveState.glow.rotation = sliceGet(get, size);
-            get = LevelData.nodeData.node.(@name == type).scale;
-            type == NodeType.PLANET ? node.moveState.halo.scaleY = node.moveState.halo.scaleX = size * 0.5 : node.moveState.image.scaleX = node.moveState.image.scaleY = node.moveState.halo.scaleX = node.moveState.halo.scaleY = node.moveState.glow.scaleX = node.moveState.glow.scaleY = Number(get);
-            // 读取参数
-            get = LevelData.nodeData.node.(@name == type).startVal;
+            node.moveState.image.rotation = node.moveState.halo.rotation = node.moveState.glow.rotation = NodeType.getDefaultRotation(type);
+            if (type == NodeType.PLANET)
+                node.moveState.halo.scaleY = node.moveState.halo.scaleX = size * 0.5;
+            else
+                node.moveState.image.scaleX = node.moveState.image.scaleY = node.moveState.halo.scaleX = node.moveState.halo.scaleY = node.moveState.glow.scaleX = node.moveState.glow.scaleY = NodeType.getDefaultScale(type, size);
             if (node.nodeData.team != 0)
-                node.nodeData.startShips[node.nodeData.team] = sliceGet(get, size);
-            get = LevelData.nodeData.node.(@name == type).popVal;
-            if (!node.nodeData.popVal)
-                node.nodeData.popVal = sliceGet(get, size);
-            get = LevelData.nodeData.node.(@name == type).buildRate;
-            node.buildState.buildRate = sliceGet(get, size);
-            get = LevelData.nodeData.node.(@name == type).hpMult;
-            if (!node.nodeData.hpMult)
-                node.nodeData.hpMult = sliceGet(get, size);
-            get = LevelData.nodeData.node.(@name == type).attackRate;
-            var attackRate:Number = sliceGet(get, size);
-            get = LevelData.nodeData.node.(@name == type).attackRange;
-            var attackRange:Number = sliceGet(get, size);
-            get = LevelData.nodeData.node.(@name == type).attackLast;
-            var attackLast:Number = sliceGet(get, size);
-            get = LevelData.nodeData.node.(@name == type).attackType;
-            node.attackState.attackStrategy = AttackStrategyFactory.create(get, attackRate, attackRange, attackLast);
-            get = LevelData.nodeData.node.(@name == type).isBarrier;
+                node.nodeData.startShips[node.nodeData.team] = NodeType.getDefaultStartVal(type, size);
+            node.nodeData.popVal = NodeType.getDefaultPopVal(type, size);
+            node.nodeData.hpMult = NodeType.getDefaultHpMult(type, size);
+            node.buildState.buildRate = NodeType.getDefaultBuildRate(type, size);
+            var attackRate:Number = NodeType.getDefaultAttackRate(type, size);
+            var attackRange:Number = NodeType.getDefaultAttackRange(type, size);
+            var attackLast:Number = NodeType.getDefaultAttackLast(type, size);
+            node.attackState.attackStrategy = AttackStrategyFactory.create(NodeType.getDefaultAttackType(type), attackRate, attackRange, attackLast);
             if (!node.nodeData.isBarrier)
-                node.nodeData.isBarrier = (get == "true");
-            get = LevelData.nodeData.node.(@name == type).isWarp;
+                node.nodeData.isBarrier = NodeType.isBarrier(type);
             if (!node.nodeData.isWarp)
-                node.nodeData.isWarp = (get == "true");
-            get = LevelData.nodeData.node.(@name == type).isUntouchable;
+                node.nodeData.isWarp = NodeType.isWarp(type);
             if (!node.nodeData.isUntouchable)
-                node.nodeData.isUntouchable = (get == "true");
-            get = LevelData.nodeData.node.(@name == type).isAIinvisible;
+                node.nodeData.isUntouchable = NodeType.isUntouchable(type);
             if (!node.nodeData.isAIinvisible)
-                node.nodeData.isAIinvisible = (get == "true");
+                node.nodeData.isAIinvisible = NodeType.isAIinvisible(type);
         }
 
         public static function changeSize(node:Node, size:Number):void {

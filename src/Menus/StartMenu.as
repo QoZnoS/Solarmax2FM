@@ -41,7 +41,6 @@ package Menus {
                 addChild(menus[i] as Sprite);
                 menus[i].animateOut()
             }
-            menus[0].animateIn()
             pages = []
             for (i = 0; i < MAX_PAGE; i++) {
                 pages.push(new OptionButton(pageName[i], COLOR, pages));
@@ -69,12 +68,18 @@ package Menus {
         public function animateIn():void {
             this.alpha = 0;
             this.visible = true;
+            for(var i:int = 0; i < MAX_PAGE; i++)
+                if (pages[i].toggled && !menus[i].visible)
+                    menus[i].animateIn()
             Starling.juggler.removeTweens(this);
             Starling.juggler.tween(this, 0.15, {"alpha": 1});
             Globals.textSize == 2 ? menuBtn.setImage("btn_menu2x", 0.75) : menuBtn.setImage("btn_menu");
         }
 
         public function animateOut():void {
+            for(var i:int = 0; i < MAX_PAGE; i++)
+                if (pages[i].toggled && menus[i].visible)
+                    menus[i].animateOut()
             Starling.juggler.removeTweens(this);
             Starling.juggler.tween(this, 0.15, {"alpha": 0,
                     "onComplete": hide});

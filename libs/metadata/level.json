@@ -3,6 +3,7 @@
     "data": [
         {
             "name": "SOLARMAX 2",
+            "mapper": "NICOTUASON",
             "describe1": "THE ORIGINAL GAME",
             "icon": "icon192",
             "team": [
@@ -2973,17 +2974,11 @@
                 {
                     "name": "33",
                     "color": "0x0000FF",
-                    "victoryCondition": {
-                        "type": "None"
-                    },
                     "specialEvents": [
-                        {
-                            "type": "MoveGuide"
-                        },
                         {
                             "type": "BossAppear",
                             "trigger": {
-                                "ships": 180,
+                                "ships": 220,
                                 "node": {
                                     "x": 512,
                                     "y": 384,
@@ -2996,103 +2991,7 @@
                                         0,
                                         0,
                                         0,
-                                        220
-                                    ],
-                                    "popVal": 0,
-                                    "isUntouchable": true,
-                                    "isAIinvisible": true
-                                }
-                            }
-                        },
-                        {
-                            "type": "BossAppear",
-                            "trigger": {
-                                "ships": 240,
-                                "node": {
-                                    "x": 482,
-                                    "y": 414,
-                                    "type": "warp",
-                                    "team": 2,
-                                    "startShips": [
-                                        0,
-                                        0,
-                                        240,
-                                        0,
-                                        0,
-                                        0,
-                                        0
-                                    ],
-                                    "popVal": 0,
-                                    "isUntouchable": true,
-                                    "isAIinvisible": true
-                                }
-                            }
-                        },
-                        {
-                            "type": "BossAppear",
-                            "trigger": {
-                                "ships": 240,
-                                "node": {
-                                    "x": 542,
-                                    "y": 354,
-                                    "type": "warp",
-                                    "team": 3,
-                                    "startShips": [
-                                        0,
-                                        0,
-                                        0,
-                                        240,
-                                        0,
-                                        0,
-                                        0
-                                    ],
-                                    "popVal": 0,
-                                    "isUntouchable": true,
-                                    "isAIinvisible": true
-                                }
-                            }
-                        },
-                        {
-                            "type": "BossAppear",
-                            "trigger": {
-                                "ships": 300,
-                                "node": {
-                                    "x": 512,
-                                    "y": 384,
-                                    "type": "warp",
-                                    "team": 4,
-                                    "startShips": [
-                                        0,
-                                        0,
-                                        0,
-                                        0,
-                                        320,
-                                        0,
-                                        0
-                                    ],
-                                    "popVal": 0,
-                                    "isUntouchable": true,
-                                    "isAIinvisible": true
-                                }
-                            }
-                        },
-                        {
-                            "type": "BossAppear",
-                            "trigger": {
-                                "ships": 370,
-                                "node": {
-                                    "x": 512,
-                                    "y": 384,
-                                    "type": "warp",
-                                    "team": 6,
-                                    "startShips": [
-                                        0,
-                                        0,
-                                        0,
-                                        0,
-                                        0,
-                                        0,
-                                        420
+                                        350
                                     ],
                                     "popVal": 0,
                                     "isUntouchable": true,
@@ -3308,6 +3207,41 @@
                 {
                     "name": "34",
                     "color": "0xFFFF00",
+                    "specialEvents": [
+                        {
+                            "type": "BossAppear",
+                            "trigger": {
+                                "ships": 220,
+                                "node": {
+                                    "x": 512,
+                                    "y": 384,
+                                    "type": "dilator",
+                                    "team": 6,
+                                    "startShips": [
+                                        0,
+                                        0,
+                                        0,
+                                        0,
+                                        0,
+                                        0,
+                                        320
+                                    ],
+                                    "startShips/hard": [
+                                        0,
+                                        0,
+                                        0,
+                                        0,
+                                        0,
+                                        0,
+                                        350
+                                    ],
+                                    "popVal": 0,
+                                    "isUntouchable": true,
+                                    "isAIinvisible": true
+                                }
+                            }
+                        }
+                    ],
                     "node": [
                         {
                             "x": 512,
@@ -3603,6 +3537,32 @@
                 {
                     "name": "35",
                     "color": "0xFFFF00",
+                    "specialEvents": [
+                        {
+                            "type": "BossAppear",
+                            "trigger": {
+                                "ships": 220,
+                                "node": {
+                                    "x": 512,
+                                    "y": 384,
+                                    "type": "dilator",
+                                    "team": 6,
+                                    "startShips": [
+                                        0,
+                                        0,
+                                        0,
+                                        0,
+                                        0,
+                                        0,
+                                        350
+                                    ],
+                                    "popVal": 0,
+                                    "isUntouchable": true,
+                                    "isAIinvisible": true
+                                }
+                            }
+                        }
+                    ],
                     "node": [
                         {
                             "team": 3,
@@ -4221,6 +4181,7 @@
         },
         {
             "name": "Dark Empire Revival",
+            "mapper": "Thirdsister",
             "describe1": "  This version is based on the abandoned version and adds a new and ",
             "describe2": "stronger AI version (with difficulty levels referring to hard). As the commander ",
             "describe3": "of the Dark Empire, you carry all the hopes of the Dark Empire and are ready ",
@@ -10622,7 +10583,7 @@
                         },
                         {
                             "x": 438,
-                            "y": "0x0000FF",
+                            "y": 255,
                             "type": "barrier"
                         },
                         {
@@ -10635,7 +10596,7 @@
                         },
                         {
                             "x": 576,
-                            "y": "0x0000FF",
+                            "y": 255,
                             "type": "barrier",
                             "barrierLinks": [
                                 5
@@ -13015,6 +12976,7 @@
         },
         {
             "name": "Dark Empire Revival (Abandoned)",
+            "mapper": "Thirdsister",
             "describe1": "  This is the first self-made version by the author's third sister,with black as ",
             "describe2": "the main perspective, featuring a broader and more creative map,and newly ",
             "describe3": "filled in white as a new special force with new attributes.But in hard AI, some  ",
@@ -19354,7 +19316,7 @@
                         },
                         {
                             "x": 438,
-                            "y": "0x0000FF",
+                            "y": 255,
                             "type": "barrier"
                         },
                         {
@@ -19367,7 +19329,7 @@
                         },
                         {
                             "x": 576,
-                            "y": "0x0000FF",
+                            "y": 255,
                             "type": "barrier",
                             "barrierLinks": [
                                 5
@@ -21667,6 +21629,7 @@
         },
         {
             "name": "New World",
+            "mapper": "Tuetledove",
             "describe1": "You have discovered a brand-new area. While exploring this area, you have found many devices that you have never seen before, but they also make you",
             "describe2": "",
             "describe3": "feel strangely familiar. Your enemies have also discovered this area. It seems that a new battle is about to begin...",
@@ -25773,10 +25736,7 @@
                         {
                             "x": 448,
                             "y": 128,
-                            "type": "barrier",
-                            "barrierLinks": [
-                                19
-                            ]
+                            "type": "barrier"
                         }
                     ],
                     "name": "27",

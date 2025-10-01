@@ -46,7 +46,7 @@ package UI.Component {
                 removeChild(buttons[i]);
                 buttons.pop();
             }
-            var levelData:Object = LevelData.level.data[Globals.currentData].level;
+            var levelData:Array = LevelData.level;
             for (i = 0; i < levelData.length; i++) {
                 var _levelText:String = levelData[i].name ? levelData[i].name : ((i + 1 < 10) ? ("0" + (i + 1).toString()) : (i + 1).toString());
                 var _buttonColor:uint = levelData[i].color ? levelData[i].color : 0xFFAAAA;

@@ -43,7 +43,7 @@ package {
         public static var antialias:int = 3; // 抗锯齿参数，playerData.txt第九项
         public static var touchControls:Boolean = true; // 控制方式，playerData.txt第十六项
         public static var levelData:Array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]; // 每关已获取的星数，playerData.txt第十七项
-        public static var currentDifficulty:int = 2; // 当前难度，playerData.txt第十八项，levelData后第一项
+        public static var currentDifficulty:String = "normal"; // 当前难度，playerData.txt第十八项，levelData后第一项
         public static var blackQuad:Boolean = true; // 是否生成黑边，playerData.txt第十九项，levelData后第二项
         public static var currentData:int = 0; // 当前关卡数据，playerData.txt第二十项，levelData后第三项
         public static var nohup:Boolean = false; // 禁用暂停，playerData.txt第二十一项，levelData后第四项
@@ -172,6 +172,20 @@ package {
             fileStream.open(file, "read");
             replay = JSON.parse(fileStream.readMultiByte(fileStream.bytesAvailable, "utf-8")) as Array;
             fileStream.close();
+        }
+
+        public static function get difficultyInt():int{
+            switch(currentDifficulty)
+            {
+                case "easy":
+                    return 1
+                case "normal":
+                    return 2
+                case "hard":
+                    return 3
+                default:
+                    return 0
+            }
         }
     }
 }

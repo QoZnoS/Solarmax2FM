@@ -34,11 +34,11 @@ package Entity.AI {
                 return false;
             if (actionDelay <= 0) {
                 if (team == 6)
-                    actionDelay = Math.max(0, (3 - Globals.currentDifficulty) * (0.25 + rng.nextNumber() * 0.25));
+                    actionDelay = Math.max(0, (3 - Globals.difficultyInt) * (0.25 + rng.nextNumber() * 0.25));
                 else if (Globals.level == 33 && (team == 3 || team == 4))
-                    actionDelay = Math.max(0, (3 - Globals.currentDifficulty) * (1.5 + rng.nextNumber() * 1.5));
+                    actionDelay = Math.max(0, (3 - Globals.difficultyInt) * (1.5 + rng.nextNumber() * 1.5));
                 else
-                    actionDelay = Math.max(0, (3 - Globals.currentDifficulty) * (1.5 + rng.nextNumber() * 1.5));
+                    actionDelay = Math.max(0, (3 - Globals.difficultyInt) * (1.5 + rng.nextNumber() * 1.5));
             }
             return true;
         }

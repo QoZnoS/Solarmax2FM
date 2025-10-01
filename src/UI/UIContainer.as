@@ -50,8 +50,8 @@ package UI {
         }
 
         public function initLevel():void {
-            if (LevelData.level.data[Globals.currentData].level[Globals.level].gameScale)
-                _scale = LevelData.level.data[Globals.currentData].level[Globals.level].gameScale;
+            if (LevelData.level[Globals.level].gameScale)
+                _scale = LevelData.level[Globals.level].gameScale;
             else
                 _scale = 1;
             if (Globals.touchControls) {

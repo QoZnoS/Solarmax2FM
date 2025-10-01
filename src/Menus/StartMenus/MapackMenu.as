@@ -100,14 +100,12 @@ package Menus.StartMenus {
                 mapacks = [];
             }
             var _y:Number = 160;
-            var _data:Array;
-            for (var i:int = 0; i < LevelData.data.length; i++) {
-                _data = LevelData.data[i];
+            for (var i:int = 0; i < LevelData.rawData.length; i++) {
                 _dataQuad = new OptionButton(LevelData.extensions.data.(@id == i).@name, COLOR, mapacks);
                 _dataQuad.label.fontName = "Downlink18";
                 _dataQuad.label.width = 700;
                 _dataQuad.label.x += 40;
-                _dataQuad.addLabel(new TextField(40, 40, "#" + LevelData.data.indexOf(_data), "Downlink18", -1, COLOR), 0, 0);
+                _dataQuad.addLabel(new TextField(40, 40, "#" + i, "Downlink18", -1, COLOR), 0, 0);
                 _dataQuad.addLabel(new TextField(600, 40, LevelData.extensions.data.(@id == i).@describe1, "Downlink12", -1, COLOR), 40, 25);
                 if (LevelData.extensions.data.(@id == i).@describe2 != undefined)
                     _dataQuad.addLabel(new TextField(600, 40, LevelData.extensions.data.(@id == i).@describe2, "Downlink12", -1, COLOR), 40, 40);
@@ -115,7 +113,7 @@ package Menus.StartMenus {
                     _dataQuad.addLabel(new TextField(600, 40, LevelData.extensions.data.(@id == i).@describe3, "Downlink12", -1, COLOR), 40, 55);
                 if (LevelData.extensions.data.(@id == i).@describe4 != undefined)
                     _dataQuad.addLabel(new TextField(600, 40, LevelData.extensions.data.(@id == i).@describe4, "Downlink12", -1, COLOR), 40, 70);
-                _dataQuad.addLabel(new TextField(600, 40, "MAPPER: " + _data[1][0], "Downlink12", -1, COLOR), 40, 90);
+                _dataQuad.addLabel(new TextField(600, 40, "MAPPER: " + LevelData.rawData[i].mapper, "Downlink12", -1, COLOR), 40, 90);
                 _dataQuad.addImage(new Image(Root.assets.getTexture(LevelData.extensions.data.(@id == i).@icon)));
                 _dataQuad.quad.color = 0x000000;
                 _dataQuad.quad.alpha = 0.5;

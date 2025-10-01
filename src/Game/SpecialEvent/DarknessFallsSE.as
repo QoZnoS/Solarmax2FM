@@ -10,6 +10,7 @@ package Game.SpecialEvent {
     import starling.display.Image;
     import UI.UIContainer;
     import Entity.Ship;
+    import starling.core.Starling;
 
     public class DarknessFallsSE implements ISpecialEvent {
         private static const STATE_START:int = 0;
@@ -35,7 +36,7 @@ package Game.SpecialEvent {
             darkPulse.visible = false;
             UIContainer.entityLayer.addGlow(darkPulse);
         }
-
+        private var soundVolume:Number = Globals.soundVolume;
         public function update(dt:Number):void {
             var delay:Number = 0;
             var delayStep:Number = 1;
@@ -87,7 +88,7 @@ package Game.SpecialEvent {
                     if (triggerTimer > 0)
                         break;
                     state = STATE_BOSSOUT;
-
+                    Globals.soundVolume = 0;
                     // 黑色出场
                     NodeStaticLogic.changeTeam(triggerNode, 6);
                     NodeStaticLogic.changeShipsTeam(triggerNode, 6);
@@ -141,7 +142,7 @@ package Game.SpecialEvent {
             darkPulse.color == 0x000000 ? darkPulse.blendMode = "normal" : darkPulse.blendMode = "add";
             darkPulse.scaleY = darkPulse.scaleX += dt * 0.5;
             if (chackDarkPulseEnd())
-                darkPulse.alpha -= dt / 3;
+                darkPulse.alpha -= dt / 10;
             if (state == STATE_BOSSOUT) {
                 _game.gameOver = true;
                 _game.winningTeam = 1;
@@ -179,6 +180,7 @@ package Game.SpecialEvent {
 
         public function deinit():void {
             UIContainer.entityLayer.removeGlow(darkPulse);
+            Globals.soundVolume = soundVolume;
         }
 
         public function get type():String {

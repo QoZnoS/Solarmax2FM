@@ -63,7 +63,6 @@ package Game {
             cover.touchable = false;
             cover.blendMode = BlendMode.ADD;
             cover.alpha = 0;
-            addChild(cover);
             // 其他可视化对象
             barrierLines = []; // 障碍连接数据
             this.alpha = 0;
@@ -93,12 +92,13 @@ package Game {
         // #region 进入关卡
         override public function init(seed:uint = 0, rep:Boolean = false):void {
             ui = scene.ui;
+            ui.btnL.addChildAt(cover, 0);
             var i:int = 0;
             var aiArray:Array = [];
             this.level = Globals.level;
             this.rng = new Rng(seed);
             this.rep = rep;
-            var levelData:Object = LevelData.level.data[Globals.currentData].level[Globals.level];
+            var levelData:Object = LevelData.level[Globals.level];
             aiArray = nodeIn(levelData.node as Array); // 生成天体，同时返回需生成的ai
             if (!rep)
                 Globals.replay = [rng.seed, [0]];
@@ -110,23 +110,23 @@ package Game {
             }
             for (i = 0; i < aiArray.length; i++) {
                 switch (Globals.currentDifficulty) {
-                    case 1:
+                    case "easy":
                         EntityHandler.addAI(aiArray[i], EnemyAIFactory.SIMPLE);
                         break;
-                    case 2:
+                    case "normal":
                         EntityHandler.addAI(aiArray[i], EnemyAIFactory.SMART);
                         break;
-                    case 3:
+                    case "hard":
                         EntityHandler.addAI(aiArray[i], EnemyAIFactory.HARD);
                         break;
                     default:
                         break;
                 }
             }
-            if (Globals.level >= 35 && !rep) { // 为36关黑色设定ai
-                Globals.currentDifficulty == 3 ? EntityHandler.addAI(6, EnemyAIFactory.HARD) : EntityHandler.addAI(6, EnemyAIFactory.FINAL);
-                bossTimer = 0;
-            }
+            // if (Globals.level >= 35 && !rep) { // 为36关黑色设定ai
+            //     Globals.difficultyInt == 3 ? EntityHandler.addAI(6, EnemyAIFactory.HARD) : EntityHandler.addAI(6, EnemyAIFactory.FINAL);
+            //     bossTimer = 0;
+            // }
             for each (var label:TextField in popLabels) {
                 switch (Globals.textSize) {
                     case 0:
@@ -222,6 +222,7 @@ package Game {
         // #endregion
         // #region 界面功能
         public function deInit():void {
+            ui.removeChild(cover);
             for each (var pool:EntityPool in EntityContainer.entityPool)
                 pool.deInit();
             for each (var se:ISpecialEvent in specialEvents)
@@ -246,8 +247,8 @@ package Game {
             animateOut();
             if (!Globals.levelData[Globals.level])
                 Globals.levelData.push(0);
-            if (Globals.levelData[Globals.level] < Globals.currentDifficulty)
-                Globals.levelData[Globals.level] = Globals.currentDifficulty;
+            if (Globals.levelData[Globals.level] < Globals.difficultyInt)
+                Globals.levelData[Globals.level] = Globals.difficultyInt;
             if (Globals.levelReached < Globals.level + 1) {
                 Globals.levelReached = Globals.level + 1;
                 Globals.save();
@@ -334,11 +335,11 @@ package Game {
         }
 
         public function updateSpeed(dt:Number):Number {
-            if (Globals.level == 35 && gameOver) {
-                // 36关通关时
-                slowMult = Math.max(slowMult - dt * 0.75, 0.1);
-                dt *= slowMult;
-            } else
+            // if (Globals.level == 35 && gameOver) {
+            //     // 36关通关时
+            //     slowMult = Math.max(slowMult - dt * 0.75, 0.1);
+            //     dt *= slowMult;
+            // } else
                 dt *= scene.speedMult;
             return dt;
         }

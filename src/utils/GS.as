@@ -53,7 +53,8 @@ package utils{
                     Starling.juggler.tween(transform, 1, {"volume": 0,
                             "onUpdate": function():void
                             {
-                                prevChannel.soundTransform = transform;
+                                if (prevChannel)
+                                    prevChannel.soundTransform = transform;
                             },
                             "onComplete": prevChannel.stop});
                 }
@@ -64,7 +65,8 @@ package utils{
                     Starling.juggler.tween(transform2, 0.5, {"volume": Globals.musicVolume,
                             "onUpdate": function():void
                             {
-                                musicChannel.soundTransform = transform2;
+                                if (musicChannel)
+                                    musicChannel.soundTransform = transform2;
                             }});
                 }
             } else if (!musicChannel) {
@@ -74,7 +76,8 @@ package utils{
                 Starling.juggler.tween(transform2, 0.5, {"volume": Globals.musicVolume,
                         "onUpdate": function():void
                         {
-                            musicChannel.soundTransform = transform2;
+                            if (musicChannel)
+                                musicChannel.soundTransform = transform2;
                         }});
             }
         }

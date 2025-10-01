@@ -5,16 +5,14 @@ package {
     import flash.filesystem.FileStream;
 
     public class LevelData {
-        public static var maps:Array; // 储存关卡
         public static var file:File; // 文件
         public static var fileStream:FileStream;
-        public static var difficulty:Array; // 难度标识数据
-        public static var currentFile:Array; // 当前读取的文件
         public static var nodeData:XML;
         public static var extensions:XML;
-        public static var data:Array;
-
-        public static var level:Object; // level.json
+        /** level.json 不含版本信息 */
+        public static var rawData:Object;
+        /** 关卡列表，经难度和图集修正 */
+        public static var level:Array;
 
         public function LevelData() {
             super();
@@ -24,37 +22,50 @@ package {
         public static function init():void {
             fileStream = new FileStream();
             nodeData = Root.assets.getXml("Node");
-            data = Root.assets.getObject("data") as Array;
-            level = Root.assets.getObject("level");
+            rawData = Root.assets.getObject("level").data;
             loadExtensions();
             Globals.initTeam();
             resetExtensions();
             if (Globals.device == "Mobile") {
-                currentFile = data[Globals.currentData];
-                maps = currentFile[0];
-                difficulty = currentFile[1];
-                readExtensions(); // 读取文件
+                readExtensions();
                 return
             }
-            file = File.applicationDirectory.resolvePath("data.txt"); // 读取文件Data.txt
-            if (!file.exists) {
-                currentFile = data[Globals.currentData];
-                maps = currentFile[0];
-                difficulty = currentFile[1];
-            } else
-                load(); // 导入文件
-            readExtensions(); // 读取文件
+            file = File.applicationDirectory.resolvePath("level.json");
+            if (file.exists)
+                load();
+            readExtensions();
+            updateLevelData();
+        }
+
+        public static function updateLevelData():void {
+            // 深拷贝 level
+            var originalLevel:Object = rawData[Globals.currentData].level;
+            // 使用 JSON 序列化实现深拷贝
+            level = JSON.parse(JSON.stringify(originalLevel)) as Array;
+            process(level);
+        }
+
+        private static function process(obj:Object):void {
+            for (var key:String in obj) {
+                // 检查是否有难度后缀
+                if (key.indexOf("/") > -1) {
+                    var baseKey:String = key.replace(/\/.*$/, "");
+                    var diff:String = key.substr(key.lastIndexOf("/") + 1);
+                    // 判断当前难度是否匹配
+                    if (Globals.currentDifficulty == diff)
+                        obj[baseKey] = obj[key];
+                    delete obj[key];
+                } else if (obj[key] is Object)
+                    process(obj[key]);
+            }
         }
 
         // 导入关卡文件
         public static function load():void {
             fileStream.open(file, "read"); // 以只读模式打开文件
-            var _data:String = String(fileStream.readMultiByte(fileStream.bytesAvailable, "utf-8")); // 按utf-8编码读取文件并转化为字符串
+            var data:String = String(fileStream.readMultiByte(fileStream.bytesAvailable, "utf-8"));
+            rawData = JSON.parse(data);
             fileStream.close(); // 关闭文件
-            data = JSON.parse(_data) as Array; // 将文件内容转化为字符串并写入Data
-            currentFile = data[Globals.currentData]; // 读取当前配置
-            maps = currentFile[0]; // 设置maps
-            difficulty = currentFile[1]; // 设置Difficulty
         }
 
         public static function loadExtensions():void {
