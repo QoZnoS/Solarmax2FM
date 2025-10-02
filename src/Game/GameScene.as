@@ -94,35 +94,22 @@ package Game {
             ui = scene.ui;
             ui.btnL.addChildAt(cover, 0);
             var i:int = 0;
-            var aiArray:Array = [];
             this.level = Globals.level;
             this.rng = new Rng(seed);
             this.rep = rep;
             var levelData:Object = LevelData.level[Globals.level];
-            aiArray = nodeIn(levelData.node as Array); // 生成天体，同时返回需生成的ai
+            var aiData:Array = levelData.ai;
+            nodeIn(levelData.node);
             if (!rep)
                 Globals.replay = [rng.seed, [0]];
             else {
-                for (i = 0; i < aiArray.length; i++)
+                for (i = 0; i < aiData.length; i++)
                     rng.nextInt();
-                aiArray = [];
+                aiData = [];
                 Globals.replay.shift();
             }
-            for (i = 0; i < aiArray.length; i++) {
-                switch (Globals.currentDifficulty) {
-                    case "easy":
-                        EntityHandler.addAI(aiArray[i], EnemyAIFactory.SIMPLE);
-                        break;
-                    case "normal":
-                        EntityHandler.addAI(aiArray[i], EnemyAIFactory.SMART);
-                        break;
-                    case "hard":
-                        EntityHandler.addAI(aiArray[i], EnemyAIFactory.HARD);
-                        break;
-                    default:
-                        break;
-                }
-            }
+            for (i = 0; i < aiData.length; i++)
+                EntityHandler.addAI(aiData[i]);
             // if (Globals.level >= 35 && !rep) { // 为36关黑色设定ai
             //     Globals.difficultyInt == 3 ? EntityHandler.addAI(6, EnemyAIFactory.HARD) : EntityHandler.addAI(6, EnemyAIFactory.FINAL);
             //     bossTimer = 0;
@@ -176,27 +163,13 @@ package Game {
             animateIn(); // 播放关卡进入动画
         }
 
-        public function nodeIn(nodes:Array):Array {
+        public function nodeIn(nodes:Array):void {
             var aiArray:Array = [];
             for each (var nodeData:Object in nodes) {
                 var node:Node = EntityHandler.addNode(nodeData);
                 for (var i:int = 0; i < node.nodeData.startShips.length; i++)
                     EntityHandler.addShips(node, i, node.nodeData.startShips[i]);
-                if (aiArray.indexOf(nodeData.team) == -1) {
-                    // 写入具有常规ai的势力，此处检验势力是否已写入，避免重复写入
-                    switch (nodeData.team) {
-                        case 0: // 排除中立势力
-                        case Globals.playerTeam: // 排除玩家势力
-                        case 5: // 排除灰色势力
-                        case 6: // 排除黑色势力
-                            break;
-                        default:
-                            aiArray.push(nodeData.team);
-                            break;
-                    }
-                }
             }
-            return aiArray;
         }
 
         override public function animateIn():void {

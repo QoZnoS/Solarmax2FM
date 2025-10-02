@@ -1,16 +1,14 @@
 package Entity.AI {
     import Entity.Node;
-    import Game.GameScene;
     import Entity.EntityContainer;
     import utils.Rng;
     import Entity.Node.NodeStaticLogic;
-    import Entity.Node.NodeType;
     import Entity.EntityContainer;
 
     public class SimpleAI extends BasicAI {
 
-        public function SimpleAI(rng:Rng) {
-            super(rng)
+        public function SimpleAI(rng:Rng, actionDelay:Number, startDelay:Number) {
+            super(rng, actionDelay, startDelay)
         }
 
         override public function update(dt:Number):void {

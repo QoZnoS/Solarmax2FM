@@ -75,6 +75,7 @@
                             "type": "planet"
                         }
                     ],
+                    "ai": [],
                     "gameScale": 1,
                     "bgm": "bgm02"
                 },
@@ -125,6 +126,30 @@
                             "type": "planet"
                         }
                     ],
+                    "ai/easy": [
+                        {
+                            "team": 2,
+                            "type": "SimpleAI",
+                            "actionDelay": 3,
+                            "startDelay": 3
+                        }
+                    ],
+                    "ai/normal": [
+                        {
+                            "team": 2,
+                            "type": "SmartAI",
+                            "actionDelay": 1.5,
+                            "startDelay": 1.5
+                        }
+                    ],
+                    "ai/hard": [
+                        {
+                            "team": 2,
+                            "type": "HardAI",
+                            "actionDelay": 0,
+                            "startDelay": 1.5
+                        }
+                    ],
                     "bgm": "bgm02"
                 },
                 {
@@ -171,6 +196,14 @@
                             "x": 432,
                             "y": 472,
                             "type": "planet"
+                        }
+                    ],
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
                         }
                     ],
                     "bgm": "bgm02"
@@ -225,6 +258,14 @@
                             "y": 384,
                             "type": "planet",
                             "size": 0.4
+                        }
+                    ],
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
                         }
                     ],
                     "bgm": "bgm02"
@@ -285,6 +326,14 @@
                             "type": "planet"
                         }
                     ],
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        }
+                    ],
                     "bgm": "bgm02"
                 },
                 {
@@ -337,6 +386,14 @@
                             "x": 512,
                             "y": 536,
                             "type": "planet"
+                        }
+                    ],
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
                         }
                     ],
                     "bgm": "bgm02"
@@ -398,6 +455,14 @@
                             "x": 336,
                             "y": 384,
                             "type": "planet"
+                        }
+                    ],
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
                         }
                     ],
                     "bgm": "bgm02"
@@ -480,6 +545,14 @@
                             "barrierLinks": [
                                 7
                             ]
+                        }
+                    ],
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
                         }
                     ],
                     "bgm": "bgm02"
@@ -571,6 +644,14 @@
                             ]
                         }
                     ],
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        }
+                    ],
                     "bgm": "bgm04"
                 },
                 {
@@ -640,6 +721,14 @@
                             "x": 312,
                             "y": 256,
                             "type": "planet"
+                        }
+                    ],
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
                         }
                     ],
                     "bgm": "bgm04"
@@ -741,6 +830,14 @@
                             ]
                         }
                     ],
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        }
+                    ],
                     "bgm": "bgm04"
                 },
                 {
@@ -796,6 +893,14 @@
                             "x": 432,
                             "y": 384,
                             "type": "warp"
+                        }
+                    ],
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
                         }
                     ],
                     "bgm": "bgm04"
@@ -922,6 +1027,14 @@
                             "type": "planet"
                         }
                     ],
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        }
+                    ],
                     "bgm": "bgm04"
                 },
                 {
@@ -1011,6 +1124,14 @@
                             "x": 744,
                             "y": 512,
                             "type": "planet"
+                        }
+                    ],
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
                         }
                     ],
                     "bgm": "bgm04"
@@ -1121,6 +1242,14 @@
                             "type": "planet"
                         }
                     ],
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        }
+                    ],
                     "bgm": "bgm04"
                 },
                 {
@@ -1173,6 +1302,14 @@
                             "x": 352,
                             "y": 472,
                             "type": "planet"
+                        }
+                    ],
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
                         }
                     ],
                     "bgm": "bgm04"
@@ -1298,6 +1435,14 @@
                             "type": "planet"
                         }
                     ],
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        }
+                    ],
                     "bgm": "bgm04"
                 },
                 {
@@ -1380,6 +1525,14 @@
                             "x": 632,
                             "y": 456,
                             "type": "planet"
+                        }
+                    ],
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
                         }
                     ],
                     "bgm": "bgm04"
@@ -1519,6 +1672,14 @@
                             ]
                         }
                     ],
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        }
+                    ],
                     "bgm": "bgm04"
                 },
                 {
@@ -1576,6 +1737,14 @@
                                 0,
                                 0
                             ]
+                        }
+                    ],
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
                         }
                     ],
                     "bgm": "bgm04"
@@ -1643,6 +1812,14 @@
                             "x": 800,
                             "y": 384,
                             "type": "planet"
+                        }
+                    ],
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
                         }
                     ],
                     "bgm": "bgm04"
@@ -1745,6 +1922,14 @@
                             ]
                         }
                     ],
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        }
+                    ],
                     "bgm": "bgm04"
                 },
                 {
@@ -1838,6 +2023,14 @@
                             "type": "planet"
                         }
                     ],
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        }
+                    ],
                     "bgm": "bgm05"
                 },
                 {
@@ -1903,6 +2096,20 @@
                                 0,
                                 0
                             ]
+                        }
+                    ],
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        },
+                        {
+                            "team": 3,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
                         }
                     ],
                     "bgm": "bgm05"
@@ -2048,6 +2255,26 @@
                             "type": "planet"
                         }
                     ],
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        },
+                        {
+                            "team": 3,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        },
+                        {
+                            "team": 4,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        }
+                    ],
                     "bgm": "bgm05"
                 },
                 {
@@ -2160,6 +2387,26 @@
                             "x": 384,
                             "y": 312,
                             "type": "planet"
+                        }
+                    ],
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        },
+                        {
+                            "team": 3,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        },
+                        {
+                            "team": 4,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
                         }
                     ],
                     "bgm": "bgm05"
@@ -2308,6 +2555,26 @@
                             ]
                         }
                     ],
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        },
+                        {
+                            "team": 3,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        },
+                        {
+                            "team": 4,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        }
+                    ],
                     "bgm": "bgm05"
                 },
                 {
@@ -2398,6 +2665,20 @@
                             "x": 104,
                             "y": 376,
                             "type": "planet"
+                        }
+                    ],
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        },
+                        {
+                            "team": 3,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
                         }
                     ],
                     "bgm": "bgm05"
@@ -2517,6 +2798,20 @@
                             "y": 504,
                             "type": "planet",
                             "size": 0.5
+                        }
+                    ],
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        },
+                        {
+                            "team": 3,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
                         }
                     ],
                     "bgm": "bgm05"
@@ -2644,6 +2939,26 @@
                             "barrierLinks": [
                                 12
                             ]
+                        }
+                    ],
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        },
+                        {
+                            "team": 3,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        },
+                        {
+                            "team": 4,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
                         }
                     ],
                     "bgm": "bgm05"
@@ -2777,6 +3092,26 @@
                                 0,
                                 0
                             ]
+                        }
+                    ],
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        },
+                        {
+                            "team": 3,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        },
+                        {
+                            "team": 4,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
                         }
                     ],
                     "bgm": "bgm05"
@@ -2969,6 +3304,14 @@
                             "size": 0.4
                         }
                     ],
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        }
+                    ],
                     "bgm": "bgm06"
                 },
                 {
@@ -2996,6 +3339,12 @@
                                     "popVal": 0,
                                     "isUntouchable": true,
                                     "isAIinvisible": true
+                                },
+                                "ai": {
+                                    "team": 6,
+                                    "type": "DarkAI",
+                                    "type/hard": "HardAI",
+                                    "startDelay": 0
                                 }
                             }
                         }
@@ -3202,6 +3551,26 @@
                             ]
                         }
                     ],
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        },
+                        {
+                            "team": 3,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        },
+                        {
+                            "team": 4,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        }
+                    ],
                     "bgm": "bgm06"
                 },
                 {
@@ -3238,6 +3607,14 @@
                                     "popVal": 0,
                                     "isUntouchable": true,
                                     "isAIinvisible": true
+                                },
+                                "ai": {
+                                    "team": 6,
+                                    "type": "DarkAI"
+                                },
+                                "ai/hard": {
+                                    "team": 6,
+                                    "type": "HardAI"
                                 }
                             }
                         }
@@ -3532,6 +3909,26 @@
                             ]
                         }
                     ],
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        },
+                        {
+                            "team": 3,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        },
+                        {
+                            "team": 4,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        }
+                    ],
                     "bgm": "bgm06"
                 },
                 {
@@ -3559,6 +3956,14 @@
                                     "popVal": 0,
                                     "isUntouchable": true,
                                     "isAIinvisible": true
+                                },
+                                "ai": {
+                                    "team": 6,
+                                    "type": "DarkAI"
+                                },
+                                "ai/hard": {
+                                    "team": 6,
+                                    "type": "HardAI"
                                 }
                             }
                         }
@@ -3853,6 +4258,26 @@
                             "x": 912,
                             "y": 224,
                             "type": "warp"
+                        }
+                    ],
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        },
+                        {
+                            "team": 3,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        },
+                        {
+                            "team": 4,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
                         }
                     ],
                     "bgm": "bgm06"
@@ -4173,6 +4598,32 @@
                             "x": 832,
                             "y": 384,
                             "type": "warp"
+                        }
+                    ],
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        },
+                        {
+                            "team": 3,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        },
+                        {
+                            "team": 4,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        },
+                        {
+                            "team": 6,
+                            "type": "FinalAI",
+                            "type/hard": "HardAI",
+                            "startDelay": 0.25
                         }
                     ],
                     "bgm": "bgm06"
@@ -24397,6 +24848,7 @@
                             "x": 896,
                             "y": 384,
                             "type": "tower",
+                            "orbitSpeed": -0.1,
                             "orbitNode": 13,
                             "team": 1
                         },
@@ -24540,6 +24992,7 @@
                             "x": 704,
                             "y": 384,
                             "type": "tower",
+                            "orbitSpeed": -0.1,
                             "orbitNode": 13,
                             "team": 4
                         },
@@ -24547,6 +25000,7 @@
                             "x": 800,
                             "y": 480,
                             "type": "tower",
+                            "orbitSpeed": -0.1,
                             "orbitNode": 13,
                             "team": 2
                         },
@@ -24554,6 +25008,7 @@
                             "x": 800,
                             "y": 288,
                             "type": "tower",
+                            "orbitSpeed": -0.1,
                             "orbitNode": 13,
                             "team": 3
                         }
@@ -29096,17 +29551,6 @@
                         },
                         {
                             "x": 896,
-                            "startShips": [
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                40
-                            ],
                             "y": 448,
                             "type": "warp",
                             "team": 8

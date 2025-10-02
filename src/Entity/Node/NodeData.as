@@ -15,7 +15,7 @@ package Entity.Node {
         public var startShips:Vector.<int>; // 开局飞船，每一项对于各势力飞船数
         public var barrierLinks:Vector.<int>; // 障碍连接数组，储存相连天体tag
         public var orbitNode:int = -1; // 轨道中心天体
-        public var orbitSpeed:Number; // 轨道运转速度
+        public var orbitSpeed:Number = 0.1; // 轨道运转速度
 
         public var isBarrier:Boolean = false; // 启用障碍
         public var isWarp:Boolean = false; // 启用传送

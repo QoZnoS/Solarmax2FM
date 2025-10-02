@@ -18,9 +18,9 @@ package Entity {
             debugTrace = [null, null, null, null, null];
         }
 
-        public function initAI(_GameScene:GameScene, rng:Rng, team:int, type:String):void {
+        public function initAI(_GameScene:GameScene, rng:Rng, team:int, type:String, actionDelay:Number = -1, startDelay:Number = -1):void {
             this.init(_GameScene);
-            ai = EnemyAIFactory.create(type, rng);
+            ai = EnemyAIFactory.create(type, rng, actionDelay, startDelay);
             ai.team = team;
         }
 

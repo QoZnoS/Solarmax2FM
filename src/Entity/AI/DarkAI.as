@@ -6,8 +6,8 @@ package Entity.AI {
     import Entity.EntityContainer;
 
     public class DarkAI extends BasicAI {
-        public function DarkAI(rng:Rng) {
-            super(rng)
+        public function DarkAI(rng:Rng, actionDelay:Number, startDelay:Number) {
+            super(rng, actionDelay, startDelay)
         }
 
         override public function update(dt:Number):void {

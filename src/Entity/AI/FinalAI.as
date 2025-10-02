@@ -6,8 +6,8 @@ package Entity.AI {
     import Entity.EntityContainer;
 
     public class FinalAI extends BasicAI {
-        public function FinalAI(rng:Rng) {
-            super(rng)
+        public function FinalAI(rng:Rng, actionDelay:Number, startDelay:Number) {
+            super(rng, actionDelay, startDelay)
         }
 
         override public function update(dt:Number):void {

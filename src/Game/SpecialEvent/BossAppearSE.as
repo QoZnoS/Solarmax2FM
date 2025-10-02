@@ -20,10 +20,13 @@ package Game.SpecialEvent {
         private var triggerNodeData:Object;
         private var triggerNode:Node;
         private var triggerTimer:Number;
+        private var triggerAI:Object
 
         public function BossAppearSE(trigger:Object) {
             triggerShips = trigger.ships;
             triggerNodeData = trigger.node;
+            if ("ai" in trigger)
+                triggerAI = trigger.ai
         }
 
         public function update(dt:Number):void {
@@ -76,12 +79,10 @@ package Game.SpecialEvent {
                     triggerTimer = 3;
 
                     // 生成飞船和AI
-                    var bossAI:String = (Globals.difficultyInt == 3) ? EnemyAIFactory.HARD : EnemyAIFactory.DARK;
-                    for (i = 0; i < triggerNode.nodeData.startShips.length; i++){
+                    for (i = 0; i < triggerNode.nodeData.startShips.length; i++)
                         EntityHandler.addShips(triggerNode, i, triggerNode.nodeData.startShips[i]);
-                        if (!EntityHandler.hadAI(i) && triggerNode.nodeData.startShips[i] != 0)
-                            EntityHandler.addAI(i, bossAI);
-                    }
+                    if (triggerAI)
+                        EntityHandler.addAI(triggerAI);
 
                     // 播放特效
                     triggerNode.moveState.image.visible = true;

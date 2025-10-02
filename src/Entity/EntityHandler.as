@@ -7,6 +7,7 @@ package Entity {
     import utils.Rng;
     import utils.GS;
     import Entity.AI.EnemyAIFactory;
+    import air.media.NullSink;
 
     public class EntityHandler {
         public static var game:GameScene;
@@ -16,12 +17,14 @@ package Entity {
         }
 
         // #region 添加实体
-        public static function addAI(team:int, type:String = EnemyAIFactory.BASIC):void {
+        public static function addAI(data:Object):void {
             var enemyAI:EnemyAI = EntityContainer.getReserve(EntityContainer.INDEX_AIS) as EnemyAI;
             if (!enemyAI)
                 enemyAI = new EnemyAI();
-            var rng:Rng = new Rng(game.rng.nextInt(), Rng.X32)
-            enemyAI.initAI(game, rng, team, type);
+            var rng:Rng = new Rng(game.rng.nextInt(), Rng.X32);
+            var actionDelay:Number = ("actionDelay" in data) ? data.actionDelay : -1;
+            var startDelay:Number = ("startDelay" in data) ? data.startDelay : -1;
+            enemyAI.initAI(game, rng, data.team, data.type, actionDelay);
             EntityContainer.addEntity(EntityContainer.INDEX_AIS, enemyAI);
         }
 

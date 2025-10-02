@@ -7,8 +7,8 @@ package Entity.AI {
     import Entity.EntityContainer;
 
     public class HardAI extends BasicAI {
-        public function HardAI(rng:Rng) {
-            super(rng);
+        public function HardAI(rng:Rng, actionDelay:Number, startDelay:Number) {
+            super(rng, actionDelay, startDelay);
         }
 
         override public function update(dt:Number):void {

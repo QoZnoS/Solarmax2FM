@@ -35,20 +35,53 @@ package Entity.AI {
             _aiMap[type] = aiClass;
         }
 
-        public static function create(type:String, rng:Rng):IEnemyAI {
+        public static function create(type:String, rng:Rng, actionDelay:Number = -1, startDelay:Number = -1):IEnemyAI {
             if (!_ready)
                 init();
 
             var aiClass:Class = _aiMap[type] as Class;
-
+            if (actionDelay == -1)
+                actionDelay = getDefaultActionDelay(type);
+            if (startDelay == -1)
+                startDelay = getDefaultStartDelay(type);
             if (aiClass) {
                 try {
-                    return new aiClass(rng);
+                    return new aiClass(rng, actionDelay, startDelay);
                 } catch (e:Error) {
                     trace("Error creating AI for type", type, ":", e.message);
                 }
             }
-            return new BasicAI(rng);
+            return new BasicAI(rng, actionDelay, startDelay);
         }
+
+        private static function getDefaultActionDelay(type:String):Number {
+            switch (type) {
+                case SIMPLE:
+                    return 3;
+                case SMART:
+                    return 1.5;
+                case HARD:
+                    return 0;
+                case DARK,FINAL:
+                    return 0.25;
+                default:
+                    return 1.5;
+            }
+        }
+
+        private static function getDefaultStartDelay(type:String):Number {
+            switch (type) {
+                case SIMPLE:
+                    return 3;
+                case SMART:
+                    return 1.5;
+                case HARD:
+                    return 1.5;
+                case DARK,FINAL:
+                    return 0.25;
+                default:
+                    return 1.5;
+            }
+        }        
     }
 }

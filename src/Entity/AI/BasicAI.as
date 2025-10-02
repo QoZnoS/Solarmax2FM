@@ -12,34 +12,28 @@ package Entity.AI {
         public var targets:Array;
         public var senders:Array;
 
-        public function BasicAI(rng:Rng) {
-            initAI(rng)
+        public function BasicAI(rng:Rng, actionDelay:Number, startDelay:Number) {
+            initAI(rng, actionDelay, startDelay)
         }
 
-        public function initAI(rng:Rng):void {
+        public function initAI(rng:Rng, actionDelay:Number, startDelay:Number):void {
             this._nodes = EntityContainer.nodes;
             this._rng = rng;
+            this.maxActionDelay = actionDelay;
+            this.actionDelay = startDelay;
             targets = [];
             senders = [];
-            actionDelay = 1.5;
-            if (team == 6)
-                actionDelay = 0.25;
         }
 
+        private var maxActionDelay:Number;
         private var actionDelay:Number;
 
         public function updateTimer(dt:Number):Boolean {
             actionDelay -= dt;
             if (actionDelay > 0)
                 return false;
-            if (actionDelay <= 0) {
-                if (team == 6)
-                    actionDelay = Math.max(0, (3 - Globals.difficultyInt) * (0.25 + rng.nextNumber() * 0.25));
-                else if (Globals.level == 33 && (team == 3 || team == 4))
-                    actionDelay = Math.max(0, (3 - Globals.difficultyInt) * (1.5 + rng.nextNumber() * 1.5));
-                else
-                    actionDelay = Math.max(0, (3 - Globals.difficultyInt) * (1.5 + rng.nextNumber() * 1.5));
-            }
+            if (actionDelay <= 0)
+                actionDelay = Math.max(0, maxActionDelay * (0.25 + rng.nextNumber() * 0.25));
             return true;
         }
 

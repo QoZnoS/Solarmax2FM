@@ -10,7 +10,6 @@ package Game.SpecialEvent {
     import starling.display.Image;
     import UI.UIContainer;
     import Entity.Ship;
-    import starling.core.Starling;
 
     public class DarknessFallsSE implements ISpecialEvent {
         private static const STATE_START:int = 0;
@@ -24,11 +23,16 @@ package Game.SpecialEvent {
         private var triggerTimer:Number;
         private var darkPulse:Image;
         private var targetTeam:int;
+        private var darkAI:Object = {
+            type:EnemyAIFactory.DARK,
+            actionDelay:0.25
+        }
 
         public function DarknessFallsSE(trigger:Object) {
             state = 0;
             triggerNode = EntityContainer.nodes[trigger.nodeTag];
             targetTeam = trigger.targetTeam;
+            darkAI.team = trigger.targetTeam;
             darkPulse = new Image(Root.assets.getTexture("halo"));
             darkPulse.pivotY = darkPulse.pivotX = darkPulse.width * 0.5;
             darkPulse.x = triggerNode.nodeData.x;
@@ -92,7 +96,7 @@ package Game.SpecialEvent {
                     // 黑色出场
                     NodeStaticLogic.changeTeam(triggerNode, 6);
                     NodeStaticLogic.changeShipsTeam(triggerNode, 6);
-                    EntityHandler.addAI(6, EnemyAIFactory.DARK);
+                    EntityHandler.addAI(darkAI);
                     darkPulse.scaleX = darkPulse.scaleY = 0;
                     darkPulse.visible = true;
                     darkPulse.alpha = 1;
