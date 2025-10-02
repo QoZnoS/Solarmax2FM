@@ -44,13 +44,13 @@ package Entity.AI {
             // #region 防御部分
             targets.length = 0;
             for each (_Node in _NodeArray) { // 计算目标天体
+                if (_Node.nodeData.isAIinvisible)
+                    continue;
                 _Node.getTransitShips(team);
                 if (_Node.nodeData.team != team && _Node.predictedTeamStrength(team) == 0)
                     continue; // 条件1：为己方天体或有己方飞船（包括飞行中的
                 if (_Node.predictedTeamStrength(team) > _Node.predictedOppStrength(team) * 2)
                     continue; // 条件2：预测己方强度低于敌方两倍（即可能打不过敌方
-                if (_Node.nodeData.isUntouchable)
-                    continue; // 排除障碍
                 _dx = _Node.nodeData.x - _CenterX;
                 _dy = _Node.nodeData.y - _CenterY;
                 _Distance = Math.sqrt(_dx * _dx + _dy * _dy); // 该天体到己方天体几何中心的距离
@@ -91,8 +91,8 @@ package Entity.AI {
             // #region 进攻部分
             targets.length = 0;
             for each (_Node in _NodeArray) { // 计算目标天体
-                if (_Node.nodeData.team == team || _Node.nodeData.isUntouchable || _Node.nodeData.isAIinvisible)
-                    continue; // 基本条件：不为己方天体且不为障碍星核
+                if (_Node.nodeData.team == team || _Node.nodeData.isAIinvisible)
+                    continue;
                 if (_Node.nodeData.team == 0 && _Node.predictedOppStrength(team) == 0 && _Node.predictedTeamStrength(team) > _Node.nodeData.size * 100)
                     continue; // 目标条件：不为中立或预测有非己方飞船或己方势力飞船不足100倍size（基本兵力上限）
                 _dx = _Node.nodeData.x - _CenterX;

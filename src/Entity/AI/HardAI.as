@@ -163,8 +163,7 @@ package Entity.AI {
         }
 
         public function targetCheckBasic(_Node:Node):Boolean {
-            // 判断能否作为目标天体
-            if (_Node.nodeData.isUntouchable || _Node.nodeData.isAIinvisible)
+            if (_Node.nodeData.isAIinvisible)
                 return false;
             return true;
         }

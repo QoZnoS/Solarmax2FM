@@ -49,8 +49,8 @@ package Entity.AI {
                     _Node.unloadShips();
                     return;
                 }
-                if (team == 6 || _Node.nodeData.isUntouchable || _Node.nodeData.isAIinvisible)
-                    continue; // ？排除障碍星核
+                if (team == 6 || _Node.nodeData.isAIinvisible)
+                    continue;
                 if (_Node.nodeData.team != team && _Node.predictedTeamStrength(team) == 0)
                     continue; // 条件1：为己方天体或有己方飞船（包括飞行中的）
                 if (_Node.predictedOppStrength(team) == 0)
@@ -68,6 +68,8 @@ package Entity.AI {
             if (targets.length > 0) { // 目标天体存在时
                 senders.length = 0;
                 for each (_Node in nodeArray) { // 计算出兵天体
+                    if (_Node.nodeData.isAIinvisible)
+                        continue;
                     if (_Node.aiTimers[team] > 0 || _Node.teamStrength(team) == 0)
                         continue; // 基本条件：该天体己方ai倒计时为0且该天体己方强度不为0
                     if (_Node.nodeData.team != team && _Node.predictedTeamStrength(team) > _Node.predictedOppStrength(team))
@@ -104,8 +106,8 @@ package Entity.AI {
             // #region 进攻
             targets.length = 0;
             for each (_Node in nodeArray) { // 计算目标天体
-                if (_Node.nodeData.team == team || _Node.nodeData.isUntouchable || _Node.nodeData.isAIinvisible)
-                    continue; // 基本条件：不为己方天体和障碍星核
+                if (_Node.nodeData.team == team || _Node.nodeData.isAIinvisible)
+                    continue;
                 if (_Node.predictedOppStrength(team) == 0 && _Node.predictedTeamStrength(team) > _Node.nodeData.size * 150)
                     continue; // 条件：排除己方强度足够且无敌方的天体
                 _dx = _Node.nodeData.x - _CenterX;
@@ -119,6 +121,8 @@ package Entity.AI {
             if (targets.length > 0) {
                 senders.length = 0;
                 for each (_Node in nodeArray) { // 计算出兵天体
+                    if (_Node.nodeData.isAIinvisible)
+                        continue;
                     if (_Node.aiTimers[team] > 0 || _Node.teamStrength(team) == 0)
                         continue; // 基本条件：该天体己方ai倒计时为0且该天体己方强度不为0
                     if (_Node.predictedOppStrength(team) == 0 && _Node.capturing)
@@ -149,7 +153,7 @@ package Entity.AI {
                             continue; // 总兵力不足估损时不派兵
                         if (Globals.level == 31)
                             if (_towerAttack > 0 && _senderNode.teamStrength(team) < _towerAttack * 2)
-                                break; // 32关兵力不足估损二倍时换个目标
+                                continue; // 32关兵力不足估损二倍时换个目标
                         if (_towerAttack > 0 && _senderNode.teamStrength(team) < _towerAttack * 0.5)
                             continue; // 出兵天体强度低于估损的一半时不派兵
                         // if (Globals.level == 34 && _targetNode.x == 912 && _targetNode.y == 544)
@@ -164,6 +168,8 @@ package Entity.AI {
             // #region 聚兵
             senders.length = 0;
             for each (_Node in nodeArray) { // 计算出兵天体
+                if (_Node.nodeData.isAIinvisible)
+                    continue;
                 if (_Node.nodeData.team != team && _Node.predictedOppStrength(team) == 0 && _Node.teamStrength(team) > 0)
                     continue; // 条件：没在锁星
                 if (_Node.predictedOppStrength(team) > 0 && _Node.predictedTeamStrength(team) > _Node.predictedOppStrength(team))
@@ -178,9 +184,9 @@ package Entity.AI {
             if (senders.length > 0) {
                 targets.length = 0;
                 for each (_Node in nodeArray) { // 计算目标天体
+                    if (_Node.nodeData.isAIinvisible)
+                        continue;
                     _Node.getOppLinks(team);
-                    if (_Node.nodeData.isUntouchable || _Node.nodeData.isAIinvisible)
-                        continue; // 排除障碍星核
                     _Node.aiValue = -_Node.oppNodeLinks.length; // 按路径数计算价值
                     if (_Node.nodeData.isWarp)
                         _Node.aiValue--; // 传送权重提高
@@ -201,8 +207,8 @@ package Entity.AI {
                         if (_towerAttack > 0 && Globals.teamPops[team] < _towerAttack)
                             continue; // 条件：总兵力不足估损时不派兵
                         if (Globals.level == 31)
-                            if (!(_towerAttack > 0 && _senderNode.teamStrength(team) < _towerAttack * 3))
-                                break; // 32关兵力不足估损三倍时换个目标
+                            if (_towerAttack > 0 && _senderNode.teamStrength(team) < _towerAttack * 3)
+                                continue; // 32关兵力不足估损三倍时换个目标
                         if (_towerAttack > 0 && _senderNode.teamStrength(team) < _towerAttack * 0.5)
                             continue; // 出兵天体强度低于估损的一半时不派兵
                         // if (Globals.level == 34 && _targetNode.x == 912 && _targetNode.y == 544)

@@ -50,8 +50,8 @@ package Entity.AI {
             // #region 进攻
             targets.length = 0;
             for each (_Node in nodeArray) { // 计算目标天体
-                if (_Node.nodeData.team == team || _Node.nodeData.isUntouchable || _Node.nodeData.isAIinvisible)
-                    continue; // 排除己方天体和星核障碍
+                if (_Node.nodeData.team == team || _Node.nodeData.isAIinvisible)
+                    continue;
                 if (_Node.predictedOppStrength(team) == 0 && _Node.predictedTeamStrength(team) > _Node.nodeData.size * 200)
                     continue; // 条件1：天体未被己方以二倍标准兵力占据
                 if (_Node.predictedOppStrength(team) > 0 && _Node.predictedTeamStrength(team) * 0.5 > _Node.predictedOppStrength(team))
@@ -106,7 +106,7 @@ package Entity.AI {
             // #region 聚兵
             senders.length = 0;
             for each (_Node in nodeArray) { // 计算出兵天体
-                if (_Node.nodeData.team != team || _Node.conflict)
+                if (_Node.nodeData.team != team || _Node.conflict || _Node.teamStrength(team) == 0)
                     continue; // 条件：为己方天体且无战争
                 _Node.aiValue = -_Node.teamStrength(team);
                 senders.push(_Node);
@@ -115,9 +115,9 @@ package Entity.AI {
             if (senders.length > 0) {
                 targets.length = 0;
                 for each (_Node in nodeArray) { // 计算目标天体
+                    if (_Node.nodeData.isAIinvisible)
+                        continue;
                     _Node.getOppLinks(team);
-                    if (_Node.nodeData.isUntouchable || _Node.nodeData.isAIinvisible)
-                        continue; // 排除星核障碍
                     _Node.aiValue = -_Node.oppNodeLinks.length; // 按路径数计算价值
                     if (_Node.nodeData.isWarp)
                         _Node.aiValue--; // 提高传送权重

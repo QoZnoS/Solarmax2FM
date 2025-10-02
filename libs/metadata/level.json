@@ -907,7 +907,8 @@
                 },
                 {
                     "name": "13",
-                    "color": "0x0000FF",
+                    "color": "0x00FF00",
+                    "color/hard": "0x0000FF",
                     "node": [
                         {
                             "x": 512,
@@ -1039,7 +1040,8 @@
                 },
                 {
                     "name": "14",
-                    "color": "0x0000FF",
+                    "color": "0x00FF00",
+                    "color/hard": "0x0000FF",
                     "node": [
                         {
                             "x": 512,
@@ -1539,7 +1541,8 @@
                 },
                 {
                     "name": "19",
-                    "color": "0x0000FF",
+                    "color": "0x00FF00",
+                    "color/hard": "0x0000FF",
                     "node": [
                         {
                             "x": 512,
@@ -2035,6 +2038,7 @@
                 },
                 {
                     "name": "24",
+                    "color/easy": "0x00FF00",
                     "color": "0x0000FF",
                     "node": [
                         {
@@ -2116,7 +2120,8 @@
                 },
                 {
                     "name": "25",
-                    "color": "0x0000FF",
+                    "color": "0x00FF00",
+                    "color/hard": "0x0000FF",
                     "node": [
                         {
                             "x": 112,
@@ -2579,7 +2584,8 @@
                 },
                 {
                     "name": "28",
-                    "color": "0xFFFF00",
+                    "color": "0x00FF00",
+                    "color/hard": "0xFFFF00",
                     "node": [
                         {
                             "x": 512,
@@ -2685,7 +2691,7 @@
                 },
                 {
                     "name": "29",
-                    "color": "0x0000FF",
+                    "color": "0x00FF00",
                     "node": [
                         {
                             "x": 512,
@@ -2818,7 +2824,7 @@
                 },
                 {
                     "name": "30",
-                    "color": "0x0000FF",
+                    "color": "0x00FF00",
                     "node": [
                         {
                             "x": 352,
@@ -3316,7 +3322,8 @@
                 },
                 {
                     "name": "33",
-                    "color": "0x0000FF",
+                    "color": "0x00FF00",
+                    "color/hard": "0x0000FF",
                     "specialEvents": [
                         {
                             "type": "BossAppear",
@@ -3575,7 +3582,8 @@
                 },
                 {
                     "name": "34",
-                    "color": "0xFFFF00",
+                    "color": "0x0000FF",
+                    "color/hard": "0xFFFF00",
                     "specialEvents": [
                         {
                             "type": "BossAppear",
@@ -3933,7 +3941,8 @@
                 },
                 {
                     "name": "35",
-                    "color": "0xFFFF00",
+                    "color": "0x00FF00",
+                    "color/hard": "0xFFFF00",
                     "specialEvents": [
                         {
                             "type": "BossAppear",
@@ -4293,7 +4302,8 @@
                 },
                 {
                     "name": "36",
-                    "color": "0xFFFF00",
+                    "color": "0x0000FF",
+                    "color/hard": "0xFFFF00",
                     "victoryCondition": {
                         "type": "None"
                     },
@@ -4313,12 +4323,12 @@
                             "type": "dilator",
                             "startShips": [
                                 0,
-                                100,
                                 0,
                                 0,
                                 0,
                                 0,
-                                0
+                                0,
+                                225
                             ]
                         },
                         {
