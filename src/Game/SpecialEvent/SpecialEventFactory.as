@@ -24,6 +24,7 @@ package Game.SpecialEvent {
             registerType(FLEET_SLIDER_GUIDE, FleetSliderGuideSE);
             registerType(DARKNESS_FALLS, DarknessFallsSE);
             registerType(BOSS_APPEAR, BossAppearSE);
+            registerType(GAME_END, GameEndSE);
 
             _ready = true;
         }

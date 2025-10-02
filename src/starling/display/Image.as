@@ -44,8 +44,6 @@ package starling.display
         private var mVertexDataCache:VertexData;
         private var mVertexDataCacheInvalid:Boolean;
 
-        public var team:int;
-
         /** Creates a quad with a texture mapped onto it. */
         public function Image(texture:Texture)
         {

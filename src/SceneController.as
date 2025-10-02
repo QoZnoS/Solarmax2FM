@@ -145,7 +145,7 @@ package {
                     break;
                 case 2:
                     initTitleMenu(1);
-                    applyFilter();
+                    // applyFilter();
                     break;
                 default:
                     initTitleMenu()

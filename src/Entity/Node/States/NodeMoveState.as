@@ -4,9 +4,7 @@ package Entity.Node.States {
     import starling.text.TextField;
     import Entity.Node.NodeData;
     import Entity.EntityContainer;
-    import UI.EntityLayer;
     import UI.UIContainer;
-    import Entity.EntityHandler;
 
     public class NodeMoveState implements INodeState {
         public var node:Node;

@@ -2,10 +2,8 @@ package Game.SpecialEvent {
     import Game.GameScene;
     import Entity.Node;
     import Entity.EntityHandler;
-    import Entity.EntityContainer;
     import Entity.FXHandler;
     import utils.GS;
-    import Entity.AI.EnemyAIFactory;
 
     public class BossAppearSE implements ISpecialEvent {
         private static const STATE_READY_APPEAR:int = 0;
@@ -94,13 +92,13 @@ package Game.SpecialEvent {
                     angle = Math.PI / 2;
                     maxSize = 1;
                     for (i = 0; i < 3; i++) {
-                        FXHandler.addDarkPulse(triggerNode, color, 1, maxSize, rate, angle, delay);
+                        FXHandler.addDarkPulse(triggerNode, color, 0, maxSize, rate, angle, delay);
                         delay += delayStep;
                         angle += angleStep;
-                        FXHandler.addDarkPulse(triggerNode, color, 1, maxSize, rate, angle, delay);
+                        FXHandler.addDarkPulse(triggerNode, color, 0, maxSize, rate, angle, delay);
                         delay += delayStep;
                         angle += angleStep;
-                        FXHandler.addDarkPulse(triggerNode, color, 1, maxSize, rate, angle, delay);
+                        FXHandler.addDarkPulse(triggerNode, color, 0, maxSize, rate, angle, delay);
                         delay += delayStep;
                         angle += angleStep;
                         maxSize *= 1.5;

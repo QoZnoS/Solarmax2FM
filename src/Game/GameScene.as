@@ -38,7 +38,6 @@ package Game {
         public var winningTeam:int;
         public var darkPulse:Image;
         public var bossTimer:Number;
-        public var slowMult:Number;
 
         public var rng:Rng;
 
@@ -266,7 +265,7 @@ package Game {
                 return;
             GS.update(dt); // 更新音效计时器
             dt *= this.alpha; // 速度随能见度变化
-            dt = updateSpeed(dt); // 更新游戏速度
+            dt *= scene.speedMult;
             Debug.update(e);
             var arr:Array;
             if (Globals.replay.length == 0) {
@@ -307,16 +306,6 @@ package Game {
             updateBarrier();
         }
 
-        public function updateSpeed(dt:Number):Number {
-            // if (Globals.level == 35 && gameOver) {
-            //     // 36关通关时
-            //     slowMult = Math.max(slowMult - dt * 0.75, 0.1);
-            //     dt *= slowMult;
-            // } else
-                dt *= scene.speedMult;
-            return dt;
-        }
-
         public function countTeamCaps(dt:Number):void {
             for (var team:int = 0; team < Globals.teamCount; team++) {
                 // 重置兵力
@@ -335,166 +324,6 @@ package Game {
             if (popLabels[2].alpha > 0) {
                 popLabels[2].x = 512 + popLabels[0].textBounds.width * 0.5 + 10;
                 popLabels[2].alpha = Math.max(0, popLabels[2].alpha - dt * 0.5);
-            }
-        }
-
-        // public function specialEvents():void {
-        //     var i:int;
-        //     var _boss:Node;
-        //     var _timer:Number;
-        //     var _rate:Number;
-        //     var _addTime:Number;
-        //     var _angle:Number;
-        //     var _angleStep:Number;
-        //     var _size:Number;
-        //     var _bossParam:int;
-        //     switch (Globals.level) // 处理特殊关卡的特殊事件
-        //     {
-        //         case 35:
-        //             if (!gameOver) {
-        //                 _boss = EntityContainer.nodes[0];
-        //                 if (!triggers[0] && _boss.nodeData.hp == 0) // 阶段一，坍缩动画
-        //                 {
-        //                     triggers[0] = true;
-        //                     _timer = 0;
-        //                     _rate = 0.5;
-        //                     _addTime = 1;
-        //                     _angle = 1.5707963267948966;
-        //                     _angleStep = 2.0943951023931953;
-        //                     _size = 2;
-        //                     for (i = 0; i < 64; i++) {
-        //                         FXHandler.addDarkPulse(_boss, Globals.teamColors[1], 1, _size, _rate, _angle, _timer);
-        //                         _timer += _addTime;
-        //                         _angle += _angleStep;
-        //                         FXHandler.addDarkPulse(_boss, Globals.teamColors[1], 1, _size, _rate, _angle, _timer);
-        //                         _timer += _addTime;
-        //                         _angle += _angleStep;
-        //                         FXHandler.addDarkPulse(_boss, Globals.teamColors[1], 1, _size, _rate, _angle, _timer);
-        //                         _timer += _addTime;
-        //                         _angle += _angleStep;
-        //                         if (i < 20) {
-        //                             _rate *= 1.1;
-        //                             _addTime *= 0.85;
-        //                         }
-        //                         _size *= 0.975;
-        //                     }
-        //                     FXHandler.addDarkPulse(_boss, Globals.teamColors[1], 2, 2.5, 0.75, 0, _timer - 5.5);
-        //                     FXHandler.addDarkPulse(_boss, Globals.teamColors[1], 2, 2.5, 1, 0, _timer - 4.5);
-        //                     _boss.triggerTimer = _timer - 2.5;
-        //                     if (Globals.levelReached == 35)
-        //                         Globals.levelReached = 36;
-        //                     if (Globals.levelData[Globals.level] < Globals.currentDifficulty)
-        //                         Globals.levelData[Globals.level] = Globals.currentDifficulty;
-        //                     Globals.save();
-        //                     GS.playMusic("bgm07", false);
-        //                     invisibleMode();
-        //                 }
-        //                 if (triggers[0] && !triggers[1]) // 阶段二，膨胀动画
-        //                 {
-        //                     _boss = EntityContainer.nodes[0];
-        //                     if (_boss.triggerTimer == 0) {
-        //                         triggers[1] = true;
-        //                         _timer = 0;
-        //                         _rate = 2;
-        //                         _addTime = 0.15;
-        //                         _angle = 1.5707963267948966;
-        //                         _angleStep = 2.0943951023931953;
-        //                         _size = 1.75;
-        //                         for (i = 0; i < 9; i++) {
-        //                             FXHandler.addDarkPulse(_boss, Globals.teamColors[1], 0, _size, _rate, _angle, _timer);
-        //                             _timer += _addTime;
-        //                             _angle += _angleStep;
-        //                             FXHandler.addDarkPulse(_boss, Globals.teamColors[1], 0, _size, _rate, _angle, _timer);
-        //                             _timer += _addTime;
-        //                             _angle += _angleStep;
-        //                             FXHandler.addDarkPulse(_boss, Globals.teamColors[1], 0, _size, _rate, _angle, _timer);
-        //                             _timer += _addTime;
-        //                             _angle += _angleStep;
-        //                             _size *= 1.2;
-        //                         }
-        //                         FXHandler.addDarkPulse(_boss, Globals.teamColors[1], 3, 20, 5, 0, _timer - 3.5);
-        //                         FXHandler.addDarkPulse(_boss, Globals.teamColors[1], 3, 25, 10, 0, _timer - 3.5);
-        //                         FXHandler.addDarkPulse(_boss, Globals.teamColors[1], 3, 30, 15, 0, _timer - 3.5);
-        //                         FXHandler.addDarkPulse(_boss, Globals.teamColors[1], 3, 40, 20, 0, _timer - 4);
-        //                         FXHandler.addDarkPulse(_boss, Globals.teamColors[1], 3, 50, 25, 0, _timer - 4);
-        //                         FXHandler.addDarkPulse(_boss, Globals.teamColors[1], 3, 60, 30, 0, _timer - 4);
-        //                         FXHandler.addDarkPulse(_boss, Globals.teamColors[1], 3, 50, 20, 0, _timer - 3);
-        //                         FXHandler.addDarkPulse(_boss, Globals.teamColors[1], 3, 60, 30, 0, _timer - 2);
-        //                         FXHandler.addDarkPulse(_boss, Globals.teamColors[1], 3, 50, 6, 0, _timer - 2);
-        //                         FXHandler.addDarkPulse(_boss, Globals.teamColors[1], 3, 60, 8, 0, _timer - 2);
-        //                         _boss.triggerTimer = _timer - 3.5;
-        //                     }
-        //                 }
-        //                 if (triggers[1] && !triggers[2]) // 阶段三，画面缩小，天体消失，回到主界面
-        //                 {
-        //                     _boss = EntityContainer.nodes[0];
-        //                     if (_boss.triggerTimer == 0) {
-        //                         _boss.active = false;
-        //                         gameOver = true;
-        //                         gameOverTimer = 1;
-        //                         slowMult = 1;
-        //                         triggers[2] = true;
-        //                         darkPulse.team = 1;
-        //                         darkPulse.scaleX = darkPulse.scaleY = 0;
-        //                         darkPulse.visible = true;
-        //                         Starling.juggler.tween(ui.gameContainer, 25, {"scaleX": 0.01,
-        //                                 "scaleY": 0.01,
-        //                                 "delay": 20,
-        //                                 "transition": "easeInOut"}); // 画面缩小动画
-        //                         Starling.juggler.tween(this, 5, {"alpha": 0,
-        //                                 "delay": 40,
-        //                                 "onComplete": hide}); // 天体消失动画
-        //                         Starling.juggler.delayCall(function():void {
-        //                             scene.playEndScene();
-        //                         }, 40); // 退回到主界面
-        //                     }
-        //                 }
-        //                 if (triggers[2] && gameOver) {
-        //                 }
-        //             }
-        //             break;
-        //         default:
-        //             return;
-        //     }
-        // }
-
-        public function expandDarkPulse(dt:Number):void {
-            var team:int = darkPulse.team;
-            var node:Node = null;
-            var x:Number = NaN;
-            var y:Number = NaN;
-            var distance:Number = NaN;
-            var ship:Ship = null;
-            darkPulse.color = Globals.teamColors[team];
-            darkPulse.color == 0 ? darkPulse.blendMode = "normal" : darkPulse.blendMode = "add";
-            team == 1 ? darkPulse.scaleX += dt * 2 : darkPulse.scaleX += dt * 0.5;
-            darkPulse.scaleY = darkPulse.scaleX;
-            if (darkPulse.width > 3072) {
-                darkPulse.visible = false;
-                gameOver = true;
-                winningTeam = 1;
-                gameOverTimer = 0.5;
-            }
-            for each (node in EntityContainer.nodes) {
-                if (node.nodeData.team == team || node.nodeData.isUntouchable)
-                    continue;
-                x = node.nodeData.x - darkPulse.x;
-                y = node.nodeData.y - darkPulse.y;
-                distance = Math.sqrt(x * x + y * y);
-                if (distance < darkPulse.width * 0.25) {
-                    NodeStaticLogic.changeTeam(node, team);
-                    NodeStaticLogic.changeShipsTeam(node, team);
-                    node.nodeData.hp = 100;
-                }
-            }
-            for each (ship in EntityContainer.ships) {
-                if (ship.team == team)
-                    continue;
-                x = ship.x - darkPulse.x;
-                y = ship.y - darkPulse.y;
-                distance = Math.sqrt(x * x + y * y);
-                if (distance < darkPulse.width * 0.25)
-                    ship.changeTeam(team);
             }
         }
 
@@ -528,18 +357,6 @@ package Game {
             addBarriers();
             hideSingleBarriers();
         }
-
-        public function invisibleMode():void {
-            // Starling.juggler.tween(ui.entityL.labelLayer, 5, {"alpha": 0,
-            //         "delay": 22});
-            // Starling.juggler.tween(ui.entityL.shipsLayer1, 5, {"alpha": 0,
-            //         "delay": 50});
-            // Starling.juggler.tween(ui.entityL.shipsLayer2, 5, {"alpha": 0,
-            //         "delay": 50});
-            // Starling.juggler.tween(ui.btnL, 5, {"alpha": 0,
-            //         "delay": 120});
-        }
-
         // #endregion
         // #region 障碍
         public function addBarriers():void {

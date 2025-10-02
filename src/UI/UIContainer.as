@@ -79,6 +79,15 @@ package UI {
         }
 
         public function deinitLevel():void {
+            if (Globals.touchControls) {
+                touchCL.visible = false;
+                touchCL.deinit();
+            } else {
+                tradiCL.visible = false;
+                tradiCL.deinit();
+            }
+            touchQuad.touchable = false;
+
             Starling.juggler.removeTweens(gameContainer);
             Starling.juggler.removeTweens(btnL);
             Starling.juggler.tween(gameContainer, Globals.transitionSpeed, {"alpha": 0,
@@ -88,19 +97,10 @@ package UI {
                     "transition": "easeInOut"});
             Starling.juggler.tween(btnL, Globals.transitionSpeed, {"alpha": 0,
                     "onComplete": function():void {
-                        btnL.deinitLevel()
+                        btnL.deinitLevel();
+                        entityL.deinit();
                     },
                     "transition": "easeInOut"});
-
-            if (Globals.touchControls) {
-                touchCL.visible = false;
-                touchCL.deinit();
-            } else {
-                tradiCL.visible = false;
-                tradiCL.deinit();
-            }
-            entityL.reset();
-            touchQuad.touchable = false;
         }
 
         public function restartLevel():void {
@@ -116,6 +116,7 @@ package UI {
                     "scaleY": _scale,
                     "y": 384,
                     "transition": "easeInOut"});
+            entityL.reset();
         }
 
         public function update():void {
@@ -142,6 +143,16 @@ package UI {
 
         public static function get btnLayer():BtnLayer {
             return ui.btnL;
+        }
+
+        public static function invisibleMode():void {
+            ui.entityL.invisibleMode();
+            Starling.juggler.tween(ui.btnL, 5, {"alpha": 0,
+                    "delay": 120});
+        }
+
+        public static function set touchable(value:Boolean):void {
+            ui.touchable = value;
         }
     }
 }

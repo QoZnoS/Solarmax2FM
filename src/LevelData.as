@@ -38,9 +38,7 @@ package {
         }
 
         public static function updateLevelData():void {
-            // 深拷贝 level
             var originalLevel:Object = rawData[Globals.currentData].level;
-            // 使用 JSON 序列化实现深拷贝
             level = JSON.parse(JSON.stringify(originalLevel)) as Array;
             process(level);
         }

@@ -6,6 +6,7 @@ package Menus.StartMenus {
     import starling.core.Starling;
     import utils.GS;
     import UI.Component.OptionButton;
+    import UI.UIContainer;
 
     public class StaffMenu extends Sprite implements IMenu {
 
@@ -97,7 +98,7 @@ package Menus.StartMenus {
                 nicobtn.label.color = COLOR;
                 title.on_menu(null);
                 title.loadMap();
-                title.scene.gameScene.invisibleMode();
+                UIContainer.invisibleMode();
             }
         }
     }

@@ -3,6 +3,7 @@ package UI {
     import starling.display.Sprite;
     import starling.display.BlendMode;
     import starling.display.Image;
+    import starling.core.Starling;
 
     /** 显示天体和飞船 */
     public class EntityLayer extends Sprite {
@@ -80,23 +81,26 @@ package UI {
             shipsFGBatchbs.push(new QuadBatch());
             fgNormalBatch.addChild(shipsFGBatchbs[0]);
             fgNormalBatch.addChild(labels);
+            labels.alpha = 1;
         }
 
         public function deinit():void {
-            disposeBatchVector(shipsBGBatchs);
-            disposeBatchVector(shipsBGBatchbs);
-            disposeBatchVector(shipsFGBatchs);
-            disposeBatchVector(shipsFGBatchbs);
+            removeBatchVector(shipsBGBatchs);
+            removeBatchVector(shipsBGBatchbs);
+            removeBatchVector(shipsFGBatchs);
+            removeBatchVector(shipsFGBatchbs);
 
-            nodeGlow.dispose();
-            nodeBatch.dispose();
-            nodeGlowNormal.dispose();
-            fx.dispose();
-            labels.dispose();
-            blackholePulseBatch.dispose();
+            removeChild(nodeGlow);
+            removeChild(nodeBatch);
+            removeChild(nodeGlowNormal);
+            removeChild(fx);
+            removeChild(labels);
+            removeChild(blackholePulseBatch);
+
+            Starling.juggler.removeTweens(labels);
         }
 
-        public function reset():void{
+        public function reset():void {
             blackholeLayer.reset();
             resetBatchVector(shipsBGBatchs);
             resetBatchVector(shipsBGBatchbs);
@@ -105,9 +109,11 @@ package UI {
             fx.reset();
         }
 
-        private function disposeBatchVector(batches:Vector.<QuadBatch>):void {
-            for each (var batch:QuadBatch in batches)
-                batch.dispose();
+        private function removeBatchVector(batches:Vector.<QuadBatch>):void {
+            for each (var batch:QuadBatch in batches){
+                Starling.juggler.removeTweens(batch);
+                batch.removeFromParent();
+            }
             batches.length = 0;
         }
 
@@ -115,6 +121,7 @@ package UI {
             for each (var batch:QuadBatch in batches)
                 batch.reset();
         }
+
         //#endregion
         //#region 添加贴图
         public function addImage(image:Image, foreground:Boolean):void {
@@ -143,18 +150,18 @@ package UI {
             return newBatch;
         }
 
-        public function addNode(node:Image, halo:Image, glow:Image):void{
+        public function addNode(node:Image, halo:Image, glow:Image):void {
             nodeBatch.addChild(node);
-            if(halo.color == 0){
+            if (halo.color == 0) {
                 nodeGlowNormal.addChild(halo);
                 nodeGlowNormal.addChild(glow);
-            }else{
+            } else {
                 nodeGlow.addChild(halo);
                 nodeGlow.addChild(glow);
             }
         }
 
-        public function removeNode(node:Image, halo:Image, glow:Image):void{
+        public function removeNode(node:Image, halo:Image, glow:Image):void {
             nodeBatch.removeChild(node);
             if (nodeGlowNormal.contains(halo))
                 nodeGlowNormal.removeChild(halo);
@@ -166,30 +173,49 @@ package UI {
                 nodeGlow.removeChild(glow);
         }
 
-        public function addGlow(glow:Image):void{
+        public function addGlow(glow:Image):void {
             if (glow.color == 0)
                 nodeGlowNormal.addChild(glow);
             else
                 nodeGlow.addChild(glow);
         }
 
-        public function removeGlow(glow:Image):void{
+        public function removeGlow(glow:Image):void {
             if (nodeGlowNormal.contains(glow))
                 nodeGlowNormal.removeChild(glow);
             if (nodeGlow.contains(glow))
                 nodeGlow.removeChild(glow);
         }
+
+        public function invisibleMode():void {
+            var batch:QuadBatch;
+            Starling.juggler.tween(labelLayer, 5, {"alpha": 0,
+                    "delay": 22});
+            for each (batch in shipsBGBatchbs)
+                Starling.juggler.tween(batch, 5, {"alpha": 0,
+                        "delay": 50});
+            for each (batch in shipsBGBatchs)
+                Starling.juggler.tween(batch, 5, {"alpha": 0,
+                        "delay": 50});
+            for each (batch in shipsFGBatchbs)
+                Starling.juggler.tween(batch, 5, {"alpha": 0,
+                        "delay": 50});
+            for each (batch in shipsFGBatchs)
+                Starling.juggler.tween(batch, 5, {"alpha": 0,
+                        "delay": 50});
+        }
+
         //#endregion
         //#region getter
         public function get blackholeLayer():QuadBatch {
             return blackholePulseBatch;
         }
 
-        public function get fxLayer():QuadBatch{
+        public function get fxLayer():QuadBatch {
             return fx;
         }
 
-        public function get labelLayer():Sprite{
+        public function get labelLayer():Sprite {
             return labels;
         }
         //#endregion

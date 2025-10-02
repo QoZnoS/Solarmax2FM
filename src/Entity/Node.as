@@ -21,11 +21,9 @@ package Entity {
     import Game.GameScene;
     import Entity.GameEntity;
     import starling.text.TextField;
-    import Entity.EntityHandler;
     import Entity.EntityContainer;
     import utils.Rng;
     import utils.GS;
-    import utils.Drawer;
     import Entity.Node.NodeStaticLogic;
     import Entity.Node.NodeData;
     import Entity.Node.NodeType;
@@ -119,7 +117,6 @@ package Entity {
             nodeData = new NodeData(true);
             NodeStaticLogic.changeType(this, data.type, data.size);
             NodeStaticLogic.changeTeam(this, data.team, false);
-            NodeStaticLogic.updateLabelSizes(this);
             nodeData.deserialize(data);
             aiValue = 0;
             triggerTimer = 0;
@@ -131,6 +128,7 @@ package Entity {
                 transitShips[i] = 0;
             for each (var state:INodeState in statePool)
                 state.init();
+            NodeStaticLogic.updateLabelSizes(this);
         }
 
         override public function deInit():void {

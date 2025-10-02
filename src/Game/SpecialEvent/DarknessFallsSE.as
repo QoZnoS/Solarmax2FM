@@ -10,6 +10,7 @@ package Game.SpecialEvent {
     import starling.display.Image;
     import UI.UIContainer;
     import Entity.Ship;
+    import starling.core.Starling;
 
     public class DarknessFallsSE implements ISpecialEvent {
         private static const STATE_START:int = 0;
@@ -56,7 +57,7 @@ package Game.SpecialEvent {
                     state = STATE_BOSSIN;
                     triggerNode.nodeData.hp = 99.99; // 天体满占领度但不占领特效
                     triggerTimer = 24.34106748146577 - 3; // 24.34106748146577为动画的总时间
-
+                    Starling.juggler.tween(Globals,5,{"soundVolume":0});
                     // 播放动画
                     delay = 0;
                     delayStep = 1;
@@ -92,7 +93,6 @@ package Game.SpecialEvent {
                     if (triggerTimer > 0)
                         break;
                     state = STATE_BOSSOUT;
-                    Globals.soundVolume = 0;
                     // 黑色出场
                     NodeStaticLogic.changeTeam(triggerNode, 6);
                     NodeStaticLogic.changeShipsTeam(triggerNode, 6);
@@ -184,6 +184,7 @@ package Game.SpecialEvent {
 
         public function deinit():void {
             UIContainer.entityLayer.removeGlow(darkPulse);
+            Starling.juggler.removeTweens(Globals);
             Globals.soundVolume = soundVolume;
         }
 

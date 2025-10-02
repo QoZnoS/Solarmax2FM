@@ -3953,6 +3953,15 @@
                                         0,
                                         350
                                     ],
+                                    "startShips/hard": [
+                                        0,
+                                        0,
+                                        0,
+                                        0,
+                                        0,
+                                        0,
+                                        400
+                                    ],
                                     "popVal": 0,
                                     "isUntouchable": true,
                                     "isAIinvisible": true
@@ -4285,6 +4294,17 @@
                 {
                     "name": "36",
                     "color": "0xFFFF00",
+                    "victoryCondition": {
+                        "type": "None"
+                    },
+                    "specialEvents": [
+                        {
+                            "type": "GameEnd",
+                            "trigger": {
+                                "nodeTag": 0
+                            }
+                        }
+                    ],
                     "node": [
                         {
                             "team": 6,
@@ -4293,12 +4313,12 @@
                             "type": "dilator",
                             "startShips": [
                                 0,
+                                100,
                                 0,
                                 0,
                                 0,
                                 0,
-                                0,
-                                225
+                                0
                             ]
                         },
                         {

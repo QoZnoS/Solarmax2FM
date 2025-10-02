@@ -279,7 +279,6 @@ package Game {
         }
 
         private function set_expandDarkPulse(_team:int):void {
-            game.darkPulse.team = _team;
             game.darkPulse.scaleX = game.darkPulse.scaleY = 0;
             game.darkPulse.visible = true;
         }
