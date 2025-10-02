@@ -64,7 +64,7 @@ package {
         public static function load():void {
             fileStream.open(file, "read"); // 以只读模式打开文件
             var data:String = String(fileStream.readMultiByte(fileStream.bytesAvailable, "utf-8"));
-            rawData = JSON.parse(data);
+            rawData = JSON.parse(data).data;
             fileStream.close(); // 关闭文件
         }
 
