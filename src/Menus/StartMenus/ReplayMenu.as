@@ -2,7 +2,6 @@ package Menus.StartMenus {
     import starling.display.Sprite;
     import Menus.TitleMenu;
     import starling.core.Starling;
-    import UI.Component.MenuButton;
     import UI.Component.OptionButton;
     import flash.filesystem.File;
 

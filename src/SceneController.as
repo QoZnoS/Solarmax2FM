@@ -134,7 +134,7 @@ package {
          * @param label 警告文本
          */
         public static function alert(label:String):void {
-            var popup:Popup = new Popup("ERROR");
+            var popup:Popup = new Popup(Popup.TYPE_INFORMATION, "ERROR");
             if (!_s){
                 _alert = new Vector.<Popup>;
                 _alert.push(popup);

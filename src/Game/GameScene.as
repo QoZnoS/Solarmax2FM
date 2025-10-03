@@ -98,6 +98,8 @@ package Game {
             this.rep = rep;
             var levelData:Object = LevelData.level[Globals.level];
             var aiData:Array = levelData.ai;
+            if (!("ai" in levelData))
+                aiData = [];
             nodeIn(levelData.node);
             if (!rep)
                 Globals.replay = [rng.seed, [0]];
@@ -109,10 +111,6 @@ package Game {
             }
             for (i = 0; i < aiData.length; i++)
                 EntityHandler.addAI(aiData[i]);
-            // if (Globals.level >= 35 && !rep) { // 为36关黑色设定ai
-            //     Globals.difficultyInt == 3 ? EntityHandler.addAI(6, EnemyAIFactory.HARD) : EntityHandler.addAI(6, EnemyAIFactory.FINAL);
-            //     bossTimer = 0;
-            // }
             for each (var label:TextField in popLabels) {
                 switch (Globals.textSize) {
                     case 0:
