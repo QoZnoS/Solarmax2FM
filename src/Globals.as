@@ -12,7 +12,7 @@ package {
         public static var stageWidth:Number = 1920; // 画面宽度
         public static var stageHeight:Number = 1080; // 画面高度
         public static var device:String = "pc"; // 设备类型
-        public static var teamColors:Array = [13421772, 6272767, 16735635, 16747610, 13303662, 10066329, 0]; // 势力颜色
+        public static var teamColors:Array = [0xCCCCCC, 0x5FB6FF, 0xFF5D93, 0xFF8C5A, 0xCAFF6E, 0x999999, 0x000000]; // 势力颜色
         public static var teamCaps:Array = [0, 0, 0, 0, 0, 0, 0]; // 势力在关卡内的总飞船上限
         public static var teamPops:Array = [0, 0, 0, 0, 0, 0, 0]; // 势力在关卡内的总飞船数
         public static var teamShipSpeeds:Array = [50, 50, 50, 50, 50, 50, 100]; // 基础飞船速度
@@ -52,7 +52,6 @@ package {
         public static const VERSION:int = 250905;
 
         public static var saveVersion:int = VERSION;
-        public static var errorMessage:String;
 
         public static var saveData:Dictionary = new Dictionary(true);
         public static var replay:Array = [];
@@ -66,7 +65,7 @@ package {
          */
         public static function initTeam():void {
             fileStream = new FileStream();
-            teamCount = LevelData.extensions.data.(@id == currentData).@teamCount
+            teamCount = LevelData.rawData[Globals.currentData].team.length;
             if (teamCount == 7)
                 return;
             // 重置数组
@@ -132,7 +131,7 @@ package {
                     save(); // 保存存档文件到本地
                 } else { // 如果文件存在
                     saveVersion = -1;
-                    errorMessage = error.message;
+                    SceneController.alert("Failed to read the save file: " + error.message);
                 }
             }
             

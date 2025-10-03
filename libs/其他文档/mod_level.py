@@ -3,82 +3,67 @@ import json
 file_path = "./libs/其他文档/level.json"
 output_path = "./libs/其他文档/level_mod.json"
 
-def add_bgm_to_levels(data):
-    for item in data:
-        levels = item.get('level', [])
-        for index, level in enumerate(levels):
-            if index < 8:  # 索引0到7（前8个关卡）
-                level['bgm'] = 'bgm02'
-            elif index < 22:  # 索引8到21（接下来的14个关卡）
-                level['bgm'] = 'bgm04'
-            elif index < 31:  # 索引22到30（接下来的9个关卡）
-                level['bgm'] = 'bgm05'
-            else:  # 索引31及以后的关卡
-                level['bgm'] = 'bgm06'
-
-def shift_colors(data):
+def process_start_ships(data):
     """
-    将每个level数组中的color属性向前移动一位
+    处理JSON数据中的startShips字段
+    如果startShips中只有与team值为索引的项不为0，则将整个startShips替换为该值
     """
-    for item in data:
-        if 'level' in item:
-            levels = item['level']
+    
+    def process_node(node, team_data_length):
+        # 检查节点是否有startShips字段
+        if 'startShips' not in node:
+            return
             
-            # 如果level数组为空或只有一个元素，则跳过
-            if len(levels) <= 1:
-                continue
-                
-            # 保存第一个元素的color值
-            first_color = levels[0]['color']
+        start_ships = node['startShips']
+        
+        # 如果不是列表类型，跳过
+        if not isinstance(start_ships, list):
+            return
             
-            # 向前移动color值
-            for i in range(len(levels) - 1):
-                levels[i]['color'] = levels[i + 1]['color']
+        # 获取team值，如果不存在则视为0
+        team_index = node.get('team', 0)
+        
+        # 确保team_index在有效范围内
+        if team_index < 0 or team_index >= len(start_ships):
+            return
             
-            # 最后一项保持不变（实际上已经移动完成）
-            # 原逻辑是最后一项不动，所以不需要额外操作
+        # 检查是否只有team索引对应的值不为0
+        only_team_non_zero = True
+        for i, value in enumerate(start_ships):
+            if i != team_index and value != 0:
+                only_team_non_zero = False
+                break
+        
+        # 如果只有team索引对应的值不为0，则替换整个startShips
+        if only_team_non_zero and start_ships[team_index] != 0:
+            node['startShips'] = start_ships[team_index]
+    
+    # 处理主数据
+    if 'data' in data:
+        for item in data['data']:
+            if 'level' in item:
+                for level in item['level']:
+                    if 'node' in level:
+                        for node in level['node']:
+                            # 获取team数组长度用于验证
+                            team_length = len(item.get('team', []))
+                            process_node(node, team_length)
     
     return data
 
-def process_json_file(input_file, output_file):
-    """
-    处理JSON文件：读取、修改color值、保存
-    """
-    try:
-        # 读取JSON文件
-        with open(input_file, 'r', encoding='utf-8') as f:
-            content = json.load(f)
-        
-        # 检查数据结构
-        if 'data' in content:
-            # 处理data数组
-            content['data'] = shift_colors(content['data'])
-            
-            # 保存修改后的JSON
-            with open(output_file, 'w', encoding='utf-8') as f:
-                json.dump(content, f, indent=4, ensure_ascii=False)
-            
-            print(f"处理完成！结果已保存到: {output_file}")
-        else:
-            print("JSON文件中未找到 'data' 字段")
-            
-    except Exception as e:
-        print(f"处理文件时出错: {e}")
-
 def main():
     # 读取JSON文件
-    with open(file_path, 'r', encoding='utf-8') as file:
-        data = json.load(file)
+    with open(file_path, 'r', encoding='utf-8') as f:
+        data = json.load(f)
     
     # 处理数据
-    if 'data' in data:
-        add_bgm_to_levels(data['data'])
+    processed_data = process_start_ships(data)
     
     # 写回文件
-    with open(output_path, 'w', encoding='utf-8') as file:
-        json.dump(data, file, indent=4, ensure_ascii=False)
+    with open(output_path, 'w', encoding='utf-8') as f:
+        json.dump(processed_data, f, indent=4, ensure_ascii=False)
     
-    print("处理完成，结果已保存到 level_modified.json")
+    print("处理完成！结果已保存到 level_processed.json")
 
-if __name__ == '__main__':
-    process_json_file(file_path, output_path)
+if __name__ == "__main__":
+    main()

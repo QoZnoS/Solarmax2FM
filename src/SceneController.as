@@ -12,6 +12,9 @@ package {
     import utils.Popup;
 
     public class SceneController extends Sprite {
+        private static var _s:SceneController;
+        private static var _alert:Vector.<Popup>;
+
         public var titleMenu:TitleMenu; // 手动单例
         public var gameScene:GameScene; // 手动单例
         public var endScene:EndScene; // 手动单例
@@ -22,6 +25,7 @@ package {
 
         public function SceneController() {
             super();
+            _s = this;
             titleMenu = new TitleMenu(this);
             gameScene = new GameScene(this);
             endScene = new EndScene(this);
@@ -41,11 +45,8 @@ package {
             ui.x = gameScene.x = ui.pivotX = gameScene.pivotX = 512;
             ui.y = gameScene.y = ui.pivotY = gameScene.pivotY = 384;
             gameScene.scaleX = gameScene.scaleY = ui.scale = 1;
-            if (Globals.saveVersion == -1){
-                var popup:Popup = new Popup("ERROR");
-                addChild(popup);
-                popup.addLabel("Failed to read the save file: " + Globals.errorMessage);
-            }
+            for each (var popup:Popup in _alert)
+                addChild(popup)
         }
 
         // #region 处理黑边
@@ -127,6 +128,19 @@ package {
         /**编辑关卡*/
         public function editorMap():void {
 
+        }
+
+        /**弹出警告
+         * @param label 警告文本
+         */
+        public static function alert(label:String):void {
+            var popup:Popup = new Popup("ERROR");
+            if (!_s){
+                _alert = new Vector.<Popup>;
+                _alert.push(popup);
+            }else
+                _s.addChild(popup);
+            popup.addLabel(label);
         }
 
         /**退出到标题界面

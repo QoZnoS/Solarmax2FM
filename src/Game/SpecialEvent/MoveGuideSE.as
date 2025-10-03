@@ -15,6 +15,8 @@ package Game.SpecialEvent {
         public function MoveGuideSE(trigger:Object) {
             tutorial = new TutorialSprite();
             tutorial.init(TutorialSprite.TYPE_L1);
+            if (EntityContainer.nodes[0].ships[1].length == 0)
+                tutorial.type = TutorialSprite.TYPE_END;
             state = STATE_START;
         }
 

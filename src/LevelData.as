@@ -8,9 +8,8 @@ package {
         public static var file:File; // 文件
         public static var fileStream:FileStream;
         public static var nodeData:XML;
-        public static var extensions:XML;
         /** level.json 不含版本信息 */
-        public static var rawData:Object;
+        public static var rawData:Array;
         /** 关卡列表，经难度和图集修正 */
         public static var level:Array;
 
@@ -23,17 +22,15 @@ package {
             fileStream = new FileStream();
             nodeData = Root.assets.getXml("Node");
             rawData = Root.assets.getObject("level").data;
-            loadExtensions();
-            Globals.initTeam();
-            resetExtensions();
-            if (Globals.device == "Mobile") {
-                readExtensions();
-                return
+            if (Globals.currentData >= rawData.length){
+                SceneController.alert("The selected Mappack does not exist!");
+                Globals.currentData = 0;
             }
+            Globals.initTeam();
+            updateTeam();
             file = File.applicationDirectory.resolvePath("level.json");
             if (file.exists)
                 load();
-            readExtensions();
             updateLevelData();
         }
 
@@ -58,58 +55,42 @@ package {
             }
         }
 
+        private static function updateTeam():void {
+            var len:int = rawData[Globals.currentData].team.length;
+            for (var i:int = 0; i < len; i++) {
+                var teamData:Object = rawData[Globals.currentData].team[i];
+                if ("color" in teamData)
+                    Globals.teamColors[i] = teamData.color;
+                if ("shipSpeed" in teamData)
+                    Globals.teamShipSpeeds[i] = teamData.shipSpeed;
+                if ("shipAttack" in teamData)
+                    Globals.teamShipAttacks[i] = teamData.shipAttack;
+                if ("shipDefence" in teamData)
+                    Globals.teamShipDefences[i] = teamData.shipDefence;
+                if ("captureSpeed" in teamData)
+                    Globals.teamRepairingSpeeds[i] = Globals.teamColonizingSpeeds[i] = Globals.teamDestroyingSpeeds[i] = Globals.teamDecolonizingSpeeds[i] = teamData.captureSpeed;
+                if ("repairingSpeed" in teamData)
+                    Globals.teamRepairingSpeeds[i] = teamData.repairingSpeed;
+                if ("colonizingSpeed" in teamData)
+                    Globals.teamColonizingSpeeds[i] = teamData.colonizingSpeed;
+                if ("destroyingSpeed" in teamData)
+                    Globals.teamDestroyingSpeeds[i] = teamData.destroyingSpeed;
+                if ("decolonizingSpeed" in teamData)
+                    Globals.teamDecolonizingSpeeds[i] = teamData.decolonizingSpeed;
+                if ("constructionStrength" in teamData)
+                    Globals.teamConstructionStrengths[i] = teamData.constructionStrength;
+                if ("nodeBuild" in teamData)
+                    Globals.teamNodeBuilds[i] = teamData.nodeBuild;
+                if ("nodePop" in teamData)
+                    Globals.teamNodePops[i] = teamData.nodePop;
+            }
+        }
         // 导入关卡文件
         public static function load():void {
             fileStream.open(file, "read"); // 以只读模式打开文件
             var data:String = String(fileStream.readMultiByte(fileStream.bytesAvailable, "utf-8"));
             rawData = JSON.parse(data).data;
             fileStream.close(); // 关闭文件
-        }
-
-        public static function loadExtensions():void {
-            file = File.applicationDirectory.resolvePath("extensions.xml");
-            if (!file.exists)
-                extensions = Root.assets.getXml("extensions")
-            else {
-                fileStream.open(file, "read");
-                var _extensions:String = String(fileStream.readMultiByte(fileStream.bytesAvailable, "utf-8"));
-                fileStream.close();
-                extensions = XML(_extensions);
-            }
-            extensions.ignoreComments = true; // 忽略注释
-        }
-
-        public static function readExtensions():void {
-            var _currentData:int = Globals.currentData;
-            var _data:XMLList = extensions.data.(@id == _currentData);
-            for each (var _team:XML in _data.team) {
-                Globals.teamColors[_team.@id] = String(_team.@color) ? uint(_team.@color) : uint(extensions.data.(@id == 0).team.(@id == 6).@color);
-                Globals.teamShipSpeeds[_team.@id] = String(_team.@shipSpeed) ? _team.@shipSpeed : extensions.data.(@id == 0).team.(@id == 0).@shipSpeed;
-                Globals.teamShipAttacks[_team.@id] = String(_team.@shipAttack) ? _team.@shipAttack : extensions.data.(@id == 0).team.(@id == 0).@shipAttack;
-                Globals.teamShipDefences[_team.@id] = String(_team.@shipDefence) ? _team.@shipDefence : extensions.data.(@id == 0).team.(@id == 0).@shipDefence;
-                _team.@captureSpeed != undefined ? Globals.teamRepairingSpeeds[_team.@id] = Globals.teamColonizingSpeeds[_team.@id] = Globals.teamDestroyingSpeeds[_team.@id] = Globals.teamDecolonizingSpeeds[_team.@id] = _team.@captureSpeed : Globals.teamRepairingSpeeds[_team.@id] = Globals.teamColonizingSpeeds[_team.@id] = Globals.teamDestroyingSpeeds[_team.@id] = Globals.teamDecolonizingSpeeds[_team.@id] = extensions.data.(@id == 0).team.(@id == 0).@captureSpeed;
-                Globals.teamRepairingSpeeds[_team.@id] = String(_team.@repairingSpeed) ? _team.@repairingSpeed : Globals.teamRepairingSpeeds[_team.@id];
-                Globals.teamColonizingSpeeds[_team.@id] = String(_team.@colonizingSpeed) ? _team.@colonizingSpeed : Globals.teamColonizingSpeeds[_team.@id];
-                Globals.teamDestroyingSpeeds[_team.@id] = String(_team.@destroyingSpeed) ? _team.@destroyingSpeed : Globals.teamDestroyingSpeeds[_team.@id];
-                Globals.teamDecolonizingSpeeds[_team.@id] = String(_team.@decolonizingSpeed) ? _team.@decolonizingSpeed : Globals.teamDecolonizingSpeeds[_team.@id];
-                Globals.teamConstructionStrengths[_team.@id] = String(_team.@constructionStrength) ? _team.@constructionStrength : extensions.data.(@id == 0).team.(@id == 0).@constructionStrength;
-                Globals.teamNodeBuilds[_team.@id] = String(_team.@nodeBuild) ? _team.@nodeBuild : extensions.data.(@id == 0).team.(@id == 0).@nodeBuild;
-                Globals.teamNodePops[_team.@id] = String(_team.@nodePop) ? _team.@nodePop : extensions.data.(@id == 0).team.(@id == 0).@nodePop;
-            }
-        }
-
-        private static function resetExtensions():void {
-            var _data:XMLList = extensions.data.(@id == 0);
-            for each (var _team:XML in _data.team) {
-                Globals.teamColors[_team.@id] = uint(_team.@color);
-                Globals.teamShipSpeeds[_team.@id] = _team.@shipSpeed;
-                Globals.teamShipAttacks[_team.@id] = _team.@shipAttack;
-                Globals.teamShipDefences[_team.@id] = _team.@shipDefence;
-                Globals.teamRepairingSpeeds[_team.@id] = Globals.teamColonizingSpeeds[_team.@id] = Globals.teamDestroyingSpeeds[_team.@id] = Globals.teamDecolonizingSpeeds[_team.@id] = _team.@captureSpeed;
-                Globals.teamConstructionStrengths[_team.@id] = _team.@constructionStrength;
-                Globals.teamNodeBuilds[_team.@id] = _team.@nodeBuild;
-                Globals.teamNodePops[_team.@id] = _team.@nodePop;
-            }
         }
     }
 }

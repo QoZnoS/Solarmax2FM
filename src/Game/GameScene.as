@@ -328,8 +328,7 @@ package Game {
         }
 
         public function updateGameOver(dt:Number):void {
-            if (!gameOver) // 通关判断
-            {
+            if (!gameOver) { // 通关判断
                 gameOver = (winningTeam != -1);
                 if (gameOver) { // 处理游戏结束时的动画
                     var _ripple:int = 1;
@@ -357,6 +356,7 @@ package Game {
             addBarriers();
             hideSingleBarriers();
         }
+
         // #endregion
         // #region 障碍
         public function addBarriers():void {

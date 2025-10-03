@@ -126,9 +126,11 @@ package Game.SpecialEvent {
                     if (darkPulse.alpha > 0.5)
                         break;
                     state = STATE_END;
+                    _game.gameOverTimer = 0.5;
                     break;
-
                 case STATE_END:
+                    _game.gameOver = true;
+                    _game.winningTeam = Globals.playerTeam;
                     expandDarkPulse(dt);
                     break;
                 default:
@@ -147,11 +149,6 @@ package Game.SpecialEvent {
             darkPulse.scaleY = darkPulse.scaleX += dt * 0.5;
             if (chackDarkPulseEnd())
                 darkPulse.alpha -= dt / 10;
-            if (state == STATE_BOSSOUT) {
-                _game.gameOver = true;
-                _game.winningTeam = 1;
-                _game.gameOverTimer = 0.5;
-            }
             for each (node in EntityContainer.nodes) {
                 if (node.nodeData.team == targetTeam || node.nodeData.isUntouchable)
                     continue;

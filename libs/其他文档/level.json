@@ -3,11 +3,11 @@
     "data": [
         {
             "name": "SOLARMAX 2",
+            "mapper": "NICOTUASON",
             "describe1": "THE ORIGINAL GAME",
             "icon": "icon192",
             "team": [
                 {
-                    "id": 0,
                     "color": "0xCCCCCC",
                     "shipSpeed": 50,
                     "shipAttack": 1,
@@ -15,20 +15,36 @@
                     "captureSpeed": 1,
                     "constructionStrength": 1,
                     "nodeBuild": 1,
-                    "nodePop": 1
+                    "nodePop": 1,
+                    "repairingSpeed": 1,
+                    "colonizingSpeed": 1,
+                    "destroyingSpeed": 1,
+                    "decolonizingSpeed": 1,
+                    "注释1": "captureSpeed: 占领速度，使用此参数会同时修改以下四个参数，一般不建议区分这四个参数",
+                    "注释2": "repairingSpeed: 修复速度倍率：恢复己方天体占领度的速度倍率",
+                    "注释3": "colonizingSpeed: 建造速度倍率：占领中立天体的速度倍率",
+                    "注释4": "destroyingSpeed: 摧毁速度倍率：破坏敌方天体占领度的速度倍率",
+                    "注释5": "decolonizingSpeed: 中立破坏速度倍率：破坏中立天体上敌方占领度的速度倍率"
                 },
                 {
-                    "id": 1,
-                    "color": "0x5FB6FF",
-                    "shipSpeed": 50,
-                    "shipAttack": 1,
-                    "shipDefence": 1,
-                    "captureSpeed": 1,
-                    "constructionStrength": 1,
-                    "nodeBuild": 1,
-                    "nodePop": 1
+                    "color": "0x5FB6FF"
                 },
-                {}
+                {
+                    "color": "0xFF5D93"
+                },
+                {
+                    "color": "0xFF8C5A"
+                },
+                {
+                    "color": "0xCAFF6E"
+                },
+                {
+                    "color": "0x999999"
+                },
+                {
+                    "color": "0x000000",
+                    "shipSpeed": 100
+                }
             ],
             "level": [
                 {
@@ -74,6 +90,7 @@
                             "type": "planet"
                         }
                     ],
+                    "ai": [],
                     "gameScale": 1,
                     "bgm": "bgm02"
                 },
@@ -124,11 +141,35 @@
                             "type": "planet"
                         }
                     ],
+                    "ai/easy": [
+                        {
+                            "team": 2,
+                            "type": "SimpleAI",
+                            "actionDelay": 3,
+                            "startDelay": 3
+                        }
+                    ],
+                    "ai/normal": [
+                        {
+                            "team": 2,
+                            "type": "SmartAI",
+                            "actionDelay": 1.5,
+                            "startDelay": 1.5
+                        }
+                    ],
+                    "ai/hard": [
+                        {
+                            "team": 2,
+                            "type": "HardAI",
+                            "actionDelay": 0,
+                            "startDelay": 1.5
+                        }
+                    ],
                     "bgm": "bgm02"
                 },
                 {
                     "name": "03",
-                    "color": "0xFFAAAA",
+                    "color": "0x00FF00",
                     "node": [
                         {
                             "team": 1,
@@ -170,6 +211,14 @@
                             "x": 432,
                             "y": 472,
                             "type": "planet"
+                        }
+                    ],
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
                         }
                     ],
                     "bgm": "bgm02"
@@ -224,6 +273,14 @@
                             "y": 384,
                             "type": "planet",
                             "size": 0.4
+                        }
+                    ],
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
                         }
                     ],
                     "bgm": "bgm02"
@@ -284,6 +341,14 @@
                             "type": "planet"
                         }
                     ],
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        }
+                    ],
                     "bgm": "bgm02"
                 },
                 {
@@ -336,6 +401,14 @@
                             "x": 512,
                             "y": 536,
                             "type": "planet"
+                        }
+                    ],
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
                         }
                     ],
                     "bgm": "bgm02"
@@ -397,6 +470,14 @@
                             "x": 336,
                             "y": 384,
                             "type": "planet"
+                        }
+                    ],
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
                         }
                     ],
                     "bgm": "bgm02"
@@ -479,6 +560,14 @@
                             "barrierLinks": [
                                 7
                             ]
+                        }
+                    ],
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
                         }
                     ],
                     "bgm": "bgm02"
@@ -570,7 +659,15 @@
                             ]
                         }
                     ],
-                    "bgm": "bgm04"
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        }
+                    ],
+                    "bgm": "bgm02"
                 },
                 {
                     "name": "10",
@@ -639,6 +736,14 @@
                             "x": 312,
                             "y": 256,
                             "type": "planet"
+                        }
+                    ],
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
                         }
                     ],
                     "bgm": "bgm04"
@@ -740,11 +845,19 @@
                             ]
                         }
                     ],
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        }
+                    ],
                     "bgm": "bgm04"
                 },
                 {
                     "name": "12",
-                    "color": "0x00FF00",
+                    "color": "0xFFAAAA",
                     "node": [
                         {
                             "x": 600,
@@ -797,11 +910,20 @@
                             "type": "warp"
                         }
                     ],
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        }
+                    ],
                     "bgm": "bgm04"
                 },
                 {
                     "name": "13",
-                    "color": "0xFFAAAA",
+                    "color": "0x00FF00",
+                    "color/hard": "0x0000FF",
                     "node": [
                         {
                             "x": 512,
@@ -921,11 +1043,20 @@
                             "type": "planet"
                         }
                     ],
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        }
+                    ],
                     "bgm": "bgm04"
                 },
                 {
                     "name": "14",
-                    "color": "0x0000FF",
+                    "color": "0x00FF00",
+                    "color/hard": "0x0000FF",
                     "node": [
                         {
                             "x": 512,
@@ -1012,11 +1143,19 @@
                             "type": "planet"
                         }
                     ],
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        }
+                    ],
                     "bgm": "bgm04"
                 },
                 {
                     "name": "15",
-                    "color": "0x0000FF",
+                    "color": "0x00FF00",
                     "node": [
                         {
                             "x": 352,
@@ -1120,6 +1259,14 @@
                             "type": "planet"
                         }
                     ],
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        }
+                    ],
                     "bgm": "bgm04"
                 },
                 {
@@ -1172,6 +1319,14 @@
                             "x": 352,
                             "y": 472,
                             "type": "planet"
+                        }
+                    ],
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
                         }
                     ],
                     "bgm": "bgm04"
@@ -1297,6 +1452,14 @@
                             "type": "planet"
                         }
                     ],
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        }
+                    ],
                     "bgm": "bgm04"
                 },
                 {
@@ -1381,11 +1544,20 @@
                             "type": "planet"
                         }
                     ],
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        }
+                    ],
                     "bgm": "bgm04"
                 },
                 {
                     "name": "19",
                     "color": "0x00FF00",
+                    "color/hard": "0x0000FF",
                     "node": [
                         {
                             "x": 512,
@@ -1518,11 +1690,19 @@
                             ]
                         }
                     ],
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        }
+                    ],
                     "bgm": "bgm04"
                 },
                 {
                     "name": "20",
-                    "color": "0x0000FF",
+                    "color": "0x00FF00",
                     "node": [
                         {
                             "x": 512,
@@ -1575,6 +1755,14 @@
                                 0,
                                 0
                             ]
+                        }
+                    ],
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
                         }
                     ],
                     "bgm": "bgm04"
@@ -1642,6 +1830,14 @@
                             "x": 800,
                             "y": 384,
                             "type": "planet"
+                        }
+                    ],
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
                         }
                     ],
                     "bgm": "bgm04"
@@ -1744,6 +1940,14 @@
                             ]
                         }
                     ],
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        }
+                    ],
                     "bgm": "bgm04"
                 },
                 {
@@ -1837,11 +2041,20 @@
                             "type": "planet"
                         }
                     ],
-                    "bgm": "bgm05"
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        }
+                    ],
+                    "bgm": "bgm04"
                 },
                 {
                     "name": "24",
-                    "color": "0x00FF00",
+                    "color/easy": "0x00FF00",
+                    "color": "0x0000FF",
                     "node": [
                         {
                             "team": 1,
@@ -1904,11 +2117,26 @@
                             ]
                         }
                     ],
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        },
+                        {
+                            "team": 3,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        }
+                    ],
                     "bgm": "bgm05"
                 },
                 {
                     "name": "25",
-                    "color": "0x0000FF",
+                    "color": "0x00FF00",
+                    "color/hard": "0x0000FF",
                     "node": [
                         {
                             "x": 112,
@@ -2047,11 +2275,31 @@
                             "type": "planet"
                         }
                     ],
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        },
+                        {
+                            "team": 3,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        },
+                        {
+                            "team": 4,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        }
+                    ],
                     "bgm": "bgm05"
                 },
                 {
                     "name": "26",
-                    "color": "0x0000FF",
+                    "color": "0x00FF00",
                     "node": [
                         {
                             "team": 1,
@@ -2159,6 +2407,26 @@
                             "x": 384,
                             "y": 312,
                             "type": "planet"
+                        }
+                    ],
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        },
+                        {
+                            "team": 3,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        },
+                        {
+                            "team": 4,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
                         }
                     ],
                     "bgm": "bgm05"
@@ -2307,11 +2575,32 @@
                             ]
                         }
                     ],
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        },
+                        {
+                            "team": 3,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        },
+                        {
+                            "team": 4,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        }
+                    ],
                     "bgm": "bgm05"
                 },
                 {
                     "name": "28",
                     "color": "0x00FF00",
+                    "color/hard": "0xFFFF00",
                     "node": [
                         {
                             "x": 512,
@@ -2399,11 +2688,25 @@
                             "type": "planet"
                         }
                     ],
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        },
+                        {
+                            "team": 3,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        }
+                    ],
                     "bgm": "bgm05"
                 },
                 {
                     "name": "29",
-                    "color": "0xFFFF00",
+                    "color": "0x00FF00",
                     "node": [
                         {
                             "x": 512,
@@ -2518,11 +2821,25 @@
                             "size": 0.5
                         }
                     ],
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        },
+                        {
+                            "team": 3,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        }
+                    ],
                     "bgm": "bgm05"
                 },
                 {
                     "name": "30",
-                    "color": "0x0000FF",
+                    "color": "0x00FF00",
                     "node": [
                         {
                             "x": 352,
@@ -2645,11 +2962,31 @@
                             ]
                         }
                     ],
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        },
+                        {
+                            "team": 3,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        },
+                        {
+                            "team": 4,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        }
+                    ],
                     "bgm": "bgm05"
                 },
                 {
                     "name": "31",
-                    "color": "0x0000FF",
+                    "color": "0x00FF00",
                     "node": [
                         {
                             "x": 368,
@@ -2778,11 +3115,31 @@
                             ]
                         }
                     ],
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        },
+                        {
+                            "team": 3,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        },
+                        {
+                            "team": 4,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        }
+                    ],
                     "bgm": "bgm05"
                 },
                 {
                     "name": "32",
-                    "color": "0x00FF00",
+                    "color": "0xFFAAAA",
                     "specialEvents": [
                         {
                             "type": "DarknessFalls",
@@ -2968,16 +3325,25 @@
                             "size": 0.4
                         }
                     ],
-                    "bgm": "bgm06"
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        }
+                    ],
+                    "bgm": "bgm05"
                 },
                 {
                     "name": "33",
-                    "color": "0xFFAAAA",
+                    "color": "0x00FF00",
+                    "color/hard": "0x0000FF",
                     "specialEvents": [
                         {
                             "type": "BossAppear",
                             "trigger": {
-                                "ships": 0,
+                                "ships": 220,
                                 "node": {
                                     "x": 512,
                                     "y": 384,
@@ -2995,6 +3361,12 @@
                                     "popVal": 0,
                                     "isUntouchable": true,
                                     "isAIinvisible": true
+                                },
+                                "ai": {
+                                    "team": 6,
+                                    "type": "DarkAI",
+                                    "type/hard": "HardAI",
+                                    "startDelay": 0
                                 }
                             }
                         }
@@ -3201,11 +3573,75 @@
                             ]
                         }
                     ],
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        },
+                        {
+                            "team": 3,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        },
+                        {
+                            "team": 4,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        }
+                    ],
                     "bgm": "bgm06"
                 },
                 {
                     "name": "34",
                     "color": "0x0000FF",
+                    "color/hard": "0xFFFF00",
+                    "specialEvents": [
+                        {
+                            "type": "BossAppear",
+                            "trigger": {
+                                "ships": 220,
+                                "node": {
+                                    "x": 512,
+                                    "y": 384,
+                                    "type": "dilator",
+                                    "team": 6,
+                                    "startShips": [
+                                        0,
+                                        0,
+                                        0,
+                                        0,
+                                        0,
+                                        0,
+                                        320
+                                    ],
+                                    "startShips/hard": [
+                                        0,
+                                        0,
+                                        0,
+                                        0,
+                                        0,
+                                        0,
+                                        350
+                                    ],
+                                    "popVal": 0,
+                                    "isUntouchable": true,
+                                    "isAIinvisible": true
+                                },
+                                "ai": {
+                                    "team": 6,
+                                    "type": "DarkAI"
+                                },
+                                "ai/hard": {
+                                    "team": 6,
+                                    "type": "HardAI"
+                                }
+                            }
+                        }
+                    ],
                     "node": [
                         {
                             "x": 512,
@@ -3496,11 +3932,75 @@
                             ]
                         }
                     ],
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        },
+                        {
+                            "team": 3,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        },
+                        {
+                            "team": 4,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        }
+                    ],
                     "bgm": "bgm06"
                 },
                 {
                     "name": "35",
-                    "color": "0xFFFF00",
+                    "color": "0x00FF00",
+                    "color/hard": "0xFFFF00",
+                    "specialEvents": [
+                        {
+                            "type": "BossAppear",
+                            "trigger": {
+                                "ships": 220,
+                                "node": {
+                                    "x": 512,
+                                    "y": 384,
+                                    "type": "dilator",
+                                    "team": 6,
+                                    "startShips": [
+                                        0,
+                                        0,
+                                        0,
+                                        0,
+                                        0,
+                                        0,
+                                        350
+                                    ],
+                                    "startShips/hard": [
+                                        0,
+                                        0,
+                                        0,
+                                        0,
+                                        0,
+                                        0,
+                                        400
+                                    ],
+                                    "popVal": 0,
+                                    "isUntouchable": true,
+                                    "isAIinvisible": true
+                                },
+                                "ai": {
+                                    "team": 6,
+                                    "type": "DarkAI"
+                                },
+                                "ai/hard": {
+                                    "team": 6,
+                                    "type": "HardAI"
+                                }
+                            }
+                        }
+                    ],
                     "node": [
                         {
                             "team": 3,
@@ -3793,11 +4293,43 @@
                             "type": "warp"
                         }
                     ],
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        },
+                        {
+                            "team": 3,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        },
+                        {
+                            "team": 4,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        }
+                    ],
                     "bgm": "bgm06"
                 },
                 {
                     "name": "36",
-                    "color": "0xFFFF00",
+                    "color": "0x0000FF",
+                    "color/hard": "0xFFFF00",
+                    "victoryCondition": {
+                        "type": "None"
+                    },
+                    "specialEvents": [
+                        {
+                            "type": "GameEnd",
+                            "trigger": {
+                                "nodeTag": 0
+                            }
+                        }
+                    ],
                     "node": [
                         {
                             "team": 6,
@@ -4113,18 +4645,73 @@
                             "type": "warp"
                         }
                     ],
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        },
+                        {
+                            "team": 3,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        },
+                        {
+                            "team": 4,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        },
+                        {
+                            "team": 6,
+                            "type": "FinalAI",
+                            "type/hard": "HardAI",
+                            "startDelay": 0.25
+                        }
+                    ],
                     "bgm": "bgm06"
                 }
             ]
         },
         {
             "name": "Dark Empire Revival",
+            "mapper": "Thirdsister",
             "describe1": "  This version is based on the abandoned version and adds a new and ",
             "describe2": "stronger AI version (with difficulty levels referring to hard). As the commander ",
             "describe3": "of the Dark Empire, you carry all the hopes of the Dark Empire and are ready ",
             "describe4": "to face powerful enemies, break through the dead end, and defeat them!",
             "icon": "blackVer",
-            "team": [],
+            "team": [
+                {
+                    "color": "0xCCCCCC"
+                },
+                {
+                    "color": "0x000000",
+                    "captureSpeed": 2,
+                    "shipSpeed": 100
+                },
+                {
+                    "color": "0xFF5D93"
+                },
+                {
+                    "color": "0xFF8C5A"
+                },
+                {
+                    "color": "0xCAFF6E"
+                },
+                {
+                    "color": "0x999999"
+                },
+                {
+                    "color": "0xFFFFFF",
+                    "nodePop": 10000
+                },
+                {
+                    "color": "0x5FB6FF"
+                }
+            ],
             "level": [
                 {
                     "node": [
@@ -4264,7 +4851,7 @@
                         }
                     ],
                     "name": "02",
-                    "color": "0xFFAAAA",
+                    "color": "0x00FF00",
                     "bgm": "bgm02"
                 },
                 {
@@ -4401,7 +4988,7 @@
                         }
                     ],
                     "name": "04",
-                    "color": "0x00FF00",
+                    "color": "0x0000FF",
                     "bgm": "bgm02"
                 },
                 {
@@ -4467,7 +5054,7 @@
                         }
                     ],
                     "name": "05",
-                    "color": "0x0000FF",
+                    "color": "0x00FF00",
                     "bgm": "bgm02"
                 },
                 {
@@ -4616,7 +5203,7 @@
                         }
                     ],
                     "name": "06",
-                    "color": "0x00FF00",
+                    "color": "0x0000FF",
                     "bgm": "bgm02"
                 },
                 {
@@ -4750,7 +5337,7 @@
                         }
                     ],
                     "name": "07",
-                    "color": "0x0000FF",
+                    "color": "0x00FF00",
                     "bgm": "bgm02"
                 },
                 {
@@ -5038,7 +5625,7 @@
                         }
                     ],
                     "name": "09",
-                    "color": "0x00FF00",
+                    "color": "0x0000FF",
                     "bgm": "bgm04"
                 },
                 {
@@ -5172,7 +5759,7 @@
                         }
                     ],
                     "name": "10",
-                    "color": "0x0000FF",
+                    "color": "0x00FF00",
                     "bgm": "bgm04"
                 },
                 {
@@ -5380,7 +5967,7 @@
                         }
                     ],
                     "name": "12",
-                    "color": "0x00FF00",
+                    "color": "0x0000FF",
                     "bgm": "bgm04"
                 },
                 {
@@ -5567,7 +6154,7 @@
                         }
                     ],
                     "name": "13",
-                    "color": "0x0000FF",
+                    "color": "0x00FF00",
                     "bgm": "bgm04"
                 },
                 {
@@ -5652,7 +6239,7 @@
                         }
                     ],
                     "name": "14",
-                    "color": "0x00FF00",
+                    "color": "0x0000FF",
                     "bgm": "bgm04"
                 },
                 {
@@ -5721,7 +6308,7 @@
                         }
                     ],
                     "name": "15",
-                    "color": "0x0000FF",
+                    "color": "0x00FF00",
                     "bgm": "bgm04"
                 },
                 {
@@ -5812,7 +6399,7 @@
                         }
                     ],
                     "name": "16",
-                    "color": "0x00FF00",
+                    "color": "0x0000FF",
                     "bgm": "bgm04"
                 },
                 {
@@ -5975,7 +6562,7 @@
                         }
                     ],
                     "name": "17",
-                    "color": "0x0000FF",
+                    "color": "0x00FF00",
                     "bgm": "bgm04"
                 },
                 {
@@ -6482,7 +7069,7 @@
                         }
                     ],
                     "name": "19",
-                    "color": "0x00FF00",
+                    "color": "0xFFFF00",
                     "bgm": "bgm04"
                 },
                 {
@@ -6636,7 +7223,7 @@
                         }
                     ],
                     "name": "20",
-                    "color": "0xFFFF00",
+                    "color": "0x00FF00",
                     "bgm": "bgm04"
                 },
                 {
@@ -6962,7 +7549,7 @@
                         }
                     ],
                     "name": "23",
-                    "color": "0x00FF00",
+                    "color": "0x0000FF",
                     "bgm": "bgm05"
                 },
                 {
@@ -7192,7 +7779,7 @@
                         }
                     ],
                     "name": "24",
-                    "color": "0x0000FF",
+                    "color": "0x00FF00",
                     "bgm": "bgm05"
                 },
                 {
@@ -8743,7 +9330,7 @@
                         }
                     ],
                     "name": "28",
-                    "color": "0x00FF00",
+                    "color": "0xFFFF00",
                     "bgm": "bgm05"
                 },
                 {
@@ -9036,7 +9623,7 @@
                         }
                     ],
                     "name": "29",
-                    "color": "0xFFFF00",
+                    "color": "0x0000FF",
                     "bgm": "bgm05"
                 },
                 {
@@ -9127,7 +9714,7 @@
                         }
                     ],
                     "name": "30",
-                    "color": "0x0000FF",
+                    "color": "0x00FF00",
                     "bgm": "bgm05"
                 },
                 {
@@ -9299,7 +9886,7 @@
                         }
                     ],
                     "name": "31",
-                    "color": "0x00FF00",
+                    "color": "0x0000FF",
                     "bgm": "bgm05"
                 },
                 {
@@ -9877,7 +10464,7 @@
                         }
                     ],
                     "name": "32",
-                    "color": "0x0000FF",
+                    "color": "0xFFAAAA",
                     "bgm": "bgm06"
                 },
                 {
@@ -10172,7 +10759,7 @@
                         }
                     ],
                     "name": "33",
-                    "color": "0xFFAAAA",
+                    "color": "0x00FF00",
                     "bgm": "bgm06"
                 },
                 {
@@ -10520,7 +11107,7 @@
                         },
                         {
                             "x": 438,
-                            "y": "0x0000FF",
+                            "y": 255,
                             "type": "barrier"
                         },
                         {
@@ -10533,7 +11120,7 @@
                         },
                         {
                             "x": 576,
-                            "y": "0x0000FF",
+                            "y": 255,
                             "type": "barrier",
                             "barrierLinks": [
                                 5
@@ -10694,7 +11281,7 @@
                         }
                     ],
                     "name": "35",
-                    "color": "0x00FF00",
+                    "color": "0xFF0000",
                     "bgm": "bgm06"
                 },
                 {
@@ -11242,7 +11829,7 @@
                         }
                     ],
                     "name": "36",
-                    "color": "0xFF0000",
+                    "color": "0xFFFF00",
                     "bgm": "bgm06"
                 },
                 {
@@ -11806,7 +12393,7 @@
                         }
                     ],
                     "name": "37",
-                    "color": "0xFFFF00",
+                    "color": "0x00FF00",
                     "bgm": "bgm06"
                 },
                 {
@@ -12913,12 +13500,41 @@
         },
         {
             "name": "Dark Empire Revival (Abandoned)",
+            "mapper": "Thirdsister",
             "describe1": "  This is the first self-made version by the author's third sister,with black as ",
             "describe2": "the main perspective, featuring a broader and more creative map,and newly ",
             "describe3": "filled in white as a new special force with new attributes.But in hard AI, some  ",
             "describe4": "levels may become imbalanced.",
             "icon": "blackLegacy",
-            "team": [],
+            "team": [
+                {
+                    "color": "0xCCCCCC"
+                },
+                {
+                    "color": "0x000000",
+                    "captureSpeed": 2,
+                    "shipSpeed": 100
+                },
+                {
+                    "color": "0xFF5D93"
+                },
+                {
+                    "color": "0xFF8C5A"
+                },
+                {
+                    "color": "0xCAFF6E"
+                },
+                {
+                    "color": "0x999999"
+                },
+                {
+                    "color": "0xFFFFFF",
+                    "nodePop": 10000
+                },
+                {
+                    "color": "0x5FB6FF"
+                }
+            ],
             "level": [
                 {
                     "node": [
@@ -13026,7 +13642,7 @@
                         }
                     ],
                     "name": "02",
-                    "color": "0xFFAAAA",
+                    "color": "0x00FF00",
                     "bgm": "bgm02"
                 },
                 {
@@ -13163,7 +13779,7 @@
                         }
                     ],
                     "name": "04",
-                    "color": "0x00FF00",
+                    "color": "0x0000FF",
                     "bgm": "bgm02"
                 },
                 {
@@ -13229,7 +13845,7 @@
                         }
                     ],
                     "name": "05",
-                    "color": "0x0000FF",
+                    "color": "0x00FF00",
                     "bgm": "bgm02"
                 },
                 {
@@ -13378,7 +13994,7 @@
                         }
                     ],
                     "name": "06",
-                    "color": "0x00FF00",
+                    "color": "0x0000FF",
                     "bgm": "bgm02"
                 },
                 {
@@ -13512,7 +14128,7 @@
                         }
                     ],
                     "name": "07",
-                    "color": "0x0000FF",
+                    "color": "0x00FF00",
                     "bgm": "bgm02"
                 },
                 {
@@ -13800,7 +14416,7 @@
                         }
                     ],
                     "name": "09",
-                    "color": "0x00FF00",
+                    "color": "0x0000FF",
                     "bgm": "bgm04"
                 },
                 {
@@ -13934,7 +14550,7 @@
                         }
                     ],
                     "name": "10",
-                    "color": "0x0000FF",
+                    "color": "0x00FF00",
                     "bgm": "bgm04"
                 },
                 {
@@ -14142,7 +14758,7 @@
                         }
                     ],
                     "name": "12",
-                    "color": "0x00FF00",
+                    "color": "0x0000FF",
                     "bgm": "bgm04"
                 },
                 {
@@ -14359,7 +14975,7 @@
                         }
                     ],
                     "name": "13",
-                    "color": "0x0000FF",
+                    "color": "0x00FF00",
                     "bgm": "bgm04"
                 },
                 {
@@ -14444,7 +15060,7 @@
                         }
                     ],
                     "name": "14",
-                    "color": "0x00FF00",
+                    "color": "0xFFFF00",
                     "bgm": "bgm04"
                 },
                 {
@@ -14513,7 +15129,7 @@
                         }
                     ],
                     "name": "15",
-                    "color": "0xFFFF00",
+                    "color": "0x00FF00",
                     "bgm": "bgm04"
                 },
                 {
@@ -14684,7 +15300,7 @@
                         }
                     ],
                     "name": "16",
-                    "color": "0x00FF00",
+                    "color": "0xFFFF00",
                     "bgm": "bgm04"
                 },
                 {
@@ -14867,7 +15483,7 @@
                         }
                     ],
                     "name": "17",
-                    "color": "0xFFFF00",
+                    "color": "0x0000FF",
                     "bgm": "bgm04"
                 },
                 {
@@ -15374,7 +15990,7 @@
                         }
                     ],
                     "name": "19",
-                    "color": "0x0000FF",
+                    "color": "0xFFFF00",
                     "bgm": "bgm04"
                 },
                 {
@@ -15528,7 +16144,7 @@
                         }
                     ],
                     "name": "20",
-                    "color": "0xFFFF00",
+                    "color": "0x00FF00",
                     "bgm": "bgm04"
                 },
                 {
@@ -16957,7 +17573,7 @@
                         }
                     ],
                     "name": "26",
-                    "color": "0x00FF00",
+                    "color": "0xFFFF00",
                     "bgm": "bgm05"
                 },
                 {
@@ -17249,7 +17865,7 @@
                         }
                     ],
                     "name": "27",
-                    "color": "0xFFFF00",
+                    "color": "0x0000FF",
                     "bgm": "bgm05"
                 },
                 {
@@ -17639,7 +18255,7 @@
                         }
                     ],
                     "name": "28",
-                    "color": "0x0000FF",
+                    "color": "0xFF0000",
                     "bgm": "bgm05"
                 },
                 {
@@ -17932,7 +18548,7 @@
                         }
                     ],
                     "name": "29",
-                    "color": "0xFF0000",
+                    "color": "0x0000FF",
                     "bgm": "bgm05"
                 },
                 {
@@ -18023,7 +18639,7 @@
                         }
                     ],
                     "name": "30",
-                    "color": "0x0000FF",
+                    "color": "0x00FF00",
                     "bgm": "bgm05"
                 },
                 {
@@ -18195,7 +18811,7 @@
                         }
                     ],
                     "name": "31",
-                    "color": "0x00FF00",
+                    "color": "0x0000FF",
                     "bgm": "bgm05"
                 },
                 {
@@ -18643,7 +19259,7 @@
                         }
                     ],
                     "name": "32",
-                    "color": "0x0000FF",
+                    "color": "0xFFAAAA",
                     "bgm": "bgm06"
                 },
                 {
@@ -18938,7 +19554,7 @@
                         }
                     ],
                     "name": "33",
-                    "color": "0xFFAAAA",
+                    "color": "0x00FF00",
                     "bgm": "bgm06"
                 },
                 {
@@ -19252,7 +19868,7 @@
                         },
                         {
                             "x": 438,
-                            "y": "0x0000FF",
+                            "y": 255,
                             "type": "barrier"
                         },
                         {
@@ -19265,7 +19881,7 @@
                         },
                         {
                             "x": 576,
-                            "y": "0x0000FF",
+                            "y": 255,
                             "type": "barrier",
                             "barrierLinks": [
                                 5
@@ -19423,7 +20039,7 @@
                         }
                     ],
                     "name": "35",
-                    "color": "0x00FF00",
+                    "color": "0xFF0000",
                     "bgm": "bgm06"
                 },
                 {
@@ -19894,7 +20510,7 @@
                         }
                     ],
                     "name": "36",
-                    "color": "0xFF0000",
+                    "color": "0x000000",
                     "bgm": "bgm06"
                 },
                 {
@@ -20458,7 +21074,7 @@
                         }
                     ],
                     "name": "37",
-                    "color": "0x000000",
+                    "color": "0x0000FF",
                     "bgm": "bgm06"
                 },
                 {
@@ -20938,7 +21554,7 @@
                         }
                     ],
                     "name": "38",
-                    "color": "0x0000FF",
+                    "color": "0x00FF00",
                     "bgm": "bgm06"
                 },
                 {
@@ -21565,12 +22181,42 @@
         },
         {
             "name": "New World",
+            "mapper": "Tuetledove",
             "describe1": "You have discovered a brand-new area. While exploring this area, you have found many devices that you have never seen before, but they also make you",
             "describe2": "",
             "describe3": "feel strangely familiar. Your enemies have also discovered this area. It seems that a new battle is about to begin...",
             "describe4": "",
             "icon": "solarmax3",
-            "team": [],
+            "team": [
+                {
+                    "color": "0xCCCCCC",
+                    "nodePop": 0
+                },
+                {
+                    "color": "0x5FB6FF"
+                },
+                {
+                    "color": "0xFF5D93"
+                },
+                {
+                    "color": "0xFF8C5A"
+                },
+                {
+                    "color": "0xCAFF6E"
+                },
+                {
+                    "color": "0x999999",
+                    "captureSpeed": 0.00001
+                },
+                {
+                    "color": "0x000000",
+                    "shipSpeed": 100,
+                    "captureSpeed": 2
+                },
+                {
+                    "color": "0xDA70D6"
+                }
+            ],
             "level": [
                 {
                     "node": [
@@ -21579,7 +22225,6 @@
                             "startShips": [
                                 0,
                                 90,
-                                0,
                                 0,
                                 0,
                                 0,
@@ -21634,7 +22279,6 @@
                                 0,
                                 0,
                                 0,
-                                0,
                                 0
                             ],
                             "y": 384,
@@ -21672,7 +22316,6 @@
                                 0,
                                 0,
                                 0,
-                                0,
                                 0
                             ],
                             "y": 288,
@@ -21685,7 +22328,6 @@
                                 0,
                                 0,
                                 15,
-                                0,
                                 0,
                                 0,
                                 0,
@@ -21723,7 +22365,7 @@
                         }
                     ],
                     "name": "02",
-                    "color": "0xFFAAAA",
+                    "color": "0x00FF00",
                     "bgm": "bgm02"
                 },
                 {
@@ -21732,7 +22374,6 @@
                             "x": 640,
                             "y": 384,
                             "type": "pulsecannon",
-                            "size": 0.3,
                             "team": 2
                         },
                         {
@@ -21763,7 +22404,6 @@
                                 0,
                                 0,
                                 0,
-                                0,
                                 0
                             ],
                             "y": 384,
@@ -21772,7 +22412,7 @@
                         }
                     ],
                     "name": "03",
-                    "color": "0x00FF00",
+                    "color": "0xFFAAAA",
                     "bgm": "bgm02"
                 },
                 {
@@ -21782,7 +22422,6 @@
                             "startShips": [
                                 0,
                                 30,
-                                0,
                                 0,
                                 0,
                                 0,
@@ -21800,7 +22439,6 @@
                                 0,
                                 0,
                                 30,
-                                0,
                                 0,
                                 0,
                                 0,
@@ -21834,8 +22472,7 @@
                         {
                             "x": 512,
                             "y": 384,
-                            "type": "pulsecannon",
-                            "size": 0.3
+                            "type": "pulsecannon"
                         }
                     ],
                     "name": "04",
@@ -21860,21 +22497,18 @@
                         {
                             "x": 736,
                             "y": 384,
-                            "type": "pulsecannon",
-                            "size": 0.3
+                            "type": "pulsecannon"
                         },
                         {
                             "x": 288,
                             "y": 384,
-                            "type": "pulsecannon",
-                            "size": 0.3
+                            "type": "pulsecannon"
                         },
                         {
                             "x": 416,
                             "startShips": [
                                 0,
                                 30,
-                                0,
                                 0,
                                 0,
                                 0,
@@ -21892,7 +22526,6 @@
                                 0,
                                 0,
                                 30,
-                                0,
                                 0,
                                 0,
                                 0,
@@ -21945,7 +22578,7 @@
                         }
                     ],
                     "name": "05",
-                    "color": "0xFFAAAA",
+                    "color": "0x00FF00",
                     "bgm": "bgm02"
                 },
                 {
@@ -21966,7 +22599,6 @@
                             "x": 416,
                             "y": 288,
                             "type": "pulsecannon",
-                            "size": 0.3,
                             "orbitNode": 0
                         },
                         {
@@ -21974,7 +22606,6 @@
                             "x": 608,
                             "y": 480,
                             "type": "pulsecannon",
-                            "size": 0.3,
                             "orbitNode": 0
                         },
                         {
@@ -21982,7 +22613,6 @@
                             "x": 416,
                             "y": 480,
                             "type": "pulsecannon",
-                            "size": 0.3,
                             "orbitNode": 0
                         },
                         {
@@ -21990,7 +22620,6 @@
                             "x": 608,
                             "y": 288,
                             "type": "pulsecannon",
-                            "size": 0.3,
                             "orbitNode": 0
                         },
                         {
@@ -22018,7 +22647,6 @@
                             "startShips": [
                                 0,
                                 30,
-                                0,
                                 0,
                                 0,
                                 0,
@@ -22060,7 +22688,6 @@
                                 0,
                                 0,
                                 0,
-                                0,
                                 0
                             ],
                             "y": 576,
@@ -22094,7 +22721,6 @@
                                 0,
                                 0,
                                 30,
-                                0,
                                 0,
                                 0,
                                 0,
@@ -22132,7 +22758,6 @@
                                 0,
                                 0,
                                 30,
-                                0,
                                 0,
                                 0,
                                 0
@@ -22202,14 +22827,12 @@
                             "x": 512,
                             "y": 204,
                             "type": "pulsecannon",
-                            "size": 0.3,
                             "team": 1
                         },
                         {
                             "x": 512,
                             "y": 564,
                             "type": "pulsecannon",
-                            "size": 0.3,
                             "team": 1
                         },
                         {
@@ -22222,8 +22845,7 @@
                                 0,
                                 0,
                                 0,
-                                58,
-                                0
+                                58
                             ],
                             "y": 544,
                             "type": "planet",
@@ -22240,8 +22862,7 @@
                                 0,
                                 0,
                                 0,
-                                58,
-                                0
+                                58
                             ],
                             "y": 224,
                             "type": "planet",
@@ -22258,8 +22879,7 @@
                                 0,
                                 0,
                                 0,
-                                58,
-                                0
+                                58
                             ],
                             "y": 544,
                             "type": "planet",
@@ -22276,8 +22896,7 @@
                                 0,
                                 0,
                                 0,
-                                58,
-                                0
+                                58
                             ],
                             "y": 224,
                             "type": "planet",
@@ -22286,7 +22905,7 @@
                         }
                     ],
                     "name": "07",
-                    "color": "0x00FF00",
+                    "color": "0x0000FF",
                     "bgm": "bgm02"
                 },
                 {
@@ -22296,7 +22915,6 @@
                             "startShips": [
                                 0,
                                 30,
-                                0,
                                 0,
                                 0,
                                 0,
@@ -22329,7 +22947,6 @@
                                 0,
                                 0,
                                 0,
-                                0,
                                 0
                             ],
                             "y": 448,
@@ -22338,7 +22955,7 @@
                         }
                     ],
                     "name": "08",
-                    "color": "0x0000FF",
+                    "color": "0x00FF00",
                     "bgm": "bgm02"
                 },
                 {
@@ -22379,7 +22996,6 @@
                                 0,
                                 0,
                                 0,
-                                0,
                                 0
                             ],
                             "y": 384,
@@ -22396,7 +23012,6 @@
                                 0,
                                 0,
                                 0,
-                                0,
                                 0
                             ],
                             "y": 384,
@@ -22406,7 +23021,7 @@
                     ],
                     "name": "09",
                     "color": "0x00FF00",
-                    "bgm": "bgm04"
+                    "bgm": "bgm02"
                 },
                 {
                     "node": [
@@ -22478,7 +23093,6 @@
                                 0,
                                 0,
                                 0,
-                                0,
                                 0
                             ],
                             "y": 192,
@@ -22495,7 +23109,6 @@
                                 0,
                                 0,
                                 0,
-                                0,
                                 0
                             ],
                             "y": 192,
@@ -22508,7 +23121,6 @@
                                 0,
                                 0,
                                 30,
-                                0,
                                 0,
                                 0,
                                 0,
@@ -22529,7 +23141,6 @@
                                 30,
                                 0,
                                 0,
-                                0,
                                 0
                             ],
                             "y": 576,
@@ -22546,8 +23157,7 @@
                         {
                             "x": 512,
                             "y": 384,
-                            "type": "pulsecannon",
-                            "size": 0.3
+                            "type": "pulsecannon"
                         },
                         {
                             "x": 512,
@@ -22555,7 +23165,7 @@
                             "type": "planet",
                             "orbitSpeed": -0.1,
                             "orbitNode": 0,
-                            "team": 8
+                            "team": 6
                         },
                         {
                             "x": 512,
@@ -22563,7 +23173,7 @@
                             "type": "planet",
                             "orbitSpeed": -0.1,
                             "orbitNode": 0,
-                            "team": 8
+                            "team": 6
                         },
                         {
                             "x": 440,
@@ -22612,21 +23222,18 @@
                         {
                             "x": 216,
                             "y": 384,
-                            "type": "pulsecannon",
-                            "size": 0.3
+                            "type": "pulsecannon"
                         },
                         {
                             "x": 808,
                             "y": 384,
-                            "type": "pulsecannon",
-                            "size": 0.3
+                            "type": "pulsecannon"
                         },
                         {
                             "x": 128,
                             "startShips": [
                                 0,
                                 30,
-                                0,
                                 0,
                                 0,
                                 0,
@@ -22647,7 +23254,6 @@
                                 0,
                                 0,
                                 30,
-                                0,
                                 0,
                                 0,
                                 0,
@@ -22697,7 +23303,6 @@
                                 0,
                                 0,
                                 0,
-                                0,
                                 0
                             ],
                             "y": 296,
@@ -22714,7 +23319,6 @@
                                 0,
                                 0,
                                 30,
-                                0,
                                 0,
                                 0,
                                 0
@@ -22736,7 +23340,6 @@
                             "x": 416,
                             "y": 384,
                             "type": "captureship",
-                            "size": 0.3,
                             "team": 1
                         },
                         {
@@ -22752,7 +23355,6 @@
                                 0,
                                 0,
                                 40,
-                                0,
                                 0,
                                 0,
                                 0,
@@ -22774,8 +23376,7 @@
                         {
                             "x": 512,
                             "y": 384,
-                            "type": "captureship",
-                            "size": 0.3
+                            "type": "captureship"
                         },
                         {
                             "x": 640,
@@ -22807,7 +23408,6 @@
                                 0,
                                 0,
                                 0,
-                                0,
                                 0
                             ],
                             "y": 384,
@@ -22820,7 +23420,6 @@
                                 0,
                                 0,
                                 30,
-                                0,
                                 0,
                                 0,
                                 0,
@@ -22854,7 +23453,6 @@
                                 0,
                                 0,
                                 0,
-                                0,
                                 0
                             ],
                             "y": 576,
@@ -22868,7 +23466,6 @@
                             "x": 512,
                             "y": 192,
                             "type": "captureship",
-                            "size": 0.3,
                             "orbitNode": 0
                         },
                         {
@@ -22877,7 +23474,6 @@
                             "startShips": [
                                 0,
                                 30,
-                                0,
                                 0,
                                 0,
                                 0,
@@ -22896,7 +23492,6 @@
                             "x": 345.6,
                             "y": 480,
                             "type": "captureship",
-                            "size": 0.3,
                             "orbitNode": 0
                         },
                         {
@@ -22906,7 +23501,6 @@
                                 0,
                                 0,
                                 30,
-                                0,
                                 0,
                                 0,
                                 0,
@@ -22924,7 +23518,6 @@
                             "x": 678.4,
                             "y": 480,
                             "type": "captureship",
-                            "size": 0.3,
                             "orbitNode": 0
                         }
                     ],
@@ -22939,7 +23532,6 @@
                             "startShips": [
                                 0,
                                 40,
-                                0,
                                 0,
                                 0,
                                 0,
@@ -22962,7 +23554,6 @@
                                 0,
                                 0,
                                 0,
-                                0,
                                 0
                             ],
                             "y": 384,
@@ -23013,14 +23604,12 @@
                         {
                             "x": 720,
                             "y": 384,
-                            "type": "captureship",
-                            "size": 0.3
+                            "type": "captureship"
                         },
                         {
                             "x": 304,
                             "y": 384,
-                            "type": "captureship",
-                            "size": 0.3
+                            "type": "captureship"
                         },
                         {
                             "x": 512,
@@ -23034,7 +23623,7 @@
                         }
                     ],
                     "name": "15",
-                    "color": "0x00FF00",
+                    "color": "0x0000FF",
                     "bgm": "bgm04"
                 },
                 {
@@ -23049,7 +23638,6 @@
                                 0,
                                 0,
                                 0,
-                                0,
                                 0
                             ],
                             "y": 384,
@@ -23059,26 +23647,22 @@
                         {
                             "x": 512,
                             "y": 288,
-                            "type": "captureship",
-                            "size": 0.3
+                            "type": "captureship"
                         },
                         {
                             "x": 608,
                             "y": 384,
-                            "type": "captureship",
-                            "size": 0.3
+                            "type": "captureship"
                         },
                         {
                             "x": 512,
                             "y": 480,
-                            "type": "captureship",
-                            "size": 0.3
+                            "type": "captureship"
                         },
                         {
                             "x": 416,
                             "y": 384,
-                            "type": "captureship",
-                            "size": 0.3
+                            "type": "captureship"
                         },
                         {
                             "x": 512,
@@ -23198,8 +23782,7 @@
                                 0,
                                 0,
                                 0,
-                                60,
-                                0
+                                60
                             ],
                             "y": 384,
                             "type": "warp",
@@ -23211,7 +23794,6 @@
                                 0,
                                 0,
                                 60,
-                                0,
                                 0,
                                 0,
                                 0,
@@ -23232,7 +23814,6 @@
                                 0,
                                 0,
                                 0,
-                                0,
                                 0
                             ],
                             "y": 96,
@@ -23249,7 +23830,6 @@
                                 60,
                                 0,
                                 0,
-                                0,
                                 0
                             ],
                             "y": 384,
@@ -23258,7 +23838,7 @@
                         }
                     ],
                     "name": "16",
-                    "color": "0x0000FF",
+                    "color": "0x00FF00",
                     "bgm": "bgm04"
                 },
                 {
@@ -23272,21 +23852,19 @@
                                 0,
                                 0,
                                 0,
-                                0,
-                                0,
-                                135
+                                135,
+                                0
                             ],
                             "y": 384,
                             "type": "planet",
                             "size": 0.6,
-                            "team": 8
+                            "team": 6
                         },
                         {
                             "orbitSpeed": 0.1,
                             "x": 512,
                             "y": 272,
                             "type": "captureship",
-                            "size": 0.3,
                             "orbitNode": 0
                         },
                         {
@@ -23294,7 +23872,6 @@
                             "x": 512,
                             "y": 496,
                             "type": "captureship",
-                            "size": 0.3,
                             "orbitNode": 0
                         },
                         {
@@ -23302,7 +23879,6 @@
                             "x": 608,
                             "y": 328,
                             "type": "captureship",
-                            "size": 0.3,
                             "orbitNode": 0
                         },
                         {
@@ -23310,7 +23886,6 @@
                             "x": 416,
                             "y": 328,
                             "type": "captureship",
-                            "size": 0.3,
                             "orbitNode": 0
                         },
                         {
@@ -23318,7 +23893,6 @@
                             "x": 416,
                             "y": 440,
                             "type": "captureship",
-                            "size": 0.3,
                             "orbitNode": 0
                         },
                         {
@@ -23326,7 +23900,6 @@
                             "x": 608,
                             "y": 440,
                             "type": "captureship",
-                            "size": 0.3,
                             "orbitNode": 0
                         },
                         {
@@ -23334,7 +23907,6 @@
                             "startShips": [
                                 0,
                                 20,
-                                0,
                                 0,
                                 0,
                                 0,
@@ -23351,7 +23923,6 @@
                             "startShips": [
                                 0,
                                 20,
-                                0,
                                 0,
                                 0,
                                 0,
@@ -23374,7 +23945,6 @@
                                 20,
                                 0,
                                 0,
-                                0,
                                 0
                             ],
                             "y": 520,
@@ -23388,7 +23958,6 @@
                                 0,
                                 0,
                                 20,
-                                0,
                                 0,
                                 0,
                                 0,
@@ -23410,7 +23979,6 @@
                                 0,
                                 0,
                                 0,
-                                0,
                                 0
                             ],
                             "y": 520,
@@ -23423,7 +23991,6 @@
                             "startShips": [
                                 0,
                                 20,
-                                0,
                                 0,
                                 0,
                                 0,
@@ -23443,7 +24010,6 @@
                                 0,
                                 0,
                                 20,
-                                0,
                                 0,
                                 0,
                                 0
@@ -23462,7 +24028,6 @@
                                 20,
                                 0,
                                 0,
-                                0,
                                 0
                             ],
                             "y": 456,
@@ -23474,7 +24039,6 @@
                             "startShips": [
                                 0,
                                 20,
-                                0,
                                 0,
                                 0,
                                 0,
@@ -23496,7 +24060,6 @@
                                 20,
                                 0,
                                 0,
-                                0,
                                 0
                             ],
                             "y": 552,
@@ -23509,7 +24072,6 @@
                                 0,
                                 0,
                                 20,
-                                0,
                                 0,
                                 0,
                                 0,
@@ -23530,7 +24092,6 @@
                                 0,
                                 0,
                                 0,
-                                0,
                                 0
                             ],
                             "y": 456,
@@ -23544,7 +24105,6 @@
                                 0,
                                 0,
                                 20,
-                                0,
                                 0,
                                 0,
                                 0,
@@ -23564,7 +24124,6 @@
                                 0,
                                 0,
                                 0,
-                                0,
                                 0
                             ],
                             "y": 216,
@@ -23577,7 +24136,6 @@
                                 0,
                                 0,
                                 20,
-                                0,
                                 0,
                                 0,
                                 0,
@@ -23595,7 +24153,6 @@
                                 0,
                                 0,
                                 20,
-                                0,
                                 0,
                                 0,
                                 0,
@@ -23607,7 +24164,7 @@
                         }
                     ],
                     "name": "17",
-                    "color": "0x00FF00",
+                    "color": "0x0000FF",
                     "bgm": "bgm04"
                 },
                 {
@@ -23617,7 +24174,6 @@
                             "startShips": [
                                 0,
                                 50,
-                                0,
                                 0,
                                 0,
                                 0,
@@ -23633,8 +24189,7 @@
                         {
                             "x": 704,
                             "y": 384,
-                            "type": "captureship",
-                            "size": 0.3
+                            "type": "captureship"
                         },
                         {
                             "x": 896,
@@ -23642,7 +24197,6 @@
                                 0,
                                 0,
                                 60,
-                                0,
                                 0,
                                 0,
                                 0,
@@ -23668,7 +24222,7 @@
                         }
                     ],
                     "name": "18",
-                    "color": "0x0000FF",
+                    "color": "0x00FF00",
                     "bgm": "bgm04"
                 },
                 {
@@ -23704,7 +24258,6 @@
                                 0,
                                 0,
                                 0,
-                                0,
                                 0
                             ],
                             "y": 384,
@@ -23731,7 +24284,6 @@
                                 0,
                                 0,
                                 0,
-                                0,
                                 0
                             ],
                             "y": 384,
@@ -23745,7 +24297,7 @@
                         }
                     ],
                     "name": "19",
-                    "color": "0x00FF00",
+                    "color": "0x0000FF",
                     "bgm": "bgm04"
                 },
                 {
@@ -23753,15 +24305,13 @@
                         {
                             "x": 512,
                             "y": 384,
-                            "type": "pulsecannon",
-                            "size": 0.3
+                            "type": "pulsecannon"
                         },
                         {
                             "orbitSpeed": 0.1,
                             "x": 608,
                             "y": 384,
                             "type": "cloneturret",
-                            "size": 0.3,
                             "orbitNode": 0
                         },
                         {
@@ -23769,7 +24319,6 @@
                             "x": 512,
                             "y": 288,
                             "type": "cloneturret",
-                            "size": 0.3,
                             "orbitNode": 0
                         },
                         {
@@ -23777,7 +24326,6 @@
                             "x": 416,
                             "y": 384,
                             "type": "cloneturret",
-                            "size": 0.3,
                             "orbitNode": 0
                         },
                         {
@@ -23785,7 +24333,6 @@
                             "x": 512,
                             "y": 480,
                             "type": "cloneturret",
-                            "size": 0.3,
                             "orbitNode": 0
                         },
                         {
@@ -23828,7 +24375,6 @@
                                 0,
                                 0,
                                 0,
-                                0,
                                 0
                             ],
                             "y": 576,
@@ -23842,7 +24388,6 @@
                                 0,
                                 0,
                                 50,
-                                0,
                                 0,
                                 0,
                                 0,
@@ -23913,7 +24458,6 @@
                                 0,
                                 0,
                                 0,
-                                0,
                                 0
                             ],
                             "y": 190,
@@ -23931,7 +24475,6 @@
                                 0,
                                 0,
                                 0,
-                                0,
                                 0
                             ],
                             "y": 576,
@@ -23949,7 +24492,6 @@
                                 0,
                                 0,
                                 0,
-                                0,
                                 0
                             ],
                             "y": 576,
@@ -23967,7 +24509,6 @@
                                 40,
                                 0,
                                 0,
-                                0,
                                 0
                             ],
                             "y": 192,
@@ -23979,104 +24520,88 @@
                             "x": 192,
                             "y": 192,
                             "type": "captureship",
-                            "size": 0.3,
                             "team": 1
                         },
                         {
                             "x": 192,
                             "y": 576,
                             "type": "captureship",
-                            "size": 0.3,
                             "team": 2
                         },
                         {
                             "x": 832,
                             "y": 192,
                             "type": "captureship",
-                            "size": 0.3,
                             "team": 4
                         },
                         {
                             "x": 832,
                             "y": 576,
                             "type": "captureship",
-                            "size": 0.3,
                             "team": 3
                         },
                         {
                             "x": 448,
                             "y": 192,
-                            "type": "captureship",
-                            "size": 0.3
+                            "type": "captureship"
                         },
                         {
                             "x": 448,
                             "y": 576,
-                            "type": "captureship",
-                            "size": 0.3
+                            "type": "captureship"
                         },
                         {
                             "x": 576,
                             "y": 192,
-                            "type": "captureship",
-                            "size": 0.3
+                            "type": "captureship"
                         },
                         {
                             "x": 576,
                             "y": 576,
-                            "type": "captureship",
-                            "size": 0.3
+                            "type": "captureship"
                         },
                         {
                             "x": 320,
                             "y": 320,
-                            "type": "captureship",
-                            "size": 0.3
+                            "type": "captureship"
                         },
                         {
                             "x": 320,
                             "y": 448,
-                            "type": "captureship",
-                            "size": 0.3
+                            "type": "captureship"
                         },
                         {
                             "x": 704,
                             "y": 448,
-                            "type": "captureship",
-                            "size": 0.3
+                            "type": "captureship"
                         },
                         {
                             "x": 704,
                             "y": 320,
-                            "type": "captureship",
-                            "size": 0.3
+                            "type": "captureship"
                         },
                         {
                             "x": 192,
                             "y": 320,
                             "type": "cloneturret",
-                            "size": 0.3,
                             "team": 1
                         },
                         {
                             "x": 192,
                             "y": 448,
                             "type": "cloneturret",
-                            "size": 0.3,
                             "team": 2
                         },
                         {
                             "x": 832,
                             "y": 320,
                             "type": "cloneturret",
-                            "size": 0.3,
                             "team": 4
                         },
                         {
                             "x": 832,
                             "y": 448,
                             "type": "cloneturret",
-                            "size": 0.3,
                             "team": 3
                         },
                         {
@@ -24089,12 +24614,10 @@
                                 0,
                                 0,
                                 0,
-                                25,
-                                0
+                                25
                             ],
                             "y": 320,
                             "type": "cloneturret",
-                            "size": 0.3,
                             "team": 7
                         },
                         {
@@ -24107,12 +24630,10 @@
                                 0,
                                 0,
                                 0,
-                                25,
-                                0
+                                25
                             ],
                             "y": 448,
                             "type": "cloneturret",
-                            "size": 0.3,
                             "team": 7
                         },
                         {
@@ -24125,12 +24646,10 @@
                                 0,
                                 0,
                                 0,
-                                25,
-                                0
+                                25
                             ],
                             "y": 320,
                             "type": "cloneturret",
-                            "size": 0.3,
                             "team": 7
                         },
                         {
@@ -24143,17 +24662,15 @@
                                 0,
                                 0,
                                 0,
-                                25,
-                                0
+                                25
                             ],
                             "y": 448,
                             "type": "cloneturret",
-                            "size": 0.3,
                             "team": 7
                         }
                     ],
                     "name": "21",
-                    "color": "0x0000FF",
+                    "color": "0x00FF00",
                     "bgm": "bgm04"
                 },
                 {
@@ -24209,7 +24726,6 @@
                                 0,
                                 0,
                                 0,
-                                0,
                                 0
                             ],
                             "y": 288,
@@ -24228,7 +24744,6 @@
                                 30,
                                 0,
                                 0,
-                                0,
                                 0
                             ],
                             "y": 480,
@@ -24243,7 +24758,6 @@
                                 0,
                                 0,
                                 30,
-                                0,
                                 0,
                                 0,
                                 0,
@@ -24266,7 +24780,6 @@
                                 0,
                                 0,
                                 0,
-                                0,
                                 0
                             ],
                             "y": 288,
@@ -24283,14 +24796,13 @@
                                 0,
                                 0,
                                 0,
-                                0,
-                                0,
-                                50
+                                50,
+                                0
                             ],
                             "y": 160,
                             "type": "planet",
                             "size": 0.5,
-                            "team": 8
+                            "team": 6
                         },
                         {
                             "x": 224,
@@ -24306,14 +24818,13 @@
                                 0,
                                 0,
                                 0,
-                                0,
-                                0,
-                                50
+                                50,
+                                0
                             ],
                             "y": 608,
                             "type": "planet",
                             "size": 0.5,
-                            "team": 8
+                            "team": 6
                         },
                         {
                             "x": 800,
@@ -24332,6 +24843,7 @@
                             "x": 896,
                             "y": 384,
                             "type": "tower",
+                            "orbitSpeed": -0.1,
                             "orbitNode": 13,
                             "team": 1
                         },
@@ -24423,28 +24935,24 @@
                             "x": 320,
                             "y": 160,
                             "type": "cloneturret",
-                            "size": 0.3,
                             "team": 1
                         },
                         {
                             "x": 320,
                             "y": 608,
                             "type": "cloneturret",
-                            "size": 0.3,
                             "team": 2
                         },
                         {
                             "x": 704,
                             "y": 608,
                             "type": "cloneturret",
-                            "size": 0.3,
                             "team": 4
                         },
                         {
                             "x": 704,
                             "y": 160,
                             "type": "cloneturret",
-                            "size": 0.3,
                             "team": 3
                         },
                         {
@@ -24475,6 +24983,7 @@
                             "x": 704,
                             "y": 384,
                             "type": "tower",
+                            "orbitSpeed": -0.1,
                             "orbitNode": 13,
                             "team": 4
                         },
@@ -24482,6 +24991,7 @@
                             "x": 800,
                             "y": 480,
                             "type": "tower",
+                            "orbitSpeed": -0.1,
                             "orbitNode": 13,
                             "team": 2
                         },
@@ -24489,6 +24999,7 @@
                             "x": 800,
                             "y": 288,
                             "type": "tower",
+                            "orbitSpeed": -0.1,
                             "orbitNode": 13,
                             "team": 3
                         }
@@ -24508,14 +25019,13 @@
                                 0,
                                 0,
                                 0,
-                                0,
-                                0,
-                                50
+                                50,
+                                0
                             ],
                             "y": 384,
                             "type": "blackhole",
                             "size": 0.3,
-                            "team": 8
+                            "team": 6
                         },
                         {
                             "x": 416,
@@ -24548,33 +25058,28 @@
                         {
                             "x": 352,
                             "y": 224,
-                            "type": "captureship",
-                            "size": 0.3
+                            "type": "captureship"
                         },
                         {
                             "x": 352,
                             "y": 544,
-                            "type": "captureship",
-                            "size": 0.3
+                            "type": "captureship"
                         },
                         {
                             "x": 672,
                             "y": 544,
-                            "type": "captureship",
-                            "size": 0.3
+                            "type": "captureship"
                         },
                         {
                             "x": 672,
                             "y": 224,
-                            "type": "captureship",
-                            "size": 0.3
+                            "type": "captureship"
                         },
                         {
                             "x": 96,
                             "startShips": [
                                 0,
                                 30,
-                                0,
                                 0,
                                 0,
                                 0,
@@ -24596,7 +25101,6 @@
                                 0,
                                 0,
                                 0,
-                                0,
                                 0
                             ],
                             "y": 512,
@@ -24610,7 +25114,6 @@
                                 0,
                                 0,
                                 30,
-                                0,
                                 0,
                                 0,
                                 0,
@@ -24628,7 +25131,6 @@
                                 0,
                                 0,
                                 30,
-                                0,
                                 0,
                                 0,
                                 0
@@ -24679,7 +25181,6 @@
                                 0,
                                 0,
                                 0,
-                                0,
                                 0
                             ],
                             "y": 192,
@@ -24692,7 +25193,6 @@
                                 0,
                                 0,
                                 30,
-                                0,
                                 0,
                                 0,
                                 0,
@@ -24713,7 +25213,6 @@
                                 0,
                                 0,
                                 0,
-                                0,
                                 0
                             ],
                             "y": 576,
@@ -24730,7 +25229,6 @@
                                 30,
                                 0,
                                 0,
-                                0,
                                 0
                             ],
                             "y": 192,
@@ -24740,7 +25238,7 @@
                     ],
                     "name": "23",
                     "color": "0x00FF00",
-                    "bgm": "bgm05"
+                    "bgm": "bgm04"
                 },
                 {
                     "node": [
@@ -24754,7 +25252,6 @@
                                 0,
                                 0,
                                 0,
-                                0,
                                 0
                             ],
                             "y": 224,
@@ -24768,7 +25265,6 @@
                                 0,
                                 0,
                                 50,
-                                0,
                                 0,
                                 0,
                                 0,
@@ -24790,7 +25286,6 @@
                                 0,
                                 0,
                                 0,
-                                0,
                                 0
                             ],
                             "y": 224,
@@ -24808,7 +25303,6 @@
                                 50,
                                 0,
                                 0,
-                                0,
                                 0
                             ],
                             "y": 544,
@@ -24819,25 +25313,6 @@
                         {
                             "x": 896,
                             "startShips": [
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                50,
-                                0
-                            ],
-                            "y": 224,
-                            "type": "planet",
-                            "size": 0.5,
-                            "team": 7
-                        },
-                        {
-                            "x": 896,
-                            "startShips": [
-                                0,
                                 0,
                                 0,
                                 0,
@@ -24847,17 +25322,33 @@
                                 0,
                                 50
                             ],
+                            "y": 224,
+                            "type": "planet",
+                            "size": 0.5,
+                            "team": 7
+                        },
+                        {
+                            "x": 896,
+                            "startShips": [
+                                0,
+                                0,
+                                0,
+                                0,
+                                0,
+                                0,
+                                50,
+                                0
+                            ],
                             "y": 544,
                             "type": "planet",
                             "size": 0.5,
-                            "team": 8
+                            "team": 6
                         },
                         {
                             "orbitSpeed": 0.1,
                             "x": 32,
                             "y": 224,
                             "type": "cloneturret",
-                            "size": 0.3,
                             "orbitNode": 0,
                             "team": 1
                         },
@@ -24875,7 +25366,6 @@
                             "x": 224,
                             "y": 224,
                             "type": "captureship",
-                            "size": 0.3,
                             "orbitNode": 0,
                             "team": 1
                         },
@@ -24884,7 +25374,6 @@
                             "x": 128,
                             "y": 320,
                             "type": "pulsecannon",
-                            "size": 0.3,
                             "orbitNode": 0,
                             "team": 1
                         },
@@ -24892,7 +25381,6 @@
                             "x": 32,
                             "y": 544,
                             "type": "cloneturret",
-                            "size": 0.3,
                             "orbitSpeed": -0.1,
                             "orbitNode": 1,
                             "team": 2
@@ -24901,7 +25389,6 @@
                             "x": 128,
                             "y": 448,
                             "type": "pulsecannon",
-                            "size": 0.3,
                             "orbitSpeed": -0.1,
                             "orbitNode": 1,
                             "team": 2
@@ -24910,7 +25397,6 @@
                             "x": 224,
                             "y": 544,
                             "type": "captureship",
-                            "size": 0.3,
                             "orbitSpeed": -0.1,
                             "orbitNode": 1,
                             "team": 2
@@ -24928,7 +25414,6 @@
                             "x": 416,
                             "y": 224,
                             "type": "captureship",
-                            "size": 0.3,
                             "orbitSpeed": -0.1,
                             "orbitNode": 2,
                             "team": 3
@@ -24946,7 +25431,6 @@
                             "x": 608,
                             "y": 224,
                             "type": "cloneturret",
-                            "size": 0.3,
                             "orbitSpeed": -0.1,
                             "orbitNode": 2,
                             "team": 3
@@ -24955,7 +25439,6 @@
                             "x": 512,
                             "y": 320,
                             "type": "pulsecannon",
-                            "size": 0.3,
                             "orbitSpeed": -0.1,
                             "orbitNode": 2,
                             "team": 3
@@ -24965,7 +25448,6 @@
                             "x": 416,
                             "y": 544,
                             "type": "captureship",
-                            "size": 0.3,
                             "orbitNode": 3,
                             "team": 4
                         },
@@ -24974,7 +25456,6 @@
                             "x": 512,
                             "y": 448,
                             "type": "pulsecannon",
-                            "size": 0.3,
                             "orbitNode": 3,
                             "team": 4
                         },
@@ -24983,7 +25464,6 @@
                             "x": 608,
                             "y": 544,
                             "type": "cloneturret",
-                            "size": 0.3,
                             "orbitNode": 3,
                             "team": 4
                         },
@@ -25000,7 +25480,6 @@
                             "x": 800,
                             "y": 224,
                             "type": "captureship",
-                            "size": 0.3,
                             "orbitSpeed": -0.1,
                             "orbitNode": 4,
                             "team": 7
@@ -25018,7 +25497,6 @@
                             "x": 992,
                             "y": 224,
                             "type": "cloneturret",
-                            "size": 0.3,
                             "orbitSpeed": -0.1,
                             "orbitNode": 4,
                             "team": 7
@@ -25027,7 +25505,6 @@
                             "x": 896,
                             "y": 320,
                             "type": "pulsecannon",
-                            "size": 0.3,
                             "orbitSpeed": -0.1,
                             "orbitNode": 4,
                             "team": 7
@@ -25037,27 +25514,24 @@
                             "x": 800,
                             "y": 544,
                             "type": "captureship",
-                            "size": 0.3,
                             "orbitNode": 5,
-                            "team": 8
+                            "team": 6
                         },
                         {
                             "orbitSpeed": 0.1,
                             "x": 896,
                             "y": 448,
                             "type": "pulsecannon",
-                            "size": 0.3,
                             "orbitNode": 5,
-                            "team": 8
+                            "team": 6
                         },
                         {
                             "orbitSpeed": 0.1,
                             "x": 992,
                             "y": 544,
                             "type": "cloneturret",
-                            "size": 0.3,
                             "orbitNode": 5,
-                            "team": 8
+                            "team": 6
                         },
                         {
                             "orbitSpeed": 0.1,
@@ -25066,7 +25540,7 @@
                             "type": "blackhole",
                             "size": 0.3,
                             "orbitNode": 5,
-                            "team": 8
+                            "team": 6
                         },
                         {
                             "x": 320,
@@ -25160,12 +25634,10 @@
                                 0,
                                 0,
                                 0,
-                                0,
                                 0
                             ],
                             "y": 384,
                             "type": "pulsecannon",
-                            "size": 0.3,
                             "team": 1
                         },
                         {
@@ -25178,12 +25650,10 @@
                                 0,
                                 0,
                                 0,
-                                0,
                                 0
                             ],
                             "y": 384,
                             "type": "cloneturret",
-                            "size": 0.3,
                             "team": 1
                         },
                         {
@@ -25222,7 +25692,6 @@
                                 0,
                                 0,
                                 0,
-                                0,
                                 0
                             ],
                             "y": 384,
@@ -25231,7 +25700,7 @@
                         }
                     ],
                     "name": "25",
-                    "color": "0x00FF00",
+                    "color": "0x0000FF",
                     "bgm": "bgm05"
                 },
                 {
@@ -25408,12 +25877,10 @@
                                 50,
                                 0,
                                 0,
-                                0,
                                 0
                             ],
                             "y": 576,
                             "type": "cloneturret",
-                            "size": 0.3,
                             "team": 4
                         },
                         {
@@ -25426,12 +25893,10 @@
                                 0,
                                 0,
                                 0,
-                                0,
                                 0
                             ],
                             "y": 192,
                             "type": "cloneturret",
-                            "size": 0.3,
                             "team": 3
                         },
                         {
@@ -25462,12 +25927,10 @@
                                 0,
                                 0,
                                 0,
-                                0,
                                 0
                             ],
                             "y": 192,
                             "type": "cloneturret",
-                            "size": 0.3,
                             "team": 1
                         },
                         {
@@ -25480,12 +25943,10 @@
                                 0,
                                 0,
                                 0,
-                                0,
                                 0
                             ],
                             "y": 576,
                             "type": "cloneturret",
-                            "size": 0.3,
                             "team": 2
                         },
                         {
@@ -25496,7 +25957,7 @@
                         }
                     ],
                     "name": "26",
-                    "color": "0x0000FF",
+                    "color": "0xFFFF00",
                     "bgm": "bgm05"
                 },
                 {
@@ -25511,12 +25972,10 @@
                                 0,
                                 0,
                                 0,
-                                0,
                                 0
                             ],
                             "y": 384,
                             "type": "cloneturret",
-                            "size": 0.3,
                             "team": 1
                         },
                         {
@@ -25524,7 +25983,6 @@
                             "x": 512,
                             "y": 224,
                             "type": "pulsecannon",
-                            "size": 0.3,
                             "orbitNode": 0,
                             "team": 1
                         },
@@ -25533,7 +25991,6 @@
                             "x": 512,
                             "y": 544,
                             "type": "pulsecannon",
-                            "size": 0.3,
                             "orbitNode": 0,
                             "team": 1
                         },
@@ -25543,7 +26000,6 @@
                                 0,
                                 0,
                                 60,
-                                0,
                                 0,
                                 0,
                                 0,
@@ -25562,7 +26018,6 @@
                                 0,
                                 0,
                                 60,
-                                0,
                                 0,
                                 0,
                                 0,
@@ -25671,10 +26126,7 @@
                         {
                             "x": 448,
                             "y": 128,
-                            "type": "barrier",
-                            "barrierLinks": [
-                                19
-                            ]
+                            "type": "barrier"
                         }
                     ],
                     "name": "27",
@@ -25693,12 +26145,10 @@
                                 0,
                                 0,
                                 0,
-                                0,
                                 0
                             ],
                             "y": 384,
                             "type": "cloneturret",
-                            "size": 0.3,
                             "team": 1
                         },
                         {
@@ -25762,7 +26212,6 @@
                                 0,
                                 0,
                                 0,
-                                0,
                                 0
                             ],
                             "y": 219.5,
@@ -25778,7 +26227,6 @@
                                 0,
                                 0,
                                 120,
-                                0,
                                 0,
                                 0,
                                 0,
@@ -25800,7 +26248,6 @@
                                 120,
                                 0,
                                 0,
-                                0,
                                 0
                             ],
                             "y": 446.83,
@@ -25819,8 +26266,7 @@
                                 0,
                                 0,
                                 0,
-                                120,
-                                0
+                                120
                             ],
                             "y": 587.33,
                             "type": "planet",
@@ -25837,14 +26283,13 @@
                                 0,
                                 0,
                                 0,
-                                0,
-                                0,
-                                30
+                                30,
+                                0
                             ],
                             "y": 446.83,
                             "type": "planet",
                             "orbitNode": 0,
-                            "team": 8
+                            "team": 6
                         }
                     ],
                     "name": "28",
@@ -25863,12 +26308,10 @@
                                 0,
                                 0,
                                 0,
-                                0,
                                 0
                             ],
                             "y": 384,
                             "type": "cloneturret",
-                            "size": 0.3,
                             "team": 1
                         },
                         {
@@ -25880,82 +26323,71 @@
                                 0,
                                 0,
                                 0,
-                                0,
-                                0,
-                                388
+                                388,
+                                0
                             ],
                             "y": 384,
                             "type": "starbase",
-                            "team": 8
+                            "team": 6
                         },
                         {
                             "x": 192,
                             "y": 320,
                             "type": "cloneturret",
-                            "size": 0.3,
                             "team": 1
                         },
                         {
                             "x": 192,
                             "y": 448,
                             "type": "cloneturret",
-                            "size": 0.3,
                             "team": 1
                         },
                         {
                             "x": 320,
                             "y": 320,
                             "type": "cloneturret",
-                            "size": 0.3,
                             "team": 1
                         },
                         {
                             "x": 320,
                             "y": 448,
                             "type": "cloneturret",
-                            "size": 0.3,
                             "team": 1
                         },
                         {
                             "x": 448,
                             "y": 320,
                             "type": "cloneturret",
-                            "size": 0.3,
                             "team": 1
                         },
                         {
                             "x": 448,
                             "y": 448,
                             "type": "cloneturret",
-                            "size": 0.3,
                             "team": 1
                         },
                         {
                             "x": 576,
                             "y": 320,
                             "type": "cloneturret",
-                            "size": 0.3,
                             "team": 1
                         },
                         {
                             "x": 576,
                             "y": 448,
                             "type": "cloneturret",
-                            "size": 0.3,
                             "team": 1
                         },
                         {
                             "x": 704,
                             "y": 320,
                             "type": "cloneturret",
-                            "size": 0.3,
                             "team": 1
                         },
                         {
                             "x": 704,
                             "y": 448,
                             "type": "cloneturret",
-                            "size": 0.3,
                             "team": 1
                         }
                     ],
@@ -26060,7 +26492,6 @@
                             "x": 576,
                             "y": 448,
                             "type": "cloneturret",
-                            "size": 0.3,
                             "team": 3
                         },
                         {
@@ -26073,7 +26504,6 @@
                             "x": 448,
                             "y": 320,
                             "type": "cloneturret",
-                            "size": 0.3,
                             "team": 2
                         },
                         {
@@ -26139,7 +26569,6 @@
                                 0,
                                 0,
                                 30,
-                                0,
                                 0,
                                 0,
                                 0,
@@ -26153,7 +26582,6 @@
                             "x": 352,
                             "y": 544,
                             "type": "captureship",
-                            "size": 0.3,
                             "team": 1
                         },
                         {
@@ -26162,7 +26590,6 @@
                                 0,
                                 0,
                                 30,
-                                0,
                                 0,
                                 0,
                                 0,
@@ -26177,7 +26604,6 @@
                             "x": 672,
                             "y": 224,
                             "type": "captureship",
-                            "size": 0.3,
                             "team": 1
                         }
                     ],
@@ -26262,89 +26688,76 @@
                                 0,
                                 0,
                                 0,
-                                0,
                                 0
                             ],
                             "y": 384,
                             "type": "captureship",
-                            "size": 0.3,
                             "team": 1
                         },
                         {
                             "x": 512,
                             "y": 512,
                             "type": "captureship",
-                            "size": 0.3,
                             "team": 1
                         },
                         {
                             "x": 512,
                             "y": 640,
                             "type": "captureship",
-                            "size": 0.3,
                             "team": 1
                         },
                         {
                             "x": 512,
                             "y": 256,
                             "type": "captureship",
-                            "size": 0.3,
                             "team": 1
                         },
                         {
                             "x": 512,
                             "y": 128,
                             "type": "captureship",
-                            "size": 0.3,
                             "team": 1
                         },
                         {
                             "x": 384,
                             "y": 192,
                             "type": "cloneturret",
-                            "size": 0.3,
                             "team": 1
                         },
                         {
                             "x": 384,
                             "y": 576,
                             "type": "cloneturret",
-                            "size": 0.3,
                             "team": 1
                         },
                         {
                             "x": 384,
                             "y": 384,
                             "type": "cloneturret",
-                            "size": 0.3,
                             "team": 1
                         },
                         {
                             "x": 256,
                             "y": 320,
                             "type": "cloneturret",
-                            "size": 0.3,
                             "team": 1
                         },
                         {
                             "x": 256,
                             "y": 448,
                             "type": "cloneturret",
-                            "size": 0.3,
                             "team": 1
                         },
                         {
                             "x": 160,
                             "y": 256,
                             "type": "cloneturret",
-                            "size": 0.3,
                             "team": 1
                         },
                         {
                             "x": 160,
                             "y": 512,
                             "type": "cloneturret",
-                            "size": 0.3,
                             "team": 1
                         },
                         {
@@ -26356,13 +26769,12 @@
                                 0,
                                 0,
                                 0,
-                                0,
-                                0,
-                                64
+                                64,
+                                0
                             ],
                             "y": 320,
                             "type": "planet",
-                            "team": 8
+                            "team": 6
                         },
                         {
                             "x": 640,
@@ -26373,13 +26785,12 @@
                                 0,
                                 0,
                                 0,
-                                0,
-                                0,
-                                64
+                                64,
+                                0
                             ],
                             "y": 448,
                             "type": "planet",
-                            "team": 8
+                            "team": 6
                         },
                         {
                             "x": 768,
@@ -26390,13 +26801,12 @@
                                 0,
                                 0,
                                 0,
-                                0,
-                                0,
-                                64
+                                64,
+                                0
                             ],
                             "y": 192,
                             "type": "planet",
-                            "team": 8
+                            "team": 6
                         },
                         {
                             "x": 768,
@@ -26407,13 +26817,12 @@
                                 0,
                                 0,
                                 0,
-                                0,
-                                0,
-                                64
+                                64,
+                                0
                             ],
                             "y": 576,
                             "type": "planet",
-                            "team": 8
+                            "team": 6
                         },
                         {
                             "x": 768,
@@ -26424,13 +26833,12 @@
                                 0,
                                 0,
                                 0,
-                                0,
-                                0,
-                                64
+                                64,
+                                0
                             ],
                             "y": 384,
                             "type": "starbase",
-                            "team": 8
+                            "team": 6
                         },
                         {
                             "x": 960,
@@ -26441,13 +26849,12 @@
                                 0,
                                 0,
                                 0,
-                                0,
-                                0,
-                                64
+                                64,
+                                0
                             ],
                             "y": 256,
                             "type": "starbase",
-                            "team": 8
+                            "team": 6
                         },
                         {
                             "x": 960,
@@ -26458,13 +26865,12 @@
                                 0,
                                 0,
                                 0,
-                                0,
-                                0,
-                                64
+                                64,
+                                0
                             ],
                             "y": 512,
                             "type": "starbase",
-                            "team": 8
+                            "team": 6
                         }
                     ],
                     "name": "31",
@@ -26482,7 +26888,6 @@
                                 0,
                                 0,
                                 25,
-                                0,
                                 0,
                                 0
                             ],
@@ -26510,7 +26915,6 @@
                                 0,
                                 0,
                                 0,
-                                0,
                                 0
                             ],
                             "y": 192,
@@ -26527,7 +26931,6 @@
                                 0,
                                 0,
                                 25,
-                                0,
                                 0,
                                 0
                             ],
@@ -26546,12 +26949,10 @@
                                 0,
                                 0,
                                 0,
-                                0,
                                 0
                             ],
                             "y": 384,
                             "type": "pulsecannon",
-                            "size": 0.3,
                             "team": 1
                         },
                         {
@@ -26587,14 +26988,12 @@
                             "x": 416,
                             "y": 224,
                             "type": "captureship",
-                            "size": 0.3,
                             "team": 1
                         },
                         {
                             "x": 416,
                             "y": 544,
                             "type": "captureship",
-                            "size": 0.3,
                             "team": 1
                         },
                         {
@@ -26706,14 +27105,12 @@
                             "x": 768,
                             "y": 256,
                             "type": "cloneturret",
-                            "size": 0.3,
                             "team": 7
                         },
                         {
                             "x": 768,
                             "y": 512,
                             "type": "cloneturret",
-                            "size": 0.3,
                             "team": 7
                         },
                         {
@@ -26816,14 +27213,12 @@
                             "x": 864,
                             "y": 256,
                             "type": "pulsecannon",
-                            "size": 0.3,
                             "team": 7
                         },
                         {
                             "x": 864,
                             "y": 512,
                             "type": "pulsecannon",
-                            "size": 0.3,
                             "team": 7
                         },
                         {
@@ -26846,8 +27241,8 @@
                         }
                     ],
                     "name": "32",
-                    "color": "0xFFFF00",
-                    "bgm": "bgm06"
+                    "color": "0x0000FF",
+                    "bgm": "bgm05"
                 },
                 {
                     "node": [
@@ -26856,7 +27251,6 @@
                             "startShips": [
                                 0,
                                 40,
-                                0,
                                 0,
                                 0,
                                 0,
@@ -26891,14 +27285,12 @@
                         {
                             "x": 304,
                             "y": 384,
-                            "type": "pulsecannon",
-                            "size": 0.3
+                            "type": "pulsecannon"
                         },
                         {
                             "x": 720,
                             "y": 384,
-                            "type": "pulsecannon",
-                            "size": 0.3
+                            "type": "pulsecannon"
                         },
                         {
                             "x": 128,
@@ -26920,8 +27312,7 @@
                                 0,
                                 0,
                                 0,
-                                30,
-                                0
+                                30
                             ],
                             "y": 192,
                             "type": "planet",
@@ -26933,7 +27324,6 @@
                                 0,
                                 0,
                                 30,
-                                0,
                                 0,
                                 0,
                                 0,
@@ -26964,7 +27354,6 @@
                                 0,
                                 0,
                                 0,
-                                0,
                                 0
                             ],
                             "y": 192,
@@ -26979,7 +27368,6 @@
                                 0,
                                 0,
                                 30,
-                                0,
                                 0,
                                 0,
                                 0
@@ -27150,13 +27538,11 @@
                             ]
                         },
                         {
-                            "orbitSpeed": null,
                             "x": 928,
                             "y": 608,
                             "type": "barrier"
                         },
                         {
-                            "orbitSpeed": -55,
                             "x": 928,
                             "y": 352,
                             "type": "barrier"
@@ -27309,7 +27695,7 @@
                         }
                     ],
                     "name": "33",
-                    "color": "0x0000FF",
+                    "color": "0xFFFF00",
                     "bgm": "bgm06"
                 },
                 {
@@ -27319,7 +27705,6 @@
                             "startShips": [
                                 0,
                                 20,
-                                0,
                                 0,
                                 0,
                                 0,
@@ -27336,7 +27721,6 @@
                             "startShips": [
                                 0,
                                 20,
-                                0,
                                 0,
                                 0,
                                 0,
@@ -27358,7 +27742,6 @@
                                 0,
                                 0,
                                 0,
-                                0,
                                 0
                             ],
                             "y": 320,
@@ -27370,7 +27753,6 @@
                             "startShips": [
                                 0,
                                 20,
-                                0,
                                 0,
                                 0,
                                 0,
@@ -27421,50 +27803,42 @@
                         {
                             "x": 729.6,
                             "y": 307.2,
-                            "type": "captureship",
-                            "size": 0.3
+                            "type": "captureship"
                         },
                         {
                             "x": 729.6,
                             "y": 460.8,
-                            "type": "captureship",
-                            "size": 0.3
+                            "type": "captureship"
                         },
                         {
                             "x": 294.4,
                             "y": 307.2,
-                            "type": "captureship",
-                            "size": 0.3
+                            "type": "captureship"
                         },
                         {
                             "x": 294.4,
                             "y": 460.8,
-                            "type": "captureship",
-                            "size": 0.3
+                            "type": "captureship"
                         },
                         {
                             "x": 672,
                             "y": 230.4,
-                            "type": "captureship",
-                            "size": 0.3
+                            "type": "captureship"
                         },
                         {
                             "x": 672,
                             "y": 537.6,
-                            "type": "captureship",
-                            "size": 0.3
+                            "type": "captureship"
                         },
                         {
                             "x": 352,
                             "y": 230.4,
-                            "type": "captureship",
-                            "size": 0.3
+                            "type": "captureship"
                         },
                         {
                             "x": 352,
                             "y": 537.6,
-                            "type": "captureship",
-                            "size": 0.3
+                            "type": "captureship"
                         },
                         {
                             "x": 64,
@@ -27476,8 +27850,7 @@
                                 0,
                                 0,
                                 0,
-                                100,
-                                0
+                                100
                             ],
                             "y": 160,
                             "type": "starbase",
@@ -27489,7 +27862,6 @@
                                 0,
                                 0,
                                 100,
-                                0,
                                 0,
                                 0,
                                 0,
@@ -27510,7 +27882,6 @@
                                 0,
                                 0,
                                 0,
-                                0,
                                 0
                             ],
                             "y": 160,
@@ -27525,7 +27896,6 @@
                                 0,
                                 0,
                                 100,
-                                0,
                                 0,
                                 0,
                                 0
@@ -27562,28 +27932,24 @@
                             "x": 192,
                             "y": 160,
                             "type": "cloneturret",
-                            "size": 0.3,
                             "team": 7
                         },
                         {
                             "x": 192,
                             "y": 608,
                             "type": "cloneturret",
-                            "size": 0.3,
                             "team": 2
                         },
                         {
                             "x": 832,
                             "y": 160,
                             "type": "cloneturret",
-                            "size": 0.3,
                             "team": 3
                         },
                         {
                             "x": 832,
                             "y": 608,
                             "type": "cloneturret",
-                            "size": 0.3,
                             "team": 4
                         },
                         {
@@ -27691,8 +28057,7 @@
                         {
                             "x": 512,
                             "y": 384,
-                            "type": "pulsecannon",
-                            "size": 0.3
+                            "type": "pulsecannon"
                         }
                     ],
                     "name": "34",
@@ -27873,7 +28238,6 @@
                                 0,
                                 0,
                                 0,
-                                0,
                                 0
                             ],
                             "y": 160,
@@ -27886,7 +28250,6 @@
                                 0,
                                 0,
                                 60,
-                                0,
                                 0,
                                 0,
                                 0,
@@ -27907,7 +28270,6 @@
                                 0,
                                 0,
                                 0,
-                                0,
                                 0
                             ],
                             "y": 160,
@@ -27922,7 +28284,6 @@
                                 0,
                                 0,
                                 60,
-                                0,
                                 0,
                                 0,
                                 0
@@ -27992,38 +28353,32 @@
                         {
                             "x": 832,
                             "y": 304,
-                            "type": "captureship",
-                            "size": 0.3
+                            "type": "captureship"
                         },
                         {
                             "x": 832,
                             "y": 464,
-                            "type": "captureship",
-                            "size": 0.3
+                            "type": "captureship"
                         },
                         {
                             "x": 192,
                             "y": 304,
-                            "type": "captureship",
-                            "size": 0.3
+                            "type": "captureship"
                         },
                         {
                             "x": 192,
                             "y": 464,
-                            "type": "captureship",
-                            "size": 0.3
+                            "type": "captureship"
                         },
                         {
                             "x": 192,
                             "y": 384,
-                            "type": "pulsecannon",
-                            "size": 0.3
+                            "type": "pulsecannon"
                         },
                         {
                             "x": 832,
                             "y": 384,
-                            "type": "pulsecannon",
-                            "size": 0.3
+                            "type": "pulsecannon"
                         },
                         {
                             "x": 320,
@@ -28058,26 +28413,22 @@
                         {
                             "x": 448,
                             "y": 160,
-                            "type": "captureship",
-                            "size": 0.3
+                            "type": "captureship"
                         },
                         {
                             "x": 448,
                             "y": 608,
-                            "type": "captureship",
-                            "size": 0.3
+                            "type": "captureship"
                         },
                         {
                             "x": 576,
                             "y": 160,
-                            "type": "captureship",
-                            "size": 0.3
+                            "type": "captureship"
                         },
                         {
                             "x": 576,
                             "y": 608,
-                            "type": "captureship",
-                            "size": 0.3
+                            "type": "captureship"
                         },
                         {
                             "x": 448,
@@ -28109,12 +28460,10 @@
                                 0,
                                 0,
                                 225,
-                                0,
                                 0
                             ],
                             "y": 384,
                             "type": "pulsecannon",
-                            "size": 0.3,
                             "team": 6
                         },
                         {
@@ -28127,12 +28476,10 @@
                                 0,
                                 0,
                                 225,
-                                0,
                                 0
                             ],
                             "y": 384,
                             "type": "pulsecannon",
-                            "size": 0.3,
                             "team": 6
                         },
                         {
@@ -28200,7 +28547,6 @@
                                 0,
                                 0,
                                 225,
-                                0,
                                 0
                             ],
                             "y": 384,
@@ -28213,7 +28559,6 @@
                             "x": 512,
                             "y": 272,
                             "type": "pulsecannon",
-                            "size": 0.3,
                             "orbitNode": 0,
                             "team": 6
                         },
@@ -28222,7 +28567,6 @@
                             "x": 512,
                             "y": 496,
                             "type": "pulsecannon",
-                            "size": 0.3,
                             "orbitNode": 0,
                             "team": 6
                         },
@@ -28231,7 +28575,6 @@
                             "x": 608,
                             "y": 328,
                             "type": "pulsecannon",
-                            "size": 0.3,
                             "orbitNode": 0,
                             "team": 6
                         },
@@ -28240,7 +28583,6 @@
                             "x": 416,
                             "y": 328,
                             "type": "pulsecannon",
-                            "size": 0.3,
                             "orbitNode": 0,
                             "team": 6
                         },
@@ -28249,7 +28591,6 @@
                             "x": 416,
                             "y": 440,
                             "type": "pulsecannon",
-                            "size": 0.3,
                             "orbitNode": 0,
                             "team": 6
                         },
@@ -28258,7 +28599,6 @@
                             "x": 608,
                             "y": 440,
                             "type": "pulsecannon",
-                            "size": 0.3,
                             "orbitNode": 0,
                             "team": 6
                         },
@@ -28266,28 +28606,24 @@
                             "x": 192,
                             "y": 384,
                             "type": "cloneturret",
-                            "size": 0.3,
                             "team": 6
                         },
                         {
                             "x": 320,
                             "y": 384,
                             "type": "cloneturret",
-                            "size": 0.3,
                             "team": 6
                         },
                         {
                             "x": 704,
                             "y": 384,
                             "type": "cloneturret",
-                            "size": 0.3,
                             "team": 6
                         },
                         {
                             "x": 832,
                             "y": 384,
                             "type": "cloneturret",
-                            "size": 0.3,
                             "team": 6
                         },
                         {
@@ -28318,14 +28654,12 @@
                             "x": 512,
                             "y": 576,
                             "type": "captureship",
-                            "size": 0.3,
                             "team": 6
                         },
                         {
                             "x": 512,
                             "y": 192,
                             "type": "captureship",
-                            "size": 0.3,
                             "team": 6
                         },
                         {
@@ -28338,12 +28672,10 @@
                                 0,
                                 0,
                                 0,
-                                0,
                                 0
                             ],
                             "y": 281.6,
                             "type": "cloneturret",
-                            "size": 0.3,
                             "team": 1
                         },
                         {
@@ -28356,12 +28688,10 @@
                                 0,
                                 0,
                                 0,
-                                22,
-                                0
+                                22
                             ],
                             "y": 486.4,
                             "type": "cloneturret",
-                            "size": 0.3,
                             "team": 7
                         },
                         {
@@ -28374,12 +28704,10 @@
                                 0,
                                 0,
                                 0,
-                                0,
                                 0
                             ],
                             "y": 281.6,
                             "type": "cloneturret",
-                            "size": 0.3,
                             "team": 3
                         },
                         {
@@ -28392,12 +28720,10 @@
                                 22,
                                 0,
                                 0,
-                                0,
                                 0
                             ],
                             "y": 486.4,
                             "type": "cloneturret",
-                            "size": 0.3,
                             "team": 4
                         },
                         {
@@ -28405,7 +28731,6 @@
                             "startShips": [
                                 0,
                                 100,
-                                0,
                                 0,
                                 0,
                                 0,
@@ -28427,8 +28752,7 @@
                                 0,
                                 0,
                                 0,
-                                100,
-                                0
+                                100
                             ],
                             "y": 576,
                             "type": "starbase",
@@ -28444,7 +28768,6 @@
                                 0,
                                 0,
                                 0,
-                                0,
                                 0
                             ],
                             "y": 192,
@@ -28459,7 +28782,6 @@
                                 0,
                                 0,
                                 100,
-                                0,
                                 0,
                                 0,
                                 0
@@ -28478,12 +28800,10 @@
                                 0,
                                 0,
                                 0,
-                                0,
                                 0
                             ],
                             "y": 192,
                             "type": "cloneturret",
-                            "size": 0.3,
                             "team": 1
                         },
                         {
@@ -28496,12 +28816,10 @@
                                 0,
                                 0,
                                 0,
-                                22,
-                                0
+                                22
                             ],
                             "y": 576,
                             "type": "cloneturret",
-                            "size": 0.3,
                             "team": 7
                         },
                         {
@@ -28514,12 +28832,10 @@
                                 0,
                                 0,
                                 0,
-                                0,
                                 0
                             ],
                             "y": 192,
                             "type": "cloneturret",
-                            "size": 0.3,
                             "team": 3
                         },
                         {
@@ -28532,12 +28848,10 @@
                                 22,
                                 0,
                                 0,
-                                0,
                                 0
                             ],
                             "y": 576,
                             "type": "cloneturret",
-                            "size": 0.3,
                             "team": 4
                         },
                         {
@@ -28550,12 +28864,10 @@
                                 0,
                                 0,
                                 0,
-                                0,
                                 0
                             ],
                             "y": 192,
                             "type": "pulsecannon",
-                            "size": 0.3,
                             "team": 1
                         },
                         {
@@ -28568,12 +28880,10 @@
                                 0,
                                 0,
                                 0,
-                                20,
-                                0
+                                20
                             ],
                             "y": 576,
                             "type": "pulsecannon",
-                            "size": 0.3,
                             "team": 7
                         },
                         {
@@ -28583,7 +28893,6 @@
                                 0,
                                 0,
                                 20,
-                                0,
                                 0,
                                 0,
                                 0,
@@ -28591,7 +28900,6 @@
                             ],
                             "y": 192,
                             "type": "pulsecannon",
-                            "size": 0.3,
                             "team": 3
                         },
                         {
@@ -28604,40 +28912,34 @@
                                 20,
                                 0,
                                 0,
-                                0,
                                 0
                             ],
                             "y": 576,
                             "type": "pulsecannon",
-                            "size": 0.3,
                             "team": 4
                         },
                         {
                             "x": 192,
                             "y": 288,
                             "type": "captureship",
-                            "size": 0.3,
                             "team": 1
                         },
                         {
                             "x": 192,
                             "y": 480,
                             "type": "captureship",
-                            "size": 0.3,
                             "team": 7
                         },
                         {
                             "x": 832,
                             "y": 288,
                             "type": "captureship",
-                            "size": 0.3,
                             "team": 3
                         },
                         {
                             "x": 832,
                             "y": 480,
                             "type": "captureship",
-                            "size": 0.3,
                             "team": 4
                         },
                         {
@@ -28661,43 +28963,39 @@
                             "x": 512,
                             "y": 384,
                             "type": "starbase",
-                            "team": 8
+                            "team": 6
                         },
                         {
                             "orbitSpeed": 0.1,
                             "x": 512,
                             "y": 288,
                             "type": "pulsecannon",
-                            "size": 0.3,
                             "orbitNode": 0,
-                            "team": 8
+                            "team": 6
                         },
                         {
                             "orbitSpeed": 0.1,
                             "x": 608,
                             "y": 384,
                             "type": "pulsecannon",
-                            "size": 0.3,
                             "orbitNode": 0,
-                            "team": 8
+                            "team": 6
                         },
                         {
                             "orbitSpeed": 0.1,
                             "x": 512,
                             "y": 480,
                             "type": "pulsecannon",
-                            "size": 0.3,
                             "orbitNode": 0,
-                            "team": 8
+                            "team": 6
                         },
                         {
                             "orbitSpeed": 0.1,
                             "x": 416,
                             "y": 384,
                             "type": "pulsecannon",
-                            "size": 0.3,
                             "orbitNode": 0,
-                            "team": 8
+                            "team": 6
                         },
                         {
                             "x": 512,
@@ -28746,7 +29044,6 @@
                                 0,
                                 0,
                                 50,
-                                0,
                                 0,
                                 0,
                                 0,
@@ -28772,7 +29069,6 @@
                                 50,
                                 0,
                                 0,
-                                0,
                                 0
                             ],
                             "y": 544,
@@ -28786,7 +29082,6 @@
                                 0,
                                 0,
                                 50,
-                                0,
                                 0,
                                 0,
                                 0,
@@ -28808,7 +29103,6 @@
                             "startShips": [
                                 0,
                                 50,
-                                0,
                                 0,
                                 0,
                                 0,
@@ -28843,7 +29137,7 @@
                         }
                     ],
                     "name": "37",
-                    "color": "0xFFFF00",
+                    "color": "0xFF0000",
                     "bgm": "bgm06"
                 },
                 {
@@ -28858,7 +29152,6 @@
                                 0,
                                 0,
                                 0,
-                                0,
                                 0
                             ],
                             "y": 576,
@@ -28875,7 +29168,6 @@
                                 0,
                                 0,
                                 0,
-                                0,
                                 0
                             ],
                             "y": 192,
@@ -28941,13 +29233,12 @@
                                 0,
                                 0,
                                 0,
-                                0,
-                                0,
-                                30
+                                30,
+                                0
                             ],
                             "y": 576,
                             "type": "planet",
-                            "team": 8
+                            "team": 6
                         },
                         {
                             "x": 896,
@@ -28958,19 +29249,18 @@
                                 0,
                                 0,
                                 0,
-                                0,
-                                0,
-                                30
+                                30,
+                                0
                             ],
                             "y": 192,
                             "type": "planet",
-                            "team": 8
+                            "team": 6
                         },
                         {
                             "x": 896,
                             "y": 320,
                             "type": "warp",
-                            "team": 8
+                            "team": 6
                         },
                         {
                             "x": 128,
@@ -29034,20 +29324,9 @@
                         },
                         {
                             "x": 896,
-                            "startShips": [
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                40
-                            ],
                             "y": 448,
                             "type": "warp",
-                            "team": 8
+                            "team": 6
                         },
                         {
                             "x": 32,

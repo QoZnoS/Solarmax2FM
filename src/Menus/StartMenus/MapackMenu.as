@@ -101,20 +101,20 @@ package Menus.StartMenus {
             }
             var _y:Number = 160;
             for (var i:int = 0; i < LevelData.rawData.length; i++) {
-                _dataQuad = new OptionButton(LevelData.extensions.data.(@id == i).@name, COLOR, mapacks);
+                _dataQuad = new OptionButton(LevelData.rawData[i].name, COLOR, mapacks);
                 _dataQuad.label.fontName = "Downlink18";
                 _dataQuad.label.width = 700;
                 _dataQuad.label.x += 40;
                 _dataQuad.addLabel(new TextField(40, 40, "#" + i, "Downlink18", -1, COLOR), 0, 0);
-                _dataQuad.addLabel(new TextField(600, 40, LevelData.extensions.data.(@id == i).@describe1, "Downlink12", -1, COLOR), 40, 25);
-                if (LevelData.extensions.data.(@id == i).@describe2 != undefined)
-                    _dataQuad.addLabel(new TextField(600, 40, LevelData.extensions.data.(@id == i).@describe2, "Downlink12", -1, COLOR), 40, 40);
-                if (LevelData.extensions.data.(@id == i).@describe3 != undefined)
-                    _dataQuad.addLabel(new TextField(600, 40, LevelData.extensions.data.(@id == i).@describe3, "Downlink12", -1, COLOR), 40, 55);
-                if (LevelData.extensions.data.(@id == i).@describe4 != undefined)
-                    _dataQuad.addLabel(new TextField(600, 40, LevelData.extensions.data.(@id == i).@describe4, "Downlink12", -1, COLOR), 40, 70);
+                _dataQuad.addLabel(new TextField(600, 40, LevelData.rawData[i].describe1, "Downlink12", -1, COLOR), 40, 25);
+                if ("describe2" in LevelData.rawData[i])
+                    _dataQuad.addLabel(new TextField(600, 40, LevelData.rawData[i].describe2, "Downlink12", -1, COLOR), 40, 40);
+                if ("describe3" in LevelData.rawData[i])
+                    _dataQuad.addLabel(new TextField(600, 40, LevelData.rawData[i].describe3, "Downlink12", -1, COLOR), 40, 55);
+                if ("describe4" in LevelData.rawData[i])
+                    _dataQuad.addLabel(new TextField(600, 40, LevelData.rawData[i].describe4, "Downlink12", -1, COLOR), 40, 70);
                 _dataQuad.addLabel(new TextField(600, 40, "MAPPER: " + LevelData.rawData[i].mapper, "Downlink12", -1, COLOR), 40, 90);
-                _dataQuad.addImage(new Image(Root.assets.getTexture(LevelData.extensions.data.(@id == i).@icon)));
+                _dataQuad.addImage(new Image(Root.assets.getTexture(LevelData.rawData[i].icon)));
                 _dataQuad.quad.color = 0x000000;
                 _dataQuad.quad.alpha = 0.5;
                 _dataQuad.quad.width = _dataQuad.labelBG.width = 768;
@@ -154,11 +154,13 @@ package Menus.StartMenus {
         private function on_prev(_click:Event):void {
             if (mapPage > 0)
                 mapPage--;
+            on_refresh()
         }
 
         private function on_next(_click:Event):void {
             if (mapPage < mapacks.length - 1)
                 mapPage++;
+            on_refresh()
         }
     }
 }

@@ -85,11 +85,18 @@ package Entity.Node {
         }
 
         public function deserialize(obj:Object):void {
+            var array:Array;
+            var vector:Vector.<int>;
+            var i:int = 0;
             for (var prop:String in obj) {
-                if (prop === "startShips" || prop === "barrierLinks") {
-                    var array:Array = obj[prop] as Array;
-                    var vector:Vector.<int> = new Vector.<int>();
-                    for (var i:int = 0; i < array.length; i++)
+                if (prop === "startShips" && !(obj[prop] is Array)) {
+                    vector = new Vector.<int>(Globals.teamCount);
+                    vector[team] = int(obj[prop]);
+                    this[prop] = vector;
+                } else if (obj[prop] is Array){
+                    array = obj[prop] as Array;
+                    vector = new Vector.<int>();
+                    for (i = 0; i < array.length; i++)
                         vector.push(int(array[i]));
                     this[prop] = vector;
                 } else
