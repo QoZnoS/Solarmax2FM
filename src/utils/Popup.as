@@ -30,7 +30,8 @@ package utils {
         private var labels:Vector.<TextField>;
 
         /**
-         * TYPE_INFORMATION title
+         * <p>TYPE_INFORMATION title
+         * <p>TYPE_CHOOSE info
          */
         public function Popup(type:int = TYPE_INFORMATION, ...prop) {
             this.type = type;
@@ -59,6 +60,13 @@ package utils {
                     title.touchable = false;
                     popupContainer.addChild(title);
                     break;
+                case TYPE_CHOOSE:
+                    var info:TextField = new TextField (512, 200, prop[0], "Downlink18", -1, COLOR);
+                    info.x = 256;
+                    info.y = 180;
+                    info.vAlign = info.hAlign = "center";
+                    info.touchable = false;
+                    popupContainer.addChild(info);
                 default:
                     break;
             }
@@ -88,6 +96,22 @@ package utils {
                     popupContainer.addChild(acceptBtn);
                     acceptBtn.addEventListener("clicked", on_accept_deinit)
                     break;
+                case TYPE_CHOOSE:
+                    acceptBtn = new OptionButton("ACCEPT", COLOR);
+                    acceptBtn.x = 350;
+                    acceptBtn.y = 480;
+                    acceptBtn.quad.color = COLOR;
+                    acceptBtn.quad.alpha = 0.2;
+                    popupContainer.addChild(acceptBtn);
+                    acceptBtn.addEventListener("clicked", on_accept_deinit)
+                    rejectBtn = new OptionButton("REJECL", COLOR);
+                    rejectBtn.x = 610;
+                    rejectBtn.y = 480;
+                    rejectBtn.quad.color = COLOR;
+                    rejectBtn.quad.alpha = 0.2;
+                    popupContainer.addChild(rejectBtn);
+                    rejectBtn.addEventListener("clicked", on_accept_deinit)
+                    break;
                 default:
                     break;
             }
@@ -112,12 +136,12 @@ package utils {
             super.dispose();
         }
 
-        private function enableDrag():void {
+        public function enableDrag():void {
             dragable = true;
             addEventListener(TouchEvent.TOUCH, onTouch);
         }
 
-        private function enableScale():void {
+        public function enableScale():void {
             scaleable = true;
             Starling.current.nativeStage.addEventListener(MouseEvent.MOUSE_WHEEL, onMouseWheel);
         }

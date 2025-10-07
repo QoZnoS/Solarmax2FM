@@ -1,8 +1,8 @@
 package {
     import flash.filesystem.File;
     import flash.filesystem.FileStream;
-    import starling.errors.AbstractClassError;
     import flash.utils.Dictionary;
+    import utils.ReplayData;
 
     public class Globals {
         public static var main:Main;
@@ -54,15 +54,9 @@ package {
         public static var saveVersion:int = VERSION;
 
         public static var saveData:Dictionary = new Dictionary(true);
-        public static var replay:Array = [];
+        public static var replay:ReplayData;
 
-        public function Globals() {
-            throw new AbstractClassError();
-        }
-
-        /**
-         * 初始化势力数组
-         */
+        /** 初始化势力数组 */
         public static function initTeam():void {
             fileStream = new FileStream();
             teamCount = LevelData.rawData[Globals.currentData].team.length;
@@ -134,7 +128,7 @@ package {
                     SceneController.alert("Failed to read the save file: " + error.message);
                 }
             }
-            
+
             main.start(); // 执行main.as中的start()
         }
 
@@ -148,7 +142,7 @@ package {
             fileStream.close(); // 关闭文件
         }
 
-        public static function save_new():void{
+        public static function save_new():void {
             var data:String = JSON.stringify(saveData);
             file = File.applicationStorageDirectory.resolvePath("saveData.json");
             fileStream.open(file, "write");
@@ -156,8 +150,35 @@ package {
             fileStream.close();
         }
 
-        public static function save_replay(name:String):void{
-            var data:String = JSON.stringify(replay);
+        public static function auto_save_replay():void {
+            var replayDir:File = File.applicationStorageDirectory.resolvePath("replay");
+            if (!replayDir.exists)
+                replayDir.createDirectory();
+            var files:Array = replayDir.getDirectoryListing();
+            // 只保留.s2rp文件
+            var replayFiles:Array = [];
+            for each (var f:File in files)
+                if (f.extension == "s2rp" && f.name.startsWith("auto"))
+                    replayFiles.push(f);
+            // 按修改时间排序，旧的在前
+            replayFiles.sortOn("modificationDate", Array.NUMERIC);
+
+            // 如果已有4个及以上回放，删除最旧的
+            while (replayFiles.length >= 20) {
+                try {
+                    replayFiles[0].deleteFile();
+                } catch (e:Error) {
+                }
+                replayFiles.shift();
+            }
+            // 自动命名新回放
+            var now:Date = new Date();
+            var name:String = "auto_" + now.fullYear + ("0" + (now.month + 1)).substr(-2) + ("0" + now.date).substr(-2) + "_" + ("0" + now.hours).substr(-2) + ("0" + now.minutes).substr(-2) + ("0" + now.seconds).substr(-2);
+            save_replay(name);
+        }
+
+        public static function save_replay(name:String):void {
+            var data:String = JSON.stringify(replay.save(name));
             var filePath:String = "replay/" + name + ".s2rp"
             file = File.applicationStorageDirectory.resolvePath(filePath);
             fileStream.open(file, "write");
@@ -165,17 +186,18 @@ package {
             fileStream.close();
         }
 
-        public static function load_replay(name:String):void{
+        public static function load_replay(name:String):void {
             var filePath:String = "replay/" + name + ".s2rp"
             file = File.applicationStorageDirectory.resolvePath(filePath);
             fileStream.open(file, "read");
-            replay = JSON.parse(fileStream.readMultiByte(fileStream.bytesAvailable, "utf-8")) as Array;
+            var loadData:Array = JSON.parse(fileStream.readMultiByte(fileStream.bytesAvailable, "utf-8")) as Array;
+            replay = new ReplayData(loadData[0][0], loadData[0][1], loadData[0][2])
+            replay.load(loadData);
             fileStream.close();
         }
 
-        public static function get difficultyInt():int{
-            switch(currentDifficulty)
-            {
+        public static function get difficultyInt():int {
+            switch (currentDifficulty) {
                 case "easy":
                     return 1
                 case "normal":

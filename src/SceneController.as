@@ -10,6 +10,9 @@ package {
     import starling.filters.ColorMatrixFilter;
     import UI.UIContainer;
     import utils.Popup;
+    import Game.ReplayScene;
+    import flash.ui.Keyboard;
+    import utils.ReplayData;
 
     public class SceneController extends Sprite {
         private static var _s:SceneController;
@@ -17,6 +20,7 @@ package {
 
         public var titleMenu:TitleMenu; // 手动单例
         public var gameScene:GameScene; // 手动单例
+        public var replayScene:ReplayScene; // 手动单例
         public var endScene:EndScene; // 手动单例
         public var debug:Debug; // 自动单例
         public var ui:UIContainer; // 自动单例
@@ -28,6 +32,7 @@ package {
             _s = this;
             titleMenu = new TitleMenu(this);
             gameScene = new GameScene(this);
+            replayScene = new ReplayScene(this);
             endScene = new EndScene(this);
             debug = new Debug(this);
             ui = new UIContainer(this);
@@ -36,6 +41,7 @@ package {
             debug.init(gameScene, titleMenu);
             addChild(titleMenu);
             addChild(gameScene);
+            addChild(replayScene);
             addChild(endScene);
             addChild(ui);
             addChild(debug);
@@ -70,12 +76,16 @@ package {
         }
         // #endregion
         // #region 私有方法，界面载入载出
-        private function initGameScene(seed:uint = 0, rep:Boolean = false):void {
-            gameScene.init(seed, rep);
+        private function initGameScene(seed:uint = 0):void {
+            gameScene.init(seed);
         }
 
         private function deInitGameScene():void {
             gameScene.deInit()
+        }
+
+        private function initReplayScene(rep:ReplayData):void {
+            replayScene.init(rep);
         }
 
         /**加载标题界面
@@ -113,15 +123,15 @@ package {
         /**游玩关卡*/
         public function playMap(seed:uint = 0):void {
             speedMult = 1;
-            ui.initLevel();
+            ui.initLevel(LevelData.level[Globals.level].gameScale);
             initGameScene(seed);
             debug.init_game();
         }
 
-        public function replayMap():void {
+        public function replayMap(rep:ReplayData):void {
             speedMult = 1;
             ui.initLevel();
-            initGameScene(Globals.replay[0], true);
+            initReplayScene(rep);
             debug.init_game();
         }
 
@@ -183,6 +193,8 @@ package {
                         titleMenu.optionsMenu.visible ? titleMenu.optionsMenu.animateOut() : titleMenu.on_menu(null);
                     else if (gameScene.visible)
                         gameScene.quit();
+                    else if (replayScene.visible)
+                        replayScene.quit();
                     break;
                 case 81: // Q 启用 Debug 模式
                     debug.startDebugMode();
@@ -205,5 +217,9 @@ package {
         }
 
         // #endregion
+
+        public static function get s():SceneController {
+            return _s;
+        }
     }
 }

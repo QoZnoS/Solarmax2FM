@@ -26,33 +26,33 @@ package Menus.StartMenus {
         }
 
         public function init():void {
-            var _text:TextField = new TextField(200, 40, "MAP MANAGER", "Downlink18", -1, COLOR);
-            components.push(_text);
-            addLabel(_text, 412, 122, "center");
-            var _btn:MenuButton = new MenuButton("btn_restart");
-            _btn.x = 604;
-            _btn.y = 124;
-            _btn.init();
-            _btn.addEventListener("clicked", on_refresh);
-            components.push(_btn);
-            this.addChild(_btn);
-            _btn = new MenuButton("tutorial_arrow");
-            _btn.x = 670;
-            _btn.y = 146;
-            _btn.image.rotation = Math.PI;
-            _btn.init();
-            _btn.setImage("tutorial_arrow", 0.75);
-            _btn.addEventListener("clicked", on_prev);
-            components.push(_btn);
-            this.addChild(_btn);
-            _btn = new MenuButton("tutorial_arrow");
-            _btn.x = 680;
-            _btn.y = 124;
-            _btn.init();
-            _btn.setImage("tutorial_arrow", 0.75);
-            _btn.addEventListener("clicked", on_next);
-            components.push(_btn);
-            this.addChild(_btn);
+            var text:TextField = new TextField(200, 40, "MAP MANAGER", "Downlink18", -1, COLOR);
+            components.push(text);
+            addLabel(text, 412, 122, "center");
+            var btn:MenuButton = new MenuButton("btn_restart");
+            btn.x = 604;
+            btn.y = 124;
+            btn.init();
+            btn.addEventListener("clicked", on_refresh);
+            components.push(btn);
+            this.addChild(btn);
+            btn = new MenuButton("tutorial_arrow");
+            btn.x = 670;
+            btn.y = 146;
+            btn.image.rotation = Math.PI;
+            btn.init();
+            btn.setImage("tutorial_arrow", 0.75);
+            btn.addEventListener("clicked", on_prev);
+            components.push(btn);
+            this.addChild(btn);
+            btn = new MenuButton("tutorial_arrow");
+            btn.x = 680;
+            btn.y = 124;
+            btn.init();
+            btn.setImage("tutorial_arrow", 0.75);
+            btn.addEventListener("clicked", on_next);
+            components.push(btn);
+            this.addChild(btn);
             on_refresh();
         }
 
@@ -77,12 +77,12 @@ package Menus.StartMenus {
         }
 
         // #region 私有方法
-        private function addLabel(_label:TextField, _x:Number, _y:Number, _hAlign:String = "right"):void {
-            _label.hAlign = _hAlign;
-            _label.vAlign = "top";
-            _label.x = _x;
-            _label.y = _y;
-            this.addChild(_label);
+        private function addLabel(label:TextField, x:Number, y:Number, hAlign:String = "right"):void {
+            label.hAlign = hAlign;
+            label.vAlign = "top";
+            label.x = x;
+            label.y = y;
+            this.addChild(label);
         }
 
         private function on_refresh():void {
@@ -91,42 +91,42 @@ package Menus.StartMenus {
             title.getOrbitData();
             title.getMoreInfoTexts();
             title.levels.updateLevels();
-            var _dataQuad:OptionButton;
+            var dataQuad:OptionButton;
             if (mapacks.length != 0) {
-                for each (_dataQuad in mapacks) {
-                    _dataQuad.removeEventListener("clicked", on_choose_map);
-                    this.removeChild(_dataQuad);
+                for each (dataQuad in mapacks) {
+                    dataQuad.removeEventListener("clicked", on_choose_map);
+                    this.removeChild(dataQuad);
                 }
                 mapacks = [];
             }
-            var _y:Number = 160;
+            var y:Number = 160;
             for (var i:int = 0; i < LevelData.rawData.length; i++) {
-                _dataQuad = new OptionButton(LevelData.rawData[i].name, COLOR, mapacks);
-                _dataQuad.label.fontName = "Downlink18";
-                _dataQuad.label.width = 700;
-                _dataQuad.label.x += 40;
-                _dataQuad.addLabel(new TextField(40, 40, "#" + i, "Downlink18", -1, COLOR), 0, 0);
-                _dataQuad.addLabel(new TextField(600, 40, LevelData.rawData[i].describe1, "Downlink12", -1, COLOR), 40, 25);
+                dataQuad = new OptionButton(LevelData.rawData[i].name, COLOR, mapacks);
+                dataQuad.label.fontName = "Downlink18";
+                dataQuad.label.width = 700;
+                dataQuad.label.x += 40;
+                dataQuad.addLabel(new TextField(40, 40, "#" + i, "Downlink18", -1, COLOR), 0, 0);
+                dataQuad.addLabel(new TextField(600, 40, LevelData.rawData[i].describe1, "Downlink12", -1, COLOR), 40, 25);
                 if ("describe2" in LevelData.rawData[i])
-                    _dataQuad.addLabel(new TextField(600, 40, LevelData.rawData[i].describe2, "Downlink12", -1, COLOR), 40, 40);
+                    dataQuad.addLabel(new TextField(600, 40, LevelData.rawData[i].describe2, "Downlink12", -1, COLOR), 40, 40);
                 if ("describe3" in LevelData.rawData[i])
-                    _dataQuad.addLabel(new TextField(600, 40, LevelData.rawData[i].describe3, "Downlink12", -1, COLOR), 40, 55);
+                    dataQuad.addLabel(new TextField(600, 40, LevelData.rawData[i].describe3, "Downlink12", -1, COLOR), 40, 55);
                 if ("describe4" in LevelData.rawData[i])
-                    _dataQuad.addLabel(new TextField(600, 40, LevelData.rawData[i].describe4, "Downlink12", -1, COLOR), 40, 70);
-                _dataQuad.addLabel(new TextField(600, 40, "MAPPER: " + LevelData.rawData[i].mapper, "Downlink12", -1, COLOR), 40, 90);
-                _dataQuad.addImage(new Image(Root.assets.getTexture(LevelData.rawData[i].icon)));
-                _dataQuad.quad.color = 0x000000;
-                _dataQuad.quad.alpha = 0.5;
-                _dataQuad.quad.width = _dataQuad.labelBG.width = 768;
-                _dataQuad.quad.height = _dataQuad.labelBG.height = 120;
-                _dataQuad.x = 128;
-                _dataQuad.y = _y;
-                _dataQuad.addEventListener("clicked", on_choose_map);
-                mapacks.push(_dataQuad);
-                this.addChild(_dataQuad);
-                _y += 125;
-                if (_y > 600)
-                    _y -= 500;
+                    dataQuad.addLabel(new TextField(600, 40, LevelData.rawData[i].describe4, "Downlink12", -1, COLOR), 40, 70);
+                dataQuad.addLabel(new TextField(600, 40, "MAPPER: " + LevelData.rawData[i].mapper, "Downlink12", -1, COLOR), 40, 90);
+                dataQuad.addImage(new Image(Root.assets.getTexture(LevelData.rawData[i].icon)));
+                dataQuad.quad.color = 0x000000;
+                dataQuad.quad.alpha = 0.5;
+                dataQuad.quad.width = dataQuad.labelBG.width = 768;
+                dataQuad.quad.height = dataQuad.labelBG.height = 120;
+                dataQuad.x = 128;
+                dataQuad.y = y;
+                dataQuad.addEventListener("clicked", on_choose_map);
+                mapacks.push(dataQuad);
+                this.addChild(dataQuad);
+                y += 125;
+                if (y > 600)
+                    y -= 500;
             }
             mapacks[Globals.currentData].toggle();
             if (mapacks.length <= 4){

@@ -35,7 +35,7 @@ package Entity {
             throw new AbstractClassError();
         }
 
-        public static function init():void{
+        private static function init():void{
             _entityPools = new Vector.<EntityPool>(11, true);
             for(var i:int = 0; i < _ENTITY_POOL_COUNT; i++)
                 _entityPools[i] = new EntityPool();

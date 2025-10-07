@@ -2,9 +2,7 @@
    实体池会记录场上的所有实体到对应的active列表中
  */
 package Game {
-    import flash.geom.Point;
     import starling.core.Starling;
-    import starling.display.Image;
     import starling.display.Quad;
     import starling.events.EnterFrameEvent;
     import flash.ui.Keyboard;
@@ -17,42 +15,30 @@ package Game {
     import Entity.Ship;
     import Entity.FXHandler;
     import starling.display.BlendMode;
-    import UI.UIContainer;
     import starling.text.TextField;
     import starling.utils.VAlign;
-    import Entity.AI.EnemyAIFactory;
     import Entity.Node.NodeStaticLogic;
     import Entity.EntityContainer;
     import Game.VictoryType.VictoryTypeFactory;
     import Game.SpecialEvent.ISpecialEvent;
     import Game.SpecialEvent.SpecialEventFactory;
+    import utils.ReplayData;
 
     public class GameScene extends BasicScene {
         // #region 类变量
         // 其他
         public var cover:Quad; // 通关时的遮罩
-        public var barrierLines:Array;
-        public var level:int;
         public var gameOver:Boolean;
         public var gameOverTimer:Number;
         public var winningTeam:int;
-        public var darkPulse:Image;
-        public var bossTimer:Number;
 
-        public var rng:Rng;
-
-        public var scene:SceneController
-        public var ui:UIContainer;
         public var popLabels:Vector.<TextField>;
-
-        public var rep:Boolean = false;
 
         public var specialEvents:Vector.<ISpecialEvent>;
 
         // #endregion
-        public function GameScene(_scene:SceneController) {
-            super();
-            this.scene = _scene;
+        public function GameScene(scene:SceneController) {
+            super(scene);
             NodeStaticLogic.game = this;
             EntityContainer.game = this;
             FXHandler.game = this;
@@ -63,15 +49,14 @@ package Game {
             cover.blendMode = BlendMode.ADD;
             cover.alpha = 0;
             // 其他可视化对象
-            barrierLines = []; // 障碍连接数据
             this.alpha = 0;
             this.visible = false;
             gameOver = true;
             popLabels = new Vector.<TextField>(3, true);
-            var _Color:Number = 16755370;
-            popLabels[0] = new TextField(600, 40, "POPULATION : 50 / 50", "Downlink12", -1, _Color);
-            popLabels[1] = new TextField(600, 40, "POPULATION : 50 / 50", "Downlink12", -1, _Color);
-            popLabels[2] = new TextField(200, 40, "+ 30", "Downlink12", -1, _Color);
+            var color:Number = 16755370;
+            popLabels[0] = new TextField(600, 40, "POPULATION : 50 / 50", "Downlink12", -1, color);
+            popLabels[1] = new TextField(600, 40, "POPULATION : 50 / 50", "Downlink12", -1, color);
+            popLabels[2] = new TextField(200, 40, "+ 30", "Downlink12", -1, color);
             for (var i:int = 0; i < 3; i++) {
                 var label:TextField = popLabels[i];
                 label.vAlign = label.hAlign = VAlign.CENTER;
@@ -89,26 +74,19 @@ package Game {
         }
 
         // #region 进入关卡
-        override public function init(seed:uint = 0, rep:Boolean = false):void {
+        public function init(seed:uint = 0):void {
+            this.alpha = 0;
+            this.visible = true;
             ui = scene.ui;
             ui.btnL.addChildAt(cover, 0);
             var i:int = 0;
-            this.level = Globals.level;
-            this.rng = new Rng(seed);
-            this.rep = rep;
+            rng = new Rng(seed);
             var levelData:Object = LevelData.level[Globals.level];
             var aiData:Array = levelData.ai;
             if (!("ai" in levelData))
                 aiData = [];
             nodeIn(levelData.node);
-            if (!rep)
-                Globals.replay = [rng.seed, [0]];
-            else {
-                for (i = 0; i < aiData.length; i++)
-                    rng.nextInt();
-                aiData = [];
-                Globals.replay.shift();
-            }
+            Globals.replay = new ReplayData(LevelData.rawData[Globals.currentData].name, LevelData.level[Globals.level].name, rng.seed);
             for (i = 0; i < aiData.length; i++)
                 EntityHandler.addAI(aiData[i]);
             for each (var label:TextField in popLabels) {
@@ -129,18 +107,11 @@ package Game {
             }
             // ui.btnL.color = Globals.teamColors[Globals.playerTeam];
             // 执行一些初始化函数
-            getBarrierLines();
-            addBarriers();
-            if (darkPulse)
-                darkPulse.visible = false;
-            // 重置一些变量
-            this.alpha = 0;
-            this.visible = true;
+            initBarrierLines();
             cover.alpha = 0;
             gameOver = false;
             gameOverTimer = 3;
             winningTeam = -1;
-
             if (levelData.bgm)
                 GS.playMusic(levelData.bgm);
             else
@@ -155,38 +126,16 @@ package Game {
                 se.game = this;
                 specialEvents.push(se);
             }
-
             addEventListener("enterFrame", update); // 添加帧监听器，每帧执行一次update
             animateIn(); // 播放关卡进入动画
         }
 
         public function nodeIn(nodes:Array):void {
-            var aiArray:Array = [];
             for each (var nodeData:Object in nodes) {
                 var node:Node = EntityHandler.addNode(nodeData);
                 for (var i:int = 0; i < node.nodeData.startShips.length; i++)
                     EntityHandler.addShips(node, i, node.nodeData.startShips[i]);
             }
-        }
-
-        override public function animateIn():void {
-            this.alpha = 0;
-            this.visible = true;
-            Starling.juggler.tween(this, Globals.transitionSpeed, {"alpha": 1,
-                    "transition": "easeInOut"});
-        }
-
-        private function check4same(_Array1:Array, _Array2:Array):Boolean {
-            var _1:Point = _Array1[0];
-            var _2:Point = _Array1[1];
-            var _3:Point = _Array2[0];
-            var _4:Point = _Array2[1];
-            var _result:Boolean = false;
-            if (_1.x == _3.x && _1.y == _3.y && _2.x == _4.x && _2.y == _4.y)
-                _result = true;
-            if (_1.x == _4.x && _1.y == _4.y && _2.x == _3.x && _2.y == _3.y)
-                _result = true;
-            return _result;
         }
 
         // #endregion
@@ -204,17 +153,19 @@ package Game {
                 else
                     ui.btnL.addLayer.removeChild(label);
             }
+            Globals.auto_save_replay();
+            this.visible = false;
         }
 
-        // 移除UI，执行animateOut()
         public function quit():void {
             animateOut();
             scene.exit2TitleMenu(0);
+            Starling.juggler.tween(this, Globals.transitionSpeed, {onComplete: deInit});
         }
 
-        // 解锁下一关，执行animateOut()
         public function next():void {
             animateOut();
+            Starling.juggler.tween(this, Globals.transitionSpeed, {onComplete: deInit});
             if (!Globals.levelData[Globals.level])
                 Globals.levelData.push(0);
             if (Globals.levelData[Globals.level] < Globals.difficultyInt)
@@ -223,22 +174,10 @@ package Game {
                 Globals.levelReached = Globals.level + 1;
                 Globals.save();
                 scene.exit2TitleMenu(1);
-            } else
+            } else{
                 Globals.save();
-            scene.exit2TitleMenu(0);
-        }
-
-        // 关卡退出动画，执行hide()
-        override public function animateOut():void {
-            Starling.juggler.tween(this, Globals.transitionSpeed, {"alpha": 0,
-                    "onComplete": hide,
-                    "transition": "easeInOut"});
-        }
-
-        // 隐藏UI，执行deInit()
-        public function hide():void {
-            this.visible = false;
-            deInit();
+                scene.exit2TitleMenu(0);
+            }
         }
 
         public function pause():void {
@@ -265,31 +204,8 @@ package Game {
             dt *= this.alpha; // 速度随能见度变化
             dt *= scene.speedMult;
             Debug.update(e);
-            var arr:Array;
-            if (Globals.replay.length == 0) {
-                updateGame(dt);
-                return;
-            }
-            if (!rep) {
-                var l:int = Globals.replay[Globals.replay.length - 1].length;
-                for (var i:int = 1; i < l; i++) {
-                    arr = Globals.replay[Globals.replay.length - 1][i];
-                    try {
-                        NodeStaticLogic.moveShips(EntityContainer.nodes[arr[0]], arr[1], EntityContainer.nodes[arr[2]], arr[3]);
-                    } catch (error:Error) {
-                        Globals.replay[Globals.replay.length - 1].removeAt(i);
-                    }
-                }
-                Globals.replay.push([dt]);
-                updateGame(dt);
-            } else {
-                dt = Globals.replay[0].shift();
-                updateGame(dt);
-                for each (arr in Globals.replay[0]) {
-                    NodeStaticLogic.moveShips(EntityContainer.nodes[arr[0]], arr[1], EntityContainer.nodes[arr[2]], arr[3]);
-                }
-                Globals.replay.shift();
-            }
+            Globals.replay.addAction(dt);
+            updateGame(dt);
         }
 
         public function updateGame(dt:Number):void {
@@ -349,97 +265,7 @@ package Game {
             }
         }
 
-        public function updateBarrier():void {
-            EntityContainer.entityPool[EntityContainer.INDEX_BARRIERS].deInit();
-            addBarriers();
-            hideSingleBarriers();
-        }
-
         // #endregion
-        // #region 障碍
-        public function addBarriers():void {
-            var x1:Number = NaN;
-            var y1:Number = NaN;
-            var x2:Number = NaN;
-            var y2:Number = NaN;
-            var dx:Number = NaN;
-            var dy:Number = NaN;
-            var angle:Number = NaN;
-            var distance:Number = NaN;
-            var x3:Number = NaN;
-            var y3:Number = NaN;
-            var space:Number = 8;
-            var dspace:int = 0;
-            for each (var _barrierArray:Array in barrierLines) {
-                x1 = Number(_barrierArray[0].x);
-                y1 = Number(_barrierArray[0].y);
-                x2 = Number(_barrierArray[1].x);
-                y2 = Number(_barrierArray[1].y);
-                space = 8; // 贴图间距
-                dx = x2 - x1;
-                dy = y2 - y1;
-                angle = Math.atan2(dy, dx);
-                distance = Math.sqrt(dx * dx + dy * dy);
-                x3 = x1 + Math.cos(angle) * space;
-                y3 = y1 + Math.sin(angle) * space;
-                dspace = int(space);
-                while (dspace < int(Math.floor(distance))) {
-                    dx = x3 + Math.cos(angle) * space * 0.5;
-                    dy = y3 + Math.sin(angle) * space * 0.5;
-                    FXHandler.addBarrier(x3, y3, angle, 16729156);
-                    x3 += Math.cos(angle) * space;
-                    y3 += Math.sin(angle) * space;
-                    dspace += int(space);
-                }
-            }
-        }
-
-        public function hideSingleBarriers():void {
-            for each (var node:Node in EntityContainer.nodes) {
-                if (!node.nodeData.isBarrier)
-                    continue;
-                node.moveState.image.visible = node.moveState.halo.visible = node.linked;
-            }
-        }
-
-        public function getBarrierLines():void {
-            var i:int = 0;
-            var j:int = 0;
-            var k:int = 0;
-            var L_1:int = 0;
-            var L_2:int = 0;
-            var L_3:int = 0;
-            var node1:Node = null;
-            var node2:Node = null;
-            var array:Array;
-            var exist:Boolean;
-            barrierLines.length = 0; // 清空障碍线数组
-            L_1 = int(EntityContainer.nodes.length);
-            for (i = 0; i < L_1; i++) {
-                node1 = EntityContainer.nodes[i];
-                if (!node1.nodeData.isBarrier)
-                    continue;
-                L_2 = int(node1.nodeData.barrierLinks.length); // 该天体需连接的障碍总数
-                for (j = 0; j < L_2; j++) {
-                    if (node1.nodeData.barrierLinks[j] < L_1)
-                        node2 = EntityContainer.nodes[node1.nodeData.barrierLinks[j]];
-                    array = [new Point(node1.nodeData.x, node1.nodeData.y), new Point(node2.nodeData.x, node2.nodeData.y)];
-                    L_3 = int(barrierLines.length);
-                    exist = false;
-                    for (k = 0; k < L_3; k++)
-                        if (check4same(array, barrierLines[k]))
-                            exist = true;
-                    if (!exist && node2.nodeData.isBarrier) {
-                        barrierLines.push(array);
-                        node1.linked = true;
-                        node2.linked = true;
-                    }
-                }
-            }
-        }
-
-        // #endregion
-
         public function on_key_down(keyCode:int):void {
             switch (keyCode) {
                 case Keyboard.SPACE: // 对应Spacebar，即空格
@@ -472,6 +298,5 @@ package Game {
                     ui.btnL.fleetSlider.perc = 1;
             }
         }
-
     }
 }

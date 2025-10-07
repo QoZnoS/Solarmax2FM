@@ -136,7 +136,7 @@ package Game.SpecialEvent {
                             "transition": "easeInOut"}); // 画面缩小动画
                     Starling.juggler.tween(_game, 5, {"alpha": 0,
                             "delay": 40,
-                            "onComplete": _game.hide}); // 天体消失动画
+                            "onComplete": _game.deInit}); // 天体消失动画
                     Starling.juggler.delayCall(function():void {
                         _game.scene.playEndScene();
                     }, 40); // 退回到主界面

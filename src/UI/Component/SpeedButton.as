@@ -94,17 +94,15 @@ package UI.Component {
         public function changeSpeed():void {
             switch (buttonArray.indexOf(this)) {
                 case 0:
-                    if (scene.speedMult != 0.125) {
+                    if (scene.speedMult > 0.125)
                         scene.speedMult *= 0.5;
-                    }
                     break;
                 case 1:
                     scene.speedMult = 1;
                     break;
                 case 2:
-                    if (scene.speedMult != 8) {
+                    if (scene.speedMult < 8)
                         scene.speedMult *= 2;
-                    }
                     break;
             }
             buttonArray[1].setImage("btn_speed" + scene.speedMult + "x", 0.75 + 0.6 * Globals.textSize);

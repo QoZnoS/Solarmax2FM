@@ -188,8 +188,9 @@ package Entity.Node {
             var l:int = Math.ceil(node.ships[team].length * game.scene.ui.btnL.fleetSlider.perc); // 计算调动的飞船数，Math.ceil()为至少调动1飞船判定
             if (targetNode == node || l == 0)
                 return;
-            if (!game.rep)
-                Globals.replay[Globals.replay.length - 1].push([node.tag, team, targetNode.tag, l]);
+            if (game.visible)
+                Globals.replay.addAction(0, node.tag, team, l, targetNode.tag);
+            node.shipActions.push([team, targetNode, l])
         }
 
         /**派出AI飞船
@@ -202,10 +203,11 @@ package Entity.Node {
             var shipNumber:int = Math.min(ships, node.ships[team].length);
             if (targetNode == node || shipNumber == 0)
                 return;
-            if (!game.rep)
-                Globals.replay[Globals.replay.length - 1].push([node.tag, team, targetNode.tag, shipNumber]);
+            if (game.visible)
+                Globals.replay.addAction(0, node.tag, team, shipNumber, targetNode.tag);
             if (node.aiTimers[team] < 1)
                 node.aiTimers[team] = 1;
+            node.shipActions.push([team, targetNode, shipNumber]);
         }
 
         /**发送飞船

@@ -49,11 +49,9 @@ package UI {
             gameContainer.y = gameContainer.pivotY = 384;
         }
 
-        public function initLevel():void {
-            if (LevelData.level[Globals.level].gameScale)
-                _scale = LevelData.level[Globals.level].gameScale;
-            else
-                _scale = 1;
+        public function initLevel(scale:Number = 1):void {
+            if (scale)
+                _scale = scale;
             if (Globals.touchControls) {
                 touchCL.visible = true;
                 touchCL.init();

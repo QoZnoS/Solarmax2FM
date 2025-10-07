@@ -7,6 +7,7 @@ package UI {
     import UI.Component.SpeedButton;
     import UI.Component.FleetSlider;
     import starling.display.BlendMode;
+    import Game.ReplayScene;
 
     public class BtnLayer extends Sprite {
         /**
@@ -21,12 +22,14 @@ package UI {
         public var normalLayer:Sprite;
 
         private var game:GameScene;
+        private var repScene:ReplayScene;
 
         private var scene:SceneController;
 
         public function BtnLayer(_ui:UIContainer) {
             this.scene = _ui.scene
             this.game = _ui.scene.gameScene;
+            this.repScene = _ui.scene.replayScene;
             gameBtn = new Vector.<MenuButton>(3, true);
             speedBtns = new Vector.<SpeedButton>(3, true);
             addLayer = new Sprite;
@@ -104,6 +107,7 @@ package UI {
                     }
             }
             fleetSlider.init();
+            fleetSlider.visible = true;
             addLayer.addChild(fleetSlider);
             Starling.current.nativeStage.addEventListener("mouseWheel", on_wheel);
             addChild(addLayer);
@@ -133,7 +137,10 @@ package UI {
         private function on_closeBtn():void {
             touchable = false;
             Starling.juggler.removeTweens(game);
-            game.quit();
+            if (game.visible)
+                game.quit();
+            if (repScene.visible)
+                repScene.quit();
         }
 
         private function on_pauseBtn():void {
@@ -141,7 +148,10 @@ package UI {
         }
 
         private function on_restartBtn():void {
-            game.restart();
+            if (game.visible)
+                game.restart();
+            if (repScene.visible)
+                repScene.restart();
         }
 
         private function on_wheel(_Mouse:MouseEvent):void {

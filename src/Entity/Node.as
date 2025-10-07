@@ -56,11 +56,13 @@ package Entity {
         public var capturing:Boolean; // 占据状态
 
         public var nodeData:NodeData;
+        public var shipActions:Vector.<Array>;
 
         // #endregion
         public function Node() {
             super();
             nodeLinks = new Vector.<Vector.<Node>>;
+            shipActions = new Vector.<Array>;
             oppNodeLinks = [];
             statePool = NodeStateFactory.createStatePool(this);
         }
@@ -153,6 +155,7 @@ package Entity {
                     state.update(dt);
             updateTimer(dt); // 更新各种计时器
             updateNodeLinks();
+            updateShipAction();
         }
 
         public function updateTimer(_dt:Number):void {
@@ -192,6 +195,12 @@ package Entity {
                         nodeLinks[i].push(_Node);
                 }
             }
+        }
+
+        public function updateShipAction():void {
+            for each(var action:Array in shipActions)
+                NodeStaticLogic.moveShips(this, action[0], action[1], action[2]);
+            shipActions.length = 0;
         }
 
         // #endregion
@@ -379,21 +388,6 @@ package Entity {
         }
 
         // #endregion
-        // 计算需连接的障碍
-        public function getBarrierLinks():void {
-            var _dx:Number = NaN;
-            var _dy:Number = NaN;
-            for each (var _Node:Node in EntityContainer.nodes) {
-                if (_Node == this || !_Node.nodeData.isBarrier)
-                    continue;
-                if (_Node.nodeData.x != nodeData.x && _Node.nodeData.y != nodeData.y)
-                    continue; // 横纵坐标至少有一个相等
-                _dx = _Node.nodeData.x - nodeData.x;
-                _dy = _Node.nodeData.y - nodeData.y;
-                if (Math.sqrt(_dx * _dx + _dy * _dy) < 180)
-                    nodeData.barrierLinks.push(_Node.tag);
-            }
-        }
 
         // #region 特效与绘图
 

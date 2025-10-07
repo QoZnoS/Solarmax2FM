@@ -6,11 +6,11 @@ package Entity {
     import starling.errors.AbstractClassError;
     import utils.Rng;
     import utils.GS;
-    import Entity.AI.EnemyAIFactory;
-    import air.media.NullSink;
+    import Game.ReplayScene;
 
     public class EntityHandler {
         public static var game:GameScene;
+        public static var replay:ReplayScene;
 
         public function EntityHandler() {
             throw new AbstractClassError();
@@ -21,7 +21,11 @@ package Entity {
             var enemyAI:EnemyAI = EntityContainer.getReserve(EntityContainer.INDEX_AIS) as EnemyAI;
             if (!enemyAI)
                 enemyAI = new EnemyAI();
-            var rng:Rng = new Rng(game.rng.nextInt(), Rng.X32);
+            var rng:Rng;
+            if (game.visible)
+                rng = new Rng(game.rng.nextInt(), Rng.X32);
+            else if (replay.visible)
+                rng = new Rng(replay.rng.nextInt(), Rng.X32);
             var actionDelay:Number = ("actionDelay" in data) ? data.actionDelay : -1;
             var startDelay:Number = ("startDelay" in data) ? data.startDelay : -1;
             enemyAI.initAI(game, rng, data.team, data.type, actionDelay);
@@ -32,7 +36,11 @@ package Entity {
             var node:Node = EntityContainer.getReserve(EntityContainer.INDEX_NODES) as Node;
             if (!node)
                 node = new Node();
-            var rng:Rng = new Rng(game.rng.nextInt(), Rng.X32)
+            var rng:Rng;
+            if (game.visible)
+                rng = new Rng(game.rng.nextInt(), Rng.X32);
+            else if (replay.visible)
+                rng = new Rng(replay.rng.nextInt(), Rng.X32);
             node.initNode(game, rng, data);
             EntityContainer.addEntity(EntityContainer.INDEX_NODES, node);
             node.tag = EntityContainer.nodes.length - 1;
@@ -48,7 +56,11 @@ package Entity {
             var ship:Ship = EntityContainer.getReserve(EntityContainer.INDEX_SHIPS) as Ship;
             if (!ship)
                 ship = new Ship();
-            var rng:Rng = new Rng(game.rng.nextInt(), Rng.X0)
+            var rng:Rng;
+            if (game.visible)
+                rng = new Rng(game.rng.nextInt(), Rng.X32);
+            else if (replay.visible)
+                rng = new Rng(replay.rng.nextInt(), Rng.X32);
             ship.initShip(game, rng, team, node, _productionEffect);
             EntityContainer.addEntity(EntityContainer.INDEX_SHIPS, ship);
             return ship;
@@ -107,6 +119,12 @@ package Entity {
                 if (ai.team == team)
                     return true;
             return false;
+        }
+
+        public static function removeAllAI():void {
+            for each (var ai:EnemyAI in EntityContainer.ais)
+                ai.active = false;
+            EntityContainer.ais.length = 0;
         }
     }
 }

@@ -98,10 +98,6 @@ package Game {
                 case Keyboard.Z:
                     scene.applyFilter()
                     break;
-                case Keyboard.X:
-                    scene.replayMap();
-                    title.animateOut();
-                    break;
                 case Keyboard.C:
                     THIS.pause = !THIS.pause;
                     if (THIS.pause)
@@ -148,7 +144,7 @@ package Game {
 
         // 进入游戏时触发一次
         public function init_game():void {
-            init_tag();
+            // init_tag();
         }
 
         // 启动debug触发一次
@@ -276,11 +272,6 @@ package Game {
             (EntityContainer.ais[0] as EnemyAI).debugTrace[2] = null;
             (EntityContainer.ais[0] as EnemyAI).debugTrace[3] = null;
             (EntityContainer.ais[0] as EnemyAI).debugTrace[4] = null;
-        }
-
-        private function set_expandDarkPulse(_team:int):void {
-            game.darkPulse.scaleX = game.darkPulse.scaleY = 0;
-            game.darkPulse.visible = true;
         }
 
         private function createFilter():ColorMatrixFilter{

@@ -136,7 +136,8 @@ package Game.SpecialEvent {
                     break;
                 case STATE_DISAPPEAR:
                     triggerTimer -= dt;
-                    triggerNode.unloadShips();
+                    if (game.visible)
+                        triggerNode.unloadShips();
                     if (triggerTimer > 0)
                         break;
                     state = STATE_END;
