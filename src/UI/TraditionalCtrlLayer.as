@@ -10,7 +10,6 @@ package UI {
     import Entity.FXHandler;
     import starling.display.QuadBatch;
     import Entity.Node.NodeStaticLogic;
-    import Entity.Node.NodeType;
     import Entity.EntityContainer;
 
     public class TraditionalCtrlLayer extends Sprite {

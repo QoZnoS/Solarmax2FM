@@ -155,23 +155,37 @@ package {
             if (!replayDir.exists)
                 replayDir.createDirectory();
             var files:Array = replayDir.getDirectoryListing();
-            // 只保留.s2rp文件
-            var replayFiles:Array = [];
-            for each (var f:File in files)
-                if (f.extension == "s2rp" && f.name.startsWith("auto"))
-                    replayFiles.push(f);
-            // 按修改时间排序，旧的在前
-            replayFiles.sortOn("modificationDate", Array.NUMERIC);
-
-            // 如果已有4个及以上回放，删除最旧的
-            while (replayFiles.length >= 20) {
-                try {
-                    replayFiles[0].deleteFile();
-                } catch (e:Error) {
+            var replayGroups:Object = {};
+            for each (var f:File in files) {
+                if (f.extension == "s2rp" && f.name.startsWith("auto")) {
+                    try {
+                        var fs:FileStream = new FileStream();
+                        fs.open(f, "read");
+                        var loadData:Array = JSON.parse(fs.readMultiByte(fs.bytesAvailable, "utf-8")) as Array;
+                        fs.close();
+                        var key:String = (loadData && loadData.length > 0 && loadData[0].length > 0) ? String(loadData[0][0]) : "default";
+                        if (!replayGroups[key])
+                            replayGroups[key] = [];
+                        replayGroups[key].push(f);
+                    } catch (e:Error) {
+                        // 跳过损坏文件
+                    }
                 }
-                replayFiles.shift();
             }
-            // 自动命名新回放
+            // 每组按修改时间排序，旧的在前
+            for (var group:String in replayGroups) {
+                var arr:Array = replayGroups[group];
+                arr.sortOn("modificationDate", Array.NUMERIC);
+                // 每组最多保留20个
+                while (arr.length >= 20) {
+                    try {
+                        arr[0].deleteFile();
+                    } catch (e:Error) {
+                    }
+                    arr.shift();
+                }
+            }
+            // 自动命名新回放，格式 auto_时间
             var now:Date = new Date();
             var name:String = "auto_" + now.fullYear + ("0" + (now.month + 1)).substr(-2) + ("0" + now.date).substr(-2) + "_" + ("0" + now.hours).substr(-2) + ("0" + now.minutes).substr(-2) + ("0" + now.seconds).substr(-2);
             save_replay(name);
@@ -181,19 +195,27 @@ package {
             var data:String = JSON.stringify(replay.save(name));
             var filePath:String = "replay/" + name + ".s2rp"
             file = File.applicationStorageDirectory.resolvePath(filePath);
-            fileStream.open(file, "write");
-            fileStream.writeUTFBytes(data);
-            fileStream.close();
+            try {
+                fileStream.open(file, "write");
+                fileStream.writeUTFBytes(data);
+                fileStream.close();
+            } catch (e:Error) {
+                SceneController.alert("Failed to save replay: " + e.message);
+            }
         }
 
         public static function load_replay(name:String):void {
             var filePath:String = "replay/" + name + ".s2rp"
             file = File.applicationStorageDirectory.resolvePath(filePath);
-            fileStream.open(file, "read");
-            var loadData:Array = JSON.parse(fileStream.readMultiByte(fileStream.bytesAvailable, "utf-8")) as Array;
-            replay = new ReplayData(loadData[0][0], loadData[0][1], loadData[0][2])
-            replay.load(loadData);
-            fileStream.close();
+            try {
+                fileStream.open(file, "read");
+                var loadData:Array = JSON.parse(fileStream.readMultiByte(fileStream.bytesAvailable, "utf-8")) as Array;
+                replay = new ReplayData(loadData[0][0], loadData[0][1], loadData[0][2]);
+                replay.load(loadData);
+                fileStream.close();
+            } catch (e:Error) {
+                SceneController.alert("Failed to load replay: " + e.message);
+            }
         }
 
         public static function get difficultyInt():int {

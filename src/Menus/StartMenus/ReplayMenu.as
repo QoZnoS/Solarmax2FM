@@ -153,12 +153,12 @@ package Menus.StartMenus {
                     restartTime[i] -= dt;
                 restartTime[i] = Math.max(0, Math.min(1, restartTime[i]))
                 restartHint[i].scaleX = Math.max(0, (restartTime[i] - 0.3) * 10 / 7);
-                if (restartTime[i] == 1){
+                if (restartTime[i] == 1) {
                     if (Globals.currentDifficulty != Globals.replay.difficulty) {
                         Globals.currentDifficulty = Globals.replay.difficulty;
                         LevelData.updateLevelData();
                     }
-                    for each(var level:Object in LevelData.level)
+                    for each (var level:Object in LevelData.level)
                         if (level.name == repList[i].level[1])
                             Globals.level = LevelData.level.indexOf(level);
                     refresh();
@@ -197,10 +197,14 @@ package Menus.StartMenus {
             if (!replayDir.exists)
                 replayDir.createDirectory();
             var files:Array = replayDir.getDirectoryListing();
-            var replayFiles:Array = [];
-            for each (var f:File in files)
-                if (f.extension == "s2rp")
-                    f.deleteFile();
+            for each (var f:File in files) {
+                if (f.extension == "s2rp") {
+                    var repName:String = f.name.split(".")[0];
+                    Globals.load_replay(repName);
+                    if (Globals.replay.level[0] == LevelData.rawData[Globals.currentData].name)
+                        f.deleteFile();
+                }
+            }
             refresh();
         }
 

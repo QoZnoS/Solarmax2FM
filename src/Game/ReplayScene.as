@@ -22,6 +22,7 @@ package Game {
 
         public function ReplayScene(scene:SceneController) {
             super(scene);
+            visible = false;
         }
 
         public function init(rep:ReplayData):void {

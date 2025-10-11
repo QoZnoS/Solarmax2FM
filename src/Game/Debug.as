@@ -76,10 +76,10 @@ package Game {
             THIS.dt = e.passedTime;
             updateFPS();
             updateDebugLabel();
-            // if (game.visible)
-            //     updateTag();
-            // else
-            //     clear_tag();
+            if (game.visible)
+                updateTag();
+            else
+                clear_tag();
         }
 
         private var pause:Boolean = false;

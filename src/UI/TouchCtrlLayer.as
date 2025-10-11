@@ -10,7 +10,6 @@ package UI {
     import Entity.FXHandler;
     import starling.display.QuadBatch;
     import Entity.Node.NodeStaticLogic;
-    import Entity.Node.NodeType;
     import Entity.EntityContainer;
 
     public class TouchCtrlLayer extends Sprite {
@@ -26,15 +25,17 @@ package UI {
             this.touchQuad = _ui.touchQuad;
             convertQuad = new Quad(1024, 768, 16711680);
             convertQuad.alpha = 0;
-            addChild(convertQuad)
+            addChild(convertQuad);
         }
 
         public function init():void {
             touchQuad.addEventListener("touch", on_touch); // 按操作方式添加事件监听器
+            touches = new Vector.<Touch>;
         }
 
         public function deinit():void {
             touchQuad.removeEventListener("touch", on_touch);
+            touches = new Vector.<Touch>;
         }
 
         public function draw():void {
