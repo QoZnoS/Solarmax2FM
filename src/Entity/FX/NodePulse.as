@@ -27,28 +27,28 @@ package Entity.FX {
             image.pivotX = image.pivotY = image.width * 0.5;
         }
 
-        public function initPulse(_GameScene:GameScene, _Node:Node, _Color:uint, _type:int, _delay:Number = 0):void {
-            super.init(_GameScene);
-            this.x = _Node.nodeData.x;
-            this.y = _Node.nodeData.y;
-            this.type = _type;
-            this.delay = _delay;
-            switch (_type) {
+        public function initPulse(gameScene:GameScene, node:Node, color:uint, type:int, delay:Number = 0):void {
+            super.init(gameScene);
+            this.x = node.nodeData.x;
+            this.y = node.nodeData.y;
+            this.type = type;
+            this.delay = delay;
+            switch (type) {
                 case 0:
                     size = 0;
-                    maxSize = _Node.nodeData.size * 2;
+                    maxSize = node.nodeData.size * 2;
                     image.alpha = 1;
-                    rate = _Node.nodeData.size;
+                    rate = node.nodeData.size;
                     break;
                 case 1:
-                    size = _Node.nodeData.size * 1.333;
-                    maxSize = _Node.nodeData.size * 1.333;
+                    size = node.nodeData.size * 1.333;
+                    maxSize = node.nodeData.size * 1.333;
                     image.alpha = 0;
-                    rate = _Node.nodeData.size;
+                    rate = node.nodeData.size;
             }
             image.x = x;
             image.y = y;
-            image.color = _Color;
+            image.color = color;
             image.scaleX = image.scaleY = size;
             image.visible = true;
             UIContainer.entityLayer.addGlow(image);
@@ -58,10 +58,10 @@ package Entity.FX {
             UIContainer.entityLayer.removeGlow(image);
         }
 
-        override public function update(_dt:Number):void {
+        override public function update(dt:Number):void {
             if (delay > 0) {
                 image.visible = false;
-                delay -= _dt;
+                delay -= dt;
                 if (delay <= 0) {
                     image.visible = true;
                     GS.playCapture(this.x);
@@ -70,7 +70,7 @@ package Entity.FX {
             }
             switch (type) {
                 case 0:
-                    size += _dt * rate;
+                    size += dt * rate;
                     if (size > maxSize) {
                         size = maxSize;
                         active = false;
@@ -78,7 +78,7 @@ package Entity.FX {
                     image.alpha = 1 - size / maxSize;
                     break;
                 case 1:
-                    size -= _dt * rate;
+                    size -= dt * rate;
                     if (size < 0) {
                         size = 0;
                         active = false;

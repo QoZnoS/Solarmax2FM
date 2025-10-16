@@ -22,9 +22,9 @@ package Menus {
         private const pageName:Array = ["SETTING", "MAPACKS", "STAFF", "REPLAY"]
         private var pages:Array;
 
-        public function StartMenu(_titleMenu:TitleMenu) {
+        public function StartMenu(titleMenu:TitleMenu) {
             super();
-            this.title = _titleMenu;
+            this.title = titleMenu;
             var bg:Quad = new Quad(1024, 768, 0);
             bg.alpha = 0.65;
             addChild(bg);
@@ -89,12 +89,12 @@ package Menus {
             this.visible = false;
         }
 
-        public function on_menu(_click:Event):void {
+        public function on_menu(click:Event):void {
             Globals.save();
             animateOut();
         }
 
-        public function on_page(_click:Event = null):void {
+        public function on_page(click:Event):void {
             for(var i:int = 0; i < MAX_PAGE; i++)
             {
                 if (pages[i].toggled && !menus[i].visible)

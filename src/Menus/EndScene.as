@@ -20,9 +20,9 @@ package Menus {
 
         private var scene:SceneController
 
-        public function EndScene(_scene:SceneController) {
+        public function EndScene(scene:SceneController) {
             super();
-            this.scene = _scene
+            this.scene = scene
             quadImage = new Image(Root.assets.getTexture("quad"));
             quadImage.adjustVertices();
             stars = new EntityPool();
@@ -37,31 +37,31 @@ package Menus {
         }
 
         public function init():void {
-            var _EndStar1:EndStar = null;
-            var _Distance:Number = NaN;
-            var _angle:Number = NaN;
-            var _sqrt500:Number = Math.sqrt(500);
-            var _EndStar2:EndStar = makeStar(512, 384);
-            _EndStar2.mult = 1;
+            var endStar1:EndStar = null;
+            var distance:Number = NaN;
+            var angle:Number = NaN;
+            var sqrt500:Number = Math.sqrt(500);
+            var endStar2:EndStar = makeStar(512, 384);
+            endStar2.mult = 1;
             for (var i:int = 0; i < 50; i++) {
-                _EndStar1 = makeStar(512, 384);
-                _Distance = Math.random() * _sqrt500;
-                _Distance = _Distance * _Distance + 50;
-                _angle = Math.random() * 3.141592653589793 * 2;
-                _EndStar1.x = 512 + Math.cos(_angle) * _Distance;
-                _EndStar1.y = 384 + Math.sin(_angle) * _Distance;
-                while (checkProximity(stars.active, _EndStar1, 60)) {
-                    _Distance = Math.random() * _sqrt500;
-                    _Distance = _Distance * _Distance + 50;
-                    _angle = Math.random() * 3.141592653589793 * 2;
-                    _EndStar1.x = 512 + Math.cos(_angle) * _Distance;
-                    _EndStar1.y = 384 + Math.sin(_angle) * _Distance;
+                endStar1 = makeStar(512, 384);
+                distance = Math.random() * sqrt500;
+                distance = distance * distance + 50;
+                angle = Math.random() * 3.141592653589793 * 2;
+                endStar1.x = 512 + Math.cos(angle) * distance;
+                endStar1.y = 384 + Math.sin(angle) * distance;
+                while (checkProximity(stars.active, endStar1, 60)) {
+                    distance = Math.random() * sqrt500;
+                    distance = distance * distance + 50;
+                    angle = Math.random() * 3.141592653589793 * 2;
+                    endStar1.x = 512 + Math.cos(angle) * distance;
+                    endStar1.y = 384 + Math.sin(angle) * distance;
                 }
             }
-            for each (_EndStar1 in stars.active) {
-                if (_EndStar1 == _EndStar2)
+            for each (endStar1 in stars.active) {
+                if (endStar1 == endStar2)
                     continue;
-                _EndStar1.delay = getDistance(_EndStar2, _EndStar1) * 0.05;
+                endStar1.delay = getDistance(endStar2, endStar1) * 0.05;
             }
             pulseSize = 0;
             pulseWidth = 10;
@@ -73,11 +73,11 @@ package Menus {
         }
 
         // 检测_EndStar1 距数组每项的距离是否均小于_Distance
-        public function checkProximity(_StarVector:Vector.<GameEntity>, _EndStar1:EndStar, _Distance:Number):Boolean {
-            for each (var _EndStar2:EndStar in _StarVector) {
-                if (_EndStar2 == _EndStar1)
+        public function checkProximity(starVector:Vector.<GameEntity>, endStar1:EndStar, distance:Number):Boolean {
+            for each (var endStar2:EndStar in starVector) {
+                if (endStar2 == endStar1)
                     continue;
-                if (getDistance(_EndStar1, _EndStar2) > _Distance)
+                if (getDistance(endStar1, endStar2) > distance)
                     continue;
                 return true;
             }
@@ -85,10 +85,10 @@ package Menus {
         }
 
         // 计算距离
-        public function getDistance(_EndStar1:EndStar, _EndStar2:EndStar):Number {
-            var _dx:Number = _EndStar1.x - _EndStar2.x;
-            var _dy:Number = _EndStar1.y - _EndStar2.y;
-            return Math.sqrt(_dx * _dx + _dy * _dy);
+        public function getDistance(endStar1:EndStar, endStar2:EndStar):Number {
+            var dx:Number = endStar1.x - endStar2.x;
+            var dy:Number = endStar1.y - endStar2.y;
+            return Math.sqrt(dx * dx + dy * dy);
         }
 
         public function deInit():void {
@@ -101,18 +101,18 @@ package Menus {
             removeEventListener("enterFrame", update);
         }
 
-        public function makeStar(_x:Number, _y:Number, _delay:Number = 0):EndStar {
-            var _EndStar:EndStar = stars.getReserve() as EndStar;
-            if (!_EndStar)
-                _EndStar = new EndStar();
-            _EndStar.initStar(this, _x, _y, _delay);
-            stars.addEntity(_EndStar);
-            return _EndStar;
+        public function makeStar(x:Number, y:Number, delay:Number = 0):EndStar {
+            var endStar:EndStar = stars.getReserve() as EndStar;
+            if (!endStar)
+                endStar = new EndStar();
+            endStar.initStar(this, x, y, delay);
+            stars.addEntity(endStar);
+            return endStar;
         }
 
         public function update(e:EnterFrameEvent):void {
-            var _dt:Number = e.passedTime;
-            timer -= _dt;
+            var dt:Number = e.passedTime;
+            timer -= dt;
             if (cover.alpha == 1) {
                 if (timer <= 0) {
                     timer = 0;
@@ -122,25 +122,25 @@ package Menus {
             } else if (timer <= 0) {
                 timer = 0;
                 if (cover.alpha < 1) {
-                    cover.alpha += _dt * 0.1;
+                    cover.alpha += dt * 0.1;
                     if (cover.alpha >= 1) {
                         cover.alpha = 1;
                         timer = 5;
                     }
                 }
             }
-            stars.update(_dt);
-            pulseSize += _dt * 20;
-            pulseWidth += _dt * 3;
-            var _model:Number = pulseSize - pulseWidth;
-            if (_model < 0)
-                _model = 0;
-            var _alpha:Number = (1 - pulseSize / 512) * 0.4;
-            if (_alpha < 0)
-                _alpha = 0;
-            var _quality:int = 8 + pulseSize / 512 * 248;
+            stars.update(dt);
+            pulseSize += dt * 20;
+            pulseWidth += dt * 3;
+            var model:Number = pulseSize - pulseWidth;
+            if (model < 0)
+                model = 0;
+            var alpha:Number = (1 - pulseSize / 512) * 0.4;
+            if (alpha < 0)
+                alpha = 0;
+            var quality:int = 8 + pulseSize / 512 * 248;
             batch.reset();
-            Drawer.drawCircle(batch, 512, 384, Globals.teamColors[1], pulseSize, _model, true, _alpha, 1, 0, _quality);
+            Drawer.drawCircle(batch, 512, 384, Globals.teamColors[1], pulseSize, model, true, alpha, 1, 0, quality);
             Globals.teamColors[1] == 0 ? batch.blendMode = "normal" : batch.blendMode = "add";
         }
 

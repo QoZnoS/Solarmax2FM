@@ -129,8 +129,8 @@ package Game.SpecialEvent {
                     state = STATE_END;
                     darkPulse.scaleX = darkPulse.scaleY = 0;
                     darkPulse.visible = true;
-                    Starling.juggler.tween(_game.ui.btnL, 5, {"alpha": 0});
-                    Starling.juggler.tween(_game.ui.gameContainer, 25, {"scaleX": 0.01,
+                    Starling.juggler.tween(UIContainer.btnLayer, 5, {"alpha": 0});
+                    Starling.juggler.tween(UIContainer.gameContainer, 25, {"scaleX": 0.01,
                             "scaleY": 0.01,
                             "delay": 20,
                             "transition": "easeInOut"}); // 画面缩小动画

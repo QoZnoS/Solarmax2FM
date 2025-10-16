@@ -11,19 +11,18 @@ package {
     import UI.UIContainer;
     import utils.Popup;
     import Game.ReplayScene;
-    import flash.ui.Keyboard;
     import utils.ReplayData;
 
     public class SceneController extends Sprite {
         private static var _s:SceneController;
         private static var _alert:Vector.<Popup>;
 
-        public var titleMenu:TitleMenu; // 手动单例
-        public var gameScene:GameScene; // 手动单例
-        public var replayScene:ReplayScene; // 手动单例
-        public var endScene:EndScene; // 手动单例
-        public var debug:Debug; // 自动单例
-        public var ui:UIContainer; // 自动单例
+        public var titleMenu:TitleMenu;
+        public var gameScene:GameScene;
+        public var replayScene:ReplayScene;
+        public var endScene:EndScene;
+        public var debug:Debug;
+        public var ui:UIContainer;
 
         public var speedMult:Number;
 

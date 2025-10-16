@@ -19,33 +19,33 @@ package Menus.StartMenus {
 
         private var nicobtn:OptionButton;
 
-        public function StaffMenu(_title:TitleMenu):void {
-            this.title = _title;
+        public function StaffMenu(title:TitleMenu):void {
+            this.title = title;
             components = [];
             init();
         }
 
         public function init():void {
-            for each (var _string:Array in staffString) {
-                components.push(new TextField(400, 40, _string[0], _string[1], -1, COLOR));
+            for each (var strings:Array in staffString) {
+                components.push(new TextField(400, 40, strings[0], strings[1], -1, COLOR));
             }
-            var _y:Number = 120;
-            var _side:int = 0;
+            var y:Number = 120;
+            var side:int = 0;
             for (var i:int = 0; i < components.length; i++) {
                 if (components[i].fontName == "Downlink18") {
-                    addLabel(components[i], 312, _y, "center");
-                    _y += lineHeight * 1.6;
+                    addLabel(components[i], 312, y, "center");
+                    y += lineHeight * 1.6;
                 } else {
-                    if (_side == 0) {
-                        addLabel(components[i], 100, _y, "right");
-                        _side = 1;
-                        _y += lineHeight;
+                    if (side == 0) {
+                        addLabel(components[i], 100, y, "right");
+                        side = 1;
+                        y += lineHeight;
                     } else {
-                        addLabel(components[i], 520, _y, "left");
-                        _side = 0;
+                        addLabel(components[i], 520, y, "left");
+                        side = 0;
                     }
                 }
-                components[i].y = _y;
+                components[i].y = y;
                 if (components[i].text == "NICO TUASON") {
                     nicobtn = new OptionButton("NICO TUASON", COLOR, null)
                     nicobtn.x = components[i].x
@@ -77,17 +77,17 @@ package Menus.StartMenus {
             this.visible = false;
         }
 
-        private function addLabel(_label:TextField, _x:Number, _y:Number, _hAlign:String = "right"):void {
-            _label.hAlign = _hAlign;
-            _label.vAlign = "top";
-            _label.x = _x;
-            _label.y = _y;
-            this.addChild(_label);
+        private function addLabel(label:TextField, x:Number, y:Number, hAlign:String = "right"):void {
+            label.hAlign = hAlign;
+            label.vAlign = "top";
+            label.x = x;
+            label.y = y;
+            this.addChild(label);
         }
 
         private var nicoClickTime:int = 0
 
-        private function invisibleMode(_click:Event):void {
+        private function invisibleMode(click:Event):void {
             if (title.currentIndex == 0)
                 return;
             nicoClickTime += 1;

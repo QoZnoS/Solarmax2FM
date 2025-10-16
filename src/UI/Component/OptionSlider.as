@@ -23,11 +23,11 @@ package UI.Component {
         public var boxHeight:Number;
         public var thickness:Number;
 
-        public function OptionSlider(_size:int) {
-            var _texture:String = null;
+        public function OptionSlider(size:int) {
+            var texture:String = null;
             super();
-            var _color:Number = 16752059;
-            switch (_size) {
+            var color:uint = 0xFF9DBB;
+            switch (size) {
                 case 0:
                 case 1:
                     touchWidth = 320;
@@ -35,7 +35,7 @@ package UI.Component {
                     boxWidth = 50;
                     boxHeight = 18;
                     thickness = 1;
-                    _texture = "Downlink12";
+                    texture = "Downlink12";
                     break;
                 case 2:
                     touchWidth = 512;
@@ -43,9 +43,9 @@ package UI.Component {
                     boxWidth = 80;
                     boxHeight = 24;
                     thickness = 2;
-                    _texture = "Downlink18";
+                    texture = "Downlink18";
             }
-            label = new TextField(boxWidth, boxHeight * 2, "100%", _texture, -1, _color);
+            label = new TextField(boxWidth, boxHeight * 2, "100%", texture, -1, color);
             label.pivotX = label.x = boxWidth * 0.5;
             label.pivotY = boxHeight;
             label.y = boxHeight * 0.5;
@@ -53,29 +53,29 @@ package UI.Component {
             label.pivotX -= 2;
             label.touchable = false;
             addChild(label);
-            quad1 = new Quad(touchWidth, thickness, _color);
+            quad1 = new Quad(touchWidth, thickness, color);
             quad1.y = boxHeight * 0.5 - thickness * 0.5;
             quad1.alpha = 0.6;
             addChild(quad1);
-            quad2 = new Quad(touchWidth, thickness, _color);
+            quad2 = new Quad(touchWidth, thickness, color);
             quad2.pivotX = quad2.x = touchWidth;
             quad2.y = boxHeight * 0.5 - thickness * 0.5;
             quad2.alpha = 0.3;
             addChild(quad2);
             box = new Sprite();
-            boxQuad1 = new Quad(boxWidth, thickness, _color);
+            boxQuad1 = new Quad(boxWidth, thickness, color);
             boxQuad1.x = -boxWidth * 0.5;
             boxQuad1.y = -boxHeight * 0.5 - thickness;
             box.addChild(boxQuad1);
-            boxQuad2 = new Quad(boxWidth, thickness, _color);
+            boxQuad2 = new Quad(boxWidth, thickness, color);
             boxQuad2.x = -boxWidth * 0.5;
             boxQuad2.y = boxHeight * 0.5;
             box.addChild(boxQuad2);
-            boxQuad3 = new Quad(thickness, boxHeight, _color);
+            boxQuad3 = new Quad(thickness, boxHeight, color);
             boxQuad3.x = -boxWidth * 0.5;
             boxQuad3.y = -boxHeight * 0.5;
             box.addChild(boxQuad3);
-            boxQuad4 = new Quad(thickness, boxHeight, _color);
+            boxQuad4 = new Quad(thickness, boxHeight, color);
             boxQuad4.x = boxWidth * 0.5 - thickness;
             boxQuad4.y = -boxHeight * 0.5;
             box.addChild(boxQuad4);
@@ -99,15 +99,15 @@ package UI.Component {
             touchQuad.removeEventListener("touch", on_touch);
         }
 
-        public function on_touch(_touchEvent:TouchEvent):void {
-            var _touches:Vector.<Touch> = _touchEvent.getTouches(touchQuad);
-            if (!_touches || _touches.length == 0)
+        public function on_touch(touchEvent:TouchEvent):void {
+            var touches:Vector.<Touch> = touchEvent.getTouches(touchQuad);
+            if (!touches || touches.length == 0)
                 return;
-            var _touch:Touch = _touches[0];
-            if (_touch.phase == "began" || _touch.phase == "moved" || _touch.phase == "ended") {
-                var _location:Point = _touch.getLocation(this);
-                var _newTotal:Number = (_location.x - boxWidth * 0.5) / (touchWidth - boxWidth);
-                total = Math.max(0, Math.min(1, _newTotal));
+            var touch:Touch = touches[0];
+            if (touch.phase == "began" || touch.phase == "moved" || touch.phase == "ended") {
+                var location:Point = touch.getLocation(this);
+                var newTotal:Number = (location.x - boxWidth * 0.5) / (touchWidth - boxWidth);
+                total = Math.max(0, Math.min(1, newTotal));
                 update();
             }
         }

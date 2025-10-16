@@ -6,6 +6,9 @@ package UI.Component {
     import starling.text.TextField;
 
     public class FleetSlider extends Sprite {
+        public static const TYPE_HORIZONTAL_SMALL:int = 1;
+        public static const TYPE_HORIZONTAL_LARGE:int = 2;
+        public static const TYPE_VERTICAL:int = 3;
 
         private var _quad1:Quad;
         private var _quad2:Quad;
@@ -24,39 +27,39 @@ package UI.Component {
         private var _thickness:Number;
         private var _type:int;
 
-        public function FleetSlider(_type:int) {
-            var _font:String = null;
+        public function FleetSlider(type:int) {
+            var font:String = null;
+            this._type = type;
             super();
             switch (_type) {
                 case 0:
-                case 1:
+                case TYPE_HORIZONTAL_SMALL:
                     _touchWidth = 512;
                     _touchHeight = 40;
                     _boxWidth = 50;
                     _boxHeight = 20;
                     _thickness = 2;
-                    _font = "Downlink12";
+                    font = "Downlink12";
                     break;
-                case 2:
+                case TYPE_HORIZONTAL_LARGE:
                     _touchWidth = 640;
                     _touchHeight = 60;
                     _boxWidth = 80;
                     _boxHeight = 30;
                     _thickness = 2;
-                    _font = "Downlink18";
+                    font = "Downlink18";
                     break;
-                case 3:
+                case TYPE_VERTICAL:
                     _touchWidth = 40;
                     _touchHeight = 360;
                     _boxWidth = 50;
                     _boxHeight = 20;
                     _thickness = 2;
-                    _font = "Downlink12";
+                    font = "Downlink12";
                     break;
             }
-            this._type = _type;
-            if (_type == 3) {
-                _label = new TextField(_boxWidth * 2, _boxHeight, "100%", _font, -1, 16755370);
+            if (_type == TYPE_VERTICAL) {
+                _label = new TextField(_boxWidth * 2, _boxHeight, "100%", font, -1, 16755370);
                 _label.pivotX = _boxWidth;
                 _label.pivotY = _label.y = _boxHeight * 0.5;
                 _label.x = _boxWidth * 0.5;
@@ -66,7 +69,7 @@ package UI.Component {
                 _quad2.pivotY = _quad2.y = _touchHeight;
                 _quad2.x = _boxWidth * 0.5 - _thickness * 0.5;
             } else {
-                _label = new TextField(_boxWidth, _boxHeight * 2, "100%", _font, -1, 16755370);
+                _label = new TextField(_boxWidth, _boxHeight * 2, "100%", font, -1, 16755370);
                 _label.pivotX = _label.x = _boxWidth * 0.5;
                 _label.pivotY = _boxHeight;
                 _label.y = _boxHeight * 0.5;
@@ -121,18 +124,18 @@ package UI.Component {
             _touchQuad.removeEventListener("touch", on_touch);
         }
 
-        private function on_touch(_touch:TouchEvent):void {
-            var _TouchArray:Vector.<Touch> = _touch.getTouches(_touchQuad);
-            if (!_TouchArray)
+        private function on_touch(touchEvent:TouchEvent):void {
+            var touchArray:Vector.<Touch> = touchEvent.getTouches(_touchQuad);
+            if (!touchArray)
                 return;
-            if (_TouchArray.length == 1) // 确保只有一个触点
+            if (touchArray.length == 1) // 确保只有一个触点
             {
-                var _Touch:Touch = _TouchArray[0];
-                switch (_Touch.phase) {
+                var touch:Touch = touchArray[0];
+                switch (touch.phase) {
                     case "began":
                     case "moved":
                     case "ended":
-                        _type == 3 ? _total = 1 - (_Touch.getLocation(this).y - _boxHeight * 0.5) / (_touchHeight - _boxHeight) : _total = (_Touch.getLocation(this).x - _boxWidth * 0.5) / (_touchWidth - _boxWidth);
+                        _type == 3 ? _total = 1 - (touch.getLocation(this).y - _boxHeight * 0.5) / (_touchHeight - _boxHeight) : _total = (touch.getLocation(this).x - _boxWidth * 0.5) / (_touchWidth - _boxWidth);
                         _total = Math.max(0.0001, Math.min(_total, 1));
                         break;
                 }
@@ -141,7 +144,7 @@ package UI.Component {
         }
 
         private function update():void {
-            if (_type == 3) {
+            if (_type == TYPE_VERTICAL) {
                 _label.y = _box.y = _boxHeight * 0.5 + (1 - _total) * (_touchHeight - _boxHeight);
                 _label.text = int(_total * 100).toString() + "%";
                 _quad1.setVertexPosition(1, _thickness, _label.y + _boxHeight * 0.5);

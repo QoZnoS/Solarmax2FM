@@ -86,22 +86,22 @@ package UI {
             //#region 分兵条
             switch (Globals.fleetSliderPosition) {
                 case 0: // 左
-                    fleetSlider = new FleetSlider(3)
+                    fleetSlider = new FleetSlider(FleetSlider.TYPE_VERTICAL)
                     fleetSlider.y = 210;
                     fleetSlider.x = 20;
                     break;
                 case 2: // 右
-                    fleetSlider = new FleetSlider(3)
+                    fleetSlider = new FleetSlider(FleetSlider.TYPE_VERTICAL)
                     fleetSlider.y = 210;
                     fleetSlider.x = 950;
                     break;
                 case 1: // 下
                     if (Globals.textSize <= 1) {
-                        fleetSlider = new FleetSlider(1)
+                        fleetSlider = new FleetSlider(FleetSlider.TYPE_HORIZONTAL_SMALL)
                         fleetSlider.x = 256;
                         fleetSlider.y = 640 - fleetSlider.height * 0.5;
                     } else {
-                        fleetSlider = new FleetSlider(2)
+                        fleetSlider = new FleetSlider(FleetSlider.TYPE_HORIZONTAL_LARGE)
                         fleetSlider.x = 192;
                         fleetSlider.y = 640 - fleetSlider.height * 0.5;
                     }

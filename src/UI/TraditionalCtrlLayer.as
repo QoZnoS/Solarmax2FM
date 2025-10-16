@@ -15,10 +15,10 @@ package UI {
     public class TraditionalCtrlLayer extends Sprite {
 
         private var selectedNodes:Array;
-        private var down_x:Number;
-        private var down_y:Number;
-        private var drag_x:Number;
-        private var drag_y:Number;
+        private var downx:Number;
+        private var downy:Number;
+        private var dragx:Number;
+        private var dragy:Number;
         private var mouseDown:Boolean;
         private var dragging:Boolean;
         private var rightDown:Boolean;
@@ -29,8 +29,8 @@ package UI {
         private var dragLine:Quad;
         private var convertQuad:Quad;
 
-        public function TraditionalCtrlLayer(_ui:UIContainer) {
-            this.game = _ui.scene.gameScene;
+        public function TraditionalCtrlLayer(ui:UIContainer) {
+            this.game = ui.scene.gameScene;
             this.displayBatch = UIContainer.behaviorBatch;
             dragQuad = new Quad(10, 10, Globals.teamColors[1]);
             dragLine = new Quad(2, 2, Globals.teamColors[1]);
@@ -61,231 +61,231 @@ package UI {
 
         public function draw():void {
             mouseBatch.reset();
-            var _quadtypeX:Number = NaN;
-            var _quadtypeY:Number = NaN;
+            var quadtypeX:Number = NaN;
+            var quadtypeY:Number = NaN;
             var i:int = 0;
-            var _Node1:Node = null;
-            var _mouseX:Number = NaN;
-            var _mouseY:Number = NaN;
-            var _Node2:Node = null;
-            var _Block:Point = null;
-            var _x:Number = NaN;
-            var _y:Number = NaN;
-            var _dx:Number = NaN;
-            var _dy:Number = NaN;
-            var _angle:Number = NaN;
-            var _lx:Number = NaN;
-            var _ly:Number = NaN;
+            var node1:Node = null;
+            var mouseX:Number = NaN;
+            var mouseY:Number = NaN;
+            var node2:Node = null;
+            var block:Point = null;
+            var x:Number = NaN;
+            var y:Number = NaN;
+            var dx:Number = NaN;
+            var dy:Number = NaN;
+            var angle:Number = NaN;
+            var lx:Number = NaN;
+            var ly:Number = NaN;
             if (mouseDown && dragging) {
-                dragQuad.x = down_x;
-                dragQuad.y = down_y;
-                dragQuad.width = drag_x - down_x;
-                dragQuad.height = drag_y - down_y;
+                dragQuad.x = downx;
+                dragQuad.y = downy;
+                dragQuad.width = dragx - downx;
+                dragQuad.height = dragy - downy;
                 dragQuad.alpha = 0.2;
                 mouseBatch.addQuad(dragQuad);
-                _quadtypeX = drag_x - down_x > 0 ? 1 : -1;
-                _quadtypeY = drag_y - down_y > 0 ? 1 : -1;
+                quadtypeX = dragx - downx > 0 ? 1 : -1;
+                quadtypeY = dragy - downy > 0 ? 1 : -1;
                 dragLine.alpha = 0.5;
-                dragLine.width = (dragQuad.width + 2) * _quadtypeX;
-                dragLine.height = _quadtypeY;
-                dragLine.x = down_x - _quadtypeX;
-                dragLine.y = down_y - _quadtypeY;
+                dragLine.width = (dragQuad.width + 2) * quadtypeX;
+                dragLine.height = quadtypeY;
+                dragLine.x = downx - quadtypeX;
+                dragLine.y = downy - quadtypeY;
                 mouseBatch.addQuad(dragLine);
-                dragLine.x = down_x - _quadtypeX;
-                dragLine.y = down_y + dragQuad.height * _quadtypeY;
+                dragLine.x = downx - quadtypeX;
+                dragLine.y = downy + dragQuad.height * quadtypeY;
                 mouseBatch.addQuad(dragLine);
-                dragLine.width = _quadtypeX;
-                dragLine.height = dragQuad.height * _quadtypeY;
-                dragLine.x = down_x - _quadtypeX;
-                dragLine.y = down_y;
+                dragLine.width = quadtypeX;
+                dragLine.height = dragQuad.height * quadtypeY;
+                dragLine.x = downx - quadtypeX;
+                dragLine.y = downy;
                 mouseBatch.addQuad(dragLine);
-                dragLine.x = down_x + dragQuad.width * _quadtypeX;
-                dragLine.y = down_y;
+                dragLine.x = downx + dragQuad.width * quadtypeX;
+                dragLine.y = downy;
                 mouseBatch.addQuad(dragLine);
-                if(dragQuad.color != 0x000000)
+                if (dragQuad.color != 0x000000)
                     mouseBatch.blendMode = "add";
-                for each (_Node1 in EntityContainer.nodes) {
-                    if (_Node1.ships[1].length == 0 && _Node1.nodeData.team != 1)
+                for each (node1 in EntityContainer.nodes) {
+                    if (node1.ships[1].length == 0 && node1.nodeData.team != 1)
                         continue;
-                    if (selectedNodes.indexOf(_Node1) != -1)
+                    if (selectedNodes.indexOf(node1) != -1)
                         continue;
-                    if (_quadtypeX > 0 && _quadtypeY > 0) {
-                        if (_Node1.nodeData.x > down_x && _Node1.nodeData.x < drag_x && _Node1.nodeData.y > down_y && _Node1.nodeData.y < drag_y)
-                            selectedNodes.push(_Node1);
-                    } else if (_quadtypeX > 0 && _quadtypeY < 0) {
-                        if (_Node1.nodeData.x > down_x && _Node1.nodeData.x < drag_x && _Node1.nodeData.y > drag_y && _Node1.nodeData.y < down_y)
-                            selectedNodes.push(_Node1);
-                    } else if (_quadtypeX < 0 && _quadtypeY > 0) {
-                        if (_Node1.nodeData.x > drag_x && _Node1.nodeData.x < down_x && _Node1.nodeData.y > down_y && _Node1.nodeData.y < drag_y)
-                            selectedNodes.push(_Node1);
-                    } else if (_quadtypeX < 0 && _quadtypeY < 0) {
-                        if (_Node1.nodeData.x > drag_x && _Node1.nodeData.x < down_x && _Node1.nodeData.y > drag_y && _Node1.nodeData.y < down_y)
-                            selectedNodes.push(_Node1);
+                    if (quadtypeX > 0 && quadtypeY > 0) {
+                        if (node1.nodeData.x > downx && node1.nodeData.x < dragx && node1.nodeData.y > downy && node1.nodeData.y < dragy)
+                            selectedNodes.push(node1);
+                    } else if (quadtypeX > 0 && quadtypeY < 0) {
+                        if (node1.nodeData.x > downx && node1.nodeData.x < dragx && node1.nodeData.y > dragy && node1.nodeData.y < downy)
+                            selectedNodes.push(node1);
+                    } else if (quadtypeX < 0 && quadtypeY > 0) {
+                        if (node1.nodeData.x > dragx && node1.nodeData.x < downx && node1.nodeData.y > downy && node1.nodeData.y < dragy)
+                            selectedNodes.push(node1);
+                    } else if (quadtypeX < 0 && quadtypeY < 0) {
+                        if (node1.nodeData.x > dragx && node1.nodeData.x < downx && node1.nodeData.y > dragy && node1.nodeData.y < downy)
+                            selectedNodes.push(node1);
                     }
                 }
             } else {
-                _mouseX = (Starling.current.nativeStage.mouseX - Starling.current.viewPort.x) / Starling.contentScaleFactor;
-                _mouseY = (Starling.current.nativeStage.mouseY - Starling.current.viewPort.y) / Starling.contentScaleFactor;
-                _Node2 = getClosestNode(_mouseX, _mouseY);
-                if (_Node2) {
-                    Drawer.drawCircle(displayBatch, _Node2.nodeData.x, _Node2.nodeData.y, Globals.teamColors[_Node2.nodeData.team], _Node2.nodeData.lineDist - 4, _Node2.nodeData.size * 25 * 2, true, 0.5);
-                    if (_Node2.attackState.attackRate > 0 && _Node2.attackState.attackRange > 0)
-                        Drawer.drawDashedCircle(displayBatch, _Node2.nodeData.x, _Node2.nodeData.y, Globals.teamColors[_Node2.nodeData.team], _Node2.attackState.attackRange, _Node2.attackState.attackRange - 2, false, 0.5, 1, 0, 256);
+                mouseX = (Starling.current.nativeStage.mouseX - Starling.current.viewPort.x) / Starling.contentScaleFactor;
+                mouseY = (Starling.current.nativeStage.mouseY - Starling.current.viewPort.y) / Starling.contentScaleFactor;
+                node2 = getClosestNode(mouseX, mouseY);
+                if (node2) {
+                    Drawer.drawCircle(displayBatch, node2.nodeData.x, node2.nodeData.y, Globals.teamColors[node2.nodeData.team], node2.nodeData.lineDist - 4, node2.nodeData.size * 25 * 2, true, 0.5);
+                    if (node2.attackState.attackRate > 0 && node2.attackState.attackRange > 0)
+                        Drawer.drawDashedCircle(displayBatch, node2.nodeData.x, node2.nodeData.y, Globals.teamColors[node2.nodeData.team], node2.attackState.attackRange, node2.attackState.attackRange - 2, false, 0.5, 1, 0, 256);
                     if (rightDown && selectedNodes.length > 0) {
-                        for each (_Node1 in selectedNodes) {
-                            if (!(_Node1.nodeData.isWarp && _Node1.nodeData.team == Globals.playerTeam))
-                                _Block = EntityContainer.nodesBlocked(_Node1, _Node2);
-                            _x = _Node2.nodeData.x;
-                            _y = _Node2.nodeData.y;
-                            _dx = _x - _Node1.nodeData.x;
-                            _dy = _y - _Node1.nodeData.y;
-                            if (Math.sqrt(_dx * _dx + _dy * _dy) > _Node1.nodeData.lineDist - 5) {
-                                _angle = Math.atan2(_dy, _dx);
-                                _lx = _Node1.nodeData.x + Math.cos(_angle) * (_Node1.nodeData.lineDist - 5);
-                                _ly = _Node1.nodeData.y + Math.sin(_angle) * (_Node1.nodeData.lineDist - 5);
-                                _x -= Math.cos(_angle) * (_Node2.nodeData.lineDist - 5);
-                                _y -= Math.sin(_angle) * (_Node2.nodeData.lineDist - 5);
-                                if (_Block) {
-                                    Drawer.drawLine(displayBatch, _lx, _ly, _Block.x, _Block.y, 0xFFFFFF, 3, 0.8);
-                                    Drawer.drawLine(displayBatch, _Block.x, _Block.y, _x, _y, 0xFF3333, 3, 0.8);
+                        for each (node1 in selectedNodes) {
+                            if (!(node1.nodeData.isWarp && node1.nodeData.team == Globals.playerTeam))
+                                block = EntityContainer.nodesBlocked(node1, node2);
+                            x = node2.nodeData.x;
+                            y = node2.nodeData.y;
+                            dx = x - node1.nodeData.x;
+                            dy = y - node1.nodeData.y;
+                            if (Math.sqrt(dx * dx + dy * dy) > node1.nodeData.lineDist - 5) {
+                                angle = Math.atan2(dy, dx);
+                                lx = node1.nodeData.x + Math.cos(angle) * (node1.nodeData.lineDist - 5);
+                                ly = node1.nodeData.y + Math.sin(angle) * (node1.nodeData.lineDist - 5);
+                                x -= Math.cos(angle) * (node2.nodeData.lineDist - 5);
+                                y -= Math.sin(angle) * (node2.nodeData.lineDist - 5);
+                                if (block) {
+                                    Drawer.drawLine(displayBatch, lx, ly, block.x, block.y, 0xFFFFFF, 3, 0.8);
+                                    Drawer.drawLine(displayBatch, block.x, block.y, x, y, 0xFF3333, 3, 0.8);
                                 } else
-                                    Drawer.drawLine(displayBatch, _lx, _ly, _x, _y, 0xFFFFFF, 3, 0.8);
+                                    Drawer.drawLine(displayBatch, lx, ly, x, y, 0xFFFFFF, 3, 0.8);
                             }
                         }
-                        if (_Block)
-                            Drawer.drawCircle(displayBatch, _Node2.nodeData.x, _Node2.nodeData.y, 0xFF3333, _Node2.nodeData.lineDist - 4, _Node2.nodeData.lineDist - 7, false, 0.8);
+                        if (block)
+                            Drawer.drawCircle(displayBatch, node2.nodeData.x, node2.nodeData.y, 0xFF3333, node2.nodeData.lineDist - 4, node2.nodeData.lineDist - 7, false, 0.8);
                         else
-                            Drawer.drawCircle(displayBatch, _Node2.nodeData.x, _Node2.nodeData.y, 0xFFFFFF, _Node2.nodeData.lineDist - 4, _Node2.nodeData.lineDist - 7, false, 0.8);
+                            Drawer.drawCircle(displayBatch, node2.nodeData.x, node2.nodeData.y, 0xFFFFFF, node2.nodeData.lineDist - 4, node2.nodeData.lineDist - 7, false, 0.8);
                     }
                 }
             }
-            for each (_Node1 in selectedNodes)
-                Drawer.drawCircle(displayBatch, _Node1.nodeData.x, _Node1.nodeData.y, 0xFFFFFF, _Node1.nodeData.lineDist - 4, _Node1.nodeData.lineDist - 7, false, 0.8);
+            for each (node1 in selectedNodes)
+                Drawer.drawCircle(displayBatch, node1.nodeData.x, node1.nodeData.y, 0xFFFFFF, node1.nodeData.lineDist - 4, node1.nodeData.lineDist - 7, false, 0.8);
         }
 
-        public function on_mouseDown(_Mouse:MouseEvent):void // 鼠标左键按下
-        {
+        // 鼠标左键按下
+        public function on_mouseDown(mouse:MouseEvent):void {
             if (game.alpha < 0.5)
                 return;
-            down_x = (_Mouse.stageX - Starling.current.viewPort.x) / Starling.contentScaleFactor;
-            down_y = (_Mouse.stageY - Starling.current.viewPort.y) / Starling.contentScaleFactor;
-            var _localPoint:Point = convertQuad.globalToLocal(new Point(down_x, down_y));
-            down_x = _localPoint.x;
-            down_y = _localPoint.y;
+            downx = (mouse.stageX - Starling.current.viewPort.x) / Starling.contentScaleFactor;
+            downy = (mouse.stageY - Starling.current.viewPort.y) / Starling.contentScaleFactor;
+            var localPoint:Point = convertQuad.globalToLocal(new Point(downx, downy));
+            downx = localPoint.x;
+            downy = localPoint.y;
             mouseDown = true;
             dragging = false;
         }
 
-        public function on_mouseMove(_Mouse:MouseEvent):void // 鼠标左键拖动（框选天体）
-        {
-            var _dx:Number = NaN;
-            var _dy:Number = NaN;
+        // 鼠标左键拖动（框选天体）
+        public function on_mouseMove(mouse:MouseEvent):void {
+            var dx:Number = NaN;
+            var dy:Number = NaN;
             if (game.alpha < 0.5)
                 return;
             if (!mouseDown)
                 return;
-            drag_x = (_Mouse.stageX - Starling.current.viewPort.x) / Starling.contentScaleFactor;
-            drag_y = (_Mouse.stageY - Starling.current.viewPort.y) / Starling.contentScaleFactor;
-            var _localPoint:Point = convertQuad.globalToLocal(new Point(drag_x, drag_y));
-            drag_x = _localPoint.x;
-            drag_y = _localPoint.y;
+            dragx = (mouse.stageX - Starling.current.viewPort.x) / Starling.contentScaleFactor;
+            dragy = (mouse.stageY - Starling.current.viewPort.y) / Starling.contentScaleFactor;
+            var localPoint:Point = convertQuad.globalToLocal(new Point(dragx, dragy));
+            dragx = localPoint.x;
+            dragy = localPoint.y;
             if (dragging)
                 return;
-            _dx = drag_x - down_x;
-            _dy = drag_y - down_y;
-            if (Math.sqrt(_dx * _dx + _dy * _dy) > 5) {
+            dx = dragx - downx;
+            dy = dragy - downy;
+            if (Math.sqrt(dx * dx + dy * dy) > 5) {
                 dragging = true;
-                if (!_Mouse.shiftKey)
+                if (!mouse.shiftKey)
                     selectedNodes.length = 0;
             }
         }
 
-        public function on_mouseUp(_Mouse:MouseEvent):void // 鼠标左键抬起（选中天体）
-        {
-            var _x:Number = NaN;
-            var _y:Number = NaN;
-            var _Node:Node = null;
+        // 鼠标左键抬起（选中天体）
+        public function on_mouseUp(mouse:MouseEvent):void {
+            var x:Number = NaN;
+            var y:Number = NaN;
+            var node:Node = null;
             mouseDown = false;
             if (game.alpha < 0.5)
                 return;
             if (dragging)
                 return;
-            _x = (_Mouse.stageX - Starling.current.viewPort.x) / Starling.contentScaleFactor;
-            _y = (_Mouse.stageY - Starling.current.viewPort.y) / Starling.contentScaleFactor;
-            _Node = getClosestNode(_x, _y);
-            if (_Mouse.shiftKey) {
-                if (_Node && selectedNodes.indexOf(_Node) == -1)
-                    selectedNodes.push(_Node);
-                else if (_Node && selectedNodes.indexOf(_Node) != -1)
-                    selectedNodes.splice(selectedNodes.indexOf(_Node), 1);
+            x = (mouse.stageX - Starling.current.viewPort.x) / Starling.contentScaleFactor;
+            y = (mouse.stageY - Starling.current.viewPort.y) / Starling.contentScaleFactor;
+            node = getClosestNode(x, y);
+            if (mouse.shiftKey) {
+                if (node && selectedNodes.indexOf(node) == -1)
+                    selectedNodes.push(node);
+                else if (node && selectedNodes.indexOf(node) != -1)
+                    selectedNodes.splice(selectedNodes.indexOf(node), 1);
             } else {
                 selectedNodes.length = 0;
-                if (_Node)
-                    selectedNodes.push(_Node);
+                if (node)
+                    selectedNodes.push(node);
             }
         }
 
-        public function on_rightDown(_Mouse:MouseEvent):void // 鼠标右键按下
-        {
+        // 鼠标右键按下
+        public function on_rightDown(mouse:MouseEvent):void {
             if (game.alpha < 0.5)
                 return;
             rightDown = true;
         }
 
-        public function on_rightUp(_Mouse:MouseEvent):void // 鼠标右键抬起（发送飞船）
-        {
+        // 鼠标右键抬起（发送飞船）
+        public function on_rightUp(mouse:MouseEvent):void {
             rightDown = false;
             if (game.alpha < 0.5)
                 return;
-            var _x:Number = (_Mouse.stageX - Starling.current.viewPort.x) / Starling.contentScaleFactor;
-            var _y:Number = (_Mouse.stageY - Starling.current.viewPort.y) / Starling.contentScaleFactor;
-            var _currentNode:Node = getClosestNode(_x, _y);
-            if (!_currentNode)
+            var x:Number = (mouse.stageX - Starling.current.viewPort.x) / Starling.contentScaleFactor;
+            var y:Number = (mouse.stageY - Starling.current.viewPort.y) / Starling.contentScaleFactor;
+            var currentNode:Node = getClosestNode(x, y);
+            if (!currentNode)
                 return;
-            FXHandler.addFade(_currentNode.nodeData.x, _currentNode.nodeData.y, _currentNode.nodeData.size, 0xFFFFFF, 1);
-            for each (var _Node:Node in selectedNodes) {
-                if (_Node == _currentNode || !_Node.nodeLinks[Globals.playerTeam].includes(_currentNode))
+            FXHandler.addFade(currentNode.nodeData.x, currentNode.nodeData.y, currentNode.nodeData.size, 0xFFFFFF, 1);
+            for each (var node:Node in selectedNodes) {
+                if (node == currentNode || !node.nodeLinks[Globals.playerTeam].includes(currentNode))
                     continue;
-                NodeStaticLogic.sendShips(_Node, Globals.playerTeam, _currentNode);
-                FXHandler.addFade(_Node.nodeData.x, _Node.nodeData.y, _Node.nodeData.size, 0xFFFFFF, 0);
+                NodeStaticLogic.sendShips(node, Globals.playerTeam, currentNode);
+                FXHandler.addFade(node.nodeData.x, node.nodeData.y, node.nodeData.size, 0xFFFFFF, 0);
             }
         }
 
 
         //#region 计算工具
-        private function getClosestNode(_x:Number, _y:Number):Node {
-            var _localPoint:Point = convertQuad.globalToLocal(new Point(_x, _y));
-            var _ClosestNode:Node = null;
-            var _dx:Number = NaN;
-            var _dy:Number = NaN;
-            var _Distance:Number = NaN;
-            var _lineDist:Number = NaN;
-            var _ClosestDist:Number = 200;
-            for each (var _Node:Node in EntityContainer.nodes) {
-                if (_Node.nodeData.isUntouchable)
+        private function getClosestNode(x:Number, y:Number):Node {
+            var localPoint:Point = convertQuad.globalToLocal(new Point(x, y));
+            var closestNode:Node = null;
+            var dx:Number = NaN;
+            var dy:Number = NaN;
+            var distance:Number = NaN;
+            var lineDist:Number = NaN;
+            var closestDist:Number = 200;
+            for each (var node:Node in EntityContainer.nodes) {
+                if (node.nodeData.isUntouchable)
                     continue;
-                _dx = _Node.nodeData.x - _localPoint.x;
-                _dy = _Node.nodeData.y - _localPoint.y;
-                _Distance = Math.sqrt(_dx * _dx + _dy * _dy);
-                _lineDist = _Node.nodeData.lineDist;
-                if (_Distance < _lineDist && _Distance < _ClosestDist) {
-                    _ClosestDist = _Distance;
-                    _ClosestNode = _Node;
+                dx = node.nodeData.x - localPoint.x;
+                dy = node.nodeData.y - localPoint.y;
+                distance = Math.sqrt(dx * dx + dy * dy);
+                lineDist = node.nodeData.lineDist;
+                if (distance < lineDist && distance < closestDist) {
+                    closestDist = distance;
+                    closestNode = node;
                 }
             }
-            return _ClosestNode;
+            return closestNode;
         }
 
-        private function lineBlocked(_x1:Number, _y1:Number, _x2:Number, _y2:Number):Point {
-            var _Intersection:Point = null;
-            var _bar1:Point = null;
-            var _bar2:Point = null;
-            for each (var _bar:Array in game.barrierLines) {
-                _bar1 = _bar[0];
-                _bar2 = _bar[1];
-                _Intersection = EntityContainer.getIntersection(_x1, _y1, _x2, _y2, _bar1.x, _bar1.y, _bar2.x, _bar2.y);
-                if (_Intersection)
-                    return _Intersection;
+        private function lineBlocked(x1:Number, y1:Number, x2:Number, y2:Number):Point {
+            var intersection:Point = null;
+            var bar1:Point = null;
+            var bar2:Point = null;
+            for each (var bar:Array in game.barrierLines) {
+                bar1 = bar[0];
+                bar2 = bar[1];
+                intersection = EntityContainer.getIntersection(x1, y1, x2, y2, bar1.x, bar1.y, bar2.x, bar2.y);
+                if (intersection)
+                    return intersection;
             }
             return null;
         }

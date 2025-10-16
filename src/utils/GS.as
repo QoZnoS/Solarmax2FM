@@ -21,12 +21,12 @@ package utils{
             mt = new SoundTransform(Globals.musicVolume);
         }
 
-        public static function update(_dt:Number):void {
+        public static function update(dt:Number):void {
             for (var i:int = 0; i < timers.length; i++) {
-                var _timer:Number = timers[i];
-                if (_timer > 0)
-                    _timer = Math.max(0, _timer - _dt);
-                timers[i] = _timer;
+                var timer:Number = timers[i];
+                if (timer > 0)
+                    timer = Math.max(0, timer - dt);
+                timers[i] = timer;
             }
         }
 
@@ -37,12 +37,10 @@ package utils{
                 musicChannel.soundTransform = mt;
         }
 
-        public static function playMusic(_name:String, _loop:Boolean = true):void {
+        public static function playMusic(name:String, loop:Boolean = true):void {
             var prevChannel:SoundChannel;
             var transform:SoundTransform;
             var transform2:SoundTransform;
-            var name:String = _name;
-            var loop:Boolean = _loop;
             var loopVal:int = 0;
             if (loop)
                 loopVal = 2147483647;
@@ -82,9 +80,8 @@ package utils{
             }
         }
 
-        public static function fadeOutMusic(_time:Number):void {
+        public static function fadeOutMusic(time:Number):void {
             var transform:SoundTransform;
-            var time:Number = _time;
             if (musicChannel) {
                 transform = new SoundTransform(Globals.musicVolume, 0);
                 Starling.juggler.tween(transform, time, {"volume": 0,
@@ -151,18 +148,18 @@ package utils{
                     }});
         }
 
-        public static function playSound(_name:String, _volume:Number = 1, _pan:Number = 0):void {
-            st.volume = _volume * Globals.soundVolume;
+        public static function playSound(name:String, volume:Number = 1, pan:Number = 0):void {
+            st.volume = volume * Globals.soundVolume;
             if (st.volume == 0)
                 return;
-            st.pan = _pan;
-            Root.assets.playSound(_name, 0, 0, st);
+            st.pan = pan;
+            Root.assets.playSound(name, 0, 0, st);
         }
 
-        public static function playSoundLikeMusic(_name:String, _volume:Number = 1, _pan:Number = 0):void {
-            st.volume = _volume * Globals.musicVolume;
-            st.pan = _pan;
-            Root.assets.playSound(_name, 0, 0, st);
+        public static function playSoundLikeMusic(name:String, volume:Number = 1, pan:Number = 0):void {
+            st.volume = volume * Globals.musicVolume;
+            st.pan = pan;
+            Root.assets.playSound(name, 0, 0, st);
         }
 
         public static function playClick():void {

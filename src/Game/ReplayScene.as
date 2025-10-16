@@ -13,6 +13,7 @@ package Game {
     import starling.events.EnterFrameEvent;
     import Entity.Node.NodeStaticLogic;
     import Entity.Ship;
+    import UI.UIContainer;
 
     public class ReplayScene extends BasicScene {
         public var rep:ReplayData;
@@ -33,7 +34,7 @@ package Game {
             this.repBak = rep.deepCopy;
             rep.startRead();
             this.ui = scene.ui;
-            ui.btnL.fleetSlider.visible = false;
+            UIContainer.btnLayer.fleetSlider.visible = false;
             var level:Object = find_level();
             var i:int = 0;
             rng = new Rng(rep.seed);

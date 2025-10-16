@@ -8,7 +8,6 @@ package Entity.Node.States {
         public var node:Node;
         public var nodeData:NodeData;
         public var buildTimer:Number; // 生产计时器
-        
         public var buildRate:Number; // 生产速度，生产时间的倒数
 
         public function NodeBuildState(node:Node) {
@@ -25,8 +24,7 @@ package Entity.Node.States {
 
         public function update(dt:Number):void {
             buildTimer -= buildRate * Globals.teamNodeBuilds[nodeData.team] * dt; // 计算生产计时器
-            while (buildTimer <= 0) // 计时结束时
-            {
+            while (buildTimer <= 0) {
                 buildTimer += 1; // 重置倒计时
                 EntityHandler.addShip(node, nodeData.team); // 生产飞船
             }

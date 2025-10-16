@@ -22,9 +22,8 @@ package Entity.Node.Attack {
             if (!attacking)
                 return;
             var ships:Vector.<Ship> = EntityContainer.findShipsInRange(node);
-            for each (var ship:Ship in ships) {
+            for each (var ship:Ship in ships)
                 EntityHandler.destroyShip(ship);
-            }
         }
 
         override public function updateTimer(dt:Number):Boolean {

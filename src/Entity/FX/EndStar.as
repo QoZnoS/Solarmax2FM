@@ -5,7 +5,6 @@ package Entity.FX {
     import Entity.GameEntity;
 
     public class EndStar extends GameEntity {
-
         public static const STATE_GROW:int = 0;
         public static const STATE_SHRINK:int = 1;
         public static const STATE_BLINK:int = 2;
@@ -59,24 +58,24 @@ package Entity.FX {
             glare4.rotation = -0.7853981633974483;
         }
 
-        public function initStar(_EndScene:EndScene, _x:Number, _y:Number, _delay:Number):void {
+        public function initStar(endScene:EndScene, x:Number, y:Number, delay:Number):void {
             init(null);
-            this.endScene = _EndScene;
-            this.x = _x;
-            this.y = _y;
-            this.delay = _delay;
+            this.endScene = endScene;
+            this.x = x;
+            this.y = y;
+            this.delay = delay;
             size = 0;
             mult = 0.3 + Math.random() * 0.5;
-            image.x = glare1.x = glare2.x = glare3.x = glare4.x = _x;
-            image.y = glare1.y = glare2.y = glare3.y = glare4.y = _y;
+            image.x = glare1.x = glare2.x = glare3.x = glare4.x = x;
+            image.y = glare1.y = glare2.y = glare3.y = glare4.y = y;
             image.scaleX = image.scaleY = glare1.scaleX = glare1.scaleY = glare2.scaleX = glare2.scaleY = glare3.scaleX = glare3.scaleY = glare4.scaleX = glare4.scaleY = 0;
             Globals.teamColors[1] == 0 ? image.blendMode = glare1.blendMode = glare2.blendMode = glare3.blendMode = glare4.blendMode = "normal" : image.blendMode = glare1.blendMode = glare2.blendMode = glare3.blendMode = glare4.blendMode = "add";
-            _EndScene.addChildAt(glare1, 0);
-            _EndScene.addChildAt(glare2, 0);
-            _EndScene.addChildAt(glare3, 0);
-            _EndScene.addChildAt(glare4, 0);
-            _EndScene.addChildAt(image, 0);
-            state = 0;
+            endScene.addChildAt(glare1, 0);
+            endScene.addChildAt(glare2, 0);
+            endScene.addChildAt(glare3, 0);
+            endScene.addChildAt(glare4, 0);
+            endScene.addChildAt(image, 0);
+            state = STATE_GROW;
         }
 
         override public function deInit():void {
@@ -87,35 +86,39 @@ package Entity.FX {
             endScene.removeChild(image);
         }
 
-        override public function update(_dt:Number):void {
+        override public function update(dt:Number):void {
             image.x = glare1.x = glare2.x = glare3.x = glare4.x = x;
             image.y = glare1.y = glare2.y = glare3.y = glare4.y = y;
             if (delay > 0) {
-                delay -= _dt;
+                delay -= dt;
                 return;
             }
             switch (state) {
-                case 0:
-                    size += _dt * 3;
+                case STATE_GROW:
+                    size += dt * 3;
                     if (size > 1.5) {
                         size = 1.5;
-                        state = 1;
+                        state = STATE_SHRINK;
                     }
                     image.scaleX = image.scaleY = size * 0.3 * mult;
                     break;
-                case 1:
-                    size -= _dt * 0.5;
+                case STATE_SHRINK:
+                    size -= dt * 0.5;
                     if (size <= 1) {
                         size = 1;
-                        state = 2;
+                        state = STATE_BLINK;
                     }
                     image.scaleX = image.scaleY = size * 0.3 * mult;
+                    break;
+                case STATE_BLINK:
+                default:
+                    break;
             }
-            var _scale:Number = size * mult * (0.8 + Math.random() * 0.2);
-            glare1.scaleX = glare2.scaleX = _scale * 1;
-            glare1.scaleY = glare2.scaleY = _scale * 0.3;
-            glare3.scaleX = glare4.scaleX = _scale * 0.75;
-            glare3.scaleY = glare4.scaleY = _scale * 0.3;
+            var scale:Number = size * mult * (0.8 + Math.random() * 0.2);
+            glare1.scaleX = glare2.scaleX = scale * 1;
+            glare1.scaleY = glare2.scaleY = scale * 0.3;
+            glare3.scaleX = glare4.scaleX = scale * 0.75;
+            glare3.scaleY = glare4.scaleY = scale * 0.3;
         }
     }
 }

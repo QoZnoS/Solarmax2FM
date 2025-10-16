@@ -8,34 +8,34 @@ package utils {
         public var images:Array;
 
         public function ScrollingBackground() {
-            var _bg:Image = null;
+            var bg:Image = null;
             super();
             images = [];
             for (var i:int = 0; i < 4; i++) {
-                _bg = new Image(Root.assets.getTexture("bg0" + (i + 1).toString()));
-                _bg.x = i * 1024;
-                _bg.blendMode = "none";
+                bg = new Image(Root.assets.getTexture("bg0" + (i + 1).toString()));
+                bg.x = i * 1024;
+                bg.blendMode = "none";
                 if (Globals.scaleFactor == 2 || Globals.scaleFactor == 1)
-                    _bg.scaleX = 1;
+                    bg.scaleX = 1;
                 else
-                    _bg.scaleX = 1.01;
-                images.push(_bg);
-                addChild(_bg);
+                    bg.scaleX = 1.01;
+                images.push(bg);
+                addChild(bg);
             }
         }
 
-        public function setX(_x:Number):void {
-            this.x = _x;
-            for each (var _image:Image in images) {
-                _image.visible = false;
-                if (-_x > _image.x - 1024 && -_x < _image.x + 1024)
-                    _image.visible = true;
+        public function setX(x:Number):void {
+            this.x = x;
+            for each (var image:Image in images) {
+                image.visible = false;
+                if (-x > image.x - 1024 && -x < image.x + 1024)
+                    image.visible = true;
             }
         }
 
-        public function scrollTo(_x:Number, _tweenTime:Number = 2):void {
+        public function scrollTo(x:Number, tweenTime:Number = 2):void {
             Starling.juggler.removeTweens(this);
-            Starling.juggler.tween(this, _tweenTime, {"x": _x,
+            Starling.juggler.tween(this, tweenTime, {"x": x,
                     "transition": "easeOut",
                     "onStart": scrollUpdate,
                     "onUpdate": scrollUpdate,
@@ -43,10 +43,10 @@ package utils {
         }
 
         public function scrollUpdate():void {
-            for each (var _image:Image in images) {
-                _image.visible = false;
-                if (-x > _image.x - 1024 && -x < _image.x + 1024)
-                    _image.visible = true;
+            for each (var image:Image in images) {
+                image.visible = false;
+                if (-x > image.x - 1024 && -x < image.x + 1024)
+                    image.visible = true;
             }
         }
     }

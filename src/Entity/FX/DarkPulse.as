@@ -1,6 +1,6 @@
-// initPulse(_GameScene, _Node, _Color, _type, _maxSize, _rate, _angle, _delay)
-// _Node为天体，_Color为颜色，_type为类型，_maxSize为最大大小，_rate为速度，_angle为角度，_delay为延迟
-// 类型的意义详见update(_dt)
+// initPulse(gameScene, node, color, type, maxSize, rate, angle, delay)
+// node为天体，color为颜色，type为类型，maxSize为最大大小，rate为速度，angle为角度，delay为延迟
+// 类型的意义详见update(dt)
 package Entity.FX {
     import Game.GameScene;
     import Entity.Node;
@@ -33,23 +33,23 @@ package Entity.FX {
             image.pivotX = image.pivotY = image.width * 0.5;
         }
 
-        public function initPulse(_GameScene:GameScene, _Node:Node, _Color:uint, _type:int, _maxSize:Number, _rate:Number, _angle:Number, _delay:Number = 0):void {
-            super.init(_GameScene);
+        public function initPulse(gameScene:GameScene, node:Node, color:uint, type:int, maxSize:Number, rate:Number, angle:Number, delay:Number = 0):void {
+            super.init(gameScene);
             image.rotation = 0;
-            switch (_type) {
-                case 0:
-                case 1:
+            switch (type) {
+                case TYPE_GROW:
+                case TYPE_SHRINK:
                     image.texture = Root.assets.getTexture("halo");
                     break;
-                case 2:
-                case 3:
+                case TYPE_BLOB:
+                case TYPE_BLOOM:
                     image.texture = Root.assets.getTexture("spot_glow");
                     break;
-                case 4:
-                case 5:
+                case TYPE_BLACKHOLE_ATTACK:
+                case TYPE_BLACKHOLE:
                     image.texture = Root.assets.getTexture("blackhole_pulse");
                     break;
-                case 6:
+                case TYPE_BLACKHOLE_FLARE:
                     image.texture = Root.assets.getTexture("skill_light");
                     break;
                 case 7:
@@ -60,48 +60,48 @@ package Entity.FX {
             image.height = image.texture.height;
             image.scaleX = image.scaleY = 1;
             image.pivotX = image.pivotY = image.width * 0.5;
-            image.color = _Color;
-            this.x = _Node.nodeData.x;
-            this.y = _Node.nodeData.y;
-            this.type = _type;
-            this.maxSize = _maxSize;
-            this.rate = _rate;
-            this.angle = _angle;
-            this.delay = _delay;
+            image.color = color;
+            this.x = node.nodeData.x;
+            this.y = node.nodeData.y;
+            this.type = type;
+            this.maxSize = maxSize;
+            this.rate = rate;
+            this.angle = angle;
+            this.delay = delay;
             image.x = x;
             image.y = y;
-            image.color = _Color;
+            image.color = color;
             image.visible = true;
-            switch (_type) {
-                case 0:
+            switch (type) {
+                case TYPE_GROW:
                     size = 0;
                     image.alpha = 1;
                     image.scaleX = image.scaleY = size;
                     break;
-                case 1:
-                    size = _maxSize;
+                case TYPE_SHRINK:
+                    size = maxSize;
                     image.alpha = 0;
                     image.scaleX = image.scaleY = size;
                     break;
-                case 2:
-                    size = _maxSize;
+                case TYPE_BLOB:
+                    size = maxSize;
                     image.alpha = 0;
                     image.scaleX = image.scaleY = size * 6;
                     break;
-                case 3:
+                case TYPE_BLOOM:
                     size = 0;
                     image.alpha = 1;
                     image.scaleX = image.scaleY = size;
                     break;
-                case 4:
-                case 5:
-                case 6:
+                case TYPE_BLACKHOLE_ATTACK:
+                case TYPE_BLACKHOLE:
+                case TYPE_BLACKHOLE_FLARE:
                 case 7:
-                    image.alpha = _rate * 0.8;
-                    image.scaleX = image.scaleY = _maxSize;
+                    image.alpha = rate * 0.8;
+                    image.scaleX = image.scaleY = maxSize;
                     image.rotation = angle;
             }
-            if (_type == 4)
+            if (type == TYPE_BLACKHOLE_ATTACK)
                 UIContainer.entityLayer.blackholeLayer.addImage(image);
             else
                 UIContainer.entityLayer.addGlow(image);
@@ -111,84 +111,81 @@ package Entity.FX {
             UIContainer.entityLayer.removeGlow(image);
         }
 
-        override public function update(_dt:Number):void {
+        override public function update(dt:Number):void {
             if (delay > 0) {
                 image.visible = false;
-                delay -= _dt;
+                delay -= dt;
                 if (delay <= 0)
                     image.visible = true;
                 return;
             }
             switch (type) {
-                case 0: // 使用halo，贴图大小递增
-                    updateGrow(_dt);
+                case TYPE_GROW: // 使用halo，贴图大小递增
+                    updateGrow(dt);
                     break;
-                case 1: // 使用halo，贴图大小递减
-                    updateShrink(_dt);
+                case TYPE_SHRINK: // 使用halo，贴图大小递减
+                    updateShrink(dt);
                     break;
-                case 2: // 使用spot_glow，贴图大小递减
-                    updateBlob(_dt);
+                case TYPE_BLOB: // 使用spot_glow，贴图大小递减
+                    updateBlob(dt);
                     break;
-                case 3: // 使用spot_glow，贴图大小递增
-                    updateBloom(_dt);
+                case TYPE_BLOOM: // 使用spot_glow，贴图大小递增
+                    updateBloom(dt);
                     break;
-                case 4: // 只播放一帧的特效
-                case 5:
-                case 6:
-                case 7:
-                    updateFrame(_dt);
+                default: // 只播放一帧的特效
+                    updateFrame(dt);
             }
         }
 
-        private function updateGrow(_dt:Number):void {
-            var _scale:Number = size / maxSize;
-            size += _dt * rate;
+        private function updateGrow(dt:Number):void {
+            var scale:Number = size / maxSize;
+            size += dt * rate;
             if (size > maxSize) {
                 size = maxSize;
                 active = false;
             }
-            image.alpha = 1 - _scale;
-            image.scaleY = size * _scale;
+            image.alpha = 1 - scale;
+            image.scaleY = size * scale;
             image.scaleX = maxSize * 0.5;
             image.rotation = angle;
         }
 
-        private function updateShrink(_dt:Number):void {
-            var _scale:Number = size / maxSize;
-            size -= _dt * rate;
+        private function updateShrink(dt:Number):void {
+            var scale:Number = size / maxSize;
+            size -= dt * rate;
             if (size < 0) {
                 size = 0;
                 active = false;
             }
-            image.alpha = 1 - _scale;
-            image.scaleY = size * _scale;
+            image.alpha = 1 - scale;
+            image.scaleY = size * scale;
             image.scaleX = maxSize * 0.5;
             image.rotation = angle;
         }
 
-        private function updateBlob(_dt:Number):void {
-            var _scale:Number = size / maxSize;
-            size -= _dt * rate;
+        private function updateBlob(dt:Number):void {
+            var scale:Number = size / maxSize;
+            size -= dt * rate;
             if (size < 0) {
                 size = 0;
                 active = false;
             }
-            image.alpha = 1 - _scale;
+            image.alpha = 1 - scale;
             image.scaleX = image.scaleY = size * 6;
         }
 
-        private function updateBloom(_dt:Number):void {
-            var _scale:Number = size / maxSize;
-            size += _dt * rate;
+        private function updateBloom(dt:Number):void {
+            var scale:Number = size / maxSize;
+            size += dt * rate;
             if (size > maxSize) {
                 size = maxSize;
                 active = false;
             }
-            image.alpha = 1 - _scale;
+            image.alpha = 1 - scale;
             image.scaleX = image.scaleY = size;
         }
 
-        private function updateFrame(_dt:Number):void {
+        private function updateFrame(dt:Number):void {
             active = false;
         }
     }

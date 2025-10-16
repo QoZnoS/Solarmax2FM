@@ -23,35 +23,35 @@ package Entity.FX {
             image.pivotX = image.pivotY = image.width * 0.5;
         }
 
-        public function initExplosion(_GameScene:GameScene, _x:Number, _y:Number, _Color:uint, _foreground:Boolean):void {
-            super.init(_GameScene);
-            this.x = _x;
-            this.y = _y;
-            this.color = _Color;
-            this.foreground = _foreground;
+        public function initExplosion(gameScene:GameScene, x:Number, y:Number, color:uint, foreground:Boolean):void {
+            super.init(gameScene);
+            this.x = x;
+            this.y = y;
+            this.color = color;
+            this.foreground = foreground;
             this.size = 0;
-            image.x = _x;
-            image.y = _y;
-            image.color = _Color;
+            image.x = x;
+            image.y = y;
+            image.color = color;
             image.scaleY = 0;
             image.scaleX = 0;
             image.alpha = 0.5;
-            state = 0;
+            state = STATE_GROW;
         }
 
         override public function deInit():void {
         }
 
-        override public function update(_dt:Number):void {
-            if (state == 0) {
-                size += _dt;
+        override public function update(dt:Number):void {
+            if (state == STATE_GROW) {
+                size += dt;
                 image.scaleX = image.scaleY = size;
                 if (size >= 0.5)
-                    state = 1;
+                    state = STATE_SHRINK;
             } else {
-                size += _dt;
+                size += dt;
                 image.scaleX = image.scaleY = size;
-                image.alpha -= _dt;
+                image.alpha -= dt;
                 if (image.alpha <= 0) {
                     image.alpha = 0;
                     active = false;

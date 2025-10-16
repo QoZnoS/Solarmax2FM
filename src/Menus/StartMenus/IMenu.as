@@ -1,8 +1,5 @@
 package Menus.StartMenus {
 
-    import starling.display.DisplayObjectContainer;
-    import mx.core.IFlexDisplayObject;
-
     public interface IMenu{
         function init():void
         function deinit():void

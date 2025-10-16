@@ -104,10 +104,10 @@ package Entity {
         // #region 天体
         /** 搜寻范围内飞行中的飞船
          * @param node 目标天体
-         * @param _hostile 是否为敌对势力
+         * @param hostile 是否为敌对势力
          * @return 飞船数组
          */
-        public static function findShipsInRange(node:Node, _hostile:Boolean = true):Vector.<Ship> {
+        public static function findShipsInRange(node:Node, hostile:Boolean = true):Vector.<Ship> {
             var dx:Number;
             var dy:Number;
             var ship:Ship;
@@ -115,7 +115,7 @@ package Entity {
             for each (ship in ships) {
                 if (ship.state != 3 || ship.warping)
                     continue;
-                if ((ship.team == node.nodeData.team) == _hostile)
+                if ((ship.team == node.nodeData.team) == hostile)
                     continue; // 建议势力
                 dx = ship.x - node.nodeData.x;
                 dy = ship.y - node.nodeData.y;
@@ -306,17 +306,17 @@ package Entity {
 
         /** 按指定 static 过滤数组中的元素，返回被过滤的元素数组
          * <p>元素必须包含 static 属性
-         * @param _arr 目标数组
-         * @param _static 目标状态
+         * @param arr 目标数组
+         * @param static 目标状态
          * @return 被过滤的元素组成的数组
          */
-        public static function fliterByStatic(_arr:Array, state:int):Array{
+        public static function fliterByStatic(arr:Array, state:int):Array{
             var fliterArr:Array = [];
-            for (var i:int = 0; i < _arr.length; i++){
-                if (_arr[i].state != state)
+            for (var i:int = 0; i < arr.length; i++){
+                if (arr[i].state != state)
                     continue
-                fliterArr.push(_arr[i]);
-                _arr.removeAt(i);
+                fliterArr.push(arr[i]);
+                arr.removeAt(i);
                 i--;
             }
             return fliterArr;

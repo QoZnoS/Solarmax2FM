@@ -8,36 +8,36 @@ package UI.Component {
         public function LevelButtons() {
             super();
             buttons = [];
-            var _startBtn:TextField = new TextField(100, 40, "S2", "Downlink16", -1, 16755370);
-            _startBtn.pivotX = 50;
-            _startBtn.pivotY = 20;
-            _startBtn.alpha = 0.6;
-            _startBtn.blendMode = "add";
-            _startBtn.x = 0;
-            addChild(_startBtn);
-            buttons.push(_startBtn);
+            var startBtn:TextField = new TextField(100, 40, "S2", "Downlink16", -1, 16755370);
+            startBtn.pivotX = 50;
+            startBtn.pivotY = 20;
+            startBtn.alpha = 0.6;
+            startBtn.blendMode = "add";
+            startBtn.x = 0;
+            addChild(startBtn);
+            buttons.push(startBtn);
             updateLevels();
         }
 
         public function updateSize():void {
-            const _FONT_SIZES:Array = ["Downlink12", "Downlink16", "Downlink20"];
-            var _fontName:String = _FONT_SIZES[Globals.textSize];
-            for each (var _btn:TextField in buttons) {
-                _btn.fontName = _fontName;
-                _btn.fontSize = -1;
+            const FONT_SIZES:Array = ["Downlink12", "Downlink16", "Downlink20"];
+            var fontName:String = FONT_SIZES[Globals.textSize];
+            for each (var btn:TextField in buttons) {
+                btn.fontName = fontName;
+                btn.fontSize = -1;
             }
         }
 
         public function update(_dt:Number, _level:int):void {
-            var _btn:TextField = null;
+            var btn:TextField = null;
             for (var i:int = 0; i < buttons.length; i++) {
-                _btn = buttons[i];
-                var _distance:Number = Math.abs(this.x - 512 + _btn.x);
-                _btn.alpha = (1 - Math.min(_distance / 600, 1)) * 0.8;
+                btn = buttons[i];
+                var distance:Number = Math.abs(this.x - 512 + btn.x);
+                btn.alpha = (1 - Math.min(distance / 600, 1)) * 0.8;
                 if (i > Globals.levelReached + 1)
-                    _btn.alpha *= 0.3;
+                    btn.alpha *= 0.3;
                 else if (i == _level)
-                    _btn.alpha = 1;
+                    btn.alpha = 1;
             }
         }
 
@@ -48,16 +48,16 @@ package UI.Component {
             }
             var levelData:Array = LevelData.level;
             for (i = 0; i < levelData.length; i++) {
-                var _levelText:String = levelData[i].name ? levelData[i].name : ((i + 1 < 10) ? ("0" + (i + 1).toString()) : (i + 1).toString());
-                var _buttonColor:uint = levelData[i].color ? levelData[i].color : 0xFFAAAA;
-                var _levelBtn:TextField = new TextField(100, 200, _levelText, "Downlink16", -1, _buttonColor);
-                _levelBtn.pivotX = 50;
-                _levelBtn.pivotY = 100;
-                _levelBtn.alpha = 0.6;
-                _buttonColor == 0 ? _levelBtn.blendMode = "normal" : _levelBtn.blendMode = "add";
-                _levelBtn.x = (i + 1) * 120;
-                addChild(_levelBtn);
-                buttons.push(_levelBtn);
+                var levelText:String = levelData[i].name ? levelData[i].name : ((i + 1 < 10) ? ("0" + (i + 1).toString()) : (i + 1).toString());
+                var buttonColor:uint = levelData[i].color ? levelData[i].color : 0xFFAAAA;
+                var levelBtn:TextField = new TextField(100, 200, levelText, "Downlink16", -1, buttonColor);
+                levelBtn.pivotX = 50;
+                levelBtn.pivotY = 100;
+                levelBtn.alpha = 0.6;
+                buttonColor == 0 ? levelBtn.blendMode = "normal" : levelBtn.blendMode = "add";
+                levelBtn.x = (i + 1) * 120;
+                addChild(levelBtn);
+                buttons.push(levelBtn);
             }
             updateSize();
         }

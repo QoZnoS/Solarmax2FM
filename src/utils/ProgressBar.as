@@ -7,15 +7,15 @@ package utils {
         private var mBar:Quad;
         private var mBackground:Quad;
 
-        public function ProgressBar(_width:int, _height:int) {
+        public function ProgressBar(width:int, height:int) {
             super();
-            init(_width, _height);
+            init(width, height);
         }
 
-        private function init(_width:int, _height:int):void {
-            mBackground = new Quad(_width, _height, 0xEEEEEE); // 空轴
+        private function init(width:int, height:int):void {
+            mBackground = new Quad(width, height, 0xEEEEEE); // 空轴
             addChild(mBackground);
-            mBar = new Quad(_width, _height, 0xAAAAAA); // 填充轴
+            mBar = new Quad(width, height, 0xAAAAAA); // 填充轴
             mBar.scaleX = 0;
             addChild(mBar);
         }
@@ -24,8 +24,8 @@ package utils {
             return mBar.scaleX;
         }
 
-        public function set ratio(_width:Number):void {
-            mBar.scaleX = Math.max(0, Math.min(1, _width));
+        public function set ratio(width:Number):void {
+            mBar.scaleX = Math.max(0, Math.min(1, width));
         }
     }
 }

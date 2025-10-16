@@ -52,7 +52,7 @@ package Entity {
                 addShip(node, team, false);
         }
 
-        public static function addShip(node:Node, team:int, _productionEffect:Boolean = true):Ship {
+        public static function addShip(node:Node, team:int, productionEffect:Boolean = true):Ship {
             var ship:Ship = EntityContainer.getReserve(EntityContainer.INDEX_SHIPS) as Ship;
             if (!ship)
                 ship = new Ship();
@@ -61,7 +61,7 @@ package Entity {
                 rng = new Rng(game.rng.nextInt(), Rng.X32);
             else if (replay.visible)
                 rng = new Rng(replay.rng.nextInt(), Rng.X32);
-            ship.initShip(game, rng, team, node, _productionEffect);
+            ship.initShip(game, rng, team, node, productionEffect);
             EntityContainer.addEntity(EntityContainer.INDEX_SHIPS, ship);
             return ship;
         }

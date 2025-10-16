@@ -42,14 +42,14 @@ package Menus.StartMenus {
 
         private var title:TitleMenu;
 
-        public function SettingMenu(_title:TitleMenu) {
-            this.title = _title
+        public function SettingMenu(title:TitleMenu) {
+            this.title = title
             init()
         }
 
         public function init():void {
             var i:int;
-            var _btn:OptionButton;
+            var btn:OptionButton;
             // #region VIDEO
             components = []
             components.push(new TextField(200, 40, "VIDEO", "Downlink18", -1, COLOR));
@@ -57,20 +57,20 @@ package Menus.StartMenus {
                 components.push(new TextField(200, 40, "WINDOW MODE:", "Downlink12", -1, COLOR));
             fullscreen = [];
             for (i = 0; i < windowStrings.length; i++) {
-                _btn = new OptionButton(windowStrings[i], COLOR, fullscreen);
-                _btn.x = 330 + i * 140;
-                _btn.addEventListener("clicked", on_fullscreen);
-                fullscreen.push(_btn);
+                btn = new OptionButton(windowStrings[i], COLOR, fullscreen);
+                btn.x = 330 + i * 140;
+                btn.addEventListener("clicked", on_fullscreen);
+                fullscreen.push(btn);
                 if (Globals.device == "PC")
                     components.push(fullscreen);
             }
             components.push(new TextField(200, 40, "ANTI-ALIASING:", "Downlink12", -1, COLOR));
             antialias = [];
             for (i = 0; i < aaStrings.length; i++) {
-                _btn = new OptionButton(aaStrings[i], COLOR, antialias);
-                _btn.x = 330 + i * 60;
-                _btn.addEventListener("clicked", on_antialias);
-                antialias.push(_btn);
+                btn = new OptionButton(aaStrings[i], COLOR, antialias);
+                btn.x = 330 + i * 60;
+                btn.addEventListener("clicked", on_antialias);
+                antialias.push(btn);
                 components.push(antialias);
             }
             // #endregion
@@ -92,46 +92,46 @@ package Menus.StartMenus {
             components.push(new TextField(200, 40, "UI SIZE:", "Downlink12", -1, COLOR));
             textsizes = [];
             for (i = 0; i < sizeStrings.length; i++) {
-                _btn = new OptionButton(sizeStrings[i], COLOR, textsizes);
-                _btn.x = 330 + i * 90;
-                _btn.addEventListener("clicked", on_textsize);
-                textsizes.push(_btn);
+                btn = new OptionButton(sizeStrings[i], COLOR, textsizes);
+                btn.x = 330 + i * 90;
+                btn.addEventListener("clicked", on_textsize);
+                textsizes.push(btn);
             }
             components.push(textsizes);
             components.push(new TextField(200, 40, "CONTROL METHOD:", "Downlink12", -1, COLOR));
             controls = [];
             for (i = 0; i < controlStrings.length; i++) {
-                _btn = new OptionButton(controlStrings[i], COLOR, controls);
-                _btn.x = 330 + i * 130;
-                _btn.addEventListener("clicked", on_controls);
-                controls.push(_btn);
+                btn = new OptionButton(controlStrings[i], COLOR, controls);
+                btn.x = 330 + i * 130;
+                btn.addEventListener("clicked", on_controls);
+                controls.push(btn);
             }
             components.push(controls);
             components.push(new TextField(200, 40, "FLEETSLIDER POSITION:", "Downlink12", -1, COLOR));
             fleetSliderPositions = [];
             for (i = 0; i < fleetSliderPositionStrings.length; i++) {
-                _btn = new OptionButton(fleetSliderPositionStrings[i], COLOR, fleetSliderPositions);
-                _btn.x = 330 + i * 90;
-                _btn.addEventListener("clicked", on_fleetSliderPosition);
-                fleetSliderPositions.push(_btn);
+                btn = new OptionButton(fleetSliderPositionStrings[i], COLOR, fleetSliderPositions);
+                btn.x = 330 + i * 90;
+                btn.addEventListener("clicked", on_fleetSliderPosition);
+                fleetSliderPositions.push(btn);
             }
             components.push(fleetSliderPositions);
             components.push(new TextField(200, 40, "BLACK BORDER:", "Downlink12", -1, COLOR));
             blackBorders = [];
             for (i = 0; i < yesORno.length; i++) {
-                _btn = new OptionButton(yesORno[i], COLOR, blackBorders);
-                _btn.x = 330 + i * 90;
-                _btn.addEventListener("clicked", on_blackBorder);
-                blackBorders.push(_btn);
+                btn = new OptionButton(yesORno[i], COLOR, blackBorders);
+                btn.x = 330 + i * 90;
+                btn.addEventListener("clicked", on_blackBorder);
+                blackBorders.push(btn);
             }
             components.push(blackBorders);
             components.push(new TextField(200, 40, "ALLOW PAUSE:", "Downlink12", -1, COLOR));
             pauseAllows = [];
             for (i = 0; i < yesORno.length; i++) {
-                _btn = new OptionButton(yesORno[i], COLOR, pauseAllows);
-                _btn.x = 330 + i * 90;
-                _btn.addEventListener("clicked", on_pauseAllow);
-                pauseAllows.push(_btn);
+                btn = new OptionButton(yesORno[i], COLOR, pauseAllows);
+                btn.x = 330 + i * 90;
+                btn.addEventListener("clicked", on_pauseAllow);
+                pauseAllows.push(btn);
             }
             components.push(pauseAllows);
             components.push(new TextField(200, 40, "SAVE FILE:", "Downlink12", -1, COLOR));
@@ -149,20 +149,20 @@ package Menus.StartMenus {
             components.push(exitBtn);
             // #endregion
             // #region 添加实例化对象
-            var _y:Number = 100;
+            var y:Number = 100;
             var lineHeight:Number = 540 / components.length * 2
             for (i = 0; i < components.length; i++) {
                 if (components[i] is TextField) {
-                    addLabel(components[i], 100, _y);
-                    components[i].fontName == "Downlink18" ? _y += lineHeight * 1.25 : _y += lineHeight;
-                    components[i].y = _y;
+                    addLabel(components[i], 100, y);
+                    components[i].fontName == "Downlink18" ? y += lineHeight * 1.25 : y += lineHeight;
+                    components[i].y = y;
                 } else if (components[i] is Array) {
                     for (var j:int = 0; j < components[i].length; j++) {
-                        components[i][j].y = _y;
+                        components[i][j].y = y;
                         this.addChild(components[i][j]);
                     }
                 } else {
-                    components[i].y = _y;
+                    components[i].y = y;
                     this.addChild(components[i]);
                 }
             }
@@ -217,12 +217,12 @@ package Menus.StartMenus {
         }
 
         //#region 私有方法
-        private function addLabel(_label:TextField, _x:Number, _y:Number, _hAlign:String = "right"):void {
-            _label.hAlign = _hAlign;
-            _label.vAlign = "top";
-            _label.x = _x;
-            _label.y = _y;
-            this.addChild(_label);
+        private function addLabel(label:TextField, x:Number, y:Number, hAlign:String = "right"):void {
+            label.hAlign = hAlign;
+            label.vAlign = "top";
+            label.x = x;
+            label.y = y;
+            this.addChild(label);
         }
 
         private function update(e:EnterFrameEvent):void {
@@ -231,63 +231,63 @@ package Menus.StartMenus {
             GS.updateTransforms();
         }
 
-        private function on_fullscreen(_click:Event):void {
-            fullscreen.indexOf(_click.target) == 0 ? Globals.fullscreen = true : Globals.fullscreen = false;
+        private function on_fullscreen(click:Event):void {
+            fullscreen.indexOf(click.target) == 0 ? Globals.fullscreen = true : Globals.fullscreen = false;
             Globals.main.on_fullscreen();
         }
 
-        private function on_antialias(_click:Event):void {
-            Globals.antialias = antialias.indexOf(_click.target);
+        private function on_antialias(click:Event):void {
+            Globals.antialias = antialias.indexOf(click.target);
         }
 
-        private function on_textsize(_click:Event):void {
-            Globals.textSize = textsizes.indexOf(_click.target);
+        private function on_textsize(click:Event):void {
+            Globals.textSize = textsizes.indexOf(click.target);
             title.on_resize();
         }
 
-        private function on_controls(_click:Event):void {
-            controls.indexOf(_click.target) == 0 ? Globals.touchControls = true : Globals.touchControls = false;
+        private function on_controls(click:Event):void {
+            controls.indexOf(click.target) == 0 ? Globals.touchControls = true : Globals.touchControls = false;
         }
 
-        private function on_fleetSliderPosition(_click:Event):void {
-            Globals.fleetSliderPosition = fleetSliderPositions.indexOf(_click.target);
+        private function on_fleetSliderPosition(click:Event):void {
+            Globals.fleetSliderPosition = fleetSliderPositions.indexOf(click.target);
         }
 
-        private function on_show_reset(_click:Event):void {
+        private function on_show_reset(click:Event):void {
             Starling.juggler.tween(resetBtn2, 0.5, {"alpha": 1});
         }
 
-        private function on_reset(_click:Event):void {
+        private function on_reset(click:Event):void {
             title.on_reset();
             animateOut();
         }
 
-        private function on_blackBorder(_click:Event):void {
-            blackBorders.indexOf(_click.target) == 0 ? Globals.blackQuad = true : Globals.blackQuad = false;
+        private function on_blackBorder(click:Event):void {
+            blackBorders.indexOf(click.target) == 0 ? Globals.blackQuad = true : Globals.blackQuad = false;
             title.scene.updateBlackQuad()
         }
 
-        private function on_pauseAllow(_click:Event):void {
-            pauseAllows.indexOf(_click.target) == 0 ? Globals.nohup = false : Globals.nohup = true;
+        private function on_pauseAllow(click:Event):void {
+            pauseAllows.indexOf(click.target) == 0 ? Globals.nohup = false : Globals.nohup = true;
         }
 
-        private function on_tooltip1(_touchEvent:TouchEvent):void {
-            var _touch:Touch = _touchEvent.getTouch(controls[0].quad);
-            if (!_touch) {
+        private function on_tooltip1(touchEvent:TouchEvent):void {
+            var touch:Touch = touchEvent.getTouch(controls[0].quad);
+            if (!touch) {
                 tooltip1.visible = false;
                 return;
             }
-            if (_touch.phase == "hover")
+            if (touch.phase == "hover")
                 tooltip1.visible = true;
         }
 
-        private function on_tooltip2(_touchEvent:TouchEvent):void {
-            var _touch:Touch = _touchEvent.getTouch(controls[1].quad);
-            if (!_touch) {
+        private function on_tooltip2(touchEvent:TouchEvent):void {
+            var touch:Touch = touchEvent.getTouch(controls[1].quad);
+            if (!touch) {
                 tooltip2.visible = false;
                 return;
             }
-            if (_touch.phase == "hover")
+            if (touch.phase == "hover")
                 tooltip2.visible = true;
         }
         //#endregion

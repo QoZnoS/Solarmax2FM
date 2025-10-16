@@ -80,38 +80,6 @@ package Entity {
         }
 
         // #region 生成天体 移除天体
-        public function oldInitNode(_GameScene:GameScene, _rng:Rng, _x:Number, _y:Number, _type:int, _size:Number, _team:int, _OrbitNode:Node = null, _Clockwise:Boolean = true, _OrbitSpeed:Number = 0.1):void {
-            super.init(_GameScene);
-            nodeData = new NodeData(true);
-            nodeData.size = _size;
-            NodeStaticLogic.changeTeam(this, _team, false)
-            nodeData.type = NodeType.switchType(_type);
-            nodeData.x = _x;
-            nodeData.y = _y;
-            if (_OrbitNode)
-                nodeData.orbitNode = _OrbitNode.tag;
-            else
-                nodeData.orbitNode = -1;
-            if (_Clockwise)
-                nodeData.orbitSpeed = _OrbitSpeed;
-            else
-                nodeData.orbitSpeed = -_OrbitSpeed;
-            this.rng = _rng;
-            resetArray()
-            aiValue = 0;
-            triggerTimer = 0;
-            NodeStaticLogic.updateLabelSizes(this);
-            linked = false;
-            NodeStaticLogic.changeType(this, NodeType.switchType(_type), _size);
-            var i:int = 0;
-            for (i = 0; i < aiTimers.length; i++)
-                aiTimers[i] = 0;
-            for (i = 0; i < transitShips.length; i++)
-                transitShips[i] = 0;
-            for each (var state:INodeState in statePool)
-                state.init()
-        }
-
         public function initNode(gameScene:GameScene, rng:Rng, data:Object):void {
             super.init(gameScene);
             this.rng = rng;
@@ -135,8 +103,7 @@ package Entity {
 
         override public function deInit():void {
             var i:int = 0;
-            for (i = 0; i < ships.length; i++) // 循环移除每个势力的飞船
-            {
+            for (i = 0; i < ships.length; i++) { // 循环移除每个势力的飞船
                 ships[i].length = 0; // 移除遍历势力飞船
                 transitShips[i] = 0;
             }
@@ -158,15 +125,15 @@ package Entity {
             updateShipAction();
         }
 
-        public function updateTimer(_dt:Number):void {
+        public function updateTimer(dt:Number):void {
             for (var i:int = 0; i < aiTimers.length; i++) // 计算AI计时器
                 if (aiTimers[i] > 0)
-                    aiTimers[i] = Math.max(0, aiTimers[i] - _dt);
+                    aiTimers[i] = Math.max(0, aiTimers[i] - dt);
             if (triggerTimer > 0)
-                triggerTimer = Math.max(0, triggerTimer - _dt);
+                triggerTimer = Math.max(0, triggerTimer - dt);
         }
 
-        public function updateAttack(_dt:Number):void {
+        public function updateAttack(dt:Number):void {
             if (nodeData.team == 0 && Globals.level != 31)
                 return; // 排除32关以外的中立和无范围天体
         }
@@ -184,21 +151,21 @@ package Entity {
                     nodeLinks[i] = nodeLinks[0].concat();
                     continue;
                 }
-                for each (var _Node:Node in EntityContainer.nodes) {
-                    if (_Node == this || _Node.nodeData.isUntouchable)
+                for each (var node:Node in EntityContainer.nodes) {
+                    if (node == this || node.nodeData.isUntouchable)
                         continue;
                     if (nodeData.isWarp && nodeData.team == i && i != 0) {
-                        nodeLinks[i].push(_Node);
+                        nodeLinks[i].push(node);
                         continue;
                     }
-                    if (EntityContainer.nodesBlocked(this, _Node) == null)
-                        nodeLinks[i].push(_Node);
+                    if (EntityContainer.nodesBlocked(this, node) == null)
+                        nodeLinks[i].push(node);
                 }
             }
         }
 
         public function updateShipAction():void {
-            for each(var action:Array in shipActions)
+            for each (var action:Array in shipActions)
                 NodeStaticLogic.moveShips(this, action[0], action[1], action[2]);
             shipActions.length = 0;
         }
@@ -208,107 +175,105 @@ package Entity {
 
         // 将飞船分配到周围天体上，按距离依次，兵力用完为止（传 送 门 分 兵
         public function unloadShips():void {
-            var _Node:Node = null;
-            var _dx:Number = NaN;
-            var _dy:Number = NaN;
-            var _Distance:Number = NaN;
-            var _Ship:Number = NaN;
-            var _NodeArray:Vector.<Node> = EntityContainer.nodes;
-            var _targetNode:Array = [];
-            var _ShipArray:Array = [];
-            for each (_Node in _NodeArray) { // 按距离计算每个目标天体的价值
-                if (_Node != this && !_Node.nodeData.isUntouchable) {
-                    _dx = _Node.nodeData.x - this.nodeData.x;
-                    _dy = _Node.nodeData.y - this.nodeData.y;
-                    _Distance = Math.sqrt(_dx * _dx + _dy * _dy);
-                    _Node.aiValue = _Distance;
-                    _targetNode.push(_Node);
+            var node:Node = null;
+            var dx:Number = NaN;
+            var dy:Number = NaN;
+            var distance:Number = NaN;
+            var ship:Number = NaN;
+            var nodeArray:Vector.<Node> = EntityContainer.nodes;
+            var targetNode:Array = [];
+            var shipArray:Array = [];
+            for each (node in nodeArray) { // 按距离计算每个目标天体的价值
+                if (node != this && !node.nodeData.isUntouchable) {
+                    dx = node.nodeData.x - this.nodeData.x;
+                    dy = node.nodeData.y - this.nodeData.y;
+                    distance = Math.sqrt(dx * dx + dy * dy);
+                    node.aiValue = distance;
+                    targetNode.push(node);
                 }
             }
-            _targetNode.sortOn("aiValue", 16); // 按价值从小到大对目标天体排序
-            var _ShipCount:int = int(ships[nodeData.team].length);
-            for each (_Node in _targetNode) {
-                _Ship = _Node.predictedOppStrength(nodeData.team) * 2 - _Node.predictedTeamStrength(nodeData.team) * 0.5; // 飞船数：非己方预测强度二倍减去己方预测强度一半
-                if (_Ship < _Node.nodeData.size * 200)
-                    _Ship = _Node.nodeData.size * 200; // 不足200倍size时补齐到200倍size
-                if (_Ship < _ShipCount) { // 未达到总飞船数时，从总飞船数中抽去这部分飞船
-                    _ShipCount -= _Ship;
-                    _ShipArray.push(_Ship);
+            targetNode.sortOn("aiValue", 16); // 按价值从小到大对目标天体排序
+            var shipCount:int = int(ships[nodeData.team].length);
+            for each (node in targetNode) {
+                ship = node.predictedOppStrength(nodeData.team) * 2 - node.predictedTeamStrength(nodeData.team) * 0.5; // 飞船数：非己方预测强度二倍减去己方预测强度一半
+                if (ship < node.nodeData.size * 200)
+                    ship = node.nodeData.size * 200; // 不足200倍size时补齐到200倍size
+                if (ship < shipCount) { // 未达到总飞船数时，从总飞船数中抽去这部分飞船
+                    shipCount -= ship;
+                    shipArray.push(ship);
                 } else { // 达到或超过总飞船数时
-                    if (_ShipArray.length > 0)
-                        _ShipArray[_ShipArray.length - 1] += _ShipCount; // 将剩余飞船加在最后一项
+                    if (shipArray.length > 0)
+                        shipArray[shipArray.length - 1] += shipCount; // 将剩余飞船加在最后一项
                     else
-                        _ShipArray.push(_ShipCount); // 没有项时添加这一项
-                    _ShipCount = 0; // 清空总飞船数
+                        shipArray.push(shipCount); // 没有项时添加这一项
+                    shipCount = 0; // 清空总飞船数
                 }
-                if (_ShipCount == 0)
+                if (shipCount == 0)
                     break; // 总飞船数耗尽时跳出循环
             }
-            for (var i:int = 0; i < _ShipArray.length; i++)
-                NodeStaticLogic.sendAIShips(this, nodeData.team, _targetNode[i], _ShipArray[i]);
+            for (var i:int = 0; i < shipArray.length; i++)
+                NodeStaticLogic.sendAIShips(this, nodeData.team, targetNode[i], shipArray[i]);
         }
 
         // 统计飞向自身的飞船，包括指定势力的和移动距离大于50px的
-        public function getTransitShips(_team:int):void {
+        public function getTransitShips(team:int):void {
             for (var i:int = 0; i < transitShips.length; i++) // 重置数组
                 transitShips[i] = 0;
-            for each (var _Ship:Ship in EntityContainer.ships) {
-                if (!(_Ship.node == this && _Ship.state == 3))
+            for each (var ship:Ship in EntityContainer.ships) {
+                if (!(ship.node == this && ship.state == 3))
                     continue; // 飞船在飞行中且飞向自身
-                if (_Ship.team == _team || _Ship.jumpDist > 50)
-                    transitShips[_Ship.team]++; // 为参数势力或移动距离大于50px
+                if (ship.team == team || ship.jumpDist > 50)
+                    transitShips[ship.team]++; // 为参数势力或移动距离大于50px
             }
         }
 
         // 返回飞船数最多的势力的总飞船数
-        public function oppStrength(_team:int):int {
-            var _Strength:int = 0;
-            for (var i:int = 0; i < ships.length; i++) {
-                if (i != _team) {
-                    if (ships[i].length > _Strength)
-                        _Strength = int(ships[i].length);
-                }
-            }
-            return _Strength;
+        public function oppStrength(team:int):int {
+            var strength:int = 0;
+            for (var i:int = 0; i < ships.length; i++)
+                if (i != team)
+                    if (ships[i].length > strength)
+                        strength = int(ships[i].length);
+            return strength;
         }
 
         // 估算后续可能面对的非指定势力方最强飞船强度
-        public function predictedOppStrength(_team:int):int {
-            var _Strength:Number = NaN;
-            var _preStrength:int = 0;
+        public function predictedOppStrength(team:int):int {
+            var strength:Number = NaN;
+            var preStrength:int = 0;
             for (var i:int = 0; i < ships.length; i++) {
-                if (i == _team)
+                if (i == team)
                     continue;
-                _Strength = ships[i].length + transitShips[i];
+                strength = ships[i].length + transitShips[i];
                 if (buildState.buildRate > 0 && nodeData.team == i)
-                    _Strength *= 1.25;
-                if (_Strength > _preStrength)
-                    _preStrength = _Strength;
+                    strength *= 1.25;
+                if (strength > preStrength)
+                    preStrength = strength;
             }
-            return _preStrength;
+            return preStrength;
         }
 
         // 返回该势力飞船数
-        public function teamStrength(_team:int):int {
-            return Number(ships[_team].length);
+        public function teamStrength(team:int):int {
+            return Number(ships[team].length);
         }
 
         // 预测该势力可能的强度
-        public function predictedTeamStrength(_team:int):int {
-            var _Strength:Number = ships[_team].length + transitShips[_team];
-            if (buildState.buildRate > 0 && _team == nodeData.team)
-                _Strength *= 1.25;
-            return _Strength;
+        public function predictedTeamStrength(team:int):int {
+            var strength:Number = ships[team].length + transitShips[team];
+            if (buildState.buildRate > 0 && team == nodeData.team)
+                strength *= 1.25;
+            return strength;
         }
 
         // 计算可到达的有前往价值的天体
-        public function getOppLinks(_team:int):void {
+        public function getOppLinks(team:int):void {
             oppNodeLinks.length = 0;
-            for each (var _Node:Node in nodeLinks[_team]) {
-                if (_Node == this)
+            for each (var node:Node in nodeLinks[team]) {
+                if (node == this)
                     continue;
-                if (_Node.nodeData.team == 0 || _Node.nodeData.team != _team || _Node.predictedOppStrength(_team) > 0)
-                    oppNodeLinks.push(_Node);
+                if (node.nodeData.team == 0 || node.nodeData.team != team || node.predictedOppStrength(team) > 0)
+                    oppNodeLinks.push(node);
             }
         }
 
@@ -316,73 +281,67 @@ package Entity {
         // #region hardAI 特制工具函数
 
         // 返回飞向自身的最强非己方飞船数
-        public function hard_getOppTransitShips(_team:int):int {
-            var _ships:Array = [];
-            for (var i:int = 0; i < Globals.teamCount; i++) {
-                _ships.push([]);
-            }
-            for each (var _Ship:Ship in EntityContainer.ships) {
-                if (_Ship.state == 0 || _Ship.node != this)
+        public function hard_getOppTransitShips(team:int):int {
+            var ships:Array = [];
+            for (var i:int = 0; i < Globals.teamCount; i++)
+                ships.push([]);
+            for each (var ship:Ship in EntityContainer.ships) {
+                if (ship.state == 0 || ship.node != this)
                     continue; // 排除未起飞的和不飞向自身的飞船
-                _ships[_Ship.team].push(_Ship);
+                ships[ship.team].push(ship);
             }
-            var _maxShips:int = 0;
+            var maxShips:int = 0;
             for (i = 0; i < Globals.teamCount; i++) {
-                if (i == _team)
+                if (i == team)
                     continue; // 排除己方
-                _maxShips = Math.max(_maxShips, _ships[i].length); // 取最强的非己方飞船
+                maxShips = Math.max(maxShips, ships[i].length); // 取最强的非己方飞船
             }
-            return _maxShips;
+            return maxShips;
         }
 
         // 返回指定势力的飞船数
-        public function hard_teamStrength(_team:int):int {
-            var _Strength:int = 0;
-            for each (var _Ship:Ship in ships[_team]) {
-                if (_Ship.state == 0)
-                    _Strength++;
-            }
-            return _Strength;
+        public function hard_teamStrength(team:int):int {
+            var strength:int = 0;
+            for each (var ship:Ship in ships[team])
+                if (ship.state == 0)
+                    strength++;
+            return strength;
         }
 
         // 返回自身综合强度
-        public function hard_AllStrength(_team:int):int {
-            var _Strength:int = 0;
-            for each (var _Ship:Ship in EntityContainer.ships) {
-                if (_Ship.node == this && _Ship.team == _team)
-                    _Strength++;
-            }
-            return _Strength;
+        public function hard_AllStrength(team:int):int {
+            var strength:int = 0;
+            for each (var ship:Ship in EntityContainer.ships)
+                if (ship.node == this && ship.team == team)
+                    strength++;
+            return strength;
         }
 
         // 返回敌方综合强度
-        public function hard_oppAllStrength(_team:int):int {
-            var _ships:Array = [];
-            for (var i:int = 0; i < Globals.teamCount; i++) {
-                _ships.push([]);
-            }
-            for each (var _Ship:Ship in EntityContainer.ships) {
-                if (_Ship.node == this && _Ship.team != _team)
-                    _ships[_Ship.team].push(_Ship);
-            }
-            _ships.sortOn("length", 16); // 按飞船数从小到大排序
-            return _ships[_ships.length - 1].length; // 取最强的非己方势力的飞船数
+        public function hard_oppAllStrength(team:int):int {
+            var ships:Array = [];
+            for (var i:int = 0; i < Globals.teamCount; i++)
+                ships.push([]);
+            for each (var ship:Ship in EntityContainer.ships)
+                if (ship.node == this && ship.team != team)
+                    ships[ship.team].push(ship);
+            ships.sortOn("length", 16); // 按飞船数从小到大排序
+            return ships[ships.length - 1].length; // 取最强的非己方势力的飞船数
         }
 
         // 检查撤退时机是否合理
-        public function hard_retreatCheck(_team:int):Boolean {
-            var _ships:Array = [];
-            for (var i:int = 0; i < Globals.teamCount; i++) {
-                _ships.push([]);
-            }
-            for each (var _Ship:Ship in EntityContainer.ships) {
-                if (_Ship.node != this || _Ship.team == _team)
+        public function hard_retreatCheck(team:int):Boolean {
+            var ships:Array = [];
+            for (var i:int = 0; i < Globals.teamCount; i++)
+                ships.push([]);
+            for each (var ship:Ship in EntityContainer.ships) {
+                if (ship.node != this || ship.team == team)
                     continue; // 排除不飞向自身的飞船和己方飞船
-                if (_Ship.targetDist / _Ship.jumpSpeed < 1 || _Ship.state == 0)
-                    _ships[_Ship.team].push(_Ship); // 记录一秒后抵达的和已经抵达的飞船数
+                if (ship.targetDist / ship.jumpSpeed < 1 || ship.state == 0)
+                    ships[ship.team].push(ship); // 记录一秒后抵达的和已经抵达的飞船数
             }
-            _ships.sortOn("length", 16); // 按飞船数从小到大排序
-            if (_ships[_ships.length - 1].length > hard_AllStrength(_team))
+            ships.sortOn("length", 16); // 按飞船数从小到大排序
+            if (ships[ships.length - 1].length > hard_AllStrength(team))
                 return true;
             return false;
         }
@@ -391,8 +350,8 @@ package Entity {
 
         // #region 特效与绘图
 
-        public function fireBeam(_Ship:Ship):void {
-            FXHandler.addBeam(this, _Ship); // 播放攻击特效
+        public function fireBeam(ship:Ship):void {
+            FXHandler.addBeam(this, ship); // 播放攻击特效
             GS.playLaser(nodeData.x); // 播放攻击音效
         }
 

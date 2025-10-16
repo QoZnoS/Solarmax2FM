@@ -26,18 +26,18 @@ package Entity.FX {
             image.pivotY = image.height * 0.5;
         }
 
-        public function initWarp(_GameScene:GameScene, _x:Number, _y:Number, _prevX:Number, _prevY:Number, _Color:uint, _foreground:Boolean):void {
-            super.init(_GameScene);
-            this.x = _x;
-            this.y = _y;
-            this.prevX = _prevX;
-            this.prevY = _prevY;
-            this.color = _Color;
-            this.foreground = _foreground;
+        public function initWarp(gameScene:GameScene, x:Number, y:Number, prevX:Number, prevY:Number, color:uint, foreground:Boolean):void {
+            super.init(gameScene);
+            this.x = x;
+            this.y = y;
+            this.prevX = prevX;
+            this.prevY = prevY;
+            this.color = color;
+            this.foreground = foreground;
             this.size = 0;
-            image.x = _x;
-            image.y = _y;
-            image.color = _Color;
+            image.x = x;
+            image.y = y;
+            image.color = color;
             image.scaleY = 0;
             image.scaleX = 0;
             image.alpha = 1;
@@ -47,15 +47,15 @@ package Entity.FX {
         override public function deInit():void {
         }
 
-        override public function update(_dt:Number):void {
+        override public function update(dt:Number):void {
             if (state == 0) {
-                size += _dt * 8;
+                size += dt * 8;
                 if (size >= 1) {
                     size = 1;
                     state = 1;
                 }
             } else {
-                size -= _dt * 3;
+                size -= dt * 3;
                 if (size <= 0) {
                     size = 0;
                     active = false;
@@ -63,17 +63,17 @@ package Entity.FX {
             }
             image.scaleX = image.scaleY = size;
             image.alpha = 1;
-            var _dx:Number = prevX - x;
-            var _dy:Number = prevY - y;
-            var _angle:Number = Math.atan2(_dy, _dx);
-            var _Distance:Number = Math.sqrt(_dx * _dx + _dy * _dy);
+            var dx:Number = prevX - x;
+            var dy:Number = prevY - y;
+            var angle:Number = Math.atan2(dy, dx);
+            var distance:Number = Math.sqrt(dx * dx + dy * dy);
             image.rotation = 0;
-            image.x = x + Math.cos(_angle) * _Distance * 0.5;
-            image.y = y + Math.sin(_angle) * _Distance * 0.5;
-            image.width = _Distance;
+            image.x = x + Math.cos(angle) * distance * 0.5;
+            image.y = y + Math.sin(angle) * distance * 0.5;
+            image.width = distance;
             image.scaleY *= 0.5;
             image.alpha = 0.25;
-            image.rotation = _angle;
+            image.rotation = angle;
             UIContainer.entityLayer.addImage(image, foreground);
         }
     }

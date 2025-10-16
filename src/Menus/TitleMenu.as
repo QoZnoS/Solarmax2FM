@@ -145,12 +145,12 @@ package Menus {
             addChild(touchQuad);
             difficultyHolder = new Sprite();
             difficultyButtons = [];
-            var _DBtn:DifficultyButton = null;
+            var dBtn:DifficultyButton = null;
             for (i = 0; i < 3; i++) {
-                _DBtn = new DifficultyButton(i, difficultyButtons);
-                _DBtn.x = i * 100;
-                difficultyHolder.addChild(_DBtn);
-                difficultyButtons.push(_DBtn);
+                dBtn = new DifficultyButton(i, difficultyButtons);
+                dBtn.x = i * 100;
+                difficultyHolder.addChild(dBtn);
+                difficultyButtons.push(dBtn);
             }
             difficultyHolder.x = 412;
             difficultyHolder.y = 150;
@@ -340,9 +340,9 @@ package Menus {
         }
 
         public function deInit():void {
-            for each (var _difficultyBtn:DifficultyButton in difficultyButtons) {
-                _difficultyBtn.deInit();
-                _difficultyBtn.removeEventListener("clicked", on_difficultyButton);
+            for each (var difficultyBtn:DifficultyButton in difficultyButtons) {
+                difficultyBtn.deInit();
+                difficultyBtn.removeEventListener("clicked", on_difficultyButton);
             }
             menuBtn.deInit();
             menuBtn.removeEventListener("clicked", on_menu);
@@ -352,18 +352,18 @@ package Menus {
 
         // #endregion
         // #region 按钮和动画
-        public function on_menu(_click:Event):void {
+        public function on_menu(click:Event):void {
             //  menuBtn.deInit();
             //  menuBtn.removeEventListener("clicked", on_menu);
             optionsMenu.animateIn();
         }
 
-        public function on_quit(_click:Event):void {
+        public function on_quit(click:Event):void {
             NativeApplication.nativeApplication.exit();
         }
 
-        public function on_difficultyButton(_click:Event):void {
-            Globals.currentDifficulty = DifficultyButton.btnText[difficultyButtons.indexOf(_click.target)].toLowerCase();
+        public function on_difficultyButton(click:Event):void {
+            Globals.currentDifficulty = DifficultyButton.btnText[difficultyButtons.indexOf(click.target)].toLowerCase();
             LevelData.updateLevelData();
         }
 
@@ -417,8 +417,8 @@ package Menus {
 
         public function on_reset():void {
             Globals.levelReached = 0;
-            for each (var _star:int in Globals.levelData)
-                _star = 0;
+            for each (var star:int in Globals.levelData)
+                star = 0;
             Globals.save();
             initAfterEnd();
         }
@@ -428,68 +428,68 @@ package Menus {
         public function update(e:EnterFrameEvent):void {
             var x:Number = NaN;
             var y:Number = NaN;
-            var _R:Number = NaN;
-            var _voidR:Number = NaN;
-            var _dt:Number = e.passedTime;
+            var radiu:Number = NaN;
+            var voidR:Number = NaN;
+            var dt:Number = e.passedTime;
             if (this.alpha == 0)
                 return;
             if (cover.alpha > 0) {
-                var _fadeSpeed:Number = currentIndex > 0 ? 0.75 : 0.12;
-                cover.alpha = Math.max(0, cover.alpha - _dt * _fadeSpeed);
+                var fadeSpeed:Number = currentIndex > 0 ? 0.75 : 0.12;
+                cover.alpha = Math.max(0, cover.alpha - dt * fadeSpeed);
             }
             if (!Starling.juggler.containsTweens(levels)) {
-                var _scrollDamping:Number = mouseDown ? 0.5 : 0.025;
-                deltaScroll.x *= (1 - _scrollDamping);
+                var scrollDamping:Number = mouseDown ? 0.5 : 0.025;
+                deltaScroll.x *= (1 - scrollDamping);
                 levels.x += deltaScroll.x;
                 if (!mouseDown && Math.abs(deltaScroll.x) < 2) {
                     deltaScroll.x = 0;
-                    var _targetX:Number = Math.round((levels.x - 512) / 120) * 120;
-                    levels.x += (_targetX - (levels.x - 512)) * 0.1;
+                    var targetX:Number = Math.round((levels.x - 512) / 120) * 120;
+                    levels.x += (targetX - (levels.x - 512)) * 0.1;
                 }
             }
-            var _minX:Number = 512 - levels.width + 100 + (LevelData.level.length - (Math.min(Globals.levelReached, LevelData.level.length - 1) + 1)) * 120;
-            levels.x = Math.max(_minX, Math.min(512, levels.x));
-            levels.update(_dt, hoverIndex);
+            var minX:Number = 512 - levels.width + 100 + (LevelData.level.length - (Math.min(Globals.levelReached, LevelData.level.length - 1) + 1)) * 120;
+            levels.x = Math.max(minX, Math.min(512, levels.x));
+            levels.update(dt, hoverIndex);
             currentIndex = -Math.round((levels.x - 512) / 120);
             var scale:Number = (levels.x - 512) / -(levels.width - 100);
             Root.bg.setX(Root.bg.x + (-scale * 1024 * 3 - Root.bg.x) * 0.05);
             updatePreview();
             selector.reset();
             scale = 1 - Math.abs(levels.x + currentIndex * 120 - 512) / 60;
-            _R = 48 * scale;
-            _voidR = _R - 2;
+            radiu = 48 * scale;
+            voidR = radiu - 2;
             if (Globals.textSize == 2)
-                _voidR = _R - 3;
-            if (_voidR < 0)
-                _voidR = 0;
-            Drawer.drawCircle(selector, 0, 0, 16755370, _R, _voidR);
+                voidR = radiu - 3;
+            if (voidR < 0)
+                voidR = 0;
+            Drawer.drawCircle(selector, 0, 0, 16755370, radiu, voidR);
             selector.blendMode = "add";
             selector.alpha = scale * 0.5;
-            for each (var _difficultyBtn:DifficultyButton in difficultyButtons) {
+            for each (var difficultyBtn:DifficultyButton in difficultyButtons) {
                 if (currentIndex > 0)
-                    _difficultyBtn.scaleX = _difficultyBtn.scaleY = _difficultyBtn.alpha = scale;
+                    difficultyBtn.scaleX = difficultyBtn.scaleY = difficultyBtn.alpha = scale;
                 else
-                    _difficultyBtn.scaleX = _difficultyBtn.scaleY = _difficultyBtn.alpha = 0;
-                if (Globals.levelData[currentIndex - 1] > 0 && difficultyButtons.indexOf(_difficultyBtn) + 1 <= Globals.levelData[currentIndex - 1])
-                    _difficultyBtn.showStar(true);
+                    difficultyBtn.scaleX = difficultyBtn.scaleY = difficultyBtn.alpha = 0;
+                if (Globals.levelData[currentIndex - 1] > 0 && difficultyButtons.indexOf(difficultyBtn) + 1 <= Globals.levelData[currentIndex - 1])
+                    difficultyBtn.showStar(true);
                 else
-                    _difficultyBtn.showStar(false);
+                    difficultyBtn.showStar(false);
             }
             if (currentIndex == 0) { // 处理进游戏后的 SOLARMAX2 标题渐变
                 if (title.alpha < 0.5)
-                    title.alpha = Math.min(0.5, title.alpha + _dt * 0.5);
+                    title.alpha = Math.min(0.5, title.alpha + dt * 0.5);
             } else if (title.alpha > 0)
-                title.alpha = Math.max(0, title.alpha - _dt * 0.5);
+                title.alpha = Math.max(0, title.alpha - dt * 0.5);
             title_blur.alpha = title.alpha * 0.6;
-            for each (var _text:TextField in credits)
-                _text.alpha = title.alpha / 0.5 * 0.2;
+            for each (var text:TextField in credits)
+                text.alpha = title.alpha / 0.5 * 0.2;
         }
 
         public function updateStarCount():void {
-            var _allStar:int = 0;
-            for each (var _star:int in Globals.levelData)
-                _allStar += _star;
-            starLabel.text = _allStar.toString();
+            var allStar:int = 0;
+            for each (var star:int in Globals.levelData)
+                allStar += star;
+            starLabel.text = allStar.toString();
         }
 
         private function updatePreview():void {
@@ -554,57 +554,57 @@ package Menus {
             preview.blendMode = "add";
         }
 
-        public function on_touch(_getTouch:TouchEvent):void {
-            var _endPoint:Point = null;
-            var _level:int = 0;
-            var _touch:Touch = _getTouch.getTouch(touchQuad);
-            if (!_touch)
+        public function on_touch(getTouch:TouchEvent):void {
+            var endPoint:Point = null;
+            var level:int = 0;
+            var touch:Touch = getTouch.getTouch(touchQuad);
+            if (!touch)
                 return;
-            switch (_touch.phase) {
+            switch (touch.phase) {
                 case "hover":
-                    hoverIndex = getClosestIndex(_touch.globalX, _touch.globalY);
+                    hoverIndex = getClosestIndex(touch.globalX, touch.globalY);
                     break;
                 case "began":
                     Starling.juggler.removeTweens(levels);
-                    downIndex = getClosestIndex(_touch.globalX, _touch.globalY);
+                    downIndex = getClosestIndex(touch.globalX, touch.globalY);
                     mouseDown = true;
                     break;
                 case "moved":
-                    _endPoint = _touch.getMovement(this);
-                    if (Math.abs(_endPoint.x) > 2) {
+                    endPoint = touch.getMovement(this);
+                    if (Math.abs(endPoint.x) > 2) {
                         downIndex = -1;
                         dragging = true;
                     }
-                    deltaScroll.x += _endPoint.x;
+                    deltaScroll.x += endPoint.x;
                     break;
                 case "ended":
-                    if (downIndex > -1 && getClosestIndex(_touch.globalX, _touch.globalY) == downIndex && !dragging) {
+                    if (downIndex > -1 && getClosestIndex(touch.globalX, touch.globalY) == downIndex && !dragging) {
                         if (downIndex > 0 && downIndex == currentIndex)
                             loadMap();
                         else {
-                            _level = Math.min(Globals.levelReached, LevelData.level.length - 1);
-                            if (downIndex <= _level + 1)
+                            level = Math.min(Globals.levelReached, LevelData.level.length - 1);
+                            if (downIndex <= level + 1)
                                 scrollTo(downIndex);
                         }
                     } else if (!dragging && currentIndex > 0)
-                        if (_touch.globalX > 140 && _touch.globalX < 884 && _touch.globalY > 220 && _touch.globalY < 508)
+                        if (touch.globalX > 140 && touch.globalX < 884 && touch.globalY > 220 && touch.globalY < 508)
                             loadMap();
                     mouseDown = false;
                     dragging = false;
             }
         }
 
-        public function scrollTo(_level:int, _time:Number = 0.5):void {
+        public function scrollTo(level:int, time:Number = 0.5):void {
             deltaScroll.x = 0;
-            Starling.juggler.tween(levels, _time, {"x": -_level * 120 + 512,
+            Starling.juggler.tween(levels, time, {"x": -level * 120 + 512,
                     "transition": "easeOut"});
         }
 
         public function scrollToCurrent():void {
-            var _levelReached:int = Math.min(Globals.levelReached, LevelData.level.length - 1);
-            if (_levelReached > 0) {
-                scrollTo(_levelReached + 1, Globals.transitionSpeed);
-                currentIndex = _levelReached + 1;
+            var levelReached:int = Math.min(Globals.levelReached, LevelData.level.length - 1);
+            if (levelReached > 0) {
+                scrollTo(levelReached + 1, Globals.transitionSpeed);
+                currentIndex = levelReached + 1;
             }
         }
 
@@ -618,12 +618,12 @@ package Menus {
             GS.playClick();
         }
 
-        public function getClosestIndex(_mouseX:Number, _mouseY:Number):int {
-            var index:int = Math.round((_mouseX - levels.x) / 120);
+        public function getClosestIndex(mouseX:Number, mouseY:Number):int {
+            var index:int = Math.round((mouseX - levels.x) / 120);
             if (index < 0)
                 return -1;
-            var dx:Number = index * 120 + levels.x - _mouseX;
-            var dy:Number = levels.y - _mouseY;
+            var dx:Number = index * 120 + levels.x - mouseX;
+            var dy:Number = levels.y - mouseY;
             var distance:Number = dx * dx + dy * dy;
             return (distance < 2304) ? index : -1; // 2304 is 48^2 保证鼠标在关卡按钮附近
         }

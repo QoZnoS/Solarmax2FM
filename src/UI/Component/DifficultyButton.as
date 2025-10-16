@@ -23,9 +23,9 @@ package UI.Component {
         public var toggled:Boolean;
         public var starred:Boolean;
 
-        public function DifficultyButton(_difficulty:int, _buttonArray:Array) {
+        public function DifficultyButton(difficulty:int, buttonArray:Array) {
             super();
-            this.buttonArray = _buttonArray;
+            this.buttonArray = buttonArray;
             bg = new Image(Root.assets.getTexture("difficulty_btn01"));
             bg.pivotX = bg.width * 0.5;
             bg.pivotY = bg.height * 0.5;
@@ -41,7 +41,7 @@ package UI.Component {
             icon.alpha = 0.4;
             addChild(icon);
             starred = false;
-            label = new TextField(bg.width, 40, btnText[_difficulty], "Downlink12", -1, 0xFFAAAA);
+            label = new TextField(bg.width, 40, btnText[difficulty], "Downlink12", -1, 0xFFAAAA);
             label.pivotX = bg.width * 0.5;
             label.pivotY = 20;
             label.y = -15;
@@ -66,14 +66,14 @@ package UI.Component {
             quad.removeEventListener("touch", on_touch);
         }
 
-        public function on_touch(_touchEvent:TouchEvent):void {
-            var _touch:Touch = _touchEvent.getTouch(quad);
-            if (!_touch) {
+        public function on_touch(touchEvent:TouchEvent):void {
+            var touch:Touch = touchEvent.getTouch(quad);
+            if (!touch) {
                 bg.alpha = toggled ? 0.4 : 0;
                 down = false;
                 return;
             }
-            switch (_touch.phase) {
+            switch (touch.phase) {
                 case "hover":
                     bg.alpha = 0.4;
                     break;
@@ -82,7 +82,7 @@ package UI.Component {
                     down = true;
                     break;
                 case "moved":
-                    if (down && !hitTest(_touch.getLocation(quad, hitPoint))) {
+                    if (down && !hitTest(touch.getLocation(quad, hitPoint))) {
                         bg.alpha = toggled ? 0.4 : 0;
                         down = false;
                     }
@@ -92,10 +92,10 @@ package UI.Component {
                         toggled = true;
                         if (buttonArray) {
                             bg.alpha = 0.4;
-                            for each (var _button:DifficultyButton in buttonArray) {
-                                if (_button == this)
+                            for each (var button:DifficultyButton in buttonArray) {
+                                if (button == this)
                                     continue;
-                                _button.untoggle();
+                                button.untoggle();
                             }
                         } else {
                             toggled = false;
@@ -119,11 +119,11 @@ package UI.Component {
             bg.alpha = 0;
         }
 
-        public function showStar(_get:Boolean):void {
-            if (_get && !starred) {
+        public function showStar(get:Boolean):void {
+            if (get && !starred) {
                 icon.texture = Root.assets.getTexture("star");
                 starred = true;
-            } else if (!_get && starred) {
+            } else if (!get && starred) {
                 icon.texture = Root.assets.getTexture("star2");
                 starred = false;
             }

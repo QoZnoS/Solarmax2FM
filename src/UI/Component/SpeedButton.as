@@ -16,11 +16,11 @@ package UI.Component {
         public var toggled:Boolean;
         public var scene:SceneController; // 速度变量在scene中修改
 
-        public function SpeedButton(_scene:SceneController, _Texture:String, _buttonArray:Vector.<SpeedButton>, _scale:Number = 1) {
+        public function SpeedButton(scene:SceneController, texture:String, buttonArray:Vector.<SpeedButton>, scale:Number = 1) {
             super();
-            this.buttonArray = _buttonArray;
-            this.scene = _scene;
-            image = new Image(Root.assets.getTexture(_Texture));
+            this.buttonArray = buttonArray;
+            this.scene = scene;
+            image = new Image(Root.assets.getTexture(texture));
             image.color = 16755370;
             image.alpha = 0.3;
             addChild(image);
@@ -31,15 +31,15 @@ package UI.Component {
             addChild(quad);
             hitPoint = new Point(0, 0);
             toggled = false;
-            setImage(_Texture, _scale)
+            setImage(texture, scale)
         }
 
-        public function setImage(_Texture:String, _scale:Number = 1):void {
-            image.texture = Root.assets.getTexture(_Texture);
+        public function setImage(texture:String, scale:Number = 1):void {
+            image.texture = Root.assets.getTexture(texture);
             image.readjustSize();
             image.width = image.texture.width;
             image.height = image.texture.height;
-            image.scaleX = image.scaleY = _scale;
+            image.scaleX = image.scaleY = scale;
             image.alpha = 0.3;
             quad.width = image.width + 20;
             quad.height = image.height + 20;
@@ -58,17 +58,17 @@ package UI.Component {
             removeEventListener("touch", on_touch);
         }
 
-        public function on_touch(_touchEvent:TouchEvent):void {
-            var _Touch:Touch = _touchEvent.getTouch(this);
-            if (!_Touch)
+        public function on_touch(touchEvent:TouchEvent):void {
+            var touch:Touch = touchEvent.getTouch(this);
+            if (!touch)
                 return;
-            switch (_Touch.phase) {
+            switch (touch.phase) {
                 case "began":
                     image.alpha = 0.8;
                     down = true;
                     break;
                 case "moved":
-                    if (down && !hitTest(_Touch.getLocation(this, hitPoint))) {
+                    if (down && !hitTest(touch.getLocation(this, hitPoint))) {
                         image.alpha = 0.3;
                         down = false;
                     }
@@ -77,11 +77,11 @@ package UI.Component {
                     if (down) {
                         toggled = true;
                         image.alpha = 0.8;
-                        for each (var _SpeedBtn:SpeedButton in buttonArray) {
-                            if (_SpeedBtn == this)
+                        for each (var speedBtn:SpeedButton in buttonArray) {
+                            if (speedBtn == this)
                                 continue;
-                            _SpeedBtn.image.alpha = 0.3;
-                            _SpeedBtn.toggled = false;
+                            speedBtn.image.alpha = 0.3;
+                            speedBtn.toggled = false;
                         }
                         down = false;
                         this.changeSpeed();

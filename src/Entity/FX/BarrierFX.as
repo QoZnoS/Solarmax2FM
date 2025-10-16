@@ -15,14 +15,14 @@ package Entity.FX {
             image.pivotY = image.height * 0.5;
         }
 
-        public function initBarrier(_GameScene:GameScene, _x:Number, _y:Number, _Angle:Number, _Color:uint):void {
-            super.init(_GameScene);
-            image.x = _x;
-            image.y = _y;
+        public function initBarrier(gameScene:GameScene, x:Number, y:Number, angle:Number, color:uint):void {
+            super.init(gameScene);
+            image.x = x;
+            image.y = y;
             image.scaleY = 0.75;
             image.scaleX = 0.75;
-            image.rotation = _Angle;
-            image.color = _Color;
+            image.rotation = angle;
+            image.color = color;
             UIContainer.entityLayer.fxLayer.addImage(image);
         }
     }

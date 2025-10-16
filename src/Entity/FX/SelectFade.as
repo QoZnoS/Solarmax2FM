@@ -21,32 +21,32 @@ package Entity.FX {
             super();
         }
 
-        public function initSelectFade(_GameScene:GameScene, _x:Number, _y:Number, _size:Number, _Color:uint, _type:int):void {
-            super.init(_GameScene);
-            this.x = _x;
-            this.y = _y;
-            this.color = _Color;
-            this.size = _size;
-            this.type = _type;
+        public function initSelectFade(gameScene:GameScene, x:Number, y:Number, size:Number, color:uint, type:int):void {
+            super.init(gameScene);
+            this.x = x;
+            this.y = y;
+            this.color = color;
+            this.size = size;
+            this.type = type;
             alpha = 1;
         }
 
         override public function deInit():void {
         }
 
-        override public function update(_dt:Number):void {
+        override public function update(dt:Number):void {
             if (type == 0)
-                size += _dt * 0.2;
+                size += dt * 0.2;
             else
-                size -= _dt * 0.2;
-            alpha -= _dt * 4;
+                size -= dt * 0.2;
+            alpha -= dt * 4;
             if (alpha <= 0) {
                 alpha = 0;
                 active = false;
             }
-            var _R:Number = 150 * size - 4;
-            var _voidR:Number = Math.max(0, _R - 3);
-            Drawer.drawCircle(UIContainer.behaviorBatch, x, y, color, _R, _voidR, false, alpha);
+            var radius:Number = 150 * size - 4;
+            var voidR:Number = Math.max(0, radius - 3);
+            Drawer.drawCircle(UIContainer.behaviorBatch, x, y, color, radius, voidR, false, alpha);
         }
     }
 }

@@ -186,7 +186,7 @@
             on_resize(null);
         }
 
-        public function on_resize(param1:*):Rectangle {
+        public function on_resize(event:*):Rectangle {
 
             // 1. DPI感知：获取物理像素尺寸
             var actualScaleFactor:Number = stage.contentsScaleFactor || 1.0;
@@ -216,18 +216,18 @@
             mStarling.stage.stageHeight = designHeight;
 
             // 6. 覆盖层适配（全屏蒙版）
-            var _shape:Shape = cover.getChildAt(0) as Shape;
-            _shape.graphics.clear();
-            _shape.graphics.beginFill(0, 0.5);
-            _shape.graphics.drawRect(-10, -10, fullScreenWidth + 20, fullScreenHeight + 20);
-            _shape.graphics.endFill();
+            var shape:Shape = cover.getChildAt(0) as Shape;
+            shape.graphics.clear();
+            shape.graphics.beginFill(0, 0.5);
+            shape.graphics.drawRect(-10, -10, fullScreenWidth + 20, fullScreenHeight + 20);
+            shape.graphics.endFill();
 
             // 7. 暂停按钮动态适配（保持居中）
-            var _pause:Bitmap = cover.getChildAt(1) as Bitmap;
-            _pause.scaleX = _pause.scaleY = contentScale * 0.5; // 基于设计比例缩放
-            _pause.x = (fullScreenWidth - _pause.width) * 0.5;
-            _pause.y = (fullScreenHeight - _pause.height) * 0.5;
-            _pause.smoothing = true;
+            var pause:Bitmap = cover.getChildAt(1) as Bitmap;
+            pause.scaleX = pause.scaleY = contentScale * 0.5; // 基于设计比例缩放
+            pause.x = (fullScreenWidth - pause.width) * 0.5;
+            pause.y = (fullScreenHeight - pause.height) * 0.5;
+            pause.smoothing = true;
 
             return null;
         }

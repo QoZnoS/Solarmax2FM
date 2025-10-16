@@ -7,7 +7,6 @@ package Menus.StartMenus {
     import utils.ReplayData;
     import starling.text.TextField;
     import starling.events.Event;
-    import flash.display.Scene;
     import utils.Popup;
     import starling.display.Quad;
     import starling.events.EnterFrameEvent;

@@ -32,30 +32,29 @@ package Entity.FX {
             foreground = true;
         }
 
-        public function initBeam(_GameScene:GameScene, _x1:Number, _y1:Number, _x2:Number, _y2:Number, _Color:uint, _node:Node):void {
-            super.init(_GameScene);
-            this.x = _x1;
-            this.y = _y1;
-            this.color = _Color;
+        public function initBeam(gameScene:GameScene, x1:Number, y1:Number, x2:Number, y2:Number, color:uint, node:Node):void {
+            super.init(gameScene);
+            this.x = x1;
+            this.y = y1;
+            this.color = color;
             this.size = 0;
-            var _dx:Number = _x2 - _x1;
-            var _dy:Number = _y2 - _y1;
-            var _Distance:Number = Math.sqrt(_dx * _dx + _dy * _dy);
-            angle = Math.atan2(_dy, _dx);
+            var dx:Number = x2 - x1;
+            var dy:Number = y2 - y1;
+            var distance:Number = Math.sqrt(dx * dx + dy * dy);
+            angle = Math.atan2(dy, dx);
             image.rotation = 0;
             image.x = x;
             image.y = y;
-            image.width = _Distance;
-            image.color = _Color;
+            image.width = distance;
+            image.color = color;
             image.scaleY = 1;
             image.alpha = 0.75;
             image2.x = x;
             image2.y = y;
-            image2.color = _Color;
-            this.type = _node.nodeData.type;
-            state = 0;
-            switch (_node.nodeData.type) // 添加攻击塔特效贴图
-            {
+            image2.color = color;
+            this.type = node.nodeData.type;
+            state = STATE_GROW;
+            switch (node.nodeData.type) { // 添加攻击塔特效贴图
                 case NodeType.TOWER:
                     image2.texture = Root.assets.getTexture("tower_shape");
                     image2.scaleX = image2.scaleY = 0;
@@ -67,8 +66,8 @@ package Entity.FX {
                     image2.alpha = 0;
                     break;
                 default:
-                    image2.texture = Root.assets.getTexture(_node.nodeData.type + "_shape");
-                    image2.scaleX = image2.scaleY = _node.moveState.image.scaleX;
+                    image2.texture = Root.assets.getTexture(node.nodeData.type + "_shape");
+                    image2.scaleX = image2.scaleY = node.moveState.image.scaleX;
                     image2.alpha = 0;
                     break;
             }
@@ -77,16 +76,16 @@ package Entity.FX {
         override public function deInit():void {
         }
 
-        override public function update(_dt:Number):void {
+        override public function update(dt:Number):void {
             image.rotation = 0;
-            if (state == 0) {
-                size += _dt * 20;
+            if (state == STATE_GROW) {
+                size += dt * 20;
                 if (size >= 1) {
                     size = 1;
-                    state = 1;
+                    state = STATE_SHRINK;
                 }
             } else {
-                size -= _dt * 10;
+                size -= dt * 10;
                 if (size <= 0) {
                     size = 0;
                     active = false;
@@ -95,10 +94,10 @@ package Entity.FX {
             image.alpha = image2.alpha = size;
             image.scaleY = size * 0.5;
             switch (type) {
-                case 4:
+                case NodeType.TOWER:
                     image2.scaleX = image2.scaleY = size;
                     break;
-                case 6:
+                case NodeType.STARBASE:
                     image2.alpha = size;
                     break;
             }

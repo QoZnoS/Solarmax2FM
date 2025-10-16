@@ -28,7 +28,7 @@ package UI.Component {
             arrow.blendMode = "add";
             arrow.scaleY = 0.8;
             arrow.scaleX = 0.8;
-            arrow.color = 16755370;
+            arrow.color = 0xFFAAAA;
         }
 
         public function init(type:int):void {
@@ -69,7 +69,7 @@ package UI.Component {
             var x:Number = NaN;
             var y:Number = NaN;
             var nodeArray:Vector.<Node> = EntityContainer.nodes;
-            arrow.rotation = -1.5707963267948966;
+            arrow.rotation = -Math.PI / 2;
             arrow.x = nodeArray[0].nodeData.x;
             arrow.y = nodeArray[0].nodeData.y + 60;
             Starling.juggler.tween(arrow, 1, {"alpha": 0.8,

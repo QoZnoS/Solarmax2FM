@@ -15,25 +15,25 @@ package UI.Component {
         
         /** 基础控制按钮
          * <p>注册方法： <code>btn.addEventListener("clicked", 回调函数)</code>
-         * @param _texture 按钮贴图
+         * @param texture 按钮贴图
          */
-        public function MenuButton(_texture:String, _size:Number = 1) {
+        public function MenuButton(texture:String, size:Number = 1) {
             super();
-            image = new Image(Root.assets.getTexture(_texture));
+            image = new Image(Root.assets.getTexture(texture));
             image.color = 16755370;
             addChild(image);
             quad = new Quad(image.width + 20, image.height + 20, 16711680);
             addChild(quad);
             hitPoint = new Point(0, 0);
-            setImage(_texture, _size);
+            setImage(texture, size);
         }
 
-        public function setImage(_texture:String, _size:Number = 1):void {
-            image.texture = Root.assets.getTexture(_texture);
+        public function setImage(texture:String, size:Number = 1):void {
+            image.texture = Root.assets.getTexture(texture);
             image.readjustSize();
             image.width = image.texture.width;
             image.height = image.texture.height;
-            image.scaleX = image.scaleY = _size;
+            image.scaleX = image.scaleY = size;
             image.alpha = 0.3;
             quad.width = image.width + 20;
             quad.height = image.height + 20;
@@ -51,13 +51,13 @@ package UI.Component {
             removeEventListener("touch", on_touch);
         }
 
-        public function on_touch(_touchEvent:TouchEvent):void {
-            var _touch:Touch = _touchEvent.getTouch(this);
-            if (!_touch) {
+        public function on_touch(touchEvent:TouchEvent):void {
+            var touch:Touch = touchEvent.getTouch(this);
+            if (!touch) {
                 image.alpha = 0.3;
                 return;
             }
-            switch (_touch.phase) {
+            switch (touch.phase) {
                 case "hover":
                     image.alpha = down ? image.alpha : 0.5;
                     break;
@@ -66,7 +66,7 @@ package UI.Component {
                     down = true;
                     break;
                 case "moved":
-                    if (down && !hitTest(_touch.getLocation(this, hitPoint))) {
+                    if (down && !hitTest(touch.getLocation(this, hitPoint))) {
                         image.alpha = 0.3;
                         down = false;
                     }

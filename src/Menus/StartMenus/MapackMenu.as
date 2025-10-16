@@ -18,8 +18,8 @@ package Menus.StartMenus {
 
         private var title:TitleMenu;
 
-        public function MapackMenu(_title:TitleMenu):void {
-            this.title = _title;
+        public function MapackMenu(title:TitleMenu):void {
+            this.title = title;
             components = [];
             mapacks = [];
             init();
@@ -140,8 +140,8 @@ package Menus.StartMenus {
             }
         }
 
-        private function on_choose_map(_click:Event):void {
-            Globals.currentData = mapacks.indexOf(_click.target);
+        private function on_choose_map(click:Event):void {
+            Globals.currentData = mapacks.indexOf(click.target);
             Globals.save();
             LevelData.init();
             title.getBarrierData();
@@ -151,13 +151,13 @@ package Menus.StartMenus {
             title.optionsMenu.animateOut();
         }
 
-        private function on_prev(_click:Event):void {
+        private function on_prev(click:Event):void {
             if (mapPage > 0)
                 mapPage--;
             on_refresh()
         }
 
-        private function on_next(_click:Event):void {
+        private function on_next(click:Event):void {
             if (mapPage < mapacks.length - 1)
                 mapPage++;
             on_refresh()

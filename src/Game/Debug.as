@@ -26,14 +26,14 @@ package Game {
         private var seed:uint;
 
         // #region 初始化
-        public function Debug(_scene:SceneController) {
+        public function Debug(scene:SceneController) {
             super();
-            scene = _scene;
+            scene = scene;
         }
 
-        public function init(_gameScene:GameScene, _titleMenu:TitleMenu):void {
-            game = _gameScene;
-            title = _titleMenu;
+        public function init(gameScene:GameScene, titleMenu:TitleMenu):void {
+            game = gameScene;
+            title = titleMenu;
             debug = false;
             THIS = this;
             fpsCalculator = [0, 0, 0, 0, 0, 0, 0];
@@ -46,23 +46,23 @@ package Game {
         }
 
         private function addDebugView():void {
-            var _y:Number = 100;
+            var y:Number = 100;
             debugLables.push(new TextField(1000, 40, "DebugView", "Downlink12", -1, 16777215));
             debugLables.push(new TextField(1000, 40, "DebugView", "Downlink12", -1, 16777215));
             debugLables.push(new TextField(1000, 40, "DebugView", "Downlink12", -1, 16777215));
             debugLables.push(new TextField(1000, 40, "DebugView", "Downlink12", -1, 16777215));
             debugLables.push(new TextField(1000, 40, "DebugView", "Downlink12", -1, 16777215));
             debugLables.push(new TextField(1000, 40, "DebugView", "Downlink12", -1, 16777215));
-            for each (var _label:TextField in debugLables) {
-                _label.vAlign = "top";
-                _label.hAlign = "left";
-                _label.x = 40;
-                _label.y = _y;
-                _label.alpha = 1;
-                _label.visible = false;
-                _label.touchable = false;
-                addChild(_label);
-                _y += 12;
+            for each (var label:TextField in debugLables) {
+                label.vAlign = "top";
+                label.hAlign = "left";
+                label.x = 40;
+                label.y = y;
+                label.alpha = 1;
+                label.visible = false;
+                label.touchable = false;
+                addChild(label);
+                y += 12;
             }
         }
 
@@ -83,10 +83,10 @@ package Game {
         }
 
         private var pause:Boolean = false;
-        public static function on_key_down(_keyCode:int):void {
+        public static function on_key_down(keyCode:int):void {
             if (!debug)
                 return;
-            switch (_keyCode) {
+            switch (keyCode) {
                 case Keyboard.Q: // Q 启用 Debug 模式，已移至 Root.as 中
                     break;
                 case Keyboard.S: // 跳关
@@ -117,7 +117,7 @@ package Game {
                 case Keyboard.NUMBER_9:
                     if(THIS.seed > uint.MAX_VALUE/10)
                         THIS.seed = 0
-                    THIS.seed = THIS.seed*10 + (_keyCode-48);
+                    THIS.seed = THIS.seed*10 + (keyCode-48);
                     break;
                 case Keyboard.NUMPAD_0:
                 case Keyboard.NUMPAD_1:
@@ -131,7 +131,7 @@ package Game {
                 case Keyboard.NUMPAD_9:
                     if(THIS.seed > uint.MAX_VALUE/10)
                         THIS.seed = 0
-                    THIS.seed = THIS.seed*10 + (_keyCode-96);
+                    THIS.seed = THIS.seed*10 + (keyCode-96);
                     break;
                 case Keyboard.ENTER:
                 case Keyboard.NUMPAD_ENTER:
@@ -153,11 +153,11 @@ package Game {
                 debug = false;
             else
                 debug = true;
-            for each (var _label:TextField in debugLables) {
-                if (_label.visible)
-                    _label.visible = false;
+            for each (var label:TextField in debugLables) {
+                if (label.visible)
+                    label.visible = false;
                 else
-                    _label.visible = true;
+                    label.visible = true;
             }
         }
 
@@ -198,66 +198,66 @@ package Game {
         private static function updateTag():void {
             if (EntityContainer.nodes.length != THIS.nodeTagLables[0].length)
                 init_tag(); // 重置tag
-            for each (var _node:Node in EntityContainer.nodes) { // 更新tag位置
-                THIS.nodeTagLables[0][_node.tag].x = _node.nodeData.x - 30 * _node.nodeData.size - 60;
-                THIS.nodeTagLables[0][_node.tag].y = _node.nodeData.y - 50 * _node.nodeData.size - 48;
-                THIS.nodeTagLables[1][_node.tag].x = _node.nodeData.x - 60;
-                THIS.nodeTagLables[1][_node.tag].y = _node.nodeData.y + 50 * _node.nodeData.size - 30;
-                THIS.nodeTagLables[2][_node.tag].x = _node.nodeData.x - 60;
-                THIS.nodeTagLables[2][_node.tag].y = _node.nodeData.y + 50 * _node.nodeData.size - 30;
-                if (_node.conflict)
-                    THIS.nodeTagLables[1][_node.tag].visible = true;
+            for each (var node:Node in EntityContainer.nodes) { // 更新tag位置
+                THIS.nodeTagLables[0][node.tag].x = node.nodeData.x - 30 * node.nodeData.size - 60;
+                THIS.nodeTagLables[0][node.tag].y = node.nodeData.y - 50 * node.nodeData.size - 48;
+                THIS.nodeTagLables[1][node.tag].x = node.nodeData.x - 60;
+                THIS.nodeTagLables[1][node.tag].y = node.nodeData.y + 50 * node.nodeData.size - 30;
+                THIS.nodeTagLables[2][node.tag].x = node.nodeData.x - 60;
+                THIS.nodeTagLables[2][node.tag].y = node.nodeData.y + 50 * node.nodeData.size - 30;
+                if (node.conflict)
+                    THIS.nodeTagLables[1][node.tag].visible = true;
                 else
-                    THIS.nodeTagLables[1][_node.tag].visible = false;
-                if (_node.capturing) {
-                    THIS.nodeTagLables[2][_node.tag].visible = true;
-                    THIS.nodeTagLables[2][_node.tag].text = "RATE: " + _node.captureState.captureRate.toFixed(2);
+                    THIS.nodeTagLables[1][node.tag].visible = false;
+                if (node.capturing) {
+                    THIS.nodeTagLables[2][node.tag].visible = true;
+                    THIS.nodeTagLables[2][node.tag].text = "RATE: " + node.captureState.captureRate.toFixed(2);
                 } else
-                    THIS.nodeTagLables[2][_node.tag].visible = false;
+                    THIS.nodeTagLables[2][node.tag].visible = false;
             }
         }
 
         private static function init_tag():void { // 重置tag
             clear_tag();
-            for each (var _node:Node in EntityContainer.nodes) {
-                _node.tag = EntityContainer.nodes.indexOf(_node);
-                var _label:TextField = new TextField(60, 48, String(_node.tag), "Downlink12", -1, 16777215);
-                _label.vAlign = _label.hAlign = "center";
-                _label.pivotX = -30;
-                _label.pivotY = -24;
-                _label.alpha = 1;
-                _label.touchable = false;
-                _label.visible = true;
-                THIS.addChild(_label);
-                THIS.nodeTagLables[0].push(_label);
-                _label = new TextField(60, 48, "conflict", "Downlink12", -1, 16777215);
-                _label.vAlign = _label.hAlign = "center";
-                _label.pivotX = -30;
-                _label.pivotY = -24;
-                _label.alpha = 1;
-                _label.touchable = false;
-                _label.visible = false;
-                THIS.addChild(_label);
-                THIS.nodeTagLables[1].push(_label);
-                _label = new TextField(60, 48, "capture", "Downlink12", -1, 16777215);
-                _label.vAlign = _label.hAlign = "center";
-                _label.pivotX = -30;
-                _label.pivotY = -24;
-                _label.alpha = 1;
-                _label.touchable = false;
-                _label.visible = false;
-                THIS.addChild(_label);
-                THIS.nodeTagLables[2].push(_label);
+            for each (var node:Node in EntityContainer.nodes) {
+                node.tag = EntityContainer.nodes.indexOf(node);
+                var label:TextField = new TextField(60, 48, String(node.tag), "Downlink12", -1, 16777215);
+                label.vAlign = label.hAlign = "center";
+                label.pivotX = -30;
+                label.pivotY = -24;
+                label.alpha = 1;
+                label.touchable = false;
+                label.visible = true;
+                THIS.addChild(label);
+                THIS.nodeTagLables[0].push(label);
+                label = new TextField(60, 48, "conflict", "Downlink12", -1, 16777215);
+                label.vAlign = label.hAlign = "center";
+                label.pivotX = -30;
+                label.pivotY = -24;
+                label.alpha = 1;
+                label.touchable = false;
+                label.visible = false;
+                THIS.addChild(label);
+                THIS.nodeTagLables[1].push(label);
+                label = new TextField(60, 48, "capture", "Downlink12", -1, 16777215);
+                label.vAlign = label.hAlign = "center";
+                label.pivotX = -30;
+                label.pivotY = -24;
+                label.alpha = 1;
+                label.touchable = false;
+                label.visible = false;
+                THIS.addChild(label);
+                THIS.nodeTagLables[2].push(label);
             }
         }
 
         private static function clear_tag():void { // 清除tag
             if (THIS.nodeTagLables[0].length == 0)
                 return;
-            for each (var _array:Array in THIS.nodeTagLables) {
-                for each (var _label:TextField in _array) {
-                    _label.visible = false;
-                    THIS.removeChild(_label);
+            for each (var array:Array in THIS.nodeTagLables) {
+                for each (var label:TextField in array) {
+                    label.visible = false;
+                    THIS.removeChild(label);
                 }
             }
             THIS.nodeTagLables = [[], [], []];

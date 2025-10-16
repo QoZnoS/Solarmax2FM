@@ -10,9 +10,9 @@ package UI.Component {
         public var title:TextField;
         public var content:TextField;
 
-        public function Tooltip(_type:int) {
+        public function Tooltip(type:int) {
             super();
-            if (_type == 0) {
+            if (type == 0) {
                 bg = new Quad(400, 100, 0);
                 bg.alpha = 0.9;
                 addChild(bg);

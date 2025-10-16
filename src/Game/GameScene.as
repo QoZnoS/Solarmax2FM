@@ -23,6 +23,7 @@ package Game {
     import Game.SpecialEvent.ISpecialEvent;
     import Game.SpecialEvent.SpecialEventFactory;
     import utils.ReplayData;
+    import UI.UIContainer;
 
     public class GameScene extends BasicScene {
         // #region 类变量
@@ -78,7 +79,7 @@ package Game {
             this.alpha = 0;
             this.visible = true;
             ui = scene.ui;
-            ui.btnL.addChildAt(cover, 0);
+            UIContainer.btnLayer.addChildAt(cover, 0);
             var i:int = 0;
             rng = new Rng(seed);
             var levelData:Object = LevelData.level[Globals.level];
@@ -101,11 +102,11 @@ package Game {
                 label.color = Globals.teamColors[Globals.playerTeam];
                 label.fontSize = -1;
                 if (label.color == 0)
-                    ui.btnL.normalLayer.addChild(label);
+                    UIContainer.btnLayer.normalLayer.addChild(label);
                 else
-                    ui.btnL.addLayer.addChild(label);
+                    UIContainer.btnLayer.addLayer.addChild(label);
             }
-            // ui.btnL.color = Globals.teamColors[Globals.playerTeam];
+            // UIContainer.btnLayer.color = Globals.teamColors[Globals.playerTeam];
             // 执行一些初始化函数
             initBarrierLines();
             cover.alpha = 0;
@@ -149,9 +150,9 @@ package Game {
             removeEventListener("enterFrame", update); // 移除更新帧监听器
             for each (var label:TextField in popLabels) {
                 if (label.color == 0)
-                    ui.btnL.normalLayer.removeChild(label);
+                    UIContainer.btnLayer.normalLayer.removeChild(label);
                 else
-                    ui.btnL.addLayer.removeChild(label);
+                    UIContainer.btnLayer.addLayer.removeChild(label);
             }
             Globals.auto_save_replay();
             this.visible = false;
@@ -245,12 +246,12 @@ package Game {
             if (!gameOver) { // 通关判断
                 gameOver = (winningTeam != -1);
                 if (gameOver) { // 处理游戏结束时的动画
-                    var _ripple:int = 1;
+                    var ripple:int = 1;
                     for each (var node:Node in EntityContainer.nodes) {
                         if (node.nodeData.isUntouchable)
                             continue;
-                        node.basicState.winPulseTimer = Math.min(_ripple * 0.101, _ripple * 2.5 / EntityContainer.nodes.length);
-                        _ripple++;
+                        node.basicState.winPulseTimer = Math.min(ripple * 0.101, ripple * 2.5 / EntityContainer.nodes.length);
+                        ripple++;
                     }
                     cover.color = Globals.teamColors[winningTeam];
                     cover.color == 0 ? cover.blendMode = "normal" : cover.blendMode = "add";
@@ -268,10 +269,10 @@ package Game {
         // #endregion
         public function on_key_down(keyCode:int):void {
             switch (keyCode) {
-                case Keyboard.SPACE: // 对应Spacebar，即空格
+                case Keyboard.SPACE:
                     Starling.current.isStarted ? pause() : Globals.main.on_resume(null);
                     break;
-                case Keyboard.NUMBER_1: // 大键盘上的1
+                case Keyboard.NUMBER_1:
                 case Keyboard.NUMBER_2:
                 case Keyboard.NUMBER_3:
                 case Keyboard.NUMBER_4:
@@ -280,9 +281,9 @@ package Game {
                 case Keyboard.NUMBER_7:
                 case Keyboard.NUMBER_8:
                 case Keyboard.NUMBER_9:
-                    ui.btnL.fleetSlider.perc = (keyCode - Keyboard.NUMBER_0) / 10;
+                    UIContainer.btnLayer.fleetSlider.perc = (keyCode - Keyboard.NUMBER_0) / 10;
                     break;
-                case Keyboard.NUMPAD_1: // 小键盘上的1
+                case Keyboard.NUMPAD_1:
                 case Keyboard.NUMPAD_2:
                 case Keyboard.NUMPAD_3:
                 case Keyboard.NUMPAD_4:
@@ -291,11 +292,11 @@ package Game {
                 case Keyboard.NUMPAD_7:
                 case Keyboard.NUMPAD_8:
                 case Keyboard.NUMPAD_9:
-                    ui.btnL.fleetSlider.perc = (keyCode - Keyboard.NUMPAD_0) / 10;
+                    UIContainer.btnLayer.fleetSlider.perc = (keyCode - Keyboard.NUMPAD_0) / 10;
                     break;
                 case Keyboard.NUMBER_0:
                 case Keyboard.NUMPAD_0:
-                    ui.btnL.fleetSlider.perc = 1;
+                    UIContainer.btnLayer.fleetSlider.perc = 1;
             }
         }
     }

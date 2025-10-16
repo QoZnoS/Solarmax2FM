@@ -116,12 +116,12 @@ package Game {
             var a2:Point = array1[1];
             var b1:Point = array2[0];
             var b2:Point = array2[1];
-            var _result:Boolean = false;
+            var result:Boolean = false;
             if (a1.x == b1.x && a1.y == b1.y && a2.x == b2.x && a2.y == b2.y)
-                _result = true;
+                result = true;
             if (a1.x == b2.x && a1.y == b2.y && a2.x == b1.x && a2.y == b1.y)
-                _result = true;
-            return _result;
+                result = true;
+            return result;
         }
 
     }

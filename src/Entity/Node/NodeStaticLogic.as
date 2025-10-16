@@ -18,18 +18,16 @@ package Entity.Node {
          */
         public static function updateLabelSizes(node:Node):void {
             var i:int = 0;
-            switch (Globals.textSize) // 读取文本大小设置
-            {
-                case 0: // 大小设置为0
+            switch (Globals.textSize) {
+                case 0:
                     node.moveState.label.fontName = "Downlink10"; // 切换和平状态下的字体图
-                    node.moveState.label.fontSize = -1; // 默认大小
-                    for (i = 0; i < node.moveState.labels.length; i++) {
-                        // 设定战斗状态下每个势力的文本
+                    node.moveState.label.fontSize = -1;
+                    for (i = 0; i < node.moveState.labels.length; i++) { // 设定战斗状态下每个势力的文本
                         node.moveState.labels[i].fontName = "Downlink10";
                         node.moveState.labels[i].fontSize = -1;
                     }
                     break;
-                case 1: // 大小设置为1
+                case 1:
                     node.moveState.label.fontName = "Downlink12";
                     node.moveState.label.fontSize = -1;
                     for (i = 0; i < node.moveState.labels.length; i++) {
@@ -37,7 +35,7 @@ package Entity.Node {
                         node.moveState.labels[i].fontSize = -1;
                     }
                     break;
-                case 2: // 大小设置为2
+                case 2:
                     node.moveState.label.fontName = "Downlink18";
                     node.moveState.label.fontSize = -1;
                     for (i = 0; i < node.moveState.labels.length; i++) {
@@ -54,12 +52,7 @@ package Entity.Node {
          * @param pulseEffect 是否播放占领特效
          */
         public static function changeTeam(node:Node, team:int, pulseEffect:Boolean = true):void {
-            // if (Globals.level == 35 && node.nodeData.type == NodeType.DILATOR)
-            // return; // 32 36关星核不做处理，自己变自己不做处理
-            if (team == 0)
-                node.nodeData.hp = 0;
-            else
-                node.nodeData.hp = 100;
+            node.nodeData.hp = (team == 0 ? 0 : 100);
             var nodeTeam:int = node.nodeData.team;
             node.nodeData.team = team;
             node.captureState.captureTeam = team;
@@ -185,7 +178,7 @@ package Entity.Node {
          * @param targetNode 终点
          */
         public static function sendShips(node:Node, team:int, targetNode:Node):void {
-            var l:int = Math.ceil(node.ships[team].length * game.scene.ui.btnL.fleetSlider.perc); // 计算调动的飞船数，Math.ceil()为至少调动1飞船判定
+            var l:int = Math.ceil(node.ships[team].length * UIContainer.btnLayer.fleetSlider.perc); // 计算调动的飞船数，Math.ceil()为至少调动1飞船判定
             if (targetNode == node || l == 0)
                 return;
             if (game.visible)
@@ -220,8 +213,7 @@ package Entity.Node {
             var ship:Ship = null;
             var warp:Boolean = false; // 是否为传送门
             var ShipNumber:int = Math.min(ships, node.ships[team].length);
-            for (var i:int = 0; i < ShipNumber; i++) {
-                // 遍历每个需调动的飞船
+            for (var i:int = 0; i < ShipNumber; i++) {// 遍历每个需调动的飞船
                 ship = node.ships[team][i];
                 if (ship.state != 0)
                     ShipNumber = Math.min(ShipNumber + 1, node.ships[team].length); // 这里是为了允许快速操作，跳过将要起飞的飞船并将循环次数增加1
@@ -256,24 +248,24 @@ package Entity.Node {
          * @param team 特效颜色势力
          */
         public static function showWarpPulse(node:Node, team:int):void {
-            var _delay:Number = 0;
-            var _rate:Number = 2.6;
-            var _delayStep:Number = 0.12;
-            var _angle:Number = 1.5707963267948966;
-            var _maxSize:Number = 1;
+            var delay:Number = 0;
+            var rate:Number = 2.6;
+            var delayStep:Number = 0.12;
+            var angle:Number = 1.5707963267948966;
+            var maxSize:Number = 1;
             for (var i:int = 0; i < 3; i++) {
-                FXHandler.addDarkPulse(node, Globals.teamColors[team], 1, _maxSize, _rate, _angle, _delay);
-                _delay += _delayStep;
-                _angle += 2.0943951023931953;
-                FXHandler.addDarkPulse(node, Globals.teamColors[team], 1, _maxSize, _rate, _angle, _delay);
-                _delay += _delayStep;
-                _angle += 2.0943951023931953;
-                FXHandler.addDarkPulse(node, Globals.teamColors[team], 1, _maxSize, _rate, _angle, _delay);
-                _delay += _delayStep;
-                _angle += 2.0943951023931953;
-                _rate *= 1.1;
-                _delayStep *= 0.9;
-                _maxSize *= 0.8;
+                FXHandler.addDarkPulse(node, Globals.teamColors[team], 1, maxSize, rate, angle, delay);
+                delay += delayStep;
+                angle += 2.0943951023931953;
+                FXHandler.addDarkPulse(node, Globals.teamColors[team], 1, maxSize, rate, angle, delay);
+                delay += delayStep;
+                angle += 2.0943951023931953;
+                FXHandler.addDarkPulse(node, Globals.teamColors[team], 1, maxSize, rate, angle, delay);
+                delay += delayStep;
+                angle += 2.0943951023931953;
+                rate *= 1.1;
+                delayStep *= 0.9;
+                maxSize *= 0.8;
             }
             FXHandler.addDarkPulse(node, Globals.teamColors[team], 2, 2, 2, 0);
             GS.playWarpCharge(node.nodeData.x);

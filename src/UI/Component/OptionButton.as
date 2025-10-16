@@ -21,20 +21,20 @@ package UI.Component {
         /** 多项单选文字按钮
          * <p>注册方法： <code>this.addEventListener("clicked", 回调函数)</code>
          * <p>读取状态： <code>this.toggled</code>
-         * @param _text 按钮文字
-         * @param _color 字体颜色
-         * @param _buttonArray 包含同条目下全部按钮
+         * @param text 按钮文字
+         * @param color 字体颜色
+         * @param buttonArray 包含同条目下全部按钮
          */
-        public function OptionButton(_text:String, _color:uint, _buttonArray:Array = undefined) {
+        public function OptionButton(text:String, color:uint, buttonArray:Array = undefined) {
             super();
-            this.buttonArray = _buttonArray;
+            this.buttonArray = buttonArray;
             labelArray = [];
-            label = new TextField(240, 40, _text, "Downlink12", -1, _color);
+            label = new TextField(240, 40, text, "Downlink12", -1, color);
             label.hAlign = "left";
             label.vAlign = "top";
             label.touchable = false;
             addChild(label);
-            labelBG = new Quad(label.textBounds.width + 12, label.textBounds.height + 12, _color);
+            labelBG = new Quad(label.textBounds.width + 12, label.textBounds.height + 12, color);
             labelBG.x = -6;
             labelBG.y = -2;
             labelBG.alpha = 0;
@@ -50,14 +50,14 @@ package UI.Component {
             quad.addEventListener("touch", on_touch);
         }
 
-        private function on_touch(_touchEvent:TouchEvent):void {
-            var _touch:Touch = _touchEvent.getTouch(this);
-            if (!_touch) {
+        private function on_touch(touchEvent:TouchEvent):void {
+            var touch:Touch = touchEvent.getTouch(this);
+            if (!touch) {
                 labelBG.alpha = toggled ? 0.2 : 0;
                 down = false;
                 return;
             }
-            switch (_touch.phase) {
+            switch (touch.phase) {
                 case "hover":
                     labelBG.alpha = 0.2;
                     break;
@@ -66,16 +66,16 @@ package UI.Component {
                     down = true;
                     break;
                 case "moved":
-                    if (down && !hitTest(_touch.getLocation(this, hitPoint))) {
+                    if (down && !hitTest(touch.getLocation(this, hitPoint))) {
                         labelBG.alpha = toggled ? 0.2 : 0;
                         down = false;
                     }
                     break;
                 case "ended":
                     if (down) {
-                        var _shouldToggle:Boolean = buttonArray != null;
-                        toggled = _shouldToggle;
-                        labelBG.alpha = _shouldToggle ? 0.2 : 0;
+                        var shouldToggle:Boolean = buttonArray != null;
+                        toggled = shouldToggle;
+                        labelBG.alpha = shouldToggle ? 0.2 : 0;
                         if (buttonArray) {
                             for each (var _button:OptionButton in buttonArray) {
                                 if (_button == this)
@@ -100,22 +100,22 @@ package UI.Component {
             labelBG.alpha = 0;
         }
 
-        public function addLabel(_label:TextField, _x:Number, _y:Number, _hAlign:String = "left"):void {
-            _label.hAlign = _hAlign;
-            _label.vAlign = "top";
-            _label.x = _x;
-            _label.y = _y;
-            _label.touchable = false;
-            labelArray.push(_label);
-            addChildAt(_label, 0);
+        public function addLabel(label:TextField, x:Number, y:Number, hAlign:String = "left"):void {
+            label.hAlign = hAlign;
+            label.vAlign = "top";
+            label.x = x;
+            label.y = y;
+            label.touchable = false;
+            labelArray.push(label);
+            addChildAt(label, 0);
         }
 
-        public function addImage(_image:Image, _scale:Number = 1):void {
-            _image.scaleX = _image.scaleY = _scale;
-            _image.x = 640;
-            _image.y = quad.height / 2 - 6;
-            _image.touchable = false;
-            addChild(_image);
+        public function addImage(image:Image, scale:Number = 1):void {
+            image.scaleX = image.scaleY = scale;
+            image.x = 640;
+            image.y = quad.height / 2 - 6;
+            image.touchable = false;
+            addChild(image);
         }
     }
 }

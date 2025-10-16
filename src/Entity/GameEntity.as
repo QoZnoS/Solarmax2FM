@@ -12,8 +12,8 @@ package Entity {
             super();
         }
 
-        public function init(_GameScene:GameScene):void {
-            this.game = _GameScene;
+        public function init(gameScene:GameScene):void {
+            this.game = gameScene;
             active = true;
         }
 

@@ -15,70 +15,70 @@ package Entity
             throw new AbstractClassError();
         }
 
-        public static function addBarrier(_x:Number, _y:Number, _Angle:Number, _Color:uint):void {
-            var _BarrierFX:BarrierFX = EntityContainer.getReserve(EntityContainer.INDEX_BARRIERS) as BarrierFX;
-            if (!_BarrierFX)
-                _BarrierFX = new BarrierFX();
-            _BarrierFX.initBarrier(game, _x, _y, _Angle, _Color);
-            EntityContainer.addEntity(EntityContainer.INDEX_BARRIERS, _BarrierFX);
+        public static function addBarrier(x:Number, y:Number, angle:Number, color:uint):void {
+            var barrierFX:BarrierFX = EntityContainer.getReserve(EntityContainer.INDEX_BARRIERS) as BarrierFX;
+            if (!barrierFX)
+                barrierFX = new BarrierFX();
+            barrierFX.initBarrier(game, x, y, angle, color);
+            EntityContainer.addEntity(EntityContainer.INDEX_BARRIERS, barrierFX);
         }
 
-        public static function addWarp(_GameScene:Number, _x:Number, _y:Number, _prevX:Number, _prevY:uint, _foreground:Boolean):void {
-            var _warp:WarpFX = EntityContainer.getReserve(EntityContainer.INDEX_WARPS) as WarpFX;
-            if (!_warp)
-                _warp = new WarpFX();
-            _warp.initWarp(game, _GameScene, _x, _y, _prevX, _prevY, _foreground);
-            EntityContainer.addEntity(EntityContainer.INDEX_WARPS, _warp);
+        public static function addWarp(gameScene:Number, x:Number, y:Number, prevX:Number, prevY:uint, foreground:Boolean):void {
+            var warp:WarpFX = EntityContainer.getReserve(EntityContainer.INDEX_WARPS) as WarpFX;
+            if (!warp)
+                warp = new WarpFX();
+            warp.initWarp(game, gameScene, x, y, prevX, prevY, foreground);
+            EntityContainer.addEntity(EntityContainer.INDEX_WARPS, warp);
         }
 
-        public static function addBeam(_Node:Node, _Ship:Ship):void {
-            var _BeamFX:BeamFX = EntityContainer.getReserve(EntityContainer.INDEX_BEAMS) as BeamFX;
-            if (!_BeamFX)
-                _BeamFX = new BeamFX();
-            _BeamFX.initBeam(game, _Node.nodeData.x, _Node.nodeData.y, _Ship.x, _Ship.y, Globals.teamColors[_Node.nodeData.team], _Node);
-            EntityContainer.addEntity(EntityContainer.INDEX_BEAMS, _BeamFX);
+        public static function addBeam(node:Node, ship:Ship):void {
+            var beamFX:BeamFX = EntityContainer.getReserve(EntityContainer.INDEX_BEAMS) as BeamFX;
+            if (!beamFX)
+                beamFX = new BeamFX();
+            beamFX.initBeam(game, node.nodeData.x, node.nodeData.y, ship.x, ship.y, Globals.teamColors[node.nodeData.team], node);
+            EntityContainer.addEntity(EntityContainer.INDEX_BEAMS, beamFX);
         }
 
-        public static function addPulse(_Node:Node, _Color:uint, _type:int, _delay:Number = 0):void {
-            var _NodePulse:NodePulse = EntityContainer.getReserve(EntityContainer.INDEX_PULSES) as NodePulse;
-            if (!_NodePulse)
-                _NodePulse = new NodePulse();
-            _NodePulse.initPulse(game, _Node, _Color, _type, _delay);
-            EntityContainer.addEntity(EntityContainer.INDEX_PULSES, _NodePulse);
+        public static function addPulse(node:Node, color:uint, type:int, delay:Number = 0):void {
+            var nodePulse:NodePulse = EntityContainer.getReserve(EntityContainer.INDEX_PULSES) as NodePulse;
+            if (!nodePulse)
+                nodePulse = new NodePulse();
+            nodePulse.initPulse(game, node, color, type, delay);
+            EntityContainer.addEntity(EntityContainer.INDEX_PULSES, nodePulse);
         }
 
-        public static function addDarkPulse(_Node:Node, _Color:uint, _type:int, _maxSize:Number, _rate:Number, _angle:Number, _delay:Number = 0):void {
-            var _DarkPulse:DarkPulse = EntityContainer.getReserve(EntityContainer.INDEX_DARKPLUSES) as DarkPulse;
-            if (!_DarkPulse)
-                _DarkPulse = new DarkPulse();
-            _DarkPulse.initPulse(game, _Node, _Color, _type, _maxSize, _rate, _angle, _delay);
-            EntityContainer.addEntity(EntityContainer.INDEX_DARKPLUSES, _DarkPulse);
+        public static function addDarkPulse(node:Node, color:uint, type:int, maxSize:Number, rate:Number, angle:Number, delay:Number = 0):void {
+            var darkPulse:DarkPulse = EntityContainer.getReserve(EntityContainer.INDEX_DARKPLUSES) as DarkPulse;
+            if (!darkPulse)
+                darkPulse = new DarkPulse();
+            darkPulse.initPulse(game, node, color, type, maxSize, rate, angle, delay);
+            EntityContainer.addEntity(EntityContainer.INDEX_DARKPLUSES, darkPulse);
         }
 
         // type 0为扩散式 1为收缩式
-        public static function addFade(_x:Number, _y:Number, _size:Number, _color:uint, _type:int):void {
-            var _SelectFade:SelectFade = EntityContainer.getReserve(EntityContainer.INDEX_FADES) as SelectFade;
-            if (!_SelectFade)
-                _SelectFade = new SelectFade();
-            _SelectFade.initSelectFade(game, _x, _y, _size, _color, _type);
-            EntityContainer.addEntity(EntityContainer.INDEX_FADES, _SelectFade);
+        public static function addFade(x:Number, y:Number, size:Number, color:uint, type:int):void {
+            var selectFade:SelectFade = EntityContainer.getReserve(EntityContainer.INDEX_FADES) as SelectFade;
+            if (!selectFade)
+                selectFade = new SelectFade();
+            selectFade.initSelectFade(game, x, y, size, color, type);
+            EntityContainer.addEntity(EntityContainer.INDEX_FADES, selectFade);
         }
 
         // 摧毁飞船特效
-        public static function addFlash(_x:Number, _y:Number, _Color:uint, _foreground:Boolean):void {
-            var _Flash:FlashFX = EntityContainer.getReserve(EntityContainer.INDEX_FLASHES) as FlashFX;
-            if (!_Flash)
-                _Flash = new FlashFX();
-            _Flash.initExplosion(game, _x, _y, _Color, _foreground);
-            EntityContainer.addEntity(EntityContainer.INDEX_FLASHES, _Flash);
+        public static function addFlash(x:Number, y:Number, color:uint, foreground:Boolean):void {
+            var flash:FlashFX = EntityContainer.getReserve(EntityContainer.INDEX_FLASHES) as FlashFX;
+            if (!flash)
+                flash = new FlashFX();
+            flash.initExplosion(game, x, y, color, foreground);
+            EntityContainer.addEntity(EntityContainer.INDEX_FLASHES, flash);
         }
 
-        public static function addExplosion(_x:Number, _y:Number, _Color:uint, _foreground:Boolean):void {
-            var _Explode:ExplodeFX = EntityContainer.getReserve(EntityContainer.INDEX_EXPLOSIONS) as ExplodeFX;
-            if (!_Explode)
-                _Explode = new ExplodeFX();
-            _Explode.initExplosion(game, _x, _y, _Color, _foreground);
-            EntityContainer.addEntity(EntityContainer.INDEX_EXPLOSIONS, _Explode);
+        public static function addExplosion(x:Number, y:Number, color:uint, foreground:Boolean):void {
+            var explode:ExplodeFX = EntityContainer.getReserve(EntityContainer.INDEX_EXPLOSIONS) as ExplodeFX;
+            if (!explode)
+                explode = new ExplodeFX();
+            explode.initExplosion(game, x, y, color, foreground);
+            EntityContainer.addEntity(EntityContainer.INDEX_EXPLOSIONS, explode);
         }
 
     }

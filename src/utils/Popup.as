@@ -33,7 +33,7 @@ package utils {
          * <p>TYPE_INFORMATION title
          * <p>TYPE_CHOOSE info
          */
-        public function Popup(type:int = TYPE_INFORMATION, ...prop) {
+        public function Popup(type:int = TYPE_INFORMATION, ... prop) {
             this.type = type;
             cover = new Quad(1024, 768);
             cover.alpha = 0;
@@ -50,8 +50,7 @@ package utils {
             addChild(cover);
             addChild(popupContainer);
             popupContainer.addChild(bg);
-            switch(type)
-            {
+            switch (type) {
                 case TYPE_INFORMATION:
                     var title:TextField = new TextField(512, 40, prop[0], "Downlink18", -1, COLOR);
                     title.x = 256;
@@ -61,12 +60,13 @@ package utils {
                     popupContainer.addChild(title);
                     break;
                 case TYPE_CHOOSE:
-                    var info:TextField = new TextField (512, 200, prop[0], "Downlink18", -1, COLOR);
+                    var info:TextField = new TextField(512, 200, prop[0], "Downlink18", -1, COLOR);
                     info.x = 256;
                     info.y = 180;
                     info.vAlign = info.hAlign = "center";
                     info.touchable = false;
                     popupContainer.addChild(info);
+                    break;
                 default:
                     break;
             }
