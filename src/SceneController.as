@@ -12,6 +12,7 @@ package {
     import utils.Popup;
     import Game.ReplayScene;
     import utils.ReplayData;
+    import Game.EditorScene;
 
     public class SceneController extends Sprite {
         private static var _s:SceneController;
@@ -20,6 +21,7 @@ package {
         public var titleMenu:TitleMenu;
         public var gameScene:GameScene;
         public var replayScene:ReplayScene;
+        public var editorScene:EditorScene;
         public var endScene:EndScene;
         public var debug:Debug;
         public var ui:UIContainer;
@@ -32,6 +34,7 @@ package {
             titleMenu = new TitleMenu(this);
             gameScene = new GameScene(this);
             replayScene = new ReplayScene(this);
+            editorScene = new EditorScene(this);
             endScene = new EndScene(this);
             debug = new Debug(this);
             ui = new UIContainer(this);
@@ -41,6 +44,7 @@ package {
             addChild(titleMenu);
             addChild(gameScene);
             addChild(replayScene);
+            addChild(editorScene);
             addChild(endScene);
             addChild(ui);
             addChild(debug);
@@ -136,7 +140,9 @@ package {
 
         /**编辑关卡*/
         public function editorMap():void {
-
+            speedMult = 1;
+            ui.initEditor();
+            editorScene.init();
         }
 
         /**弹出警告
@@ -153,28 +159,36 @@ package {
         }
 
         /**退出到标题界面
-         * @param type 0为直接退出关卡，1为从关卡退出且转到下一关，2为从退出动画进入标题界面
+         * @param type 0为直接退出关卡，1为从关卡退出且转到下一关，2为从退出动画进入标题界面，3为从地编退出
          */
         public function exit2TitleMenu(type:int = -1):void {
             switch (type) {
                 case 0:
-                    initTitleMenu()
-                    titleMenu.animateIn()
+                    initTitleMenu();
+                    titleMenu.animateIn();
+                    ui.deinitLevel();
                     break;
                 case 1:
-                    initTitleMenu()
-                    titleMenu.animateIn()
-                    titleMenu.nextLevel()
+                    initTitleMenu();
+                    titleMenu.animateIn();
+                    titleMenu.nextLevel();
+                    ui.deinitLevel();
                     break;
                 case 2:
                     initTitleMenu(1);
+                    ui.deinitLevel();
                     // applyFilter();
                     break;
+                case 3:
+                    initTitleMenu();
+                    titleMenu.animateIn();
+                    ui.deinitEditor();
+                    break;
                 default:
-                    initTitleMenu()
+                    initTitleMenu();
+                    ui.deinitLevel();
                     break;
             }
-            ui.deinitLevel()
         }
 
         /**播放通关动画*/

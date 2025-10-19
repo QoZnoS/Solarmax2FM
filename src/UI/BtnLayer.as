@@ -8,6 +8,7 @@ package UI {
     import UI.Component.FleetSlider;
     import starling.display.BlendMode;
     import Game.ReplayScene;
+    import Game.EditorScene;
 
     public class BtnLayer extends Sprite {
         /**
@@ -23,6 +24,7 @@ package UI {
 
         private var game:GameScene;
         private var repScene:ReplayScene;
+        private var editorScene:EditorScene;
 
         private var scene:SceneController;
 
@@ -30,6 +32,7 @@ package UI {
             this.scene = _ui.scene
             this.game = _ui.scene.gameScene;
             this.repScene = _ui.scene.replayScene;
+            this.editorScene = _ui.scene.editorScene;
             gameBtn = new Vector.<MenuButton>(3, true);
             speedBtns = new Vector.<SpeedButton>(3, true);
             addLayer = new Sprite;
@@ -127,9 +130,41 @@ package UI {
             gameBtn[0].removeEventListener("clicked", on_closeBtn);
             gameBtn[1].removeEventListener("clicked", on_pauseBtn);
             gameBtn[2].removeEventListener("clicked", on_restartBtn);
+            gameBtn = new Vector.<MenuButton>(3, true);
+            speedBtns = new Vector.<SpeedButton>(3, true);
             fleetSlider.deInit();
             addLayer.removeChild(fleetSlider)
             Starling.current.nativeStage.removeEventListener("mouseWheel", on_wheel);
+            removeChild(addLayer);
+            removeChild(normalLayer);
+        }
+
+        public function initEditor():void {
+            touchable = true;
+            //#region 界面按钮
+            gameBtn[0] = new MenuButton("btn_close");
+            for (var i:int = 0; i < 1; i++) {
+                var _btn:MenuButton = gameBtn[i]
+                i == 0 ? _btn.x = 15 + Globals.margin : _btn.x = gameBtn[i - 1].x + gameBtn[i - 1].width * 1.1;
+                _btn.y = 124;
+                _btn.init();
+                addLayer.addChild(_btn);
+            }
+            gameBtn[0].addEventListener("clicked", on_closeBtn);
+            //#endregion
+            addChild(addLayer);
+            addChild(normalLayer);
+        }
+
+        public function deinitEditor():void {
+            for each (var _btn:MenuButton in gameBtn) {
+                if (!_btn)
+                    continue;
+                _btn.deInit();
+                addLayer.removeChild(_btn);
+            }
+            gameBtn[0].removeEventListener("clicked", on_closeBtn);
+            gameBtn = new Vector.<MenuButton>(3, true);
             removeChild(addLayer);
             removeChild(normalLayer);
         }
@@ -141,6 +176,8 @@ package UI {
                 game.quit();
             if (repScene.visible)
                 repScene.quit();
+            if (editorScene.visible)
+                editorScene.quit();
         }
 
         private function on_pauseBtn():void {

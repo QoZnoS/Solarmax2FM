@@ -42,6 +42,7 @@ package Menus {
         public var quadImage:Image;
         public var shapeImage:Image;
         public var menuBtn:MenuButton;
+        public var editorBtn:MenuButton;
         public var optionsMenu:StartMenu;
         public var currentIndex:int;
         public var barrierData:Array; // 三维数组，第一层为关卡，第二层为障碍线，第三层为 [中点X，中点Y，距离，角度]
@@ -177,6 +178,12 @@ package Menus {
             menuBtn.y = 124;
             menuBtn.blendMode = "add";
             addChild(menuBtn);
+            editorBtn = new MenuButton("btn_close");
+            editorBtn.x = menuBtn.width + 15 + Globals.margin * 2;
+            editorBtn.y = 120;
+            editorBtn.blendMode = "add";
+            editorBtn.rotation = Math.PI / 4;
+            addChild(editorBtn);
             optionsMenu = new StartMenu(this);
             addChild(optionsMenu);
             optionsMenu.visible = false;
@@ -327,6 +334,8 @@ package Menus {
             dragging = false;
             menuBtn.init();
             menuBtn.addEventListener("clicked", on_menu);
+            editorBtn.init();
+            editorBtn.addEventListener("clicked", on_editor);
             levels.updateLevels();
             for (var i:int = 0; i < difficultyButtons.length; i++) {
                 difficultyButtons[i].init();
@@ -346,6 +355,8 @@ package Menus {
             }
             menuBtn.deInit();
             menuBtn.removeEventListener("clicked", on_menu);
+            editorBtn.deInit();
+            editorBtn.removeEventListener("clicked", on_editor);
             removeEventListener("enterFrame", update);
             touchQuad.removeEventListener("touch", on_touch);
         }
@@ -356,6 +367,13 @@ package Menus {
             //  menuBtn.deInit();
             //  menuBtn.removeEventListener("clicked", on_menu);
             optionsMenu.animateIn();
+        }
+
+        public function on_editor(click:Event):void {
+            Starling.juggler.advanceTime(Globals.transitionSpeed);
+            scene.editorMap();
+            animateOut();
+            GS.playClick();
         }
 
         public function on_quit(click:Event):void {

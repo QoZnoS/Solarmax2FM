@@ -6,13 +6,12 @@ package UI {
 
     public class UIContainer extends Sprite {
         private var _gameContainer:Sprite;
-
-
         private var _entityL:EntityLayer;
         private var _controlL:Sprite;
         private var _behaviorB:QuadBatch;
         private var _touchCL:TouchCtrlLayer;
         private var _tradiCL:TraditionalCtrlLayer;
+        private var _editorCL:EditorCtrlLayer;
         private var _btnL:BtnLayer;
 
         public var touchQuad:Quad;
@@ -32,6 +31,7 @@ package UI {
             _behaviorB = new QuadBatch();
             _touchCL = new TouchCtrlLayer(this);
             _tradiCL = new TraditionalCtrlLayer(this);
+            _editorCL = new EditorCtrlLayer(this);
             _btnL = new BtnLayer(this);
 
             _gameContainer.addChild(_entityL);
@@ -39,11 +39,12 @@ package UI {
             _controlL.addChild(_behaviorB);
             _controlL.addChild(_touchCL);
             _controlL.addChild(_tradiCL);
+            _controlL.addChild(_editorCL);
             addChild(_gameContainer)
             addChild(touchQuad);
             addChild(_btnL);
 
-            _touchCL.visible = _tradiCL.visible = touchQuad.touchable = _gameContainer.touchable = false;
+            _touchCL.visible = _tradiCL.visible = _editorCL.visible = touchQuad.touchable = _gameContainer.touchable = false;
             touchQuad.alpha = 0;
 
             _gameContainer.x = _gameContainer.pivotX = 512;
@@ -118,10 +119,52 @@ package UI {
             _entityL.reset();
         }
 
+        public function initEditor():void {
+            _editorCL.visible = true;
+            _editorCL.init();
+            _entityL.init();
+            _btnL.initEditor();
+            touchQuad.touchable = true;
+
+            _gameContainer.alpha = 0;
+            _gameContainer.scaleX = _gameContainer.scaleY = _scale * 0.7;
+            _gameContainer.y = 354;
+            _btnL.alpha = 0;
+            Starling.juggler.tween(_gameContainer, Globals.transitionSpeed, {"alpha": 1,
+                    "scaleX": _scale,
+                    "scaleY": _scale,
+                    "y": 384,
+                    "transition": "easeInOut"});
+            Starling.juggler.tween(_btnL, Globals.transitionSpeed, {"alpha": 1,
+                    "transition": "easeInOut"});
+        }
+
+        public function deinitEditor():void {
+            _editorCL.visible = false;
+            _editorCL.deinit();
+            touchQuad.touchable = false;
+
+            Starling.juggler.removeTweens(_gameContainer);
+            Starling.juggler.removeTweens(_btnL);
+            Starling.juggler.tween(_gameContainer, Globals.transitionSpeed, {"alpha": 0,
+                    "scaleX": _scale * 0.7,
+                    "scaleY": _scale * 0.7,
+                    "y": 354,
+                    "transition": "easeInOut"});
+            Starling.juggler.tween(_btnL, Globals.transitionSpeed, {"alpha": 0,
+                    "onComplete": function():void {
+                        _btnL.deinitEditor();
+                        _entityL.deinit();
+                    },
+                    "transition": "easeInOut"});
+        }
+
         public function update():void {
             _behaviorB.reset();
             _entityL.reset();
             Globals.touchControls ? _touchCL.draw() : _tradiCL.draw();
+            if (_editorCL.visible)
+                _editorCL.draw();
         }
 
         public function set scale(scale:Number):void {

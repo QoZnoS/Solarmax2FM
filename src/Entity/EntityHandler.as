@@ -26,6 +26,8 @@ package Entity {
                 rng = new Rng(game.rng.nextInt(), Rng.X32);
             else if (replay.visible)
                 rng = new Rng(replay.rng.nextInt(), Rng.X32);
+            else 
+                rng = new Rng(0, Rng.X32);
             var actionDelay:Number = ("actionDelay" in data) ? data.actionDelay : -1;
             var startDelay:Number = ("startDelay" in data) ? data.startDelay : -1;
             enemyAI.initAI(game, rng, data.team, data.type, actionDelay);
@@ -41,6 +43,8 @@ package Entity {
                 rng = new Rng(game.rng.nextInt(), Rng.X32);
             else if (replay.visible)
                 rng = new Rng(replay.rng.nextInt(), Rng.X32);
+            else 
+                rng = new Rng(0, Rng.X32);
             node.initNode(game, rng, data);
             EntityContainer.addEntity(EntityContainer.INDEX_NODES, node);
             node.tag = EntityContainer.nodes.length - 1;
@@ -61,6 +65,8 @@ package Entity {
                 rng = new Rng(game.rng.nextInt(), Rng.X32);
             else if (replay.visible)
                 rng = new Rng(replay.rng.nextInt(), Rng.X32);
+            else 
+                rng = new Rng(0, Rng.X32);
             ship.initShip(game, rng, team, node, productionEffect);
             EntityContainer.addEntity(EntityContainer.INDEX_SHIPS, ship);
             return ship;
