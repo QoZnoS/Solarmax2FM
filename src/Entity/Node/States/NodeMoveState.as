@@ -67,6 +67,9 @@ package Entity.Node.States {
                 orbitDist = Math.sqrt(dx * dx + dy * dy);
                 orbitAngle = Math.atan2(dy, dx);
             }
+            _originalImageScale = image.scaleX;
+            _originalHaloScale = halo.scaleX;
+            _originalGlowScale = glow.scaleX;
         }
 
         public function deinit():void {
@@ -161,6 +164,20 @@ package Entity.Node.States {
 
         public function get stateType():String {
             return NodeStateFactory.MOVE;
+        }
+
+        private var _scale:Number = 1;
+        public function get scale():Number {
+            return _scale;
+        }
+        private var _originalImageScale:Number;
+        private var _originalHaloScale:Number;
+        private var _originalGlowScale:Number;
+        public function set scale(val:Number):void {
+            _scale = val;
+            image.scaleX = image.scaleY = _originalImageScale * _scale;
+            halo.scaleX = halo.scaleY = _originalHaloScale * _scale;
+            glow.scaleX = glow.scaleY = _originalGlowScale * _scale;
         }
     }
 }

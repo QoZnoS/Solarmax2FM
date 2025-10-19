@@ -24,12 +24,12 @@ package Game {
         public function ReplayScene(scene:SceneController) {
             super(scene);
             visible = false;
+            EntityHandler.replay = this;
         }
 
         public function init(rep:ReplayData):void {
             this.alpha = 1;
             this.visible = true;
-            EntityHandler.replay = this;
             this.rep = rep;
             this.repBak = rep.deepCopy;
             rep.startRead();
