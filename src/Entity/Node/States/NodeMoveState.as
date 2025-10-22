@@ -179,5 +179,9 @@ package Entity.Node.States {
             halo.scaleX = halo.scaleY = _originalHaloScale * _scale;
             glow.scaleX = glow.scaleY = _originalGlowScale * _scale;
         }
+
+        public function set visible(val:Boolean):void {
+            image.visible = halo.visible = glow.visible = val;
+        }
     }
 }

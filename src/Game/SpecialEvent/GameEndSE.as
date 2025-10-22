@@ -122,9 +122,7 @@ package Game.SpecialEvent {
                     if (triggerTimer > 0)
                         break;
 
-                    boss.moveState.image.visible = false;
-                    boss.moveState.halo.visible = false;
-                    boss.moveState.glow.visible = false;
+                    boss.moveState.visible = false;
                     boss.unloadShips();
                     state = STATE_END;
                     darkPulse.scaleX = darkPulse.scaleY = 0;

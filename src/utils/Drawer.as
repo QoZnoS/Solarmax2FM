@@ -77,6 +77,27 @@ package utils
             }
         }
 
+        /**
+         * @param layer 
+         * @param x1 
+         * @param y1 
+         * @param x2 
+         * @param y2 
+         * @param color 
+         * @param width 
+         * @param alpha 
+         * @param progress 
+         */
+        public static function drawTweenedLine(layer:QuadBatch, x1:Number, y1:Number, x2:Number, y2:Number, color:uint, width:Number = 2, alpha:Number = 1, progress:Number = 1):void {
+            var dx:Number = x2 - x1;
+            var dy:Number = y2 - y1;
+            var angle:Number = Math.atan2(dy, dx);
+            var distance:Number = Math.sqrt(dx * dx + dy * dy) * progress;
+            var xEnd:Number = x1 + Math.cos(angle) * distance;
+            var yEnd:Number = y1 + Math.sin(angle) * distance;
+            drawLine(layer, x1, y1, xEnd, yEnd, color, width, alpha);
+        }
+
         /**绘制圆形
          * @param layer 图层，关卡内请使用<code>UIContainer.behaviorBatch</code>，关卡外需自备图层
          * @param x,y 圆心坐标

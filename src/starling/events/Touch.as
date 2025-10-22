@@ -59,6 +59,8 @@ package starling.events
         public var hoverNode:Node;
         public var downNode:Node;
         public var downNodes:Array;
+        public var state:String;
+        public var startPoint:Point;
         
         /** Helper object. */
         private static var sHelperMatrix:Matrix = new Matrix();

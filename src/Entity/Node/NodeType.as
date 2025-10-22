@@ -46,6 +46,13 @@ package Entity.Node {
             }
         }
 
+        public static function getTypeVector():Vector.<String> {
+            var types:Vector.<String> = new Vector.<String>;
+            for each(var nodeXml:XML in LevelData.nodeData.node)
+                types.push(String(nodeXml.@name));
+            return types;
+        }
+
         /** 获取默认天体大小 */
         public static function getDefaultSize(type:String):Number {
             return LevelData.nodeData.node.(@name == type).defaultSize;

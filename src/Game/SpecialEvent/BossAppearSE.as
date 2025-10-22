@@ -45,9 +45,7 @@ package Game.SpecialEvent {
 
                     // 生成星核
                     triggerNode = EntityHandler.addNode(triggerNodeData);
-                    triggerNode.moveState.image.visible = false;
-                    triggerNode.moveState.halo.visible = false;
-                    triggerNode.moveState.glow.visible = false;
+                    triggerNode.moveState.visible = false;
 
                     // 播放特效
                     for (i = 0; i < 24; i++) {

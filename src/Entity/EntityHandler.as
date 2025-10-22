@@ -83,9 +83,7 @@ package Entity {
                     ship.active = false;
                 }
             }
-            node.moveState.image.visible = false;
-            node.moveState.halo.visible = false;
-            node.moveState.glow.visible = false;
+            node.moveState.visible = false;
             node.active = false;
         }
 
