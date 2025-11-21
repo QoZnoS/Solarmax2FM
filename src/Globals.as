@@ -5,6 +5,8 @@ package {
     import utils.ReplayData;
 
     public class Globals {
+        public static const defaultColors:Array = [0xCCCCCC, 0x5FB6FF, 0xFF5D93, 0xFF8C5A, 0xCAFF6E, 0x999999, 0x000000];
+
         public static var main:Main;
         public static var level:int = 0; // 关卡
         public static var scaleFactor:Number = 2; // 比例因子
@@ -60,9 +62,10 @@ package {
         public static function initTeam():void {
             fileStream = new FileStream();
             teamCount = LevelData.rawData[Globals.currentData].team.length;
-            if (teamCount == 7)
-                return;
+            if (teamCount < 7)
+                teamCount = 7;
             // 重置数组
+            teamColors = defaultColors.slice()
             teamCaps = new Array();
             teamPops = new Array();
             teamShipSpeeds = new Array();

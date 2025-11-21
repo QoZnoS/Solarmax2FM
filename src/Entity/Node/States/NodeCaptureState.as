@@ -2,10 +2,7 @@ package Entity.Node.States {
     import Entity.Node;
     import Entity.Node.NodeData;
     import Entity.Ship;
-    import Entity.Node.NodeType;
-    import utils.Drawer;
     import Entity.Node.NodeStaticLogic;
-    import UI.UIContainer;
 
     public class NodeCaptureState implements INodeState {
 
@@ -32,13 +29,15 @@ package Entity.Node.States {
             processTeamChange(capturingTeam);
             captureRate = calculateCaptureRate(capturingTeam);
             updateNodeHP(capturingTeam, captureRate, dt);
-            updateCaptureUI(capturingTeam);
+            var hpRate:Number = 0;
+            if (node.capturing || (nodeData.hp != MAX_HP && captureTeam == capturingTeam && nodeData.team != NEUTRAL_TEAM))
+                hpRate = nodeData.hp / MAX_HP;
+            node.moveState.updateCaptureLabel(capturingTeam, captureTeam, ships[capturingTeam].length, hpRate);
         }
 
         private static const MAX_HP:Number = 100;
         private static const NEUTRAL_TEAM:int = 0;
         private static const CAPTURE_RATE_MULTIPLIER:Number = 10;
-        private static const START_ANGLE:Number = -Math.PI / 2;
 
         private function checkCaptureState():Boolean {
             for (var teamId:int = 0; teamId < ships.length; teamId++) {
@@ -81,19 +80,6 @@ package Entity.Node.States {
                 }
             }
             nodeData.hp = Math.max(0, Math.min(MAX_HP, nodeData.hp));
-        }
-
-        private function updateCaptureUI(capturingTeam:int):void {
-            if (shouldDrawCaptureArc()) {
-                var arcAngle:Number = START_ANGLE - Math.PI * (nodeData.hp / MAX_HP);
-                Drawer.drawCircle(UIContainer.behaviorBatch, nodeData.x, nodeData.y, Globals.teamColors[captureTeam], nodeData.lineDist, nodeData.lineDist - 2, false, 0.1);
-                Drawer.drawCircle(UIContainer.behaviorBatch, nodeData.x, nodeData.y, Globals.teamColors[captureTeam], nodeData.lineDist, nodeData.lineDist - 2, false, 0.7, nodeData.hp / MAX_HP, arcAngle);
-            }
-            node.moveState.updateCaptureLabel(capturingTeam, ships[capturingTeam].length);
-        }
-
-        private function shouldDrawCaptureArc():Boolean {
-            return node.capturing || (nodeData.hp != MAX_HP && captureTeam == capturingTeam && nodeData.team != NEUTRAL_TEAM);
         }
 
         private function processTeamChange(capturingTeam:int):void {

@@ -5,6 +5,7 @@ package Entity.Node.States {
     import Entity.Node.NodeData;
     import Entity.EntityContainer;
     import UI.UIContainer;
+    import utils.Drawer;
 
     public class NodeMoveState implements INodeState {
         public var node:Node;
@@ -53,7 +54,6 @@ package Entity.Node.States {
                 textField.vAlign = textField.hAlign = "center";
                 textField.pivotX = 30;
                 textField.pivotY = 24;
-                textField.visible = false;
                 labels.push(textField);
             }
             for (i = 0; i < labels.length; i++)
@@ -87,8 +87,6 @@ package Entity.Node.States {
             orbitSpeed = nodeData.orbitSpeed;
             updateImagePositions();
             label.visible = false;
-            for (var i:int = 0; i < labels.length; i++)
-                labels[i].visible = false;
             if (orbitNode)
                 updateOrbit(dt);
             updateGrow(dt)
@@ -125,7 +123,28 @@ package Entity.Node.States {
             }
         }
 
-        public function updateConflictLabel(teamId:int, labelAngle:Number, shipCount:int):void {
+        private static const START_ANGLE:Number = -Math.PI / 2; // 起始角度（12点钟方向）
+        private static const ARC_ADJUSTMENT:Number = 0.006366197723675814; // 弧线绘制微调值
+
+        public function updateConflictLabels(activeTeams:Vector.<int>, totalShips:int):void {
+            var currentAngle:Number = START_ANGLE - Math.PI * node.ships[activeTeams[0]].length / totalShips;
+            var labelAngleStep:Number = Math.PI * 2 / activeTeams.length;
+            for (var i:int = 0; i < Globals.teamCount; i++) {
+                if (activeTeams.indexOf(i) == -1){
+                    labels[i].visible = false;
+                    continue;
+                }
+                var teamId:int = i;
+                var shipCount:int = node.ships[teamId].length;
+                var arcRatio:Number = shipCount / totalShips;
+                Drawer.drawCircle(UIContainer.behaviorBatch, nodeData.x, nodeData.y, Globals.teamColors[teamId], nodeData.lineDist, nodeData.lineDist - 2, false, 1, arcRatio - ARC_ADJUSTMENT, currentAngle + 0.01);
+                var labelAngle:Number = START_ANGLE + teamId * labelAngleStep;
+                node.moveState.updateConflictLabel(teamId, labelAngle, shipCount);
+                currentAngle += Math.PI * 2 * arcRatio;
+            }
+        }
+
+        private function updateConflictLabel(teamId:int, labelAngle:Number, shipCount:int):void {
             var teamLabel:TextField = labels[teamId];
             teamLabel.x = nodeData.x + Math.cos(labelAngle) * labelDist;
             teamLabel.y = nodeData.y + Math.sin(labelAngle) * labelDist;
@@ -133,13 +152,23 @@ package Entity.Node.States {
             teamLabel.visible = (teamLabel.color > 0);
         }
 
-        public function updateCaptureLabel(capturingTeam:int, shipCount:int):void{
+        public function updateCaptureLabel(capturingTeam:int, captureTeam:int, shipCount:int, hpRate:Number):void {
             if (capturingTeam != 0 && shipCount > 0) {
                 label.text = shipCount.toString();
                 label.color = Globals.teamColors[capturingTeam];
                 label.visible = (label.color > 0);
             } else 
                 label.visible = false;
+            if (hpRate != 0) {
+                var arcAngle:Number = START_ANGLE - Math.PI * hpRate;
+                Drawer.drawCircle(UIContainer.behaviorBatch, nodeData.x, nodeData.y, Globals.teamColors[captureTeam], nodeData.lineDist, nodeData.lineDist - 2, false, 0.1);
+                Drawer.drawCircle(UIContainer.behaviorBatch, nodeData.x, nodeData.y, Globals.teamColors[captureTeam], nodeData.lineDist, nodeData.lineDist - 2, false, 0.7, hpRate, arcAngle);
+            }
+        }
+
+        public function hideConflictLabels():void {
+            for (var i:int = 0; i < labels.length; i++)
+                labels[i].visible = false;
         }
         // #endregion
 
