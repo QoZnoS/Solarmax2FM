@@ -133,11 +133,6 @@ package Entity {
                 triggerTimer = Math.max(0, triggerTimer - dt);
         }
 
-        public function updateAttack(dt:Number):void {
-            if (nodeData.team == 0 && Globals.level != 31)
-                return; // 排除32关以外的中立和无范围天体
-        }
-
         public function updateNodeLinks():void {
             if (nodeData.isBarrier)
                 return;
@@ -279,7 +274,6 @@ package Entity {
 
         // #endregion
         // #region hardAI 特制工具函数
-
         // 返回飞向自身的最强非己方飞船数
         public function hard_getOppTransitShips(team:int):int {
             var ships:Array = [];
@@ -345,9 +339,7 @@ package Entity {
                 return true;
             return false;
         }
-
         // #endregion
-
         // #region 特效与绘图
 
         public function fireBeam(ship:Ship):void {

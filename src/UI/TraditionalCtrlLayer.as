@@ -133,7 +133,7 @@ package UI {
                         Drawer.drawDashedCircle(displayBatch, node2.nodeData.x, node2.nodeData.y, Globals.teamColors[node2.nodeData.team], node2.attackState.attackRange, node2.attackState.attackRange - 2, false, 0.5, 1, 0, 256);
                     if (rightDown && selectedNodes.length > 0) {
                         for each (node1 in selectedNodes) {
-                            if (!(node1.nodeData.isWarp && node1.nodeData.team == Globals.playerTeam))
+                            if (!node1.nodeLinks[Globals.playerTeam].includes(node2))
                                 block = EntityContainer.nodesBlocked(node1, node2);
                             x = node2.nodeData.x;
                             y = node2.nodeData.y;

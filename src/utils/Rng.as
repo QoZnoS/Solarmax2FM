@@ -1,10 +1,8 @@
 package utils {
-
     public class Rng {
         private var _state:Vector.<uint>;
         private var _seed:uint;
-
-        public var generator:Generator;
+        private var _generator:Generator;
 
         // RNG类型，数字越大随机效果越好
         public static const X128:String = "Xorshift128";
@@ -17,13 +15,13 @@ package utils {
             _seed = seed
             switch (type) {
                 case X128:
-                    generator = new Xorshift128(seed)
+                    _generator = new Xorshift128(seed)
                     break;
                 case X32:
-                    generator = new Xorshift32(seed)
+                    _generator = new Xorshift32(seed)
                     break;
                 case X0:
-                    generator = new LCG(seed)
+                    _generator = new LCG(seed)
                     break;
                 default:
                     break;
@@ -34,21 +32,21 @@ package utils {
          * 步进生成uint
          */
         public function nextInt():uint {
-            return generator.nextInt()
+            return _generator.nextInt()
         }
 
         /**
          * 生成 [0, 1) 范围的浮点数
          */
         public function nextNumber():Number {
-            return generator.nextNumber()
+            return _generator.nextNumber()
         }
 
         /**
          * 生成 [min, max] 范围的整数
          */
         public function nextRange(min:int, max:int):int {
-            return generator.nextRange(min, max)
+            return _generator.nextRange(min, max)
         }
 
         /**

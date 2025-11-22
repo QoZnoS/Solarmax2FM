@@ -26,9 +26,9 @@ package Entity.Node.States {
         }
 
         public function update(dt:Number):void {
-            processTeamChange(capturingTeam);
-            captureRate = calculateCaptureRate(capturingTeam);
-            updateNodeHP(capturingTeam, captureRate, dt);
+            processTeamChange();
+            captureRate = calculateCaptureRate();
+            updateNodeHP(captureRate, dt);
             var hpRate:Number = 0;
             if (node.capturing || (nodeData.hp != MAX_HP && captureTeam == capturingTeam && nodeData.team != NEUTRAL_TEAM))
                 hpRate = nodeData.hp / MAX_HP;
@@ -52,7 +52,7 @@ package Entity.Node.States {
             return node.capturing = false;
         }
 
-        private function calculateCaptureRate(capturingTeam:int):Number {
+        private function calculateCaptureRate():Number {
             // 基础占领速率 = 飞船数 / (天体大小 * 100) * 10
             var rate:Number = (ships[capturingTeam].length / (nodeData.size * 100)) * CAPTURE_RATE_MULTIPLIER;
             // 应用占领速度加权
@@ -60,7 +60,7 @@ package Entity.Node.States {
             return Math.min(rate, MAX_HP);
         }
 
-        private function updateNodeHP(capturingTeam:int, captureRate:Number, dt:Number):void {
+        private function updateNodeHP(captureRate:Number, dt:Number):void {
             var hpChange:Number = 0;
             if (nodeData.team == NEUTRAL_TEAM) { // 中立天体占领逻辑
                 if (captureTeam == capturingTeam) {
@@ -82,7 +82,7 @@ package Entity.Node.States {
             nodeData.hp = Math.max(0, Math.min(MAX_HP, nodeData.hp));
         }
 
-        private function processTeamChange(capturingTeam:int):void {
+        private function processTeamChange():void {
             if (nodeData.team == NEUTRAL_TEAM && nodeData.hp == MAX_HP)
                 NodeStaticLogic.changeTeam(node, captureTeam); // 中立天体完全占领
             else if (nodeData.team != NEUTRAL_TEAM && nodeData.hp == 0 && node.game.winningTeam == -1)

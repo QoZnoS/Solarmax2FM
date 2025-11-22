@@ -65,7 +65,7 @@ package UI {
                     _Tx = localPoint.x;
                     _Ty = localPoint.y;
                     if (touch.hoverNode) { // 绘制目标天体的定位圈
-                        if (!(node.nodeData.isWarp && node.nodeData.team == Globals.playerTeam))
+                        if (!node.nodeLinks[Globals.playerTeam].includes(touch.hoverNode))
                             _Block = EntityContainer.nodesBlocked(node, touch.hoverNode);
                         _Tx = touch.hoverNode.nodeData.x;
                         _Ty = touch.hoverNode.nodeData.y;
@@ -73,7 +73,7 @@ package UI {
                             Drawer.drawCircle(displayBatch, _Tx, _Ty, 0xFF3333, touch.hoverNode.nodeData.lineDist - 4, touch.hoverNode.nodeData.lineDist - 7, false, 0.8);
                         else
                             Drawer.drawCircle(displayBatch, _Tx, _Ty, _Color, touch.hoverNode.nodeData.lineDist - 4, touch.hoverNode.nodeData.lineDist - 7, false, 0.8);
-                    } else if (!(node.nodeData.isWarp && node.nodeData.team == Globals.playerTeam))
+                    } else if (!node.nodeLinks[Globals.playerTeam].includes(touch.hoverNode))
                         _Block = lineBlocked(node.nodeData.x, node.nodeData.y, _Tx, _Ty);
                     dx = _Tx - node.nodeData.x;
                     dy = _Ty - node.nodeData.y;

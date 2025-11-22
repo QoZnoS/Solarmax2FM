@@ -138,7 +138,7 @@ package Entity.Node.States {
                 var shipCount:int = node.ships[teamId].length;
                 var arcRatio:Number = shipCount / totalShips;
                 Drawer.drawCircle(UIContainer.behaviorBatch, nodeData.x, nodeData.y, Globals.teamColors[teamId], nodeData.lineDist, nodeData.lineDist - 2, false, 1, arcRatio - ARC_ADJUSTMENT, currentAngle + 0.01);
-                var labelAngle:Number = START_ANGLE + teamId * labelAngleStep;
+                var labelAngle:Number = START_ANGLE + activeTeams.indexOf(i) * labelAngleStep;
                 node.moveState.updateConflictLabel(teamId, labelAngle, shipCount);
                 currentAngle += Math.PI * 2 * arcRatio;
             }
