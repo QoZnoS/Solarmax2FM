@@ -154,8 +154,8 @@ package Entity.Node.States {
 
         public function updateCaptureLabel(capturingTeams:Vector.<int>, captureTeam:int, shipCounts:Array, hpRate:Number):void {
             const labelAngleStep:Number = Math.min(Math.PI * 2 / Globals.maxMarginTeam, Math.PI * 2 / capturingTeams.length);
-            // const startAngle:Number = capturingTeams.length == 1 ? 1.03037682652 : -Math.PI / 2;
-            const startAngle:Number = 1.03037682652;
+            // const startAngle:Number = capturingTeams.length == 1 ? 1.06396404148 : -Math.PI / 2;
+            const startAngle:Number = 1.06396404148;
             for (var teamId:int = 0; teamId < Globals.teamCount; teamId++) {
                 if (capturingTeams.indexOf(teamId) == -1) {
                     captureLabels[teamId].visible = false;
@@ -172,12 +172,17 @@ package Entity.Node.States {
             }
         }
 
-        private const startEaseX:Number = 100 - Transitions.getTransition(Transitions.EASE_OUT)(1 / Globals.maxMarginTeam) * 80;
-        private const startEaseY:Number = 60 - Transitions.getTransition(Transitions.EASE_OUT)(1 / Globals.maxMarginTeam) * 120;
+        private const startEaseX:Number = 61.8033988750 - Transitions.getTransition(Transitions.EASE_OUT)(1 / Globals.maxMarginTeam) * 118.196601125;
+        private const startEaseY:Number = 57.1894889582 - Transitions.getTransition(Transitions.EASE_OUT)(1 / Globals.maxMarginTeam) * 122.8105110418;
         private function updateCooperateLabel(teamId:int, labelAngle:Number, shipCount:int, teamCount:int):void {
             var teamLabel:TextField = captureLabels[teamId];
-            var easeX:Number = Math.min(180, Transitions.getTransition(Transitions.EASE_OUT)(teamCount / Globals.maxMarginTeam) * 80 + startEaseX);
-            var easeY:Number = Math.min(180, Transitions.getTransition(Transitions.EASE_OUT)(teamCount / Globals.maxMarginTeam) * 120 + startEaseY);
+            var easeX:Number = Math.min(180, Transitions.getTransition(Transitions.EASE_OUT)(teamCount / Globals.maxMarginTeam) * 118.196601125 + startEaseX);
+            var easeY:Number = Math.min(180, Transitions.getTransition(Transitions.EASE_OUT)(teamCount / Globals.maxMarginTeam) * 122.8105110418 + startEaseY);
+            trace(easeX);
+            trace(easeY)
+            trace(labelAngle);
+            trace(Math.cos(labelAngle))
+            trace(Math.sin(labelAngle))
             teamLabel.x = nodeData.x + Math.cos(labelAngle) * easeX * nodeData.size;
             teamLabel.y = nodeData.y + Math.sin(labelAngle) * easeY * nodeData.size;
             teamLabel.text = shipCount.toString();

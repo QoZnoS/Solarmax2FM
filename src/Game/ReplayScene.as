@@ -84,6 +84,7 @@ package Game {
                 frameData.shift();
             }
             countTeamCaps(dt); // 统计兵力
+            GS.update(dt); // 更新音效计时器
             ui.update();
             scene.gameScene.winningGroup = -1;
             EntityHandler.removeAllAI();
