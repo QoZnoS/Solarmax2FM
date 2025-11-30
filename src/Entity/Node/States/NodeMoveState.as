@@ -187,7 +187,7 @@ package Entity.Node.States {
         }
 
         public function updateCooperateLabels(activeTeams:Vector.<int>):void {
-            const labelAngleStep:Number = Math.min(Math.PI * 0.4, Math.PI * 2 / activeTeams.length);
+            const labelAngleStep:Number = Math.min(Math.PI * 0.2, Math.PI * 2 / activeTeams.length);
             const startAngle:Number = 1.03037682652;
             for (var teamId:int = 0; teamId < Globals.teamCount; teamId++) {
                 if (activeTeams.indexOf(teamId) == -1) {
@@ -195,15 +195,15 @@ package Entity.Node.States {
                     continue;
                 }
                 var shipCount:int = node.ships[teamId].length;
-                var labelAngle:Number = startAngle + activeTeams.indexOf(teamId) * labelAngleStep - Math.PI * 0.2 * (activeTeams.length - 1);
+                var labelAngle:Number = startAngle + activeTeams.indexOf(teamId) * labelAngleStep - Math.PI * 0.1 * (activeTeams.length - 1);
                 node.moveState.updateCooperateLabel(teamId, labelAngle, shipCount, activeTeams.length);
             }
         }
 
         private function updateCooperateLabel(teamId:int, labelAngle:Number, shipCount:int, teamCount:int):void {
             var teamLabel:TextField = captureLabels[teamId];
-            var easeX:Number = Transitions.getTransition(Transitions.EASE_OUT)(teamCount / 5) * 80 + 60.96000000000001;
-            var easeY:Number = Transitions.getTransition(Transitions.EASE_OUT)(teamCount / 5) * 120 + 1.440000000000012;
+            var easeX:Number = Transitions.getTransition(Transitions.EASE_OUT)(teamCount / 10) * 80 + 78.32000000000001;
+            var easeY:Number = Transitions.getTransition(Transitions.EASE_OUT)(teamCount / 10) * 120 + 27.48000000000001;
             // trace(100 - Transitions.getTransition(Transitions.EASE_OUT)(1 / 5) * 80)
             // trace(60 - Transitions.getTransition(Transitions.EASE_OUT)(1 / 5) * 120)
             teamLabel.x = nodeData.x + Math.cos(labelAngle) * easeX * nodeData.size;
