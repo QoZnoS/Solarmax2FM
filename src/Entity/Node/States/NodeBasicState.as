@@ -45,8 +45,29 @@ package Entity.Node.States {
             }
             if (winPulseTimer > 0) {
                 winPulseTimer = Math.max(0, winPulseTimer - dt);
-                if (winPulseTimer == 0)
-                    NodeStaticLogic.changeTeam(node, node.game.winningTeam);
+                if (winPulseTimer == 0){
+                    var r:Number = node.rng.nextNumber(); //  根据飞船数随机选择占领势力
+                    var teams:Array = new Array();
+                    var shipNum:int = 0;
+                    var team:int = 0;
+                    for (var teamId:int = 0; teamId < Globals.teamCount; teamId++){
+                        var group:int = Globals.teamGroups[teamId];
+                        if (group == node.game.winningGroup){
+                            teams.push(teamId);
+                            shipNum += Globals.teamPops[teamId];
+                        }
+                    }
+                    var lowerBound:Number = 0; // 随机数因子下界
+                    for each (teamId in teams) {
+                        var upperBound:Number = lowerBound + Globals.teamPops[teamId] / shipNum; // 因子上界
+                        if (r >= lowerBound && r < upperBound){
+                            team = teamId;
+                            break;
+                        }
+                        lowerBound = upperBound; // 新的因子下界
+                    }
+                    NodeStaticLogic.changeTeam(node, team);
+                }
             }
             for (i = 0; i < warps.length; i++) { // 有传送时播放传送门目的地特效
                 if (warps[i])

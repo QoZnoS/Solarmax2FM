@@ -112,10 +112,12 @@ package Entity {
             var dy:Number;
             var ship:Ship;
             var shipinRange:Vector.<Ship> = new Vector.<Ship>;
+            var nodeGroup:int = Globals.teamGroups[node.nodeData.team];
             for each (ship in ships) {
+                var shipGroup:int = Globals.teamGroups[ship.team];
                 if (ship.state != 3 || ship.warping)
                     continue;
-                if ((ship.team == node.nodeData.team) == hostile)
+                if ((shipGroup == nodeGroup) == hostile)
                     continue; // 建议势力
                 dx = ship.x - node.nodeData.x;
                 dy = ship.y - node.nodeData.y;
@@ -178,6 +180,7 @@ package Entity {
 
         // #region AI
         public static function getLengthInTowerRange(node1:Node, node2:Node, team:int):Number {
+            var group:int = Globals.teamGroups[team];
             var node:Node = null;
             var start:Point = null;
             var end:Point = null;
@@ -189,7 +192,8 @@ package Entity {
             var resultEnter:Point; // 线和圆的第一个交点
             var resultExit:Point; // 线和圆的第二个交点
             for each (node in nodes) {
-                if (node.nodeData.team == 0 || node.nodeData.team == team)
+                var nodeGroup:int = Globals.teamGroups[node.nodeData.team]
+                if (node.nodeData.team == 0 || nodeGroup == group)
                     continue;
                 if (node.nodeData.type == NodeType.TOWER || node.nodeData.type == NodeType.STARBASE || node.nodeData.type == NodeType.CAPTURESHIP) {
                     start = new Point(node1.nodeData.x, node1.nodeData.y);

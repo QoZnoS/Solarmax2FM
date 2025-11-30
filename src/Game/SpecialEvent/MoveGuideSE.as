@@ -32,7 +32,7 @@ package Game.SpecialEvent {
                     for each (var node:Node in EntityContainer.nodes)
                         if (node.nodeData.team != Globals.playerTeam)
                             return;
-                    _game.winningTeam = Globals.playerTeam;
+                    _game.winningGroup = Globals.playerTeam;
                     break;
             }
         }

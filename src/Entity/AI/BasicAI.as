@@ -45,6 +45,10 @@ package Entity.AI {
             return _team;
         }
 
+        public function get group():int {
+            return Globals.teamGroups[_team];
+        }
+
         public function set team(team:int):void {
             this._team = team;
         }

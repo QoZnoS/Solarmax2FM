@@ -1,4 +1,5 @@
 package utils {
+
     public class Rng {
         private var _state:Vector.<uint>;
         private var _seed:uint;

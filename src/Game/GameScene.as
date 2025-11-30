@@ -24,6 +24,8 @@ package Game {
     import Game.SpecialEvent.SpecialEventFactory;
     import utils.ReplayData;
     import UI.UIContainer;
+    import flash.geom.Utils3D;
+    import utils.CalcTools;
 
     public class GameScene extends BasicScene {
         // #region 类变量
@@ -31,7 +33,7 @@ package Game {
         public var cover:Quad; // 通关时的遮罩
         public var gameOver:Boolean;
         public var gameOverTimer:Number;
-        public var winningTeam:int;
+        public var winningGroup:int;
 
         public var popLabels:Vector.<TextField>;
 
@@ -112,7 +114,7 @@ package Game {
             cover.alpha = 0;
             gameOver = false;
             gameOverTimer = 3;
-            winningTeam = -1;
+            winningGroup = -1;
             if (levelData.bgm)
                 GS.playMusic(levelData.bgm);
             else
@@ -214,7 +216,7 @@ package Game {
             ui.update();
             for each (var pool:EntityPool in EntityContainer.entityPool) // 依次执行所有实体的更新函数
                 pool.update(dt);
-            winningTeam = victoryType.update(dt);
+            winningGroup = victoryType.update(dt);
             for each (var se:ISpecialEvent in specialEvents) // 依次执行所有特殊事件的更新函数
                 se.update(dt);
             updateGameOver(dt);
@@ -244,7 +246,7 @@ package Game {
 
         public function updateGameOver(dt:Number):void {
             if (!gameOver) { // 通关判断
-                gameOver = (winningTeam != -1);
+                gameOver = (winningGroup != -1);
                 if (gameOver) { // 处理游戏结束时的动画
                     var ripple:int = 1;
                     for each (var node:Node in EntityContainer.nodes) {
@@ -253,7 +255,17 @@ package Game {
                         node.basicState.winPulseTimer = Math.min(ripple * 0.101, ripple * 2.5 / EntityContainer.nodes.length);
                         ripple++;
                     }
-                    cover.color = Globals.teamColors[winningTeam];
+                    var winningColors:Array = new Array();
+                    var colorShips:Array = new Array();
+                    for (var teamId:int = 0; teamId < Globals.teamCount; teamId++){
+                        var group:int = Globals.teamGroups[teamId];
+                        if (group == winningGroup){
+                            winningColors.push(Globals.teamColors[teamId]);
+                            colorShips.push(Globals.teamPops[teamId]);
+                        }
+                    }
+                    var color:uint = CalcTools.calculateWeightedColorAverage(winningColors, colorShips);
+                    cover.color = color;
                     cover.color == 0 ? cover.blendMode = "normal" : cover.blendMode = "add";
                     Starling.juggler.tween(cover, 1, {"alpha": 0.4});
                     Starling.juggler.tween(cover, 1, {"alpha": 0,
@@ -262,7 +274,7 @@ package Game {
             } else if (gameOverTimer > 0) {
                 gameOverTimer -= dt;
                 if (gameOverTimer <= 0)
-                    winningTeam == Globals.playerTeam ? next() : quit();
+                    winningGroup == Globals.teamGroups[Globals.playerTeam] ? next() : quit();
             }
         }
 

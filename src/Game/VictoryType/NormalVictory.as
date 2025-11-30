@@ -9,29 +9,37 @@ package Game.VictoryType {
         }
 
         public function update(dt:Number):int {
-            var winTeam:int = 0;
-            // 验证仅有一方势力有飞船
+            var winGroup:int = 0;
+            // 验证仅有一个队伍有飞船
             for (var j:int = 0; j < Globals.teamCount; j++) {
+                var group:int = Globals.teamGroups[j];
                 if (Globals.teamPops[j] <= 0)
                     continue;
-                if (winTeam == 0)
-                    winTeam = j;
-                else
+                if (winGroup == 0)
+                    winGroup = group;
+                else if (group != winGroup)
                     return -1;
             }
             // 验证所有天体被占据
             for each (var node:Node in EntityContainer.nodes) {
                 var nodeData:NodeData = node.nodeData;
+                var nodeGroup:int = Globals.teamGroups[nodeData.team];
+                var groupShipNum:int = 0;
+                for (var teamId:int = 0; teamId < node.ships.length; teamId++) {
+                    group = Globals.teamGroups[teamId];
+                    if (group == winGroup)
+                        groupShipNum += node.ships[teamId].length;
+                }
                 if (nodeData.isUntouchable || nodeData.type == NodeType.DILATOR)
                     continue;
-                if (nodeData.team == 0 || nodeData.team == winTeam)
+                if (nodeData.team == 0 || nodeGroup == winGroup)
                     continue;
-                if (winTeam == 0 && node.buildState.buildRate != 0)
+                if (winGroup == 0 && node.buildState.buildRate != 0)
                     return -1;
-                if (winTeam != 0 && node.ships[winTeam].length == 0)
+                if (winGroup != 0 && groupShipNum == 0)
                     return -1;
             }
-            return winTeam;
+            return winGroup;
         }
 
         public function get type():String {

@@ -5,8 +5,8 @@ package {
     import utils.ReplayData;
 
     public class Globals {
+        public static const defaultGroups:Array = [0, 1, 2, 3, 4, 5, 6];
         public static const defaultColors:Array = [0xCCCCCC, 0x5FB6FF, 0xFF5D93, 0xFF8C5A, 0xCAFF6E, 0x999999, 0x000000];
-
         public static var main:Main;
         public static var level:int = 0; // 关卡
         public static var scaleFactor:Number = 2; // 比例因子
@@ -14,6 +14,9 @@ package {
         public static var stageWidth:Number = 1920; // 画面宽度
         public static var stageHeight:Number = 1080; // 画面高度
         public static var device:String = "pc"; // 设备类型
+        // #region S33加的队伍归属
+        public static var teamGroups:Array = [0, 1, 2, 3, 4, 5, 6]; // 势力所属的队伍
+        // #endregion
         public static var teamColors:Array = [0xCCCCCC, 0x5FB6FF, 0xFF5D93, 0xFF8C5A, 0xCAFF6E, 0x999999, 0x000000]; // 势力颜色
         public static var teamCaps:Array = [0, 0, 0, 0, 0, 0, 0]; // 势力在关卡内的总飞船上限
         public static var teamPops:Array = [0, 0, 0, 0, 0, 0, 0]; // 势力在关卡内的总飞船数
@@ -65,7 +68,9 @@ package {
             if (teamCount < 7)
                 teamCount = 7;
             // 重置数组
-            teamColors = defaultColors.slice()
+            // #region S33加的初始化
+            teamGroups = defaultGroups.slice();
+            teamColors = defaultColors.slice();
             teamCaps = new Array();
             teamPops = new Array();
             teamShipSpeeds = new Array();
@@ -79,6 +84,8 @@ package {
             teamNodeBuilds = new Array();
             teamNodePops = new Array();
             for (var i:int = 0; i < teamCount; i++) {
+                if (teamGroups.length <= i)
+                    teamColors.push(i);
                 if (teamColors.length <= i)
                     teamColors.push(0);
                 teamCaps.push(0);
@@ -95,6 +102,7 @@ package {
                 teamNodePops.push(1);
             }
             teamShipSpeeds[6] = 100;
+            // #endregion
         }
 
         // 加载存档文件

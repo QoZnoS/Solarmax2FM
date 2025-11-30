@@ -25,7 +25,7 @@ package Entity.AI {
             }
             if (surrender && Globals.teamPops[team] < 30)
                 return;
-            if (team == 6 && nodeArray[0].nodeData.type == NodeType.DILATOR && nodeArray[0].hard_AllStrength(team) * 0.6 < nodeArray[0].hard_oppAllStrength(team)) {
+            if (nodeArray[0].nodeData.type == NodeType.DILATOR && nodeArray[0].hard_AllStrength(team) * 0.6 < nodeArray[0].hard_oppAllStrength(team)) {
                 blackDefend();
                 return;
             }
@@ -33,15 +33,20 @@ package Entity.AI {
         }
 
         public function attackV1():void {
+            var nodeGroup:int = -1;
+            var senderGroup:int = -1;
+            var targetGroup:int = -1;
+            var captureGroup:int = -1;
             var node:Node = null;
             var distance:Number = NaN;
             senders.length = 0;
             for each (node in nodeArray) { // 计算出兵天体
+                nodeGroup = Globals.teamGroups[node.nodeData.team];
                 if (!senderCheckBasic(node))
                     continue;
                 if (node.hard_oppAllStrength(team) != 0 || node.conflict) { // (预)战争状态
                     if (node.hard_teamStrength(team) * 0.6 > node.hard_oppAllStrength(team)) {
-                        if (node.nodeData.team != team && node.hard_teamStrength(team) < node.nodeData.size * 200)
+                        if (nodeGroup != group && node.hard_teamStrength(team) < node.nodeData.size * 200)
                             continue; // 保留占据兵力
                         senders.push(node); // 己方过强时出兵（损失不到五分之一）
                         node.senderType = "overflow"; // 类型：兵力溢出
@@ -67,18 +72,20 @@ package Entity.AI {
                 return;
             targets.length = 0;
             for each (node in nodeArray) { // 计算目标天体
+                nodeGroup = Globals.teamGroups[node.nodeData.team];
+                captureGroup = Globals.teamGroups[node.captureState.captureTeam];
                 if (!targetCheckBasic(node))
                     continue;
                 if (node.hard_oppAllStrength(team) != 0) { // (预)战争状态
-                    if (node.hard_teamStrength(team) * 0.866 < node.hard_oppAllStrength(team)) {
+                    if (node.hard_AllStrength(team) * 0.866 < node.hard_oppAllStrength(team)) {
                         targets.push(node); // 己方强度不足时作为目标（损失超过一半）
                         node.targetType = "lack"; // 类型：兵力不足
                     }
                     continue;
                 }
-                if (node.nodeData.team == 0 && node.capturing && node.captureState.captureTeam == team && (100 - node.nodeData.hp) / node.captureState.captureRate < node.aiValue / 50)
+                if (node.nodeData.team == 0 && node.capturing && captureGroup == group && (100 - node.nodeData.hp) / node.captureState.captureRate < node.aiValue / 50)
                     continue; // 不向快占完的天体派兵
-                if (node.nodeData.team == team && !node.nodeData.isWarp)
+                if (nodeGroup == group && !node.nodeData.isWarp)
                     continue; // 除传送门不向己方天体派兵
                 targets.push(node);
                 node.targetType = "attack"; // 类型：正常目标
@@ -86,6 +93,7 @@ package Entity.AI {
             if (targets.length == 0)
                 return;
             for each (var senderNode:Node in senders) { // 出兵
+                senderGroup = Globals.teamGroups[senderNode.nodeData.team];
                 for each (var targetNode:Node in targets) { // 先排序
                     distance = calcDistence(senderNode, targetNode) + rng.nextNumber() * 32;
                     targetNode.aiValue = distance * 0.8 + targetNode.hard_oppAllStrength(team);
@@ -103,30 +111,29 @@ package Entity.AI {
                 }
                 targets.sortOn("aiValue", 16);
                 for each (targetNode in targets) { // 再派兵
+                    targetGroup = Globals.teamGroups[targetNode.nodeData.team];
                     targetClose = breadthFirstSearch(senderNode, targetNode);
                     if (!targetClose)
                         continue;
-                    if (targetClose.nodeData.isWarp && senderNode.nodeData.isWarp && senderNode.nodeData.team == team)
+                    if (targetClose.nodeData.isWarp && senderNode.nodeData.isWarp && senderGroup == group)
                         continue; // 避免传送门之间反复横跳
                     var ships:Number = senderNode.hard_teamStrength(team);
                     if (senderNode.senderType == "overflow") {
-                        if (senderNode.nodeData.team != team)
+                        if (senderGroup != group)
                             ships -= senderNode.nodeData.size * 200; // 尝试占领时减少派兵数量
                         ships -= Math.floor(senderNode.hard_oppAllStrength(team) * 1.667); // 兵力溢出时减少派兵数量
                     }
                     if (targetNode.targetType == "lack") {
-                        if (targetNode.nodeData.team == team)
+                        if (targetGroup == group)
                             ships = Math.min(ships, Math.floor(targetNode.hard_oppAllStrength(team) * 1.2 - targetNode.hard_AllStrength(team)) + 4); // 目标兵力不足时防止派兵过度
-                        else if (team != 6)
-                            ships = Math.min(ships, Math.floor(targetNode.hard_oppAllStrength(team) * 1.6 - targetNode.hard_AllStrength(team))); // 目标兵力不足时防止派兵过度
                         else
-                            ships = Math.min(ships, Math.floor(targetNode.hard_oppAllStrength(team) * 2.4 - targetNode.hard_AllStrength(team)) + 4); // 加强黑色分兵
+                            ships = Math.min(ships, Math.floor(targetNode.hard_oppAllStrength(team) * 1.6 - targetNode.hard_AllStrength(team))); // 目标兵力不足时防止派兵过度
                     }
                     ships = Math.max(ships, ((hard_distance(senderNode, targetNode) * targetNode.buildState.buildRate / 50) * 1.2 + 3));
                     towerAttack = hard_getTowerAttack(senderNode, targetClose);
                     if (towerAttack > 0 && ships < towerAttack + 30)
                         continue; // 派出的兵力不超估损30兵时不派兵
-                    if (ships - towerAttack < targetNode.hard_oppAllStrength(team) - targetNode.hard_teamStrength(team))
+                    if (ships - towerAttack < targetNode.hard_oppAllStrength(team) - targetNode.hard_AllStrength(team))
                         continue; // 己方兵力不足敌方时不派兵
                     NodeStaticLogic.sendAIShips(senderNode, team, targetClose, ships);
                     // traceDebug("attackV1: " + senderNode.senderType + " " + senderNode.tag + " -> " + targetNode.tag + " " + targetNode.targetType + " ships: " + ships + " guessDieShips: " + towerAttack);
@@ -160,9 +167,10 @@ package Entity.AI {
         }
 
         public function moveCheckBasic(senderNode:Node, targetNode:Node):Boolean { // 移动判断
+            var senderGroup:int = Globals.teamGroups[senderNode.nodeData.team];
             if (senderNode == targetNode)
                 return false;
-            if (senderNode.nodeData.isWarp && senderNode.nodeData.team == team)
+            if (senderNode.nodeData.isWarp && senderGroup == group)
                 return true;
             else if (senderNode.nodeLinks[team].indexOf(targetNode) != -1)
                 return true;
@@ -178,10 +186,12 @@ package Entity.AI {
         }
 
         public function getWarpAIValue():Number { // 计算传送价值
+            var nodeGroup:int = -1;
             var warpValue:Number = 0;
             for each (var node:Node in nodeArray) {
+                nodeGroup = Globals.teamGroups[node.nodeData.team];
                 warpValue += node.nodeData.popVal;
-                if (node.nodeData.team != 0 && node.nodeData.team != team)
+                if (node.nodeData.team != 0 && nodeGroup != group)
                     warpValue -= node.attackState.attackRange * 3.5;
             }
             return warpValue;
@@ -261,6 +271,8 @@ package Entity.AI {
         }
 
         public function hard_getTowerAttack(node1:Node, node2:Node):Number { // 高精度估损
+            var node1Group:int = Globals.teamGroups[node1.nodeData.team];
+            var nodeGroup:int = -1;
             var node:Node = null;
             var start:Point = null;
             var end:Point = null;
@@ -272,11 +284,12 @@ package Entity.AI {
             var resultIntersects:Boolean; // 线和圆是否相交
             var resultEnter:Point; // 线和圆的第一个交点
             var resultExit:Point; // 线和圆的第二个交点
-            if (node1.nodeData.isWarp && node1.nodeData.team == team)
+            if (node1.nodeData.isWarp && node1Group == group)
                 return 0; // 对传送门不执行该函数
             for each (node in nodeArray) {
+                nodeGroup = Globals.teamGroups[node.nodeData.team];
                 length = 0;
-                if (node.nodeData.team == 0 || node.nodeData.team == team)
+                if (node.nodeData.team == 0 || nodeGroup == group)
                     continue;
                 if (node.attackState.attackRange != 0) {
                     start = new Point(node1.nodeData.x, node1.nodeData.y);

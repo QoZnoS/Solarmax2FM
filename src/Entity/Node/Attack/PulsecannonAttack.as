@@ -9,11 +9,14 @@ package Entity.Node.Attack {
 
     public class PulsecannonAttack extends BasicAttack {
 
+        
+
         public function PulsecannonAttack(attackRate:Number, attackRange:Number, attackLast:Number) {
             super(attackRate, attackRange, attackLast)
         }
 
         override public function executeAttack(_Node:Node, dt:Number):void {
+            var group:int = Globals.teamGroups[_Node.nodeData.team];
             if (!updateTimer(dt))
                 return;
             var nodes:Array = EntityContainer.findNodeInRange(_Node);
@@ -23,7 +26,8 @@ package Entity.Node.Attack {
                     continue
                 var ships:Vector.<Vector.<Ship>> = EntityContainer.filterShipByStatic(node, 0);
                 for (var i:int = 0; i < Globals.teamCount; i++) {
-                    if (i == _Node.nodeData.team)
+                    var iGroup:int = Globals.teamGroups[i];
+                    if (iGroup == group)
                         continue
                     for (var j:int = 0; j < 5; j++) {
                         if (ships[i].length == 0)

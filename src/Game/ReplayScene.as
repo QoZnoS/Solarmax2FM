@@ -85,7 +85,7 @@ package Game {
             }
             countTeamCaps(dt); // 统计兵力
             ui.update();
-            scene.gameScene.winningTeam = -1;
+            scene.gameScene.winningGroup = -1;
             EntityHandler.removeAllAI();
             for each (var pool:EntityPool in EntityContainer.entityPool) // 依次执行所有实体的更新函数
                 pool.update(dt);

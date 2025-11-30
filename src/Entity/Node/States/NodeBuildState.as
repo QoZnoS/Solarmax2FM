@@ -34,12 +34,15 @@ package Entity.Node.States {
             throw new Error("Method not implemented.");
         }
 
+        // #region S33加的队伍判断
         public function get enable():Boolean {
-            return !(nodeData.team == 0 || // 天体中立
-                Globals.teamPops[nodeData.team] >= Globals.teamCaps[nodeData.team] || // 飞船已达上限
-                node.capturing || // 正在被占领
-                node.conflict && node.ships[nodeData.team].length == 0 // 混战但无己方飞船
-                );
+            var group:int = Globals.teamGroups[nodeData.team];
+            var groupShips:int = 0;
+            for (var i:int = 0; i < node.ships.length; i++){
+                if (i == nodeData.team || Globals.teamGroups[i] == group)
+                    groupShips += node.ships[i].length;
+            }
+            return !(nodeData.team == 0 || Globals.teamPops[nodeData.team] >= Globals.teamCaps[nodeData.team] || node.capturing || node.conflict && groupShips == 0)
         }
 
         public function get stateType():String {

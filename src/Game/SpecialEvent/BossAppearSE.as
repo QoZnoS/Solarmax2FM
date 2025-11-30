@@ -14,21 +14,25 @@ package Game.SpecialEvent {
 
         private var _game:GameScene;
         private var state:int;
+        private var groupTrigger:Boolean = true;
         private var triggerShips:int;
         private var triggerNodeData:Object;
         private var triggerNode:Node;
         private var triggerTimer:Number;
-        private var triggerAI:Object
+        private var triggerAI:Object;
 
         public function BossAppearSE(trigger:Object) {
             triggerShips = trigger.ships;
             triggerNodeData = trigger.node;
             if ("ai" in trigger)
                 triggerAI = trigger.ai
+            if ("teamTrigger" in trigger)
+                groupTrigger = !(trigger.teamTrigger)
         }
 
         public function update(dt:Number):void {
             var i:int;
+            var levelData:Object = LevelData.level[Globals.level];
             var rate:Number = 1;
             var delay:Number = 0;
             var delayStep:Number = 0.5;
@@ -140,7 +144,7 @@ package Game.SpecialEvent {
                         break;
                     state = STATE_END;
                     EntityHandler.removeNode(triggerNode);
-                    GS.playMusic("bgm06");
+                    GS.playMusic(levelData.bgm);
                     break;
                 case STATE_END:
                     break;
@@ -148,8 +152,17 @@ package Game.SpecialEvent {
         }
 
         private function checkAppearCondition():Boolean {
-            for (var i:int = 0; i < Globals.teamCount; i++) {
-                if (Globals.teamPops[i] > triggerShips && Globals.teamCaps[i] > triggerShips)
+            if (groupTrigger){
+                var groupShipCounts:Vector.<int> = new Vector.<int>;
+                for (var i:int = 0; i < Globals.teamCount; i++){
+                    if (groupShipCounts.length < Globals.teamGroups[i] + 1)
+                        groupShipCounts.length = Globals.teamGroups[i] + 1;
+                    groupShipCounts[Globals.teamGroups[i]]+=Globals.teamPops[i];
+                    if (groupShipCounts[Globals.teamGroups[i]] > triggerShips)
+                        return true;
+                }
+            } else for (var j:int = 0; j < Globals.teamCount; j++) {
+                if (Globals.teamPops[j] > triggerShips && Globals.teamCaps[j] > triggerShips)
                     return true;
             }
             return false;

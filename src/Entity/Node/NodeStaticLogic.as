@@ -221,7 +221,7 @@ package Entity.Node {
                     warp = moveShip(node, ship, targetNode);
             }
             if (warp)
-                showWarpPulse(node, team); // 播放传送门特效
+                showWarpPulse(node, node.nodeData.team); // 播放传送门特效
         }
 
         /**发送单个飞船
@@ -231,7 +231,9 @@ package Entity.Node {
          * @return 是否为传送门
          */
         private static function moveShip(node:Node, ship:Ship, targetNode:Node):Boolean {
-            if (node.nodeData.isWarp && ship.team == node.nodeData.team) {
+            var shipGroup:int = Globals.teamGroups[ship.team];
+            var nodeGroup:int = Globals.teamGroups[node.nodeData.team];
+            if (node.nodeData.isWarp && shipGroup == nodeGroup) {
                 ship.warpTo(targetNode);
                 return true;
             } else {

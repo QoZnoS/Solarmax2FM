@@ -130,7 +130,7 @@ package Entity.Node.States {
             var currentAngle:Number = START_ANGLE - Math.PI * node.ships[activeTeams[0]].length / totalShips;
             var labelAngleStep:Number = Math.PI * 2 / activeTeams.length;
             for (var i:int = 0; i < Globals.teamCount; i++) {
-                if (activeTeams.indexOf(i) == -1){
+                if (activeTeams.indexOf(i) == -1) {
                     labels[i].visible = false;
                     continue;
                 }
@@ -144,20 +144,49 @@ package Entity.Node.States {
             }
         }
 
+        public function updateCooperateLabels(activeTeams:Vector.<int>):void {
+            var labelAngleStep:Number = Math.PI * 2 / activeTeams.length;
+            for (var i:int = 0; i < Globals.teamCount; i++) {
+                if (activeTeams.indexOf(i) == -1) {
+                    labels[i].visible = false;
+                    continue;
+                }
+                var teamId:int = i;
+                var shipCount:int = node.ships[teamId].length;
+                var labelAngle:Number = START_ANGLE + activeTeams.indexOf(i) * labelAngleStep;
+                node.moveState.updateCooperateLabel(teamId, labelAngle, shipCount);
+            }
+        }
+
         private function updateConflictLabel(teamId:int, labelAngle:Number, shipCount:int):void {
             var teamLabel:TextField = labels[teamId];
             teamLabel.x = nodeData.x + Math.cos(labelAngle) * labelDist;
             teamLabel.y = nodeData.y + Math.sin(labelAngle) * labelDist;
             teamLabel.text = shipCount.toString();
-            teamLabel.visible = (teamLabel.color > 0);
+            teamLabel.visible = (teamLabel.color > 0 || teamId == Globals.playerTeam) && !(Globals.currentData == 4 && teamId == 7);
         }
 
-        public function updateCaptureLabel(capturingTeam:int, captureTeam:int, shipCount:int, hpRate:Number):void {
-            if (capturingTeam != 0 && shipCount > 0) {
-                label.text = shipCount.toString();
-                label.color = Globals.teamColors[capturingTeam];
-                label.visible = (label.color > 0);
-            } else 
+        private function updateCooperateLabel(teamId:int, labelAngle:Number, shipCount:int):void {
+            var teamLabel:TextField = labels[teamId];
+            teamLabel.x = nodeData.x + Math.cos(labelAngle) * labelDist;
+            teamLabel.y = nodeData.y + Math.sin(labelAngle) * labelDist;
+            teamLabel.text = shipCount.toString();
+            teamLabel.visible = (teamLabel.color > 0  || teamId == Globals.playerTeam) && !(Globals.currentData == 4 && teamId == 7);
+        }
+
+        public function updateCaptureLabel(capturingTeams:Vector.<int>, captureTeam:int, shipCounts:Array, hpRate:Number):void {
+            if (capturingTeams.length == 1) {
+                var capturingTeam:int = capturingTeams[0];
+                var shipCount:int = shipCounts[0];
+                if (capturingTeam != 0 && shipCount > 0) {
+                    label.text = shipCount.toString();
+                    label.color = Globals.teamColors[capturingTeam];
+                    label.visible = (label.color > 0  || capturingTeam == Globals.playerTeam) && !(Globals.currentData == 4 && capturingTeam == 7);
+                } else
+                    label.visible = false;
+            } else if (capturingTeams.length > 1) {
+                updateCooperateLabels(capturingTeams)
+            } else
                 label.visible = false;
             if (hpRate != 0) {
                 var arcAngle:Number = START_ANGLE - Math.PI * hpRate;
@@ -170,6 +199,7 @@ package Entity.Node.States {
             for (var i:int = 0; i < labels.length; i++)
                 labels[i].visible = false;
         }
+
         // #endregion
 
         public function setOrbitNode(nodeTag:int, orbitSpeed:Number = 0.1, clockwise:Boolean = true):void {
@@ -196,12 +226,14 @@ package Entity.Node.States {
         }
 
         private var _scale:Number = 1;
+
         public function get scale():Number {
             return _scale;
         }
         private var _originalImageScale:Number;
         private var _originalHaloScale:Number;
         private var _originalGlowScale:Number;
+
         public function set scale(val:Number):void {
             _scale = val;
             image.scaleX = image.scaleY = _originalImageScale * _scale;

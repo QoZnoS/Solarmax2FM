@@ -130,7 +130,7 @@ package Game.SpecialEvent {
                     break;
                 case STATE_END:
                     _game.gameOver = true;
-                    _game.winningTeam = Globals.playerTeam;
+                    _game.winningGroup = Globals.playerTeam;
                     expandDarkPulse(dt);
                     break;
                 default:
