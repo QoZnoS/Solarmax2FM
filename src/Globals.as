@@ -30,6 +30,7 @@ package {
         public static var teamConstructionStrengths:Array = [1, 1, 1, 1, 1, 1, 1]; // 基地强度
         public static var teamNodeBuilds:Array = [1, 1, 1, 1, 1, 1, 1]; // 生产速度倍率
         public static var teamNodePops:Array = [1, 1, 1, 1, 1, 1, 1]; // 飞船上限倍率
+        public static var teamShowLabels:Array = [false, true, true, true, true, true, false]; // 是否显示兵力文本
         public static var teamCount:int = 7; // 势力数上限
         public static var playerTeam:int = 1; // 玩家势力
         public static var exOptimization:int = 0; // 优化等级
@@ -83,6 +84,7 @@ package {
             teamConstructionStrengths = new Array();
             teamNodeBuilds = new Array();
             teamNodePops = new Array();
+            teamShowLabels = new Array();
             for (var i:int = 0; i < teamCount; i++) {
                 if (teamGroups.length <= i)
                     teamColors.push(i);
@@ -100,8 +102,10 @@ package {
                 teamConstructionStrengths.push(1);
                 teamNodeBuilds.push(1);
                 teamNodePops.push(1);
+                teamShowLabels.push(true);
             }
             teamShipSpeeds[6] = 100;
+            teamShowLabels[0] = teamShowLabels[6] = false;
             // #endregion
         }
 

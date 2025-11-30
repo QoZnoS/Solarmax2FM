@@ -6,6 +6,7 @@ package Entity.Node.States {
     import Entity.EntityContainer;
     import UI.UIContainer;
     import utils.Drawer;
+    import starling.animation.Transitions;
 
     public class NodeMoveState implements INodeState {
         public var node:Node;
@@ -14,6 +15,8 @@ package Entity.Node.States {
         public var image:Image; // 天体图片
         public var halo:Image; // 光圈图片
         public var label:TextField; // 非战斗状态下的兵力文本
+        public var captureLabels:Vector.<TextField>; // 驻留飞船兵力文本
+        public var conflictLabels:Vector.<TextField>; // 战争飞船兵力文本
         public var labels:Vector.<TextField>; // 战斗状态下的兵力文本列表
         public var labelDist:Number; // 文本圈大小
         public var glowing:Boolean; // 是否正在发光（天体改变势力时的特效
@@ -41,6 +44,8 @@ package Entity.Node.States {
             label.pivotY = 24;
             glowing = false;
             labels = new Vector.<TextField>;
+            captureLabels = new Vector.<TextField>;
+            conflictLabels = new Vector.<TextField>;
         }
 
         public function init():void {
@@ -48,8 +53,14 @@ package Entity.Node.States {
             if (nodeData.orbitNode != -1)
                 orbitNode = EntityContainer.nodes[nodeData.orbitNode]
             labels.length = 0;
+            captureLabels.length = 0;
+            conflictLabels.length = 0;
             var textField:TextField;
             for (var i:int = 0; i < Globals.teamCount; i++) {
+                addTextField(captureLabels, i);
+                addTextField(conflictLabels, i);
+            }
+            for (i = 0; i < Globals.teamCount; i++) {
                 textField = new TextField(60, 48, "00", "Downlink12", -1, Globals.teamColors[i]);
                 textField.vAlign = textField.hAlign = "center";
                 textField.pivotX = 30;
@@ -72,11 +83,23 @@ package Entity.Node.States {
             _originalGlowScale = glow.scaleX;
         }
 
+        private function addTextField(vec:Vector.<TextField>, team:int):void {
+            var textField:TextField = new TextField(60, 48, "00", "Downlink12", -1, Globals.teamColors[team]);
+            textField.vAlign = textField.hAlign = "center";
+            textField.pivotX = 30;
+            textField.pivotY = 24;
+            vec.push(textField);
+            UIContainer.entityLayer.labelLayer.addChild(textField);
+        }
+
         public function deinit():void {
             UIContainer.entityLayer.removeNode(image, halo, glow);
             UIContainer.entityLayer.labelLayer.removeChild(label);
-            for (var i:int = 0; i < labels.length; i++)
+            for (var i:int = 0; i < Globals.teamCount; i++){
                 UIContainer.entityLayer.labelLayer.removeChild(labels[i]);
+                UIContainer.entityLayer.labelLayer.removeChild(captureLabels[i]);
+                UIContainer.entityLayer.labelLayer.removeChild(conflictLabels[i]);
+            }
             orbitNode = null;
         }
 
@@ -129,9 +152,10 @@ package Entity.Node.States {
         public function updateConflictLabels(activeTeams:Vector.<int>, totalShips:int):void {
             var currentAngle:Number = START_ANGLE - Math.PI * node.ships[activeTeams[0]].length / totalShips;
             var labelAngleStep:Number = Math.PI * 2 / activeTeams.length;
+            hideCaptureLabels()
             for (var i:int = 0; i < Globals.teamCount; i++) {
                 if (activeTeams.indexOf(i) == -1) {
-                    labels[i].visible = false;
+                    conflictLabels[i].visible = false;
                     continue;
                 }
                 var teamId:int = i;
@@ -144,50 +168,17 @@ package Entity.Node.States {
             }
         }
 
-        public function updateCooperateLabels(activeTeams:Vector.<int>):void {
-            var labelAngleStep:Number = Math.PI * 2 / activeTeams.length;
-            for (var i:int = 0; i < Globals.teamCount; i++) {
-                if (activeTeams.indexOf(i) == -1) {
-                    labels[i].visible = false;
-                    continue;
-                }
-                var teamId:int = i;
-                var shipCount:int = node.ships[teamId].length;
-                var labelAngle:Number = START_ANGLE + activeTeams.indexOf(i) * labelAngleStep;
-                node.moveState.updateCooperateLabel(teamId, labelAngle, shipCount);
-            }
-        }
-
         private function updateConflictLabel(teamId:int, labelAngle:Number, shipCount:int):void {
-            var teamLabel:TextField = labels[teamId];
+            var teamLabel:TextField = conflictLabels[teamId];
             teamLabel.x = nodeData.x + Math.cos(labelAngle) * labelDist;
             teamLabel.y = nodeData.y + Math.sin(labelAngle) * labelDist;
             teamLabel.text = shipCount.toString();
-            teamLabel.visible = (teamLabel.color > 0 || teamId == Globals.playerTeam) && !(Globals.currentData == 4 && teamId == 7);
-        }
-
-        private function updateCooperateLabel(teamId:int, labelAngle:Number, shipCount:int):void {
-            var teamLabel:TextField = labels[teamId];
-            teamLabel.x = nodeData.x + Math.cos(labelAngle) * labelDist;
-            teamLabel.y = nodeData.y + Math.sin(labelAngle) * labelDist;
-            teamLabel.text = shipCount.toString();
-            teamLabel.visible = (teamLabel.color > 0  || teamId == Globals.playerTeam) && !(Globals.currentData == 4 && teamId == 7);
+            teamLabel.visible = Globals.teamShowLabels[teamId];
         }
 
         public function updateCaptureLabel(capturingTeams:Vector.<int>, captureTeam:int, shipCounts:Array, hpRate:Number):void {
-            if (capturingTeams.length == 1) {
-                var capturingTeam:int = capturingTeams[0];
-                var shipCount:int = shipCounts[0];
-                if (capturingTeam != 0 && shipCount > 0) {
-                    label.text = shipCount.toString();
-                    label.color = Globals.teamColors[capturingTeam];
-                    label.visible = (label.color > 0  || capturingTeam == Globals.playerTeam) && !(Globals.currentData == 4 && capturingTeam == 7);
-                } else
-                    label.visible = false;
-            } else if (capturingTeams.length > 1) {
-                updateCooperateLabels(capturingTeams)
-            } else
-                label.visible = false;
+            updateCooperateLabels(capturingTeams)
+            label.visible = false;
             if (hpRate != 0) {
                 var arcAngle:Number = START_ANGLE - Math.PI * hpRate;
                 Drawer.drawCircle(UIContainer.behaviorBatch, nodeData.x, nodeData.y, Globals.teamColors[captureTeam], nodeData.lineDist, nodeData.lineDist - 2, false, 0.1);
@@ -195,9 +186,40 @@ package Entity.Node.States {
             }
         }
 
+        public function updateCooperateLabels(activeTeams:Vector.<int>):void {
+            const labelAngleStep:Number = Math.min(Math.PI * 0.4, Math.PI * 2 / activeTeams.length);
+            const startAngle:Number = 1.03037682652;
+            for (var teamId:int = 0; teamId < Globals.teamCount; teamId++) {
+                if (activeTeams.indexOf(teamId) == -1) {
+                    captureLabels[teamId].visible = false;
+                    continue;
+                }
+                var shipCount:int = node.ships[teamId].length;
+                var labelAngle:Number = startAngle + activeTeams.indexOf(teamId) * labelAngleStep - Math.PI * 0.2 * (activeTeams.length - 1);
+                node.moveState.updateCooperateLabel(teamId, labelAngle, shipCount, activeTeams.length);
+            }
+        }
+
+        private function updateCooperateLabel(teamId:int, labelAngle:Number, shipCount:int, teamCount:int):void {
+            var teamLabel:TextField = captureLabels[teamId];
+            var easeX:Number = Transitions.getTransition(Transitions.EASE_OUT)(teamCount / 5) * 80 + 60.96000000000001;
+            var easeY:Number = Transitions.getTransition(Transitions.EASE_OUT)(teamCount / 5) * 120 + 1.440000000000012;
+            // trace(100 - Transitions.getTransition(Transitions.EASE_OUT)(1 / 5) * 80)
+            // trace(60 - Transitions.getTransition(Transitions.EASE_OUT)(1 / 5) * 120)
+            teamLabel.x = nodeData.x + Math.cos(labelAngle) * easeX * nodeData.size;
+            teamLabel.y = nodeData.y + Math.sin(labelAngle) * easeY * nodeData.size;
+            teamLabel.text = shipCount.toString();
+            teamLabel.visible = Globals.teamShowLabels[teamId];
+        }
+
+        public function hideCaptureLabels():void {
+            for (var i:int = 0; i < captureLabels.length; i++)
+                captureLabels[i].visible = false;
+        }
+
         public function hideConflictLabels():void {
-            for (var i:int = 0; i < labels.length; i++)
-                labels[i].visible = false;
+            for (var i:int = 0; i < conflictLabels.length; i++)
+                conflictLabels[i].visible = false;
         }
 
         // #endregion

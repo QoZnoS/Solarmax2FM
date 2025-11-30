@@ -22,16 +22,17 @@ package {
             fileStream = new FileStream();
             nodeData = Root.assets.getXml("Node");
             rawData = Root.assets.getObject("level").data;
+            file = File.applicationDirectory.resolvePath("level.json");
+            if (file.exists)
+                load();
+            updateLevelData();
+
             if (Globals.currentData >= rawData.length){
                 SceneController.alert("The selected Mappack does not exist!");
                 Globals.currentData = 0;
             }
             Globals.initTeam();
             updateTeam();
-            file = File.applicationDirectory.resolvePath("level.json");
-            if (file.exists)
-                load();
-            updateLevelData();
         }
 
         public static function updateLevelData():void {
@@ -88,6 +89,8 @@ package {
                     Globals.teamNodeBuilds[i] = teamData.nodeBuild;
                 if ("nodePop" in teamData)
                     Globals.teamNodePops[i] = teamData.nodePop;
+                if ("showLabel" in teamData)
+                    Globals.teamShowLabels[i] = teamData.showLabel
             }
         }
         // 导入关卡文件
