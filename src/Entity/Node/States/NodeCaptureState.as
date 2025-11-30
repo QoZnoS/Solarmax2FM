@@ -134,10 +134,14 @@ package Entity.Node.States {
         }
 
         public function get enable():Boolean {
+            var hadGroupShips:Boolean;
             if (node.conflict)
-                return node.capturing = false;
+                hadGroupShips = node.capturing = false;
             else
-                return checkCaptureState();
+                hadGroupShips = checkCaptureState();
+            if (!hadGroupShips)
+                node.moveState.hideCaptureLabels();
+            return hadGroupShips;
         }
 
         public function get stateType():String {

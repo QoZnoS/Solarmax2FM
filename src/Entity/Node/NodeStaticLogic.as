@@ -20,8 +20,6 @@ package Entity.Node {
             var i:int = 0;
             switch (Globals.textSize) {
                 case 0:
-                    node.moveState.label.fontName = "Downlink10"; // 切换和平状态下的字体图
-                    node.moveState.label.fontSize = -1;
                     for (i = 0; i < Globals.teamCount; i++) { // 设定战斗状态下每个势力的文本
                         node.moveState.captureLabels[i].fontName = "Downlink10";
                         node.moveState.captureLabels[i].fontSize = -1;
@@ -30,8 +28,6 @@ package Entity.Node {
                     }
                     break;
                 case 1:
-                    node.moveState.label.fontName = "Downlink12";
-                    node.moveState.label.fontSize = -1;
                     for (i = 0; i < Globals.teamCount; i++) {
                         node.moveState.captureLabels[i].fontName = "Downlink12";
                         node.moveState.captureLabels[i].fontSize = -1;
@@ -40,8 +36,6 @@ package Entity.Node {
                     }
                     break;
                 case 2:
-                    node.moveState.label.fontName = "Downlink18";
-                    node.moveState.label.fontSize = -1;
                     for (i = 0; i < Globals.teamCount; i++) {
                         node.moveState.captureLabels[i].fontName = "Downlink18";
                         node.moveState.captureLabels[i].fontSize = -1;

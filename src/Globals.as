@@ -14,7 +14,7 @@ package {
         public static var stageWidth:Number = 1920; // 画面宽度
         public static var stageHeight:Number = 1080; // 画面高度
         public static var device:String = "pc"; // 设备类型
-        public static var maxMarginTeam:int = 1; // 最大边距势力数，合作中势力数达到该值时兵力文本显示与战争状态相同
+        public static var maxMarginTeam:int = 8; // 最大边距势力数，合作中势力数达到该值时兵力文本显示与战争状态相同
         // #region S33加的队伍归属
         public static var teamGroups:Array = [0, 1, 2, 3, 4, 5, 6]; // 势力所属的队伍
         // #endregion
