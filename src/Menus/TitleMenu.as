@@ -27,7 +27,8 @@ package Menus {
         public var title:Image; // Solarmax2 标题
         public var title_blur:Image; // Solarmax2 标题模糊光圈
         public var credits:Array; // 显示作者信息
-        public var previewLayer:Sprite;
+        public var previewBox:Sprite; // 预览信息根图层，不受scale影响
+        public var previewLayer:Sprite; // 天体预览图层
         public var uiLayer:Sprite;
         public var levels:LevelButtons;
         public var deltaScroll:Point;
@@ -69,9 +70,11 @@ package Menus {
             quadImage = new Image(Root.assets.getTexture("quad8x4"));
             quadImage.adjustVertices();
             deltaScroll = new Point(0, 0);
+            previewBox = new Sprite();
             previewLayer = new Sprite();
             uiLayer = new Sprite();
-            addChild(previewLayer);
+            addChild(previewBox);
+            previewBox.addChild(previewLayer);
             addChild(uiLayer);
             // 障碍线预览
             bQuad = new Quad(160, 6, 16733525);
@@ -124,10 +127,12 @@ package Menus {
             previewQuad.blendMode = "add";
             previewQuad.alpha = 0.4;
             previewLayer.addChild(previewQuad);
+            previewBox.x = previewBox.pivotX = 512;
+            previewBox.y = previewBox.pivotY = 384;
+            previewBox.y -= 30;
+            previewBox.scaleX = previewBox.scaleY = 0.7;
             previewLayer.x = previewLayer.pivotX = 512;
             previewLayer.y = previewLayer.pivotY = 384;
-            previewLayer.y -= 30;
-            previewLayer.scaleX = previewLayer.scaleY = 0.7;
             shapeImage = new Image(Root.assets.getTexture("planet_shape"));
             shapeImage.pivotX = shapeImage.pivotY = shapeImage.width * 0.5;
             selector = new QuadBatch();
@@ -210,7 +215,7 @@ package Menus {
                 infoText.visible = false;
                 infoText.touchable = false;
                 infoTexts.push(infoText);
-                addChild(infoText);
+                previewBox.addChild(infoText);
             }
         }
 
@@ -320,12 +325,12 @@ package Menus {
             deltaScroll.x = 0;
             cover.alpha = 1;
             Root.bg.x = 0;
-            previewLayer.y = 354;
-            previewLayer.scaleY = 0.7;
-            previewLayer.scaleX = 0.7;
+            previewBox.y = 354;
+            previewBox.scaleY = 0.7;
+            previewBox.scaleX = 0.7;
             commonInit();
             Starling.juggler.removeTweens(this);
-            Starling.juggler.removeTweens(previewLayer);
+            Starling.juggler.removeTweens(previewBox);
             GS.playMusic("bgm01");
         }
 
@@ -391,26 +396,26 @@ package Menus {
             this.alpha = 0;
             this.visible = true;
             Starling.juggler.removeTweens(this);
-            Starling.juggler.removeTweens(previewLayer);
+            Starling.juggler.removeTweens(previewBox);
             Starling.juggler.tween(this, Globals.transitionSpeed, {"alpha": 1,
                     "transition": "easeInOut"});
-            Starling.juggler.tween(previewLayer, Globals.transitionSpeed, {"y": 354,
-                    "scaleX": UIContainer.scale * 0.7,
-                    "scaleY": UIContainer.scale * 0.7,
+            Starling.juggler.tween(previewBox, Globals.transitionSpeed, {"y":354,
+                    "scaleX": 0.7,
+                    "scaleY": 0.7,
                     "transition": "easeInOut"});
         }
 
         public function animateOut():void {
             deInit();
             Starling.juggler.removeTweens(this);
-            Starling.juggler.removeTweens(previewLayer);
-            Starling.juggler.tween(previewLayer, Globals.transitionSpeed, {"y": 384,
-                    "scaleX": UIContainer.scale,
-                    "scaleY": UIContainer.scale,
-                    "transition": "easeInOut"});
+            Starling.juggler.removeTweens(previewBox);
             Starling.juggler.tween(this, Globals.transitionSpeed, {"alpha": 0,
                     "transition": "easeInOut",
                     "onComplete": hide});
+            Starling.juggler.tween(previewBox, Globals.transitionSpeed, {"y":384,
+                    "scaleX": 1,
+                    "scaleY": 1,
+                    "transition": "easeInOut"});
         }
 
         public function hide():void {
@@ -566,9 +571,9 @@ package Menus {
 
                 scale = LevelData.level[currentIndex - 1].gameScale;
                 if (scale)
-                    previewLayer.scaleX = previewLayer.scaleY = scale * 0.7;
+                    previewLayer.scaleX = previewLayer.scaleY = scale;
                 else
-                    previewLayer.scaleX = previewLayer.scaleY = 0.7;
+                    previewLayer.scaleX = previewLayer.scaleY = 1;
             }
             preview.blendMode = "add";
         }

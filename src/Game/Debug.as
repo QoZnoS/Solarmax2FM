@@ -11,6 +11,7 @@ package Game {
     import Entity.EnemyAI;
     import Entity.EntityContainer;
     import utils.Rng;
+    import UI.UIContainer;
 
     public class Debug extends Sprite {
         private static var debug:Boolean; // debug 开启状态
@@ -22,6 +23,7 @@ package Game {
         private var dt:Number; // 帧时间
         private var debugLables:Array; // 调试显示文本
 
+        private var tagLayer:Sprite;
 
         private var seed:uint;
 
@@ -43,6 +45,11 @@ package Game {
             addDebugView();
             addEventListener("enterFrame", update);
             startDebugMode();
+
+            tagLayer = new Sprite();
+            tagLayer.x = tagLayer.pivotX = 512;
+            tagLayer.y = tagLayer.pivotY = 384;
+            addChild(tagLayer)
         }
 
         private function addDebugView():void {
@@ -144,6 +151,7 @@ package Game {
 
         // 进入游戏时触发一次
         public function init_game():void {
+            tagLayer.scaleX = tagLayer.scaleY = UIContainer.scale;
             // init_tag();
         }
 
@@ -228,7 +236,7 @@ package Game {
                 label.alpha = 1;
                 label.touchable = false;
                 label.visible = true;
-                THIS.addChild(label);
+                THIS.tagLayer.addChild(label);
                 THIS.nodeTagLables[0].push(label);
                 label = new TextField(60, 48, "conflict", "Downlink12", -1, 16777215);
                 label.vAlign = label.hAlign = "center";
@@ -237,7 +245,7 @@ package Game {
                 label.alpha = 1;
                 label.touchable = false;
                 label.visible = false;
-                THIS.addChild(label);
+                THIS.tagLayer.addChild(label);
                 THIS.nodeTagLables[1].push(label);
                 label = new TextField(60, 48, "capture", "Downlink12", -1, 16777215);
                 label.vAlign = label.hAlign = "center";
@@ -246,7 +254,7 @@ package Game {
                 label.alpha = 1;
                 label.touchable = false;
                 label.visible = false;
-                THIS.addChild(label);
+                THIS.tagLayer.addChild(label);
                 THIS.nodeTagLables[2].push(label);
             }
         }
@@ -257,7 +265,7 @@ package Game {
             for each (var array:Array in THIS.nodeTagLables) {
                 for each (var label:TextField in array) {
                     label.visible = false;
-                    THIS.removeChild(label);
+                    THIS.tagLayer.removeChild(label);
                 }
             }
             THIS.nodeTagLables = [[], [], []];

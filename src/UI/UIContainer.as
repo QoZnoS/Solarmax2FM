@@ -54,6 +54,8 @@ package UI {
         public function initLevel(scale:Number = 1):void {
             if (scale)
                 _scale = scale;
+            else
+                _scale = 1;
             if (Globals.touchControls) {
                 _touchCL.visible = true;
                 _touchCL.init();
