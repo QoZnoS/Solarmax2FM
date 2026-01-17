@@ -16171,6 +16171,14 @@
                             "trigger": {}
                         }
                     ],
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        }
+                    ],
                     "name": "02",
                     "color": "0x00FF00",
                     "bgm": "bgm02"
@@ -16207,6 +16215,14 @@
                             "y": 384,
                             "type": "tower",
                             "team": 1
+                        }
+                    ],
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
                         }
                     ],
                     "name": "03",
@@ -16253,6 +16269,14 @@
                             "x": 512,
                             "y": 384,
                             "type": "pulsecannon"
+                        }
+                    ],
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
                         }
                     ],
                     "name": "04",
@@ -16337,6 +16361,14 @@
                             "x": 144,
                             "y": 384,
                             "type": "warp"
+                        }
+                    ],
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "AdaptedAI"
                         }
                     ],
                     "name": "05",
@@ -16513,6 +16545,26 @@
                             "type": "planet"
                         }
                     ],
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "AdaptedAI"
+                        },
+                        {
+                            "team": 3,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "AdaptedAI"
+                        },
+                        {
+                            "team": 4,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "AdaptedAI"
+                        }
+                    ],
                     "name": "06",
                     "color": "0x00FF00",
                     "bgm": "bgm02"
@@ -16594,8 +16646,17 @@
                             "team": 7
                         }
                     ],
+                    "ai": [
+                        {
+                            "team": 7,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        }
+                    ],
                     "name": "07",
                     "color": "0x0000FF",
+                    "color/easy": "0x00FF00",
                     "bgm": "bgm02"
                 },
                 {
@@ -16624,6 +16685,14 @@
                             "y": 448,
                             "type": "planet",
                             "team": 2
+                        }
+                    ],
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
                         }
                     ],
                     "name": "08",
@@ -16671,6 +16740,14 @@
                             "y": 384,
                             "type": "planet",
                             "team": 2
+                        }
+                    ],
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "AdaptedAI"
                         }
                     ],
                     "name": "09",
@@ -16764,6 +16841,26 @@
                             "y": 576,
                             "type": "planet",
                             "team": 4
+                        }
+                    ],
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "AdaptedAI"
+                        },
+                        {
+                            "team": 3,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "AdaptedAI"
+                        },
+                        {
+                            "team": 4,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "AdaptedAI"
                         }
                     ],
                     "name": "10",
@@ -16912,6 +17009,32 @@
                             "team": 4
                         }
                     ],
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "AdaptedAI"
+                        },
+                        {
+                            "team": 3,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "AdaptedAI"
+                        },
+                        {
+                            "team": 4,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "AdaptedAI"
+                        },
+                        {
+                            "team": 6,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        }
+                    ],
                     "name": "11",
                     "color": "0x00FF00",
                     "bgm": "bgm04"
@@ -16938,6 +17061,14 @@
                             "type": "planet",
                             "size": 0.5,
                             "team": 2
+                        }
+                    ],
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
                         }
                     ],
                     "name": "12",
@@ -16984,6 +17115,14 @@
                             "y": 384,
                             "type": "planet",
                             "team": 2
+                        }
+                    ],
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "AdaptedAI"
                         }
                     ],
                     "name": "13",
@@ -17047,6 +17186,20 @@
                             "y": 480,
                             "type": "captureship",
                             "orbitNode": 0
+                        }
+                    ],
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "AdaptedAI"
+                        },
+                        {
+                            "team": 3,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "AdaptedAI"
                         }
                     ],
                     "name": "14",
@@ -17132,8 +17285,17 @@
                             "type": "tower"
                         }
                     ],
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        }
+                    ],
                     "name": "15",
-                    "color": "0x0000FF",
+                    "color": "0x00FF00",
+                    "color/hard": "0x0000FF",
                     "bgm": "bgm04"
                 },
                 {
@@ -17300,6 +17462,32 @@
                             "y": 384,
                             "type": "warp",
                             "team": 4
+                        }
+                    ],
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "AdaptedAI"
+                        },
+                        {
+                            "team": 3,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "AdaptedAI"
+                        },
+                        {
+                            "team": 4,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "AdaptedAI"
+                        },
+                        {
+                            "team": 7,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "AdaptedAI"
                         }
                     ],
                     "name": "16",
@@ -17475,8 +17663,35 @@
                             "team": 3
                         }
                     ],
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "AdaptedAI"
+                        },
+                        {
+                            "team": 3,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "AdaptedAI"
+                        },
+                        {
+                            "team": 4,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "AdaptedAI"
+                        },
+                        {
+                            "team": 6,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        }
+                    ],
                     "name": "17",
-                    "color": "0x0000FF",
+                    "color": "0x00FF00",
+                    "color/hard": "0x0000FF",
                     "bgm": "bgm04"
                 },
                 {
@@ -17513,6 +17728,14 @@
                             "y": 384,
                             "type": "tower",
                             "team": 1
+                        }
+                    ],
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
                         }
                     ],
                     "name": "18",
@@ -17572,8 +17795,17 @@
                             "type": "planet"
                         }
                     ],
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "AdaptedAI"
+                        }
+                    ],
                     "name": "19",
-                    "color": "0x0000FF",
+                    "color": "0x00FF00",
+                    "color/hard": "0x0000FF",
                     "bgm": "bgm04"
                 },
                 {
@@ -17700,8 +17932,17 @@
                             "type": "planet"
                         }
                     ],
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        }
+                    ],
                     "name": "20",
-                    "color": "0x0000FF",
+                    "color": "0x00FF00",
+                    "color/hard": "0x0000FF",
                     "bgm": "bgm04"
                 },
                 {
@@ -17853,6 +18094,32 @@
                             "y": 448,
                             "type": "cloneturret",
                             "team": 7
+                        }
+                    ],
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        },
+                        {
+                            "team": 3,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        },
+                        {
+                            "team": 4,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        },
+                        {
+                            "team": 7,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
                         }
                     ],
                     "name": "21",
@@ -18136,6 +18403,32 @@
                             "team": 3
                         }
                     ],
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "AdaptedAI"
+                        },
+                        {
+                            "team": 3,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "AdaptedAI"
+                        },
+                        {
+                            "team": 4,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "AdaptedAI"
+                        },
+                        {
+                            "team": 6,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "AdaptedAI"
+                        }
+                    ],
                     "name": "22",
                     "color": "0x00FF00",
                     "bgm": "bgm04"
@@ -18285,6 +18578,32 @@
                             "y": 192,
                             "type": "planet",
                             "team": 4
+                        }
+                    ],
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "AdaptedAI"
+                        },
+                        {
+                            "team": 3,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "AdaptedAI"
+                        },
+                        {
+                            "team": 4,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "AdaptedAI"
+                        },
+                        {
+                            "team": 6,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "AdaptedAI"
                         }
                     ],
                     "name": "23",
@@ -18572,6 +18891,38 @@
                             "size": 0.5
                         }
                     ],
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "AdaptedAI"
+                        },
+                        {
+                            "team": 3,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "AdaptedAI"
+                        },
+                        {
+                            "team": 4,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "AdaptedAI"
+                        },
+                        {
+                            "team": 6,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "AdaptedAI"
+                        },
+                        {
+                            "team": 7,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "AdaptedAI"
+                        }
+                    ],
                     "name": "24",
                     "color": "0x00FF00",
                     "bgm": "bgm05"
@@ -18669,8 +19020,17 @@
                             "team": 2
                         }
                     ],
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        }
+                    ],
                     "name": "25",
                     "color": "0x0000FF",
+                    "color/hard": "0xFFFF00",
                     "bgm": "bgm05"
                 },
                 {
@@ -18890,8 +19250,29 @@
                             "size": 0.3
                         }
                     ],
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        },
+                        {
+                            "team": 3,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        },
+                        {
+                            "team": 4,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        }
+                    ],
                     "name": "26",
-                    "color": "0xFFFF00",
+                    "color": "0x0000FF",
+                    "color/hard": "0xFFFF00",
                     "bgm": "bgm05"
                 },
                 {
@@ -19036,6 +19417,20 @@
                             "type": "barrier"
                         }
                     ],
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        },
+                        {
+                            "team": 3,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        }
+                    ],
                     "name": "27",
                     "color": "0xFFFF00",
                     "bgm": "bgm05"
@@ -19145,7 +19540,40 @@
                             "team": 6
                         }
                     ],
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        },
+                        {
+                            "team": 3,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        },
+                        {
+                            "team": 4,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        },
+                        {
+                            "team": 6,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        },
+                        {
+                            "team": 7,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        }
+                    ],
                     "name": "28",
+                    "color/easy": "0x00FF00",
                     "color": "0xFFFF00",
                     "bgm": "bgm05"
                 },
@@ -19226,8 +19654,17 @@
                             "team": 1
                         }
                     ],
+                    "ai": [
+                        {
+                            "team": 6,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        }
+                    ],
                     "name": "29",
-                    "color": "0xFFFF00",
+                    "color": "0x0000FF",
+                    "color/hard": "0xFFFF00",
                     "bgm": "bgm05"
                 },
                 {
@@ -19424,6 +19861,20 @@
                             "team": 1
                         }
                     ],
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        },
+                        {
+                            "team": 3,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        }
+                    ],
                     "name": "30",
                     "color": "0xFFFF00",
                     "bgm": "bgm05"
@@ -19618,8 +20069,17 @@
                             "team": 6
                         }
                     ],
+                    "ai": [
+                        {
+                            "team": 6,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        }
+                    ],
                     "name": "31",
-                    "color": "0xFFFF00",
+                    "color": "0x0000FF",
+                    "color/hard": "0xFFFF00",
                     "bgm": "bgm05"
                 },
                 {
@@ -19967,8 +20427,29 @@
                             ]
                         }
                     ],
+                    "specialEvents": [
+                        {
+                            "type": "DarknessFalls",
+                            "trigger": {
+                                "nodeTag": 0,
+                                "targetTeam": 6
+                            }
+                        }
+                    ],
+                    "victoryCondition": {
+                        "type": "None"
+                    },
+                    "ai": [
+                        {
+                            "team": 7,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        }
+                    ],
                     "name": "32",
-                    "color": "0x0000FF",
+                    "color": "0xFFAAAA",
+                    "color/hard": "0x0000FF",
                     "bgm": "bgm05"
                 },
                 {
@@ -20376,7 +20857,64 @@
                             ]
                         }
                     ],
+                    "specialEvents": [
+                        {
+                            "type": "BossAppear",
+                            "trigger": {
+                                "ships": 205,
+                                "node": {
+                                    "x": 512,
+                                    "y": 384,
+                                    "type": "dilator",
+                                    "team": 6,
+                                    "startShips": 350,
+                                    "startShips/hard": 275,
+                                    "popVal": 0,
+                                    "isUntouchable": true,
+                                    "isAIinvisible": true
+                                },
+                                "ai": {
+                                    "team": 6,
+                                    "type": "DarkAI",
+                                    "type/hard": "HardAI",
+                                    "startDelay": 0,
+                                    "actionDelay/hard": 0.05
+                                }
+                            }
+                        }
+                    ],
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI",
+                            "actionDelay/hard": 0.15
+                        },
+                        {
+                            "team": 3,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI",
+                            "actionDelay/hard": 0.15
+                        },
+                        {
+                            "team": 4,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI",
+                            "actionDelay/hard": 0.15
+                        },
+                        {
+                            "team": 7,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI",
+                            "actionDelay/hard": 0.15
+                        }
+                    ],
                     "name": "33",
+                    "color/easy": "0x00FF00",
                     "color": "0xFFFF00",
                     "bgm": "bgm06"
                 },
@@ -20670,7 +21208,64 @@
                             "type": "pulsecannon"
                         }
                     ],
+                    "specialEvents": [
+                        {
+                            "type": "BossAppear",
+                            "trigger": {
+                                "ships": 220,
+                                "node": {
+                                    "x": 512,
+                                    "y": 384,
+                                    "type": "dilator",
+                                    "team": 6,
+                                    "startShips": 350,
+                                    "popVal": 0,
+                                    "isUntouchable": true,
+                                    "isAIinvisible": true
+                                },
+                                "ai": {
+                                    "team": 6,
+                                    "type": "DarkAI",
+                                    "type/hard": "HardAI",
+                                    "startDelay": 0,
+                                    "actionDelay/hard": 0.05
+                                }
+                            }
+                        }
+                    ],
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI",
+                            "actionDelay/hard": 0.15
+                        },
+                        {
+                            "team": 3,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI",
+                            "actionDelay/hard": 0.15
+                        },
+                        {
+                            "team": 4,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI",
+                            "actionDelay/hard": 0.15
+                        },
+                        {
+                            "team": 7,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI",
+                            "actionDelay/hard": 0.15
+                        }
+                    ],
                     "name": "34",
+                    "color/easy": "0x00FF00",
+                    "color/normal": "0x0000FF",
                     "color": "0xFFFF00",
                     "bgm": "bgm06"
                 },
@@ -20782,7 +21377,7 @@
                         },
                         {
                             "x": 512,
-                            "y": 320,
+                            "y": 128,
                             "type": "barrier",
                             "barrierLinks": [
                                 17
@@ -20790,53 +21385,8 @@
                         },
                         {
                             "x": 512,
-                            "y": 128,
-                            "type": "barrier"
-                        },
-                        {
-                            "x": 560,
-                            "y": 320,
-                            "type": "barrier",
-                            "barrierLinks": [
-                                16
-                            ]
-                        },
-                        {
-                            "x": 464,
-                            "y": 320,
-                            "type": "barrier",
-                            "barrierLinks": [
-                                16
-                            ]
-                        },
-                        {
-                            "x": 512,
-                            "y": 448,
-                            "type": "barrier",
-                            "barrierLinks": [
-                                21
-                            ]
-                        },
-                        {
-                            "x": 512,
                             "y": 640,
                             "type": "barrier"
-                        },
-                        {
-                            "x": 560,
-                            "y": 448,
-                            "type": "barrier",
-                            "barrierLinks": [
-                                20
-                            ]
-                        },
-                        {
-                            "x": 464,
-                            "y": 448,
-                            "type": "barrier",
-                            "barrierLinks": [
-                                20
-                            ]
                         },
                         {
                             "x": 64,
@@ -21087,7 +21637,89 @@
                             "size": 0.4
                         }
                     ],
+                    "specialEvents": [
+                        {
+                            "type": "BossAppear",
+                            "trigger": {
+                                "ships": 175,
+                                "node": {
+                                    "x": 448,
+                                    "y": 384,
+                                    "type": "dilator",
+                                    "team": 6,
+                                    "startShips": 250,
+                                    "startShips/hard": 325,
+                                    "popVal": 0,
+                                    "isUntouchable": true,
+                                    "isAIinvisible": true
+                                },
+                                "ai": {
+                                    "team": 6,
+                                    "type": "DarkAI",
+                                    "type/hard": "HardAI",
+                                    "startDelay": 0,
+                                    "actionDelay/hard": 0.05
+                                }
+                            }
+                        },
+                        {
+                            "type": "BossAppear",
+                            "trigger": {
+                                "ships": 175,
+                                "node": {
+                                    "x": 576,
+                                    "y": 384,
+                                    "type": "dilator",
+                                    "team": 6,
+                                    "startShips": 250,
+                                    "startShips/hard": 325,
+                                    "popVal": 0,
+                                    "isUntouchable": true,
+                                    "isAIinvisible": true
+                                },
+                                "ai": {
+                                    "team": 6,
+                                    "type": "DarkAI",
+                                    "type/hard": "HardAI",
+                                    "startDelay": 0,
+                                    "actionDelay/hard": 0.05
+                                }
+                            }
+                        }
+                    ],
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI",
+                            "actionDelay/hard": 0.15
+                        },
+                        {
+                            "team": 3,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI",
+                            "actionDelay/hard": 0.15
+                        },
+                        {
+                            "team": 4,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI",
+                            "actionDelay/hard": 0.15
+                        },
+                        {
+                            "team": 7,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI",
+                            "actionDelay/hard": 0.15
+                        }
+                    ],
                     "name": "35",
+                    "color/easy": "0x00FF00",
+                    "color/normal": "0x0000FF",
                     "color": "0xFFFF00",
                     "bgm": "bgm06"
                 },
@@ -21356,7 +21988,39 @@
                             "type": "warp"
                         }
                     ],
+                    "ai": [
+                        {
+                            "team": 3,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI",
+                            "actionDelay/hard": 0.22
+                        },
+                        {
+                            "team": 4,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI",
+                            "actionDelay/hard": 0.22
+                        },
+                        {
+                            "team": 7,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI",
+                            "actionDelay/hard": 0.22
+                        },
+                        {
+                            "team": 6,
+                            "type/hard": "HardAI",
+                            "type": "FinalAI",
+                            "actionDelay/hard": 0.22,
+                            "startDelay": 0
+                        }
+                    ],
                     "name": "36",
+                    "color/easy": "0x00FF00",
+                    "color/normal": "0x0000FF",
                     "color": "0xFFFF00",
                     "bgm": "bgm06"
                 },
@@ -21503,7 +22167,35 @@
                             "type": "tower"
                         }
                     ],
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        },
+                        {
+                            "team": 3,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        },
+                        {
+                            "team": 4,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        },
+                        {
+                            "team": 6,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        }
+                    ],
                     "name": "37",
+                    "color/easy": "0x00FF00",
+                    "color/normal": "0xFFFF00",
                     "color": "0xFF0000",
                     "bgm": "bgm06"
                 },
@@ -21772,8 +22464,17 @@
                             ]
                         }
                     ],
+                    "ai": [
+                        {
+                            "team": 6,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        }
+                    ],
                     "name": "38",
-                    "color": "0xFF0000",
+                    "color": "0x00FF00",
+                    "color/hard": "0xFF0000",
                     "bgm": "bgm06"
                 }
             ]

@@ -113,7 +113,7 @@ def analyze_textures(input_dir):
 
 def pack_textures(textures):
     """
-    打包纹理到图集，使用改进的装箱算法，添加1px间隙
+    打包纹理到图集，使用简单的按行装箱算法，保持纹理间距离
     
     Args:
         textures (list): 纹理信息列表
@@ -121,65 +121,221 @@ def pack_textures(textures):
     Returns:
         tuple: (图集图像, 纹理位置信息列表)
     """
-    # 按内容面积排序，先放置大的纹理
-    textures.sort(key=lambda t: max(t.content_width, t.content_height), reverse=True)
+    # 按高度降序排序（高的优先）
+    textures.sort(key=lambda t: t.content_height, reverse=True)
     
-    # 计算所需的总面积（考虑1px间隙）
     gap = 4  # 纹理之间的间隙
-    total_area = sum((t.content_width + gap) * (t.content_height + gap) for t in textures)
+    padding = 2  # 图集边缘的填充
     
-    # 估算初始图集大小（2的幂，不超过2048）
-    initial_size = min(next_power_of_two(int(math.sqrt(total_area) * 1.1)), 2048)
-    atlas_size = initial_size
+    # 计算所有纹理的总面积
+    total_area = 0
+    max_width = 0
+    for texture in textures:
+        total_area += (texture.content_width + gap) * (texture.content_height + gap)
+        max_width = max(max_width, texture.content_width)
     
-    # 尝试不同的图集大小，直到找到合适的
-    while atlas_size <= 2048:  # 限制最大尺寸为2048
-        try:
-            # 创建空白图集
-            atlas = Image.new('RGBA', (atlas_size, atlas_size), (0, 0, 0, 0))
-            placements = []
+    # 从合理的尺寸开始尝试
+    # 先估算最小可能的宽度和高度
+    min_width = max_width + padding * 2
+    min_height = textures[0].content_height + padding * 2
+    
+    # 尝试不同的尺寸
+    for atlas_size in [2048]:
+        print(f"尝试图集尺寸: {atlas_size}x{atlas_size}")
+        
+        # 创建空白图集
+        atlas = Image.new('RGBA', (atlas_size, atlas_size), (0, 0, 0, 0))
+        placements = []
+        
+        # 初始化第一行
+        current_x = padding
+        current_y = padding
+        current_row_height = 0
+        
+        # 尝试放置每个纹理
+        for texture in textures:
+            # 如果当前行放不下，换到新的一行
+            if current_x + texture.content_width + gap > atlas_size - padding:
+                current_x = padding
+                current_y += current_row_height + gap
+                current_row_height = 0
             
-            # 使用改进的装箱算法 - 按行放置，添加1px间隙
-            current_x = 2
-            current_y = 2
-            row_height = 2
+            # 检查是否超出图集高度
+            if current_y + texture.content_height + gap > atlas_size - padding:
+                # 当前尺寸太小，尝试下一个尺寸
+                print(f"尺寸 {atlas_size} 太小，尝试下一个尺寸")
+                break
             
-            for texture in textures:
-                # 检查是否需要换行（考虑间隙）
-                if current_x + texture.content_width + gap > atlas_size:
-                    current_x = 2
-                    current_y += row_height + gap
-                    row_height = 2
-                
-                # 检查是否需要增加图集高度（考虑间隙）
-                if current_y + texture.content_height + gap > atlas_size:
-                    raise ValueError("Atlas too small")
-                
-                # 将实际内容放置到图集上
-                atlas.paste(texture.content_img, (current_x, current_y))
-                
-                # 记录纹理在图集中的位置
-                placements.append((texture.name, current_x, current_y, 
-                                  texture.content_width, texture.content_height,
-                                  texture.frame_x, texture.frame_y, 
-                                  texture.frame_width, texture.frame_height))
-                
-                # 更新当前位置和行高（考虑间隙）
-                current_x += texture.content_width + gap
-                row_height = max(row_height, texture.content_height)
+            # 放置纹理
+            atlas.paste(texture.content_img, (current_x, current_y))
             
-            # 所有纹理都已放置
-            print(f"Packed {len(textures)} textures into {atlas_size}x{atlas_size} atlas")
-            print(f"Space utilization: {total_area / (atlas_size * atlas_size) * 100:.2f}%")
+            # 记录位置信息
+            placements.append((texture.name, current_x, current_y, 
+                              texture.content_width, texture.content_height,
+                              texture.frame_x, texture.frame_y, 
+                              texture.frame_width, texture.frame_height))
+            
+            # 更新当前位置
+            current_x += texture.content_width + gap
+            current_row_height = max(current_row_height, texture.content_height)
+        else:
+            # 所有纹理都成功放置
+            print(f"成功将 {len(textures)} 个纹理打包到 {atlas_size}x{atlas_size} 图集")
+            print(f"空间利用率: {total_area / (atlas_size * atlas_size) * 100:.2f}%")
+            print(f"使用空间: {current_y + current_row_height}x{max_width if placements else 0}")
             return atlas, placements
-            
-        except ValueError:
-            # 增大图集大小（2的幂）
-            atlas_size *= 2
-            if atlas_size > 2048:  # 设置最大限制为2048
-                raise ValueError("Textures too large to pack into 2048x2048 atlas")
+        
+        # 继续尝试下一个尺寸
     
-    raise ValueError("Textures too large to pack into 2048x2048 atlas")
+    # 如果所有尺寸都失败，使用更灵活的算法
+    print("标准算法失败，使用备用算法...")
+    return pack_textures_backup(textures)
+
+def pack_textures_backup(textures):
+    """
+    备用打包算法：使用多行策略
+    
+    Args:
+        textures (list): 纹理信息列表
+        
+    Returns:
+        tuple: (图集图像, 纹理位置信息列表)
+    """
+    # 按宽度降序排序
+    textures.sort(key=lambda t: t.content_width, reverse=True)
+    
+    gap = 4
+    padding = 2
+    
+    # 尝试不同的尺寸
+    for atlas_size in [2048]:
+        print(f"备用算法尝试尺寸: {atlas_size}x{atlas_size}")
+        
+        atlas = Image.new('RGBA', (atlas_size, atlas_size), (0, 0, 0, 0))
+        placements = []
+        
+        # 初始化多行
+        rows = []
+        current_y = padding
+        
+        for texture in textures:
+            placed = False
+            
+            # 尝试放入现有行
+            for i, row in enumerate(rows):
+                row_y, row_height, row_textures = row
+                
+                # 检查这一行是否有空间
+                row_width = sum(t.content_width + gap for t in row_textures)
+                if row_width + texture.content_width + gap <= atlas_size - padding:
+                    # 可以放入这一行
+                    x_pos = padding if not row_textures else (row_width + gap)
+                    atlas.paste(texture.content_img, (x_pos, row_y))
+                    
+                    # 记录位置
+                    placements.append((texture.name, x_pos, row_y, 
+                                      texture.content_width, texture.content_height,
+                                      texture.frame_x, texture.frame_y, 
+                                      texture.frame_width, texture.frame_height))
+                    
+                    # 更新行信息
+                    row_textures.append(texture)
+                    rows[i] = (row_y, max(row_height, texture.content_height), row_textures)
+                    placed = True
+                    break
+            
+            # 如果不能放入现有行，创建新行
+            if not placed:
+                # 检查是否有空间创建新行
+                new_row_y = padding
+                if rows:
+                    # 新行放在最后一行下面
+                    last_row_y, last_row_height, _ = rows[-1]
+                    new_row_y = last_row_y + last_row_height + gap
+                
+                if new_row_y + texture.content_height + gap <= atlas_size - padding:
+                    # 创建新行
+                    x_pos = padding
+                    atlas.paste(texture.content_img, (x_pos, new_row_y))
+                    
+                    # 记录位置
+                    placements.append((texture.name, x_pos, new_row_y, 
+                                      texture.content_width, texture.content_height,
+                                      texture.frame_x, texture.frame_y, 
+                                      texture.frame_width, texture.frame_height))
+                    
+                    rows.append((new_row_y, texture.content_height, [texture]))
+                    placed = True
+            
+            if not placed:
+                # 当前尺寸放不下，尝试下一个尺寸
+                print(f"备用算法尺寸 {atlas_size} 太小")
+                break
+        
+        else:
+            # 所有纹理都成功放置
+            print(f"备用算法成功将 {len(textures)} 个纹理打包到 {atlas_size}x{atlas_size} 图集")
+            return atlas, placements
+    
+    # 如果还是失败，使用最简算法
+    print("所有算法失败，使用最简算法...")
+    return pack_textures_simple(textures)
+
+def pack_textures_simple(textures):
+    """
+    最简打包算法：一行一个纹理
+    
+    Args:
+        textures (list): 纹理信息列表
+        
+    Returns:
+        tuple: (图集图像, 纹理位置信息列表)
+    """
+    # 找到最大纹理尺寸
+    max_width = max(t.content_width for t in textures)
+    max_height = max(t.content_height for t in textures)
+    
+    gap = 4
+    padding = 2
+    
+    # 计算所需的最小尺寸
+    required_width = max_width + padding * 2
+    required_height = sum(t.content_height + gap for t in textures) + padding * 2
+    
+    # 找到合适的2的幂次方尺寸
+    atlas_size = 128
+    while atlas_size < max(required_width, required_height):
+        atlas_size *= 2
+        if atlas_size > 2048:
+            atlas_size = 2048
+            break
+    
+    print(f"最简算法使用尺寸: {atlas_size}x{atlas_size}")
+    
+    atlas = Image.new('RGBA', (atlas_size, atlas_size), (0, 0, 0, 0))
+    placements = []
+    
+    current_y = padding
+    
+    for texture in textures:
+        # 居中放置
+        x_pos = (atlas_size - texture.content_width) // 2
+        
+        # 放置纹理
+        atlas.paste(texture.content_img, (x_pos, current_y))
+        
+        # 记录位置
+        placements.append((texture.name, x_pos, current_y, 
+                          texture.content_width, texture.content_height,
+                          texture.frame_x, texture.frame_y, 
+                          texture.frame_width, texture.frame_height))
+        
+        # 更新位置
+        current_y += texture.content_height + gap
+    
+    print(f"最简算法打包完成，使用空间: {atlas_size}x{current_y}")
+    return atlas, placements
+
 
 def generate_xml(placements, atlas_size, output_path):
     """
