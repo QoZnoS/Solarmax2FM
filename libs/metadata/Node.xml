@@ -23,7 +23,7 @@
         <startVal>S*100</startVal>
         <buildRate>S*2</buildRate>
         <hpMult>1</hpMult>
-        <scale>1</scale>
+        <scale>S*1</scale>
     </node>
     <node id="1" name="warp">
         <defaultSize>0.4</defaultSize>
@@ -107,5 +107,13 @@
         <attackType>captureship</attackType>
         <hpMult>3</hpMult>
         <scale>0.8</scale>
+    </node>
+    <node id="11" name="diffusion">
+        <defaultSize>0.3</defaultSize>
+        <attackRate>0.5</attackRate>
+        <attackRange>180</attackRange>
+        <attackType>diffusion</attackType>
+        <hpMult>3</hpMult>
+        <scale>0.6</scale>
     </node>
 </node>

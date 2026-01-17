@@ -108,7 +108,7 @@ package Entity.AI {
                         // if (Globals.level == 34 && targetNode.x == 912 && targetNode.y == 544)
                         // trace("defending");
                         // traceDebug("defending       " + senderNode.x + "." + senderNode.y + "  to  " + targetNode.x + "." + targetNode.y + "  ships:  " + ships);
-                        trace("\"Defending!\" team: " + team + " sender: " + senderNode.tag + " target: " + targetNode.tag + " ships: " + ships + " towerAttack: " + towerAttack);
+                        // trace("\"Defending!\" team: " + team + " sender: " + senderNode.tag + " target: " + targetNode.tag + " ships: " + ships + " towerAttack: " + towerAttack);
                         NodeStaticLogic.sendAIShips(senderNode, team, targetNode, ships);
                         return;
                     }
@@ -192,7 +192,7 @@ package Entity.AI {
                         // if (Globals.level == 34 && targetNode.x == 912 && targetNode.y == 544)
                         // trace("attacking");
                         // traceDebug("attacking       " + senderNode.x + "." + senderNode.y + "  to  " + targetNode.x + "." + targetNode.y + "  ships:  " + ships);
-                        trace("\"Attacking!\" team: " + team + " sender: " + senderNode.tag + " target: " + targetNode.tag + " ships: " + ships + " towerAttack: " + towerAttack);
+                        // trace("\"Attacking!\" team: " + team + " sender: " + senderNode.tag + " target: " + targetNode.tag + " ships: " + ships + " towerAttack: " + towerAttack);
                         NodeStaticLogic.sendAIShips(senderNode, team, targetNode, ships);
                         return;
                     }
@@ -278,7 +278,7 @@ package Entity.AI {
                         // trace("repositioning");
                         // if (ships != 0)
                         //     traceDebug("repositioning   " + senderNode.x + "." + senderNode.y + "  to  " + targetNode.x + "." + targetNode.y + "  ships:  " + ships);
-                        trace("\"Repositioning!\" team: " + team + " sender: " + senderNode.tag + " target: " + targetNode.tag + " ships: " + ships + " towerAttack: " + towerAttack);
+                        // trace("\"Repositioning!\" team: " + team + " sender: " + senderNode.tag + " target: " + targetNode.tag + " ships: " + ships + " towerAttack: " + towerAttack);
                         NodeStaticLogic.sendAIShips(senderNode, team, targetNode, ships);
                         return;
                     }

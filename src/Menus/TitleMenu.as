@@ -383,6 +383,7 @@ package Menus {
         public function on_difficultyButton(click:Event):void {
             Globals.currentDifficulty = DifficultyButton.btnText[difficultyButtons.indexOf(click.target)].toLowerCase();
             LevelData.updateLevelData();
+            levels.updateLevels();
         }
 
         public function animateIn():void {

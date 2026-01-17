@@ -47,7 +47,7 @@ package UI.Component {
             label.y = -15;
             label.alpha = 0.6;
             addChild(label);
-            quad = new Quad(bg.width + 10, bg.height + 10, 16711680);
+            quad = new Quad(bg.width + 20, bg.height + 20, 16711680);
             quad.pivotX = quad.width * 0.5;
             quad.pivotY = quad.height * 0.5;
             quad.alpha = 0;
@@ -82,7 +82,7 @@ package UI.Component {
                     down = true;
                     break;
                 case "moved":
-                    if (down && !hitTest(touch.getLocation(quad, hitPoint))) {
+                    if (down && !hitTest(touch.getLocation(this, hitPoint))) {
                         bg.alpha = toggled ? 0.4 : 0;
                         down = false;
                     }

@@ -4,8 +4,6 @@ package Entity.Node.Attack {
     import Entity.Ship;
     import Entity.EntityHandler;
     import Entity.EntityContainer;
-    import utils.Rng;
-    import avmplus.factoryXml;
     import utils.GS;
     import Entity.FXHandler;
 
@@ -18,11 +16,12 @@ package Entity.Node.Attack {
         override public function executeAttack(node:Node, dt:Number):void {
             var nodes:Array = EntityContainer.findNodeInRange(node);
             if (nodes.length <= 1)
-                return;
+                return; // 范围内没有天体则跳过
+
             var shipNum:int = 0;
             var allyTeams:Vector.<int> = new Vector.<int>();
             var group:int = Globals.teamGroups[node.nodeData.team];
-            for (var teamId:int = 0; teamId < node.ships.length; teamId++) {
+            for (var teamId:int = 0; teamId < Globals.teamCount; teamId++) {
                 var oppGroup:int = Globals.teamGroups[teamId];
                 if (node.ships[teamId].length > 0) {
                     if (oppGroup == group) {
@@ -87,8 +86,6 @@ package Entity.Node.Attack {
             FXHandler.addDarkPulse(node, color, 8, maxSize, 1, 0)
         }
 
-
-        
         override public function get attackType():String {
             return "diffusion";
         }

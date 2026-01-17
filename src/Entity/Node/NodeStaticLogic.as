@@ -113,7 +113,6 @@ package Entity.Node {
                 node.moveState.image.texture = Root.assets.getTexture("planet" + imageID); // 更换星球贴图
                 node.moveState.halo.texture = Root.assets.getTexture("halo"); // 更换光圈
                 node.moveState.glow.texture = Root.assets.getTexture("planet_shape"); // 更换星球光效
-                node.moveState.image.scaleX = node.moveState.image.scaleY = node.moveState.glow.scaleX = node.moveState.glow.scaleY = size;
             } else {
                 node.moveState.image.texture = Root.assets.getTexture(type); // 更换星球贴图
                 node.moveState.halo.texture = Root.assets.getTexture(type + "_glow"); // 更换光圈
@@ -126,10 +125,9 @@ package Entity.Node {
             node.moveState.halo.scaleY = node.moveState.halo.scaleX = 1;
             node.moveState.halo.pivotY = node.moveState.halo.pivotX = node.moveState.halo.width * 0.5;
             node.moveState.image.rotation = node.moveState.halo.rotation = node.moveState.glow.rotation = NodeType.getDefaultRotation(type);
+            node.moveState.image.scaleX = node.moveState.image.scaleY = node.moveState.halo.scaleX = node.moveState.halo.scaleY = node.moveState.glow.scaleX = node.moveState.glow.scaleY = NodeType.getDefaultScale(type, size);
             if (type == NodeType.PLANET)
-                node.moveState.halo.scaleY = node.moveState.halo.scaleX = size * 0.5;
-            else
-                node.moveState.image.scaleX = node.moveState.image.scaleY = node.moveState.halo.scaleX = node.moveState.halo.scaleY = node.moveState.glow.scaleX = node.moveState.glow.scaleY = NodeType.getDefaultScale(type, size);
+                node.moveState.halo.scaleY = node.moveState.halo.scaleX = NodeType.getDefaultScale(type, size) * 0.5;
             if (node.nodeData.team != 0)
                 node.nodeData.startShips[node.nodeData.team] = NodeType.getDefaultStartVal(type, size);
             node.nodeData.popVal = NodeType.getDefaultPopVal(type, size);
