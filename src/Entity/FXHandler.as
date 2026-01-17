@@ -39,6 +39,16 @@ package Entity
             EntityContainer.addEntity(EntityContainer.INDEX_BEAMS, beamFX);
         }
 
+        public static function addLightning(node1:Node, node2:Node, color:uint):void {
+            var lightningFX:LightningFX = EntityContainer.getReserve(EntityContainer.INDEX_BEAMS) as LightningFX;
+            if (!lightningFX) {
+                var imageID:int = Math.floor(Math.random() * 3 + 1);
+                lightningFX = new LightningFX(imageID);
+            }
+            lightningFX.initLightning(game, node1.nodeData.x, node1.nodeData.y, node2.nodeData.x, node2.nodeData.y, color, node1);
+            EntityContainer.addEntity(EntityContainer.INDEX_BEAMS, lightningFX);
+        }
+
         public static function addPulse(node:Node, color:uint, type:int, delay:Number = 0):void {
             var nodePulse:NodePulse = EntityContainer.getReserve(EntityContainer.INDEX_PULSES) as NodePulse;
             if (!nodePulse)

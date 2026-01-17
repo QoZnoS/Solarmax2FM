@@ -229,5 +229,19 @@ package utils{
             timers[7] = gap;
             playSound("warp_charge", 0.6, (_x - 512) / 512);
         }
+
+        public static function playDiffusing(_x:Number):void {
+            if (timers[8] > 0)
+                return;
+            timers[8] = gap;
+            playSound("diffusing", 0.5, (_x - 512) / 512);
+        }
+
+        public static function playDiffused(_x:Number):void {
+            if (timers[9] > 0)
+                return;
+            timers[9] = gap;
+            playSound("diffused", 0.5, (_x - 512) / 512);
+        }
     }
 }

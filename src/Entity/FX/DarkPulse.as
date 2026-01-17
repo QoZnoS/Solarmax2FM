@@ -16,6 +16,7 @@ package Entity.FX {
         public static const TYPE_BLACKHOLE_ATTACK:int = 4;
         public static const TYPE_BLACKHOLE:int = 5;
         public static const TYPE_BLACKHOLE_FLARE:int = 6;
+        public static const TYPE_DIFFUSION_ARC:int = 8;
 
         private var x:Number;
         private var y:Number;
@@ -54,6 +55,10 @@ package Entity.FX {
                     break;
                 case 7:
                     image.texture = Root.assets.getTexture("skill_glow");
+                    break;
+                case TYPE_DIFFUSION_ARC:
+                    var imageID:int = Math.floor(Math.random() * 16) + 1;
+                    image.texture = Root.assets.getTexture("elecarc" + (imageID < 10 ? "0" + imageID : imageID.toString()));
             }
             image.readjustSize();
             image.width = image.texture.width;
@@ -97,6 +102,7 @@ package Entity.FX {
                 case TYPE_BLACKHOLE:
                 case TYPE_BLACKHOLE_FLARE:
                 case 7:
+                case TYPE_DIFFUSION_ARC:
                     image.alpha = rate * 0.8;
                     image.scaleX = image.scaleY = maxSize;
                     image.rotation = angle;

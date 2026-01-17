@@ -5,6 +5,8 @@ package Entity.Node.Attack {
     import Entity.Ship;
     import Entity.EntityHandler;
     import Entity.EntityContainer;
+    import Entity.FXHandler;
+    import utils.GS;
 
     public class CaptureshipAttack extends BasicAttack {
 
@@ -31,7 +33,8 @@ package Entity.Node.Attack {
                     ship.trail.color = node.moveState.image.color;
                     ship.pulse.color = node.moveState.image.color;
                 }
-                node.fireBeam(ship);
+                FXHandler.addBeam(node, ship); // 播放攻击特效
+                GS.playLaser(node.nodeData.x); // 播放攻击音效
             }
         }
 

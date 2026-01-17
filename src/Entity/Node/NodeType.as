@@ -12,6 +12,7 @@ package Entity.Node {
         public static const BLACKHOLE:String = "blackhole";
         public static const CLONETURRET:String = "cloneturret";
         public static const CAPTURESHIP:String = "captureship";
+        public static const DIFFUSION:String = "diffusion";
 
         /**仅用于兼容部分原版函数
          * @param type
@@ -41,6 +42,8 @@ package Entity.Node {
                     return CLONETURRET;
                 case 10:
                     return CAPTURESHIP;
+                case 11:
+                    return DIFFUSION;  
                 default:
                     throw new Error("Node type not register");
             }

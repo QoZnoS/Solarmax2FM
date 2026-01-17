@@ -26,7 +26,7 @@ package {
             if (file.exists)
                 load();
             updateLevelData();
-
+            
             if (Globals.currentData >= rawData.length){
                 SceneController.alert("The selected Mappack does not exist!");
                 Globals.currentData = 0;

@@ -67,8 +67,10 @@ package Entity.Node.States {
                         var lowerBound:Number = 0; // 随机数因子下界
                         for each (var i:int in teams) {
                             var upperBound:Number = lowerBound + ships[i].length / shipNum; // 因子上界
-                            if (r >= lowerBound && r < upperBound)
+                            if (r >= lowerBound && r < upperBound) {
                                 captureTeam = i;
+                                break;
+                            }
                             lowerBound = upperBound; // 新的因子下界
                         }
                 }

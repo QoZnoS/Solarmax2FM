@@ -150,6 +150,40 @@ package Entity {
             return nodeInRange;
         }
 
+        /** 检测目标天体是否在**指定天体**攻击范围内
+         * @param centerNode 目标天体
+         * @param team **指定天体**势力
+         * @param type **指定天体**类型
+         * @param hostile team是否特指其敌对的势力，默认为false
+         * @return Boolean
+         */
+        public static function inAttackNodeCheck(centerNode:Node, team:int, type:String, hostile:Boolean = false):Boolean {
+            var inRange:Boolean = false;
+            var group:int = Globals.teamGroups[team];
+            var node:Node;
+            var dx:Number, dy:Number, range:Number;
+            for each (node in nodes) {
+                var nodeGroup:int = Globals.teamGroups[node.nodeData.team];
+                if (hostile ? group == nodeGroup : group != nodeGroup) //排除不符合是否敌对要求的
+                    continue;
+                if (node.nodeData.team == 0) //排除中立天体
+                    continue;
+                if (node.nodeData.type != type) //排除不符合类型要求的天体
+                    continue;
+                if (node == centerNode) //排除检查天体本身
+                    continue;
+
+                dx = centerNode.nodeData.x - node.nodeData.x;
+                dy = centerNode.nodeData.y - node.nodeData.y;
+                range = node.attackState.attackRange;
+                if (dx > range || dx < -range || dy > range || dy < -range)
+                    continue;
+                if (Math.sqrt(dx * dx + dy * dy) < range)
+                    inRange = true;
+            }
+            return inRange;
+        }
+
         /** 根据状态过滤天体上的飞船
          * @param node 目标天体
          * @param state 目标状态
@@ -215,6 +249,37 @@ package Entity {
                 }
             }
             return length;
+        }
+
+        public static function isInBlackhole(node1:Node, node2:Node, team:int):Boolean {
+            var group:int = Globals.teamGroups[team];
+            var node:Node = null;
+            var start:Point = null;
+            var end:Point = null;
+            var current:Point = null;
+            var result:Array;
+            var resultInside:Boolean; // 线是否在圆内
+            var resultIntersects:Boolean; // 线和圆是否相交
+            var resultEnter:Point; // 线和圆的第一个交点
+            var resultExit:Point; // 线和圆的第二个交点
+            var inBlackhole:Boolean = false;
+            for each (node in nodes) {
+                var nodeGroup:int = Globals.teamGroups[node.nodeData.team];
+                if (node.nodeData.team == 0 || nodeGroup == group)
+                    continue;
+                if (node.nodeData.type == NodeType.BLACKHOLE && (node.attackState.attackStrategy.attacking || node.attackState.attackStrategy.attackTimer < 1)) {
+                    start = new Point(node1.nodeData.x, node1.nodeData.y);
+                    end = new Point(node2.nodeData.x, node2.nodeData.y);
+                    current = new Point(node.nodeData.x, node.nodeData.y);
+                    result = lineIntersectCircle(start, end, current, node.attackState.attackRange);
+                    resultInside = result[0],resultIntersects = result[1], resultEnter = result[2], resultExit = result[3];
+                    if (resultIntersects || resultInside) {
+                        inBlackhole = true;
+                        break;
+                    } 
+                }
+            }
+            return inBlackhole;
         }
 
         public static function lineIntersectCircle(pointA:Point, pointB:Point, circleCenter:Point, circleRadius:Number = 1):Array { // 判断线与圆的关系并返回交点

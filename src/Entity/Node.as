@@ -478,16 +478,6 @@ package Entity {
         }
 
         // #endregion
-
-        // #region 特效与绘图
-
-        public function fireBeam(ship:Ship):void {
-            FXHandler.addBeam(this, ship); // 播放攻击特效
-            GS.playLaser(nodeData.x); // 播放攻击音效
-        }
-
-        // #endregion
-
         public function get basicState():NodeBasicState {
             return statePool[NodeStateFactory.BASIC] as NodeBasicState;
         }

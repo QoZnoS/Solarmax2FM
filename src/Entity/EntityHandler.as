@@ -30,7 +30,7 @@ package Entity {
                 rng = new Rng(0, Rng.X32);
             var actionDelay:Number = ("actionDelay" in data) ? data.actionDelay : -1;
             var startDelay:Number = ("startDelay" in data) ? data.startDelay : -1;
-            enemyAI.initAI(game, rng, data.team, data.type, actionDelay);
+            enemyAI.initAI(game, rng, data.team, data.type, actionDelay, startDelay);
             EntityContainer.addEntity(EntityContainer.INDEX_AIS, enemyAI);
         }
 

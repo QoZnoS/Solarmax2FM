@@ -178,11 +178,11 @@ package Entity.Node.States {
             var teamLabel:TextField = captureLabels[teamId];
             var easeX:Number = Math.min(180, Transitions.getTransition(Transitions.EASE_OUT)(teamCount / Globals.maxMarginTeam) * 118.196601125 + startEaseX);
             var easeY:Number = Math.min(180, Transitions.getTransition(Transitions.EASE_OUT)(teamCount / Globals.maxMarginTeam) * 122.8105110418 + startEaseY);
-            trace(easeX);
-            trace(easeY)
-            trace(labelAngle);
-            trace(Math.cos(labelAngle))
-            trace(Math.sin(labelAngle))
+            // trace(easeX);
+            // trace(easeY)
+            // trace(labelAngle);
+            // trace(Math.cos(labelAngle))
+            // trace(Math.sin(labelAngle))
             teamLabel.x = nodeData.x + Math.cos(labelAngle) * easeX * nodeData.size;
             teamLabel.y = nodeData.y + Math.sin(labelAngle) * easeY * nodeData.size;
             teamLabel.text = shipCount.toString();

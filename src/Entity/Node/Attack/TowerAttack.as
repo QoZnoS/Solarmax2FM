@@ -5,6 +5,8 @@ package Entity.Node.Attack {
     import Entity.Ship;
     import Entity.EntityHandler;
     import Entity.EntityContainer;
+    import Entity.FXHandler;
+    import utils.GS;
 
     public class TowerAttack extends BasicAttack {
 
@@ -19,7 +21,8 @@ package Entity.Node.Attack {
             if (ships.length == 0)
                 return;
             var ship:Ship = node.rng.randomIndex(ships);
-            node.fireBeam(ship);
+            FXHandler.addBeam(node, ship); // 播放攻击特效
+            GS.playLaser(node.nodeData.x); // 播放攻击音效
             EntityHandler.destroyShip(ship);
         }
 
