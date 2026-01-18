@@ -15,6 +15,7 @@ package Entity.FX {
         private var color:uint;
         private var image:Image;
         private var foreground:Boolean;
+        private var deepColor:Boolean;
         private var state:int;
 
         public function FlashFX() {
@@ -24,12 +25,13 @@ package Entity.FX {
             image.pivotY = image.height * 0.5;
         }
 
-        public function initExplosion(gameScene:GameScene, x:Number, y:Number, color:uint, foreground:Boolean):void {
+        public function initExplosion(gameScene:GameScene, x:Number, y:Number, color:uint, foreground:Boolean, deepColor:Boolean):void {
             super.init(gameScene);
             this.x = x;
             this.y = y;
             this.color = color;
             this.foreground = foreground;
+            this.deepColor = deepColor;
             this.size = 0;
             image.x = x;
             image.y = y;
@@ -58,7 +60,7 @@ package Entity.FX {
                 }
             }
             image.scaleX = image.scaleY = size;
-            UIContainer.entityLayer.addImage(image, foreground);
+            UIContainer.entityLayer.addImage(image, foreground, deepColor);
         }
     }
 }

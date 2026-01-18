@@ -224,6 +224,7 @@ package Game {
 import starling.display.Image;
 import Entity.Node.NodeType;
 import UI.UIContainer;
+import Entity.Node.NodeData;
 
 class NodePreview {
     public var image:Image;
@@ -242,7 +243,7 @@ class NodePreview {
         glow.pivotX = glow.pivotY = glow.width * 0.5;
         image.scaleX = image.scaleY = halo.scaleX = halo.scaleY = glow.scaleX = glow.scaleY = 0.5;
         updateType(type);
-        UIContainer.entityLayer.addNode(image, halo, glow);
+        UIContainer.entityLayer.addNode(image, halo, glow, false);
     }
 
     public function updateType(type:String):void {

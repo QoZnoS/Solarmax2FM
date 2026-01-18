@@ -18,6 +18,7 @@ package Entity.FX {
         private var color:uint;
         private var image:Image; // 这是射线
         private var image2:Image; // 这是攻击塔的特效
+        private var deepColor:Boolean;
         private var foreground:Boolean;
         private var type:String;
         private var state:int;
@@ -32,11 +33,12 @@ package Entity.FX {
             foreground = true;
         }
 
-        public function initBeam(gameScene:GameScene, x1:Number, y1:Number, x2:Number, y2:Number, color:uint, node:Node):void {
+        public function initBeam(gameScene:GameScene, x1:Number, y1:Number, x2:Number, y2:Number, node:Node):void {
             super.init(gameScene);
             this.x = x1;
             this.y = y1;
-            this.color = color;
+            this.color = Globals.teamColors[node.nodeData.team];
+            this.deepColor = Globals.teamDeepColors[node.nodeData.team];
             this.size = 0;
             var dx:Number = x2 - x1;
             var dy:Number = y2 - y1;
@@ -102,9 +104,9 @@ package Entity.FX {
                     break;
             }
             image.rotation = angle;
-            UIContainer.entityLayer.addImage(image, foreground);
-            if (image.color != 0)
-                UIContainer.entityLayer.addImage(image2, foreground);
+            UIContainer.entityLayer.addImage(image, foreground, deepColor);
+            if (!deepColor)
+                UIContainer.entityLayer.addImage(image2, foreground, deepColor);
         }
     }
 }

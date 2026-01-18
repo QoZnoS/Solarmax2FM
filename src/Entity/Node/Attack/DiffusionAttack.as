@@ -67,8 +67,7 @@ package Entity.Node.Attack {
                         EntityHandler.removeShip(ship);
                         continue;
                     }
-                    var color:uint = Globals.teamColors[diffuseTeam];
-                    FXHandler.addLightning(node, _node, color); // 播放攻击特效
+                    FXHandler.addLightning(node, _node, Globals.teamColors[diffuseTeam], Globals.teamDeepColors[diffuseTeam]); // 播放攻击特效
                     EntityHandler.addShip(_node, diffuseTeam, false);
                     diffused++;
                 }
@@ -82,8 +81,9 @@ package Entity.Node.Attack {
 
         private function updateArc(node:Node, dt:Number):void {
             var color:uint = Globals.teamColors[node.nodeData.team];
+            var deepColor:Boolean = Globals.teamDeepColors[node.nodeData.team];
             var maxSize:Number = 2 * node.nodeData.size;
-            FXHandler.addDarkPulse(node, color, 8, maxSize, 1, 0)
+            FXHandler.addDarkPulse(node, color, 8, maxSize, 1, 0, deepColor)
         }
 
         override public function get attackType():String {

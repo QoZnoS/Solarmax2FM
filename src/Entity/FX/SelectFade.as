@@ -16,16 +16,18 @@ package Entity.FX {
         private var alpha:Number;
         private var color:uint;
         private var type:int;
+        private var deepColor:Boolean;
 
         public function SelectFade() {
             super();
         }
 
-        public function initSelectFade(gameScene:GameScene, x:Number, y:Number, size:Number, color:uint, type:int):void {
+        public function initSelectFade(gameScene:GameScene, x:Number, y:Number, size:Number, color:uint, type:int, deepColor:Boolean):void {
             super.init(gameScene);
             this.x = x;
             this.y = y;
             this.color = color;
+            this.deepColor = deepColor;
             this.size = size;
             this.type = type;
             alpha = 1;

@@ -142,6 +142,7 @@ package Menus.StartMenus {
             resetBtn2 = new OptionButton("CONFIRM?", 16720418, null);
             resetBtn2.x = 330 + resetBtn.width - 60;
             resetBtn2.addEventListener("clicked", on_reset);
+            resetBtn2.touchable = false;
             components.push(resetBtn2);
             exitBtn = new OptionButton("EXIT GAME", COLOR, null);
             exitBtn.x = 660;
@@ -197,6 +198,7 @@ package Menus.StartMenus {
             Globals.nohup ? pauseAllows[1].toggle() : pauseAllows[0].toggle();
             Starling.juggler.removeTweens(resetBtn2);
             resetBtn2.alpha = 0;
+            resetBtn2.touchable = false;
             audioSlider.update();
             musicSlider.update();
             this.visible = true
@@ -255,11 +257,12 @@ package Menus.StartMenus {
 
         private function on_show_reset(click:Event):void {
             Starling.juggler.tween(resetBtn2, 0.5, {"alpha": 1});
+            resetBtn2.touchable = true;
         }
 
         private function on_reset(click:Event):void {
             title.on_reset();
-            animateOut();
+            title.optionsMenu.animateOut();
         }
 
         private function on_blackBorder(click:Event):void {

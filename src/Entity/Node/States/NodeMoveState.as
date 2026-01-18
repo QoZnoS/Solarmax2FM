@@ -53,7 +53,7 @@ package Entity.Node.States {
                 addTextField(conflictLabels, i);
             }
             image.visible = halo.visible = true;
-            UIContainer.entityLayer.addNode(image, halo, glow);
+            UIContainer.entityLayer.addNode(image, halo, glow, Globals.teamDeepColors[nodeData.team]);
             if (orbitNode) {
                 var dx:Number = nodeData.x - orbitNode.nodeData.x;
                 var dy:Number = nodeData.y - orbitNode.nodeData.y;
@@ -114,7 +114,7 @@ package Entity.Node.States {
                     glow.alpha = 1;
                     glowing = false;
                     image.color = halo.color = glow.color = Globals.teamColors[nodeData.team];
-                    UIContainer.entityLayer.addGlow(halo);
+                    UIContainer.entityLayer.addGlow(halo, Globals.teamDeepColors[nodeData.team]);
                 }
             } else if (glow.alpha > 0) { // 再归零
                 glow.alpha -= dt * 2; // 不透明度减少

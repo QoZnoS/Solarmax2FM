@@ -543,7 +543,7 @@ package Menus {
                         shapeImage.color = Globals.teamColors[node.team];
                     else
                         shapeImage.color = Globals.teamColors[0];
-                    if (shapeImage.color == 0)
+                    if (node.team ? Globals.teamDeepColors[node.team] : Globals.teamDeepColors[0])
                         preview2.addImage(shapeImage);
                     else
                         preview.addImage(shapeImage);

@@ -25,7 +25,7 @@ package Entity.AI {
             }
             if (surrender && Globals.teamPops[team] < 30)
                 return;
-            if (nodeArray[0].nodeData.type == NodeType.DILATOR && nodeArray[0].hard_AllStrength(team) * 0.6 < nodeArray[0].hard_oppAllStrength(team)) {
+            if (nodeArray[0].nodeData.type == NodeType.DILATOR && nodeArray[0].nodeData.team == team && nodeArray[0].hard_AllStrength(team) * 0.6 < nodeArray[0].hard_oppAllStrength(team)) {
                 blackDefend();
                 return;
             }

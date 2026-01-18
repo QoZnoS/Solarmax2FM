@@ -29,7 +29,7 @@ package Game.SpecialEvent {
             darkPulse.x = boss.nodeData.x;
             darkPulse.y = boss.nodeData.y;
             darkPulse.visible = false;
-            UIContainer.entityLayer.addGlow(darkPulse);
+            UIContainer.entityLayer.addGlow(darkPulse, Globals.teamDeepColors[Globals.playerTeam]);
         }
 
         private var slowMult:Number = 1;
@@ -44,6 +44,7 @@ package Game.SpecialEvent {
             var angleStep:Number = Math.PI * 2 / 3;
             var maxSize:Number = 2;
             var color:uint = Globals.teamColors[Globals.playerTeam];
+            var deepColor:Boolean = Globals.teamDeepColors[Globals.playerTeam];
             switch (state) {
                 case STATE_START:
                     if (boss.nodeData.hp != 0)
@@ -55,13 +56,13 @@ package Game.SpecialEvent {
                     Starling.juggler.tween(Globals,10,{"soundVolume":0});
                     // 特效
                     for (i = 0; i < 64; i++) {
-                        FXHandler.addDarkPulse(boss, Globals.teamColors[Globals.playerTeam], 1, maxSize, rate, angle, delay);
+                        FXHandler.addDarkPulse(boss, Globals.teamColors[Globals.playerTeam], 1, maxSize, rate, angle, deepColor, delay);
                         delay += delayStep;
                         angle += angleStep;
-                        FXHandler.addDarkPulse(boss, Globals.teamColors[Globals.playerTeam], 1, maxSize, rate, angle, delay);
+                        FXHandler.addDarkPulse(boss, Globals.teamColors[Globals.playerTeam], 1, maxSize, rate, angle, deepColor, delay);
                         delay += delayStep;
                         angle += angleStep;
-                        FXHandler.addDarkPulse(boss, Globals.teamColors[Globals.playerTeam], 1, maxSize, rate, angle, delay);
+                        FXHandler.addDarkPulse(boss, Globals.teamColors[Globals.playerTeam], 1, maxSize, rate, angle, deepColor, delay);
                         delay += delayStep;
                         angle += angleStep;
                         if (i < 20) {
@@ -70,8 +71,8 @@ package Game.SpecialEvent {
                         }
                         maxSize *= 0.975;
                     }
-                    FXHandler.addDarkPulse(boss, Globals.teamColors[Globals.playerTeam], 2, 2.5, 0.75, 0, delay - 5.5);
-                    FXHandler.addDarkPulse(boss, Globals.teamColors[Globals.playerTeam], 2, 2.5, 1, 0, delay - 4.5);
+                    FXHandler.addDarkPulse(boss, Globals.teamColors[Globals.playerTeam], 2, 2.5, 0.75, 0, deepColor, delay - 5.5);
+                    FXHandler.addDarkPulse(boss, Globals.teamColors[Globals.playerTeam], 2, 2.5, 1, 0, deepColor, delay - 4.5);
                     if (Globals.levelReached == Globals.level)
                         Globals.levelReached = Globals.level + 1;
                     if (Globals.levelData[Globals.level] < Globals.currentDifficulty)
@@ -95,27 +96,27 @@ package Game.SpecialEvent {
                     angle = Math.PI / 2;
                     maxSize = 1.75;
                     for (i = 0; i < 9; i++) {
-                        FXHandler.addDarkPulse(boss, Globals.teamColors[Globals.playerTeam], 0, maxSize, rate, angle, delay);
+                        FXHandler.addDarkPulse(boss, Globals.teamColors[Globals.playerTeam], 0, maxSize, rate, angle, deepColor, delay);
                         delay += delayStep;
                         angle += angleStep;
-                        FXHandler.addDarkPulse(boss, Globals.teamColors[Globals.playerTeam], 0, maxSize, rate, angle, delay);
+                        FXHandler.addDarkPulse(boss, Globals.teamColors[Globals.playerTeam], 0, maxSize, rate, angle, deepColor, delay);
                         delay += delayStep;
                         angle += angleStep;
-                        FXHandler.addDarkPulse(boss, Globals.teamColors[Globals.playerTeam], 0, maxSize, rate, angle, delay);
+                        FXHandler.addDarkPulse(boss, Globals.teamColors[Globals.playerTeam], 0, maxSize, rate, angle, deepColor, delay);
                         delay += delayStep;
                         angle += angleStep;
                         maxSize *= 1.2;
                     }
-                    FXHandler.addDarkPulse(boss, Globals.teamColors[Globals.playerTeam], 3, 20, 5, 0, delay - 3.5);
-                    FXHandler.addDarkPulse(boss, Globals.teamColors[Globals.playerTeam], 3, 25, 10, 0, delay - 3.5);
-                    FXHandler.addDarkPulse(boss, Globals.teamColors[Globals.playerTeam], 3, 30, 15, 0, delay - 3.5);
-                    FXHandler.addDarkPulse(boss, Globals.teamColors[Globals.playerTeam], 3, 40, 20, 0, delay - 4);
-                    FXHandler.addDarkPulse(boss, Globals.teamColors[Globals.playerTeam], 3, 50, 25, 0, delay - 4);
-                    FXHandler.addDarkPulse(boss, Globals.teamColors[Globals.playerTeam], 3, 60, 30, 0, delay - 4);
-                    FXHandler.addDarkPulse(boss, Globals.teamColors[Globals.playerTeam], 3, 50, 20, 0, delay - 3);
-                    FXHandler.addDarkPulse(boss, Globals.teamColors[Globals.playerTeam], 3, 60, 30, 0, delay - 2);
-                    FXHandler.addDarkPulse(boss, Globals.teamColors[Globals.playerTeam], 3, 50, 6, 0, delay - 2);
-                    FXHandler.addDarkPulse(boss, Globals.teamColors[Globals.playerTeam], 3, 60, 8, 0, delay - 2);
+                    FXHandler.addDarkPulse(boss, Globals.teamColors[Globals.playerTeam], 3, 20, 5, 0, deepColor, delay - 3.5);
+                    FXHandler.addDarkPulse(boss, Globals.teamColors[Globals.playerTeam], 3, 25, 10, 0, deepColor, delay - 3.5);
+                    FXHandler.addDarkPulse(boss, Globals.teamColors[Globals.playerTeam], 3, 30, 15, 0, deepColor, delay - 3.5);
+                    FXHandler.addDarkPulse(boss, Globals.teamColors[Globals.playerTeam], 3, 40, 20, 0, deepColor, delay - 4);
+                    FXHandler.addDarkPulse(boss, Globals.teamColors[Globals.playerTeam], 3, 50, 25, 0, deepColor, delay - 4);
+                    FXHandler.addDarkPulse(boss, Globals.teamColors[Globals.playerTeam], 3, 60, 30, 0, deepColor, delay - 4);
+                    FXHandler.addDarkPulse(boss, Globals.teamColors[Globals.playerTeam], 3, 50, 20, 0, deepColor, delay - 3);
+                    FXHandler.addDarkPulse(boss, Globals.teamColors[Globals.playerTeam], 3, 60, 30, 0, deepColor, delay - 2);
+                    FXHandler.addDarkPulse(boss, Globals.teamColors[Globals.playerTeam], 3, 50, 6, 0, deepColor, delay - 2);
+                    FXHandler.addDarkPulse(boss, Globals.teamColors[Globals.playerTeam], 3, 60, 8, 0, deepColor, delay - 2);
                     break;
                 case STATE_OUT:
                     triggerTimer -= dt;
@@ -154,7 +155,7 @@ package Game.SpecialEvent {
             var distance:Number = NaN;
             var ship:Ship = null;
             darkPulse.color = Globals.teamColors[Globals.playerTeam];
-            darkPulse.color == 0x000000 ? darkPulse.blendMode = "normal" : darkPulse.blendMode = "add";
+            Globals.teamDeepColors[Globals.playerTeam] ? darkPulse.blendMode = "normal" : darkPulse.blendMode = "add";
             darkPulse.scaleY = darkPulse.scaleX += dt * 2;
             if (chackDarkPulseEnd())
                 darkPulse.alpha -= dt;

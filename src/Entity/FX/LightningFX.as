@@ -18,6 +18,7 @@ package Entity.FX {
         private var color:uint;
         private var image:Image; // 这是闪电
         private var foreground:Boolean;
+        private var deepColor:Boolean;
         private var state:int;
 
         public function LightningFX(imageID:int) {
@@ -28,11 +29,12 @@ package Entity.FX {
             foreground = true;
         }
 
-        public function initLightning(gameScene:GameScene, x1:Number, y1:Number, x2:Number, y2:Number, color:uint, node:Node):void {
+        public function initLightning(gameScene:GameScene, x1:Number, y1:Number, x2:Number, y2:Number, color:uint, node:Node, deepColor:Boolean):void {
             super.init(gameScene);
             this.x = x1;
             this.y = y1;
             this.color = color;
+            this.deepColor = deepColor;
             this.alpha = 0;
             var dx:Number = x2 - x1;
             var dy:Number = y2 - y1;
@@ -66,7 +68,7 @@ package Entity.FX {
                 }
             }
             image.alpha = alpha;
-            UIContainer.entityLayer.addImage(image, foreground);
+            UIContainer.entityLayer.addImage(image, foreground, deepColor);
         }
     }
 }

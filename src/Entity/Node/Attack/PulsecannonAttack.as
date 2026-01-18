@@ -38,7 +38,7 @@ package Entity.Node.Attack {
                     }
                 }
             }
-            FXHandler.addDarkPulse(_Node, Globals.teamColors[_Node.nodeData.team], 3, 25, 50, 0);
+            FXHandler.addDarkPulse(_Node, Globals.teamColors[_Node.nodeData.team], 3, 25, 50, 0, Globals.teamDeepColors[_Node.nodeData.team]);
         }
 
         override public function get attackType():String {

@@ -108,8 +108,8 @@ package Entity {
             GS.playExplosion(ship.x);
             if (Globals.exOptimization > 1)
                 return;
-            FXHandler.addFlash(ship.x, ship.y, Globals.teamColors[ship.team], foreground);
-            FXHandler.addExplosion(ship.x, ship.y, Globals.teamColors[ship.team], foreground);
+            FXHandler.addFlash(ship.x, ship.y, Globals.teamColors[ship.team], foreground, Globals.teamDeepColors[ship.team]);
+            FXHandler.addExplosion(ship.x, ship.y, Globals.teamColors[ship.team], foreground, Globals.teamDeepColors[ship.team]);
         }
 
         // #endregion

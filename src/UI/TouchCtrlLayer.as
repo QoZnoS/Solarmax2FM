@@ -157,12 +157,12 @@ package UI {
             for each (var touch:Touch in touchArray) {
                 if (touch.hoverNode && touch.downNodes.length > 0) {
                     node1 = touch.hoverNode;
-                    FXHandler.addFade(node1.nodeData.x, node1.nodeData.y, node1.nodeData.size, 0xFFFFFF, 1);
+                    FXHandler.addFade(node1.nodeData.x, node1.nodeData.y, node1.nodeData.size, 0xFFFFFF, 1, false);
                     for each (node2 in touch.downNodes) {
                         if (node2 == node1 || !node2.nodeLinks[Globals.playerTeam].includes(node1))
                             continue;
                         NodeStaticLogic.sendShips(node2, Globals.playerTeam, node1);
-                        FXHandler.addFade(node2.nodeData.x, node2.nodeData.y, node2.nodeData.size, 0xFFFFFF, 0);
+                        FXHandler.addFade(node2.nodeData.x, node2.nodeData.y, node2.nodeData.size, 0xFFFFFF, 0, false);
                     }
                 }
                 touch.hoverNode = null;

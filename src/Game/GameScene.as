@@ -103,7 +103,7 @@ package Game {
                 }
                 label.color = Globals.teamColors[Globals.playerTeam];
                 label.fontSize = -1;
-                if (label.color == 0)
+                if (Globals.teamDeepColors[Globals.playerTeam])
                     UIContainer.btnLayer.normalLayer.addChild(label);
                 else
                     UIContainer.btnLayer.addLayer.addChild(label);
@@ -151,7 +151,7 @@ package Game {
                 se.deinit();
             removeEventListener("enterFrame", update); // 移除更新帧监听器
             for each (var label:TextField in popLabels) {
-                if (label.color == 0)
+                if (Globals.teamDeepColors[Globals.playerTeam])
                     UIContainer.btnLayer.normalLayer.removeChild(label);
                 else
                     UIContainer.btnLayer.addLayer.removeChild(label);

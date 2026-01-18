@@ -17,6 +17,7 @@ package Entity.FX {
         private var color:uint;
         private var image:Image;
         private var foreground:Boolean;
+        private var deepColor:Boolean;
         private var state:int;
 
         public function WarpFX(){
@@ -34,6 +35,7 @@ package Entity.FX {
             this.prevY = prevY;
             this.color = color;
             this.foreground = foreground;
+            this.deepColor = deepColor;
             this.size = 0;
             image.x = x;
             image.y = y;
@@ -74,7 +76,7 @@ package Entity.FX {
             image.scaleY *= 0.5;
             image.alpha = 0.25;
             image.rotation = angle;
-            UIContainer.entityLayer.addImage(image, foreground);
+            UIContainer.entityLayer.addImage(image, foreground, deepColor);
         }
     }
 }

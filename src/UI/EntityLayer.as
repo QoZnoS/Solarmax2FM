@@ -124,8 +124,8 @@ package UI {
 
         //#endregion
         //#region 添加贴图
-        public function addImage(image:Image, foreground:Boolean):void {
-            if (image.color == 0) {
+        public function addImage(image:Image, foreground:Boolean, deepColor:Boolean):void {
+            if (deepColor) {
                 if (foreground) {
                     getEmptyBatch(shipsFGBatchbs, fgNormalBatch).addImage(image);
                 } else {
@@ -150,9 +150,9 @@ package UI {
             return newBatch;
         }
 
-        public function addNode(node:Image, halo:Image, glow:Image):void {
+        public function addNode(node:Image, halo:Image, glow:Image, deepColor:Boolean):void {
             nodeBatch.addChild(node);
-            if (halo.color == 0) {
+            if (deepColor) {
                 nodeGlowNormal.addChild(halo);
                 nodeGlowNormal.addChild(glow);
             } else {
@@ -173,8 +173,8 @@ package UI {
                 nodeGlow.removeChild(glow);
         }
 
-        public function addGlow(glow:Image):void {
-            if (glow.color == 0)
+        public function addGlow(glow:Image, deepColor:Boolean):void {
+            if (deepColor)
                 nodeGlowNormal.addChild(glow);
             else
                 nodeGlow.addChild(glow);

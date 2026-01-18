@@ -67,6 +67,8 @@ package {
                     Globals.teamGroups[i] = i;
                 if ("color" in teamData)
                     Globals.teamColors[i] = teamData.color;
+                if ("deepColor" in teamData)
+                    Globals.teamDeepColors[i] = teamData.deepColor;
                 if ("shipSpeed" in teamData)
                     Globals.teamShipSpeeds[i] = teamData.shipSpeed;
                 if ("shipAttack" in teamData)

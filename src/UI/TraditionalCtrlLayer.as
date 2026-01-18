@@ -242,15 +242,14 @@ package UI {
             var currentNode:Node = getClosestNode(x, y);
             if (!currentNode)
                 return;
-            FXHandler.addFade(currentNode.nodeData.x, currentNode.nodeData.y, currentNode.nodeData.size, 0xFFFFFF, 1);
+            FXHandler.addFade(currentNode.nodeData.x, currentNode.nodeData.y, currentNode.nodeData.size, 0xFFFFFF, 1, false);
             for each (var node:Node in selectedNodes) {
                 if (node == currentNode || !node.nodeLinks[Globals.playerTeam].includes(currentNode))
                     continue;
                 NodeStaticLogic.sendShips(node, Globals.playerTeam, currentNode);
-                FXHandler.addFade(node.nodeData.x, node.nodeData.y, node.nodeData.size, 0xFFFFFF, 0);
+                FXHandler.addFade(node.nodeData.x, node.nodeData.y, node.nodeData.size, 0xFFFFFF, 0, false);
             }
         }
-
 
         //#region 计算工具
         private function getClosestNode(x:Number, y:Number):Node {

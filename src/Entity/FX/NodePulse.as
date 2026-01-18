@@ -20,6 +20,7 @@ package Entity.FX {
         private var rate:Number;
         private var image:Image;
         private var type:int;
+        private var deepColor:Boolean;
 
         public function NodePulse() {
             super();
@@ -27,12 +28,13 @@ package Entity.FX {
             image.pivotX = image.pivotY = image.width * 0.5;
         }
 
-        public function initPulse(gameScene:GameScene, node:Node, color:uint, type:int, delay:Number = 0):void {
+        public function initPulse(gameScene:GameScene, node:Node, color:uint, type:int, deepColor:Boolean, delay:Number = 0):void {
             super.init(gameScene);
             this.x = node.nodeData.x;
             this.y = node.nodeData.y;
             this.type = type;
             this.delay = delay;
+            this.deepColor = deepColor;
             switch (type) {
                 case 0:
                     size = 0;
@@ -51,7 +53,7 @@ package Entity.FX {
             image.color = color;
             image.scaleX = image.scaleY = size;
             image.visible = true;
-            UIContainer.entityLayer.addGlow(image);
+            UIContainer.entityLayer.addGlow(image, deepColor);
         }
 
         override public function deInit():void {

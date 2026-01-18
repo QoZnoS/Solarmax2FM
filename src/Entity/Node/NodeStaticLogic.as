@@ -62,8 +62,8 @@ package Entity.Node {
                 return;
             node.moveState.glow.visible = true;
             node.moveState.glow.color = Globals.teamColors[team]; // 设定光效颜色
-            UIContainer.entityLayer.addGlow(node.moveState.glow);
-            FXHandler.addPulse(node, Globals.teamColors[team], 0);
+            UIContainer.entityLayer.addGlow(node.moveState.glow, Globals.teamDeepColors[team]);
+            FXHandler.addPulse(node, Globals.teamColors[team], 0, Globals.teamDeepColors[team]);
             GS.playCapture(node.nodeData.x); // 播放占领音效
             if (nodeTeam != Globals.playerTeam && team == Globals.playerTeam && node.nodeData.popVal > 0) {
                 game.popLabels[1].color = 65280;
@@ -254,20 +254,20 @@ package Entity.Node {
             var angle:Number = 1.5707963267948966;
             var maxSize:Number = 1;
             for (var i:int = 0; i < 3; i++) {
-                FXHandler.addDarkPulse(node, Globals.teamColors[team], 1, maxSize, rate, angle, delay);
+                FXHandler.addDarkPulse(node, Globals.teamColors[team], 1, maxSize, rate, angle, Globals.teamDeepColors[team], delay);
                 delay += delayStep;
                 angle += 2.0943951023931953;
-                FXHandler.addDarkPulse(node, Globals.teamColors[team], 1, maxSize, rate, angle, delay);
+                FXHandler.addDarkPulse(node, Globals.teamColors[team], 1, maxSize, rate, angle, Globals.teamDeepColors[team], delay);
                 delay += delayStep;
                 angle += 2.0943951023931953;
-                FXHandler.addDarkPulse(node, Globals.teamColors[team], 1, maxSize, rate, angle, delay);
+                FXHandler.addDarkPulse(node, Globals.teamColors[team], 1, maxSize, rate, angle, Globals.teamDeepColors[team], delay);
                 delay += delayStep;
                 angle += 2.0943951023931953;
                 rate *= 1.1;
                 delayStep *= 0.9;
                 maxSize *= 0.8;
             }
-            FXHandler.addDarkPulse(node, Globals.teamColors[team], 2, 2, 2, 0);
+            FXHandler.addDarkPulse(node, Globals.teamColors[team], 2, 2, 2, 0, Globals.teamDeepColors[team]);
             GS.playWarpCharge(node.nodeData.x);
         }
 
@@ -279,15 +279,15 @@ package Entity.Node {
             var rate:Number = 2;
             var angle:Number = 1.5707963267948966;
             var maxSize:Number = node.nodeData.size * 2;
-            FXHandler.addDarkPulse(node, Globals.teamColors[team], 0, maxSize, rate, angle, 0);
+            FXHandler.addDarkPulse(node, Globals.teamColors[team], 0, maxSize, rate, angle, Globals.teamDeepColors[team], 0);
             angle += 2.0943951023931953;
-            FXHandler.addDarkPulse(node, Globals.teamColors[team], 0, maxSize, rate, angle, 0);
+            FXHandler.addDarkPulse(node, Globals.teamColors[team], 0, maxSize, rate, angle, Globals.teamDeepColors[team], 0);
             angle += 2.0943951023931953;
-            FXHandler.addDarkPulse(node, Globals.teamColors[team], 0, maxSize, rate, angle, 0);
+            FXHandler.addDarkPulse(node, Globals.teamColors[team], 0, maxSize, rate, angle, Globals.teamDeepColors[team], 0);
             angle += 2.0943951023931953;
             rate *= 1.1;
             maxSize *= 1.2;
-            FXHandler.addDarkPulse(node, Globals.teamColors[team], 3, 18 * node.nodeData.size, 28 * node.nodeData.size, 0);
+            FXHandler.addDarkPulse(node, Globals.teamColors[team], 3, 18 * node.nodeData.size, 28 * node.nodeData.size, 0, Globals.teamDeepColors[team]);
         }
 
         // #endregion

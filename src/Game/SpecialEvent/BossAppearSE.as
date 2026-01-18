@@ -40,6 +40,7 @@ package Game.SpecialEvent {
             var angleStep:Number = Math.PI * 2 / 3;
             var maxSize:Number = 2;
             var color:uint = Globals.teamColors[triggerNodeData.team];
+            var deepColor:Boolean = Globals.teamDeepColors[triggerNodeData.team];
             switch (state) {
                 case STATE_READY_APPEAR:
                     if (!checkAppearCondition())
@@ -53,21 +54,21 @@ package Game.SpecialEvent {
 
                     // 播放特效
                     for (i = 0; i < 24; i++) {
-                        FXHandler.addDarkPulse(triggerNode, color, 1, maxSize, rate, angle, delay);
+                        FXHandler.addDarkPulse(triggerNode, color, 1, maxSize, rate, angle, deepColor, delay);
                         delay += delayStep;
                         angle += angleStep;
-                        FXHandler.addDarkPulse(triggerNode, color, 1, maxSize, rate, angle, delay);
+                        FXHandler.addDarkPulse(triggerNode, color, 1, maxSize, rate, angle, deepColor, delay);
                         delay += delayStep;
                         angle += angleStep;
-                        FXHandler.addDarkPulse(triggerNode, color, 1, maxSize, rate, angle, delay);
+                        FXHandler.addDarkPulse(triggerNode, color, 1, maxSize, rate, angle, deepColor, delay);
                         delay += delayStep;
                         angle += angleStep;
                         rate *= 1.15;
                         delayStep *= 0.75;
                         maxSize *= 0.9;
                     }
-                    FXHandler.addDarkPulse(triggerNode, color, 2, 2, 2, 0, delay - 0.75);
-                    FXHandler.addDarkPulse(triggerNode, color, 2, 2, 2, 0, delay - 0.4);
+                    FXHandler.addDarkPulse(triggerNode, color, 2, 2, 2, 0, deepColor, delay - 0.75);
+                    FXHandler.addDarkPulse(triggerNode, color, 2, 2, 2, 0, deepColor, delay - 0.4);
                     GS.fadeOutMusic(2);
                     GS.playSound("boss_appear");
                     break;
@@ -94,13 +95,13 @@ package Game.SpecialEvent {
                     angle = Math.PI / 2;
                     maxSize = 1;
                     for (i = 0; i < 3; i++) {
-                        FXHandler.addDarkPulse(triggerNode, color, 0, maxSize, rate, angle, delay);
+                        FXHandler.addDarkPulse(triggerNode, color, 0, maxSize, rate, angle, deepColor, delay);
                         delay += delayStep;
                         angle += angleStep;
-                        FXHandler.addDarkPulse(triggerNode, color, 0, maxSize, rate, angle, delay);
+                        FXHandler.addDarkPulse(triggerNode, color, 0, maxSize, rate, angle, deepColor, delay);
                         delay += delayStep;
                         angle += angleStep;
-                        FXHandler.addDarkPulse(triggerNode, color, 0, maxSize, rate, angle, delay);
+                        FXHandler.addDarkPulse(triggerNode, color, 0, maxSize, rate, angle, deepColor, delay);
                         delay += delayStep;
                         angle += angleStep;
                         maxSize *= 1.5;
@@ -120,20 +121,20 @@ package Game.SpecialEvent {
                     angle = Math.PI / 2;
                     maxSize = 2;
                     for (i = 0; i < 12; i++) {
-                        FXHandler.addDarkPulse(triggerNode, color, 1, maxSize, rate, angle, delay);
+                        FXHandler.addDarkPulse(triggerNode, color, 1, maxSize, rate, angle, deepColor, delay);
                         delay += delayStep;
                         angle += angleStep;
-                        FXHandler.addDarkPulse(triggerNode, color, 1, maxSize, rate, angle, delay);
+                        FXHandler.addDarkPulse(triggerNode, color, 1, maxSize, rate, angle, deepColor, delay);
                         delay += delayStep;
                         angle += angleStep;
-                        FXHandler.addDarkPulse(triggerNode, color, 1, maxSize, rate, angle, delay);
+                        FXHandler.addDarkPulse(triggerNode, color, 1, maxSize, rate, angle, deepColor, delay);
                         delay += delayStep;
                         angle += angleStep;
                         rate *= 1.5;
                         delayStep *= 0.5;
                         maxSize *= 0.7;
                     }
-                    FXHandler.addDarkPulse(triggerNode, color, 2, 2, 2, 0, delay - 0.75);
+                    FXHandler.addDarkPulse(triggerNode, color, 2, 2, 2, 0, deepColor, delay - 0.75);
                     GS.playSound("boss_reverse");
                     break;
                 case STATE_DISAPPEAR:

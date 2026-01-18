@@ -39,7 +39,7 @@ package Game.SpecialEvent {
             darkPulse.x = triggerNode.nodeData.x;
             darkPulse.y = triggerNode.nodeData.y;
             darkPulse.visible = false;
-            UIContainer.entityLayer.addGlow(darkPulse);
+            UIContainer.entityLayer.addGlow(darkPulse, Globals.teamDeepColors[targetTeam]);
         }
         private var soundVolume:Number = Globals.soundVolume;
         public function update(dt:Number):void {
@@ -50,6 +50,7 @@ package Game.SpecialEvent {
             var angleStep:Number = Math.PI * 2 / 3;
             var maxSize:Number = 1;
             var color:uint = Globals.teamColors[targetTeam];
+            var deepColor:Boolean = Globals.teamDeepColors[targetTeam];
             switch (state) {
                 case STATE_START:
                     if (triggerNode.nodeData.hp != 100)
@@ -66,13 +67,13 @@ package Game.SpecialEvent {
                     angleStep = Math.PI * 2 / 3;
                     maxSize = 2;
                     for (var i:int = 0; i < 64; i++) {
-                        FXHandler.addDarkPulse(triggerNode, color, 1, maxSize, rate, angle, delay);
+                        FXHandler.addDarkPulse(triggerNode, color, 1, maxSize, rate, angle, deepColor, delay);
                         delay += delayStep;
                         angle += angleStep;
-                        FXHandler.addDarkPulse(triggerNode, color, 1, maxSize, rate, angle, delay);
+                        FXHandler.addDarkPulse(triggerNode, color, 1, maxSize, rate, angle, deepColor, delay);
                         delay += delayStep;
                         angle += angleStep;
-                        FXHandler.addDarkPulse(triggerNode, color, 1, maxSize, rate, angle, delay);
+                        FXHandler.addDarkPulse(triggerNode, color, 1, maxSize, rate, angle, deepColor, delay);
                         delay += delayStep;
                         angle += angleStep;
                         if (i < 20) {
@@ -81,8 +82,8 @@ package Game.SpecialEvent {
                         }
                         maxSize *= 0.975;
                     }
-                    FXHandler.addDarkPulse(triggerNode, color, 2, 2.5, 0.75, 0, delay - 5.5);
-                    FXHandler.addDarkPulse(triggerNode, color, 2, 2.5, 1, 0, delay - 4.5);
+                    FXHandler.addDarkPulse(triggerNode, color, 2, 2.5, 0.75, 0, deepColor, delay - 5.5);
+                    FXHandler.addDarkPulse(triggerNode, color, 2, 2.5, 1, 0, deepColor, delay - 4.5);
                     GS.playMusic("bgm_dark", false);
                     break;
 
@@ -107,13 +108,13 @@ package Game.SpecialEvent {
                     angle = Math.PI / 2;
                     maxSize = 1;
                     for (i = 0; i < 3; i++) {
-                        FXHandler.addDarkPulse(triggerNode, color, 0, maxSize, 2, angle, delay);
+                        FXHandler.addDarkPulse(triggerNode, color, 0, maxSize, 2, angle, deepColor, delay);
                         delay += delayStep;
                         angle += Math.PI * 2 / 3;
-                        FXHandler.addDarkPulse(triggerNode, color, 0, maxSize, 2, angle, delay);
+                        FXHandler.addDarkPulse(triggerNode, color, 0, maxSize, 2, angle, deepColor, delay);
                         delay += delayStep;
                         angle += Math.PI * 2 / 3;
-                        FXHandler.addDarkPulse(triggerNode, color, 0, maxSize, 2, angle, delay);
+                        FXHandler.addDarkPulse(triggerNode, color, 0, maxSize, 2, angle, deepColor, delay);
                         delay += delayStep;
                         angle += Math.PI * 2 / 3;
                         maxSize *= 1.5;
@@ -145,7 +146,7 @@ package Game.SpecialEvent {
             var distance:Number = NaN;
             var ship:Ship = null;
             darkPulse.color = Globals.teamColors[targetTeam];
-            darkPulse.color == 0x000000 ? darkPulse.blendMode = "normal" : darkPulse.blendMode = "add";
+            Globals.teamDeepColors[targetTeam] ? darkPulse.blendMode = "normal" : darkPulse.blendMode = "add";
             darkPulse.scaleY = darkPulse.scaleX += dt * 0.5;
             if (chackDarkPulseEnd())
                 darkPulse.alpha -= dt / 10;

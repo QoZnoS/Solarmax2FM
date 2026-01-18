@@ -27,6 +27,7 @@ package Entity.FX {
         private var angle:Number;
         private var image:Image;
         private var type:int;
+        private var deepColor:Boolean;
 
         public function DarkPulse() {
             super();
@@ -34,7 +35,7 @@ package Entity.FX {
             image.pivotX = image.pivotY = image.width * 0.5;
         }
 
-        public function initPulse(gameScene:GameScene, node:Node, color:uint, type:int, maxSize:Number, rate:Number, angle:Number, delay:Number = 0):void {
+        public function initPulse(gameScene:GameScene, node:Node, color:uint, type:int, maxSize:Number, rate:Number, angle:Number, deepColor:Boolean, delay:Number = 0):void {
             super.init(gameScene);
             image.rotation = 0;
             switch (type) {
@@ -73,6 +74,7 @@ package Entity.FX {
             this.rate = rate;
             this.angle = angle;
             this.delay = delay;
+            this.deepColor = deepColor;
             image.x = x;
             image.y = y;
             image.color = color;
@@ -110,7 +112,7 @@ package Entity.FX {
             if (type == TYPE_BLACKHOLE_ATTACK)
                 UIContainer.entityLayer.blackholeLayer.addImage(image);
             else
-                UIContainer.entityLayer.addGlow(image);
+                UIContainer.entityLayer.addGlow(image, deepColor);
         }
 
         override public function deInit():void {
