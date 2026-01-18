@@ -138,11 +138,6 @@ package Entity {
                 triggerTimer = Math.max(0, triggerTimer - dt);
         }
 
-        public function updateAttack(dt:Number):void {
-            if (nodeData.team == 0)
-                return; // 排除中立天体
-        }
-
         public function updateNodeLinks():void {
             if (nodeData.isBarrier)
                 return;
@@ -245,29 +240,15 @@ package Entity {
         public function oppStrength(team:int):int {
             var strength:int = 0;
             var group:int = Globals.teamGroups[team];
-            var oppGroups:Vector.<int> = new Vector.<int>();
-            var ogShips:Vector.<int> = new Vector.<int>();
+            var groupShips:Vector.<int> = new Vector.<int>(Globals.teamCount);
             for (var i:int = 0; i < ships.length; i++) {
                 var oppGroup:int = Globals.teamGroups[i];
-                if (oppGroup != group) {
-                    if (oppGroups.indexOf(oppGroup) == -1) {
-                        oppGroups.push(oppGroup);
-                        ogShips.push(ships[i].length);
-                        continue;
-                    }
-                    for (var j:int = 0; j < oppGroups.length; j++) {
-                        if (oppGroups[j] == oppGroup) {
-                            ogShips[j] += ships[i].length;
-                            break;
-                        }
-                    }
-                }
+                if (oppGroup == group)
+                    continue;
+                groupShips[oppGroup] += ships[i].length;
             }
-            for each(var k:int in ogShips) {
-                if (k > strength) {
-                    strength = k;
-                }
-            }
+            for each(i in groupShips)
+                strength = Math.max(i, strength);
             return strength;
         }
 
@@ -275,32 +256,18 @@ package Entity {
         public function predictedOppStrength(team:int):int {
             var strength:int = 0;
             var group:int = Globals.teamGroups[team];
-            var oppGroups:Vector.<int> = new Vector.<int>();
-            var ogShips:Vector.<int> = new Vector.<int>();
+            var groupShips:Vector.<int> = new Vector.<int>(Globals.teamCount);
             for (var i:int = 0; i < ships.length; i++) {
                 var oppGroup:int = Globals.teamGroups[i];
-                if (oppGroup != group) {
-                    if (oppGroups.indexOf(oppGroup) == -1) {
-                        oppGroups.push(oppGroup);
-                        ogShips.push(ships[i].length);
-                        continue;
-                    }
-                    for (var j:int = 0; j < oppGroups.length; j++) {
-                        if (oppGroups[j] == oppGroup) {
-                            var addStrength:int = ships[i].length + transitShips[i];
-                            if (buildState.buildRate > 0 && (Globals.teamGroups[nodeData.team] == Globals.teamGroups[i]))
-                                addStrength *= 1.25;
-                            ogShips[j] += addStrength;
-                            break;
-                        }
-                    }
-                }
+                if (oppGroup == group)
+                    continue;
+                var addStrength:int = ships[i].length + transitShips[i];
+                if (buildState.buildRate > 0 && (Globals.teamGroups[nodeData.team] == Globals.teamGroups[i]))
+                    addStrength *= 1.25;
+                groupShips[oppGroup] += addStrength;
             }
-            for each(var k:int in ogShips) {
-                if (k > strength) {
-                    strength = k;
-                }
-            }
+            for each(i in groupShips)
+                strength = Math.max(i, strength);
             return strength;
         }
 
@@ -308,18 +275,15 @@ package Entity {
         public function teamStrength(team:int):int {
             return Number(ships[team].length);
         }
-
         // #endregion
-
         // #region S33添加的函数
         // 返回该队伍飞船数
         public function groupStrength(team:int):int {
             var strength:int = 0;
             var group:int = Globals.teamGroups[team];
-            for (var i:int = 0; i < ships.length; i++) {
+            for (var i:int = 0; i < ships.length; i++)
                 if (Globals.teamGroups[i] == group)
                     strength += Number(ships[i].length);
-            }
             return strength;
         }
 
@@ -336,10 +300,9 @@ package Entity {
         public function predictedGroupStrength(team:int):int {
             var strength:int = 0;
             var group:int = Globals.teamGroups[team];
-            for (var i:int = 0; i < ships.length; i++) {
+            for (var i:int = 0; i < ships.length; i++)
                 if (Globals.teamGroups[i] == group)
-                    strength += Number(ships[i].length + transitShips[team])
-            }
+                    strength += Number(ships[i].length + transitShips[i]);
             if (buildState.buildRate > 0 && group == Globals.teamGroups[nodeData.team])
                 strength *= 1.25;
             return strength;
@@ -372,24 +335,21 @@ package Entity {
                     continue; // 排除未起飞的和不飞向自身的飞船
                 ships[ship.team].push(ship);
             }
-            var ogShips:Vector.<int> = new Vector.<int>();
+            var groupShips:Vector.<int> = new Vector.<int>();
             var maxShips:int = 0;
             for (i = 0; i < Globals.teamCount; i++) {
                 var oppGroup:int = Globals.teamGroups[i];
                 if (oppGroup == group)
                     continue; // 排除己方
-                if (ogShips.length < oppGroup + 1) {
-                    ogShips.length = oppGroup + 1;
-                    ogShips[oppGroup] = ships[i].length;
+                if (groupShips.length < oppGroup + 1) {
+                    groupShips.length = oppGroup + 1;
+                    groupShips[oppGroup] = ships[i].length;
                     continue;
                 }
-                ogShips[oppGroup] += ships[i].length;
+                groupShips[oppGroup] += ships[i].length;
             }
-            for each(var k:int in ogShips) {
-                if (k > maxShips) {
-                    maxShips = k;
-                }
-            }
+            for each(i in groupShips)
+                maxShips = Math.max(i, maxShips);
             return maxShips;
         }
 
@@ -421,24 +381,21 @@ package Entity {
             for each (var ship:Ship in EntityContainer.ships)
                 if (ship.node == this && Globals.teamGroups[ship.team] != group)
                     ships[ship.team].push(ship);
-            var ogShips:Vector.<int> = new Vector.<int>();
+            var groupShips:Vector.<int> = new Vector.<int>();
             var maxShips:int = 0;
             for (i = 0; i < ships.length; i++) {
                 var oppGroup:int = Globals.teamGroups[i];
                 if (oppGroup == group)
                     continue; // 排除己方
-                if (ogShips.length < oppGroup + 1) {
-                    ogShips.length = oppGroup + 1;
-                    ogShips[oppGroup] = ships[i].length;
+                if (groupShips.length < oppGroup + 1) {
+                    groupShips.length = oppGroup + 1;
+                    groupShips[oppGroup] = ships[i].length;
                     continue;
                 }
-                ogShips[oppGroup] += ships[i].length;
+                groupShips[oppGroup] += ships[i].length;
             }
-            for each(var k:int in ogShips) {
-                if (k > maxShips) {
-                    maxShips = k;
-                }
-            }
+            for each(i in groupShips)
+                maxShips = Math.max(i, maxShips);
             return maxShips;
         }
 
@@ -454,24 +411,21 @@ package Entity {
                 if (ship.targetDist / ship.jumpSpeed < 1 || ship.state == 0)
                     ships[ship.team].push(ship); // 记录一秒后抵达的和已经抵达的飞船数
             }
-            var ogShips:Vector.<int> = new Vector.<int>();
+            var groupShips:Vector.<int> = new Vector.<int>();
             var maxShips:int = 0;
             for (i = 0; i < ships.length; i++) {
                 var oppGroup:int = Globals.teamGroups[i];
                 if (oppGroup == group)
                     continue; // 排除己方
-                if (ogShips.length < oppGroup + 1) {
-                    ogShips.length = oppGroup + 1;
-                    ogShips[oppGroup] = ships[i].length;
+                if (groupShips.length < oppGroup + 1) {
+                    groupShips.length = oppGroup + 1;
+                    groupShips[oppGroup] = ships[i].length;
                     continue;
                 }
-                ogShips[oppGroup] += ships[i].length;
+                groupShips[oppGroup] += ships[i].length;
             }
-            for each(var k:int in ogShips) {
-                if (k > maxShips) {
-                    maxShips = k;
-                }
-            }
+            for each(i in groupShips)
+                maxShips = Math.max(i, maxShips);
             if (maxShips > hard_AllStrength(team))
                 return true;
             return false;

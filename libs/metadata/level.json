@@ -20,6 +20,8 @@
                     "colonizingSpeed": 1,
                     "destroyingSpeed": 1,
                     "decolonizingSpeed": 1,
+                    "deepColor": false,
+                    "showLabel": true,
                     "注释1": "captureSpeed: 占领速度，使用此参数会同时修改以下四个参数，一般不建议区分这四个参数",
                     "注释2": "repairingSpeed: 修复速度倍率：恢复己方天体占领度的速度倍率",
                     "注释3": "colonizingSpeed: 建造速度倍率：占领中立天体的速度倍率",
@@ -44,7 +46,8 @@
                 {
                     "color": "0x000000",
                     "shipSpeed": 100,
-                    "deepColor": true
+                    "deepColor": true,
+                    "showLabel": false
                 }
             ],
             "level": [
@@ -3217,7 +3220,8 @@
                             "x": 512,
                             "y": 384,
                             "type": "dilator",
-                            "startShips": 225
+                            "startShips": 150,
+                            "startShips/hard": 225
                         },
                         {
                             "orbitSpeed": 0.1,
@@ -3433,7 +3437,8 @@
                 {
                     "color": "0x000000",
                     "captureSpeed": 2,
-                    "shipSpeed": 100
+                    "shipSpeed": 100,
+                    "deepColor": true
                 },
                 {},
                 {},
@@ -3441,7 +3446,8 @@
                 {},
                 {
                     "color": "0xFFFFFF",
-                    "nodePop": 10000
+                    "nodePop": 10000,
+                    "deepColor": false
                 },
                 {
                     "color": "0x5FB6FF"
@@ -9780,7 +9786,8 @@
                 {
                     "color": "0x000000",
                     "captureSpeed": 2,
-                    "shipSpeed": 100
+                    "shipSpeed": 100,
+                    "deepColor": true
                 },
                 {},
                 {},
@@ -9788,7 +9795,8 @@
                 {},
                 {
                     "color": "0xFFFFFF",
-                    "nodePop": 10000
+                    "nodePop": 10000,
+                    "deepColor": false
                 },
                 {
                     "color": "0x5FB6FF"
@@ -16281,7 +16289,7 @@
                         }
                     ],
                     "name": "04",
-                    "color": "0xFFAAAA",
+                    "color": "0x00FF00",
                     "bgm": "bgm02"
                 },
                 {
@@ -17493,6 +17501,7 @@
                     ],
                     "name": "16",
                     "color": "0x00FF00",
+                    "color/hard": "0xFFFF00",
                     "bgm": "bgm04"
                 },
                 {
@@ -18102,25 +18111,25 @@
                             "team": 2,
                             "type/easy": "SimpleAI",
                             "type/normal": "SmartAI",
-                            "type": "HardAI"
+                            "type": "AdaptedAI"
                         },
                         {
                             "team": 3,
                             "type/easy": "SimpleAI",
                             "type/normal": "SmartAI",
-                            "type": "HardAI"
+                            "type": "AdaptedAI"
                         },
                         {
                             "team": 4,
                             "type/easy": "SimpleAI",
                             "type/normal": "SmartAI",
-                            "type": "HardAI"
+                            "type": "AdaptedAI"
                         },
                         {
                             "team": 7,
                             "type/easy": "SimpleAI",
                             "type/normal": "SmartAI",
-                            "type": "HardAI"
+                            "type": "AdaptedAI"
                         }
                     ],
                     "name": "21",
@@ -19031,7 +19040,6 @@
                     ],
                     "name": "25",
                     "color": "0x0000FF",
-                    "color/hard": "0xFFFF00",
                     "bgm": "bgm05"
                 },
                 {
@@ -19272,6 +19280,7 @@
                         }
                     ],
                     "name": "26",
+                    "color/easy": "0xFFAAAA",
                     "color": "0x0000FF",
                     "color/hard": "0xFFFF00",
                     "bgm": "bgm05"
@@ -19433,6 +19442,7 @@
                         }
                     ],
                     "name": "27",
+                    "color/easy": "0x00FF00",
                     "color": "0xFFFF00",
                     "bgm": "bgm05"
                 },
@@ -19664,6 +19674,7 @@
                         }
                     ],
                     "name": "29",
+                    "color/easy": "0xFFAAAA",
                     "color": "0x0000FF",
                     "color/hard": "0xFFFF00",
                     "bgm": "bgm05"
@@ -19877,6 +19888,7 @@
                         }
                     ],
                     "name": "30",
+                    "color/easy": "0xFFAAAA",
                     "color": "0xFFFF00",
                     "bgm": "bgm05"
                 },
@@ -20079,6 +20091,7 @@
                         }
                     ],
                     "name": "31",
+                    "color/easy": "0x00FF00",
                     "color": "0x0000FF",
                     "color/hard": "0xFFFF00",
                     "bgm": "bgm05"
@@ -20863,6 +20876,7 @@
                             "type": "BossAppear",
                             "trigger": {
                                 "ships": 205,
+                                "ships/hard": 160,
                                 "node": {
                                     "x": 512,
                                     "y": 384,
@@ -21268,7 +21282,8 @@
                     "color/easy": "0x00FF00",
                     "color/normal": "0x0000FF",
                     "color": "0xFFFF00",
-                    "bgm": "bgm06"
+                    "bgm": "bgm06",
+                    "gameScale": 0.85
                 },
                 {
                     "node": [
@@ -21576,20 +21591,6 @@
                             "type": "tower"
                         },
                         {
-                            "x": 448,
-                            "startShips": 225,
-                            "y": 384,
-                            "type": "pulsecannon",
-                            "team": 6
-                        },
-                        {
-                            "x": 576,
-                            "startShips": 225,
-                            "y": 384,
-                            "type": "pulsecannon",
-                            "team": 6
-                        },
-                        {
                             "x": 64,
                             "y": 304,
                             "type": "planet",
@@ -21722,7 +21723,8 @@
                     "color/easy": "0x00FF00",
                     "color/normal": "0x0000FF",
                     "color": "0xFFFF00",
-                    "bgm": "bgm06"
+                    "bgm": "bgm06",
+                    "gameScale": 0.85
                 },
                 {
                     "node": [
@@ -21995,21 +21997,16 @@
                             "type/easy": "SimpleAI",
                             "type/normal": "SmartAI",
                             "type": "HardAI",
-                            "actionDelay/hard": 0.22
+                            "actionDelay/hard": 0.22,
+                            "startDelay": 1.5
                         },
                         {
                             "team": 4,
                             "type/easy": "SimpleAI",
                             "type/normal": "SmartAI",
                             "type": "HardAI",
-                            "actionDelay/hard": 0.22
-                        },
-                        {
-                            "team": 7,
-                            "type/easy": "SimpleAI",
-                            "type/normal": "SmartAI",
-                            "type": "HardAI",
-                            "actionDelay/hard": 0.22
+                            "actionDelay/hard": 0.22,
+                            "startDelay": 1.5
                         },
                         {
                             "team": 6,
@@ -22017,6 +22014,25 @@
                             "type": "FinalAI",
                             "actionDelay/hard": 0.22,
                             "startDelay": 0
+                        },
+                        {
+                            "team": 7,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI",
+                            "actionDelay/hard": 0.22,
+                            "startDelay": 1.5
+                        }
+                    ],
+                    "victoryCondition": {
+                        "type": "None"
+                    },
+                    "specialEvents": [
+                        {
+                            "type": "GameEnd",
+                            "trigger": {
+                                "nodeTag": 0
+                            }
                         }
                     ],
                     "name": "36",

@@ -60,7 +60,6 @@ package {
             var len:int = rawData[Globals.currentData].team.length;
             for (var i:int = 0; i < len; i++) {
                 var teamData:Object = rawData[Globals.currentData].team[i];
-                // #region S33加的读取
                 if ("group" in teamData)
                     Globals.teamGroups[i] = teamData.group;
                 else
