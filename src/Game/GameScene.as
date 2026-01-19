@@ -295,7 +295,7 @@ package Game {
                             "delay": 1});
                 }
             } else if (gameOverTimer > 0) {
-                scene.speedMult
+                scene.speedMult = 1;
                 gameOverTimer -= dt;
                 if (gameOverTimer <= 0)
                     winningGroup == Globals.teamGroups[Globals.playerTeam] ? next() : quit();
