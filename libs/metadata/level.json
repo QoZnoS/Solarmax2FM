@@ -96,7 +96,9 @@
                     ],
                     "ai": [],
                     "gameScale": 1,
-                    "bgm": "bgm02"
+                    "bgm": "bgm02",
+                    "group": [[1,2],[3,4]],
+                    "playerTeam": 1
                 },
                 {
                     "name": "02",
