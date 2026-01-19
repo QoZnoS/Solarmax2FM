@@ -52,6 +52,7 @@ package Entity.Node.States {
                 addTextField(captureLabels, i);
                 addTextField(conflictLabels, i);
             }
+            UIContainer.entityLayer.labelLayer.swapChildren(captureLabels[0], captureLabels[Globals.playerTeam]);
             image.visible = halo.visible = true;
             UIContainer.entityLayer.addNode(image, halo, glow, Globals.teamDeepColors[nodeData.team]);
             if (orbitNode) {
@@ -137,7 +138,10 @@ package Entity.Node.States {
                 var teamId:int = i;
                 var shipCount:int = node.ships[teamId].length;
                 var arcRatio:Number = shipCount / totalShips;
-                Drawer.drawCircle(UIContainer.behaviorBatch, nodeData.x, nodeData.y, Globals.teamColors[teamId], nodeData.lineDist, nodeData.lineDist - 2, false, 1, arcRatio - ARC_ADJUSTMENT, currentAngle + 0.01);
+                if (activeTeams.indexOf(i + 1) != -1 && Globals.teamGroups[i] == Globals.teamGroups[i + 1])
+                    Drawer.drawCircle(UIContainer.behaviorBatch, nodeData.x, nodeData.y, Globals.teamColors[teamId], nodeData.lineDist, nodeData.lineDist - 2, false, 1, arcRatio, currentAngle + 0.01);
+                else
+                    Drawer.drawCircle(UIContainer.behaviorBatch, nodeData.x, nodeData.y, Globals.teamColors[teamId], nodeData.lineDist, nodeData.lineDist - 2, false, 1, arcRatio - ARC_ADJUSTMENT * 1.5, currentAngle + 0.01);
                 var labelAngle:Number = START_ANGLE + activeTeams.indexOf(i) * labelAngleStep;
                 node.moveState.updateConflictLabel(teamId, labelAngle, shipCount);
                 currentAngle += Math.PI * 2 * arcRatio;
