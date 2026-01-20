@@ -210,7 +210,7 @@ package Entity.AI {
             while (queue.length > 0) {
                 var current:Node = queue.shift();
                 for each (var next:Node in current.nodeLinks[team]) {
-                    if (visited.indexOf(next) != -1)
+                    if (visited.indexOf(next) != -1 || !targetCheckBasic(next))
                         continue;
                     if (moveCheckBasic(current, next)) {
                         queue.push(next);

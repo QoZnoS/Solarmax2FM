@@ -9402,7 +9402,7 @@
                     "node": [
                         {
                             "x": 512,
-                            "startShips": 225,
+                            "startShips": 150,
                             "y": 384,
                             "type": "dilator",
                             "team": 6

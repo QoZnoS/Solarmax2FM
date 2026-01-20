@@ -9,6 +9,7 @@ package Game.SpecialEvent {
     import utils.GS;
     import Entity.FXHandler;
     import starling.core.Starling;
+    import UI.LayerFactory;
 
     public class GameEndSE implements ISpecialEvent {
         private static const STATE_START:int = 0;
@@ -128,7 +129,7 @@ package Game.SpecialEvent {
                     state = STATE_END;
                     darkPulse.scaleX = darkPulse.scaleY = 0;
                     darkPulse.visible = true;
-                    Starling.juggler.tween(UIContainer.btnLayer, 5, {"alpha": 0});
+                    Starling.juggler.tween(LayerFactory.getLayer(LayerFactory.BTN), 5, {"alpha": 0});
                     Starling.juggler.tween(UIContainer.gameContainer, 25, {"scaleX": 0.01,
                             "scaleY": 0.01,
                             "delay": 20,

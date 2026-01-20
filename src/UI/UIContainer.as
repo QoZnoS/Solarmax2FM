@@ -3,6 +3,7 @@ package UI {
     import starling.core.Starling;
     import starling.display.QuadBatch;
     import starling.display.Quad;
+    import UI.Component.FleetSlider;
 
     public class UIContainer extends Sprite {
         private var _gameContainer:Sprite;
@@ -49,7 +50,24 @@ package UI {
 
             _gameContainer.x = _gameContainer.pivotX = 512;
             _gameContainer.y = _gameContainer.pivotY = 384;
+
+            registerLayer();
+            registerFunction();
         }
+
+        private function registerLayer():void {
+            LayerFactory.registerLayer(LayerFactory.BTN, _btnL);
+            LayerFactory.registerLayer(LayerFactory.BTNADD, _btnL.addLayer);
+            LayerFactory.registerLayer(LayerFactory.BTNNORMAL, _btnL.normalLayer);
+
+        }
+
+        private function registerFunction():void {
+            LayerFactory.registerFunction(LayerFactory.ADDNODE, _entityL.addNode);
+
+        }
+
+
 
         public function initLevel(scale:Number = 1):void {
             if (scale)
@@ -185,12 +203,12 @@ package UI {
             return _ui._entityL;
         }
 
-        public static function get btnLayer():BtnLayer {
-            return _ui._btnL;
-        }
-
         public static function get gameContainer():Sprite {
             return _ui._gameContainer;
+        }
+
+        public static function get fleetSlider():FleetSlider {
+            return _ui._btnL.fleetSlider;
         }
 
         public static function invisibleMode():void {

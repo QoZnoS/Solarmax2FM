@@ -34,7 +34,7 @@ package Game {
             this.repBak = rep.deepCopy;
             rep.startRead();
             this.ui = scene.ui;
-            UIContainer.btnLayer.fleetSlider.visible = false;
+            UIContainer.fleetSlider.visible = false;
             var level:Object = find_level();
             var i:int = 0;
             rng = new Rng(rep.seed);

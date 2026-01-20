@@ -113,8 +113,8 @@ package UI {
             fleetSlider.visible = true;
             addLayer.addChild(fleetSlider);
             Starling.current.nativeStage.addEventListener("mouseWheel", on_wheel);
-            addChild(addLayer);
             addChild(normalLayer);
+            addChild(addLayer);
             //#endregion
         }
 

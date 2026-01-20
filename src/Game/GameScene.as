@@ -25,6 +25,7 @@ package Game {
     import utils.ReplayData;
     import UI.UIContainer;
     import utils.CalcTools;
+    import UI.LayerFactory;
 
     public class GameScene extends BasicScene {
         // #region 类变量
@@ -80,7 +81,7 @@ package Game {
             this.alpha = 0;
             this.visible = true;
             ui = scene.ui;
-            UIContainer.btnLayer.addChildAt(cover, 0);
+            LayerFactory.addChildAt(LayerFactory.BTNADD, cover, 0);
             var i:int = 0;
             rng = new Rng(seed);
             // #region 读取配置生成关卡
@@ -141,9 +142,9 @@ package Game {
                 label.color = Globals.teamColors[Globals.playerTeam];
                 label.fontSize = -1;
                 if (Globals.teamDeepColors[Globals.playerTeam])
-                    UIContainer.btnLayer.normalLayer.addChild(label);
+                    LayerFactory.addChild(LayerFactory.BTNNORMAL,label);
                 else
-                    UIContainer.btnLayer.addLayer.addChild(label);
+                    LayerFactory.addChild(LayerFactory.BTNADD,label);
             }
             // UIContainer.btnLayer.color = Globals.teamColors[Globals.playerTeam];
             // 执行一些初始化函数
@@ -175,9 +176,9 @@ package Game {
             removeEventListener("enterFrame", update); // 移除更新帧监听器
             for each (var label:TextField in popLabels) {
                 if (Globals.teamDeepColors[Globals.playerTeam])
-                    UIContainer.btnLayer.normalLayer.removeChild(label);
+                    LayerFactory.removeChild(LayerFactory.BTNNORMAL, label);
                 else
-                    UIContainer.btnLayer.addLayer.removeChild(label);
+                    LayerFactory.removeChild(LayerFactory.BTNADD, label);
             }
             Globals.auto_save_replay();
             this.visible = false;
@@ -317,7 +318,7 @@ package Game {
                 case Keyboard.NUMBER_7:
                 case Keyboard.NUMBER_8:
                 case Keyboard.NUMBER_9:
-                    UIContainer.btnLayer.fleetSlider.perc = (keyCode - Keyboard.NUMBER_0) / 10;
+                    UIContainer.fleetSlider.perc = (keyCode - Keyboard.NUMBER_0) / 10;
                     break;
                 case Keyboard.NUMPAD_1:
                 case Keyboard.NUMPAD_2:
@@ -328,11 +329,11 @@ package Game {
                 case Keyboard.NUMPAD_7:
                 case Keyboard.NUMPAD_8:
                 case Keyboard.NUMPAD_9:
-                    UIContainer.btnLayer.fleetSlider.perc = (keyCode - Keyboard.NUMPAD_0) / 10;
+                    UIContainer.fleetSlider.perc = (keyCode - Keyboard.NUMPAD_0) / 10;
                     break;
                 case Keyboard.NUMBER_0:
                 case Keyboard.NUMPAD_0:
-                    UIContainer.btnLayer.fleetSlider.perc = 1;
+                    UIContainer.fleetSlider.perc = 1;
             }
         }
     }

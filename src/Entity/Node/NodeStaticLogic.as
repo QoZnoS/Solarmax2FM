@@ -176,7 +176,7 @@ package Entity.Node {
          * @param targetNode 终点
          */
         public static function sendShips(node:Node, team:int, targetNode:Node):void {
-            var l:int = Math.ceil(node.ships[team].length * UIContainer.btnLayer.fleetSlider.perc); // 计算调动的飞船数，Math.ceil()为至少调动1飞船判定
+            var l:int = Math.ceil(node.ships[team].length * UIContainer.fleetSlider.perc); // 计算调动的飞船数，Math.ceil()为至少调动1飞船判定
             if (targetNode == node || l == 0)
                 return;
             if (game.visible)

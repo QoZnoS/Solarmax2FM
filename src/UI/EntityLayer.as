@@ -204,7 +204,6 @@ package UI {
                 Starling.juggler.tween(batch, 5, {"alpha": 0,
                         "delay": 50});
         }
-
         //#endregion
         //#region getter
         public function get blackholeLayer():QuadBatch {

@@ -19,7 +19,7 @@ package Game.SpecialEvent {
         public function update(dt:Number):void {
             switch (state) {
                 case STATE_START:
-                    if (UIContainer.btnLayer.fleetSlider.perc < 1) {
+                    if (UIContainer.fleetSlider.perc < 1) {
                         state = STATE_END;
                         tutorial.type = TutorialSprite.TYPE_END;
                     }
