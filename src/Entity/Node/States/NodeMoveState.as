@@ -130,20 +130,32 @@ package Entity.Node.States {
         public function updateConflictLabels(activeTeams:Vector.<int>, totalShips:int):void {
             var currentAngle:Number = START_ANGLE - Math.PI * node.ships[activeTeams[0]].length / totalShips;
             var labelAngleStep:Number = Math.PI * 2 / activeTeams.length;
-            for (var i:int = 0; i < Globals.teamCount; i++) {
-                if (activeTeams.indexOf(i) == -1) {
+            var activeGroup:Vector.<Vector.<int>> = new Vector.<Vector.<int>>;
+            var i:int = 0;
+            for (i = 0; i < Globals.teamCount; i++)
+                activeGroup.push(new Vector.<int>);
+            for each(i in activeTeams)
+                activeGroup[Globals.teamGroups[i]].push(i);
+
+            var labelIndex:int = 0
+            for (i = 0;i < Globals.teamCount; i++) {
+                if (activeTeams.indexOf(i) == -1)
                     conflictLabels[i].visible = false;
+                if (activeGroup[i].length == 0)
                     continue;
+                var arcRatio:Number = 0;
+                var colorArr:Array = [];
+                // 渲染兵力数字并计算队伍弧长
+                for each(var teamId:int in activeGroup[i]) {
+                    var shipCount:int = node.ships[teamId].length;
+                    var labelAngle:Number = START_ANGLE + labelIndex * labelAngleStep;
+                    updateConflictLabel(teamId, labelAngle, shipCount);
+                    labelIndex++;
+
+                    arcRatio += shipCount / totalShips;
+                    colorArr.push(Globals.teamColors[teamId]);
                 }
-                var teamId:int = i;
-                var shipCount:int = node.ships[teamId].length;
-                var arcRatio:Number = shipCount / totalShips;
-                if (activeTeams.indexOf(i + 1) != -1 && Globals.teamGroups[i] == Globals.teamGroups[i + 1])
-                    Drawer.drawCircle(UIContainer.behaviorBatch, nodeData.x, nodeData.y, Globals.teamColors[teamId], nodeData.lineDist, nodeData.lineDist - 2, false, 1, arcRatio, currentAngle + 0.01);
-                else
-                    Drawer.drawCircle(UIContainer.behaviorBatch, nodeData.x, nodeData.y, Globals.teamColors[teamId], nodeData.lineDist, nodeData.lineDist - 2, false, 1, arcRatio - ARC_ADJUSTMENT * 1.5, currentAngle + 0.01);
-                var labelAngle:Number = START_ANGLE + activeTeams.indexOf(i) * labelAngleStep;
-                node.moveState.updateConflictLabel(teamId, labelAngle, shipCount);
+                Drawer.drawMultiGradientCircleOptimized(UIContainer.behaviorBatch, nodeData.x, nodeData.y, colorArr, nodeData.lineDist, nodeData.lineDist - 2, false, 1, arcRatio - ARC_ADJUSTMENT, currentAngle + 0.01);
                 currentAngle += Math.PI * 2 * arcRatio;
             }
         }
