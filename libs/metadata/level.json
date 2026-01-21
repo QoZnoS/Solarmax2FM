@@ -18947,7 +18947,8 @@
                     "name": "16",
                     "color": "0x00FF00",
                     "color/hard": "0xFFFF00",
-                    "bgm": "bgm04"
+                    "bgm": "bgm04",
+                    "gameScale": 0.9
                 },
                 {
                     "node": [
@@ -22327,7 +22328,7 @@
                                     "y": 384,
                                     "type": "dilator",
                                     "team": 6,
-                                    "startShips": 350,
+                                    "startShips": 425,
                                     "startShips/hard": 275,
                                     "popVal": 0,
                                     "isUntouchable": true,
@@ -22673,12 +22674,14 @@
                             "type": "BossAppear",
                             "trigger": {
                                 "ships": 220,
+                                "ships/hard": 188,
                                 "node": {
                                     "x": 512,
                                     "y": 384,
                                     "type": "dilator",
                                     "team": 6,
-                                    "startShips": 350,
+                                    "startShips": 588,
+                                    "startShips/hard": 875,
                                     "popVal": 0,
                                     "isUntouchable": true,
                                     "isAIinvisible": true
@@ -23094,8 +23097,8 @@
                                     "y": 384,
                                     "type": "dilator",
                                     "team": 6,
-                                    "startShips": 250,
-                                    "startShips/hard": 325,
+                                    "startShips": 350,
+                                    "startShips/hard": 500,
                                     "popVal": 0,
                                     "isUntouchable": true,
                                     "isAIinvisible": true
@@ -23118,8 +23121,8 @@
                                     "y": 384,
                                     "type": "dilator",
                                     "team": 6,
-                                    "startShips": 250,
-                                    "startShips/hard": 325,
+                                    "startShips": 350,
+                                    "startShips/hard": 500,
                                     "popVal": 0,
                                     "isUntouchable": true,
                                     "isAIinvisible": true
@@ -23167,7 +23170,7 @@
                     "name": "35",
                     "color/easy": "0x00FF00",
                     "color/normal": "0x0000FF",
-                    "color": "0xFFFF00",
+                    "color": "0xFF0000",
                     "bgm": "bgm06",
                     "gameScale": 0.85
                 },
@@ -23176,6 +23179,8 @@
                         {
                             "x": 512,
                             "startShips": 225,
+                            "startShips/easy": 1,
+                            "startShips/normal": 150,
                             "y": 384,
                             "type": "dilator",
                             "size": 0.5,
@@ -23186,6 +23191,7 @@
                             "x": 512,
                             "y": 272,
                             "type": "pulsecannon",
+                            "startShips/hard": 36,
                             "orbitNode": 0,
                             "team": 6
                         },
@@ -23194,6 +23200,7 @@
                             "x": 512,
                             "y": 496,
                             "type": "pulsecannon",
+                            "startShips/hard": 36,
                             "orbitNode": 0,
                             "team": 6
                         },
@@ -23202,6 +23209,7 @@
                             "x": 608,
                             "y": 328,
                             "type": "pulsecannon",
+                            "startShips/hard": 36,
                             "orbitNode": 0,
                             "team": 6
                         },
@@ -23210,6 +23218,7 @@
                             "x": 416,
                             "y": 328,
                             "type": "pulsecannon",
+                            "startShips/hard": 36,
                             "orbitNode": 0,
                             "team": 6
                         },
@@ -23218,6 +23227,7 @@
                             "x": 416,
                             "y": 440,
                             "type": "pulsecannon",
+                            "startShips/hard": 36,
                             "orbitNode": 0,
                             "team": 6
                         },
@@ -23226,30 +23236,37 @@
                             "x": 608,
                             "y": 440,
                             "type": "pulsecannon",
+                            "startShips/hard": 36,
                             "orbitNode": 0,
                             "team": 6
                         },
                         {
                             "x": 192,
                             "y": 384,
+                            "x/legacy": 320,
+                            "y/legacy": 448,
                             "type": "cloneturret",
                             "team": 6
                         },
                         {
                             "x": 320,
                             "y": 384,
+                            "y/legacy": 320,
                             "type": "cloneturret",
                             "team": 6
                         },
                         {
                             "x": 704,
                             "y": 384,
+                            "y/legacy": 448,
                             "type": "cloneturret",
                             "team": 6
                         },
                         {
                             "x": 832,
                             "y": 384,
+                            "x/legacy": 704,
+                            "y/legacy": 320,
                             "type": "cloneturret",
                             "team": 6
                         },
@@ -23292,6 +23309,7 @@
                         {
                             "x": 64,
                             "startShips": 22,
+                            "startShips/legacy": 0,
                             "y": 281.6,
                             "type": "cloneturret",
                             "team": 1
@@ -23299,6 +23317,7 @@
                         {
                             "x": 64,
                             "startShips": 22,
+                            "startShips/legacy": 0,
                             "y": 486.4,
                             "type": "cloneturret",
                             "team": 7
@@ -23306,6 +23325,7 @@
                         {
                             "x": 960,
                             "startShips": 22,
+                            "startShips/legacy": 0,
                             "y": 281.6,
                             "type": "cloneturret",
                             "team": 3
@@ -23313,6 +23333,7 @@
                         {
                             "x": 960,
                             "startShips": 22,
+                            "startShips/legacy": 0,
                             "y": 486.4,
                             "type": "cloneturret",
                             "team": 4
@@ -23348,6 +23369,7 @@
                         {
                             "x": 192,
                             "startShips": 22,
+                            "startShips/legacy": 0,
                             "y": 192,
                             "type": "cloneturret",
                             "team": 1
@@ -23355,6 +23377,7 @@
                         {
                             "x": 192,
                             "startShips": 22,
+                            "startShips/legacy": 0,
                             "y": 576,
                             "type": "cloneturret",
                             "team": 7
@@ -23362,6 +23385,7 @@
                         {
                             "x": 832,
                             "startShips": 22,
+                            "startShips/legacy": 0,
                             "y": 192,
                             "type": "cloneturret",
                             "team": 3
@@ -23369,6 +23393,7 @@
                         {
                             "x": 832,
                             "startShips": 22,
+                            "startShips/legacy": 0,
                             "y": 576,
                             "type": "cloneturret",
                             "team": 4
@@ -23376,6 +23401,7 @@
                         {
                             "x": 304,
                             "startShips": 20,
+                            "startShips/legacy": 0,
                             "y": 192,
                             "type": "pulsecannon",
                             "team": 1
@@ -23383,6 +23409,7 @@
                         {
                             "x": 304,
                             "startShips": 20,
+                            "startShips/legacy": 0,
                             "y": 576,
                             "type": "pulsecannon",
                             "team": 7
@@ -23390,6 +23417,7 @@
                         {
                             "x": 720,
                             "startShips": 20,
+                            "startShips/legacy": 0,
                             "y": 192,
                             "type": "pulsecannon",
                             "team": 3
@@ -23397,6 +23425,7 @@
                         {
                             "x": 720,
                             "startShips": 20,
+                            "startShips/legacy": 0,
                             "y": 576,
                             "type": "pulsecannon",
                             "team": 4
@@ -23404,24 +23433,28 @@
                         {
                             "x": 192,
                             "y": 288,
+                            "y/legacy": 320,
                             "type": "captureship",
                             "team": 1
                         },
                         {
                             "x": 192,
                             "y": 480,
+                            "y/legacy": 448,
                             "type": "captureship",
                             "team": 7
                         },
                         {
                             "x": 832,
                             "y": 288,
+                            "y/legacy": 320,
                             "type": "captureship",
                             "team": 3
                         },
                         {
                             "x": 832,
                             "y": 480,
+                            "y/legacy": 448,
                             "type": "captureship",
                             "team": 4
                         },
@@ -23442,6 +23475,7 @@
                             "type/easy": "SimpleAI",
                             "type/normal": "SmartAI",
                             "type": "HardAI",
+                            "type/legacy": "HardAI",
                             "actionDelay/hard": 0.22,
                             "startDelay": 1.5
                         },
@@ -23450,12 +23484,14 @@
                             "type/easy": "SimpleAI",
                             "type/normal": "SmartAI",
                             "type": "HardAI",
+                            "type/legacy": "HardAI",
                             "actionDelay/hard": 0.22,
                             "startDelay": 1.5
                         },
                         {
                             "team": 6,
                             "type/hard": "HardAI",
+                            "type/legacy": "HardAI",
                             "type": "FinalAI",
                             "actionDelay/hard": 0.22,
                             "startDelay": 0
@@ -23465,6 +23501,7 @@
                             "type/easy": "SimpleAI",
                             "type/normal": "SmartAI",
                             "type": "HardAI",
+                            "type/legacy": "HardAI",
                             "actionDelay/hard": 0.22,
                             "startDelay": 1.5
                         }
@@ -23483,7 +23520,8 @@
                     "name": "36",
                     "color/easy": "0x00FF00",
                     "color/normal": "0x0000FF",
-                    "color": "0xFFFF00",
+                    "color/hard": "0xFFFF00",
+                    "color": "0xFF0000",
                     "bgm": "bgm06"
                 },
                 {
@@ -23665,14 +23703,16 @@
                     "node": [
                         {
                             "x": 128,
-                            "startShips": 18,
+                            "startShips": 22,
+                            "startShips/lecacy": 18,
                             "y": 576,
                             "type": "planet",
                             "team": 1
                         },
                         {
                             "x": 128,
-                            "startShips": 18,
+                            "startShips": 22,
+                            "startShips/lecacy": 18,
                             "y": 192,
                             "type": "planet",
                             "team": 1
@@ -23935,8 +23975,9 @@
                         }
                     ],
                     "name": "38",
-                    "color": "0x00FF00",
-                    "color/hard": "0xFF0000",
+                    "color/easy": "0x00FF00",
+                    "color/normal": "0x00FF00",
+                    "color": "0xFF0000",
                     "bgm": "bgm06"
                 }
             ]
