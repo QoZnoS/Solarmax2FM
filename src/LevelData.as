@@ -81,7 +81,7 @@ package {
             }
         }
 
-        private static function updateTeam():void {
+        public static function updateTeam():void {
             var len:int = rawData[Globals.currentData].team.length;
             for (var i:int = 0; i < len; i++) {
                 var teamData:Object = rawData[Globals.currentData].team[i];

@@ -148,6 +148,8 @@ package Menus.StartMenus {
             Globals.currentData = mapacks.indexOf(click.target);
             Globals.save();
             LevelData.updateLevelData();
+            Globals.initTeam();
+            LevelData.updateTeam();
             title.getBarrierData();
             title.getOrbitData();
             title.getMoreInfoTexts();
