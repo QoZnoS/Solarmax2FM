@@ -81,7 +81,7 @@ package Game {
             this.alpha = 0;
             this.visible = true;
             ui = scene.ui;
-            LayerFactory.addChildAt(LayerFactory.BTNADD, cover, 0);
+            LayerFactory.addChildAt(LayerFactory.BTN_ADD, cover, 0);
             var i:int = 0;
             rng = new Rng(seed);
             // #region 读取配置生成关卡
@@ -142,9 +142,9 @@ package Game {
                 label.color = Globals.teamColors[Globals.playerTeam];
                 label.fontSize = -1;
                 if (Globals.teamDeepColors[Globals.playerTeam])
-                    LayerFactory.addChild(LayerFactory.BTNNORMAL,label);
+                    LayerFactory.addChild(LayerFactory.BTN_NORMAL,label);
                 else
-                    LayerFactory.addChild(LayerFactory.BTNADD,label);
+                    LayerFactory.addChild(LayerFactory.BTN_ADD,label);
             }
             // UIContainer.btnLayer.color = Globals.teamColors[Globals.playerTeam];
             // 执行一些初始化函数
@@ -176,9 +176,9 @@ package Game {
             removeEventListener("enterFrame", update); // 移除更新帧监听器
             for each (var label:TextField in popLabels) {
                 if (Globals.teamDeepColors[Globals.playerTeam])
-                    LayerFactory.removeChild(LayerFactory.BTNNORMAL, label);
+                    LayerFactory.removeChild(LayerFactory.BTN_NORMAL, label);
                 else
-                    LayerFactory.removeChild(LayerFactory.BTNADD, label);
+                    LayerFactory.removeChild(LayerFactory.BTN_ADD, label);
             }
             Globals.auto_save_replay();
             this.visible = false;

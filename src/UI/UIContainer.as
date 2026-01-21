@@ -57,17 +57,14 @@ package UI {
 
         private function registerLayer():void {
             LayerFactory.registerLayer(LayerFactory.BTN, _btnL);
-            LayerFactory.registerLayer(LayerFactory.BTNADD, _btnL.addLayer);
-            LayerFactory.registerLayer(LayerFactory.BTNNORMAL, _btnL.normalLayer);
+            LayerFactory.registerLayer(LayerFactory.BTN_ADD, _btnL.addLayer);
+            LayerFactory.registerLayer(LayerFactory.BTN_NORMAL, _btnL.normalLayer);
 
         }
 
         private function registerFunction():void {
-            LayerFactory.registerFunction(LayerFactory.ADDNODE, _entityL.addNode);
 
         }
-
-
 
         public function initLevel(scale:Number = 1):void {
             if (scale)

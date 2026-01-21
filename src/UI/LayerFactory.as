@@ -8,8 +8,8 @@ package UI
     {
         // public static const ENTITY:String = "entityLayer";
         public static const BTN:String = "buttonLayer";
-        public static const BTNADD:String = "buttonAddLayer";
-        public static const BTNNORMAL:String = "buttonNormalLayer";
+        public static const BTN_ADD:String = "buttonAddLayer";
+        public static const BTN_NORMAL:String = "buttonNormalLayer";
 
         /** 
          * 添加天体贴图
@@ -18,7 +18,7 @@ package UI
          * <p><code>glow:Image</code>
          * <p><code>deepColor:Boolean</code>
          */
-        public static const ADDNODE:String = "addNode";
+        public static const ADD_NODE:String = "addNode";
 
         private static var _layerMap:Dictionary = new Dictionary();
         private static var _functionMap:Dictionary = new Dictionary();
@@ -66,8 +66,12 @@ package UI
                 throw new Error("layer do not exist");
         }
 
-        public static function execute(type:String):Function {
-            return _functionMap[type];
+        public static function execute(type:String, ...args):* {
+            var func:Function = _functionMap[type] as Function;
+            if (func != null) {
+                return func.apply(null, args);
+            }
+            return null;
         }
 
         public static function getLayer(type:String):Sprite {

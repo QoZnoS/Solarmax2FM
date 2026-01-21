@@ -9,6 +9,7 @@ package Entity.AI {
     public class HardAI extends BasicAI {
         public function HardAI(rng:Rng, actionDelay:Number, startDelay:Number) {
             super(rng, actionDelay, startDelay);
+            gTAcache = new Vector.<Array>;
         }
 
         override public function update(dt:Number):void {
@@ -269,7 +270,7 @@ package Entity.AI {
             for each (var node:Node in nodeArray)
                 node.breadthFirstSearchNode = null;
         }
-
+        private var gTAcache:Vector.<Array>;
         public function hard_getTowerAttack(node1:Node, node2:Node):Number { // 高精度估损
             var node1Group:int = Globals.teamGroups[node1.nodeData.team];
             var nodeGroup:int = -1;
@@ -286,6 +287,11 @@ package Entity.AI {
             var resultExit:Point; // 线和圆的第二个交点
             if (node1.nodeData.isWarp && node1Group == group)
                 return 0; // 对传送门不执行该函数
+            
+            for each(var cache:Array in gTAcache)
+                if ((cache[0] == node1 && cache[1] == node2) || (cache[0] == node2 && cache[1] == node1))
+                    return cache[2];
+
             for each (node in nodeArray) {
                 nodeGroup = Globals.teamGroups[node.nodeData.team];
                 length = 0;
@@ -309,6 +315,10 @@ package Entity.AI {
                         towerAttack += (length / Globals.teamShipSpeeds[team]) / node.attackState.attackRate;
                 }
             }
+
+            if (node1.nodeData.orbitNode == -1 && node2.nodeData.orbitNode == -1)
+                gTAcache.push([node1, node2, Math.floor(towerAttack)]);
+
             return Math.floor(towerAttack);
         }
 

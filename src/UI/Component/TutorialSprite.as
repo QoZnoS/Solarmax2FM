@@ -34,12 +34,12 @@ package UI.Component {
             this.type = type;
             arrow.visible = true;
             arrow.alpha = 0;
-            LayerFactory.addChild(LayerFactory.BTNADD, arrow);
+            LayerFactory.addChild(LayerFactory.BTN_ADD, arrow);
             show();
         }
 
         public function deInit():void {
-            LayerFactory.removeChild(LayerFactory.BTNADD, arrow);
+            LayerFactory.removeChild(LayerFactory.BTN_ADD, arrow);
             Starling.juggler.removeTweens(arrow);
             if (loop)
                 Starling.juggler.remove(loop);

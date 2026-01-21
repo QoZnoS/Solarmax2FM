@@ -55,6 +55,12 @@ package UI {
             fgNormalBatch.blendMode = BlendMode.NORMAL;
             shipsFGBatchbs = new Vector.<QuadBatch>();
             labels = new Sprite();
+
+            registerFunction();
+        }
+
+        public function registerFunction():void {
+            LayerFactory.registerFunction(LayerFactory.ADD_NODE, addNode);
         }
 
         //#region 加载
@@ -150,7 +156,7 @@ package UI {
             return newBatch;
         }
 
-        public function addNode(node:Image, halo:Image, glow:Image, deepColor:Boolean):void {
+        private function addNode(node:Image, halo:Image, glow:Image, deepColor:Boolean):void {
             nodeBatch.addChild(node);
             if (deepColor) {
                 nodeGlowNormal.addChild(halo);

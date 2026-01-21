@@ -7,6 +7,7 @@ package Entity.Node.States {
     import UI.UIContainer;
     import utils.Drawer;
     import starling.animation.Transitions;
+    import UI.LayerFactory;
 
     public class NodeMoveState implements INodeState {
         public var node:Node;
@@ -54,7 +55,7 @@ package Entity.Node.States {
             }
             UIContainer.entityLayer.labelLayer.swapChildren(captureLabels[0], captureLabels[Globals.playerTeam]);
             image.visible = halo.visible = true;
-            UIContainer.entityLayer.addNode(image, halo, glow, Globals.teamDeepColors[nodeData.team]);
+            LayerFactory.execute(LayerFactory.ADD_NODE, image, halo, glow, Globals.teamDeepColors[nodeData.team]);
             if (orbitNode) {
                 var dx:Number = nodeData.x - orbitNode.nodeData.x;
                 var dy:Number = nodeData.y - orbitNode.nodeData.y;
@@ -128,7 +129,7 @@ package Entity.Node.States {
         private static const ARC_ADJUSTMENT:Number = 0.006366197723675814; // 弧线绘制微调值
 
         public function updateConflictLabels(activeTeams:Vector.<int>, totalShips:int):void {
-            var currentAngle:Number = START_ANGLE - Math.PI * node.ships[activeTeams[0]].length / totalShips;
+            var currentAngle:Number = 567; // 随便找一个范围之外的数（
             var labelAngleStep:Number = Math.PI * 2 / activeTeams.length;
             var activeGroup:Vector.<Vector.<int>> = new Vector.<Vector.<int>>;
             var i:int = 0;
@@ -154,6 +155,8 @@ package Entity.Node.States {
 
                     arcRatio += shipCount / totalShips;
                     colorArr.push(Globals.teamColors[teamId]);
+                    if (currentAngle == 567)
+                        currentAngle = START_ANGLE - Math.PI * node.ships[teamId].length / totalShips
                 }
                 Drawer.drawMultiGradientCircleOptimized(UIContainer.behaviorBatch, nodeData.x, nodeData.y, colorArr, nodeData.lineDist, nodeData.lineDist - 2, false, 1, arcRatio - ARC_ADJUSTMENT, currentAngle + 0.01);
                 currentAngle += Math.PI * 2 * arcRatio;
@@ -192,6 +195,8 @@ package Entity.Node.States {
         private const startEaseY:Number = 57.1894889582 - Transitions.getTransition(Transitions.EASE_OUT)(1 / Globals.maxMarginTeam) * 122.8105110418;
         private function updateCooperateLabel(teamId:int, labelAngle:Number, shipCount:int, teamCount:int):void {
             var teamLabel:TextField = captureLabels[teamId];
+            if (teamCount == 2)
+                teamCount = 2.2;
             var easeX:Number = Math.min(180, Transitions.getTransition(Transitions.EASE_OUT)(teamCount / Globals.maxMarginTeam) * 118.196601125 + startEaseX);
             var easeY:Number = Math.min(180, Transitions.getTransition(Transitions.EASE_OUT)(teamCount / Globals.maxMarginTeam) * 122.8105110418 + startEaseY);
             // trace(easeX);
