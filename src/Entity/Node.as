@@ -141,27 +141,85 @@ package Entity {
         public function updateNodeLinks():void {
             if (nodeData.isBarrier)
                 return;
-            nodeLinks.length = Globals.teamCount;
-            for (var i:int = 0; i < Globals.teamCount; i++) {
-                var group:int = Globals.teamGroups[i];
-                var nodeGroup:int = Globals.teamGroups[nodeData.team];
-                if (!nodeLinks[i])
-                    nodeLinks[i] = new Vector.<Node>;
-                else
-                    nodeLinks[i].length = 0;
-                if (i != 0 && !(group == nodeGroup && nodeData.isWarp)) {
-                    nodeLinks[i] = nodeLinks[0].concat();
+
+            var globalNodes:Vector.<Node> = EntityContainer.nodes;
+            var teamCount:int = Globals.teamCount;
+            var teamGroups:Array = Globals.teamGroups;
+            var nodesLength:int = globalNodes.length;
+            var nodeTeamGroup:int = teamGroups[nodeData.team];
+            var isWarp:Boolean = nodeData.isWarp;
+
+            // 确保数组长度正确
+            if (nodeLinks.length != teamCount) {
+                nodeLinks.length = teamCount;
+            }
+
+            // 预计算nodeLinks[0]（基准列表）
+            if (!nodeLinks[0]) {
+                nodeLinks[0] = new Vector.<Node>();
+            } else {
+                nodeLinks[0].length = 0;
+            }
+
+            var baseLinks:Vector.<Node> = nodeLinks[0];
+            var i:int, j:int, node:Node;
+
+            // 填充基准列表
+            for (j = 0; j < nodesLength; j++) {
+                node = globalNodes[j];
+                if (node == this || node.nodeData.isUntouchable) {
                     continue;
                 }
-                for each (var node:Node in EntityContainer.nodes) {
-                    if (node == this || node.nodeData.isUntouchable)
-                        continue;
-                    if (nodeData.isWarp && nodeGroup == group && i != 0) {
-                        nodeLinks[i].push(node);
+                if (EntityContainer.nodesBlocked(this, node) == null) {
+                    baseLinks[baseLinks.length] = node; // 避免push调用
+                }
+            }
+
+            var baseLength:int = baseLinks.length;
+
+            // 处理其他team
+            for (i = 1; i < teamCount; i++) {
+                var group:int = teamGroups[i];
+
+                // 检查是否需要复制基准列表
+                if (!(group == nodeTeamGroup && isWarp)) {
+                    // 复制基准列表，重用现有Vector
+                    if (!nodeLinks[i]) {
+                        nodeLinks[i] = new Vector.<Node>(baseLength);
+                        // 直接复制元素
+                        for (j = 0; j < baseLength; j++) {
+                            nodeLinks[i][j] = baseLinks[j];
+                        }
+                    } else {
+                        // 重用现有数组，调整大小并复制
+                        var targetLinks:Vector.<Node> = nodeLinks[i];
+                        if (targetLinks.length != baseLength) {
+                            targetLinks.length = baseLength;
+                        }
+                        for (j = 0; j < baseLength; j++) {
+                            targetLinks[j] = baseLinks[j];
+                        }
+                    }
+                    continue;
+                }
+
+                // 需要构建特殊列表
+                if (!nodeLinks[i]) {
+                    nodeLinks[i] = new Vector.<Node>();
+                } else {
+                    nodeLinks[i].length = 0;
+                }
+
+                var warpLinks:Vector.<Node> = nodeLinks[i];
+
+                // 构建warp条件下的特殊列表
+                for (j = 0; j < nodesLength; j++) {
+                    node = globalNodes[j];
+                    if (node == this || node.nodeData.isUntouchable) {
                         continue;
                     }
-                    if (EntityContainer.nodesBlocked(this, node) == null)
-                        nodeLinks[i].push(node);
+                    // warp条件下直接添加
+                    warpLinks[warpLinks.length] = node;
                 }
             }
         }
@@ -332,7 +390,7 @@ package Entity {
             var ships:Array = [];
             for (var i:int = 0; i < Globals.teamCount; i++)
                 ships.push([]);
-            for each (var ship:Ship in globalShips) {
+            for each (var ship:Ship in EntityContainer.ships) {
                 if (ship.state == 0 || ship.node != this)
                     continue; // 排除未起飞的和不飞向自身的飞船
                 ships[ship.team].push(ship);
@@ -368,18 +426,18 @@ package Entity {
         public function hard_AllStrength(team:int):int {
             var group:int = Globals.teamGroups[team];
             var strength:int = 0;
-            for each (var ship:Ship in globalShips)
+            for each (var ship:Ship in EntityContainer.ships)
                 if (ship.node == this && Globals.teamGroups[ship.team] == group)
                     strength++;
             return strength;
         }
-        private var globalShips:Vector.<Ship> = EntityContainer.ships;
 
         // 返回敌方综合强度
         public function hard_oppAllStrength(team:int):int {
             var group:int = Globals.teamGroups[team];
             var maxShips:int = 0;
             var teamGroups:Array = Globals.teamGroups;
+            var globalShips:Vector.<Ship> = EntityContainer.ships;
             var globalShipsLength:int = globalShips.length;
             var groupShipCounts:Vector.<int> = new Vector.<int>(Globals.teamCount, true);
             for (var i:int = 0; i < globalShipsLength; i++) {

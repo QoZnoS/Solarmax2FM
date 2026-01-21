@@ -3,6 +3,9 @@
 package {
     import flash.filesystem.File;
     import flash.filesystem.FileStream;
+    import flash.utils.Dictionary;
+    import Entity.Node.NodeType;
+    import flash.utils.ByteArray;
 
     public class LevelData {
         public static var file:File; // 文件
@@ -12,6 +15,8 @@ package {
         public static var rawData:Array;
         /** 关卡列表，经难度和图集修正 */
         public static var level:Array;
+
+        private static var levelCache:Vector.<Dictionary>;
 
         public function LevelData() {
             super();
@@ -25,6 +30,12 @@ package {
             file = File.applicationDirectory.resolvePath("level.json");
             if (file.exists)
                 load();
+            var maxData:int = rawData.length;
+            levelCache = new Vector.<Dictionary>(rawData.length, true);
+            for(var i:int = 0; i < maxData; i++)
+                levelCache[i] = new Dictionary;
+
+            NodeType.init();
             updateLevelData();
             
             if (Globals.currentData >= rawData.length){
@@ -36,9 +47,23 @@ package {
         }
 
         public static function updateLevelData():void {
+            if (levelCache[Globals.currentData][Globals.currentDifficulty]){
+                level = levelCache[Globals.currentData][Globals.currentDifficulty];
+                return;
+            }
+
             var originalLevel:Object = rawData[Globals.currentData].level;
-            level = JSON.parse(JSON.stringify(originalLevel)) as Array;
-            process(level);
+            var cache:Array = deepClone(originalLevel) as Array;
+            process(cache);
+            levelCache[Globals.currentData][Globals.currentDifficulty] = cache;
+            level = cache;
+        }
+
+        public static function deepClone(obj:*):* {
+            var ba:ByteArray = new ByteArray();
+            ba.writeObject(obj);
+            ba.position = 0;
+            return ba.readObject();
         }
 
         private static function process(obj:Object):void {
