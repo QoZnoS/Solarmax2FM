@@ -8,6 +8,7 @@
 		"library-path": [
 			"libs"
 		],
+        // "advanced-telemetry": true,
 		"output": "bin/Main.swf"
 	},
 	"application": "src/Main-app.xml",
