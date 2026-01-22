@@ -6,6 +6,7 @@ package Entity {
     import utils.GS;
     import starling.display.QuadBatch;
     import UI.UIContainer;
+    import UI.LayerFactory;
 
     public class Ship extends GameEntity {
         // #region 类变量
@@ -389,7 +390,7 @@ package Entity {
             //           return;
             image.x = x;
             image.y = y;
-            UIContainer.entityLayer.addImage(image, foreground, Globals.teamDeepColors[team])
+            LayerFactory.call(LayerFactory.ADD_IMAGE)(image, foreground, Globals.teamDeepColors[team])
         }
 
         // 绘制拖尾
@@ -398,7 +399,7 @@ package Entity {
                 return;
             trail.x = x;
             trail.y = y;
-            UIContainer.entityLayer.addImage(trail, foreground, Globals.teamDeepColors[team])
+            LayerFactory.call(LayerFactory.ADD_IMAGE)(trail, foreground, Globals.teamDeepColors[team])
         }
 
         // 绘制光圈
@@ -407,7 +408,7 @@ package Entity {
                 return;
             pulse.x = x;
             pulse.y = y;
-            UIContainer.entityLayer.addImage(pulse, foreground, Globals.teamDeepColors[team])
+            LayerFactory.call(LayerFactory.ADD_IMAGE)(pulse, foreground, Globals.teamDeepColors[team])
         }
 
         // #endregion

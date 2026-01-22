@@ -10,6 +10,8 @@ package Game {
     import UI.UIContainer;
     import Entity.Node.NodeType;
     import Entity.Node.NodeStaticLogic;
+    import UI.LayerFactory;
+    import starling.display.QuadBatch;
 
     public class EditorScene extends BasicScene {
 
@@ -125,10 +127,10 @@ package Game {
             var yTop:Number = focusNode.nodeData.y - focusNode.nodeData.lineDist;
             var xRight:Number = focusNode.nodeData.x + focusNode.nodeData.lineDist;
             var yBottom:Number = focusNode.nodeData.y + focusNode.nodeData.lineDist;
-            Drawer.drawTweenedLine(UIContainer.behaviorBatch, xLeft - 512, yTop, xRight + 512, yTop, 0x00FF00, 2, 0.5);
-            Drawer.drawTweenedLine(UIContainer.behaviorBatch, xLeft - 512, yBottom, xRight + 512, yBottom, 0x00FF00, 2, 0.5);
-            Drawer.drawTweenedLine(UIContainer.behaviorBatch, xLeft, yTop - 384, xLeft, yBottom + 384, 0x00FF00, 2, 0.5);
-            Drawer.drawTweenedLine(UIContainer.behaviorBatch, xRight, yTop - 384, xRight, yBottom + 384, 0x00FF00, 2, 0.5);
+            Drawer.drawTweenedLine(LayerFactory.getLayer(LayerFactory.BEHAVIOR) as QuadBatch, xLeft - 512, yTop, xRight + 512, yTop, 0x00FF00, 2, 0.5);
+            Drawer.drawTweenedLine(LayerFactory.getLayer(LayerFactory.BEHAVIOR) as QuadBatch, xLeft - 512, yBottom, xRight + 512, yBottom, 0x00FF00, 2, 0.5);
+            Drawer.drawTweenedLine(LayerFactory.getLayer(LayerFactory.BEHAVIOR) as QuadBatch, xLeft, yTop - 384, xLeft, yBottom + 384, 0x00FF00, 2, 0.5);
+            Drawer.drawTweenedLine(LayerFactory.getLayer(LayerFactory.BEHAVIOR) as QuadBatch, xRight, yTop - 384, xRight, yBottom + 384, 0x00FF00, 2, 0.5);
 
             var fx:Number = focusNode.nodeData.x;
             var fy:Number = focusNode.nodeData.y;
@@ -244,7 +246,7 @@ class NodePreview {
         glow.pivotX = glow.pivotY = glow.width * 0.5;
         image.scaleX = image.scaleY = halo.scaleX = halo.scaleY = glow.scaleX = glow.scaleY = 0.5;
         updateType(type);
-        LayerFactory.execute(LayerFactory.ADD_NODE, image, halo, glow, false);
+        LayerFactory.call(LayerFactory.ADD_NODE)(image, halo, glow, false);
     }
 
     public function updateType(type:String):void {

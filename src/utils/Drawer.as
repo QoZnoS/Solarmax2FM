@@ -24,7 +24,7 @@ package utils {
         }
 
         /**绘制直线
-         * @param layer 图层，关卡内请使用<code>UIContainer.behaviorBatch</code>，关卡外需自备图层
+         * @param layer 图层，关卡内请使用<code>LayerFactory.getLayer(LayerFactory.BEHAVIOR) as QuadBatch</code>，关卡外需自备图层
          * @param x1,y1 直线起点
          * @param x2,y2 直线终点
          * @param color 直线颜色
@@ -55,7 +55,7 @@ package utils {
         }
 
         /**绘制虚线（未使用）
-         * @param layer 图层，关卡内请使用<code>UIContainer.behaviorBatch</code>，关卡外需自备图层
+         * @param layer 图层，关卡内请使用<code>LayerFactory.getLayer(LayerFactory.BEHAVIOR) as QuadBatch</code>，关卡外需自备图层
          * @param x1,y1 虚线起点
          * @param x2,y2 虚线终点
          * @param color 虚线颜色
@@ -105,7 +105,7 @@ package utils {
         }
 
         /**绘制圆形
-         * @param layer 图层，关卡内请使用<code>UIContainer.behaviorBatch</code>，关卡外需自备图层
+         * @param layer 图层，关卡内请使用<code>LayerFactory.getLayer(LayerFactory.BEHAVIOR) as QuadBatch</code>，关卡外需自备图层
          * @param x,y 圆心坐标
          * @param color 线条颜色
          * @param R 实心半径
@@ -148,7 +148,7 @@ package utils {
         }
 
         /**绘制虚线圆
-         * @param layer 图层，关卡内请使用<code>UIContainer.behaviorBatch</code>，关卡外需自备图层
+         * @param layer 图层，关卡内请使用<code>LayerFactory.getLayer(LayerFactory.BEHAVIOR) as QuadBatch</code>，关卡外需自备图层
          * @param x,y 圆心坐标
          * @param color 线条颜色
          * @param R 实心半径
@@ -192,7 +192,7 @@ package utils {
 
         /**
          * 绘制渐变色圆弧
-         * @param layer 图层，关卡内请使用<code>UIContainer.behaviorBatch</code>，关卡外需自备图层
+         * @param layer 图层，关卡内请使用<code>LayerFactory.getLayer(LayerFactory.BEHAVIOR) as QuadBatch</code>，关卡外需自备图层
          * @param x,y 圆心坐标
          * @param colorA 起始颜色
          * @param colorB 结束颜色
