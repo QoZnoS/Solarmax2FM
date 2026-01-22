@@ -8,6 +8,7 @@ package {
     import utils.ScrollingBackground;
     import utils.GS;
     import utils.Drawer;
+    import Entity.FX.ParticleSystem;
 
     public class Root extends Sprite {
 
@@ -54,6 +55,7 @@ package {
                             scene = new SceneController()
                             addChild(scene);
                             GS.init();
+                            ParticleSystem.init();
                         }, 0.05);
                     }
                 }; // 声明函数对象

@@ -16,11 +16,12 @@ package Entity
         }
 
         public static function addBarrier(x:Number, y:Number, angle:Number, color:uint):void {
-            var barrierFX:BarrierFX = EntityContainer.getReserve(EntityContainer.INDEX_BARRIERS) as BarrierFX;
-            if (!barrierFX)
-                barrierFX = new BarrierFX();
-            barrierFX.initBarrier(game, x, y, angle, color);
-            EntityContainer.addEntity(EntityContainer.INDEX_BARRIERS, barrierFX);
+            ParticleSystem.addParticle("FX", x, y, angle, color);
+            // var barrierFX:BarrierFX = EntityContainer.getReserve(EntityContainer.INDEX_BARRIERS) as BarrierFX;
+            // if (!barrierFX)
+            //     barrierFX = new BarrierFX();
+            // barrierFX.initBarrier(game, x, y, angle, color);
+            // EntityContainer.addEntity(EntityContainer.INDEX_BARRIERS, barrierFX);
         }
 
         public static function addWarp(gameScene:Number, x:Number, y:Number, prevX:Number, prevY:uint, foreground:Boolean):void {
