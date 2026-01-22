@@ -34,8 +34,13 @@ package utils {
             }
 
             // 计算加权平均值
-            if (totalWeight == 0)
-                return 0; // 防止除以零
+            if (totalWeight == 0) {
+                var avgColor:uint = 0
+                for (i = 0; i < colors.length; i++)
+                    avgColor += color[i];
+                avgColor /= colors.length;
+                return avgColor;
+            }
 
             var avgR:uint = Math.round(totalR / totalWeight);
             var avgG:uint = Math.round(totalG / totalWeight);

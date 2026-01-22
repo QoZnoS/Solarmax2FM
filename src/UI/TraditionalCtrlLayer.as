@@ -31,7 +31,6 @@ package UI {
 
         public function TraditionalCtrlLayer(ui:UIContainer) {
             this.game = ui.scene.gameScene;
-            this.displayBatch = LayerFactory.getLayer(LayerFactory.BEHAVIOR) as QuadBatch;
             dragQuad = new Quad(10, 10, Globals.teamColors[1]);
             dragLine = new Quad(2, 2, Globals.teamColors[1]);
             selectedNodes = [];
@@ -44,6 +43,7 @@ package UI {
 
 
         public function init():void {
+            this.displayBatch = LayerFactory.getLayer(LayerFactory.BEHAVIOR) as QuadBatch;
             Starling.current.nativeStage.addEventListener("mouseDown", on_mouseDown);
             Starling.current.nativeStage.addEventListener("mouseMove", on_mouseMove);
             Starling.current.nativeStage.addEventListener("mouseUp", on_mouseUp);

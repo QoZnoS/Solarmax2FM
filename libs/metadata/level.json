@@ -4149,7 +4149,7 @@
                             "type": "HardAI"
                         }
                     ],
-                    "bgm": "bgm04"
+                    "bgm": "bgm02"
                 },
                 {
                     "node": [
@@ -5748,7 +5748,7 @@
                     ],
                     "name": "23",
                     "color": "0x0000FF",
-                    "bgm": "bgm05"
+                    "bgm": "bgm04"
                 },
                 {
                     "node": [

@@ -90,7 +90,7 @@ package Entity {
             this.rng = rng;
             resetArray();
             nodeData = new NodeData(true);
-            NodeStaticLogic.changeType(this, data.type, data.size);
+            NodeStaticLogic.changeType(this, data.type, data.size, data.rotation);
             NodeStaticLogic.changeTeam(this, data.team, false);
             nodeData.deserialize(data);
             aiValue = 0;

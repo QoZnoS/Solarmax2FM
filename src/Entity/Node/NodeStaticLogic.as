@@ -102,7 +102,7 @@ package Entity.Node {
          * @param type 目标类型
          * @param size 目标大小
          */
-        public static function changeType(node:Node, type:String, size:Number = NaN):void {
+        public static function changeType(node:Node, type:String, size:Number = NaN, rotation:Number = NaN):void {
             size = node.nodeData.size = isNaN(size) ? NodeType.getDefaultSize(type) : size;
             // 处理贴图
             node.moveState.image.rotation = node.moveState.halo.rotation = node.moveState.glow.rotation = 0;
@@ -125,7 +125,8 @@ package Entity.Node {
             node.moveState.halo.readjustSize();
             node.moveState.halo.scaleY = node.moveState.halo.scaleX = 1;
             node.moveState.halo.pivotY = node.moveState.halo.pivotX = node.moveState.halo.width * 0.5;
-            node.moveState.image.rotation = node.moveState.halo.rotation = node.moveState.glow.rotation = NodeType.getDefaultRotation(type);
+            var rtt:Number = isNaN(rotation) ? NodeType.getDefaultRotation(type) : rotation;
+            node.moveState.image.rotation = node.moveState.halo.rotation = node.moveState.glow.rotation = rtt;
             node.moveState.image.scaleX = node.moveState.image.scaleY = node.moveState.halo.scaleX = node.moveState.halo.scaleY = node.moveState.glow.scaleX = node.moveState.glow.scaleY = NodeType.getDefaultScale(type, size);
             if (type == NodeType.PLANET)
                 node.moveState.halo.scaleY = node.moveState.halo.scaleX = NodeType.getDefaultScale(type, size) * 0.5;

@@ -37,6 +37,7 @@ package Entity {
 
         private static function init():void {
             _entityPools = new Vector.<EntityPool>(11, true);
+            _pointPool = new Vector.<Point>;
             for (var i:int = 0; i < _ENTITY_POOL_COUNT; i++)
                 _entityPools[i] = new EntityPool();
             _ready = true;
@@ -238,33 +239,49 @@ package Entity {
             var current:Point = null;
             var length:Number = 0;
             var result:Array;
-            var resultInside:Boolean; // 线是否在圆内
-            var resultIntersects:Boolean; // 线和圆是否相交
-            var resultEnter:Point; // 线和圆的第一个交点
-            var resultExit:Point; // 线和圆的第二个交点
-            for each (node in nodes) {
-                var nodeGroup:int = Globals.teamGroups[node.nodeData.team];
-                if (node.nodeData.team == 0 || nodeGroup == group)
-                    continue;
-                if (node.nodeData.type == NodeType.TOWER || node.nodeData.type == NodeType.STARBASE || node.nodeData.type == NodeType.CAPTURESHIP) {
-                    start = new Point(node1.nodeData.x, node1.nodeData.y);
-                    end = new Point(node2.nodeData.x, node2.nodeData.y);
-                    current = new Point(node.nodeData.x, node.nodeData.y);
-                    result = lineIntersectCircle(start, end, current, node.attackState.attackRange);
-                    resultInside = result[0], resultIntersects = result[1], resultEnter = result[2], resultExit = result[3];
-                    if (resultIntersects) {
-                        if (resultEnter && resultExit)
-                            length += Point.distance(resultEnter, resultExit);
-                        else if (resultEnter && !resultExit)
-                            length += Point.distance(resultEnter, end);
-                        else if (!resultEnter && resultExit)
-                            length += Point.distance(start, resultExit);
-                        else
+            var resultInside:Boolean;
+            var resultIntersects:Boolean;
+            var resultEnter:Point;
+            var resultExit:Point;
+
+            try {
+                // 从对象池获取Point
+                start = getPoint(node1.nodeData.x, node1.nodeData.y);
+                end = getPoint(node2.nodeData.x, node2.nodeData.y);
+                current = getPoint();
+
+                for each (node in nodes) {
+                    var nodeGroup:int = Globals.teamGroups[node.nodeData.team];
+                    if (node.nodeData.team == 0 || nodeGroup == group)
+                        continue;
+                    if (node.nodeData.type == NodeType.TOWER || node.nodeData.type == NodeType.STARBASE || node.nodeData.type == NodeType.CAPTURESHIP) {
+                        current.x = node.nodeData.x;
+                        current.y = node.nodeData.y;
+                        result = lineIntersectCircle(start, end, current, node.attackState.attackRange);
+                        resultInside = result[0];
+                        resultIntersects = result[1];
+                        resultEnter = result[2];
+                        resultExit = result[3];
+                        if (resultIntersects) {
+                            if (resultEnter && resultExit)
+                                length += Point.distance(resultEnter, resultExit);
+                            else if (resultEnter && !resultExit)
+                                length += Point.distance(resultEnter, end);
+                            else if (!resultEnter && resultExit)
+                                length += Point.distance(start, resultExit);
+                            else
+                                length += Point.distance(start, end);
+                        } else if (resultInside)
                             length += Point.distance(start, end);
-                    } else if (resultInside)
-                        length += Point.distance(start, end);
+                    }
                 }
+            } finally {
+                // 确保归还Point对象
+                returnPoint(start);
+                returnPoint(end);
+                returnPoint(current);
             }
+
             return length;
         }
 
@@ -275,32 +292,45 @@ package Entity {
             var end:Point = null;
             var current:Point = null;
             var result:Array;
-            var resultInside:Boolean; // 线是否在圆内
-            var resultIntersects:Boolean; // 线和圆是否相交
-            var resultEnter:Point; // 线和圆的第一个交点
-            var resultExit:Point; // 线和圆的第二个交点
+            var resultInside:Boolean;
+            var resultIntersects:Boolean;
+            var resultEnter:Point;
+            var resultExit:Point;
             var inBlackhole:Boolean = false;
-            for each (node in nodes) {
-                var nodeGroup:int = Globals.teamGroups[node.nodeData.team];
-                if (node.nodeData.team == 0 || nodeGroup == group)
-                    continue;
-                if (node.nodeData.type == NodeType.BLACKHOLE && (node.attackState.attackStrategy.attacking || node.attackState.attackStrategy.attackTimer < 1)) {
-                    start = new Point(node1.nodeData.x, node1.nodeData.y);
-                    end = new Point(node2.nodeData.x, node2.nodeData.y);
-                    current = new Point(node.nodeData.x, node.nodeData.y);
-                    result = lineIntersectCircle(start, end, current, node.attackState.attackRange);
-                    resultInside = result[0], resultIntersects = result[1], resultEnter = result[2], resultExit = result[3];
-                    if (resultIntersects || resultInside) {
-                        inBlackhole = true;
-                        break;
+
+            try {
+                start = getPoint(node1.nodeData.x, node1.nodeData.y);
+                end = getPoint(node2.nodeData.x, node2.nodeData.y);
+                current = getPoint();
+
+                for each (node in nodes) {
+                    var nodeGroup:int = Globals.teamGroups[node.nodeData.team];
+                    if (node.nodeData.team == 0 || nodeGroup == group)
+                        continue;
+                    if (node.nodeData.type == NodeType.BLACKHOLE && (node.attackState.attackStrategy.attacking || node.attackState.attackStrategy.attackTimer < 1)) {
+                        current.x = node.nodeData.x;
+                        current.y = node.nodeData.y;
+                        result = lineIntersectCircle(start, end, current, node.attackState.attackRange);
+                        resultInside = result[0];
+                        resultIntersects = result[1];
+                        resultEnter = result[2];
+                        resultExit = result[3];
+                        if (resultIntersects || resultInside) {
+                            inBlackhole = true;
+                            break;
+                        }
                     }
                 }
+            } finally {
+                returnPoint(start);
+                returnPoint(end);
+                returnPoint(current);
             }
+
             return inBlackhole;
         }
 
         public static function lineIntersectCircle(pointA:Point, pointB:Point, circleCenter:Point, circleRadius:Number = 1):Array {
-            // 判断线与圆的关系并返回交点
             var discriminant:Number = NaN;
             var intersectionParam1:Number = NaN;
             var intersectionParam2:Number = NaN;
@@ -311,22 +341,25 @@ package Entity {
             var lineSegmentLengthSquared:Number = (pointB.x - pointA.x) * (pointB.x - pointA.x) + (pointB.y - pointA.y) * (pointB.y - pointA.y);
             var lineConstant:Number = 2 * ((pointB.x - pointA.x) * (pointA.x - circleCenter.x) + (pointB.y - pointA.y) * (pointA.y - circleCenter.y));
             var circleConstant:Number = circleCenter.x * circleCenter.x + circleCenter.y * circleCenter.y + pointA.x * pointA.x + pointA.y * pointA.y - 2 * (circleCenter.x * pointA.x + circleCenter.y * pointA.y) - circleRadius * circleRadius;
-            if (lineConstant * lineConstant - 4 * lineSegmentLengthSquared * circleConstant <= 0)
+            if (lineConstant * lineConstant - 4 * lineSegmentLengthSquared * circleConstant <= 0) {
                 resultInside = false;
-            else {
+            } else {
                 discriminant = Math.sqrt(lineConstant * lineConstant - 4 * lineSegmentLengthSquared * circleConstant);
                 intersectionParam1 = (-lineConstant + discriminant) / (2 * lineSegmentLengthSquared);
                 intersectionParam2 = (-lineConstant - discriminant) / (2 * lineSegmentLengthSquared);
                 if ((intersectionParam1 < 0 || intersectionParam1 > 1) && (intersectionParam2 < 0 || intersectionParam2 > 1)) {
-                    if (intersectionParam1 < 0 && intersectionParam2 < 0 || intersectionParam1 > 1 && intersectionParam2 > 1)
-                        resultInside = false;
-                    else
-                        resultInside = true;
+                    resultInside = !((intersectionParam1 < 0 && intersectionParam2 < 0) || (intersectionParam1 > 1 && intersectionParam2 > 1))
                 } else {
-                    if (0 <= intersectionParam2 && intersectionParam2 <= 1)
-                        resultEnter = Point.interpolate(pointA, pointB, 1 - intersectionParam2);
-                    if (0 <= intersectionParam1 && intersectionParam1 <= 1)
-                        resultExit = Point.interpolate(pointA, pointB, 1 - intersectionParam1);
+                    if (0 <= intersectionParam2 && intersectionParam2 <= 1) {
+                        resultEnter = getPoint();
+                        resultEnter.x = pointA.x + intersectionParam2 * (pointB.x - pointA.x);
+                        resultEnter.y = pointA.y + intersectionParam2 * (pointB.y - pointA.y);
+                    }
+                    if (0 <= intersectionParam1 && intersectionParam1 <= 1) {
+                        resultExit = getPoint();
+                        resultExit.x = pointA.x + intersectionParam1 * (pointB.x - pointA.x);
+                        resultExit.y = pointA.y + intersectionParam1 * (pointB.y - pointA.y);
+                    }
                     resultIntersects = true;
                 }
             }
@@ -431,5 +464,63 @@ package Entity {
         }
 
         // #endregion
+
+        // #region point对象池
+
+        private static var _pointPool:Vector.<Point> = new Vector.<Point>();
+        private static var _pointPoolIndex:int = 0;
+        private static const MAX_POOL_SIZE:int = 64; // 可根据需要调整
+
+        /**
+         * 从对象池获取一个Point对象
+         * @param x 初始x坐标，默认为0
+         * @param y 初始y坐标，默认为0
+         * @return Point对象
+         */
+        public static function getPoint(x:Number = 0, y:Number = 0):Point {
+            if (_pointPoolIndex > 0) {
+                // 从池中取出
+                _pointPoolIndex--;
+                var point:Point = _pointPool[_pointPoolIndex];
+                point.x = x;
+                point.y = y;
+                _pointPool[_pointPoolIndex] = null; // 清空引用，避免重复使用
+                return point;
+            } else {
+                // 池为空，创建新对象
+                return new Point(x, y);
+            }
+        }
+
+        /**
+         * 归还Point对象到池中
+         * @param point 要归还的Point对象
+         */
+        public static function returnPoint(point:Point):void {
+            if (!point)
+                return;
+
+            if (_pointPoolIndex < MAX_POOL_SIZE) {
+                // 重置Point
+                point.x = 0;
+                point.y = 0;
+                _pointPool[_pointPoolIndex] = point;
+                _pointPoolIndex++;
+            }
+            // 如果池已满，则丢弃该对象，让GC回收
+        }
+
+        /**
+         * 清空Point对象池
+         */
+        public static function clearPointPool():void {
+            for (var i:int = 0; i < _pointPoolIndex; i++)
+                _pointPool[i] = null;
+            _pointPoolIndex = 0;
+        }
+
+        // #endregion
+
+
     }
 }

@@ -18,7 +18,7 @@ package Entity.Node {
         private static var nodeDataCache:Object;
         private static var typeVectorCache:Vector.<String>;
 
-        /**仅用于兼容部分原版函数
+        /**留着给旧版关卡文件参考
          * @param type
          * @return
          */
