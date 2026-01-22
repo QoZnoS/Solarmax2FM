@@ -4,10 +4,10 @@ package Entity.Node.States {
     import starling.text.TextField;
     import Entity.Node.NodeData;
     import Entity.EntityContainer;
-    import UI.UIContainer;
     import utils.Drawer;
     import starling.animation.Transitions;
     import UI.LayerFactory;
+    import starling.display.QuadBatch;
 
     public class NodeMoveState implements INodeState {
         public var node:Node;
@@ -53,9 +53,9 @@ package Entity.Node.States {
                 addTextField(captureLabels, i);
                 addTextField(conflictLabels, i);
             }
-            UIContainer.entityLayer.labelLayer.swapChildren(captureLabels[0], captureLabels[Globals.playerTeam]);
+            LayerFactory.swapChildren(LayerFactory.LABEL, captureLabels[0], captureLabels[Globals.playerTeam]);
             image.visible = halo.visible = true;
-            LayerFactory.execute(LayerFactory.ADD_NODE, image, halo, glow, Globals.teamDeepColors[nodeData.team]);
+            LayerFactory.call(LayerFactory.ADD_NODE)(image, halo, glow, Globals.teamDeepColors[nodeData.team]);
             if (orbitNode) {
                 var dx:Number = nodeData.x - orbitNode.nodeData.x;
                 var dy:Number = nodeData.y - orbitNode.nodeData.y;
@@ -73,14 +73,14 @@ package Entity.Node.States {
             textField.pivotX = 30;
             textField.pivotY = 24;
             vec.push(textField);
-            UIContainer.entityLayer.labelLayer.addChild(textField);
+            LayerFactory.addChild(LayerFactory.LABEL, textField);
         }
 
         public function deinit():void {
-            UIContainer.entityLayer.removeNode(image, halo, glow);
+            LayerFactory.call(LayerFactory.REMOVE_NODE)(image, halo, glow);
             for (var i:int = 0; i < Globals.teamCount; i++){
-                UIContainer.entityLayer.labelLayer.removeChild(captureLabels[i]);
-                UIContainer.entityLayer.labelLayer.removeChild(conflictLabels[i]);
+                LayerFactory.removeChild(LayerFactory.LABEL, captureLabels[i]);
+                LayerFactory.removeChild(LayerFactory.LABEL, conflictLabels[i]);
             }
             orbitNode = null;
         }
@@ -116,7 +116,7 @@ package Entity.Node.States {
                     glow.alpha = 1;
                     glowing = false;
                     image.color = halo.color = glow.color = Globals.teamColors[nodeData.team];
-                    UIContainer.entityLayer.addGlow(halo, Globals.teamDeepColors[nodeData.team]);
+                    LayerFactory.call(LayerFactory.ADD_GROW)(halo, Globals.teamDeepColors[nodeData.team]);
                 }
             } else if (glow.alpha > 0) { // 再归零
                 glow.alpha -= dt * 2; // 不透明度减少
@@ -158,7 +158,7 @@ package Entity.Node.States {
                     if (currentAngle == 567)
                         currentAngle = START_ANGLE - Math.PI * node.ships[teamId].length / totalShips
                 }
-                Drawer.drawMultiGradientCircleOptimized(UIContainer.behaviorBatch, nodeData.x, nodeData.y, colorArr, nodeData.lineDist, nodeData.lineDist - 2, false, 1, arcRatio - ARC_ADJUSTMENT, currentAngle + 0.01);
+                Drawer.drawMultiGradientCircleOptimized(LayerFactory.getLayer(LayerFactory.BEHAVIOR) as QuadBatch, nodeData.x, nodeData.y, colorArr, nodeData.lineDist, nodeData.lineDist - 2, false, 1, arcRatio - ARC_ADJUSTMENT, currentAngle + 0.01);
                 currentAngle += Math.PI * 2 * arcRatio;
             }
         }
@@ -186,8 +186,8 @@ package Entity.Node.States {
             }
             if (hpRate != 0) {
                 var arcAngle:Number = START_ANGLE - Math.PI * hpRate;
-                Drawer.drawCircle(UIContainer.behaviorBatch, nodeData.x, nodeData.y, Globals.teamColors[captureTeam], nodeData.lineDist, nodeData.lineDist - 2, false, 0.1);
-                Drawer.drawCircle(UIContainer.behaviorBatch, nodeData.x, nodeData.y, Globals.teamColors[captureTeam], nodeData.lineDist, nodeData.lineDist - 2, false, 0.7, hpRate, arcAngle);
+                Drawer.drawCircle(LayerFactory.getLayer(LayerFactory.BEHAVIOR) as QuadBatch, nodeData.x, nodeData.y, Globals.teamColors[captureTeam], nodeData.lineDist, nodeData.lineDist - 2, false, 0.1);
+                Drawer.drawCircle(LayerFactory.getLayer(LayerFactory.BEHAVIOR) as QuadBatch, nodeData.x, nodeData.y, Globals.teamColors[captureTeam], nodeData.lineDist, nodeData.lineDist - 2, false, 0.7, hpRate, arcAngle);
             }
         }
 

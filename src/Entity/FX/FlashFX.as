@@ -2,7 +2,7 @@ package Entity.FX {
     import Game.GameScene;
     import starling.display.Image;
     import Entity.GameEntity;
-    import UI.UIContainer;
+    import UI.LayerFactory;
 
     public class FlashFX extends GameEntity {
 
@@ -60,7 +60,7 @@ package Entity.FX {
                 }
             }
             image.scaleX = image.scaleY = size;
-            UIContainer.entityLayer.addImage(image, foreground, deepColor);
+            LayerFactory.call(LayerFactory.ADD_IMAGE)(image, foreground, deepColor);
         }
     }
 }

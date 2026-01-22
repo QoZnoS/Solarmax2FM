@@ -29,7 +29,7 @@ package UI {
 
         public function EditorCtrlLayer(ui:UIContainer) {
             this.editor = ui.scene.editorScene;
-            this.displayBatch = UIContainer.behaviorBatch;
+            this.displayBatch = LayerFactory.getLayer(LayerFactory.BEHAVIOR) as QuadBatch;
             this.touchQuad = ui.touchQuad;
             convertQuad = new Quad(1024, 768, 16711680);
             convertQuad.alpha = 0;

@@ -3,8 +3,7 @@ package Entity.FX {
     import starling.display.Image;
     import Entity.GameEntity;
     import Entity.Node;
-    import Entity.Node.NodeType;
-    import UI.UIContainer;
+    import UI.LayerFactory;
 
     public class LightningFX extends GameEntity {
 
@@ -68,7 +67,7 @@ package Entity.FX {
                 }
             }
             image.alpha = alpha;
-            UIContainer.entityLayer.addImage(image, foreground, deepColor);
+            LayerFactory.call(LayerFactory.ADD_IMAGE)(image, foreground, deepColor);
         }
     }
 }

@@ -52,18 +52,14 @@ package UI {
             _gameContainer.y = _gameContainer.pivotY = 384;
 
             registerLayer();
-            registerFunction();
         }
 
         private function registerLayer():void {
             LayerFactory.registerLayer(LayerFactory.BTN, _btnL);
             LayerFactory.registerLayer(LayerFactory.BTN_ADD, _btnL.addLayer);
             LayerFactory.registerLayer(LayerFactory.BTN_NORMAL, _btnL.normalLayer);
-
-        }
-
-        private function registerFunction():void {
-
+            LayerFactory.registerLayer(LayerFactory.GAME_CONTAINER, _gameContainer);
+            LayerFactory.registerLayer(LayerFactory.BEHAVIOR, _behaviorB);
         }
 
         public function initLevel(scale:Number = 1):void {
@@ -190,18 +186,6 @@ package UI {
 
         public static function get scale():Number {
             return _ui._scale;
-        }
-
-        public static function get behaviorBatch():QuadBatch {
-            return _ui._behaviorB;
-        }
-
-        public static function get entityLayer():EntityLayer {
-            return _ui._entityL;
-        }
-
-        public static function get gameContainer():Sprite {
-            return _ui._gameContainer;
         }
 
         public static function get fleetSlider():FleetSlider {

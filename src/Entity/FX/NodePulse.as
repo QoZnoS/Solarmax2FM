@@ -5,7 +5,7 @@ package Entity.FX {
     import starling.display.Image;
     import utils.GS;
     import Entity.GameEntity;
-    import UI.UIContainer;
+    import UI.LayerFactory;
 
     public class NodePulse extends GameEntity {
 
@@ -53,11 +53,11 @@ package Entity.FX {
             image.color = color;
             image.scaleX = image.scaleY = size;
             image.visible = true;
-            UIContainer.entityLayer.addGlow(image, deepColor);
+            LayerFactory.call(LayerFactory.ADD_GROW)(image, deepColor);
         }
 
         override public function deInit():void {
-            UIContainer.entityLayer.removeGlow(image);
+            LayerFactory.call(LayerFactory.REMOVE_GROW)(image);
         }
 
         override public function update(dt:Number):void {

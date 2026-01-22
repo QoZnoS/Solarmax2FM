@@ -3,6 +3,8 @@ package Game.VictoryType {
     import Entity.Node;
     import utils.Drawer;
     import UI.UIContainer;
+    import UI.LayerFactory;
+    import starling.display.QuadBatch;
 
     public class TargetVictory implements IVictoryType {
 
@@ -18,10 +20,10 @@ package Game.VictoryType {
         public function update(dt:Number):int {
             if (target.nodeData.team == Globals.playerTeam)
                 return Globals.playerTeam;
-            Drawer.drawCircle(UIContainer.behaviorBatch, target.nodeData.x, target.nodeData.y, 0xFFFFFF, target.nodeData.lineDist - 5, target.nodeData.lineDist - 7, false, 1, 0.125, angle);
-            Drawer.drawCircle(UIContainer.behaviorBatch, target.nodeData.x, target.nodeData.y, 0xFFFFFF, target.nodeData.lineDist - 5, target.nodeData.lineDist - 7, false, 1, 0.125, angle + Math.PI * 0.5);
-            Drawer.drawCircle(UIContainer.behaviorBatch, target.nodeData.x, target.nodeData.y, 0xFFFFFF, target.nodeData.lineDist - 5, target.nodeData.lineDist - 7, false, 1, 0.125, angle + Math.PI * 1);
-            Drawer.drawCircle(UIContainer.behaviorBatch, target.nodeData.x, target.nodeData.y, 0xFFFFFF, target.nodeData.lineDist - 5, target.nodeData.lineDist - 7, false, 1, 0.125, angle + Math.PI * 1.5);
+            Drawer.drawCircle(LayerFactory.getLayer(LayerFactory.BEHAVIOR) as QuadBatch, target.nodeData.x, target.nodeData.y, 0xFFFFFF, target.nodeData.lineDist - 5, target.nodeData.lineDist - 7, false, 1, 0.125, angle);
+            Drawer.drawCircle(LayerFactory.getLayer(LayerFactory.BEHAVIOR) as QuadBatch, target.nodeData.x, target.nodeData.y, 0xFFFFFF, target.nodeData.lineDist - 5, target.nodeData.lineDist - 7, false, 1, 0.125, angle + Math.PI * 0.5);
+            Drawer.drawCircle(LayerFactory.getLayer(LayerFactory.BEHAVIOR) as QuadBatch, target.nodeData.x, target.nodeData.y, 0xFFFFFF, target.nodeData.lineDist - 5, target.nodeData.lineDist - 7, false, 1, 0.125, angle + Math.PI * 1);
+            Drawer.drawCircle(LayerFactory.getLayer(LayerFactory.BEHAVIOR) as QuadBatch, target.nodeData.x, target.nodeData.y, 0xFFFFFF, target.nodeData.lineDist - 5, target.nodeData.lineDist - 7, false, 1, 0.125, angle + Math.PI * 1.5);
             angle += Math.PI / 256;
             if (angle > Math.PI * 2)
                 angle -= Math.PI * 2;
