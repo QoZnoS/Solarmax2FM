@@ -1,7 +1,8 @@
 package Entity.FX {
     public interface IParticle {
         function get imageName():String;
-        function init(p:BasicParticle, config:Object):void;
+        function get layerConfig():Array;
+        function init(p:BasicParticle, config:Array):void;
         function update(dt:Number):void;
     }
 }

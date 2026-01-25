@@ -206,7 +206,7 @@ package Entity {
                     foreground = false;
                     if (orbitAngle > 0 && orbitAngle < Math.PI)
                         foreground = true;
-                    FXHandler.addWarp(x, y, tx, ty, Globals.teamColors[team], foreground);
+                    FXHandler.addWarp(x, y, tx, ty, Globals.teamColors[team], foreground, Globals.teamDeepColors[team]);
                     x = tx;
                     y = ty;
                     node.ships[team].push(this);

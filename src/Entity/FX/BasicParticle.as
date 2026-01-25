@@ -2,15 +2,16 @@ package Entity.FX {
 
     import starling.display.Image;
     import starling.textures.Texture;
+    import UI.LayerFactory;
 
     public class BasicParticle {
 
-        // 粒子类型，与所用的贴图绑定，一经确认不可修改，方便复用纹理资源
+        // 粒子类型，与所用的贴图绑定，方便复用纹理资源
         private var type:String;
         private var pClass:IParticle;
-        public var image:Image;
+        private var image:Image;
 
-        public var active:Boolean = false;
+        public var active:Boolean = true;
 
         // 基本粒子
         public function BasicParticle(type:String, pClass:IParticle) {
@@ -19,36 +20,14 @@ package Entity.FX {
             this.image = new Image(Root.assets.getTexture(pClass.imageName));
         }
 
-        public function init(config:Object):void {
+        public function init(config:Array):void {
             pClass.init(this, config)
         }
 
         public function update(dt:Number):void {
-
+            pClass.update(dt);
         }
 
-        public function reset():void {
-        }
-
-        public function set x(value:Number):void {
-            image.x = value;
-        }
-
-        public function set y(value:Number):void {
-            image.y = value;
-        }
-
-        public function set scale(value:Number):void {
-            image.scaleX = image.scaleY = value;
-        }
-
-        public function set scaleX(value:Number):void {
-            image.scaleX = value;
-        }
-
-        public function set scaleY(value:Number):void {
-            image.scaleY = value;
-        }
         public function pivotToCenter():void {
             // 确保纹理已加载
             var texture:Texture = image.texture;
@@ -63,12 +42,86 @@ package Entity.FX {
             }
         }
 
+        public function addToLayer():void {
+            var layerArgs:Array = pClass.layerConfig;
+            var arrCache:String = layerArgs.shift();
+            var functionRef:Function = LayerFactory.call(arrCache);
+            layerArgs.unshift(image);
+            if (functionRef != null) {
+                functionRef.apply(null, layerArgs);
+                layerArgs.shift();
+                layerArgs.unshift(arrCache);
+            } else {
+                trace("Error: Layer function not found for type: " + pClass.layerConfig[0]);
+            }
+        }
+
+        public function reset():void {
+            active = true;
+        }
+
+        public function get x():Number {
+            return image.x;
+        }
+
+        public function set x(value:Number):void {
+            image.x = value;
+        }
+
+        public function get y():Number {
+            return image.y;
+        }
+
+        public function set y(value:Number):void {
+            image.y = value;
+        }
+
+        public function set scale(value:Number):void {
+            image.scaleX = image.scaleY = value;
+        }
+
+        public function get scaleX():Number {
+            return image.scaleX;
+        }
+
+        public function set scaleX(value:Number):void {
+            image.scaleX = value;
+        }
+
+        public function get scaleY():Number {
+            return image.scaleY;
+        }
+
+        public function set scaleY(value:Number):void {
+            image.scaleY = value;
+        }
+
+        public function get alpha():Number {
+            return image.alpha;
+        }
+
+        public function set alpha(value:Number):void {
+            image.alpha = value;
+        }
+
+        public function get rotation():Number {
+            return image.rotation;
+        }
+
         public function set rotation(value:Number):void {
             image.rotation = value;
         }
 
         public function set color(value:Number):void {
             image.color = value;
+        }
+
+        public function set width(value:Number):void {
+            image.width = value;
+        }
+
+        public function set texture(value:String):void {
+            image.texture = Root.assets.getTexture(value);
         }
     }
 }

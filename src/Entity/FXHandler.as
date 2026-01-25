@@ -1,36 +1,29 @@
 // 处理各种特效
 
-package Entity
-{
+package Entity {
     import starling.errors.AbstractClassError;
     import Entity.Node;
     import Entity.Ship;
     import Entity.FX.*;
     import Game.GameScene;
 
-    public class FXHandler{
+    public class FXHandler {
         public static var game:GameScene;
 
         public function FXHandler() {
             throw new AbstractClassError();
         }
-
+        private static var TEMP_ARRAY:Array = [];
         public static function addBarrier(x:Number, y:Number, angle:Number, color:uint):void {
-            var config:Object = {
-                x:x,
-                y:y,
-                angle:angle,
-                color:color
-            }
-            ParticleSystem.addParticle("FX", config);
+            TEMP_ARRAY.length = 0;
+            TEMP_ARRAY.push(x,y,angle,color);
+            ParticleSystem.addParticle("FX", TEMP_ARRAY);
         }
 
-        public static function addWarp(gameScene:Number, x:Number, y:Number, prevX:Number, prevY:uint, foreground:Boolean):void {
-            var warp:WarpFX = EntityContainer.getReserve(EntityContainer.INDEX_WARPS) as WarpFX;
-            if (!warp)
-                warp = new WarpFX();
-            warp.initWarp(game, gameScene, x, y, prevX, prevY, foreground);
-            EntityContainer.addEntity(EntityContainer.INDEX_WARPS, warp);
+        public static function addWarp(x:Number, y:Number, prevX:Number, prevY:Number, color:uint, foreground:Boolean, deepColor:Boolean):void {
+            TEMP_ARRAY.length = 0;
+            TEMP_ARRAY.push(x,y,prevX,prevY,color,foreground,deepColor);
+            ParticleSystem.addParticle("warp", TEMP_ARRAY);
         }
 
         public static function addBeam(node:Node, ship:Ship):void {

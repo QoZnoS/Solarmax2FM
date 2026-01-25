@@ -1,55 +1,58 @@
 package Entity.FX {
-    import Game.GameScene;
-    import starling.display.Image;
-    import Entity.GameEntity;
+
     import UI.LayerFactory;
 
-    public class WarpFX extends GameEntity {
+    public class WarpFX implements IParticle {
+        private var p:BasicParticle;
 
-        public static const STATE_GROW:int = 0;
-        public static const STATE_SHRINK:int = 1;
+        private static const STATE_GROW:int = 0;
+        private static const STATE_SHRINK:int = 1;
 
         private var x:Number;
         private var y:Number;
-        private var prevX:Number;
-        private var prevY:Number;
+        private var angle:Number;
+        private var distance:Number;
         private var size:Number;
-        private var color:uint;
-        private var image:Image;
         private var foreground:Boolean;
         private var deepColor:Boolean;
         private var state:int;
+        private var layerCfg:Array;
 
-        public function WarpFX(){
-            super();
-            image = new Image(Root.assets.getTexture("warp_glare"));
-            image.pivotX = image.width * 0.5;
-            image.pivotY = image.height * 0.5;
+        public function WarpFX() {
+            layerCfg = [];
         }
 
-        public function initWarp(gameScene:GameScene, x:Number, y:Number, prevX:Number, prevY:Number, color:uint, foreground:Boolean):void {
-            super.init(gameScene);
-            this.x = x;
-            this.y = y;
-            this.prevX = prevX;
-            this.prevY = prevY;
-            this.color = color;
-            this.foreground = foreground;
-            this.deepColor = deepColor;
+        // 接受参数 x, y, prevX, prevY, color, foreground, deepColor
+        public function init(p:BasicParticle, config:Array):void {
+            layerCfg.length = 0;
+            this.p = p;
+            p.pivotToCenter();
+            this.x = config[0];
+            this.y = config[1];
+            var dx:Number = config[2] - x;
+            var dy:Number = config[3] - y;
+            this.angle = Math.atan2(dy, dx);
+            this.distance = Math.sqrt(dx * dx + dy * dy);
+            this.foreground = config[5];
+            this.deepColor = config[6];
             this.size = 0;
-            image.x = x;
-            image.y = y;
-            image.color = color;
-            image.scaleY = 0;
-            image.scaleX = 0;
-            image.alpha = 1;
             state = 0;
+            p.x = x;
+            p.y = y;
+            p.color = config[4];
+            p.scale = 0;
+            p.alpha = 1;
+            layerCfg.push(LayerFactory.ADD_IMAGE, foreground, deepColor);
         }
 
-        override public function deInit():void {
+        public function get imageName():String {
+            return "warp_glare";
+        }
+        public function get layerConfig():Array {
+            return layerCfg;
         }
 
-        override public function update(dt:Number):void {
+        public function update(dt:Number):void {
             if (state == 0) {
                 size += dt * 8;
                 if (size >= 1) {
@@ -60,23 +63,19 @@ package Entity.FX {
                 size -= dt * 3;
                 if (size <= 0) {
                     size = 0;
-                    active = false;
+                    p.active = false;
                 }
             }
-            image.scaleX = image.scaleY = size;
-            image.alpha = 1;
-            var dx:Number = prevX - x;
-            var dy:Number = prevY - y;
-            var angle:Number = Math.atan2(dy, dx);
-            var distance:Number = Math.sqrt(dx * dx + dy * dy);
-            image.rotation = 0;
-            image.x = x + Math.cos(angle) * distance * 0.5;
-            image.y = y + Math.sin(angle) * distance * 0.5;
-            image.width = distance;
-            image.scaleY *= 0.5;
-            image.alpha = 0.25;
-            image.rotation = angle;
-            LayerFactory.call(LayerFactory.ADD_IMAGE)(image, foreground, deepColor);
+            p.scale = size;
+            p.alpha = 1;
+            p.rotation = 0;
+            p.x = x + Math.cos(angle) * distance * 0.5;
+            p.y = y + Math.sin(angle) * distance * 0.5;
+            p.width = distance;
+            p.scaleY *= 0.5;
+            p.alpha = 0.25;
+            p.rotation = angle;
+            p.addToLayer();
         }
     }
 }
