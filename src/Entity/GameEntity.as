@@ -1,7 +1,5 @@
 package Entity {
     import Game.GameScene;
-    import UI.EntityLayer;
-    import starling.display.QuadBatch;
 
     public class GameEntity {
 

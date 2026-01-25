@@ -240,6 +240,10 @@
                 </array>
                 <key>UIRequiresPersistentWiFi</key>
                 <string>YES</string>
+                <key>UIFileSharingEnabled</key>
+                <true/>
+                <key>LSSupportsOpeningDocumentsInPlace</key>
+                <true/>
             ]]>
         </InfoAdditions>
         <!-- A list of plist key/value pairs to be added to the application Entitlements.plist -->

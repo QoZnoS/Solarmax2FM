@@ -1,4 +1,4 @@
-﻿/* 计时器基本原理：取一个初始值，每帧为其减去这一帧的时间，计时归零时执行相应函数并重置计时器
+/* 计时器基本原理：取一个初始值，每帧为其减去这一帧的时间，计时归零时执行相应函数并重置计时器
    需要的新功能：天体实时生成与摧毁
 
    ai计时器：具有同等于势力数的项数，每一项均为倒计时
@@ -44,7 +44,7 @@ package Entity {
         public var aiStrength:Number; // ai强度
         public var aiTimers:Array; // ai计时器
         public var transitShips:Vector.<int>; //
-        public var transitGroupShips:Vector.<int>; 
+        public var transitGroupShips:Vector.<int>;
         public var oppNodeLinks:Array; // 
         public var breadthFirstSearchNode:Node; // hardAI 寻路，标记父节点
         public var senderType:String; // hardAI 出兵动机
@@ -90,7 +90,7 @@ package Entity {
             this.rng = rng;
             resetArray();
             nodeData = new NodeData(true);
-            NodeStaticLogic.changeType(this, data.type, data.size);
+            NodeStaticLogic.changeType(this, data.type, data.size, data.rotation);
             NodeStaticLogic.changeTeam(this, data.team, false);
             nodeData.deserialize(data);
             aiValue = 0;
@@ -141,27 +141,85 @@ package Entity {
         public function updateNodeLinks():void {
             if (nodeData.isBarrier)
                 return;
-            nodeLinks.length = Globals.teamCount;
-            for (var i:int = 0; i < Globals.teamCount; i++) {
-                var group:int = Globals.teamGroups[i];
-                var nodeGroup:int = Globals.teamGroups[nodeData.team];
-                if (!nodeLinks[i])
-                    nodeLinks[i] = new Vector.<Node>;
-                else
-                    nodeLinks[i].length = 0;
-                if (i != 0 && !(group == nodeGroup && nodeData.isWarp)) {
-                    nodeLinks[i] = nodeLinks[0].concat();
+
+            var globalNodes:Vector.<Node> = EntityContainer.nodes;
+            var teamCount:int = Globals.teamCount;
+            var teamGroups:Array = Globals.teamGroups;
+            var nodesLength:int = globalNodes.length;
+            var nodeTeamGroup:int = teamGroups[nodeData.team];
+            var isWarp:Boolean = nodeData.isWarp;
+
+            // 确保数组长度正确
+            if (nodeLinks.length != teamCount) {
+                nodeLinks.length = teamCount;
+            }
+
+            // 预计算nodeLinks[0]（基准列表）
+            if (!nodeLinks[0]) {
+                nodeLinks[0] = new Vector.<Node>();
+            } else {
+                nodeLinks[0].length = 0;
+            }
+
+            var baseLinks:Vector.<Node> = nodeLinks[0];
+            var i:int, j:int, node:Node;
+
+            // 填充基准列表
+            for (j = 0; j < nodesLength; j++) {
+                node = globalNodes[j];
+                if (node == this || node.nodeData.isUntouchable) {
                     continue;
                 }
-                for each (var node:Node in EntityContainer.nodes) {
-                    if (node == this || node.nodeData.isUntouchable)
-                        continue;
-                    if (nodeData.isWarp && nodeGroup == group && i != 0) {
-                        nodeLinks[i].push(node);
+                if (EntityContainer.nodesBlocked(this, node) == null) {
+                    baseLinks[baseLinks.length] = node; // 避免push调用
+                }
+            }
+
+            var baseLength:int = baseLinks.length;
+
+            // 处理其他team
+            for (i = 1; i < teamCount; i++) {
+                var group:int = teamGroups[i];
+
+                // 检查是否需要复制基准列表
+                if (!(group == nodeTeamGroup && isWarp)) {
+                    // 复制基准列表，重用现有Vector
+                    if (!nodeLinks[i]) {
+                        nodeLinks[i] = new Vector.<Node>(baseLength);
+                        // 直接复制元素
+                        for (j = 0; j < baseLength; j++) {
+                            nodeLinks[i][j] = baseLinks[j];
+                        }
+                    } else {
+                        // 重用现有数组，调整大小并复制
+                        var targetLinks:Vector.<Node> = nodeLinks[i];
+                        if (targetLinks.length != baseLength) {
+                            targetLinks.length = baseLength;
+                        }
+                        for (j = 0; j < baseLength; j++) {
+                            targetLinks[j] = baseLinks[j];
+                        }
+                    }
+                    continue;
+                }
+
+                // 需要构建特殊列表
+                if (!nodeLinks[i]) {
+                    nodeLinks[i] = new Vector.<Node>();
+                } else {
+                    nodeLinks[i].length = 0;
+                }
+
+                var warpLinks:Vector.<Node> = nodeLinks[i];
+
+                // 构建warp条件下的特殊列表
+                for (j = 0; j < nodesLength; j++) {
+                    node = globalNodes[j];
+                    if (node == this || node.nodeData.isUntouchable) {
                         continue;
                     }
-                    if (EntityContainer.nodesBlocked(this, node) == null)
-                        nodeLinks[i].push(node);
+                    // warp条件下直接添加
+                    warpLinks[warpLinks.length] = node;
                 }
             }
         }
@@ -247,7 +305,7 @@ package Entity {
                     continue;
                 groupShips[oppGroup] += ships[i].length;
             }
-            for each(i in groupShips)
+            for each (i in groupShips)
                 strength = Math.max(i, strength);
             return strength;
         }
@@ -281,7 +339,7 @@ package Entity {
                     addStrength *= 1.25;
                 groupShips[oppGroup] += addStrength;
             }
-            for each(i in groupShips)
+            for each (i in groupShips)
                 strength = Math.max(i, strength);
             return strength;
         }
@@ -384,6 +442,7 @@ package Entity {
                     oppNodeLinks.push(node);
             }
         }
+
         // #endregion
 
         // #endregion
@@ -413,7 +472,7 @@ package Entity {
                 }
                 groupShips[oppGroup] += ships[i].length;
             }
-            for each(i in groupShips)
+            for each (i in groupShips)
                 maxShips = Math.max(i, maxShips);
             return maxShips;
         }
@@ -440,27 +499,23 @@ package Entity {
         // 返回敌方综合强度
         public function hard_oppAllStrength(team:int):int {
             var group:int = Globals.teamGroups[team];
-            var ships:Array = [];
-            for (var i:int = 0; i < Globals.teamCount; i++)
-                ships.push([]);
-            for each (var ship:Ship in EntityContainer.ships)
-                if (ship.node == this && Globals.teamGroups[ship.team] != group)
-                    ships[ship.team].push(ship);
-            var groupShips:Vector.<int> = new Vector.<int>();
             var maxShips:int = 0;
-            for (i = 0; i < ships.length; i++) {
-                var oppGroup:int = Globals.teamGroups[i];
-                if (oppGroup == group)
-                    continue; // 排除己方
-                if (groupShips.length < oppGroup + 1) {
-                    groupShips.length = oppGroup + 1;
-                    groupShips[oppGroup] = ships[i].length;
+            var teamGroups:Array = Globals.teamGroups;
+            var globalShips:Vector.<Ship> = EntityContainer.ships;
+            var globalShipsLength:int = globalShips.length;
+            var groupShipCounts:Vector.<int> = new Vector.<int>(Globals.teamCount, true);
+            for (var i:int = 0; i < globalShipsLength; i++) {
+                var ship:Ship = globalShips[i];
+                if (ship.node != this)
                     continue;
-                }
-                groupShips[oppGroup] += ships[i].length;
+                var shipGroup:int = teamGroups[ship.team];
+                if (shipGroup == group)
+                    continue;
+                var newCount:int = groupShipCounts[shipGroup] + 1;
+                groupShipCounts[shipGroup] = newCount;
+                if (newCount > maxShips)
+                    maxShips = newCount;
             }
-            for each(i in groupShips)
-                maxShips = Math.max(i, maxShips);
             return maxShips;
         }
 
@@ -489,7 +544,7 @@ package Entity {
                 }
                 groupShips[oppGroup] += ships[i].length;
             }
-            for each(i in groupShips)
+            for each (i in groupShips)
                 maxShips = Math.max(i, maxShips);
             if (maxShips > hard_AllStrength(team))
                 return true;

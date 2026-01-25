@@ -2,7 +2,7 @@ package Entity.FX {
     import Game.GameScene;
     import starling.display.Image;
     import Entity.GameEntity;
-    import UI.UIContainer;
+    import UI.LayerFactory;
 
     public class ExplodeFX extends GameEntity {
 
@@ -59,7 +59,7 @@ package Entity.FX {
                     active = false;
                 }
             }
-            UIContainer.entityLayer.addImage(image, foreground, deepColor);
+            LayerFactory.call(LayerFactory.ADD_IMAGE)(image, foreground, deepColor);
         }
     }
 }

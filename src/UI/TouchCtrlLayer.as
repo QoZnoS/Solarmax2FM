@@ -21,7 +21,6 @@ package UI {
 
         public function TouchCtrlLayer(ui:UIContainer) {
             this.game = ui.scene.gameScene;
-            this.displayBatch = UIContainer.behaviorBatch;
             this.touchQuad = ui.touchQuad;
             convertQuad = new Quad(1024, 768, 16711680);
             convertQuad.alpha = 0;
@@ -29,6 +28,7 @@ package UI {
         }
 
         public function init():void {
+            this.displayBatch = LayerFactory.getLayer(LayerFactory.BEHAVIOR) as QuadBatch;
             touchQuad.addEventListener("touch", on_touch); // 按操作方式添加事件监听器
             touches = new Vector.<Touch>;
         }

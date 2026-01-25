@@ -6,6 +6,7 @@ package Entity.FX {
     import Entity.Node.NodeType;
     import UI.UIContainer;
     import utils.CalcTools;
+    import UI.LayerFactory;
 
     public class BeamFX extends GameEntity {
 
@@ -107,9 +108,9 @@ package Entity.FX {
                     break;
             }
             image.rotation = angle;
-            UIContainer.entityLayer.addImage(image, foreground, deepColor);
+            LayerFactory.call(LayerFactory.ADD_IMAGE)(image, foreground, deepColor);
             if (!deepColor)
-                UIContainer.entityLayer.addImage(image2, foreground, deepColor);
+                LayerFactory.call(LayerFactory.ADD_IMAGE)(image2, foreground, deepColor);
         }
     }
 }

@@ -35,99 +35,117 @@ package Entity {
             throw new AbstractClassError();
         }
 
-        private static function init():void{
+        private static function init():void {
             _entityPools = new Vector.<EntityPool>(11, true);
-            for(var i:int = 0; i < _ENTITY_POOL_COUNT; i++)
+            _pointPool = new Vector.<Point>;
+            for (var i:int = 0; i < _ENTITY_POOL_COUNT; i++)
                 _entityPools[i] = new EntityPool();
             _ready = true;
         }
 
-        public static function get entityPool():Vector.<EntityPool>{
+        public static function get entityPool():Vector.<EntityPool> {
             if (!_ready)
                 init();
             return _entityPools;
         }
 
-        public static function get ships():Vector.<Ship>{
+        public static function get ships():Vector.<Ship> {
             return Vector.<Ship>(_entityPools[INDEX_SHIPS].active);
         }
 
-        public static function get nodes():Vector.<Node>{
+        public static function get nodes():Vector.<Node> {
             return Vector.<Node>(_entityPools[INDEX_NODES].active);
         }
 
-        public static function get ais():Vector.<EnemyAI>{
+        public static function get ais():Vector.<EnemyAI> {
             return Vector.<EnemyAI>(_entityPools[INDEX_AIS].active);
         }
 
-        public static function get warps():Vector.<WarpFX>{
+        public static function get warps():Vector.<WarpFX> {
             return Vector.<WarpFX>(_entityPools[INDEX_WARPS].active);
         }
 
-        public static function get beams():Vector.<BeamFX>{
+        public static function get beams():Vector.<BeamFX> {
             return Vector.<BeamFX>(_entityPools[INDEX_BEAMS].active);
         }
 
-        public static function get pulses():Vector.<NodePulse>{
+        public static function get pulses():Vector.<NodePulse> {
             return Vector.<NodePulse>(_entityPools[INDEX_PULSES].active);
         }
 
-        public static function get flashes():Vector.<FlashFX>{
+        public static function get flashes():Vector.<FlashFX> {
             return Vector.<FlashFX>(_entityPools[INDEX_FLASHES].active);
         }
 
-        public static function get barriers():Vector.<BarrierFX>{
+        public static function get barriers():Vector.<BarrierFX> {
             return Vector.<BarrierFX>(_entityPools[INDEX_BARRIERS].active);
         }
 
-        public static function get darkPulses():Vector.<DarkPulse>{
+        public static function get darkPulses():Vector.<DarkPulse> {
             return Vector.<DarkPulse>(_entityPools[INDEX_DARKPLUSES].active);
         }
 
-        public static function get fades():Vector.<SelectFade>{
+        public static function get fades():Vector.<SelectFade> {
             return Vector.<SelectFade>(_entityPools[INDEX_FADES].active);
         }
 
-        public static function addEntity(index:int, entity:GameEntity):void{
+        public static function addEntity(index:int, entity:GameEntity):void {
             if (!_ready)
                 init();
             _entityPools[index].addEntity(entity);
         }
 
-        public static function getReserve(index:int):GameEntity{
+        public static function getReserve(index:int):GameEntity {
             if (!_ready)
                 init();
             return _entityPools[index].getReserve();
         }
+
         // #endregion
-        
+
         // #region 天体
+
         /** 搜寻范围内飞行中的飞船
          * @param node 目标天体
          * @param hostile 是否为敌对势力
          * @return 飞船数组
          */
         public static function findShipsInRange(node:Node, hostile:Boolean = true):Vector.<Ship> {
-            var dx:Number;
-            var dy:Number;
-            var ship:Ship;
-            var shipinRange:Vector.<Ship> = new Vector.<Ship>;
-            var nodeGroup:int = Globals.teamGroups[node.nodeData.team];
-            for each (ship in ships) {
-                var shipGroup:int = Globals.teamGroups[ship.team];
+            // 预计算常用值
+            var nodeX:Number = node.nodeData.x;
+            var nodeY:Number = node.nodeData.y;
+            var range:Number = node.attackState.attackRange;
+            var rangeSquared:Number = range * range;
+            var nodeTeamGroup:int = Globals.teamGroups[node.nodeData.team];
+            // 重用结果数组
+            var result:Vector.<Ship> = TEMP_SHIP_RESULT;
+            result.length = 0;
+            var allShips:Vector.<Ship> = ships;
+            var shipCount:int = allShips.length;
+            for (var i:int = 0; i < shipCount; i++) {
+                var ship:Ship = allShips[i];
+                // 状态检查
                 if (ship.state != 3 || ship.warping)
                     continue;
-                if ((shipGroup == nodeGroup) == hostile)
-                    continue; // 建议势力
-                dx = ship.x - node.nodeData.x;
-                dy = ship.y - node.nodeData.y;
-                if (dx > node.attackState.attackRange || dx < -node.attackState.attackRange || dy > node.attackState.attackRange || dy < -node.attackState.attackRange)
+                // 势力检查
+                var shipGroup:int = Globals.teamGroups[ship.team];
+                if ((shipGroup == nodeTeamGroup) == hostile)
                     continue;
-                if (Math.sqrt(dx * dx + dy * dy) < node.attackState.attackRange)
-                    shipinRange.push(ship);
+                // 快速距离检查（使用平方距离避免Math.sqrt）
+                var dx:Number = ship.x - nodeX;
+                if (dx > range || dx < -range)
+                    continue;
+                var dy:Number = ship.y - nodeY;
+                if (dy > range || dy < -range)
+                    continue;
+                if (dx * dx + dy * dy < rangeSquared)
+                    result[result.length] = ship;
             }
-            return shipinRange;
+            return result;
         }
+
+        // 添加临时数组
+        private static var TEMP_SHIP_RESULT:Vector.<Ship> = new Vector.<Ship>();
 
         /** 搜寻范围内的天体
          * @param centerNode 目标天体
@@ -164,13 +182,13 @@ package Entity {
             var dx:Number, dy:Number, range:Number;
             for each (node in nodes) {
                 var nodeGroup:int = Globals.teamGroups[node.nodeData.team];
-                if (hostile ? group == nodeGroup : group != nodeGroup) //排除不符合是否敌对要求的
+                if (hostile ? group == nodeGroup : group != nodeGroup) // 排除不符合是否敌对要求的
                     continue;
-                if (node.nodeData.team == 0) //排除中立天体
+                if (node.nodeData.team == 0) // 排除中立天体
                     continue;
-                if (node.nodeData.type != type) //排除不符合类型要求的天体
+                if (node.nodeData.type != type) // 排除不符合类型要求的天体
                     continue;
-                if (node == centerNode) //排除检查天体本身
+                if (node == centerNode) // 排除检查天体本身
                     continue;
 
                 dx = centerNode.nodeData.x - node.nodeData.x;
@@ -193,14 +211,14 @@ package Entity {
             var ships:Vector.<Vector.<Ship>> = new Vector.<Vector.<Ship>>;
             for each (var shipArr:Vector.<Ship> in node.ships) {
                 var filterArr:Vector.<Ship> = new Vector.<Ship>;
-                for each (var ship:Ship in shipArr) {
+                for each (var ship:Ship in shipArr)
                     if (ship.state == state)
                         filterArr.push(ship);
-                }
                 ships.push(filterArr);
             }
             return ships;
         }
+
         // #endregion
 
         // #region 飞船
@@ -221,33 +239,49 @@ package Entity {
             var current:Point = null;
             var length:Number = 0;
             var result:Array;
-            var resultInside:Boolean; // 线是否在圆内
-            var resultIntersects:Boolean; // 线和圆是否相交
-            var resultEnter:Point; // 线和圆的第一个交点
-            var resultExit:Point; // 线和圆的第二个交点
-            for each (node in nodes) {
-                var nodeGroup:int = Globals.teamGroups[node.nodeData.team]
-                if (node.nodeData.team == 0 || nodeGroup == group)
-                    continue;
-                if (node.nodeData.type == NodeType.TOWER || node.nodeData.type == NodeType.STARBASE || node.nodeData.type == NodeType.CAPTURESHIP) {
-                    start = new Point(node1.nodeData.x, node1.nodeData.y);
-                    end = new Point(node2.nodeData.x, node2.nodeData.y);
-                    current = new Point(node.nodeData.x, node.nodeData.y);
-                    result = lineIntersectCircle(start, end, current, node.attackState.attackRange);
-                    resultInside = result[0],resultIntersects = result[1], resultEnter = result[2], resultExit = result[3];
-                    if (resultIntersects) {
-                        if (resultEnter && resultExit)
-                            length += Point.distance(resultEnter, resultExit);
-                        else if (resultEnter && !resultExit)
-                            length += Point.distance(resultEnter, end);
-                        else if (!resultEnter && resultExit)
-                            length += Point.distance(start, resultExit);
-                        else
+            var resultInside:Boolean;
+            var resultIntersects:Boolean;
+            var resultEnter:Point;
+            var resultExit:Point;
+
+            try {
+                // 从对象池获取Point
+                start = getPoint(node1.nodeData.x, node1.nodeData.y);
+                end = getPoint(node2.nodeData.x, node2.nodeData.y);
+                current = getPoint();
+
+                for each (node in nodes) {
+                    var nodeGroup:int = Globals.teamGroups[node.nodeData.team];
+                    if (node.nodeData.team == 0 || nodeGroup == group)
+                        continue;
+                    if (node.nodeData.type == NodeType.TOWER || node.nodeData.type == NodeType.STARBASE || node.nodeData.type == NodeType.CAPTURESHIP) {
+                        current.x = node.nodeData.x;
+                        current.y = node.nodeData.y;
+                        result = lineIntersectCircle(start, end, current, node.attackState.attackRange);
+                        resultInside = result[0];
+                        resultIntersects = result[1];
+                        resultEnter = result[2];
+                        resultExit = result[3];
+                        if (resultIntersects) {
+                            if (resultEnter && resultExit)
+                                length += Point.distance(resultEnter, resultExit);
+                            else if (resultEnter && !resultExit)
+                                length += Point.distance(resultEnter, end);
+                            else if (!resultEnter && resultExit)
+                                length += Point.distance(start, resultExit);
+                            else
+                                length += Point.distance(start, end);
+                        } else if (resultInside)
                             length += Point.distance(start, end);
-                    } else if (resultInside)
-                        length += Point.distance(start, end);
+                    }
                 }
+            } finally {
+                // 确保归还Point对象
+                returnPoint(start);
+                returnPoint(end);
+                returnPoint(current);
             }
+
             return length;
         }
 
@@ -258,31 +292,45 @@ package Entity {
             var end:Point = null;
             var current:Point = null;
             var result:Array;
-            var resultInside:Boolean; // 线是否在圆内
-            var resultIntersects:Boolean; // 线和圆是否相交
-            var resultEnter:Point; // 线和圆的第一个交点
-            var resultExit:Point; // 线和圆的第二个交点
+            var resultInside:Boolean;
+            var resultIntersects:Boolean;
+            var resultEnter:Point;
+            var resultExit:Point;
             var inBlackhole:Boolean = false;
-            for each (node in nodes) {
-                var nodeGroup:int = Globals.teamGroups[node.nodeData.team];
-                if (node.nodeData.team == 0 || nodeGroup == group)
-                    continue;
-                if (node.nodeData.type == NodeType.BLACKHOLE && (node.attackState.attackStrategy.attacking || node.attackState.attackStrategy.attackTimer < 1)) {
-                    start = new Point(node1.nodeData.x, node1.nodeData.y);
-                    end = new Point(node2.nodeData.x, node2.nodeData.y);
-                    current = new Point(node.nodeData.x, node.nodeData.y);
-                    result = lineIntersectCircle(start, end, current, node.attackState.attackRange);
-                    resultInside = result[0],resultIntersects = result[1], resultEnter = result[2], resultExit = result[3];
-                    if (resultIntersects || resultInside) {
-                        inBlackhole = true;
-                        break;
-                    } 
+
+            try {
+                start = getPoint(node1.nodeData.x, node1.nodeData.y);
+                end = getPoint(node2.nodeData.x, node2.nodeData.y);
+                current = getPoint();
+
+                for each (node in nodes) {
+                    var nodeGroup:int = Globals.teamGroups[node.nodeData.team];
+                    if (node.nodeData.team == 0 || nodeGroup == group)
+                        continue;
+                    if (node.nodeData.type == NodeType.BLACKHOLE && (node.attackState.attackStrategy.attacking || node.attackState.attackStrategy.attackTimer < 1)) {
+                        current.x = node.nodeData.x;
+                        current.y = node.nodeData.y;
+                        result = lineIntersectCircle(start, end, current, node.attackState.attackRange);
+                        resultInside = result[0];
+                        resultIntersects = result[1];
+                        resultEnter = result[2];
+                        resultExit = result[3];
+                        if (resultIntersects || resultInside) {
+                            inBlackhole = true;
+                            break;
+                        }
+                    }
                 }
+            } finally {
+                returnPoint(start);
+                returnPoint(end);
+                returnPoint(current);
             }
+
             return inBlackhole;
         }
 
-        public static function lineIntersectCircle(pointA:Point, pointB:Point, circleCenter:Point, circleRadius:Number = 1):Array { // 判断线与圆的关系并返回交点
+        public static function lineIntersectCircle(pointA:Point, pointB:Point, circleCenter:Point, circleRadius:Number = 1):Array {
             var discriminant:Number = NaN;
             var intersectionParam1:Number = NaN;
             var intersectionParam2:Number = NaN;
@@ -293,30 +341,35 @@ package Entity {
             var lineSegmentLengthSquared:Number = (pointB.x - pointA.x) * (pointB.x - pointA.x) + (pointB.y - pointA.y) * (pointB.y - pointA.y);
             var lineConstant:Number = 2 * ((pointB.x - pointA.x) * (pointA.x - circleCenter.x) + (pointB.y - pointA.y) * (pointA.y - circleCenter.y));
             var circleConstant:Number = circleCenter.x * circleCenter.x + circleCenter.y * circleCenter.y + pointA.x * pointA.x + pointA.y * pointA.y - 2 * (circleCenter.x * pointA.x + circleCenter.y * pointA.y) - circleRadius * circleRadius;
-            if (lineConstant * lineConstant - 4 * lineSegmentLengthSquared * circleConstant <= 0)
+            if (lineConstant * lineConstant - 4 * lineSegmentLengthSquared * circleConstant <= 0) {
                 resultInside = false;
-            else {
+            } else {
                 discriminant = Math.sqrt(lineConstant * lineConstant - 4 * lineSegmentLengthSquared * circleConstant);
                 intersectionParam1 = (-lineConstant + discriminant) / (2 * lineSegmentLengthSquared);
                 intersectionParam2 = (-lineConstant - discriminant) / (2 * lineSegmentLengthSquared);
                 if ((intersectionParam1 < 0 || intersectionParam1 > 1) && (intersectionParam2 < 0 || intersectionParam2 > 1)) {
-                    if (intersectionParam1 < 0 && intersectionParam2 < 0 || intersectionParam1 > 1 && intersectionParam2 > 1)
-                        resultInside = false;
-                    else
-                        resultInside = true;
+                    resultInside = !((intersectionParam1 < 0 && intersectionParam2 < 0) || (intersectionParam1 > 1 && intersectionParam2 > 1))
                 } else {
-                    if (0 <= intersectionParam2 && intersectionParam2 <= 1)
-                        resultEnter = Point.interpolate(pointA, pointB, 1 - intersectionParam2);
-                    if (0 <= intersectionParam1 && intersectionParam1 <= 1)
-                        resultExit = Point.interpolate(pointA, pointB, 1 - intersectionParam1);
+                    if (0 <= intersectionParam2 && intersectionParam2 <= 1) {
+                        resultEnter = getPoint();
+                        resultEnter.x = pointA.x + intersectionParam2 * (pointB.x - pointA.x);
+                        resultEnter.y = pointA.y + intersectionParam2 * (pointB.y - pointA.y);
+                    }
+                    if (0 <= intersectionParam1 && intersectionParam1 <= 1) {
+                        resultExit = getPoint();
+                        resultExit.x = pointA.x + intersectionParam1 * (pointB.x - pointA.x);
+                        resultExit.y = pointA.y + intersectionParam1 * (pointB.y - pointA.y);
+                    }
                     resultIntersects = true;
                 }
             }
-            return [resultInside, resultIntersects, resultEnter, resultExit]
+            return [resultInside, resultIntersects, resultEnter, resultExit];
         }
+
         // #endregion
 
         // #region 元素控制
+
         /** 移除数组中的指定元素
          * @param arr 目标数组
          * @param element 目标元素
@@ -326,6 +379,7 @@ package Entity {
                 if (arr[i] == element)
                     arr.splice(i, 1);
         }
+
         // #endregion
 
         // #region 其他
@@ -353,8 +407,8 @@ package Entity {
         }
 
         /**判断路径是否被拦截并计算拦截点
-         * @param node1 
-         * @param node2 
+         * @param node1
+         * @param node2
          * @return Point 或 null
          */
         public static function nodesBlocked(node1:Node, node2:Node):Point {
@@ -379,11 +433,12 @@ package Entity {
          * @param static 目标状态
          * @return 被过滤的元素组成的数组
          */
-        public static function fliterByStatic(arr:Array, state:int):Array{
+        public static function fliterByStatic(arr:Array, state:int):Array {
             var fliterArr:Array = [];
-            for (var i:int = 0; i < arr.length; i++){
+            for (var i:int = 0; i < arr.length; i++) {
                 if (arr[i].state != state)
-                    continue
+                    continue;
+
                 fliterArr.push(arr[i]);
                 arr.removeAt(i);
                 i--;
@@ -409,5 +464,63 @@ package Entity {
         }
 
         // #endregion
+
+        // #region point对象池
+
+        private static var _pointPool:Vector.<Point> = new Vector.<Point>();
+        private static var _pointPoolIndex:int = 0;
+        private static const MAX_POOL_SIZE:int = 64; // 可根据需要调整
+
+        /**
+         * 从对象池获取一个Point对象
+         * @param x 初始x坐标，默认为0
+         * @param y 初始y坐标，默认为0
+         * @return Point对象
+         */
+        public static function getPoint(x:Number = 0, y:Number = 0):Point {
+            if (_pointPoolIndex > 0) {
+                // 从池中取出
+                _pointPoolIndex--;
+                var point:Point = _pointPool[_pointPoolIndex];
+                point.x = x;
+                point.y = y;
+                _pointPool[_pointPoolIndex] = null; // 清空引用，避免重复使用
+                return point;
+            } else {
+                // 池为空，创建新对象
+                return new Point(x, y);
+            }
+        }
+
+        /**
+         * 归还Point对象到池中
+         * @param point 要归还的Point对象
+         */
+        public static function returnPoint(point:Point):void {
+            if (!point)
+                return;
+
+            if (_pointPoolIndex < MAX_POOL_SIZE) {
+                // 重置Point
+                point.x = 0;
+                point.y = 0;
+                _pointPool[_pointPoolIndex] = point;
+                _pointPoolIndex++;
+            }
+            // 如果池已满，则丢弃该对象，让GC回收
+        }
+
+        /**
+         * 清空Point对象池
+         */
+        public static function clearPointPool():void {
+            for (var i:int = 0; i < _pointPoolIndex; i++)
+                _pointPool[i] = null;
+            _pointPoolIndex = 0;
+        }
+
+        // #endregion
+
+
     }
 }

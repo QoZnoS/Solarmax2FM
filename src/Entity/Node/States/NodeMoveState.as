@@ -4,10 +4,11 @@ package Entity.Node.States {
     import starling.text.TextField;
     import Entity.Node.NodeData;
     import Entity.EntityContainer;
-    import UI.UIContainer;
     import utils.Drawer;
     import starling.animation.Transitions;
     import utils.CalcTools;
+    import UI.LayerFactory;
+    import starling.display.QuadBatch;
 
     public class NodeMoveState implements INodeState {
         public var node:Node;
@@ -53,8 +54,9 @@ package Entity.Node.States {
                 addTextField(captureLabels, i);
                 addTextField(conflictLabels, i);
             }
+            LayerFactory.swapChildren(LayerFactory.LABEL, captureLabels[0], captureLabels[Globals.playerTeam]);
             image.visible = halo.visible = true;
-            UIContainer.entityLayer.addNode(image, halo, glow, Globals.teamDeepColors[nodeData.team]);
+            LayerFactory.call(LayerFactory.ADD_NODE)(image, halo, glow, Globals.teamDeepColors[nodeData.team]);
             if (orbitNode) {
                 var dx:Number = nodeData.x - orbitNode.nodeData.x;
                 var dy:Number = nodeData.y - orbitNode.nodeData.y;
@@ -72,14 +74,14 @@ package Entity.Node.States {
             textField.pivotX = 30;
             textField.pivotY = 24;
             vec.push(textField);
-            UIContainer.entityLayer.labelLayer.addChild(textField);
+            LayerFactory.addChild(LayerFactory.LABEL, textField);
         }
 
         public function deinit():void {
-            UIContainer.entityLayer.removeNode(image, halo, glow);
+            LayerFactory.call(LayerFactory.REMOVE_NODE)(image, halo, glow);
             for (var i:int = 0; i < Globals.teamCount; i++){
-                UIContainer.entityLayer.labelLayer.removeChild(captureLabels[i]);
-                UIContainer.entityLayer.labelLayer.removeChild(conflictLabels[i]);
+                LayerFactory.removeChild(LayerFactory.LABEL, captureLabels[i]);
+                LayerFactory.removeChild(LayerFactory.LABEL, conflictLabels[i]);
             }
             orbitNode = null;
         }
@@ -117,7 +119,7 @@ package Entity.Node.States {
                     image.color = halo.color = glow.color = Globals.teamColors[nodeData.team];
                     if (Globals.teamColorEnhance[nodeData.team])
                         halo.color = glow.color = CalcTools.scaleColorToMax(Globals.teamColors[nodeData.team]);
-                    UIContainer.entityLayer.addGlow(halo, Globals.teamDeepColors[nodeData.team]);
+                    LayerFactory.call(LayerFactory.ADD_GROW)(halo, Globals.teamDeepColors[nodeData.team]);
                 }
             } else if (glow.alpha > 0) { // 再归零
                 glow.alpha -= dt * 2; // 不透明度减少
@@ -130,19 +132,36 @@ package Entity.Node.States {
         private static const ARC_ADJUSTMENT:Number = 0.006366197723675814; // 弧线绘制微调值
 
         public function updateConflictLabels(activeTeams:Vector.<int>, totalShips:int):void {
-            var currentAngle:Number = START_ANGLE - Math.PI * node.ships[activeTeams[0]].length / totalShips;
+            var currentAngle:Number = 567; // 随便找一个范围之外的数（
             var labelAngleStep:Number = Math.PI * 2 / activeTeams.length;
-            for (var i:int = 0; i < Globals.teamCount; i++) {
-                if (activeTeams.indexOf(i) == -1) {
+            var activeGroup:Vector.<Vector.<int>> = new Vector.<Vector.<int>>;
+            var i:int = 0;
+            for (i = 0; i < Globals.teamCount; i++)
+                activeGroup.push(new Vector.<int>);
+            for each(i in activeTeams)
+                activeGroup[Globals.teamGroups[i]].push(i);
+
+            var labelIndex:int = 0
+            for (i = 0;i < Globals.teamCount; i++) {
+                if (activeTeams.indexOf(i) == -1)
                     conflictLabels[i].visible = false;
+                if (activeGroup[i].length == 0)
                     continue;
+                var arcRatio:Number = 0;
+                var colorArr:Array = [];
+                // 渲染兵力数字并计算队伍弧长
+                for each(var teamId:int in activeGroup[i]) {
+                    var shipCount:int = node.ships[teamId].length;
+                    var labelAngle:Number = START_ANGLE + labelIndex * labelAngleStep;
+                    updateConflictLabel(teamId, labelAngle, shipCount);
+                    labelIndex++;
+
+                    arcRatio += shipCount / totalShips;
+                    colorArr.push(Globals.teamColors[teamId]);
+                    if (currentAngle == 567)
+                        currentAngle = START_ANGLE - Math.PI * node.ships[teamId].length / totalShips
                 }
-                var teamId:int = i;
-                var shipCount:int = node.ships[teamId].length;
-                var arcRatio:Number = shipCount / totalShips;
-                Drawer.drawCircle(UIContainer.behaviorBatch, nodeData.x, nodeData.y, Globals.teamColors[teamId], nodeData.lineDist, nodeData.lineDist - 2, false, 1, arcRatio - ARC_ADJUSTMENT, currentAngle + 0.01);
-                var labelAngle:Number = START_ANGLE + activeTeams.indexOf(i) * labelAngleStep;
-                node.moveState.updateConflictLabel(teamId, labelAngle, shipCount);
+                Drawer.drawMultiGradientCircleOptimized(LayerFactory.getLayer(LayerFactory.BEHAVIOR) as QuadBatch, nodeData.x, nodeData.y, colorArr, nodeData.lineDist, nodeData.lineDist - 2, false, 1, arcRatio - ARC_ADJUSTMENT, currentAngle + 0.01);
                 currentAngle += Math.PI * 2 * arcRatio;
             }
         }
@@ -170,8 +189,8 @@ package Entity.Node.States {
             }
             if (hpRate != 0) {
                 var arcAngle:Number = START_ANGLE - Math.PI * hpRate;
-                Drawer.drawCircle(UIContainer.behaviorBatch, nodeData.x, nodeData.y, Globals.teamColors[captureTeam], nodeData.lineDist, nodeData.lineDist - 2, false, 0.1);
-                Drawer.drawCircle(UIContainer.behaviorBatch, nodeData.x, nodeData.y, Globals.teamColors[captureTeam], nodeData.lineDist, nodeData.lineDist - 2, false, 0.7, hpRate, arcAngle);
+                Drawer.drawCircle(LayerFactory.getLayer(LayerFactory.BEHAVIOR) as QuadBatch, nodeData.x, nodeData.y, Globals.teamColors[captureTeam], nodeData.lineDist, nodeData.lineDist - 2, false, 0.1);
+                Drawer.drawCircle(LayerFactory.getLayer(LayerFactory.BEHAVIOR) as QuadBatch, nodeData.x, nodeData.y, Globals.teamColors[captureTeam], nodeData.lineDist, nodeData.lineDist - 2, false, 0.7, hpRate, arcAngle);
             }
         }
 
@@ -179,6 +198,8 @@ package Entity.Node.States {
         private const startEaseY:Number = 57.1894889582 - Transitions.getTransition(Transitions.EASE_OUT)(1 / Globals.maxMarginTeam) * 122.8105110418;
         private function updateCooperateLabel(teamId:int, labelAngle:Number, shipCount:int, teamCount:int):void {
             var teamLabel:TextField = captureLabels[teamId];
+            if (teamCount == 2)
+                teamCount = 2.2;
             var easeX:Number = Math.min(180, Transitions.getTransition(Transitions.EASE_OUT)(teamCount / Globals.maxMarginTeam) * 118.196601125 + startEaseX);
             var easeY:Number = Math.min(180, Transitions.getTransition(Transitions.EASE_OUT)(teamCount / Globals.maxMarginTeam) * 122.8105110418 + startEaseY);
             // trace(easeX);

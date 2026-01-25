@@ -24,8 +24,8 @@ package Game {
     import Game.SpecialEvent.SpecialEventFactory;
     import utils.ReplayData;
     import UI.UIContainer;
-    import flash.geom.Utils3D;
     import utils.CalcTools;
+    import UI.LayerFactory;
 
     public class GameScene extends BasicScene {
         // #region 类变量
@@ -81,17 +81,55 @@ package Game {
             this.alpha = 0;
             this.visible = true;
             ui = scene.ui;
-            UIContainer.btnLayer.addChildAt(cover, 0);
+            LayerFactory.addChildAt(LayerFactory.BTN_ADD, cover, 0);
             var i:int = 0;
             rng = new Rng(seed);
+            // #region 读取配置生成关卡
             var levelData:Object = LevelData.level[Globals.level];
+            nodeIn(levelData.node); // 天体
+            // AI
             var aiData:Array = levelData.ai;
             if (!("ai" in levelData))
                 aiData = [];
-            nodeIn(levelData.node);
-            Globals.replay = new ReplayData(LevelData.rawData[Globals.currentData].name, LevelData.level[Globals.level].name, rng.seed);
             for (i = 0; i < aiData.length; i++)
                 EntityHandler.addAI(aiData[i]);
+            // bgm
+            if (levelData.bgm)
+                GS.playMusic(levelData.bgm);
+            else
+                GS.playMusic("bgm02");
+            // 胜利条件
+            if (levelData.victoryCondition)
+                victoryType = VictoryTypeFactory.create(levelData.victoryCondition);
+            else
+                victoryType = VictoryTypeFactory.create(VictoryTypeFactory.NORMAL_TYPE);
+            // 特殊事件
+            specialEvents = new Vector.<ISpecialEvent>();
+            for each (var seData:Object in(levelData.specialEvents as Array)) {
+                var se:ISpecialEvent = SpecialEventFactory.create(seData.type, seData.trigger);
+                se.game = this;
+                specialEvents.push(se);
+            }
+            // 势力属性
+            if (levelData.playerTeam)
+                Globals.playerTeam = levelData.playerTeam;
+            else
+                Globals.playerTeam = 1;
+            Globals.teamGroups = Globals.defaultGroups.slice();
+            for (i = 0; i < Globals.teamCount; i++) {
+                var teamData:Object = LevelData.rawData[Globals.currentData].team[i];
+                if ("group" in teamData)
+                    Globals.teamGroups[i] = teamData.group;
+                else
+                    Globals.teamGroups[i] = i;
+            }
+            var groupData:Array = levelData.group;
+            if (levelData.group)
+                for(var group:int = 0; group < groupData.length; group++)
+                    for(i = 0; i < groupData[group].length; i++)
+                        Globals.teamGroups[groupData[group][i]] = group + 1;
+            // #endregion
+            Globals.replay = new ReplayData(LevelData.rawData[Globals.currentData].name, LevelData.level[Globals.level].name, rng.seed);
             for each (var label:TextField in popLabels) {
                 switch (Globals.textSize) {
                     case 0:
@@ -106,9 +144,9 @@ package Game {
                     label.color = CalcTools.scaleColorToMax(label.color);
                 label.fontSize = -1;
                 if (Globals.teamDeepColors[Globals.playerTeam])
-                    UIContainer.btnLayer.normalLayer.addChild(label);
+                    LayerFactory.addChild(LayerFactory.BTN_NORMAL,label);
                 else
-                    UIContainer.btnLayer.addLayer.addChild(label);
+                    LayerFactory.addChild(LayerFactory.BTN_ADD,label);
             }
             // UIContainer.btnLayer.color = Globals.teamColors[Globals.playerTeam];
             // 执行一些初始化函数
@@ -117,20 +155,6 @@ package Game {
             gameOver = false;
             gameOverTimer = 3;
             winningGroup = -1;
-            if (levelData.bgm)
-                GS.playMusic(levelData.bgm);
-            else
-                GS.playMusic("bgm02");
-            if (levelData.victoryCondition)
-                victoryType = VictoryTypeFactory.create(levelData.victoryCondition);
-            else
-                victoryType = VictoryTypeFactory.create(VictoryTypeFactory.NORMAL_TYPE);
-            specialEvents = new Vector.<ISpecialEvent>();
-            for each (var seData:Object in(levelData.specialEvents as Array)) {
-                var se:ISpecialEvent = SpecialEventFactory.create(seData.type, seData.trigger);
-                se.game = this;
-                specialEvents.push(se);
-            }
             addEventListener("enterFrame", update); // 添加帧监听器，每帧执行一次update
             animateIn(); // 播放关卡进入动画
         }
@@ -154,9 +178,9 @@ package Game {
             removeEventListener("enterFrame", update); // 移除更新帧监听器
             for each (var label:TextField in popLabels) {
                 if (Globals.teamDeepColors[Globals.playerTeam])
-                    UIContainer.btnLayer.normalLayer.removeChild(label);
+                    LayerFactory.removeChild(LayerFactory.BTN_NORMAL, label);
                 else
-                    UIContainer.btnLayer.addLayer.removeChild(label);
+                    LayerFactory.removeChild(LayerFactory.BTN_ADD, label);
             }
             Globals.auto_save_replay();
             this.visible = false;
@@ -274,6 +298,7 @@ package Game {
                             "delay": 1});
                 }
             } else if (gameOverTimer > 0) {
+                scene.speedMult = 1;
                 gameOverTimer -= dt;
                 if (gameOverTimer <= 0)
                     winningGroup == Globals.teamGroups[Globals.playerTeam] ? next() : quit();
@@ -295,7 +320,7 @@ package Game {
                 case Keyboard.NUMBER_7:
                 case Keyboard.NUMBER_8:
                 case Keyboard.NUMBER_9:
-                    UIContainer.btnLayer.fleetSlider.perc = (keyCode - Keyboard.NUMBER_0) / 10;
+                    UIContainer.fleetSlider.perc = (keyCode - Keyboard.NUMBER_0) / 10;
                     break;
                 case Keyboard.NUMPAD_1:
                 case Keyboard.NUMPAD_2:
@@ -306,11 +331,11 @@ package Game {
                 case Keyboard.NUMPAD_7:
                 case Keyboard.NUMPAD_8:
                 case Keyboard.NUMPAD_9:
-                    UIContainer.btnLayer.fleetSlider.perc = (keyCode - Keyboard.NUMPAD_0) / 10;
+                    UIContainer.fleetSlider.perc = (keyCode - Keyboard.NUMPAD_0) / 10;
                     break;
                 case Keyboard.NUMBER_0:
                 case Keyboard.NUMPAD_0:
-                    UIContainer.btnLayer.fleetSlider.perc = 1;
+                    UIContainer.fleetSlider.perc = 1;
             }
         }
     }

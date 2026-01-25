@@ -390,6 +390,8 @@ package Menus {
             Globals.currentDifficulty = DifficultyButton.btnText[difficultyButtons.indexOf(click.target)].toLowerCase();
             LevelData.updateLevelData();
             levels.updateLevels();
+            getBarrierData();
+            getOrbitData();
         }
 
         public function animateIn():void {

@@ -10,6 +10,7 @@ package Game.SpecialEvent {
     import Entity.FXHandler;
     import starling.core.Starling;
     import utils.CalcTools;
+    import UI.LayerFactory;
 
     public class GameEndSE implements ISpecialEvent {
         private static const STATE_START:int = 0;
@@ -30,7 +31,7 @@ package Game.SpecialEvent {
             darkPulse.x = boss.nodeData.x;
             darkPulse.y = boss.nodeData.y;
             darkPulse.visible = false;
-            UIContainer.entityLayer.addGlow(darkPulse, Globals.teamDeepColors[Globals.playerTeam]);
+            LayerFactory.call(LayerFactory.ADD_GROW)(darkPulse, Globals.teamDeepColors[Globals.playerTeam]);
         }
 
         private var slowMult:Number = 1;
@@ -131,8 +132,8 @@ package Game.SpecialEvent {
                     state = STATE_END;
                     darkPulse.scaleX = darkPulse.scaleY = 0;
                     darkPulse.visible = true;
-                    Starling.juggler.tween(UIContainer.btnLayer, 5, {"alpha": 0});
-                    Starling.juggler.tween(UIContainer.gameContainer, 25, {"scaleX": 0.01,
+                    Starling.juggler.tween(LayerFactory.getLayer(LayerFactory.BTN), 5, {"alpha": 0});
+                    Starling.juggler.tween(LayerFactory.getLayer(LayerFactory.GAME_CONTAINER), 25, {"scaleX": 0.01,
                             "scaleY": 0.01,
                             "delay": 20,
                             "transition": "easeInOut"}); // 画面缩小动画
@@ -193,7 +194,7 @@ package Game.SpecialEvent {
         }
 
         public function deinit():void {
-            UIContainer.entityLayer.removeGlow(darkPulse);
+            LayerFactory.call(LayerFactory.REMOVE_GROW)(darkPulse);
             UIContainer.touchable = true;
             Starling.juggler.removeTweens(Globals);
             Globals.soundVolume = soundVolume;

@@ -3,7 +3,8 @@ package Entity.FX {
     import Game.GameScene;
     import Entity.GameEntity;
     import utils.Drawer;
-    import UI.UIContainer;
+    import UI.LayerFactory;
+    import starling.display.QuadBatch;
 
     public class SelectFade extends GameEntity {
 
@@ -48,7 +49,7 @@ package Entity.FX {
             }
             var radius:Number = 150 * size - 4;
             var voidR:Number = Math.max(0, radius - 3);
-            Drawer.drawCircle(UIContainer.behaviorBatch, x, y, color, radius, voidR, false, alpha);
+            Drawer.drawCircle(LayerFactory.getLayer(LayerFactory.BEHAVIOR) as QuadBatch, x, y, color, radius, voidR, false, alpha);
         }
     }
 }

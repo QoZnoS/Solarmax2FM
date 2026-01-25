@@ -23,8 +23,8 @@ package Game.VictoryType {
             textField.y = 140;
             textField.hAlign = HAlign.CENTER;
             textField.vAlign = VAlign.CENTER
-            UIContainer.entityLayer.addChildAt(background, 0);
-            UIContainer.entityLayer.addChildAt(textField, 1);
+            // UIContainer.entityLayer.addChildAt(background, 0);
+            // UIContainer.entityLayer.addChildAt(textField, 1);
         }
 
         public function update(dt:Number):int {
@@ -32,7 +32,7 @@ package Game.VictoryType {
             var text:String = timeToString(time);
             textField.text = text;
             if (time <= 0){
-                UIContainer.entityLayer.removeChild(textField);
+                // UIContainer.entityLayer.removeChild(textField);
                 return Globals.playerTeam;
             }
             return -1;

@@ -12,6 +12,7 @@ package Game.SpecialEvent {
     import Entity.Ship;
     import starling.core.Starling;
     import utils.CalcTools;
+    import UI.LayerFactory;
 
     public class DarknessFallsSE implements ISpecialEvent {
         private static const STATE_START:int = 0;
@@ -40,7 +41,7 @@ package Game.SpecialEvent {
             darkPulse.x = triggerNode.nodeData.x;
             darkPulse.y = triggerNode.nodeData.y;
             darkPulse.visible = false;
-            UIContainer.entityLayer.addGlow(darkPulse, Globals.teamDeepColors[targetTeam]);
+            LayerFactory.call(LayerFactory.ADD_GROW)(darkPulse, Globals.teamDeepColors[targetTeam]);
         }
         private var soundVolume:Number = Globals.soundVolume;
         public function update(dt:Number):void {
@@ -184,7 +185,7 @@ package Game.SpecialEvent {
         }
 
         public function deinit():void {
-            UIContainer.entityLayer.removeGlow(darkPulse);
+            LayerFactory.call(LayerFactory.REMOVE_GROW)(darkPulse);
             Starling.juggler.removeTweens(Globals);
             Globals.soundVolume = soundVolume;
         }

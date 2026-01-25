@@ -7,6 +7,7 @@ package UI.Component {
     import Entity.EntityContainer;
     import UI.BtnLayer;
     import UI.UIContainer;
+    import UI.LayerFactory;
 
     public class TutorialSprite extends Sprite {
         public static var TYPE_END:int = 0;
@@ -15,7 +16,6 @@ package UI.Component {
 
         private var arrow:Image;
         private var loop:DelayedCall;
-        private var layer:BtnLayer;
         public var type:int;
 
         public function TutorialSprite() {
@@ -25,23 +25,21 @@ package UI.Component {
             arrow.pivotY = arrow.height * 0.5;
             arrow.visible = false;
             arrow.alpha = 0;
-            arrow.blendMode = "add";
             arrow.scaleY = 0.8;
             arrow.scaleX = 0.8;
             arrow.color = 0xFFAAAA;
         }
 
         public function init(type:int):void {
-            this.layer = UIContainer.btnLayer;
             this.type = type;
             arrow.visible = true;
             arrow.alpha = 0;
-            layer.addChild(arrow);
+            LayerFactory.addChild(LayerFactory.BTN_ADD, arrow);
             show();
         }
 
         public function deInit():void {
-            layer.removeChild(arrow);
+            LayerFactory.removeChild(LayerFactory.BTN_ADD, arrow);
             Starling.juggler.removeTweens(arrow);
             if (loop)
                 Starling.juggler.remove(loop);
@@ -93,8 +91,8 @@ package UI.Component {
             switch (Globals.fleetSliderPosition) {
                 case 0:
                     arrow.rotation = Math.PI;
-                    x = layer.fleetSlider.x + 50;
-                    y = 384 - layer.fleetSlider.box_y;
+                    x = UIContainer.fleetSlider.x + 50;
+                    y = 384 - UIContainer.fleetSlider.box_y;
                     arrow.x = x + 20;
                     arrow.y = y;
                     Starling.juggler.tween(arrow, 1, {"alpha": 0.8,
@@ -112,8 +110,8 @@ package UI.Component {
                     break;
                 case 2:
                     arrow.rotation = 0;
-                    x = layer.fleetSlider.x;
-                    y = 384 - layer.fleetSlider.box_y;
+                    x = UIContainer.fleetSlider.x;
+                    y = 384 - UIContainer.fleetSlider.box_y;
                     arrow.x = x - 20;
                     arrow.y = y;
                     Starling.juggler.tween(arrow, 1, {"alpha": 0.8,
@@ -130,8 +128,8 @@ package UI.Component {
                     loop = Starling.juggler.delayCall(show, 6);
                     break;
                 case 1:
-                    x = 512 + layer.fleetSlider.box_x;
-                    y = layer.fleetSlider.y - 10;
+                    x = 512 + UIContainer.fleetSlider.box_x;
+                    y = UIContainer.fleetSlider.y - 10;
                     arrow.rotation = 1.5707963267948966;
                     arrow.x = x;
                     arrow.y = y - 20;

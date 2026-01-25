@@ -96,7 +96,9 @@
                     ],
                     "ai": [],
                     "gameScale": 1,
-                    "bgm": "bgm02"
+                    "bgm": "bgm02",
+                    "group": [[1,2],[3,4]],
+                    "playerTeam": 1
                 },
                 {
                     "name": "02",
@@ -3438,6 +3440,7 @@
                     "color": "0x000000",
                     "captureSpeed": 2,
                     "shipSpeed": 100,
+                    "showLabel": false,
                     "deepColor": true
                 },
                 {},
@@ -3447,6 +3450,7 @@
                 {
                     "color": "0xFFFFFF",
                     "nodePop": 10000,
+                    "showLabel": true,
                     "deepColor": false
                 },
                 {
@@ -3456,29 +3460,6 @@
             "level": [
                 {
                     "node": [
-                        {
-                            "x": 350,
-                            "y": 222,
-                            "team": 1,
-                            "type": "planet",
-                            "size": 0.6,
-                            "startShips": 1
-                        },
-                        {
-                            "x": 671,
-                            "y": 478,
-                            "type": "planet"
-                        },
-                        {
-                            "x": 350,
-                            "y": 478,
-                            "type": "planet"
-                        },
-                        {
-                            "x": 671,
-                            "y": 222,
-                            "type": "planet"
-                        },
                         {
                             "x": 350,
                             "y": 222,
@@ -3548,6 +3529,14 @@
                     ],
                     "name": "02",
                     "color": "0x00FF00",
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        }
+                    ],
                     "bgm": "bgm02"
                 },
                 {
@@ -3579,6 +3568,14 @@
                     ],
                     "name": "03",
                     "color": "0x00FF00",
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        }
+                    ],
                     "bgm": "bgm02"
                 },
                 {
@@ -3661,6 +3658,14 @@
                     ],
                     "name": "05",
                     "color": "0x00FF00",
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        }
+                    ],
                     "bgm": "bgm02"
                 },
                 {
@@ -3783,6 +3788,14 @@
                     ],
                     "name": "06",
                     "color": "0x0000FF",
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        }
+                    ],
                     "bgm": "bgm02"
                 },
                 {
@@ -3890,6 +3903,14 @@
                     ],
                     "name": "07",
                     "color": "0x00FF00",
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        }
+                    ],
                     "bgm": "bgm02"
                 },
                 {
@@ -3994,6 +4015,14 @@
                     ],
                     "name": "08",
                     "color": "0x00FF00",
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        }
+                    ],
                     "bgm": "bgm02"
                 },
                 {
@@ -4106,7 +4135,21 @@
                     ],
                     "name": "09",
                     "color": "0x0000FF",
-                    "bgm": "bgm04"
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        },
+                        {
+                            "team": 3,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        }
+                    ],
+                    "bgm": "bgm02"
                 },
                 {
                     "node": [
@@ -4222,6 +4265,14 @@
                     ],
                     "name": "10",
                     "color": "0x00FF00",
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        }
+                    ],
                     "bgm": "bgm04"
                 },
                 {
@@ -4367,6 +4418,14 @@
                     ],
                     "name": "12",
                     "color": "0x0000FF",
+                    "ai": [
+                        {
+                            "team": 4,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        }
+                    ],
                     "bgm": "bgm04"
                 },
                 {
@@ -4402,7 +4461,8 @@
                             "y": 384,
                             "team": 1,
                             "type": "warp",
-                            "startShips": 75
+                            "startShips/hard": 75,
+                            "startShips": 70
                         },
                         {
                             "x": 448,
@@ -4452,7 +4512,8 @@
                             "team": 3,
                             "type": "planet",
                             "size": 0.6,
-                            "startShips": 20
+                            "startShips/hard": 20,
+                            "startShips": 25
                         },
                         {
                             "x": 192,
@@ -4483,6 +4544,8 @@
                             "x": 640,
                             "y": 384,
                             "team": 2,
+                            "startShips/hard": 0,
+                            "startShips": 7,
                             "type": "planet"
                         },
                         {
@@ -4499,12 +4562,16 @@
                             "x": 704,
                             "y": 320,
                             "team": 2,
+                            "startShips/hard": 0,
+                            "startShips": 7,
                             "type": "planet"
                         },
                         {
                             "x": 704,
                             "y": 448,
                             "team": 2,
+                            "startShips/hard": 0,
+                            "startShips": 7,
                             "type": "planet"
                         },
                         {
@@ -4536,6 +4603,20 @@
                     ],
                     "name": "13",
                     "color": "0x00FF00",
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        },
+                        {
+                            "team": 3,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        }
+                    ],
                     "bgm": "bgm04"
                 },
                 {
@@ -4571,10 +4652,10 @@
                             "y": 384,
                             "team": 2,
                             "type": "warp",
-                            "startShips": 90
+                            "startShips/hard": 90,
+                            "startShips": 300
                         },
                         {
-                            "orbitSpeed": 0,
                             "x": 192,
                             "y": 384,
                             "team": 1,
@@ -4612,6 +4693,14 @@
                     ],
                     "name": "14",
                     "color": "0x0000FF",
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        }
+                    ],
                     "bgm": "bgm04"
                 },
                 {
@@ -4663,7 +4752,8 @@
                             "y": 384,
                             "team": 1,
                             "type": "tower",
-                            "startShips": 40
+                            "startShips/hard": 40,
+                            "startShips": 50
                         },
                         {
                             "x": 512,
@@ -4674,6 +4764,8 @@
                             "x": 405,
                             "y": 219,
                             "team": 3,
+                            "startShips/hard": 0,
+                            "startShips": 10,
                             "type": "planet"
                         },
                         {
@@ -4685,23 +4777,31 @@
                             "x": 335,
                             "y": 303,
                             "team": 3,
+                            "startShips/hard": 0,
+                            "startShips": 10,
                             "type": "planet"
                         },
                         {
                             "x": 683,
                             "y": 504,
                             "team": 3,
+                            "startShips/hard": 0,
+                            "startShips": 10,
                             "type": "planet"
                         },
                         {
                             "x": 354,
                             "y": 503,
                             "team": 3,
+                            "startShips/hard": 0,
+                            "startShips": 10,
                             "type": "planet"
                         },
                         {
                             "x": 423,
                             "y": 570,
+                            "startShips/hard": 0,
+                            "startShips": 10,
                             "team": 3,
                             "type": "planet"
                         },
@@ -4714,18 +4814,24 @@
                             "x": 609,
                             "y": 576,
                             "team": 3,
+                            "startShips/hard": 0,
+                            "startShips": 10,
                             "type": "planet"
                         },
                         {
                             "x": 613,
                             "y": 220,
                             "team": 3,
+                            "startShips/hard": 0,
+                            "startShips": 10,
                             "type": "planet"
                         },
                         {
                             "x": 688,
                             "y": 313,
                             "team": 3,
+                            "startShips/hard": 0,
+                            "startShips": 10,
                             "type": "planet"
                         },
                         {
@@ -4736,6 +4842,14 @@
                     ],
                     "name": "16",
                     "color": "0x0000FF",
+                    "ai": [
+                        {
+                            "team": 3,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        }
+                    ],
                     "bgm": "bgm04"
                 },
                 {
@@ -4745,6 +4859,8 @@
                             "y": 384,
                             "team": 2,
                             "type": "planet",
+                            "startShips/hard": 0,
+                            "startShips": 30,
                             "size": 0.5
                         },
                         {
@@ -4777,6 +4893,8 @@
                             "x": 357,
                             "y": 384,
                             "team": 2,
+                            "startShips/hard": 0,
+                            "startShips": 30,
                             "type": "tower"
                         },
                         {
@@ -4872,6 +4990,14 @@
                     ],
                     "name": "17",
                     "color": "0x00FF00",
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        }
+                    ],
                     "bgm": "bgm04"
                 },
                 {
@@ -4944,28 +5070,32 @@
                             "y": 473,
                             "team": 2,
                             "type": "planet",
-                            "startShips": 10
+                            "startShips/hard": 10,
+                            "startShips": 15
                         },
                         {
                             "x": 192,
                             "y": 601,
                             "team": 2,
                             "type": "planet",
-                            "startShips": 10
+                            "startShips/hard": 10,
+                            "startShips": 15
                         },
                         {
                             "x": 320,
                             "y": 601,
                             "team": 2,
                             "type": "planet",
-                            "startShips": 10
+                            "startShips/hard": 10,
+                            "startShips": 15
                         },
                         {
                             "x": 320,
                             "y": 473,
                             "team": 2,
                             "type": "planet",
-                            "startShips": 10
+                            "startShips/hard": 10,
+                            "startShips": 15
                         },
                         {
                             "x": 512,
@@ -4978,46 +5108,66 @@
                             "y": 473,
                             "team": 3,
                             "type": "planet",
-                            "startShips": 10
+                            "startShips/hard": 10,
+                            "startShips": 15
                         },
                         {
                             "x": 832,
                             "y": 473,
                             "team": 3,
                             "type": "planet",
-                            "startShips": 10
+                            "startShips/hard": 10,
+                            "startShips": 15
                         },
                         {
                             "x": 704,
                             "y": 601,
                             "team": 3,
                             "type": "planet",
-                            "startShips": 10
+                            "startShips/hard": 10,
+                            "startShips": 15
                         },
                         {
                             "x": 832,
                             "y": 601,
                             "team": 3,
                             "type": "planet",
-                            "startShips": 10
+                            "startShips/hard": 10,
+                            "startShips": 15
                         },
                         {
                             "x": 384,
                             "y": 192,
                             "team": 1,
                             "type": "planet",
-                            "startShips": 10
+                            "startShips/hard": 10,
+                            "startShips": 7
                         },
                         {
                             "x": 640,
                             "y": 192,
                             "team": 1,
                             "type": "planet",
-                            "startShips": 10
+                            "startShips/hard": 10,
+                            "startShips": 7
                         }
                     ],
                     "name": "18",
                     "color": "0x00FF00",
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        },
+                        {
+                            "team": 3,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        }
+                    ],
                     "bgm": "bgm04"
                 },
                 {
@@ -5083,7 +5233,8 @@
                             "y": 384,
                             "team": 1,
                             "type": "tower",
-                            "startShips": 60
+                            "startShips/hard": 60,
+                            "startShips": 65
                         },
                         {
                             "x": 64,
@@ -5172,6 +5323,20 @@
                     ],
                     "name": "19",
                     "color": "0xFFFF00",
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        },
+                        {
+                            "team": 3,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        }
+                    ],
                     "bgm": "bgm04"
                 },
                 {
@@ -5254,6 +5419,20 @@
                     ],
                     "name": "20",
                     "color": "0x00FF00",
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        },
+                        {
+                            "team": 3,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        }
+                    ],
                     "bgm": "bgm04"
                 },
                 {
@@ -5320,7 +5499,8 @@
                         {
                             "x": 896,
                             "y": 384,
-                            "team": 4,
+                            "team/hard": 4,
+                            "team": 2,
                             "type": "planet"
                         },
                         {
@@ -5331,18 +5511,29 @@
                         {
                             "x": 768,
                             "y": 214,
-                            "team": 4,
+                            "team/hard": 4,
+                            "team": 2,
                             "type": "planet"
                         },
                         {
                             "x": 768,
                             "y": 552,
-                            "team": 4,
+                            "team/hard": 4,
+                            "team": 2,
                             "type": "planet"
                         }
                     ],
                     "name": "21",
                     "color": "0x00FF00",
+                    "ai": [
+                        {
+                            "team/hard": 4,
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        }
+                    ],
                     "bgm": "bgm04"
                 },
                 {
@@ -5352,38 +5543,42 @@
                             "y": 384,
                             "team": 1,
                             "type": "tower",
-                            "startShips": 40
+                            "startShips/hard": 40
                         },
                         {
-                            "orbitSpeed": 0.1,
                             "x": 419,
                             "y": 384,
                             "team": 1,
                             "type": "planet",
+                            "startShips/hard": 0,
+                            "startShips": 10,
                             "orbitNode": 0
                         },
                         {
-                            "orbitSpeed": 0.1,
                             "x": 512,
                             "y": 291,
                             "team": 1,
                             "type": "planet",
+                            "startShips/hard": 0,
+                            "startShips": 10,
                             "orbitNode": 0
                         },
                         {
-                            "orbitSpeed": 0.1,
                             "x": 605,
                             "y": 384,
                             "team": 1,
                             "type": "planet",
+                            "startShips/hard": 0,
+                            "startShips": 10,
                             "orbitNode": 0
                         },
                         {
-                            "orbitSpeed": 0.1,
                             "x": 512,
                             "y": 477,
                             "team": 1,
                             "type": "planet",
+                            "startShips/hard": 0,
+                            "startShips": 10,
                             "orbitNode": 0
                         },
                         {
@@ -5391,10 +5586,9 @@
                             "y": 225,
                             "team": 2,
                             "type": "tower",
-                            "startShips": 40
+                            "startShips/hard": 40
                         },
                         {
-                            "orbitSpeed": 0.1,
                             "x": 704,
                             "y": 161,
                             "team": 2,
@@ -5402,15 +5596,15 @@
                             "orbitNode": 5
                         },
                         {
-                            "orbitSpeed": 0.1,
                             "x": 704,
                             "y": 289,
                             "team": 2,
                             "type": "planet",
+                            "startShips/hard": 0,
+                            "startShips": 40,
                             "orbitNode": 5
                         },
                         {
-                            "orbitSpeed": 0.1,
                             "x": 832,
                             "y": 289,
                             "team": 2,
@@ -5418,7 +5612,6 @@
                             "orbitNode": 5
                         },
                         {
-                            "orbitSpeed": 0.1,
                             "x": 832,
                             "y": 161,
                             "team": 2,
@@ -5430,10 +5623,9 @@
                             "y": 543,
                             "team": 3,
                             "type": "tower",
-                            "startShips": 40
+                            "startShips/hard": 40
                         },
                         {
-                            "orbitSpeed": 0.1,
                             "x": 320,
                             "y": 607,
                             "team": 3,
@@ -5441,7 +5633,6 @@
                             "orbitNode": 10
                         },
                         {
-                            "orbitSpeed": 0.1,
                             "x": 192,
                             "y": 479,
                             "team": 3,
@@ -5449,7 +5640,6 @@
                             "orbitNode": 10
                         },
                         {
-                            "orbitSpeed": 0.1,
                             "x": 192,
                             "y": 607,
                             "team": 3,
@@ -5457,16 +5647,31 @@
                             "orbitNode": 10
                         },
                         {
-                            "orbitSpeed": 0.1,
                             "x": 320,
                             "y": 479,
                             "team": 3,
                             "type": "planet",
+                            "startShips/hard": 0,
+                            "startShips": 40,
                             "orbitNode": 10
                         }
                     ],
                     "name": "22",
                     "color": "0x00FF00",
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        },
+                        {
+                            "team": 3,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        }
+                    ],
                     "bgm": "bgm04"
                 },
                 {
@@ -5476,25 +5681,29 @@
                             "y": 384,
                             "team": 1,
                             "type": "warp",
-                            "startShips": 1
+                            "startShips": 1,
+                            "hpMult": 0.05
                         },
                         {
                             "x": 320,
                             "y": 384,
                             "team": 2,
-                            "type": "tower"
+                            "type": "tower",
+                            "hpMult": 0.05
                         },
                         {
                             "x": 430,
                             "y": 248,
                             "team": 3,
-                            "type": "tower"
+                            "type": "tower",
+                            "hpMult": 0.05
                         },
                         {
                             "x": 430,
                             "y": 520,
                             "team": 4,
-                            "type": "tower"
+                            "type": "tower",
+                            "hpMult": 0.05
                         },
                         {
                             "x": 512,
@@ -5510,32 +5719,36 @@
                             "y": 384,
                             "team": 3,
                             "type": "tower",
-                            "orbitNode": 4
+                            "orbitNode": 4,
+                            "hpMult": 0.05
                         },
                         {
                             "x": 768,
                             "y": 384,
                             "team": 2,
-                            "type": "tower"
+                            "type": "tower",
+                            "hpMult": 0.05
                         },
                         {
                             "x": 896,
                             "y": 384,
                             "team": 3,
                             "type": "tower",
-                            "orbitSpeed": -0.1,
-                            "orbitNode": 4
+                            "orbitSpeed/hard": -0.1,
+                            "orbitNode": 4,
+                            "hpMult": 0.05
                         },
                         {
                             "x": 768,
                             "y": 512,
                             "team": 2,
-                            "type": "warp"
+                            "type": "warp",
+                            "hpMult": 0.05
                         }
                     ],
                     "name": "23",
                     "color": "0x0000FF",
-                    "bgm": "bgm05"
+                    "bgm": "bgm04"
                 },
                 {
                     "node": [
@@ -5675,7 +5888,27 @@
                     ],
                     "name": "24",
                     "color": "0x00FF00",
-                    "bgm": "bgm05"
+                    "bgm": "bgm05",
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        },
+                        {
+                            "team": 3,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        },
+                        {
+                            "team": 4,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        }
+                    ]
                 },
                 {
                     "node": [
@@ -5818,6 +6051,26 @@
                     ],
                     "name": "25",
                     "color": "0x00FF00",
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        },
+                        {
+                            "team": 3,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        },
+                        {
+                            "team": 4,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        }
+                    ],
                     "bgm": "bgm05"
                 },
                 {
@@ -5827,8 +6080,9 @@
                             "y": 128,
                             "team": 1,
                             "type": "planet",
-                            "size": 0.7,
-                            "startShips": 1
+                            "size/hard": 0.7,
+                            "size": 0.6,
+                            "startShips/hard": 1
                         },
                         {
                             "x": 128,
@@ -5850,29 +6104,34 @@
                             "y": 127,
                             "team": 4,
                             "type": "tower",
-                            "startShips": 10
+                            "startShips/hard": 10,
+                            "startShips": 30
                         },
                         {
                             "x": 700,
                             "y": 271,
                             "team": 4,
                             "type": "tower",
-                            "startShips": 10
+                            "startShips/hard": 10,
+                            "startShips": 30
                         },
                         {
                             "x": 896,
                             "y": 270,
                             "team": 4,
                             "type": "tower",
-                            "startShips": 10
+                            "startShips/hard": 10,
+                            "startShips": 30
                         },
                         {
                             "x": 896,
                             "y": 128,
                             "team": 4,
                             "type": "planet",
-                            "size": 0.8,
-                            "startShips": 20
+                            "size/hard": 0.8,
+                            "size": 0.6,
+                            "startShips/hard": 20,
+                            "startShips": 60
                         },
                         {
                             "x": 128,
@@ -5887,22 +6146,26 @@
                             "y": 512,
                             "team": 2,
                             "type": "tower",
-                            "startShips": 10
+                            "startShips/hard": 10,
+                            "startShips": 15
                         },
                         {
                             "x": 320,
                             "y": 512,
                             "team": 2,
                             "type": "tower",
-                            "startShips": 10
+                            "startShips/hard": 10,
+                            "startShips": 15
                         },
                         {
                             "x": 896,
                             "y": 640,
                             "team": 3,
                             "type": "planet",
-                            "size": 0.8,
-                            "startShips": 20
+                            "size/hard": 0.8,
+                            "size": 0.6,
+                            "startShips/hard": 20,
+                            "startShips": 60
                         },
                         {
                             "x": 228,
@@ -6011,7 +6274,8 @@
                             "y": 640,
                             "team": 2,
                             "type": "tower",
-                            "startShips": 10
+                            "startShips/hard": 10,
+                            "startShips": 15
                         },
                         {
                             "x": 275,
@@ -6144,7 +6408,8 @@
                             "team": 4,
                             "type": "planet",
                             "size": 0.5,
-                            "startShips": 20
+                            "startShips/hard": 20,
+                            "startShips": 50
                         },
                         {
                             "x": 856,
@@ -6170,14 +6435,16 @@
                             "y": 512,
                             "team": 3,
                             "type": "tower",
-                            "startShips": 10
+                            "startShips/hard": 10,
+                            "startShips": 30
                         },
                         {
                             "x": 704,
                             "y": 640,
                             "team": 3,
                             "type": "tower",
-                            "startShips": 10
+                            "startShips/hard": 10,
+                            "startShips": 30
                         },
                         {
                             "x": 800,
@@ -6185,7 +6452,8 @@
                             "team": 3,
                             "type": "planet",
                             "size": 0.5,
-                            "startShips": 20
+                            "startShips/hard": 20,
+                            "startShips": 50
                         },
                         {
                             "x": 896,
@@ -6233,7 +6501,8 @@
                             "y": 512,
                             "team": 3,
                             "type": "tower",
-                            "startShips": 10
+                            "startShips/hard": 10,
+                            "startShips": 30
                         },
                         {
                             "x": 855,
@@ -6277,10 +6546,30 @@
                     ],
                     "name": "26",
                     "color": "0x00FF00",
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        },
+                        {
+                            "team": 3,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        },
+                        {
+                            "team": 4,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        }
+                    ],
                     "bgm": "bgm05"
                 },
                 {
-                    "node": [
+                    "node/hard": [
                         {
                             "x": 512,
                             "y": 384,
@@ -6461,12 +6750,196 @@
                             "startShips": 15
                         }
                     ],
+                    "node": [
+                        {
+                            "x": 128,
+                            "startShips": 10,
+                            "y": 384,
+                            "type": "planet",
+                            "team": 1
+                        },
+                        {
+                            "x": 128,
+                            "startShips": 10,
+                            "y": 192,
+                            "type": "planet",
+                            "team": 1
+                        },
+                        {
+                            "x": 128,
+                            "startShips": 10,
+                            "y": 576,
+                            "type": "planet",
+                            "team": 1
+                        },
+                        {
+                            "x": 192,
+                            "startShips": 10,
+                            "y": 288,
+                            "type": "planet",
+                            "team": 1
+                        },
+                        {
+                            "x": 192,
+                            "startShips": 10,
+                            "y": 480,
+                            "type": "planet",
+                            "team": 1
+                        },
+                        {
+                            "x": 256,
+                            "startShips": 10,
+                            "y": 192,
+                            "type": "planet",
+                            "team": 1
+                        },
+                        {
+                            "x": 256,
+                            "startShips": 10,
+                            "y": 384,
+                            "type": "planet",
+                            "team": 1
+                        },
+                        {
+                            "x": 256,
+                            "startShips": 10,
+                            "y": 576,
+                            "type": "planet",
+                            "team": 1
+                        },
+                        {
+                            "x": 512,
+                            "y": 128,
+                            "type": "barrier"
+                        },
+                        {
+                            "x": 512,
+                            "y": 256,
+                            "type": "barrier",
+                            "barrierLinks": [
+                                8
+                            ]
+                        },
+                        {
+                            "x": 512,
+                            "y": 512,
+                            "type": "barrier"
+                        },
+                        {
+                            "x": 512,
+                            "y": 640,
+                            "type": "barrier",
+                            "barrierLinks": [
+                                10
+                            ]
+                        },
+                        {
+                            "x": 384,
+                            "startShips": 10,
+                            "y": 192,
+                            "type": "tower",
+                            "team": 6
+                        },
+                        {
+                            "x": 416,
+                            "startShips": 10,
+                            "y": 384,
+                            "type": "tower",
+                            "team": 6
+                        },
+                        {
+                            "x": 384,
+                            "startShips": 10,
+                            "y": 576,
+                            "type": "tower",
+                            "team": 6
+                        },
+                        {
+                            "x": 768,
+                            "startShips": 100,
+                            "y": 384,
+                            "type": "planet",
+                            "size": 0.8,
+                            "team": 3
+                        },
+                        {
+                            "orbitSpeed": 0.1,
+                            "x": 768,
+                            "y": 256,
+                            "type": "starbase",
+                            "orbitNode": 15,
+                            "team": 6
+                        },
+                        {
+                            "orbitSpeed": 0.1,
+                            "x": 896,
+                            "y": 384,
+                            "type": "starbase",
+                            "orbitNode": 15,
+                            "team": 6
+                        },
+                        {
+                            "orbitSpeed": 0.1,
+                            "x": 768,
+                            "y": 512,
+                            "type": "starbase",
+                            "orbitNode": 15,
+                            "team": 6
+                        },
+                        {
+                            "orbitSpeed": 0.1,
+                            "x": 640,
+                            "y": 384,
+                            "type": "starbase",
+                            "orbitNode": 15,
+                            "team": 6
+                        },
+                        {
+                            "x": 896,
+                            "startShips": 80,
+                            "y": 128,
+                            "type": "planet",
+                            "size": 0.8,
+                            "team": 4
+                        },
+                        {
+                            "x": 896,
+                            "startShips": 80,
+                            "y": 640,
+                            "type": "planet",
+                            "size": 0.8,
+                            "team": 2
+                        }
+                    ],
                     "name": "27",
                     "color": "0x00FF00",
+                    "ai/hard": [
+                        {
+                            "team": 7,
+                            "type": "HardAI"
+                        }
+                    ],
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI"
+                        },
+                        {
+                            "team": 3,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI"
+                        },
+                        {
+                            "team": 4,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI"
+                        }
+                    ],
                     "bgm": "bgm05"
                 },
                 {
-                    "node": [
+                    "node/hard": [
                         {
                             "x": 960,
                             "y": 384,
@@ -6693,8 +7166,254 @@
                             "startShips": 50
                         }
                     ],
+                    "node": [
+                        {
+                            "x": 896,
+                            "startShips": 100,
+                            "y": 384,
+                            "type": "starbase",
+                            "team": 4
+                        },
+                        {
+                            "x": 896,
+                            "startShips": 100,
+                            "y": 192,
+                            "type": "starbase",
+                            "team": 4
+                        },
+                        {
+                            "x": 896,
+                            "startShips": 100,
+                            "y": 576,
+                            "type": "starbase",
+                            "team": 4
+                        },
+                        {
+                            "x": 792,
+                            "startShips": 30,
+                            "y": 135,
+                            "type": "tower",
+                            "team": 4
+                        },
+                        {
+                            "x": 704,
+                            "startShips": 30,
+                            "y": 192,
+                            "type": "tower",
+                            "team": 4
+                        },
+                        {
+                            "x": 640,
+                            "startShips": 30,
+                            "y": 292,
+                            "type": "tower",
+                            "team": 4
+                        },
+                        {
+                            "x": 606,
+                            "startShips": 30,
+                            "y": 389,
+                            "type": "tower",
+                            "team": 4
+                        },
+                        {
+                            "x": 640,
+                            "startShips": 30,
+                            "y": 491,
+                            "type": "tower",
+                            "team": 4
+                        },
+                        {
+                            "x": 704,
+                            "startShips": 30,
+                            "y": 576,
+                            "type": "tower",
+                            "team": 4
+                        },
+                        {
+                            "x": 792,
+                            "startShips": 30,
+                            "y": 624,
+                            "type": "tower",
+                            "team": 4
+                        },
+                        {
+                            "x": 786,
+                            "startShips": 40,
+                            "y": 384,
+                            "type": "warp",
+                            "team": 3
+                        },
+                        {
+                            "x": 768,
+                            "startShips": 30,
+                            "y": 256,
+                            "type": "planet",
+                            "team": 4
+                        },
+                        {
+                            "x": 704,
+                            "startShips": 30,
+                            "y": 384,
+                            "type": "planet",
+                            "team": 4
+                        },
+                        {
+                            "x": 768,
+                            "startShips": 30,
+                            "y": 512,
+                            "type": "planet",
+                            "team": 4
+                        },
+                        {
+                            "x": 512,
+                            "y": 145,
+                            "type": "tower"
+                        },
+                        {
+                            "x": 512,
+                            "y": 273,
+                            "type": "tower"
+                        },
+                        {
+                            "x": 512,
+                            "y": 384,
+                            "type": "tower"
+                        },
+                        {
+                            "x": 512,
+                            "y": 495,
+                            "type": "tower"
+                        },
+                        {
+                            "x": 512,
+                            "y": 623,
+                            "type": "tower"
+                        },
+                        {
+                            "x": 164,
+                            "startShips": 100,
+                            "y": 384,
+                            "type": "starbase",
+                            "team": 1
+                        },
+                        {
+                            "x": 64,
+                            "y": 384,
+                            "type": "warp"
+                        },
+                        {
+                            "x": 256,
+                            "y": 286,
+                            "type": "tower"
+                        },
+                        {
+                            "x": 320,
+                            "y": 384,
+                            "type": "tower"
+                        },
+                        {
+                            "x": 256,
+                            "y": 485,
+                            "type": "tower"
+                        },
+                        {
+                            "x": 192,
+                            "y": 192,
+                            "type": "barrier"
+                        },
+                        {
+                            "x": 256,
+                            "y": 192,
+                            "type": "planet",
+                            "orbitSpeed": -0.1,
+                            "orbitNode": 24
+                        },
+                        {
+                            "x": 192,
+                            "y": 128,
+                            "type": "planet",
+                            "orbitSpeed": -0.1,
+                            "orbitNode": 24
+                        },
+                        {
+                            "x": 192,
+                            "y": 256,
+                            "type": "planet",
+                            "orbitSpeed": -0.1,
+                            "orbitNode": 24
+                        },
+                        {
+                            "x": 192,
+                            "y": 576,
+                            "type": "barrier"
+                        },
+                        {
+                            "orbitSpeed": 0.1,
+                            "x": 256,
+                            "y": 576,
+                            "type": "planet",
+                            "orbitNode": 28
+                        },
+                        {
+                            "orbitSpeed": 0.1,
+                            "x": 192,
+                            "y": 512,
+                            "type": "planet",
+                            "orbitNode": 28
+                        },
+                        {
+                            "orbitSpeed": 0.1,
+                            "x": 128,
+                            "y": 576,
+                            "type": "planet",
+                            "orbitNode": 28
+                        },
+                        {
+                            "orbitSpeed": 0.1,
+                            "x": 192,
+                            "y": 640,
+                            "type": "planet",
+                            "orbitNode": 28
+                        },
+                        {
+                            "x": 421,
+                            "startShips": 30,
+                            "y": 298,
+                            "type": "tower",
+                            "team": 4
+                        },
+                        {
+                            "x": 421,
+                            "startShips": 30,
+                            "y": 472,
+                            "type": "tower",
+                            "team": 4
+                        },
+                        {
+                            "x": 128,
+                            "y": 192,
+                            "type": "planet",
+                            "orbitSpeed": -0.1,
+                            "orbitNode": 24
+                        }
+                    ],
                     "name": "28",
                     "color": "0xFFFF00",
+                    "ai": [
+                        {
+                            "team": 3,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        },
+                        {
+                            "team": 4,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        }
+                    ],
                     "bgm": "bgm05"
                 },
                 {
@@ -6943,6 +7662,32 @@
                     ],
                     "name": "29",
                     "color": "0x0000FF",
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        },
+                        {
+                            "team": 3,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        },
+                        {
+                            "team": 4,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        },
+                        {
+                            "team": 7,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        }
+                    ],
                     "bgm": "bgm05"
                 },
                 {
@@ -6989,6 +7734,32 @@
                     ],
                     "name": "30",
                     "color": "0x00FF00",
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        },
+                        {
+                            "team": 3,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        },
+                        {
+                            "team": 4,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        },
+                        {
+                            "team": 7,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        }
+                    ],
                     "bgm": "bgm05"
                 },
                 {
@@ -7143,6 +7914,14 @@
                     ],
                     "name": "31",
                     "color": "0x0000FF",
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        }
+                    ],
                     "bgm": "bgm05"
                 },
                 {
@@ -7153,7 +7932,6 @@
                             "type": "dilator"
                         },
                         {
-                            "orbitSpeed": 0.1,
                             "x": 896,
                             "y": 272,
                             "team": 5,
@@ -7162,7 +7940,6 @@
                             "startShips": 30
                         },
                         {
-                            "orbitSpeed": 0.1,
                             "x": 896,
                             "y": 496,
                             "team": 5,
@@ -7171,7 +7948,6 @@
                             "startShips": 30
                         },
                         {
-                            "orbitSpeed": 0.1,
                             "x": 992,
                             "y": 328,
                             "team": 5,
@@ -7180,7 +7956,6 @@
                             "startShips": 30
                         },
                         {
-                            "orbitSpeed": 0.1,
                             "x": 800,
                             "y": 328,
                             "team": 5,
@@ -7193,10 +7968,9 @@
                             "y": 384,
                             "team": 1,
                             "type": "starbase",
-                            "startShips": 1
+                            "startShips/hard": 1
                         },
                         {
-                            "orbitSpeed": 0.1,
                             "x": 800,
                             "y": 440,
                             "team": 5,
@@ -7205,7 +7979,6 @@
                             "startShips": 30
                         },
                         {
-                            "orbitSpeed": 0.1,
                             "x": 992,
                             "y": 440,
                             "team": 5,
@@ -7218,28 +7991,32 @@
                             "y": 160,
                             "team": 2,
                             "type": "starbase",
-                            "startShips": 10
+                            "startShips/hard": 10,
+                            "startShips": 70
                         },
                         {
                             "x": 706,
                             "y": 311,
                             "team": 2,
                             "type": "starbase",
-                            "startShips": 10
+                            "startShips/hard": 10,
+                            "startShips": 70
                         },
                         {
                             "x": 318,
                             "y": 462,
                             "team": 4,
                             "type": "starbase",
-                            "startShips": 10
+                            "startShips/hard": 10,
+                            "startShips": 70
                         },
                         {
                             "x": 706,
                             "y": 613,
                             "team": 4,
                             "type": "starbase",
-                            "startShips": 10
+                            "startShips/hard": 10,
+                            "startShips": 70
                         },
                         {
                             "x": 308,
@@ -7265,7 +8042,7 @@
                             "team": 2,
                             "type": "planet",
                             "size": 0.4,
-                            "startShips": 30
+                            "startShips/hard": 30
                         },
                         {
                             "x": 706,
@@ -7273,7 +8050,8 @@
                             "team": 2,
                             "type": "planet",
                             "size": 0.6,
-                            "startShips": 50
+                            "startShips/hard": 50,
+                            "startShips": 60
                         },
                         {
                             "x": 318,
@@ -7281,7 +8059,8 @@
                             "team": 2,
                             "type": "planet",
                             "size": 0.6,
-                            "startShips": 50
+                            "startShips/hard": 50,
+                            "startShips": 60
                         },
                         {
                             "x": 309,
@@ -7298,7 +8077,7 @@
                             "y": 160,
                             "team": 2,
                             "type": "planet",
-                            "startShips": 20
+                            "startShips/hard": 20
                         },
                         {
                             "x": 609,
@@ -7306,14 +8085,14 @@
                             "team": 2,
                             "type": "planet",
                             "size": 0.5,
-                            "startShips": 40
+                            "startShips/hard": 40
                         },
                         {
                             "x": 609,
                             "y": 311,
                             "team": 2,
                             "type": "planet",
-                            "startShips": 20
+                            "startShips/hard": 20
                         },
                         {
                             "x": 512,
@@ -7321,7 +8100,7 @@
                             "team": 2,
                             "type": "planet",
                             "size": 0.4,
-                            "startShips": 30
+                            "startShips/hard": 30
                         },
                         {
                             "x": 415,
@@ -7329,7 +8108,7 @@
                             "team": 2,
                             "type": "planet",
                             "size": 0.5,
-                            "startShips": 40
+                            "startShips/hard": 40
                         },
                         {
                             "x": 469,
@@ -7353,7 +8132,8 @@
                             "team": 4,
                             "type": "planet",
                             "size": 0.6,
-                            "startShips": 50
+                            "startShips/hard": 50,
+                            "startShips": 60
                         },
                         {
                             "x": 609,
@@ -7361,7 +8141,7 @@
                             "team": 4,
                             "type": "planet",
                             "size": 0.5,
-                            "startShips": 40
+                            "startShips/hard": 40
                         },
                         {
                             "x": 512,
@@ -7369,14 +8149,14 @@
                             "team": 4,
                             "type": "planet",
                             "size": 0.4,
-                            "startShips": 30
+                            "startShips/hard": 30
                         },
                         {
                             "x": 415,
                             "y": 462,
                             "team": 4,
                             "type": "planet",
-                            "startShips": 20
+                            "startShips/hard": 20
                         },
                         {
                             "x": 629,
@@ -7418,7 +8198,8 @@
                             "team": 4,
                             "type": "planet",
                             "size": 0.6,
-                            "startShips": 50
+                            "startShips/hard": 50,
+                            "startShips": 60
                         },
                         {
                             "x": 415,
@@ -7426,7 +8207,7 @@
                             "team": 4,
                             "type": "planet",
                             "size": 0.5,
-                            "startShips": 40
+                            "startShips/hard": 40
                         },
                         {
                             "x": 512,
@@ -7434,14 +8215,14 @@
                             "team": 4,
                             "type": "planet",
                             "size": 0.4,
-                            "startShips": 30
+                            "startShips/hard": 30
                         },
                         {
                             "x": 609,
                             "y": 613,
                             "team": 4,
                             "type": "planet",
-                            "startShips": 20
+                            "startShips/hard": 20
                         },
                         {
                             "x": 896,
@@ -7459,8 +8240,46 @@
                         }
                     ],
                     "name": "32",
+                    "specialEvents": [
+                        {
+                            "type": "DarknessFalls",
+                            "trigger": {
+                                "nodeTag": 0,
+                                "targetTeam": 6
+                            }
+                        }
+                    ],
+                    "victoryCondition": {
+                        "type": "None"
+                    },
                     "color": "0xFFAAAA",
-                    "bgm": "bgm06"
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        },
+                        {
+                            "team": 3,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        },
+                        {
+                            "team": 4,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        },
+                        {
+                            "team": 7,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        }
+                    ],
+                    "bgm": "bgm05"
                 },
                 {
                     "node": [
@@ -7700,7 +8519,45 @@
                         }
                     ],
                     "name": "33",
+                    "specialEvents": [
+                        {
+                            "type": "BossAppear",
+                            "trigger": {
+                                "ships": 220,
+                                "node": {
+                                    "x": 512,
+                                    "y": 384,
+                                    "type": "dilator",
+                                    "team": 6,
+                                    "startShips": 350,
+                                    "popVal": 0,
+                                    "isUntouchable": true,
+                                    "isAIinvisible": true
+                                },
+                                "ai": {
+                                    "team": 6,
+                                    "type": "DarkAI",
+                                    "type/hard": "HardAI",
+                                    "startDelay": 0
+                                }
+                            }
+                        }
+                    ],
                     "color": "0x00FF00",
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        },
+                        {
+                            "team": 3,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        }
+                    ],
                     "bgm": "bgm06"
                 },
                 {
@@ -7739,7 +8596,6 @@
                             "orbitNode": 0
                         },
                         {
-                            "orbitSpeed": 0.1,
                             "x": 512,
                             "y": 208,
                             "team": 4,
@@ -7749,7 +8605,6 @@
                             "startShips": 55
                         },
                         {
-                            "orbitSpeed": 0.1,
                             "x": 512,
                             "y": 560,
                             "team": 4,
@@ -7759,7 +8614,6 @@
                             "startShips": 55
                         },
                         {
-                            "orbitSpeed": 0.1,
                             "x": 336,
                             "y": 384,
                             "team": 4,
@@ -7769,7 +8623,6 @@
                             "startShips": 55
                         },
                         {
-                            "orbitSpeed": 0.1,
                             "x": 688,
                             "y": 384,
                             "team": 4,
@@ -7784,7 +8637,7 @@
                             "team": 1,
                             "type": "planet",
                             "size": 0.6,
-                            "startShips": 20
+                            "startShips/hard": 20
                         },
                         {
                             "x": 808,
@@ -7792,7 +8645,8 @@
                             "team": 2,
                             "type": "planet",
                             "size": 0.6,
-                            "startShips": 40
+                            "startShips/hard": 40,
+                            "startShips": 30
                         },
                         {
                             "x": 128,
@@ -7801,7 +8655,8 @@
                             "type": "planet",
                             "orbitSpeed": -0.1,
                             "orbitNode": 9,
-                            "startShips": 25
+                            "startShips/hard": 25,
+                            "startShips": 30
                         },
                         {
                             "x": 128,
@@ -7817,16 +8672,17 @@
                             "type": "planet",
                             "orbitSpeed": -0.1,
                             "orbitNode": 9,
-                            "startShips": 25
+                            "startShips/hard": 25,
+                            "startShips": 30
                         },
                         {
                             "x": 304,
                             "y": 296,
-                            "team": 1,
+                            "team/hard": 1,
                             "type": "tower",
                             "orbitSpeed": -0.1,
                             "orbitNode": 9,
-                            "startShips": 15
+                            "startShips/hard": 15
                         },
                         {
                             "x": 720,
@@ -7842,7 +8698,8 @@
                             "type": "planet",
                             "orbitSpeed": -0.1,
                             "orbitNode": 10,
-                            "startShips": 50
+                            "startShips/hard": 50,
+                            "startShips": 30
                         },
                         {
                             "x": 896,
@@ -7851,20 +8708,62 @@
                             "type": "planet",
                             "orbitSpeed": -0.1,
                             "orbitNode": 10,
-                            "startShips": 50
+                            "startShips/hard": 50,
+                            "startShips": 30
                         },
                         {
                             "x": 896,
                             "y": 472,
-                            "team": 2,
+                            "team/hard": 2,
                             "type": "tower",
                             "orbitSpeed": -0.1,
                             "orbitNode": 10,
-                            "startShips": 30
+                            "startShips/hard": 30
                         }
                     ],
                     "name": "34",
+                    "specialEvents": [
+                        {
+                            "type": "BossAppear",
+                            "trigger": {
+                                "ships": 220,
+                                "node": {
+                                    "x": 512,
+                                    "y": 384,
+                                    "type": "dilator",
+                                    "team": 6,
+                                    "startShips": 320,
+                                    "startShips/hard": 350,
+                                    "popVal": 0,
+                                    "isUntouchable": true,
+                                    "isAIinvisible": true
+                                },
+                                "ai": {
+                                    "team": 6,
+                                    "type": "DarkAI"
+                                },
+                                "ai/hard": {
+                                    "team": 6,
+                                    "type": "HardAI"
+                                }
+                            }
+                        }
+                    ],
                     "color": "0x00FF00",
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        },
+                        {
+                            "team": 4,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        }
+                    ],
                     "bgm": "bgm06"
                 },
                 {
@@ -7879,28 +8778,32 @@
                             "y": 349,
                             "team": 1,
                             "type": "planet",
-                            "startShips": 10
+                            "startShips/hard": 10,
+                            "startShips": 15
                         },
                         {
                             "x": 544,
                             "y": 350,
                             "team": 1,
                             "type": "planet",
-                            "startShips": 10
+                            "startShips/hard": 10,
+                            "startShips": 15
                         },
                         {
                             "x": 478,
                             "y": 420,
-                            "team": 1,
+                            "team/hard": 1,
                             "type": "planet",
-                            "startShips": 10
+                            "startShips/hard": 10,
+                            "startShips": 5
                         },
                         {
                             "x": 545,
                             "y": 419,
-                            "team": 1,
+                            "team/hard": 1,
                             "type": "planet",
-                            "startShips": 10
+                            "startShips/hard": 10,
+                            "startShips": 5
                         },
                         {
                             "x": 438,
@@ -7983,21 +8886,22 @@
                         {
                             "x": 320,
                             "y": 384,
-                            "team": 1,
+                            "team/hard": 1,
                             "type": "warp"
                         },
                         {
                             "x": 704,
                             "y": 384,
-                            "team": 1,
+                            "team/hard": 1,
                             "type": "warp"
                         },
                         {
                             "x": 512,
                             "y": 468,
-                            "team": 1,
+                            "team/hard": 1,
                             "type": "planet",
-                            "startShips": 10
+                            "startShips/hard": 10,
+                            "startShips": 5
                         },
                         {
                             "x": 320,
@@ -8033,11 +8937,52 @@
                         }
                     ],
                     "name": "35",
+                    "specialEvents": [
+                        {
+                            "type": "BossAppear",
+                            "trigger": {
+                                "ships": 220,
+                                "node": {
+                                    "x": 512,
+                                    "y": 384,
+                                    "type": "dilator",
+                                    "team": 6,
+                                    "startShips": 350,
+                                    "startShips/hard": 400,
+                                    "popVal": 0,
+                                    "isUntouchable": true,
+                                    "isAIinvisible": true
+                                },
+                                "ai": {
+                                    "team": 6,
+                                    "type": "DarkAI"
+                                },
+                                "ai/hard": {
+                                    "team": 6,
+                                    "type": "HardAI"
+                                }
+                            }
+                        }
+                    ],
                     "color": "0xFF0000",
+                    "ai": [
+                        {
+                            "team": 3,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        },
+                        {
+                            "team": 4,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        }
+                    ],
                     "bgm": "bgm06"
                 },
                 {
-                    "node": [
+                    "node/hard": [
                         {
                             "x": 512,
                             "y": 384,
@@ -8454,8 +9399,435 @@
                             "type": "planet"
                         }
                     ],
+                    "node": [
+                        {
+                            "x": 512,
+                            "startShips": 150,
+                            "y": 384,
+                            "type": "dilator",
+                            "team": 6
+                        },
+                        {
+                            "orbitSpeed": 0.1,
+                            "x": 512,
+                            "y": 272,
+                            "type": "tower",
+                            "orbitNode": 0,
+                            "team": 6
+                        },
+                        {
+                            "orbitSpeed": 0.1,
+                            "x": 512,
+                            "y": 496,
+                            "type": "tower",
+                            "orbitNode": 0,
+                            "team": 6
+                        },
+                        {
+                            "orbitSpeed": 0.1,
+                            "x": 608,
+                            "y": 328,
+                            "type": "tower",
+                            "orbitNode": 0,
+                            "team": 6
+                        },
+                        {
+                            "orbitSpeed": 0.1,
+                            "x": 416,
+                            "y": 328,
+                            "type": "tower",
+                            "orbitNode": 0,
+                            "team": 6
+                        },
+                        {
+                            "orbitSpeed": 0.1,
+                            "x": 416,
+                            "y": 440,
+                            "type": "tower",
+                            "orbitNode": 0,
+                            "team": 6
+                        },
+                        {
+                            "orbitSpeed": 0.1,
+                            "x": 608,
+                            "y": 440,
+                            "type": "tower",
+                            "orbitNode": 0,
+                            "team": 6
+                        },
+                        {
+                            "x": 896,
+                            "y": 192,
+                            "type": "planet",
+                            "team": 6
+                        },
+                        {
+                            "x": 128,
+                            "y": 576,
+                            "type": "planet",
+                            "team": 6
+                        },
+                        {
+                            "x": 256,
+                            "y": 576,
+                            "type": "planet",
+                            "team": 6
+                        },
+                        {
+                            "x": 192,
+                            "y": 640,
+                            "type": "planet",
+                            "team": 6
+                        },
+                        {
+                            "x": 64,
+                            "y": 512,
+                            "type": "barrier"
+                        },
+                        {
+                            "x": 192,
+                            "y": 512,
+                            "type": "barrier",
+                            "barrierLinks": [
+                                11
+                            ]
+                        },
+                        {
+                            "x": 320,
+                            "y": 512,
+                            "type": "barrier",
+                            "barrierLinks": [
+                                12
+                            ]
+                        },
+                        {
+                            "x": 320,
+                            "y": 640,
+                            "type": "barrier",
+                            "barrierLinks": [
+                                13
+                            ]
+                        },
+                        {
+                            "x": 192,
+                            "startShips": 40,
+                            "y": 576,
+                            "type": "warp",
+                            "team": 7
+                        },
+                        {
+                            "x": 960,
+                            "y": 512,
+                            "type": "barrier"
+                        },
+                        {
+                            "x": 832,
+                            "y": 512,
+                            "type": "barrier",
+                            "barrierLinks": [
+                                16
+                            ]
+                        },
+                        {
+                            "x": 704,
+                            "y": 512,
+                            "type": "barrier",
+                            "barrierLinks": [
+                                17
+                            ]
+                        },
+                        {
+                            "x": 704,
+                            "y": 640,
+                            "type": "barrier",
+                            "barrierLinks": [
+                                18
+                            ]
+                        },
+                        {
+                            "x": 768,
+                            "y": 576,
+                            "type": "planet",
+                            "team": 6
+                        },
+                        {
+                            "x": 832,
+                            "y": 640,
+                            "type": "planet",
+                            "team": 6
+                        },
+                        {
+                            "x": 896,
+                            "y": 576,
+                            "type": "planet",
+                            "team": 6
+                        },
+                        {
+                            "x": 832,
+                            "startShips": 40,
+                            "y": 576,
+                            "type": "warp",
+                            "team": 7
+                        },
+                        {
+                            "x": 832,
+                            "y": 128,
+                            "type": "planet",
+                            "team": 6
+                        },
+                        {
+                            "x": 768,
+                            "y": 192,
+                            "type": "planet",
+                            "team": 6
+                        },
+                        {
+                            "x": 704,
+                            "y": 128,
+                            "type": "barrier"
+                        },
+                        {
+                            "x": 704,
+                            "y": 256,
+                            "type": "barrier",
+                            "barrierLinks": [
+                                26
+                            ]
+                        },
+                        {
+                            "x": 832,
+                            "y": 256,
+                            "type": "barrier",
+                            "barrierLinks": [
+                                27
+                            ]
+                        },
+                        {
+                            "x": 960,
+                            "y": 256,
+                            "type": "barrier",
+                            "barrierLinks": [
+                                28
+                            ]
+                        },
+                        {
+                            "x": 320,
+                            "y": 256,
+                            "type": "barrier"
+                        },
+                        {
+                            "x": 320,
+                            "y": 128,
+                            "type": "barrier",
+                            "barrierLinks": [
+                                30
+                            ]
+                        },
+                        {
+                            "x": 192,
+                            "y": 256,
+                            "type": "barrier",
+                            "barrierLinks": [
+                                30
+                            ]
+                        },
+                        {
+                            "x": 64,
+                            "y": 256,
+                            "type": "barrier",
+                            "barrierLinks": [
+                                32
+                            ]
+                        },
+                        {
+                            "x": 128,
+                            "y": 192,
+                            "type": "planet",
+                            "team": 6
+                        },
+                        {
+                            "x": 256,
+                            "y": 192,
+                            "type": "planet",
+                            "team": 6
+                        },
+                        {
+                            "x": 192,
+                            "y": 128,
+                            "type": "planet",
+                            "team": 6
+                        },
+                        {
+                            "x": 192,
+                            "startShips": 40,
+                            "y": 192,
+                            "type": "warp",
+                            "team": 7
+                        },
+                        {
+                            "x": 832,
+                            "startShips": 40,
+                            "y": 192,
+                            "type": "warp",
+                            "team": 7
+                        },
+                        {
+                            "x": 64,
+                            "startShips": 1,
+                            "y": 384,
+                            "type": "starbase",
+                            "team": 1
+                        },
+                        {
+                            "x": 960,
+                            "startShips": 100,
+                            "y": 384,
+                            "type": "starbase",
+                            "team": 3
+                        },
+                        {
+                            "x": 512,
+                            "startShips": 120,
+                            "y": 128,
+                            "type": "starbase",
+                            "team": 4
+                        },
+                        {
+                            "x": 512,
+                            "startShips": 120,
+                            "y": 640,
+                            "type": "starbase",
+                            "team": 2
+                        },
+                        {
+                            "x": 192,
+                            "y": 320,
+                            "type": "planet",
+                            "size": 0.4
+                        },
+                        {
+                            "x": 320,
+                            "y": 320,
+                            "type": "planet",
+                            "size": 0.4
+                        },
+                        {
+                            "x": 192,
+                            "y": 448,
+                            "type": "planet",
+                            "size": 0.4
+                        },
+                        {
+                            "x": 320,
+                            "y": 448,
+                            "type": "planet",
+                            "size": 0.4
+                        },
+                        {
+                            "x": 704,
+                            "y": 320,
+                            "type": "planet",
+                            "size": 0.4
+                        },
+                        {
+                            "x": 704,
+                            "y": 448,
+                            "type": "planet",
+                            "size": 0.4
+                        },
+                        {
+                            "x": 832,
+                            "y": 448,
+                            "type": "planet",
+                            "size": 0.4
+                        },
+                        {
+                            "x": 832,
+                            "y": 320,
+                            "type": "planet",
+                            "size": 0.4
+                        },
+                        {
+                            "x": 384,
+                            "y": 192,
+                            "type": "planet",
+                            "size": 0.6
+                        },
+                        {
+                            "x": 512,
+                            "y": 192,
+                            "type": "planet",
+                            "size": 0.4
+                        },
+                        {
+                            "x": 640,
+                            "y": 192,
+                            "type": "planet",
+                            "size": 0.6
+                        },
+                        {
+                            "x": 384,
+                            "y": 576,
+                            "type": "planet",
+                            "size": 0.6
+                        },
+                        {
+                            "x": 512,
+                            "y": 576,
+                            "type": "planet",
+                            "size": 0.4
+                        },
+                        {
+                            "x": 640,
+                            "y": 576,
+                            "type": "planet",
+                            "size": 0.6
+                        }
+                    ],
                     "name": "36",
+                    "victoryCondition": {
+                        "type": "None"
+                    },
+                    "specialEvents": [
+                        {
+                            "type": "GameEnd",
+                            "trigger": {
+                                "nodeTag": 0
+                            }
+                        }
+                    ],
                     "color": "0xFFFF00",
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        },
+                        {
+                            "team": 3,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        },
+                        {
+                            "team": 4,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        },
+                        {
+                            "team": 6,
+                            "type": "FinalAI",
+                            "type/hard": "HardAI"
+                        },
+                        {
+                            "team": 7,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        }
+                    ],
                     "bgm": "bgm06"
                 },
                 {
@@ -8466,49 +9838,49 @@
                             "type": "barrier"
                         },
                         {
-                            "orbitSpeed": 0.1,
                             "x": 428,
                             "y": 329,
                             "team": 1,
                             "type": "planet",
                             "orbitNode": 0,
-                            "startShips": 15
+                            "startShips/hard": 15,
+                            "startShips": 5
                         },
                         {
-                            "orbitSpeed": 0.1,
                             "x": 428,
                             "y": 436,
                             "team": 1,
                             "type": "planet",
                             "orbitNode": 0,
-                            "startShips": 15
+                            "startShips/hard": 15,
+                            "startShips": 5
                         },
                         {
-                            "orbitSpeed": 0.1,
                             "x": 512,
                             "y": 485,
                             "team": 1,
                             "type": "planet",
                             "orbitNode": 0,
-                            "startShips": 15
+                            "startShips/hard": 15,
+                            "startShips": 5
                         },
                         {
-                            "orbitSpeed": 0.1,
                             "x": 596,
                             "y": 329,
                             "team": 1,
                             "type": "planet",
                             "orbitNode": 0,
-                            "startShips": 15
+                            "startShips/hard": 15,
+                            "startShips": 5
                         },
                         {
-                            "orbitSpeed": 0.1,
                             "x": 596,
                             "y": 436,
                             "team": 1,
                             "type": "planet",
                             "orbitNode": 0,
-                            "startShips": 15
+                            "startShips/hard": 15,
+                            "startShips": 5
                         },
                         {
                             "x": 896,
@@ -8533,14 +9905,12 @@
                         {
                             "x": 512,
                             "y": 576,
-                            "type": "starbase",
-                            "size": 0.5
+                            "type": "starbase"
                         },
                         {
                             "x": 512,
                             "y": 192,
-                            "type": "starbase",
-                            "size": 0.5
+                            "type": "starbase"
                         },
                         {
                             "x": 768,
@@ -8553,7 +9923,8 @@
                             "team": 6,
                             "type": "planet",
                             "size": 1.1,
-                            "startShips": 50
+                            "startShips/hard": 50,
+                            "startShips": 70
                         },
                         {
                             "x": 64,
@@ -8561,7 +9932,8 @@
                             "team": 6,
                             "type": "planet",
                             "size": 1.1,
-                            "startShips": 50
+                            "startShips/hard": 50,
+                            "startShips": 70
                         },
                         {
                             "x": 320,
@@ -8569,40 +9941,44 @@
                             "type": "barrier"
                         },
                         {
-                            "orbitSpeed": 0.5,
+                            "orbitSpeed/hard": 0.5,
                             "x": 320,
                             "y": 256,
                             "team": 2,
                             "type": "planet",
                             "orbitNode": 15,
-                            "startShips": 40
+                            "startShips/hard": 40,
+                            "startShips": 30
                         },
                         {
-                            "orbitSpeed": 0.5,
+                            "orbitSpeed/hard": 0.5,
                             "x": 384,
                             "y": 192,
                             "team": 2,
                             "type": "planet",
                             "orbitNode": 15,
-                            "startShips": 40
+                            "startShips/hard": 40,
+                            "startShips": 30
                         },
                         {
-                            "orbitSpeed": 0.5,
+                            "orbitSpeed/hard": 0.5,
                             "x": 320,
                             "y": 128,
                             "team": 2,
                             "type": "planet",
                             "orbitNode": 15,
-                            "startShips": 40
+                            "startShips/hard": 40,
+                            "startShips": 30
                         },
                         {
-                            "orbitSpeed": 0.5,
+                            "orbitSpeed/hard": 0.5,
                             "x": 256,
                             "y": 192,
                             "team": 2,
                             "type": "planet",
                             "orbitNode": 15,
-                            "startShips": 40
+                            "startShips/hard": 40,
+                            "startShips": 30
                         },
                         {
                             "x": 128,
@@ -8615,40 +9991,44 @@
                             "type": "barrier"
                         },
                         {
-                            "orbitSpeed": 0.5,
+                            "orbitSpeed/hard": 0.5,
                             "x": 704,
                             "y": 128,
                             "team": 3,
                             "type": "planet",
                             "orbitNode": 21,
-                            "startShips": 40
+                            "startShips/hard": 40,
+                            "startShips": 30
                         },
                         {
-                            "orbitSpeed": 0.5,
+                            "orbitSpeed/hard": 0.5,
                             "x": 768,
                             "y": 192,
                             "team": 3,
                             "type": "planet",
                             "orbitNode": 21,
-                            "startShips": 40
+                            "startShips/hard": 40,
+                            "startShips": 30
                         },
                         {
-                            "orbitSpeed": 0.5,
+                            "orbitSpeed/hard": 0.5,
                             "x": 704,
                             "y": 256,
                             "team": 3,
                             "type": "planet",
                             "orbitNode": 21,
-                            "startShips": 40
+                            "startShips/hard": 40,
+                            "startShips": 30
                         },
                         {
-                            "orbitSpeed": 0.5,
+                            "orbitSpeed/hard": 0.5,
                             "x": 640,
                             "y": 192,
                             "team": 3,
                             "type": "planet",
                             "orbitNode": 21,
-                            "startShips": 40
+                            "startShips/hard": 40,
+                            "startShips": 30
                         },
                         {
                             "x": 320,
@@ -8656,40 +10036,44 @@
                             "type": "barrier"
                         },
                         {
-                            "orbitSpeed": 0.5,
+                            "orbitSpeed/hard": 0.5,
                             "x": 320,
                             "y": 512,
                             "team": 7,
                             "type": "planet",
                             "orbitNode": 26,
-                            "startShips": 40
+                            "startShips/hard": 40,
+                            "startShips": 30
                         },
                         {
-                            "orbitSpeed": 0.5,
+                            "orbitSpeed/hard": 0.5,
                             "x": 384,
                             "y": 576,
                             "team": 7,
                             "type": "planet",
                             "orbitNode": 26,
-                            "startShips": 40
+                            "startShips/hard": 40,
+                            "startShips": 30
                         },
                         {
-                            "orbitSpeed": 0.5,
+                            "orbitSpeed/hard": 0.5,
                             "x": 320,
                             "y": 640,
                             "team": 7,
                             "type": "planet",
                             "orbitNode": 26,
-                            "startShips": 40
+                            "startShips/hard": 40,
+                            "startShips": 30
                         },
                         {
-                            "orbitSpeed": 0.5,
+                            "orbitSpeed/hard": 0.5,
                             "x": 256,
                             "y": 576,
                             "team": 7,
                             "type": "planet",
                             "orbitNode": 26,
-                            "startShips": 40
+                            "startShips/hard": 40,
+                            "startShips": 30
                         },
                         {
                             "x": 704,
@@ -8697,40 +10081,44 @@
                             "type": "barrier"
                         },
                         {
-                            "orbitSpeed": 0.5,
+                            "orbitSpeed/hard": 0.5,
                             "x": 704,
                             "y": 512,
                             "team": 4,
                             "type": "planet",
                             "orbitNode": 31,
-                            "startShips": 40
+                            "startShips/hard": 40,
+                            "startShips": 30
                         },
                         {
-                            "orbitSpeed": 0.5,
+                            "orbitSpeed/hard": 0.5,
                             "x": 768,
                             "y": 576,
                             "team": 4,
                             "type": "planet",
                             "orbitNode": 31,
-                            "startShips": 40
+                            "startShips/hard": 40,
+                            "startShips": 30
                         },
                         {
-                            "orbitSpeed": 0.5,
+                            "orbitSpeed/hard": 0.5,
                             "x": 704,
                             "y": 640,
                             "team": 4,
                             "type": "planet",
                             "orbitNode": 31,
-                            "startShips": 40
+                            "startShips/hard": 40,
+                            "startShips": 30
                         },
                         {
-                            "orbitSpeed": 0.5,
+                            "orbitSpeed/hard": 0.5,
                             "x": 640,
                             "y": 576,
                             "team": 4,
                             "type": "planet",
                             "orbitNode": 31,
-                            "startShips": 40
+                            "startShips/hard": 40,
+                            "startShips": 30
                         },
                         {
                             "x": 319,
@@ -8793,17 +10181,48 @@
                             ]
                         },
                         {
-                            "orbitSpeed": 0.1,
                             "x": 512,
                             "y": 283,
                             "team": 1,
                             "type": "planet",
                             "orbitNode": 0,
-                            "startShips": 15
+                            "startShips/hard": 15,
+                            "startShips": 5
                         }
                     ],
                     "name": "37",
                     "color": "0x00FF00",
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        },
+                        {
+                            "team": 3,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        },
+                        {
+                            "team": 4,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        },
+                        {
+                            "team": 6,
+                            "type": "FinalAI",
+                            "type/hard": "HardAI"
+                        },
+                        {
+                            "team": 7,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        }
+                    ],
                     "bgm": "bgm06"
                 },
                 {
@@ -9158,6 +10577,32 @@
                     ],
                     "name": "38",
                     "color": "0x00FF00",
+                    "ai": [
+                        {
+                            "team": 2,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        },
+                        {
+                            "team": 3,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        },
+                        {
+                            "team": 4,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        },
+                        {
+                            "team": 7,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
+                        }
+                    ],
                     "bgm": "bgm06"
                 },
                 {
@@ -17502,7 +18947,8 @@
                     "name": "16",
                     "color": "0x00FF00",
                     "color/hard": "0xFFFF00",
-                    "bgm": "bgm04"
+                    "bgm": "bgm04",
+                    "gameScale": 0.9
                 },
                 {
                     "node": [
@@ -20882,7 +22328,7 @@
                                     "y": 384,
                                     "type": "dilator",
                                     "team": 6,
-                                    "startShips": 350,
+                                    "startShips": 425,
                                     "startShips/hard": 275,
                                     "popVal": 0,
                                     "isUntouchable": true,
@@ -21228,12 +22674,14 @@
                             "type": "BossAppear",
                             "trigger": {
                                 "ships": 220,
+                                "ships/hard": 188,
                                 "node": {
                                     "x": 512,
                                     "y": 384,
                                     "type": "dilator",
                                     "team": 6,
-                                    "startShips": 350,
+                                    "startShips": 588,
+                                    "startShips/hard": 875,
                                     "popVal": 0,
                                     "isUntouchable": true,
                                     "isAIinvisible": true
@@ -21649,8 +23097,8 @@
                                     "y": 384,
                                     "type": "dilator",
                                     "team": 6,
-                                    "startShips": 250,
-                                    "startShips/hard": 325,
+                                    "startShips": 350,
+                                    "startShips/hard": 500,
                                     "popVal": 0,
                                     "isUntouchable": true,
                                     "isAIinvisible": true
@@ -21673,8 +23121,8 @@
                                     "y": 384,
                                     "type": "dilator",
                                     "team": 6,
-                                    "startShips": 250,
-                                    "startShips/hard": 325,
+                                    "startShips": 350,
+                                    "startShips/hard": 500,
                                     "popVal": 0,
                                     "isUntouchable": true,
                                     "isAIinvisible": true
@@ -21722,7 +23170,7 @@
                     "name": "35",
                     "color/easy": "0x00FF00",
                     "color/normal": "0x0000FF",
-                    "color": "0xFFFF00",
+                    "color": "0xFF0000",
                     "bgm": "bgm06",
                     "gameScale": 0.85
                 },
@@ -21731,6 +23179,8 @@
                         {
                             "x": 512,
                             "startShips": 225,
+                            "startShips/easy": 1,
+                            "startShips/normal": 150,
                             "y": 384,
                             "type": "dilator",
                             "size": 0.5,
@@ -21741,6 +23191,7 @@
                             "x": 512,
                             "y": 272,
                             "type": "pulsecannon",
+                            "startShips/hard": 36,
                             "orbitNode": 0,
                             "team": 6
                         },
@@ -21749,6 +23200,7 @@
                             "x": 512,
                             "y": 496,
                             "type": "pulsecannon",
+                            "startShips/hard": 36,
                             "orbitNode": 0,
                             "team": 6
                         },
@@ -21757,6 +23209,7 @@
                             "x": 608,
                             "y": 328,
                             "type": "pulsecannon",
+                            "startShips/hard": 36,
                             "orbitNode": 0,
                             "team": 6
                         },
@@ -21765,6 +23218,7 @@
                             "x": 416,
                             "y": 328,
                             "type": "pulsecannon",
+                            "startShips/hard": 36,
                             "orbitNode": 0,
                             "team": 6
                         },
@@ -21773,6 +23227,7 @@
                             "x": 416,
                             "y": 440,
                             "type": "pulsecannon",
+                            "startShips/hard": 36,
                             "orbitNode": 0,
                             "team": 6
                         },
@@ -21781,30 +23236,37 @@
                             "x": 608,
                             "y": 440,
                             "type": "pulsecannon",
+                            "startShips/hard": 36,
                             "orbitNode": 0,
                             "team": 6
                         },
                         {
                             "x": 192,
                             "y": 384,
+                            "x/legacy": 320,
+                            "y/legacy": 448,
                             "type": "cloneturret",
                             "team": 6
                         },
                         {
                             "x": 320,
                             "y": 384,
+                            "y/legacy": 320,
                             "type": "cloneturret",
                             "team": 6
                         },
                         {
                             "x": 704,
                             "y": 384,
+                            "y/legacy": 448,
                             "type": "cloneturret",
                             "team": 6
                         },
                         {
                             "x": 832,
                             "y": 384,
+                            "x/legacy": 704,
+                            "y/legacy": 320,
                             "type": "cloneturret",
                             "team": 6
                         },
@@ -21847,6 +23309,7 @@
                         {
                             "x": 64,
                             "startShips": 22,
+                            "startShips/legacy": 0,
                             "y": 281.6,
                             "type": "cloneturret",
                             "team": 1
@@ -21854,6 +23317,7 @@
                         {
                             "x": 64,
                             "startShips": 22,
+                            "startShips/legacy": 0,
                             "y": 486.4,
                             "type": "cloneturret",
                             "team": 7
@@ -21861,6 +23325,7 @@
                         {
                             "x": 960,
                             "startShips": 22,
+                            "startShips/legacy": 0,
                             "y": 281.6,
                             "type": "cloneturret",
                             "team": 3
@@ -21868,6 +23333,7 @@
                         {
                             "x": 960,
                             "startShips": 22,
+                            "startShips/legacy": 0,
                             "y": 486.4,
                             "type": "cloneturret",
                             "team": 4
@@ -21903,6 +23369,7 @@
                         {
                             "x": 192,
                             "startShips": 22,
+                            "startShips/legacy": 0,
                             "y": 192,
                             "type": "cloneturret",
                             "team": 1
@@ -21910,6 +23377,7 @@
                         {
                             "x": 192,
                             "startShips": 22,
+                            "startShips/legacy": 0,
                             "y": 576,
                             "type": "cloneturret",
                             "team": 7
@@ -21917,6 +23385,7 @@
                         {
                             "x": 832,
                             "startShips": 22,
+                            "startShips/legacy": 0,
                             "y": 192,
                             "type": "cloneturret",
                             "team": 3
@@ -21924,6 +23393,7 @@
                         {
                             "x": 832,
                             "startShips": 22,
+                            "startShips/legacy": 0,
                             "y": 576,
                             "type": "cloneturret",
                             "team": 4
@@ -21931,6 +23401,7 @@
                         {
                             "x": 304,
                             "startShips": 20,
+                            "startShips/legacy": 0,
                             "y": 192,
                             "type": "pulsecannon",
                             "team": 1
@@ -21938,6 +23409,7 @@
                         {
                             "x": 304,
                             "startShips": 20,
+                            "startShips/legacy": 0,
                             "y": 576,
                             "type": "pulsecannon",
                             "team": 7
@@ -21945,6 +23417,7 @@
                         {
                             "x": 720,
                             "startShips": 20,
+                            "startShips/legacy": 0,
                             "y": 192,
                             "type": "pulsecannon",
                             "team": 3
@@ -21952,6 +23425,7 @@
                         {
                             "x": 720,
                             "startShips": 20,
+                            "startShips/legacy": 0,
                             "y": 576,
                             "type": "pulsecannon",
                             "team": 4
@@ -21959,24 +23433,28 @@
                         {
                             "x": 192,
                             "y": 288,
+                            "y/legacy": 320,
                             "type": "captureship",
                             "team": 1
                         },
                         {
                             "x": 192,
                             "y": 480,
+                            "y/legacy": 448,
                             "type": "captureship",
                             "team": 7
                         },
                         {
                             "x": 832,
                             "y": 288,
+                            "y/legacy": 320,
                             "type": "captureship",
                             "team": 3
                         },
                         {
                             "x": 832,
                             "y": 480,
+                            "y/legacy": 448,
                             "type": "captureship",
                             "team": 4
                         },
@@ -21997,6 +23475,7 @@
                             "type/easy": "SimpleAI",
                             "type/normal": "SmartAI",
                             "type": "HardAI",
+                            "type/legacy": "HardAI",
                             "actionDelay/hard": 0.22,
                             "startDelay": 1.5
                         },
@@ -22005,12 +23484,14 @@
                             "type/easy": "SimpleAI",
                             "type/normal": "SmartAI",
                             "type": "HardAI",
+                            "type/legacy": "HardAI",
                             "actionDelay/hard": 0.22,
                             "startDelay": 1.5
                         },
                         {
                             "team": 6,
                             "type/hard": "HardAI",
+                            "type/legacy": "HardAI",
                             "type": "FinalAI",
                             "actionDelay/hard": 0.22,
                             "startDelay": 0
@@ -22020,6 +23501,7 @@
                             "type/easy": "SimpleAI",
                             "type/normal": "SmartAI",
                             "type": "HardAI",
+                            "type/legacy": "HardAI",
                             "actionDelay/hard": 0.22,
                             "startDelay": 1.5
                         }
@@ -22038,7 +23520,8 @@
                     "name": "36",
                     "color/easy": "0x00FF00",
                     "color/normal": "0x0000FF",
-                    "color": "0xFFFF00",
+                    "color/hard": "0xFFFF00",
+                    "color": "0xFF0000",
                     "bgm": "bgm06"
                 },
                 {
@@ -22220,14 +23703,16 @@
                     "node": [
                         {
                             "x": 128,
-                            "startShips": 18,
+                            "startShips": 22,
+                            "startShips/lecacy": 18,
                             "y": 576,
                             "type": "planet",
                             "team": 1
                         },
                         {
                             "x": 128,
-                            "startShips": 18,
+                            "startShips": 22,
+                            "startShips/lecacy": 18,
                             "y": 192,
                             "type": "planet",
                             "team": 1
@@ -22490,8 +23975,9 @@
                         }
                     ],
                     "name": "38",
-                    "color": "0x00FF00",
-                    "color/hard": "0xFF0000",
+                    "color/easy": "0x00FF00",
+                    "color/normal": "0x00FF00",
+                    "color": "0xFF0000",
                     "bgm": "bgm06"
                 }
             ]

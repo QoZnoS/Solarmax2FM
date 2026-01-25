@@ -45,8 +45,6 @@ package Game {
                     "transition": "easeInOut"});
         }
 
-
-
         public function updateBarrier():void {
             EntityContainer.entityPool[EntityContainer.INDEX_BARRIERS].deInit();
             addBarriers();

@@ -55,9 +55,11 @@ package UI {
             fgNormalBatch.blendMode = BlendMode.NORMAL;
             shipsFGBatchbs = new Vector.<QuadBatch>();
             labels = new Sprite();
+
+            register();
         }
 
-        //#region 加载
+        //#region 公共接口
         public function init():void {
             addChild(blackholePulseBatch);
 
@@ -101,12 +103,43 @@ package UI {
         }
 
         public function reset():void {
-            blackholeLayer.reset();
+            blackholePulseBatch.reset();
             resetBatchVector(shipsBGBatchs);
             resetBatchVector(shipsBGBatchbs);
             resetBatchVector(shipsFGBatchs);
             resetBatchVector(shipsFGBatchbs);
             fx.reset();
+        }
+
+        public function invisibleMode():void {
+            var batch:QuadBatch;
+            Starling.juggler.tween(labels, 5, {"alpha": 0,
+                    "delay": 22});
+            for each (batch in shipsBGBatchbs)
+                Starling.juggler.tween(batch, 5, {"alpha": 0,
+                        "delay": 50});
+            for each (batch in shipsBGBatchs)
+                Starling.juggler.tween(batch, 5, {"alpha": 0,
+                        "delay": 50});
+            for each (batch in shipsFGBatchbs)
+                Starling.juggler.tween(batch, 5, {"alpha": 0,
+                        "delay": 50});
+            for each (batch in shipsFGBatchs)
+                Starling.juggler.tween(batch, 5, {"alpha": 0,
+                        "delay": 50});
+        }
+        //#endregion
+        //#region 内部接口
+        private function register():void {
+            LayerFactory.registerFunction(LayerFactory.ADD_NODE, addNode);
+            LayerFactory.registerFunction(LayerFactory.REMOVE_NODE, removeNode);
+            LayerFactory.registerFunction(LayerFactory.ADD_GROW, addGlow);
+            LayerFactory.registerFunction(LayerFactory.REMOVE_GROW, removeGlow);
+            LayerFactory.registerFunction(LayerFactory.ADD_IMAGE, addImage);
+            LayerFactory.registerFunction(LayerFactory.ADD_BLACKHOLE, addBlackhole)
+            LayerFactory.registerFunction(LayerFactory.ADD_FX, addFx);
+
+            LayerFactory.registerLayer(LayerFactory.LABEL, labels);
         }
 
         private function removeBatchVector(batches:Vector.<QuadBatch>):void {
@@ -122,9 +155,7 @@ package UI {
                 batch.reset();
         }
 
-        //#endregion
-        //#region 添加贴图
-        public function addImage(image:Image, foreground:Boolean, deepColor:Boolean):void {
+        private function addImage(image:Image, foreground:Boolean, deepColor:Boolean):void {
             if (deepColor) {
                 if (foreground) {
                     getEmptyBatch(shipsFGBatchbs, fgNormalBatch).addImage(image);
@@ -150,7 +181,7 @@ package UI {
             return newBatch;
         }
 
-        public function addNode(node:Image, halo:Image, glow:Image, deepColor:Boolean):void {
+        private function addNode(node:Image, halo:Image, glow:Image, deepColor:Boolean):void {
             nodeBatch.addChild(node);
             if (deepColor) {
                 nodeGlowNormal.addChild(halo);
@@ -161,7 +192,7 @@ package UI {
             }
         }
 
-        public function removeNode(node:Image, halo:Image, glow:Image):void {
+        private function removeNode(node:Image, halo:Image, glow:Image):void {
             nodeBatch.removeChild(node);
             if (nodeGlowNormal.contains(halo))
                 nodeGlowNormal.removeChild(halo);
@@ -173,50 +204,26 @@ package UI {
                 nodeGlow.removeChild(glow);
         }
 
-        public function addGlow(glow:Image, deepColor:Boolean):void {
+        private function addGlow(glow:Image, deepColor:Boolean):void {
             if (deepColor)
                 nodeGlowNormal.addChild(glow);
             else
                 nodeGlow.addChild(glow);
         }
 
-        public function removeGlow(glow:Image):void {
+        private function removeGlow(glow:Image):void {
             if (nodeGlowNormal.contains(glow))
                 nodeGlowNormal.removeChild(glow);
             if (nodeGlow.contains(glow))
                 nodeGlow.removeChild(glow);
         }
 
-        public function invisibleMode():void {
-            var batch:QuadBatch;
-            Starling.juggler.tween(labelLayer, 5, {"alpha": 0,
-                    "delay": 22});
-            for each (batch in shipsBGBatchbs)
-                Starling.juggler.tween(batch, 5, {"alpha": 0,
-                        "delay": 50});
-            for each (batch in shipsBGBatchs)
-                Starling.juggler.tween(batch, 5, {"alpha": 0,
-                        "delay": 50});
-            for each (batch in shipsFGBatchbs)
-                Starling.juggler.tween(batch, 5, {"alpha": 0,
-                        "delay": 50});
-            for each (batch in shipsFGBatchs)
-                Starling.juggler.tween(batch, 5, {"alpha": 0,
-                        "delay": 50});
+        private function addBlackhole(image:Image):void {
+            blackholePulseBatch.addImage(image);
         }
 
-        //#endregion
-        //#region getter
-        public function get blackholeLayer():QuadBatch {
-            return blackholePulseBatch;
-        }
-
-        public function get fxLayer():QuadBatch {
-            return fx;
-        }
-
-        public function get labelLayer():Sprite {
-            return labels;
+        private function addFx(image:Image):void {
+            fx.addImage(image);
         }
         //#endregion
     }

@@ -106,7 +106,7 @@ package Entity.AI {
                     var targetClose:Node = breadthFirstSearch(senderNode, targetNode);
                     if (!targetClose)
                         continue;
-                    var towerAttack:Number = hard_getTowerAttack(senderNode, targetClose);
+                    var towerAttack:Number = hard_getTowerAttackUltra(senderNode, targetClose);
                     targetNode.aiValue += towerAttack * 4; // 估损权重
                 }
                 targets.sortOn("aiValue", 16);
@@ -130,7 +130,7 @@ package Entity.AI {
                             ships = Math.min(ships, Math.floor(targetNode.hard_oppAllStrength(team) * 1.6 - targetNode.hard_AllStrength(team))); // 目标兵力不足时防止派兵过度
                     }
                     ships = Math.max(ships, ((hard_distance(senderNode, targetNode) * targetNode.buildState.buildRate / 50) * 1.2 + 3));
-                    towerAttack = hard_getTowerAttack(senderNode, targetClose);
+                    towerAttack = hard_getTowerAttackUltra(senderNode, targetClose);
                     if (towerAttack > 0 && ships < towerAttack + 30)
                         continue; // 派出的兵力不超估损30兵时不派兵
                     if (ships - towerAttack < targetNode.hard_oppAllStrength(team) - targetNode.hard_AllStrength(team))
@@ -210,7 +210,7 @@ package Entity.AI {
             while (queue.length > 0) {
                 var current:Node = queue.shift();
                 for each (var next:Node in current.nodeLinks[team]) {
-                    if (visited.indexOf(next) != -1)
+                    if (visited.indexOf(next) != -1 || !targetCheckBasic(next))
                         continue;
                     if (moveCheckBasic(current, next)) {
                         queue.push(next);
@@ -286,6 +286,7 @@ package Entity.AI {
             var resultExit:Point; // 线和圆的第二个交点
             if (node1.nodeData.isWarp && node1Group == group)
                 return 0; // 对传送门不执行该函数
+
             for each (node in nodeArray) {
                 nodeGroup = Globals.teamGroups[node.nodeData.team];
                 length = 0;
@@ -309,6 +310,104 @@ package Entity.AI {
                         towerAttack += (length / Globals.teamShipSpeeds[team]) / node.attackState.attackRate;
                 }
             }
+
+            return Math.floor(towerAttack);
+        }
+
+        public function hard_getTowerAttackUltra(node1:Node, node2:Node):Number {
+            if (node1.nodeData.isWarp && Globals.teamGroups[node1.nodeData.team] == group) {
+                return 0;
+            }
+
+            // 所有变量声明在函数顶部
+            var teamGroups:Array = Globals.teamGroups;
+            var teamShipSpeed:Number = Globals.teamShipSpeeds[team];
+            var node1TeamGroup:int = teamGroups[node1.nodeData.team];
+            var startX:Number = node1.nodeData.x;
+            var startY:Number = node1.nodeData.y;
+            var endX:Number = node2.nodeData.x;
+            var endY:Number = node2.nodeData.y;
+            var dx:Number = endX - startX;
+            var dy:Number = endY - startY;
+            var segLengthSquared:Number = dx * dx + dy * dy;
+            var segmentLength:Number = Math.sqrt(segLengthSquared);
+            var towerAttack:Number = 0;
+
+            // 预先计算所有攻击型节点的攻击参数
+            var nodes:Vector.<Node> = nodeArray;
+            var nodeCount:int = nodes.length;
+
+            // 预筛选节点，只处理敌方攻击节点
+            for (var i:int = 0; i < nodeCount; i++) {
+                var node:Node = nodes[i];
+                var nodeData:Object = node.nodeData;
+
+                // 快速跳过条件
+                if (nodeData.team == 0)
+                    continue;
+                if (teamGroups[nodeData.team] == group)
+                    continue;
+
+                var nodeType:String = nodeData.type;
+                if (nodeType != NodeType.TOWER && nodeType != NodeType.STARBASE && nodeType != NodeType.CAPTURESHIP)
+                    continue;
+
+                var attackState:Object = node.attackState;
+                var attackRange:Number = attackState.attackRange;
+                if (attackRange <= 0)
+                    continue;
+
+                // 使用内联的快速几何判断
+                var centerX:Number = nodeData.x;
+                var centerY:Number = nodeData.y;
+                var radiusSquared:Number = attackRange * attackRange;
+
+                // 计算圆心到起点的向量
+                var cx:Number = centerX - startX;
+                var cy:Number = centerY - startY;
+
+                // 计算投影参数
+                var t:Number = (cx * dx + cy * dy) / segLengthSquared;
+                t = t < 0 ? 0 : (t > 1 ? 1 : t);
+
+                // 计算最近点距离平方
+                var closestX:Number = startX + t * dx;
+                var closestY:Number = startY + t * dy;
+                var distX:Number = centerX - closestX;
+                var distY:Number = centerY - closestY;
+                var distSquared:Number = distX * distX + distY * distY;
+
+                // 如果不相交，跳过
+                if (distSquared > radiusSquared)
+                    continue;
+
+                // 计算重叠长度
+                var length:Number = 0;
+
+                // 检查是否完全在圆内
+                var startDistSquared:Number = cx * cx + cy * cy;
+                var endDistSquared:Number = (centerX - endX) * (centerX - endX) + (centerY - endY) * (centerY - endY);
+
+                if (startDistSquared <= radiusSquared && endDistSquared <= radiusSquared) {
+                    length = segmentLength;
+                } else {
+                    // 计算半弦长
+                    var halfChordLength:Number = Math.sqrt(radiusSquared - distSquared);
+                    var dt:Number = halfChordLength / segmentLength;
+                    var t1:Number = t - dt;
+                    var t2:Number = t + dt;
+
+                    t1 = t1 < 0 ? 0 : (t1 > 1 ? 1 : t1);
+                    t2 = t2 < 0 ? 0 : (t2 > 1 ? 1 : t2);
+
+                    length = (t2 - t1) * segmentLength;
+                }
+
+                if (length > 0) {
+                    towerAttack += (length / teamShipSpeed) / attackState.attackRate;
+                }
+            }
+
             return Math.floor(towerAttack);
         }
 

@@ -7,6 +7,7 @@ package Entity.Node {
     import Entity.Node.Attack.AttackStrategyFactory;
     import UI.UIContainer;
     import utils.CalcTools;
+    import UI.LayerFactory;
 
     /** 静态类，函数均与dt无关 */
     public class NodeStaticLogic {
@@ -65,7 +66,7 @@ package Entity.Node {
             node.moveState.glow.color = Globals.teamColors[team]; // 设定光效颜色
             if (Globals.teamColorEnhance[team])
                 node.moveState.glow.color = CalcTools.scaleColorToMax(Globals.teamColors[team]);
-            UIContainer.entityLayer.addGlow(node.moveState.glow, Globals.teamDeepColors[team]);
+            LayerFactory.call(LayerFactory.ADD_GROW)(node.moveState.glow, Globals.teamDeepColors[team]);
             FXHandler.addPulse(node, Globals.teamColors[team], 0, Globals.teamDeepColors[team]);
             GS.playCapture(node.nodeData.x); // 播放占领音效
             if (nodeTeam != Globals.playerTeam && team == Globals.playerTeam && node.nodeData.popVal > 0) {
@@ -104,7 +105,7 @@ package Entity.Node {
          * @param type 目标类型
          * @param size 目标大小
          */
-        public static function changeType(node:Node, type:String, size:Number = NaN):void {
+        public static function changeType(node:Node, type:String, size:Number = NaN, rotation:Number = NaN):void {
             size = node.nodeData.size = isNaN(size) ? NodeType.getDefaultSize(type) : size;
             // 处理贴图
             node.moveState.image.rotation = node.moveState.halo.rotation = node.moveState.glow.rotation = 0;
@@ -127,7 +128,8 @@ package Entity.Node {
             node.moveState.halo.readjustSize();
             node.moveState.halo.scaleY = node.moveState.halo.scaleX = 1;
             node.moveState.halo.pivotY = node.moveState.halo.pivotX = node.moveState.halo.width * 0.5;
-            node.moveState.image.rotation = node.moveState.halo.rotation = node.moveState.glow.rotation = NodeType.getDefaultRotation(type);
+            var rtt:Number = isNaN(rotation) ? NodeType.getDefaultRotation(type) : rotation;
+            node.moveState.image.rotation = node.moveState.halo.rotation = node.moveState.glow.rotation = rtt;
             node.moveState.image.scaleX = node.moveState.image.scaleY = node.moveState.halo.scaleX = node.moveState.halo.scaleY = node.moveState.glow.scaleX = node.moveState.glow.scaleY = NodeType.getDefaultScale(type, size);
             if (type == NodeType.PLANET)
                 node.moveState.halo.scaleY = node.moveState.halo.scaleX = NodeType.getDefaultScale(type, size) * 0.5;
@@ -179,7 +181,7 @@ package Entity.Node {
          * @param targetNode 终点
          */
         public static function sendShips(node:Node, team:int, targetNode:Node):void {
-            var l:int = Math.ceil(node.ships[team].length * UIContainer.btnLayer.fleetSlider.perc); // 计算调动的飞船数，Math.ceil()为至少调动1飞船判定
+            var l:int = Math.ceil(node.ships[team].length * UIContainer.fleetSlider.perc); // 计算调动的飞船数，Math.ceil()为至少调动1飞船判定
             if (targetNode == node || l == 0)
                 return;
             if (game.visible)

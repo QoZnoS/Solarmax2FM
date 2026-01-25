@@ -18,6 +18,8 @@ package Menus.StartMenus {
 
         private var title:TitleMenu;
 
+        private var _ready:Boolean = false;
+
         public function MapackMenu(title:TitleMenu):void {
             this.title = title;
             components = [];
@@ -54,6 +56,7 @@ package Menus.StartMenus {
             components.push(btn);
             this.addChild(btn);
             on_refresh();
+            _ready = true;
         }
 
         public function deinit():void {
@@ -86,7 +89,8 @@ package Menus.StartMenus {
         }
 
         private function on_refresh():void {
-            LevelData.init();
+            if (_ready)
+                LevelData.init();
             title.getBarrierData();
             title.getOrbitData();
             title.getMoreInfoTexts();
@@ -143,7 +147,9 @@ package Menus.StartMenus {
         private function on_choose_map(click:Event):void {
             Globals.currentData = mapacks.indexOf(click.target);
             Globals.save();
-            LevelData.init();
+            LevelData.updateLevelData();
+            Globals.initTeam();
+            LevelData.updateTeam();
             title.getBarrierData();
             title.getOrbitData();
             title.getMoreInfoTexts();
