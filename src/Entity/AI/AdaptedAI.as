@@ -100,7 +100,7 @@ package Entity.AI {
                         if (!senderNode.nodeData.isWarp && EntityContainer.isInBlackhole(senderNode, targetNode, team))
                             continue; // 路径上无有威胁的黑洞
                         // 飞船数：目标天体上预测敌方强度的二倍减去预测己方强度与己方单体强度之商
-                        ships = (targetNode.predictedOppShipCount(team) * 2 - targetNode.predictedGroupShipCount(team)) / shipCount;
+                        ships = (targetNode.predictedOppShipCount(team) * 2 - targetNode.predictedGroupShipCount(team)) / shipStrength;
                         towerAttack = EntityContainer.getLengthInTowerRange(senderNode, targetNode, team) / 4.5 / shipSpeed; // 估算经过攻击天体损失的兵力（估损
                         ships += Math.max(towerAttack, 0); // 为飞船数加上估损
                         if (towerAttack > 0 && Globals.teamPops[team] < towerAttack)
