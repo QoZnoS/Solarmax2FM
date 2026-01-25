@@ -6,6 +6,7 @@ package Entity {
     import utils.GS;
     import starling.display.QuadBatch;
     import UI.UIContainer;
+    import utils.CalcTools;
     import UI.LayerFactory;
 
     public class Ship extends GameEntity {
@@ -68,6 +69,8 @@ package Entity {
             node.ships[team].push(this);
             image.alpha = 1;
             image.color = Globals.teamColors[team];
+            if (Globals.teamColorEnhance[team])
+                image.color = CalcTools.scaleColorToMax(image.color);
             image.scaleX = image.scaleY = 1;
             trail.alpha = 0;
             trail.color = image.color;

@@ -9,6 +9,7 @@ package Game.SpecialEvent {
     import utils.GS;
     import Entity.FXHandler;
     import starling.core.Starling;
+    import utils.CalcTools;
     import UI.LayerFactory;
 
     public class GameEndSE implements ISpecialEvent {
@@ -45,6 +46,8 @@ package Game.SpecialEvent {
             var angleStep:Number = Math.PI * 2 / 3;
             var maxSize:Number = 2;
             var color:uint = Globals.teamColors[Globals.playerTeam];
+            if (Globals.teamColorEnhance[Globals.playerTeam])
+                color = CalcTools.scaleColorToMax(color);
             var deepColor:Boolean = Globals.teamDeepColors[Globals.playerTeam];
             switch (state) {
                 case STATE_START:
@@ -155,8 +158,8 @@ package Game.SpecialEvent {
             var y:Number = NaN;
             var distance:Number = NaN;
             var ship:Ship = null;
-            darkPulse.color = Globals.teamColors[Globals.playerTeam];
-            Globals.teamDeepColors[Globals.playerTeam] ? darkPulse.blendMode = "normal" : darkPulse.blendMode = "add";
+            darkPulse.color = Globals.teamColorEnhance[Globals.playerTeam] ? CalcTools.scaleColorToMax(Globals.teamColors[Globals.playerTeam]) : Globals.teamColors[Globals.playerTeam];
+            darkPulse.blendMode = Globals.teamDeepColors[Globals.playerTeam] ? "normal" : "add";
             darkPulse.scaleY = darkPulse.scaleX += dt * 2;
             if (chackDarkPulseEnd())
                 darkPulse.alpha -= dt;

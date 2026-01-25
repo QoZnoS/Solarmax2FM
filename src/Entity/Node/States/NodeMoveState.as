@@ -6,6 +6,7 @@ package Entity.Node.States {
     import Entity.EntityContainer;
     import utils.Drawer;
     import starling.animation.Transitions;
+    import utils.CalcTools;
     import UI.LayerFactory;
     import starling.display.QuadBatch;
 
@@ -116,6 +117,8 @@ package Entity.Node.States {
                     glow.alpha = 1;
                     glowing = false;
                     image.color = halo.color = glow.color = Globals.teamColors[nodeData.team];
+                    if (Globals.teamColorEnhance[nodeData.team])
+                        halo.color = glow.color = CalcTools.scaleColorToMax(Globals.teamColors[nodeData.team]);
                     LayerFactory.call(LayerFactory.ADD_GROW)(halo, Globals.teamDeepColors[nodeData.team]);
                 }
             } else if (glow.alpha > 0) { // 再归零

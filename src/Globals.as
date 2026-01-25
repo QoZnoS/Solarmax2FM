@@ -20,6 +20,7 @@ package {
         // #endregion
         public static var teamColors:Array = [0xCCCCCC, 0x5FB6FF, 0xFF5D93, 0xFF8C5A, 0xCAFF6E, 0x999999, 0x000000]; // 势力颜色
         public static var teamDeepColors:Array = [false, false, false, false, false, false, true];
+        public static var teamColorEnhance:Array = [false, false, false, false, false, false, false]; 
         public static var teamCaps:Array = [0, 0, 0, 0, 0, 0, 0]; // 势力在关卡内的总飞船上限
         public static var teamPops:Array = [0, 0, 0, 0, 0, 0, 0]; // 势力在关卡内的总飞船数
         public static var teamShipSpeeds:Array = [50, 50, 50, 50, 50, 50, 100]; // 基础飞船速度
