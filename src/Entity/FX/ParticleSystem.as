@@ -8,6 +8,16 @@ package Entity.FX {
         // 为每种粒子分配一个实体池
         private static var _particlePool:Vector.<Vector.<BasicParticle>> = new Vector.<Vector.<BasicParticle>>;
 
+        // 粒子进入池后会一直存留，不做任何位置上的变化
+        // 当粒子周期结束后，该粒子会被标记为不活跃，直到需要再次用到该粒子
+        // 添加粒子时，直接遍历找到第一个不活跃粒子
+        // 显然池中粒子总数总是等同于场上同时存在的最大粒子数量
+        // 由于每帧遍历超大向量可能产生性能问题，以下变量专用于减少遍历次数
+        private static var frame:int // 帧
+        private static var recycleFrame:int // 上一次回收粒子的帧
+        private static var firstInactive:Vector.<int> // 每个粒子池一帧内第一个不活跃粒子
+        private static var maxP:Vector.<int>; // 每个粒子池正在活跃的最大编号
+
         // 粒子池
         public function ParticleSystem() {
             throw new AbstractClassError();
@@ -20,19 +30,33 @@ package Entity.FX {
             for (var i:int = 0; i < _registerType.length; i++)
                 if (_particlePool.length < i + 1)
                     _particlePool.push(new Vector.<BasicParticle>);
+            frame = 1;
+            firstInactive = new Vector.<int>(_particlePool.length, true);
+            maxP = new Vector.<int>(_particlePool.length, true);
         }
 
         public static function deinit():void {
+            frame = 1;
             for each (var pool:Vector.<BasicParticle> in _particlePool)
                 for each (var p:BasicParticle in pool)
                     p.reset();
         }
 
         public static function update(dt:Number):void {
-            for each (var pool:Vector.<BasicParticle> in _particlePool)
-                for each (var p:BasicParticle in pool)
-                    if (p.active)
+            frame++;
+            var length:int = _particlePool.length;
+            for (var index:int = 0; index < length; index++) {
+                var pool:Vector.<BasicParticle> = _particlePool[index];
+                var maxPInFrame:int = 0;
+                for (var i:int = 0; i < maxP[index]; i++) {
+                    var p:BasicParticle = pool[i];
+                    if (p.active){
                         p.update(dt);
+                        maxPInFrame = i;
+                    }
+                }
+                maxP[index] = maxPInFrame;
+            }
         }
 
         public static function addParticle(type:String, config:Array):void {
@@ -41,12 +65,20 @@ package Entity.FX {
                 throw new Error("particle type not regist");
 
             var recycle:Boolean = false;
-            for each (var p:BasicParticle in _particlePool[index]) {
+            var length:int = _particlePool[index].length;
+            for (var i:int = 0; i < length; i++) {
+                // 单帧内需要大量添加实体时，总是从上一次回收结束时开始回收，减少遍历次数
+                if (recycleFrame == frame)
+                    i = firstInactive[index]
+                var p:BasicParticle = _particlePool[index][i];
                 if (p.active)
                     continue;
                 p.reset();
                 p.init(config);
                 recycle = true;
+                recycleFrame = frame;
+                firstInactive[index] = i;
+                maxP[index] = i;
                 break;
             }
 
@@ -56,6 +88,7 @@ package Entity.FX {
             p = new BasicParticle(type, new pClass());
             p.init(config);
             _particlePool[index].push(p);
+            maxP[index] = _particlePool[index].length;
         }
 
         public static function registerType(type:String, particleClass:Class):void {
