@@ -4,7 +4,6 @@ package Entity.FX {
     import Entity.GameEntity;
     import Entity.Node;
     import Entity.Node.NodeType;
-    import UI.UIContainer;
     import utils.CalcTools;
     import UI.LayerFactory;
 

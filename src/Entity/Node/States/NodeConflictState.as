@@ -3,7 +3,6 @@ package Entity.Node.States {
     import Entity.Node.NodeData;
     import Entity.EntityHandler;
     import Entity.Ship;
-// #region S33改过的
     public class NodeConflictState implements INodeState {
 
         private var node:Node;

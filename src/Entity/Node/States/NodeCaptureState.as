@@ -3,9 +3,7 @@ package Entity.Node.States {
     import Entity.Node.NodeData;
     import Entity.Ship;
     import Entity.Node.NodeStaticLogic;
-    import utils.Rng;
 
-// #region 这个是S33改过的
     public class NodeCaptureState implements INodeState {
 
         private var node:Node;
