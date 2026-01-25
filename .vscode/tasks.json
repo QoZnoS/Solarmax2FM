@@ -2,13 +2,138 @@
 	"version": "2.0.0",
 	"tasks": [
 		{
+			"label": "Pack Texture Assets",
+			"type": "shell",
+			"command": "python",
+			"args": [
+				"${workspaceFolder}/.vscode/CL/workspace/repacker.py",
+				"${workspaceFolder}/.vscode/CL/workspace/assets",
+				"${workspaceFolder}/libs/textures/2048px"
+			],
+			"group": "build",
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "shared"
+			},
+			"problemMatcher": []
+		},
+		{
+			"label": "Update Nightly Version",
+			"type": "shell",
+			"command": "python",
+			"args": [
+				"${workspaceFolder}/.vscode/CL/update_version.py"
+			],
+			"group": "build",
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "shared"
+			},
+			"problemMatcher": []
+		},
+		{
+			"label": "Update asconfig for Windows debug",
+			"type": "shell",
+			"command": "python",
+			"args": [
+				"${workspaceFolder}/.vscode/CL/update_asconfig.py",
+				"true",
+				"true"
+			],
+			"group": "build",
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "shared"
+			},
+			"problemMatcher": []
+		},
+		{
+			"label": "Update asconfig for Windows release",
+			"type": "shell",
+			"command": "python",
+			"args": [
+				"${workspaceFolder}/.vscode/CL/update_asconfig.py",
+				"true",
+				"false"
+			],
+			"group": "build",
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "shared"
+			},
+			"problemMatcher": []
+		},
+		{
+			"label": "Update asconfig for Android debug",
+			"type": "shell",
+			"command": "python",
+			"args": [
+				"${workspaceFolder}/.vscode/CL/update_asconfig.py",
+				"false",
+				"true"
+			],
+			"group": "build",
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "shared"
+			},
+			"problemMatcher": []
+		},
+		{
+			"label": "Update asconfig for Android release",
+			"type": "shell",
+			"command": "python",
+			"args": [
+				"${workspaceFolder}/.vscode/CL/update_asconfig.py",
+				"false",
+				"false"
+			],
+			"group": "build",
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "shared"
+			},
+			"problemMatcher": []
+		},
+		{
+			"label": "Update asconfig for iOS release",
+			"type": "shell",
+			"command": "python",
+			"args": [
+				"${workspaceFolder}/.vscode/CL/update_asconfig.py",
+				"false",
+				"false"
+			],
+			"group": "build",
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "shared"
+			},
+			"problemMatcher": []
+		},
+		{
 			"type": "actionscript",
 			"debug": false,
 			"air": "windows",
 			"asconfig": "asconfig.json",
 			"group": "build",
+			"dependsOn": "Update asconfig for Windows release",
 			"problemMatcher": [],
-			"label": "Adobe AIR: package Windows release (captive runtime) - asconfig.json"
+			"label": "Adobe AIR: package Windows release"
 		},
 		{
 			"type": "actionscript",
@@ -18,6 +143,7 @@
 				"kind": "build",
 				"isDefault": true
 			},
+			"dependsOn": "Update asconfig for Windows debug",
 			"problemMatcher": [],
 			"label": "ActionScript: compile debug - asconfig.json"
 		},
@@ -27,6 +153,7 @@
 			"air": "android",
 			"asconfig": "asconfig.json",
 			"group": "build",
+			"dependsOn": "Update asconfig for Android release",
 			"problemMatcher": [],
 			"label": "Adobe AIR: package Android release - asconfig.json"
 		},
@@ -36,6 +163,7 @@
 			"air": "ios",
 			"asconfig": "asconfig.json",
 			"group": "build",
+			"dependsOn": "Update asconfig for iOS release",
 			"problemMatcher": [],
 			"label": "Adobe AIR: package iOS release - asconfig.json"
 		},
@@ -45,50 +173,80 @@
 			"air": "android",
 			"asconfig": "asconfig.json",
 			"group": "build",
+			"dependsOn": "Update asconfig for Android debug",
 			"problemMatcher": [],
 			"label": "Adobe AIR: package Android debug - asconfig.json"
 		},
-        {
-          "label": "Build Nightly Version",
-          "type": "shell",
-          "command": "python",
-          "args": ["${workspaceFolder}/libs/其他文档/update_version.py"],
-          "group": "build",
-          "presentation": {
-            "echo": true,
-            "reveal": "always",
-            "focus": false,
-            "panel": "shared"
-          },
-          "problemMatcher": []
-        },
-        {
-          "label": "Pack Texture Assets",
-          "type": "shell",
-          "command": "python",
-          "args": [
-            "${workspaceFolder}/libs/其他文档/Texture/workspace/repacker.py",
-            "${workspaceFolder}/libs/其他文档/Texture/workspace/assets",
-            "${workspaceFolder}/libs/textures/2048px"
-            ],
-          "group": "build",
-          "presentation": {
-            "echo": true,
-            "reveal": "always",
-            "focus": false,
-            "panel": "shared"
-          },
-          "problemMatcher": []
-        },
-        {
-          "label": "Full Nightly Build",
-          "dependsOrder": "sequence",
-          "dependsOn": [
-            "Pack Texture Assets",
-            "Build Nightly Version",
-            "Adobe AIR: package Windows release (captive runtime) - asconfig.json"
-          ],
-          "problemMatcher": []
-        }
+		{
+			"label": "Windows Debug Build",
+			"dependsOrder": "sequence",
+			"dependsOn": [
+				"Update asconfig for Windows debug",
+				"ActionScript: compile debug - asconfig.json"
+			],
+			"group": "build",
+			"problemMatcher": []
+		},
+		{
+			"label": "Windows Release Build",
+			"dependsOrder": "sequence",
+			"dependsOn": [
+				"Update asconfig for Windows release",
+				"Adobe AIR: package Windows release"
+			],
+			"group": "build",
+			"problemMatcher": []
+		},
+		{
+			"label": "Android Debug Build",
+			"dependsOrder": "sequence",
+			"dependsOn": [
+				"Update asconfig for Android debug",
+				"Adobe AIR: package Android debug - asconfig.json"
+			],
+			"group": "build",
+			"problemMatcher": []
+		},
+		{
+			"label": "Android Release Build",
+			"dependsOrder": "sequence",
+			"dependsOn": [
+				"Update asconfig for Android release",
+				"Adobe AIR: package Android release - asconfig.json"
+			],
+			"group": "build",
+			"problemMatcher": []
+		},
+		{
+			"label": "iOS Release Build",
+			"dependsOrder": "sequence",
+			"dependsOn": [
+				"Update asconfig for iOS release",
+				"Adobe AIR: package iOS release - asconfig.json"
+			],
+			"group": "build",
+			"problemMatcher": []
+		},
+		{
+			"label": "完整夜间构建",
+			"dependsOrder": "sequence",
+			"dependsOn": [
+				"Pack Texture Assets",
+				"Update Nightly Version",
+				"Windows Release Build"
+			],
+			"group": "build",
+			"problemMatcher": []
+		},
+		{
+			"label": "完整调试构建",
+			"dependsOrder": "sequence",
+			"dependsOn": [
+				"Pack Texture Assets",
+				"Windows Debug Build"
+			],
+			"group": "build",
+			"problemMatcher": []
+		}
 	]
 }

@@ -2,6 +2,7 @@
 import subprocess
 from datetime import datetime
 import re
+from pathlib import Path
 
 # 1. 生成新的版本标签
 build_date = datetime.now().strftime("%Y%m%d")
@@ -9,7 +10,8 @@ git_hash = subprocess.check_output(['git', 'rev-parse', '--short', 'HEAD']).deco
 new_version_label = f"{build_date}+{git_hash}"
 
 # 2. 文件路径
-app_descriptor_path = "./libs/其他文档/Main-app.xml"
+script_dir = Path(__file__).parent
+app_descriptor_path = script_dir / "Main-app.xml"
 output_path = "./src/Main-app.xml"
 
 try:

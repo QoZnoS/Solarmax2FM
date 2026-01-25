@@ -1,6 +1,5 @@
 {
 	"config": "air",
-	// "config": "airmobile",
 	"compilerOptions": {
 		"source-path": [
 			"src"
@@ -8,7 +7,7 @@
 		"library-path": [
 			"libs"
 		],
-        // "advanced-telemetry": true,
+        "advanced-telemetry": true,
 		"output": "bin/Main.swf"
 	},
 	"application": "src/Main-app.xml",
