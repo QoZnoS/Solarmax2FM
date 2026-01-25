@@ -7,6 +7,7 @@ package Entity.Node.Attack {
     import Entity.EntityHandler;
     import Entity.FXHandler;
     import Entity.EntityContainer;
+    import utils.CalcTools;
 
     public class BlackholeAttack extends BasicAttack {
 
@@ -41,7 +42,9 @@ package Entity.Node.Attack {
             if (blackhole_angle > Math.PI * 2)
                 blackhole_angle -= Math.PI * 2;
             var color:uint = Globals.teamColors[node.nodeData.team];
-            var deepColor:Boolean = Globals.teamDeepColors[node.nodeData.team]
+            if (Globals.teamColorEnhance[node.nodeData.team])
+                color = CalcTools.scaleColorToMax(color);
+            var deepColor:Boolean = Globals.teamDeepColors[node.nodeData.team];
             if (attacking) {
                 if (attackTimer > attackLast - 0.2)
                     FXHandler.addDarkPulse(node, color, 4, 2.5, Transitions.getTransition("easeIn")(attackLast + 0.8 - attackTimer), blackhole_angle, deepColor);

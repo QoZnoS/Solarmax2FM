@@ -5,6 +5,7 @@ package Entity.FX {
     import Entity.Node;
     import Entity.Node.NodeType;
     import UI.UIContainer;
+    import utils.CalcTools;
 
     public class BeamFX extends GameEntity {
 
@@ -38,6 +39,8 @@ package Entity.FX {
             this.x = x1;
             this.y = y1;
             this.color = Globals.teamColors[node.nodeData.team];
+            if (Globals.teamColorEnhance[node.nodeData.team])
+                this.color = CalcTools.scaleColorToMax(this.color);
             this.deepColor = Globals.teamDeepColors[node.nodeData.team];
             this.size = 0;
             var dx:Number = x2 - x1;

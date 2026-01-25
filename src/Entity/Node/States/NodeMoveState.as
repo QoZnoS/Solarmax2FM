@@ -7,6 +7,7 @@ package Entity.Node.States {
     import UI.UIContainer;
     import utils.Drawer;
     import starling.animation.Transitions;
+    import utils.CalcTools;
 
     public class NodeMoveState implements INodeState {
         public var node:Node;
@@ -114,6 +115,8 @@ package Entity.Node.States {
                     glow.alpha = 1;
                     glowing = false;
                     image.color = halo.color = glow.color = Globals.teamColors[nodeData.team];
+                    if (Globals.teamColorEnhance[nodeData.team])
+                        halo.color = glow.color = CalcTools.scaleColorToMax(Globals.teamColors[nodeData.team]);
                     UIContainer.entityLayer.addGlow(halo, Globals.teamDeepColors[nodeData.team]);
                 }
             } else if (glow.alpha > 0) { // 再归零

@@ -6,6 +6,7 @@ package Entity.Node {
     import Entity.Ship;
     import Entity.Node.Attack.AttackStrategyFactory;
     import UI.UIContainer;
+    import utils.CalcTools;
 
     /** 静态类，函数均与dt无关 */
     public class NodeStaticLogic {
@@ -62,6 +63,8 @@ package Entity.Node {
                 return;
             node.moveState.glow.visible = true;
             node.moveState.glow.color = Globals.teamColors[team]; // 设定光效颜色
+            if (Globals.teamColorEnhance[team])
+                node.moveState.glow.color = CalcTools.scaleColorToMax(Globals.teamColors[team]);
             UIContainer.entityLayer.addGlow(node.moveState.glow, Globals.teamDeepColors[team]);
             FXHandler.addPulse(node, Globals.teamColors[team], 0, Globals.teamDeepColors[team]);
             GS.playCapture(node.nodeData.x); // 播放占领音效

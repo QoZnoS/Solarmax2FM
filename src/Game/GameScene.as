@@ -102,6 +102,8 @@ package Game {
                         label.fontName = "Downlink18";
                 }
                 label.color = Globals.teamColors[Globals.playerTeam];
+                if (Globals.teamColorEnhance[Globals.playerTeam])
+                    label.color = CalcTools.scaleColorToMax(label.color);
                 label.fontSize = -1;
                 if (Globals.teamDeepColors[Globals.playerTeam])
                     UIContainer.btnLayer.normalLayer.addChild(label);
