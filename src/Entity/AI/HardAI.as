@@ -19,10 +19,9 @@ package Entity.AI {
 
         public function updateHard():void {
             var surrender:Boolean = true;
-            for each (var node:Node in nodeArray) {
+            for each (var node:Node in nodeArray)
                 if (node.nodeData.team == this.team)
                     surrender = false; // 有己方天体则不认输
-            }
             if (surrender && Globals.teamPops[team] < 30)
                 return;
             if (nodeArray[0].nodeData.type == NodeType.DILATOR && nodeArray[0].nodeData.team == team && nodeArray[0].hard_AllStrength(team) * 0.6 < nodeArray[0].hard_oppAllStrength(team)) {
@@ -31,7 +30,6 @@ package Entity.AI {
             }
             attackV1();
         }
-
         public function attackV1():void {
             var nodeGroup:int = -1;
             var senderGroup:int = -1;
@@ -196,16 +194,19 @@ package Entity.AI {
             }
             return warpValue;
         }
-
+        private var TEMP_QUENE:Array = new Array();
+        private var TEMP_VISITED:Array = new Array();
         public function breadthFirstSearch(startNode:Node, targetNode:Node):Node { // 广度优先搜索，寻路算法
             if (startNode == targetNode)
                 return null;
             if (moveCheckBasic(startNode, targetNode))
                 return targetNode;
             clearbreadthFirstSearch();
-            var queue:Array = new Array();
+            var queue:Array = TEMP_QUENE;
+            queue.length = 0;
             queue.push(startNode);
-            var visited:Array = new Array();
+            var visited:Array = TEMP_VISITED;
+            visited.length = 0;
             visited.push(startNode);
             while (queue.length > 0) {
                 var current:Node = queue.shift();
@@ -237,9 +238,11 @@ package Entity.AI {
             if (moveCheckBasic(startNode, targetNode))
                 return hard_distance(startNode, targetNode);
             var distance:Number = 0;
-            var queue:Array = new Array();
+            var queue:Array = TEMP_QUENE;
+            queue.length = 0;
             queue.push(startNode);
-            var visited:Array = new Array();
+            var visited:Array = TEMP_VISITED;
+            visited.length = 0;
             visited.push(startNode);
             while (queue.length > 0) {
                 var current:Node = queue.shift();

@@ -43,7 +43,7 @@ package Entity.AI {
             centerX /= nodeCount;
             centerY /= nodeCount;
             for each (node in nodeArray) { // 分散星核兵力
-                if (node.nodeData.type == NodeType.DILATOR && node.teamShipCount(team) > 0) {
+                if (node.nodeData.type == NodeType.DILATOR && node.teamStrength(team) > 0) {
                     node.unloadShips();
                     return;
                 }
@@ -54,14 +54,14 @@ package Entity.AI {
                 nodeGroup = Globals.teamGroups[node.nodeData.team];
                 if (nodeGroup == group || node.nodeData.isAIinvisible)
                     continue;
-                if (node.predictedOppShipCount(team) == 0 && node.predictedGroupShipCount(team) > node.nodeData.size * 200)
+                if (node.predictedOppStrength(team) == 0 && node.predictedGroupStrength(team) > node.nodeData.size * 200)
                     continue; // 条件1：天体未被己方以二倍标准兵力占据
-                if (node.predictedOppShipCount(team) > 0 && node.predictedGroupShipCount(team) * 0.5 > node.predictedOppShipCount(team))
+                if (node.predictedOppStrength(team) > 0 && node.predictedGroupStrength(team) * 0.5 > node.predictedOppStrength(team))
                     continue; // 条件2：敌方无兵力或高于己方兵力一半
                 dx = node.nodeData.x - centerX;
                 dy = node.nodeData.y - centerY;
                 distence = Math.sqrt(dx * dx + dy * dy) + rng.nextNumber() * 32;
-                strength = node.predictedOppShipCount(team) - node.predictedGroupShipCount(team);
+                strength = node.predictedOppStrength(team) - node.predictedGroupStrength(team);
                 node.aiValue = distence + strength;
                 targets.push(node);
             }
@@ -70,15 +70,15 @@ package Entity.AI {
                 senders.length = 0;
                 for each (node in nodeArray) { // 计算出兵天体
                     nodeGroup = Globals.teamGroups[node.nodeData.team];
-                    if (node.aiTimers[team] > 0 || node.teamShipCount(team) == 0)
+                    if (node.aiTimers[team] > 0 || node.teamStrength(team) == 0)
                         continue; // 基本条件：天体AI计时器为0且有己方飞船
-                    if (node.predictedOppShipCount(team) == 0 && node.capturing)
+                    if (node.predictedOppStrength(team) == 0 && node.capturing)
                         continue; // 条件1：没在锁星
-                    if (nodeGroup != group && node.predictedGroupShipCount(team) > node.predictedOppShipCount(team))
+                    if (nodeGroup != group && node.predictedGroupStrength(team) > node.predictedOppStrength(team))
                         continue; // 条件2：为己方天体或己方兵力不足敌方
-                    if (node.predictedOppShipCount(team) > 0 && node.predictedGroupShipCount(team) > node.predictedOppShipCount(team))
+                    if (node.predictedOppStrength(team) > 0 && node.predictedGroupStrength(team) > node.predictedOppStrength(team))
                         continue; // 条件3：敌方无兵力或己方兵力不足敌方
-                    node.aiStrength = -node.teamShipCount(team);
+                    node.aiStrength = -node.teamStrength(team);
                     senders.push(node);
                 }
                 senders.sortOn("aiStrength", 16);
@@ -86,19 +86,19 @@ package Entity.AI {
                     for each (senderNode in senders) {
                         if (senderNode == targetNode || senderNode.nodeLinks[team].indexOf(targetNode) == -1)
                             continue; // 基本条件：出兵天体和目标天体不为同一个，且二者之间没有被拦截
-                        if (senderNode.teamShipCount(team) + targetNode.predictedGroupShipCount(team) < targetNode.predictedOppShipCount(team))
+                        if (senderNode.teamStrength(team) + targetNode.predictedGroupStrength(team) < targetNode.predictedOppStrength(team))
                             continue; // 出兵条件：出兵天体的强度和目标天体的预测强度之和高于目标天体的预测敌方强度
                         // 飞船数：目标天体上预测敌方强度的二倍减去预测己方强度一半
-                        ships = targetNode.predictedOppShipCount(team) * 2 - targetNode.predictedGroupShipCount(team) * 0.5;
-                        if (senderNode.predictedOppShipCount(team) > senderNode.predictedGroupShipCount(team))
-                            ships = senderNode.teamShipCount(team); // 预测出兵天体敌方兵力高于己方兵力时派出全部兵力
+                        ships = targetNode.predictedOppStrength(team) * 2 - targetNode.predictedGroupStrength(team) * 0.5;
+                        if (senderNode.predictedOppStrength(team) > senderNode.predictedGroupStrength(team))
+                            ships = senderNode.teamStrength(team); // 预测出兵天体敌方兵力高于己方兵力时派出全部兵力
                         if (ships < targetNode.nodeData.size * 200)
                             ships = targetNode.nodeData.size * 200; // 兵力不足目标二倍标准兵力时派出目标二倍标准兵力
                         towerAttack = EntityContainer.getLengthInTowerRange(senderNode, targetNode, team) / 4.5;
                         ships += towerAttack; // 加上估损
                         if (towerAttack > 0 && Globals.teamPops[team] < towerAttack)
                             continue; // 总兵力不足估损时不派兵
-                        if (towerAttack > 0 && senderNode.teamShipCount(team) < towerAttack * 0.5)
+                        if (towerAttack > 0 && senderNode.teamStrength(team) < towerAttack * 0.5)
                             continue; // 出兵天体的兵力不足估损的一半时不派兵
                         NodeStaticLogic.sendAIShips(senderNode, team, targetNode, ships);
                         return;
@@ -110,9 +110,9 @@ package Entity.AI {
             senders.length = 0;
             for each (node in nodeArray) { // 计算出兵天体
                 nodeGroup = Globals.teamGroups[node.nodeData.team];
-                if (nodeGroup != group || node.conflict || node.teamShipCount(team) == 0)
+                if (nodeGroup != group || node.conflict || node.teamStrength(team) == 0)
                     continue; // 条件：为己方天体且无战争
-                node.aiValue = -node.teamShipCount(team);
+                node.aiValue = -node.teamStrength(team);
                 senders.push(node);
             }
             senders.sortOn("aiValue", 16);
@@ -136,12 +136,12 @@ package Entity.AI {
                             continue; // 基本条件：出兵天体和目标天体不为同一个，且二者之间没有被拦截
                         if (targetNode.aiValue >= senderNode.aiValue)
                             continue; // 条件：目标天体价值高于出兵天体价值
-                        ships = senderNode.teamShipCount(team); // 派出该天体全部兵力
+                        ships = senderNode.teamStrength(team); // 派出该天体全部兵力
                         towerAttack = EntityContainer.getLengthInTowerRange(senderNode, targetNode, team) / 4.5;
                         ships += towerAttack; // 加上估损
                         if (towerAttack > 0 && Globals.teamPops[team] < towerAttack)
                             continue; // 总兵力不足估损时不派兵
-                        if (towerAttack > 0 && senderNode.teamShipCount(team) < towerAttack * 0.5)
+                        if (towerAttack > 0 && senderNode.teamStrength(team) < towerAttack * 0.5)
                             continue; // 出兵天体的兵力不足估损的一半时不派兵
                         NodeStaticLogic.sendAIShips(senderNode, team, targetNode, ships);
                         return;

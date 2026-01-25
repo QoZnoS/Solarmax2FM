@@ -2,7 +2,6 @@ package Entity.FX {
     import Game.GameScene;
     import starling.display.Image;
     import Entity.GameEntity;
-    import UI.UIContainer;
     import UI.LayerFactory;
 
     public class WarpFX extends GameEntity {

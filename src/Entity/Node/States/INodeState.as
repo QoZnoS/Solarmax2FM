@@ -1,7 +1,5 @@
-package Entity.Node.States
-{
-    
-    public interface INodeState{
+package Entity.Node.States {
+    public interface INodeState {
         function init():void;
         function deinit():void;
         function update(dt:Number):void;

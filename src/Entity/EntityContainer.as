@@ -53,6 +53,10 @@ package Entity {
             return Vector.<Ship>(_entityPools[INDEX_SHIPS].active);
         }
 
+        public static function get ships_entity():Vector.<GameEntity> {
+            return _entityPools[INDEX_SHIPS].active;
+        }
+
         public static function get nodes():Vector.<Node> {
             return Vector.<Node>(_entityPools[INDEX_NODES].active);
         }
@@ -120,10 +124,10 @@ package Entity {
             // 重用结果数组
             var result:Vector.<Ship> = TEMP_SHIP_RESULT;
             result.length = 0;
-            var allShips:Vector.<Ship> = ships;
+            var allShips:Vector.<GameEntity> = ships_entity;
             var shipCount:int = allShips.length;
             for (var i:int = 0; i < shipCount; i++) {
-                var ship:Ship = allShips[i];
+                var ship:Ship = allShips[i] as Ship;
                 // 状态检查
                 if (ship.state != 3 || ship.warping)
                     continue;
