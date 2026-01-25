@@ -157,8 +157,8 @@ package Game.SpecialEvent {
             var y:Number = NaN;
             var distance:Number = NaN;
             var ship:Ship = null;
-            Globals.teamColorEnhance[Globals.playerTeam] ? darkPulse.color = Globals.teamColors[Globals.playerTeam] : darkPulse.color = CalcTools.scaleColorToMax(Globals.teamColors[Globals.playerTeam]);
-            Globals.teamDeepColors[Globals.playerTeam] ? darkPulse.blendMode = "normal" : darkPulse.blendMode = "add";
+            darkPulse.color = Globals.teamColorEnhance[Globals.playerTeam] ? CalcTools.scaleColorToMax(Globals.teamColors[Globals.playerTeam]) : Globals.teamColors[Globals.playerTeam];
+            darkPulse.blendMode = Globals.teamDeepColors[Globals.playerTeam] ? "normal" : "add";
             darkPulse.scaleY = darkPulse.scaleX += dt * 2;
             if (chackDarkPulseEnd())
                 darkPulse.alpha -= dt;
