@@ -21,6 +21,7 @@ package Menus {
     import starling.utils.VAlign;
     import starling.display.BlendMode;
     import Entity.Node.NodeType;
+    import utils.CalcTools;
 
     public class TitleMenu extends Sprite {
         public var cover:Quad; // 进入游戏和通关36时的白光遮罩
@@ -545,6 +546,8 @@ package Menus {
                         shapeImage.color = Globals.teamColors[node.team];
                     else
                         shapeImage.color = Globals.teamColors[0];
+                    if (node.team ? Globals.teamColorEnhance[node.team] : Globals.teamColorEnhance[0])
+                        shapeImage.color = CalcTools.scaleColorToMax(shapeImage.color);
                     if (node.team ? Globals.teamDeepColors[node.team] : Globals.teamDeepColors[0])
                         preview2.addImage(shapeImage);
                     else

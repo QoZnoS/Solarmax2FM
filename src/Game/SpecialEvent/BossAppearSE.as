@@ -4,6 +4,7 @@ package Game.SpecialEvent {
     import Entity.EntityHandler;
     import Entity.FXHandler;
     import utils.GS;
+    import utils.CalcTools;
 
     public class BossAppearSE implements ISpecialEvent {
         private static const STATE_READY_APPEAR:int = 0;
@@ -40,6 +41,8 @@ package Game.SpecialEvent {
             var angleStep:Number = Math.PI * 2 / 3;
             var maxSize:Number = 2;
             var color:uint = Globals.teamColors[triggerNodeData.team];
+            if (Globals.teamColorEnhance[triggerNodeData.team])
+                color = CalcTools.scaleColorToMax(color);
             var deepColor:Boolean = Globals.teamDeepColors[triggerNodeData.team];
             switch (state) {
                 case STATE_READY_APPEAR:

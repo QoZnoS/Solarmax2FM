@@ -11,6 +11,7 @@ package Game.SpecialEvent {
     import UI.UIContainer;
     import Entity.Ship;
     import starling.core.Starling;
+    import utils.CalcTools;
     import UI.LayerFactory;
 
     public class DarknessFallsSE implements ISpecialEvent {
@@ -51,6 +52,8 @@ package Game.SpecialEvent {
             var angleStep:Number = Math.PI * 2 / 3;
             var maxSize:Number = 1;
             var color:uint = Globals.teamColors[targetTeam];
+            if (Globals.teamColorEnhance[targetTeam])
+                color = CalcTools.scaleColorToMax(color);
             var deepColor:Boolean = Globals.teamDeepColors[targetTeam];
             switch (state) {
                 case STATE_START:
@@ -146,7 +149,7 @@ package Game.SpecialEvent {
             var y:Number = NaN;
             var distance:Number = NaN;
             var ship:Ship = null;
-            darkPulse.color = Globals.teamColors[targetTeam];
+            darkPulse.color = Globals.teamColorEnhance[targetTeam] ? CalcTools.scaleColorToMax(Globals.teamColors[targetTeam]) : Globals.teamColors[targetTeam];
             Globals.teamDeepColors[targetTeam] ? darkPulse.blendMode = "normal" : darkPulse.blendMode = "add";
             darkPulse.scaleY = darkPulse.scaleX += dt * 0.5;
             if (chackDarkPulseEnd())

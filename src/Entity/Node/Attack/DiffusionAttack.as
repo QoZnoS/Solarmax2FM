@@ -6,6 +6,7 @@ package Entity.Node.Attack {
     import Entity.EntityContainer;
     import utils.GS;
     import Entity.FXHandler;
+    import utils.CalcTools;
 
     public class DiffusionAttack extends BasicAttack {
 
@@ -81,6 +82,8 @@ package Entity.Node.Attack {
 
         private function updateArc(node:Node, dt:Number):void {
             var color:uint = Globals.teamColors[node.nodeData.team];
+            if (Globals.teamColorEnhance[node.nodeData.team])
+                color = CalcTools.scaleColorToMax(color);
             var deepColor:Boolean = Globals.teamDeepColors[node.nodeData.team];
             var maxSize:Number = 2 * node.nodeData.size;
             FXHandler.addDarkPulse(node, color, 8, maxSize, 1, 0, deepColor)
