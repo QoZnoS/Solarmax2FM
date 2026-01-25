@@ -14,7 +14,7 @@ package Entity.FX {
         }
 
         public static function init():void {
-            registerType("FX", BarrierFX2);
+            registerType("FX", BarrierFX);
             // 初始化所有已注册类型
             for (var i:int = 0; i < _registerType.length; i++)
                 if (_particlePool.length < i + 1)
@@ -34,7 +34,7 @@ package Entity.FX {
                         p.update(dt);
         }
 
-        public static function addParticle(type:String, ... prop):void {
+        public static function addParticle(type:String, config:Object):void {
             var index:int = _registerType.indexOf(type);
             if (index == -1)
                 throw new Error("particle type not regist");
@@ -44,7 +44,7 @@ package Entity.FX {
                 if (p.active)
                     continue;
                 p.reset();
-                p.init(prop);
+                p.init(config);
                 recycle = true;
             }
 
@@ -53,7 +53,7 @@ package Entity.FX {
             var pClass:Class = _typeClass[index];
             try {
                 p = new BasicParticle(type, new pClass());
-                p.init(prop);
+                p.init(config);
                 _particlePool[index].push(p);
             } catch (error:Error) {
                 throw error;

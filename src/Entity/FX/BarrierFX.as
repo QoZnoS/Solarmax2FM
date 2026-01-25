@@ -1,29 +1,30 @@
 package Entity.FX {
-    import Game.GameScene;
-    import starling.display.Image;
-    import Entity.GameEntity;
+
     import UI.LayerFactory;
 
-    public class BarrierFX extends GameEntity {
-
-        private var image:Image;
-
+    public class BarrierFX implements IParticle {
+        private var _p:BasicParticle;
         public function BarrierFX() {
-            super();
-            image = new Image(Root.assets.getTexture("barrier_line"));
-            image.pivotX = image.width * 0.5;
-            image.pivotY = image.height * 0.5;
+
         }
 
-        public function initBarrier(gameScene:GameScene, x:Number, y:Number, angle:Number, color:uint):void {
-            super.init(gameScene);
-            image.x = x;
-            image.y = y;
-            image.scaleY = 0.75;
-            image.scaleX = 0.75;
-            image.rotation = angle;
-            image.color = color;
-            LayerFactory.call(LayerFactory.ADD_FX)(image);
+        public function get imageName():String {
+            return "barrier_line";
+        }
+        // 接受参数: x,y,angle.color
+        public function init(p:BasicParticle, config:Object):void {
+            _p = p;
+            p.pivotToCenter();
+            p.x = config.x;
+            p.y = config.y;
+            p.scale = 0.75
+            p.rotation = config.angle;
+            p.color = config.color;
+            LayerFactory.call(LayerFactory.ADD_FX)(_p.image)
+        }
+
+        public function update(dt:Number):void {
+
         }
     }
 }
