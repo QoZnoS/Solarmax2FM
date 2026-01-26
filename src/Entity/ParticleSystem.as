@@ -60,37 +60,58 @@ package Entity {
         public static function addParticle(type:String, config:Array):void {
             var index:int = _registerType.indexOf(type);
             if (index == -1)
-                throw new Error("particle type not regist");
+                throw new Error("particle type not registered");
 
-            var recycle:Boolean = false;
-            var length:int = _particlePool[index].length;
-            for (var i:int = 0; i < length; i++) {
-                // 单帧内需要大量添加实体时，总是从上一次回收结束时开始回收，减少遍历次数
-                if (recycleFrame == frame)
-                    i = firstInactive[index];
-                if (i >= length)
-                    break;
-                var p:BasicParticle = _particlePool[index][i];
-                if (p.active) {
-                    firstInactive[index] = i + 1;
-                    continue;
+            var pool:Vector.<BasicParticle> = _particlePool[index];
+            var maxActiveIndex:int = maxP[index];
+            var inactiveIndex:int = firstInactive[index];
+            var recycled:Boolean = false;
+
+            // 如果上一帧回收过粒子，则从上一次回收的位置开始查找
+            if (recycleFrame == frame && inactiveIndex < pool.length) {
+                var p:BasicParticle = pool[inactiveIndex];
+                if (!p.active) {
+                    p.reset();
+                    p.init(config);
+                    maxP[index] = Math.max(maxActiveIndex, inactiveIndex + 1);
+                    firstInactive[index] = inactiveIndex + 1;
+                    recycleFrame = frame;
+                    recycled = true;
                 }
-                p.reset();
-                p.init(config);
-                recycle = true;
-                recycleFrame = frame;
-                firstInactive[index] = p.active ? i + 1 : i;
-                maxP[index] = i + 1;
-                break;
             }
 
-            if (recycle)
-                return;
-            var pClass:Class = _typeClass[index];
-            p = new BasicParticle(type, new pClass());
-            p.init(config);
-            _particlePool[index].push(p);
-            maxP[index] = _particlePool[index].length;
+            // 如果未回收成功，则查找整个池
+            if (!recycled) {
+                // 如果池中已有粒子，查找第一个不活跃的
+                for (var i:int = 0; i < maxActiveIndex; i++) {
+                    var p2:BasicParticle = pool[i];
+                    if (!p2.active) {
+                        p2.reset();
+                        p2.init(config);
+                        // 更新firstInactive为下一个位置，但不超过当前maxP
+                        if (i == inactiveIndex)
+                            firstInactive[index] = i + 1;
+                        recycled = true;
+                        recycleFrame = frame;
+                        break;
+                    }
+                }
+            }
+
+            // 如果仍未找到可复用的粒子，创建新粒子
+            if (!recycled) {
+                var pClass:Class = _typeClass[index];
+                var newParticle:BasicParticle = new BasicParticle(type, new pClass());
+                newParticle.init(config);
+                pool.push(newParticle);
+                maxP[index] = pool.length;
+                // 新粒子加入后，firstInactive指向池末尾
+                firstInactive[index] = pool.length;
+            }
+
+            // 如果当前帧与回收帧不同，重置firstInactive
+            if (recycleFrame != frame)
+                firstInactive[index] = 0;
         }
 
         public static function registerType(type:String, particleClass:Class):void {
