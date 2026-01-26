@@ -28,12 +28,28 @@ package Entity.FX {
             pClass.update(dt);
         }
 
-        public function pivotToCenter():void {
+        public function texturePivotToCenter():void {
             // 确保纹理已加载
             var texture:Texture = image.texture;
             if (texture) {
                 image.pivotX = texture.width * 0.5;
                 image.pivotY = texture.height * 0.5;
+            } else {
+                // 延迟设置或使用默认值
+                trace("Warning: Texture not loaded when setting pivot. type: " + type);
+                image.pivotX = 0;
+                image.pivotY = 0;
+            }
+        }
+        private var _imagePivoted:Boolean = false;
+        /** 对每个实例仅执行一次 */
+        public function imagePivotToCenter():void {
+            if (_imagePivoted) return;
+            _imagePivoted = true;
+            var texture:Texture = image.texture;
+            if (texture) {
+                image.pivotX = image.width * 0.5;
+                image.pivotY = image.height * 0.5;
             } else {
                 // 延迟设置或使用默认值
                 trace("Warning: Texture not loaded when setting pivot. type: " + type);
@@ -53,6 +69,16 @@ package Entity.FX {
                 layerArgs.unshift(arrCache);
             } else {
                 trace("Error: Layer function not found for type: " + pClass.layerConfig[0]);
+            }
+        }
+
+        // 执行LayerFactory.call(method)，仅传入image参数
+        public function layerCall(method:String):void {
+            var functionRef:Function = LayerFactory.call(method);
+            if (functionRef != null) {
+                functionRef(image);
+            } else {
+                trace("Error: Layer function not found for method: " + method);
             }
         }
 
@@ -104,6 +130,14 @@ package Entity.FX {
             image.alpha = value;
         }
 
+        public function get visible():Boolean {
+            return image.visible;
+        }
+
+        public function set visible(value:Boolean):void {
+            image.visible = value;
+        }
+
         public function get rotation():Number {
             return image.rotation;
         }
@@ -122,6 +156,11 @@ package Entity.FX {
 
         public function set texture(value:String):void {
             image.texture = Root.assets.getTexture(value);
+        }
+
+        public function get debugInfo():String {
+            var texture:Texture = image.texture;
+            return "BasicParticle Debug: " + "pos: (" + x + ", " + y + ") " + "pivot: (" + image.pivotX + ", " + image.pivotY + ") " + "texture: " + (texture ? texture.width + "x" + texture.height : "null") + "scale: " + image.scaleX + ", " + image.scaleY;
         }
     }
 }

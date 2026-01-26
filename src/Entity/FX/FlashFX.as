@@ -1,51 +1,46 @@
+// 文件: FlashFX_new.as
 package Entity.FX {
-    import Game.GameScene;
-    import starling.display.Image;
-    import Entity.GameEntity;
     import UI.LayerFactory;
 
-    public class FlashFX extends GameEntity {
-
-        public static const STATE_GROW:int = 0;
-        public static const STATE_SHRINK:int = 1;
-
-        private var x:Number;
-        private var y:Number;
+    public class FlashFX implements IParticle {
+        private var p:BasicParticle;
+        private var layerCfg:Array;
+        
+        private static const STATE_GROW:int = 0;
+        private static const STATE_SHRINK:int = 1;
+        
+        private var state:int;
         private var size:Number;
-        private var color:uint;
-        private var image:Image;
         private var foreground:Boolean;
         private var deepColor:Boolean;
-        private var state:int;
 
         public function FlashFX() {
-            super();
-            image = new Image(Root.assets.getTexture("ship_flare"));
-            image.pivotX = image.width * 0.5;
-            image.pivotY = image.height * 0.5;
+            layerCfg = [];
         }
 
-        public function initExplosion(gameScene:GameScene, x:Number, y:Number, color:uint, foreground:Boolean, deepColor:Boolean):void {
-            super.init(gameScene);
-            this.x = x;
-            this.y = y;
-            this.color = color;
-            this.foreground = foreground;
-            this.deepColor = deepColor;
+        public function get imageName():String {
+            return "ship_flare";
+        }
+
+        // 接受参数: x, y, color, foreground, deepColor
+        public function init(p:BasicParticle, config:Array):void {
+            this.p = p;
+            p.texturePivotToCenter();
+            p.x = config[0];
+            p.y = config[1];
+            p.color = config[2];
+            this.foreground = config[3];
+            this.deepColor = config[4];
+            
             this.size = 0;
-            image.x = x;
-            image.y = y;
-            image.color = color;
-            image.scaleY = 0;
-            image.scaleX = 0;
-            image.alpha = 1;
+            p.scale = 0;
+            p.alpha = 1;
             state = STATE_GROW;
+            
+            layerCfg = [LayerFactory.ADD_IMAGE, foreground, deepColor];
         }
 
-        override public function deInit():void {
-        }
-
-        override public function update(dt:Number):void {
+        public function update(dt:Number):void {
             if (state == STATE_GROW) {
                 size += dt * 10;
                 if (size >= 1) {
@@ -56,11 +51,15 @@ package Entity.FX {
                 size -= dt * 5;
                 if (size <= 0) {
                     size = 0;
-                    active = false;
+                    p.active = false;
                 }
             }
-            image.scaleX = image.scaleY = size;
-            LayerFactory.call(LayerFactory.ADD_IMAGE)(image, foreground, deepColor);
+            p.scale = size;
+            p.addToLayer();
+        }
+        
+        public function get layerConfig():Array {
+            return layerCfg;
         }
     }
 }

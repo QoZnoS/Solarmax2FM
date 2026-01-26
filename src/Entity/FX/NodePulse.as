@@ -1,93 +1,101 @@
-// type 0为扩散式 1为收缩式
+// 文件: NodePulse_new.as
 package Entity.FX {
-    import Game.GameScene;
-    import Entity.Node;
-    import starling.display.Image;
-    import utils.GS;
-    import Entity.GameEntity;
     import UI.LayerFactory;
+    import Entity.Node;
+    import utils.GS;
 
-    public class NodePulse extends GameEntity {
-
+    public class NodePulse implements IParticle {
+        private var p:BasicParticle;
+        private var layerCfg:Array;
+        
         public static const TYPE_GROW:int = 0;
         public static const TYPE_SHRINK:int = 1;
-
-        private var x:Number;
-        private var y:Number;
+        
+        private var type:int;
         private var size:Number;
         private var maxSize:Number;
         private var delay:Number;
         private var rate:Number;
-        private var image:Image;
-        private var type:int;
         private var deepColor:Boolean;
+        private var targetX:Number;
 
         public function NodePulse() {
-            super();
-            image = new Image(Root.assets.getTexture("halo"));
-            image.pivotX = image.pivotY = image.width * 0.5;
+            layerCfg = [];
         }
 
-        public function initPulse(gameScene:GameScene, node:Node, color:uint, type:int, deepColor:Boolean, delay:Number = 0):void {
-            super.init(gameScene);
-            this.x = node.nodeData.x;
-            this.y = node.nodeData.y;
-            this.type = type;
-            this.delay = delay;
-            this.deepColor = deepColor;
+        public function get imageName():String {
+            return "halo";
+        }
+
+        // 接受参数: node, color, type, deepColor, delay
+        public function init(p:BasicParticle, config:Array):void {
+            this.p = p;
+            var node:Node = config[0] as Node;
+            p.imagePivotToCenter();
+            this.targetX = node.nodeData.x;
+            p.x = targetX;
+            p.y = node.nodeData.y;
+            p.color = config[1];
+            this.type = config[2];
+            this.deepColor = config[3];
+            this.delay = config.length > 4 ? config[4] : 0;
+            var nodeSize:Number = node.nodeData.size;
             switch (type) {
-                case 0:
+                case TYPE_GROW:
                     size = 0;
-                    maxSize = node.nodeData.size * 2;
-                    image.alpha = 1;
-                    rate = node.nodeData.size;
+                    maxSize = nodeSize * 2;
+                    p.alpha = 1;
+                    rate = nodeSize;
                     break;
-                case 1:
-                    size = node.nodeData.size * 1.333;
-                    maxSize = node.nodeData.size * 1.333;
-                    image.alpha = 0;
-                    rate = node.nodeData.size;
+                case TYPE_SHRINK:
+                    size = nodeSize * 1.333;
+                    maxSize = size;
+                    p.alpha = 0;
+                    rate = nodeSize;
+                    break;
             }
-            image.x = x;
-            image.y = y;
-            image.color = color;
-            image.scaleX = image.scaleY = size;
-            image.visible = true;
-            LayerFactory.call(LayerFactory.ADD_GROW)(image, deepColor);
+            p.scale = size;
+            p.visible = true;
+            layerCfg = [LayerFactory.ADD_GROW, deepColor];
+            p.addToLayer();
+            
         }
 
-        override public function deInit():void {
-            LayerFactory.call(LayerFactory.REMOVE_GROW)(image);
-        }
-
-        override public function update(dt:Number):void {
+        public function update(dt:Number):void {
             if (delay > 0) {
-                image.visible = false;
+                p.visible = false;
                 delay -= dt;
                 if (delay <= 0) {
-                    image.visible = true;
-                    GS.playCapture(this.x);
+                    p.visible = true;
+                    GS.playCapture(targetX);
                 }
                 return;
             }
             switch (type) {
-                case 0:
+                case TYPE_GROW:
                     size += dt * rate;
                     if (size > maxSize) {
                         size = maxSize;
-                        active = false;
+                        p.active = false;
                     }
-                    image.alpha = 1 - size / maxSize;
+                    p.alpha = 1 - size / maxSize;
                     break;
-                case 1:
+                case TYPE_SHRINK:
                     size -= dt * rate;
                     if (size < 0) {
                         size = 0;
-                        active = false;
+                        p.active = false;
                     }
-                    image.alpha = 1 - size / maxSize;
+                    p.alpha = 1 - size / maxSize;
+                    break;
             }
-            image.scaleX = image.scaleY = size;
+            p.scale = size;
+            if (!p.active)
+                p.layerCall(LayerFactory.REMOVE_GROW);
+        }
+        
+        public function get layerConfig():Array {
+            return layerCfg;
         }
     }
 }

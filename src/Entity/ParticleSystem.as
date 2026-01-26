@@ -27,6 +27,9 @@ package Entity {
         public static function init():void {
             registerType("FX", BarrierFX);
             registerType("warp", WarpFX);
+            registerType("explode", ExplodeFX);
+            registerType("flash", FlashFX);
+            registerType("nodePulse", NodePulse);
             // 初始化所有已注册类型
             for (var i:int = 0; i < _registerType.length; i++)
                 if (_particlePool.length < i + 1)

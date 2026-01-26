@@ -15,7 +15,7 @@ package Entity.FX {
         // 接受参数: x,y,angle.color
         public function init(p:BasicParticle, config:Array):void {
             this.p = p;
-            p.pivotToCenter();
+            p.texturePivotToCenter();
             p.x = config[0];
             p.y = config[1];
             p.scale = 0.75;

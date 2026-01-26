@@ -45,11 +45,9 @@ package Entity {
         }
 
         public static function addPulse(node:Node, color:uint, type:int, deepColor:Boolean, delay:Number = 0):void {
-            var nodePulse:NodePulse = EntityContainer.getReserve(EntityContainer.INDEX_PULSES) as NodePulse;
-            if (!nodePulse)
-                nodePulse = new NodePulse();
-            nodePulse.initPulse(game, node, color, type, deepColor, delay);
-            EntityContainer.addEntity(EntityContainer.INDEX_PULSES, nodePulse);
+            TEMP_ARRAY.length = 0;
+            TEMP_ARRAY.push(node, color, type, deepColor, delay);
+            ParticleSystem.addParticle("nodePulse", TEMP_ARRAY);
         }
 
         public static function addDarkPulse(node:Node, color:uint, type:int, maxSize:Number, rate:Number, angle:Number, deepColor:Boolean, delay:Number = 0):void {
@@ -71,19 +69,15 @@ package Entity {
 
         // 摧毁飞船特效
         public static function addFlash(x:Number, y:Number, color:uint, foreground:Boolean, deepColor:Boolean):void {
-            var flash:FlashFX = EntityContainer.getReserve(EntityContainer.INDEX_FLASHES) as FlashFX;
-            if (!flash)
-                flash = new FlashFX();
-            flash.initExplosion(game, x, y, color, foreground, deepColor);
-            EntityContainer.addEntity(EntityContainer.INDEX_FLASHES, flash);
+            TEMP_ARRAY.length = 0;
+            TEMP_ARRAY.push(x,y,color,foreground,deepColor);
+            ParticleSystem.addParticle("flash", TEMP_ARRAY);
         }
 
         public static function addExplosion(x:Number, y:Number, color:uint, foreground:Boolean, deepColor:Boolean):void {
-            var explode:ExplodeFX = EntityContainer.getReserve(EntityContainer.INDEX_EXPLOSIONS) as ExplodeFX;
-            if (!explode)
-                explode = new ExplodeFX();
-            explode.initExplosion(game, x, y, color, foreground, deepColor);
-            EntityContainer.addEntity(EntityContainer.INDEX_EXPLOSIONS, explode);
+            TEMP_ARRAY.length = 0;
+            TEMP_ARRAY.push(x,y,color,foreground,deepColor);
+            ParticleSystem.addParticle("explode", TEMP_ARRAY);
         }
 
     }

@@ -23,7 +23,7 @@ package Entity.FX {
         public function init(p:BasicParticle, config:Array):void {
             layerCfg.length = 0;
             this.p = p;
-            p.pivotToCenter();
+            p.texturePivotToCenter();
             var x:Number = config[0];
             var y:Number = config[1];
             var dx:Number = config[2] - x;
