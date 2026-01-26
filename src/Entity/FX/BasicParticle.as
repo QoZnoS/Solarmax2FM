@@ -44,7 +44,8 @@ package Entity.FX {
         private var _imagePivoted:Boolean = false;
         /** 对每个实例仅执行一次 */
         public function imagePivotToCenter():void {
-            if (_imagePivoted) return;
+            if (_imagePivoted)
+                return;
             _imagePivoted = true;
             var texture:Texture = image.texture;
             if (texture) {
@@ -56,6 +57,27 @@ package Entity.FX {
                 image.pivotX = 0;
                 image.pivotY = 0;
             }
+        }
+        public function imagePovitYToCenter():void {
+            if (_imagePivoted)
+                return;
+            _imagePivoted = true;
+            var texture:Texture = image.texture;
+            if (texture) {
+                image.pivotY = image.height * 0.5;
+            } else {
+                // 延迟设置或使用默认值
+                trace("Warning: Texture not loaded when setting pivot. type: " + type);
+                image.pivotY = 0;
+            }
+        }
+        private var _verticesAdjusted:Boolean = false;
+        /** 对每个实例仅执行一次 */
+        public function adjustVertices():void {
+            if (_verticesAdjusted)
+                return;
+            _verticesAdjusted = true;
+            image.adjustVertices();
         }
 
         public function addToLayer():void {
@@ -72,7 +94,10 @@ package Entity.FX {
             }
         }
 
-        // 执行LayerFactory.call(method)，仅传入image参数
+        /**
+         * 执行LayerFactory.call(method)，仅传入image参数
+         * @param method 
+         */ 
         public function layerCall(method:String):void {
             var functionRef:Function = LayerFactory.call(method);
             if (functionRef != null) {
@@ -82,6 +107,7 @@ package Entity.FX {
             }
         }
 
+        // #region getter/setter 代理 image 属性
         public function reset():void {
             active = true;
         }
@@ -150,17 +176,41 @@ package Entity.FX {
             image.color = value;
         }
 
+        public function get pivotX():Number {
+            return image.pivotX;
+        }
+
+        public function set pivotX(value:Number):void {
+            image.pivotX = value;
+        }
+
+        public function get pivotY():Number {
+            return image.pivotY;
+        }
+
+        public function set pivotY(value:Number):void {
+            image.pivotY = value;
+        }
+
         public function set width(value:Number):void {
             image.width = value;
+        }
+
+        public function get width():Number {
+            return image.width;
+        }
+
+        public function set height(value:Number):void {
+            image.height = value;
+        }
+
+        public function get height():Number {
+            return image.height;
         }
 
         public function set texture(value:String):void {
             image.texture = Root.assets.getTexture(value);
         }
-
-        public function get debugInfo():String {
-            var texture:Texture = image.texture;
-            return "BasicParticle Debug: " + "pos: (" + x + ", " + y + ") " + "pivot: (" + image.pivotX + ", " + image.pivotY + ") " + "texture: " + (texture ? texture.width + "x" + texture.height : "null") + "scale: " + image.scaleX + ", " + image.scaleY;
-        }
+        // #endregion
     }
 }

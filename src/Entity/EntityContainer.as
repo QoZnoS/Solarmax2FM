@@ -5,7 +5,6 @@ package Entity {
     import flash.geom.Point;
     import Entity.Node.NodeType;
     import Entity.FX.WarpFX;
-    import Entity.FX.BeamFX;
     import Entity.FX.NodePulse;
     import Entity.FX.FlashFX;
     import Entity.FX.BarrierFX;
@@ -67,10 +66,6 @@ package Entity {
 
         public static function get warps():Vector.<WarpFX> {
             return Vector.<WarpFX>(_entityPools[INDEX_WARPS].active);
-        }
-
-        public static function get beams():Vector.<BeamFX> {
-            return Vector.<BeamFX>(_entityPools[INDEX_BEAMS].active);
         }
 
         public static function get pulses():Vector.<NodePulse> {

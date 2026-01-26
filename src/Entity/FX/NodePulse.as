@@ -58,7 +58,6 @@ package Entity.FX {
             p.visible = true;
             layerCfg = [LayerFactory.ADD_GROW, deepColor];
             p.addToLayer();
-            
         }
 
         public function update(dt:Number):void {

@@ -27,11 +27,12 @@ package Entity {
         }
 
         public static function addBeam(node:Node, ship:Ship):void {
-            var beamFX:BeamFX = EntityContainer.getReserve(EntityContainer.INDEX_BEAMS) as BeamFX;
-            if (!beamFX)
-                beamFX = new BeamFX();
-            beamFX.initBeam(game, node.nodeData.x, node.nodeData.y, ship.x, ship.y, node);
-            EntityContainer.addEntity(EntityContainer.INDEX_BEAMS, beamFX);
+            TEMP_ARRAY.length = 0;
+            TEMP_ARRAY.push(node);
+            ParticleSystem.addParticle("beamShooter", TEMP_ARRAY);
+            TEMP_ARRAY.length = 0;
+            TEMP_ARRAY.push(node.nodeData.x, node.nodeData.y, ship.x, ship.y, node.nodeData.team);
+            ParticleSystem.addParticle("beamLine", TEMP_ARRAY);
         }
 
         public static function addLightning(node1:Node, node2:Node, color:uint, deepColor:Boolean):void {
