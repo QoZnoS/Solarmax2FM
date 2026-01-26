@@ -35,6 +35,12 @@ package Entity {
             ParticleSystem.addParticle("beamLine", TEMP_ARRAY);
         }
 
+        public static function addBeamLine(x1:Number, y1:Number, x2:Number, y2:Number, team:int):void {
+            TEMP_ARRAY.length = 0;
+            TEMP_ARRAY.push(x1, y1, x2, y2, team);
+            ParticleSystem.addParticle("beamLine", TEMP_ARRAY);
+        }
+
         public static function addLightning(node1:Node, node2:Node, color:uint, deepColor:Boolean):void {
             var lightningFX:LightningFX = EntityContainer.getReserve(EntityContainer.INDEX_BEAMS) as LightningFX;
             if (!lightningFX) {

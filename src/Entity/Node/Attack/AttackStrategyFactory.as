@@ -8,6 +8,7 @@ package Entity.Node.Attack {
         public static const CLONETURRET:String = "cloneturret";
         public static const CAPTURESHIP:String = "captureship";
         public static const DIFFUSION:String = "diffusion";
+        public static const ELECTROMAGNETIC:String = "electromagnetic";
 
         /** 存储类型到类路径的映射 */
         private static var _strategyMap:Dictionary = new Dictionary();
@@ -20,6 +21,7 @@ package Entity.Node.Attack {
             registerStrategy(CLONETURRET, CloneturretAttack);
             registerStrategy(CAPTURESHIP, CaptureshipAttack);
             registerStrategy(DIFFUSION, DiffusionAttack);
+            registerStrategy(ELECTROMAGNETIC, ElectromagneticAttack);
             _ready = true;
         }
 

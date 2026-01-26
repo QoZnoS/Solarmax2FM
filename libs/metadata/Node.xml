@@ -116,4 +116,9 @@
         <hpMult>3</hpMult>
         <scale>0.6</scale>
     </node>
+    <!-- <node id="12" name="electromagneticRailgun">
+        <attackRate>5</attackRate>
+        <attackRange>1</attackRange>
+        <attackType>electromagnetic</attackType>
+    </node> -->
 </node>
