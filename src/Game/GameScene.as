@@ -26,7 +26,7 @@ package Game {
     import UI.UIContainer;
     import utils.CalcTools;
     import UI.LayerFactory;
-    import Entity.FX.ParticleSystem;
+    import Entity.ParticleSystem;
 
     public class GameScene extends BasicScene {
         // #region 类变量

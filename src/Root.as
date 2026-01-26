@@ -8,7 +8,7 @@ package {
     import utils.ScrollingBackground;
     import utils.GS;
     import utils.Drawer;
-    import Entity.FX.ParticleSystem;
+    import Entity.ParticleSystem;
 
     public class Root extends Sprite {
 

@@ -1,5 +1,6 @@
-package Entity.FX {
+package Entity {
     import starling.errors.AbstractClassError;
+    import Entity.FX.*;
 
     public class ParticleSystem {
         // 所有粒子必须先注册类型
@@ -47,15 +48,12 @@ package Entity.FX {
             var length:int = _particlePool.length;
             for (var index:int = 0; index < length; index++) {
                 var pool:Vector.<BasicParticle> = _particlePool[index];
-                var maxPInFrame:int = 0;
                 for (var i:int = 0; i < maxP[index]; i++) {
                     var p:BasicParticle = pool[i];
-                    if (p.active){
+                    if (p.active)
                         p.update(dt);
-                        maxPInFrame = i;
-                    }
                 }
-                maxP[index] = maxPInFrame;
+                maxP[index] = i;
             }
         }
 
@@ -69,16 +67,20 @@ package Entity.FX {
             for (var i:int = 0; i < length; i++) {
                 // 单帧内需要大量添加实体时，总是从上一次回收结束时开始回收，减少遍历次数
                 if (recycleFrame == frame)
-                    i = firstInactive[index]
+                    i = firstInactive[index];
+                if (i >= length)
+                    break;
                 var p:BasicParticle = _particlePool[index][i];
-                if (p.active)
+                if (p.active) {
+                    firstInactive[index] = i + 1;
                     continue;
+                }
                 p.reset();
                 p.init(config);
                 recycle = true;
                 recycleFrame = frame;
-                firstInactive[index] = i;
-                maxP[index] = i;
+                firstInactive[index] = p.active ? i + 1 : i;
+                maxP[index] = i + 1;
                 break;
             }
 
