@@ -27,12 +27,15 @@ package Entity {
         }
 
         public static function addBeam(node:Node, ship:Ship):void {
+            if (!Globals.teamDeepColors[node.nodeData.team])
+                addBeamShooter(node);
+            addBeamLine(node.nodeData.x, node.nodeData.y, ship.x, ship.y, node.nodeData.team);
+        }
+
+        public static function addBeamShooter(node:Node):void {
             TEMP_ARRAY.length = 0;
             TEMP_ARRAY.push(node);
             ParticleSystem.addParticle("beamShooter", TEMP_ARRAY);
-            TEMP_ARRAY.length = 0;
-            TEMP_ARRAY.push(node.nodeData.x, node.nodeData.y, ship.x, ship.y, node.nodeData.team);
-            ParticleSystem.addParticle("beamLine", TEMP_ARRAY);
         }
 
         public static function addBeamLine(x1:Number, y1:Number, x2:Number, y2:Number, team:int):void {
