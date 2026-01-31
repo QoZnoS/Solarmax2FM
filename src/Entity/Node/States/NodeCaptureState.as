@@ -12,7 +12,7 @@ package Entity.Node.States {
         private var capturingTeams:Vector.<int>; // 占据势力（们）
         private var capturingGroup:int; // 占据队伍
         public var captureTeam:int; // 占领条势力
-        public var captureGroup:int; // 占领条队伍
+        private var captureGroup:int; // 占领条队伍
         public var captureRate:Number; // 占领速度
 
         public function NodeCaptureState(node:Node) {
@@ -61,16 +61,16 @@ package Entity.Node.States {
                 node.capturing = (group != Globals.teamGroups[nodeData.team]);
                 capturingTeams = teams;
                 if (nodeData.team == NEUTRAL_TEAM && (nodeData.hp == 0 || capturingGroup == captureGroup && capturingTeams.indexOf(captureTeam) == -1)) {
-                        var r:Number = node.rng.nextNumber(); //  根据飞船数随机选择占领势力
-                        var lowerBound:Number = 0; // 随机数因子下界
-                        for each (var i:int in teams) {
-                            var upperBound:Number = lowerBound + ships[i].length / shipNum; // 因子上界
-                            if (r >= lowerBound && r < upperBound) {
-                                captureTeam = i;
-                                break;
-                            }
-                            lowerBound = upperBound; // 新的因子下界
+                    var r:Number = node.rng.nextNumber(); //  根据飞船数随机选择占领势力
+                    var lowerBound:Number = 0; // 随机数因子下界
+                    for each (var i:int in teams) {
+                        var upperBound:Number = lowerBound + ships[i].length / shipNum; // 因子上界
+                        if (r >= lowerBound && r < upperBound) {
+                            captureTeam = i;
+                            break;
                         }
+                        lowerBound = upperBound; // 新的因子下界
+                    }
                 }
                 return true;
             }
@@ -146,6 +146,11 @@ package Entity.Node.States {
 
         public function get stateType():String {
             return NodeStateFactory.CAPTURE;
+        }
+
+        public function deserialize(obj:Object):void {
+            if (obj.captureTeam)
+                this.captureTeam = obj.captureTeam;
         }
     }
 }

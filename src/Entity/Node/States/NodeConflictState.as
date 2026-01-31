@@ -3,6 +3,7 @@ package Entity.Node.States {
     import Entity.Node.NodeData;
     import Entity.EntityHandler;
     import Entity.Ship;
+
     public class NodeConflictState implements INodeState {
 
         private var node:Node;
@@ -39,7 +40,7 @@ package Entity.Node.States {
                 if (ships[teamId].length > 0) {
                     activeTeams.push(teamId);
                     totalShips += ships[teamId].length;
-                    if(activeGroups.indexOf(Globals.teamGroups[teamId]) == -1)
+                    if (activeGroups.indexOf(Globals.teamGroups[teamId]) == -1)
                         activeGroups.push(Globals.teamGroups[teamId])
                 }
             }
@@ -57,7 +58,7 @@ package Entity.Node.States {
                 var group:int = Globals.teamGroups[attackingTeamId];
                 var allyTeamsNum:int = 0;
                 for each (var teamId:int in activeTeams) {
-                    if(Globals.teamGroups[teamId] == group)
+                    if (Globals.teamGroups[teamId] == group)
                         allyTeamsNum++;
                 }
                 var attackForce:Number = (BASE_ATTACK_FACTOR * activeShips * attackMultiplier * dt) / (activeTeams.length - allyTeamsNum);
@@ -105,6 +106,9 @@ package Entity.Node.States {
 
         public function get stateType():String {
             return NodeStateFactory.CONFLICT;
+        }
+
+        public function deserialize(obj:Object):void {
         }
     }
 }

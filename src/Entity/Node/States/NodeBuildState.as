@@ -11,12 +11,13 @@ package Entity.Node.States {
         public var buildRate:Number; // 生产速度，生产时间的倒数
 
         public function NodeBuildState(node:Node) {
-            this.node = node
+            this.node = node;
+            buildTimer = 1;
         }
 
         public function init():void {
             this.nodeData = node.nodeData;
-            buildTimer = 1;
+            buildTimer = Math.max(1, buildTimer);
         }
 
         public function deinit():void {
@@ -38,7 +39,7 @@ package Entity.Node.States {
         public function get enable():Boolean {
             var group:int = Globals.teamGroups[nodeData.team];
             var groupShips:int = 0;
-            for (var i:int = 0; i < node.ships.length; i++){
+            for (var i:int = 0; i < node.ships.length; i++) {
                 if (i == nodeData.team || Globals.teamGroups[i] == group)
                     groupShips += node.ships[i].length;
             }
@@ -47,6 +48,13 @@ package Entity.Node.States {
 
         public function get stateType():String {
             return NodeStateFactory.BUILD;
+        }
+
+        public function deserialize(obj:Object):void {
+            if (obj.buildRate)
+                this.buildRate = obj.buildRate;
+            if (obj.buildTimer)
+                this.buildTimer = obj.buildTimer;
         }
     }
 }
