@@ -36,9 +36,9 @@ package utils {
 
             // 计算加权平均值
             if (totalWeight == 0) {
-                var avgColor:uint = 0
+                var avgColor:uint = 0;
                 for (i = 0; i < colors.length; i++)
-                    avgColor += color[i];
+                    avgColor += colors[i];
                 avgColor /= colors.length;
                 return avgColor;
             }

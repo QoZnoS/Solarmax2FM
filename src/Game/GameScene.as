@@ -86,8 +86,27 @@ package Game {
             var i:int = 0;
             rng = new Rng(seed);
             // #region 读取配置生成关卡
+            // 势力属性
             var levelData:Object = LevelData.level[Globals.level];
-            nodeIn(levelData.node); // 天体
+            if (levelData.playerTeam)
+                Globals.playerTeam = levelData.playerTeam;
+            else
+                Globals.playerTeam = 1;
+            Globals.teamGroups = Globals.defaultGroups.slice();
+            for (i = 0; i < Globals.teamCount; i++) {
+                var teamData:Object = LevelData.rawData[Globals.currentData].team[i];
+                if ("group" in teamData)
+                    Globals.teamGroups[i] = teamData.group;
+                else
+                    Globals.teamGroups[i] = i;
+            }
+            var groupData:Array = levelData.group;
+            if (levelData.group)
+                for(var group:int = 0; group < groupData.length; group++)
+                    for(i = 0; i < groupData[group].length; i++)
+                        Globals.teamGroups[groupData[group][i]] = group + 1;
+            // 天体
+            nodeIn(levelData.node);
             // AI
             var aiData:Array = levelData.ai;
             if (!("ai" in levelData))
@@ -111,24 +130,6 @@ package Game {
                 se.game = this;
                 specialEvents.push(se);
             }
-            // 势力属性
-            if (levelData.playerTeam)
-                Globals.playerTeam = levelData.playerTeam;
-            else
-                Globals.playerTeam = 1;
-            Globals.teamGroups = Globals.defaultGroups.slice();
-            for (i = 0; i < Globals.teamCount; i++) {
-                var teamData:Object = LevelData.rawData[Globals.currentData].team[i];
-                if ("group" in teamData)
-                    Globals.teamGroups[i] = teamData.group;
-                else
-                    Globals.teamGroups[i] = i;
-            }
-            var groupData:Array = levelData.group;
-            if (levelData.group)
-                for(var group:int = 0; group < groupData.length; group++)
-                    for(i = 0; i < groupData[group].length; i++)
-                        Globals.teamGroups[groupData[group][i]] = group + 1;
             // #endregion
             Globals.replay = new ReplayData(LevelData.rawData[Globals.currentData].name, LevelData.level[Globals.level].name, rng.seed);
             for each (var label:TextField in popLabels) {

@@ -8556,6 +8556,12 @@
                             "type/easy": "SimpleAI",
                             "type/normal": "SmartAI",
                             "type": "HardAI"
+                        },
+                        {
+                            "team": 3,
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
                         }
                     ],
                     "bgm": "bgm06"
