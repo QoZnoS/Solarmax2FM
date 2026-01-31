@@ -86,7 +86,17 @@
                             "isUntouchable": false,
                             "isAIinvisible": false,
                             "hp": 100,
-                            "hpMult": 1
+                            "hpMult": 1,
+                            "statePool": {
+                                "build": {
+                                    "buildRate": 1.2,
+                                    "buildTimer": 1
+                                },
+                                "capture": {
+                                    "captureTeam": 1
+                                },
+                                "attack": {}
+                            }
                         },
                         {
                             "x": 672,

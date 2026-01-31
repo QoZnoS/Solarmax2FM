@@ -2,6 +2,8 @@ package Entity.Node.States {
     import Entity.Node;
     import Entity.Node.Attack.IAttackStrategy;
     import Entity.Node.NodeData;
+    import Entity.Node.Attack.AttackStrategyFactory;
+    import Entity.Node.NodeType;
 
     public class NodeAttackState implements INodeState {
 
@@ -36,12 +38,30 @@ package Entity.Node.States {
             return NodeStateFactory.ATTACK;
         }
 
-        public function get attackRange():Number{
+        public function get attackRange():Number {
             return attackStrategy.attackRange;
         }
 
-        public function get attackRate():Number{
+        public function get attackRate():Number {
             return attackStrategy.attackRate;
+        }
+
+        public function deserialize(obj:Object):void {
+            if (obj.attackType) {
+                var type:String = obj.attackType;
+                var attackRate:Number = NodeType.getDefaultAttackRate(type, nodeData.size);
+                var attackRange:Number = NodeType.getDefaultAttackRange(type, nodeData.size);
+                var attackLast:Number = NodeType.getDefaultAttackLast(type, nodeData.size);
+                this.attackStrategy = AttackStrategyFactory.create(NodeType.getDefaultAttackType(type), attackRate, attackRange, attackLast);
+            }
+            if (obj.attackTimer)
+                this.attackStrategy.attackTimer = obj.attackTimer;
+            if (obj.attackRate)
+                this.attackStrategy.attackRate = obj.attackRate;
+            if (obj.attackRange)
+                this.attackStrategy.attackRange = obj.attackRange;
+            if (obj.attackLast)
+                this.attackStrategy.attackLast = obj.attackLast;
         }
     }
 }
