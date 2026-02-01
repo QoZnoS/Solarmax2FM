@@ -36,12 +36,12 @@ package {
                 levelCache[i] = new Dictionary;
 
             NodeType.init();
-            updateLevelData();
-            
             if (Globals.currentData >= rawData.length){
                 SceneController.alert("The selected Mappack does not exist!");
                 Globals.currentData = 0;
             }
+            updateLevelData();
+            
             Globals.initTeam();
             updateTeam();
         }
