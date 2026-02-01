@@ -52,8 +52,8 @@ package utils {
         }
 
         public static function scaleColorToMax(color:uint):uint {
-            // 如果是黑色(0)，直接返回
-            if (color == 0) return 0;
+            // 如果是黑色(0)，直接返回白色
+            if (color == 0) return (255 << 16) | (255 << 8) | 255;
             
             // 提取RGB分量
             var r:uint = (color >> 16) & 0xFF;
