@@ -91,6 +91,7 @@ package Entity {
             nodeData = new NodeData(true);
             NodeStaticLogic.changeType(this, data.type, data.size, data.rotation);
             NodeStaticLogic.changeTeam(this, data.team, false);
+            deserializeState(data);
             nodeData.deserialize(data);
             aiValue = 0;
             triggerTimer = 0;
@@ -103,6 +104,15 @@ package Entity {
             for each (var state:INodeState in statePool)
                 state.init();
             NodeStaticLogic.updateLabelSizes(this);
+        }
+
+        private function deserializeState(data:Object):void {
+            if (data.statePool == undefined)
+                return;
+            var registerState:Array = NodeStateFactory.registerStateArray;
+            for (var key:String in data.statePool)
+                if (registerState.indexOf(key) != -1)
+                    statePool[key].deserialize(data.statePool[key])
         }
 
         override public function deInit():void {
@@ -222,9 +232,10 @@ package Entity {
 
         public function resetCache():void {
             nodeData.hard_oppAllStrengthCache = new Vector.<int>(Globals.teamCount, true);
-            for(var i:int = 0; i < Globals.teamCount; i++)
+            for (var i:int = 0; i < Globals.teamCount; i++)
                 nodeData.hard_oppAllStrengthCache[i] = -1;
         }
+
         // #endregion
         // #region AI工具及相关计算工具函数
         // 将飞船分配到周围天体上，按距离依次，兵力用完为止（传 送 门 分 兵
@@ -269,7 +280,7 @@ package Entity {
                 NodeStaticLogic.sendAIShips(this, nodeData.team, targetNode[i], shipArray[i]);
         }
 
-        public function divideShips() : void {
+        public function divideShips() : void {  // 均匀分散飞船
             var nodeArray:Vector.<Node> = EntityContainer.nodes;
             var shipCount:int = int(ships[nodeData.team].length);
             var nodeCount:int = nodeArray.length - 1;
@@ -303,6 +314,7 @@ package Entity {
                     transitGroupShips[shipGroup]++; // 为参数势力或移动距离大于50px
             }
         }
+
         // 返回飞船数最多的敌对队伍的总飞船数（无属性差分）
         public function oppShipCount(team:int):int {
             var strength:int = 0;
@@ -318,6 +330,7 @@ package Entity {
                 strength = Math.max(i, strength);
             return strength;
         }
+
         // 返回飞船数最多的敌对队伍的总飞船数（考虑属性）
         public function oppStrength(team:int):int {
             var strength:int = 0;
@@ -329,10 +342,11 @@ package Entity {
                     continue;
                 groupStrengths[oppGroup] += ships[i].length * Globals.teamShipAttacks[i] * Globals.teamShipDefences[i];
             }
-            for each(i in groupStrengths)
+            for each (i in groupStrengths)
                 strength = Math.max(i, strength);
             return strength;
         }
+
         // 估算后续可能面对的非指定势力方最强飞船强度（无属性差分）
         public function predictedOppShipCount(team:int):int {
             var strength:int = 0;
@@ -351,6 +365,7 @@ package Entity {
                 strength = Math.max(i, strength);
             return strength;
         }
+
         // 估算后续可能面对的非指定势力方最强飞船强度（考虑属性）
         public function predictedOppStrength(team:int):int {
             var strength:int = 0;
@@ -365,18 +380,21 @@ package Entity {
                     addStrength *= 1.25;
                 groupStrengths[oppGroup] += addStrength;
             }
-            for each(i in groupStrengths)
+            for each (i in groupStrengths)
                 strength = Math.max(i, strength);
             return strength;
         }
+
         // 返回该势力飞船数（无属性差分）
         public function teamShipCount(team:int):int {
             return Number(ships[team].length);
         }
+
         // 返回该势力飞船数（考虑属性）
         public function teamStrength(team:int):int {
             return Number(ships[team].length) * Globals.teamShipAttacks[team] * Globals.teamShipDefences[team];
         }
+
         // 返回该队伍飞船数（无属性差分）
         public function groupShipCount(team:int):int {
             var strength:int = 0;
@@ -386,6 +404,7 @@ package Entity {
                     strength += Number(ships[i].length);
             return strength;
         }
+
         // 返回该队伍飞船数（考虑属性）
         public function groupStrength(team:int):int {
             var strength:int = 0;
@@ -395,22 +414,25 @@ package Entity {
                     strength += Number(ships[i].length) * Globals.teamShipAttacks[i] * Globals.teamShipDefences[i];
             return strength;
         }
+
         // 预测该势力可能的强度（无属性差分）
         public function predictedTeamShipCount(team:int):int {
-            var group:int = Globals.teamGroups[team]; 
+            var group:int = Globals.teamGroups[team];
             var strength:Number = ships[team].length + transitGroupShips[group];
             if (buildState.buildRate > 0 && team == nodeData.team)
                 strength *= 1.25;
             return strength;
         }
+
         // 预测该势力可能的强度（考虑属性）
         public function predictedTeamStrength(team:int):int {
-            var group:int = Globals.teamGroups[team]; 
+            var group:int = Globals.teamGroups[team];
             var strength:Number = Number(ships[team].length + transitGroupShips[group]) * Globals.teamShipAttacks[team] * Globals.teamShipDefences[team];
             if (buildState.buildRate > 0 && team == nodeData.team)
                 strength *= 1.25;
             return strength;
         }
+
         // 预测该队伍可能的强度（无属性差分）
         public function predictedGroupShipCount(team:int):int {
             var strength:int = 0;
@@ -422,6 +444,7 @@ package Entity {
                 strength *= 1.25;
             return strength;
         }
+
         // 预测该队伍可能的强度（考虑属性）
         public function predictedGroupStrength(team:int):int {
             var strength:int = 0;
@@ -433,6 +456,7 @@ package Entity {
                 strength *= 1.25;
             return strength;
         }
+
         // 计算可到达的有前往价值的天体
         public function getOppLinks(team:int):void {
             var group:int = Globals.teamGroups[team];
@@ -444,6 +468,7 @@ package Entity {
                     oppNodeLinks.push(node);
             }
         }
+
         // #endregion
         // #region hardAI 特制工具函数
         // 返回飞向自身的最强非己方飞船数
@@ -474,6 +499,7 @@ package Entity {
                 maxShips = Math.max(i, maxShips);
             return maxShips;
         }
+
         // 返回指定势力的飞船数
         public function hard_teamStrength(team:int):int {
             var strength:int = 0;
@@ -482,6 +508,7 @@ package Entity {
                     strength++;
             return strength;
         }
+
         // 返回己方综合强度
         public function hard_AllStrength(team:int):int {
             var group:int = Globals.teamGroups[team];
@@ -492,6 +519,7 @@ package Entity {
             return strength;
         }
         private var TEMP_INT:Vector.<int> = new Vector.<int>();
+
         // 返回敌方综合强度
         public function hard_oppAllStrength(team:int):int {
             if (nodeData.hard_oppAllStrengthCache[team] != -1)
@@ -520,6 +548,7 @@ package Entity {
             nodeData.hard_oppAllStrengthCache[team] = maxShips;
             return maxShips;
         }
+
         // 检查撤退时机是否合理
         public function hard_retreatCheck(team:int):Boolean {
             var ships:Array = [];
@@ -551,6 +580,7 @@ package Entity {
                 return true;
             return false;
         }
+
         // #endregion
         public function get basicState():NodeBasicState {
             return statePool[NodeStateFactory.BASIC] as NodeBasicState;

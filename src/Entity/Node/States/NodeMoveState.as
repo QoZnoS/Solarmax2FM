@@ -79,7 +79,7 @@ package Entity.Node.States {
 
         public function deinit():void {
             LayerFactory.call(LayerFactory.REMOVE_NODE)(image, halo, glow);
-            for (var i:int = 0; i < Globals.teamCount; i++){
+            for (var i:int = 0; i < Globals.teamCount; i++) {
                 LayerFactory.removeChild(LayerFactory.LABEL, captureLabels[i]);
                 LayerFactory.removeChild(LayerFactory.LABEL, conflictLabels[i]);
             }
@@ -138,11 +138,11 @@ package Entity.Node.States {
             var i:int = 0;
             for (i = 0; i < Globals.teamCount; i++)
                 activeGroup.push(new Vector.<int>);
-            for each(i in activeTeams)
+            for each (i in activeTeams)
                 activeGroup[Globals.teamGroups[i]].push(i);
 
             var labelIndex:int = 0
-            for (i = 0;i < Globals.teamCount; i++) {
+            for (i = 0; i < Globals.teamCount; i++) {
                 if (activeTeams.indexOf(i) == -1)
                     conflictLabels[i].visible = false;
                 if (activeGroup[i].length == 0)
@@ -150,7 +150,7 @@ package Entity.Node.States {
                 var arcRatio:Number = 0;
                 var colorArr:Array = [];
                 // 渲染兵力数字并计算队伍弧长
-                for each(var teamId:int in activeGroup[i]) {
+                for each (var teamId:int in activeGroup[i]) {
                     var shipCount:int = node.ships[teamId].length;
                     var labelAngle:Number = START_ANGLE + labelIndex * labelAngleStep;
                     updateConflictLabel(teamId, labelAngle, shipCount);
@@ -196,6 +196,7 @@ package Entity.Node.States {
 
         private const startEaseX:Number = 61.8033988750 - Transitions.getTransition(Transitions.EASE_OUT)(1 / Globals.maxMarginTeam) * 118.196601125;
         private const startEaseY:Number = 57.1894889582 - Transitions.getTransition(Transitions.EASE_OUT)(1 / Globals.maxMarginTeam) * 122.8105110418;
+
         private function updateCooperateLabel(teamId:int, labelAngle:Number, shipCount:int, teamCount:int):void {
             var teamLabel:TextField = captureLabels[teamId];
             if (teamCount == 2)
@@ -266,6 +267,9 @@ package Entity.Node.States {
 
         public function set visible(val:Boolean):void {
             image.visible = halo.visible = glow.visible = val;
+        }
+
+        public function deserialize(obj:Object):void {
         }
     }
 }

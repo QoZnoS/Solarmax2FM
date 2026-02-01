@@ -40,9 +40,8 @@ package Entity.Node {
          * @param ...props 要添加的属性名
          */
         public function addSerializableProp(... props):void {
-            for each (var prop:String in props) {
+            for each (var prop:String in props)
                 _serializableProps[prop] = true;
-            }
         }
 
         /**
@@ -50,9 +49,8 @@ package Entity.Node {
          * @param ...props 要移除的属性名
          */
         public function removeSerializableProp(... props):void {
-            for each (var prop:String in props) {
+            for each (var prop:String in props)
                 delete _serializableProps[prop];
-            }
         }
 
         /**
@@ -90,6 +88,8 @@ package Entity.Node {
             var vector:Vector.<int>;
             var i:int = 0;
             for (var prop:String in obj) {
+                if (prop === "statePool")
+                    continue;
                 if (prop === "startShips" && !(obj[prop] is Array)) {
                     vector = new Vector.<int>(Globals.teamCount);
                     vector[team] = int(obj[prop]);

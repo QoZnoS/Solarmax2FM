@@ -18,7 +18,7 @@ package Entity.Node.States {
 
         /** 存储类型到类路径的映射 */
         private static var _stateMap:Dictionary = new Dictionary();
-
+        private static var _stateArr:Array = new Array();
         private static var _ready:Boolean = false;
 
         private static function init():void {
@@ -39,6 +39,7 @@ package Entity.Node.States {
          */
         public static function registerState(type:String, stateClass:Class):void {
             _stateMap[type] = stateClass;
+            _stateArr.push(type);
         }
 
         public static function create(type:String, node:Node):INodeState {
@@ -63,6 +64,10 @@ package Entity.Node.States {
                 _statePool[key] = create(key, node);
             }
             return _statePool;
+        }
+
+        public static function get registerStateArray():Array {
+            return _stateArr;
         }
     }
 }
