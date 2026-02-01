@@ -10,6 +10,7 @@ package Entity.AI {
         public static const DARK:String = "DarkAI";
         public static const FINAL:String = "FinalAI";
         public static const HARD:String = "HardAI";
+        public static const WHITEHOLE:String = "WhiteHoleAI";
 
         /** 存储类型到类路径的映射 */
         private static var _aiMap:Dictionary = new Dictionary();
@@ -24,7 +25,7 @@ package Entity.AI {
             registerAI(DARK, DarkAI);
             registerAI(FINAL, FinalAI);
             registerAI(HARD, HardAI);
-
+            registerAI(WHITEHOLE, WhiteHoleAI);
             _ready = true;
         }
 
@@ -66,6 +67,7 @@ package Entity.AI {
                     return 0;
                 case DARK:
                 case FINAL:
+                case WHITEHOLE:
                     return 0.25;
                 default:
                     return 1.5;
@@ -82,6 +84,7 @@ package Entity.AI {
                     return 1.5;
                 case DARK:
                 case FINAL:
+                case WHITEHOLE:
                     return 0.25;
                 default:
                     return 1.5;

@@ -17,6 +17,8 @@ package Entity.FX {
         public static const TYPE_BLACKHOLE:int = 5;
         public static const TYPE_BLACKHOLE_FLARE:int = 6;
         public static const TYPE_DIFFUSION_ARC:int = 8;
+        public static const TYPE_SHIP_PULSE_SHRINK:int = 9;
+        public static const TYPE_SHIP_PULSE_GROW:int = 10;
 
         private var x:Number;
         private var y:Number;
@@ -60,6 +62,10 @@ package Entity.FX {
                 case TYPE_DIFFUSION_ARC:
                     var imageID:int = Math.floor(Math.random() * 16) + 1;
                     image.texture = Root.assets.getTexture("elecarc" + (imageID < 10 ? "0" + imageID : imageID.toString()));
+                    break;
+                case TYPE_SHIP_PULSE_SHRINK:
+                case TYPE_SHIP_PULSE_GROW:
+                    image.texture = Root.assets.getTexture("ship_pulse");
             }
             image.readjustSize();
             image.width = image.texture.width;
@@ -81,11 +87,13 @@ package Entity.FX {
             image.visible = true;
             switch (type) {
                 case TYPE_GROW:
+                case TYPE_SHIP_PULSE_GROW:
                     size = 0;
                     image.alpha = 1;
                     image.scaleX = image.scaleY = size;
                     break;
                 case TYPE_SHRINK:
+                case TYPE_SHIP_PULSE_SHRINK:
                     size = maxSize;
                     image.alpha = 0;
                     image.scaleX = image.scaleY = size;
@@ -140,6 +148,12 @@ package Entity.FX {
                 case TYPE_BLOOM: // 使用spot_glow，贴图大小递增
                     updateBloom(dt);
                     break;
+                case TYPE_SHIP_PULSE_SHRINK:
+                    updateFullShrink(dt);
+                    break;
+                case TYPE_SHIP_PULSE_GROW:
+                    updateFullGrow(dt);
+                    break;
                 default: // 只播放一帧的特效
                     updateFrame(dt);
             }
@@ -158,6 +172,19 @@ package Entity.FX {
             image.rotation = angle;
         }
 
+        private function updateFullGrow(dt:Number):void {
+            var scale:Number = size / maxSize;
+            size += dt * rate;
+            if (size > maxSize) {
+                size = maxSize;
+                active = false;
+            }
+            image.alpha = 1 - scale;
+            image.scaleY = size * scale;
+            image.scaleX = size * scale;
+            image.rotation = angle;
+        }
+
         private function updateShrink(dt:Number):void {
             var scale:Number = size / maxSize;
             size -= dt * rate;
@@ -168,6 +195,19 @@ package Entity.FX {
             image.alpha = 1 - scale;
             image.scaleY = size * scale;
             image.scaleX = maxSize * 0.5;
+            image.rotation = angle;
+        }
+
+        private function updateFullShrink(dt:Number):void {
+            var scale:Number = size / maxSize;
+            size -= dt * rate;
+            if (size < 0) {
+                size = 0;
+                active = false;
+            }
+            image.alpha = 1 - scale;
+            image.scaleY = size * scale;
+            image.scaleX = size * scale;
             image.rotation = angle;
         }
 

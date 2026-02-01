@@ -47,7 +47,7 @@ package {
         }
 
         public static function updateLevelData():void {
-            if (levelCache[Globals.currentData][Globals.currentDifficulty]){
+            if (levelCache[Globals.currentData] && levelCache[Globals.currentData][Globals.currentDifficulty]){
                 level = levelCache[Globals.currentData][Globals.currentDifficulty];
                 return;
             }
