@@ -14,6 +14,8 @@ package Game.SpecialEvent {
         /** 原版36通关 */
         public static var GAME_END:String = "GameEnd";
 
+        public static var WHITEHOLE_FALLS:String = "WhiteholeFalls";
+
         /** 存储类型到类路径的映射 */
         private static var _typeMap:Dictionary = new Dictionary();
 
@@ -25,7 +27,7 @@ package Game.SpecialEvent {
             registerType(DARKNESS_FALLS, DarknessFallsSE);
             registerType(BOSS_APPEAR, BossAppearSE);
             registerType(GAME_END, GameEndSE);
-
+            registerType(WHITEHOLE_FALLS, WhiteholeFallsSE);
             _ready = true;
         }
 

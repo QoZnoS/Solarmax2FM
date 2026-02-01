@@ -27,6 +27,7 @@ package Entity {
     import Entity.Node.NodeData;
     import flash.utils.Dictionary;
     import Entity.Node.States.*;
+    import Entity.Node.NodeType;
 
     public class Node extends GameEntity {
         // #region 类变量
@@ -277,6 +278,23 @@ package Entity {
             }
             for (var i:int = 0; i < shipArray.length; i++)
                 NodeStaticLogic.sendAIShips(this, nodeData.team, targetNode[i], shipArray[i]);
+        }
+
+        public function divideShips() : void {  // 均匀分散飞船
+            var nodeArray:Vector.<Node> = EntityContainer.nodes;
+            var shipCount:int = int(ships[nodeData.team].length);
+            var nodeCount:int = nodeArray.length - 1;
+            for (var i:int = 0; i < nodeArray.length; i++) {
+                if(nodeArray[i].nodeData.isBarrier)
+                    nodeCount--;
+            }
+            var shipNum:int = Math.max(int(shipCount / nodeCount), 1)
+            if(shipCount > 0) {
+                for (i = 0; i < nodeArray.length; i++) {
+                    if(!nodeArray[i].nodeData.isBarrier)
+                        NodeStaticLogic.sendAIShips(this, nodeData.team, nodeArray[i], shipNum);
+                }
+            }
         }
 
         // 统计飞向自身的飞船，包括指定势力的队伍的和移动距离大于50px的
