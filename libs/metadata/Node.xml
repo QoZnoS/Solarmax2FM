@@ -121,4 +121,12 @@
         <attackRange>1</attackRange>
         <attackType>electromagnetic</attackType>
     </node> -->
+    <node id="12" name="supply">
+        <defaultSize>0.5</defaultSize>
+        <popVal>120</popVal>
+        <startVal>60</startVal>
+        <buildRate>0.1</buildRate>
+        <hpMult>1</hpMult>
+        <scale>1.2</scale>
+    </node>
 </node>

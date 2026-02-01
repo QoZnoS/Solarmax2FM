@@ -13,6 +13,7 @@ package Entity.Node {
         public static const CLONETURRET:String = "cloneturret";
         public static const CAPTURESHIP:String = "captureship";
         public static const DIFFUSION:String = "diffusion";
+        public static const SUPPLY:String = "supply";
 
         // 缓存XML数据到更高效的数据结构
         private static var nodeDataCache:Object;
@@ -48,6 +49,8 @@ package Entity.Node {
                     return CAPTURESHIP;
                 case 11:
                     return DIFFUSION;
+                case 12:
+                    return SUPPLY;
                 default:
                     throw new Error("Node type not register");
             }
