@@ -232,20 +232,20 @@ package Entity.AI {
                     nodeGroup = Globals.teamGroups[node.nodeData.team];
                     if (node.nodeData.isAIinvisible)
                         continue;
-                    node.getOppLinks(team);
-                    node.aiValue = -node.oppNodeLinks.length; // 按路径数计算价值
                     if (nodeGroup == group) {
+                        node.getOppLinks(team);
+                        node.aiValue = -node.oppNodeLinks.length; // 按路径数计算价值
                         if (node.nodeData.isWarp) {
                             dx = node.nodeData.x - centerX;
                             dy = node.nodeData.y - centerY;
                             distance = Math.sqrt(dx * dx + dy * dy) + rng.nextNumber() * 32;
-                            node.aiValue = -512 / distance; // 传送按距离计算价值
+                            node.aiValue = -512 / distance * nodeArray.length; // 传送按距离计算价值
                         }
                         if ((node.nodeData.type == NodeType.DIFFUSION || node.nodeData.type == NodeType.CLONETURRET) && Globals.teamPops[team] < Globals.teamCaps[team] && node.teamShipCount(team) < 10)
                             dx = node.nodeData.x - centerX;
                             dy = node.nodeData.y - centerY;
                             distance = Math.sqrt(dx * dx + dy * dy) + rng.nextNumber() * 32;
-                            node.aiValue = -256 / distance; // 扩散和航母按距离计算价值
+                            node.aiValue = -256 / distance * node.oppNodeLinks.length; // 扩散和航母按距离计算价值
                     }
                     // if (Globals.level == 31 && node.nodeData.type == NodeType.STARBASE)
                     //     node.aiValue--; // 32关堡垒权重提高
