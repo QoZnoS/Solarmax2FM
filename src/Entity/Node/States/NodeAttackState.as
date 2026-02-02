@@ -47,20 +47,20 @@ package Entity.Node.States {
         }
 
         public function deserialize(obj:Object):void {
-            if (obj.attackType) {
+            if ("attackType" in obj) {
                 var type:String = obj.attackType;
                 var attackRate:Number = NodeType.getDefaultAttackRate(type, nodeData.size);
                 var attackRange:Number = NodeType.getDefaultAttackRange(type, nodeData.size);
                 var attackLast:Number = NodeType.getDefaultAttackLast(type, nodeData.size);
                 this.attackStrategy = AttackStrategyFactory.create(NodeType.getDefaultAttackType(type), attackRate, attackRange, attackLast);
             }
-            if (obj.attackTimer)
+            if ("attackTimer" in obj)
                 this.attackStrategy.attackTimer = obj.attackTimer;
-            if (obj.attackRate)
+            if ("attackRate" in obj)
                 this.attackStrategy.attackRate = obj.attackRate;
-            if (obj.attackRange)
+            if ("attackRange" in obj)
                 this.attackStrategy.attackRange = obj.attackRange;
-            if (obj.attackLast)
+            if ("attackLast" in obj)
                 this.attackStrategy.attackLast = obj.attackLast;
         }
     }

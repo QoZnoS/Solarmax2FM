@@ -30,9 +30,6 @@ package Entity.Node {
         public function NodeData(weakKeys:Boolean = false) {
             super(weakKeys);
             addSerializableProp("x", "y", "team", "size", "type", "popVal", "startShips", "barrierLinks", "orbitNode", "orbitSpeed");
-
-            startShips = new Vector.<int>(Globals.teamCount);
-            barrierLinks = new Vector.<int>;
         }
 
         //#region 序列化
@@ -104,8 +101,11 @@ package Entity.Node {
                     this[prop] = obj[prop];
             }
 
-            if (!this.startShips)
+            if (!this.startShips) {
                 this.startShips = new Vector.<int>(Globals.teamCount);
+                if (team != 0)
+                    startShips[team] = NodeType.getDefaultStartVal(type, size);
+            }
             if (!this.barrierLinks)
                 this.barrierLinks = new Vector.<int>();
         }

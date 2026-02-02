@@ -398,8 +398,8 @@ package Entity {
 
         // 绘制拖尾
         private function drawTrail():void {
-            if (Globals.exOptimization > 0)
-                return;
+            // if (Globals.exOptimization > 0)
+            //     return;
             trail.x = x;
             trail.y = y;
             LayerFactory.call(LayerFactory.ADD_IMAGE)(trail, foreground, Globals.teamDeepColors[team])
@@ -407,8 +407,8 @@ package Entity {
 
         // 绘制光圈
         private function drawPulse():void {
-            if (Globals.exOptimization > 0)
-                return;
+            // if (Globals.exOptimization > 0)
+            //     return;
             pulse.x = x;
             pulse.y = y;
             LayerFactory.call(LayerFactory.ADD_IMAGE)(pulse, foreground, Globals.teamDeepColors[team])

@@ -91,8 +91,8 @@ package Entity {
             nodeData = new NodeData(true);
             NodeStaticLogic.changeType(this, data.type, data.size, data.rotation);
             NodeStaticLogic.changeTeam(this, data.team, false);
-            deserializeState(data);
             nodeData.deserialize(data);
+            deserializeState(data);
             aiValue = 0;
             triggerTimer = 0;
             linked = false;

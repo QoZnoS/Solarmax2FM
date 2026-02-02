@@ -51,9 +51,9 @@ package Entity.Node.States {
         }
 
         public function deserialize(obj:Object):void {
-            if (obj.buildRate)
+            if ("buildRate" in obj)
                 this.buildRate = obj.buildRate;
-            if (obj.buildTimer)
+            if ("buildTimer" in obj)
                 this.buildTimer = obj.buildTimer;
         }
     }

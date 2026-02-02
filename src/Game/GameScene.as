@@ -88,7 +88,7 @@ package Game {
             // #region 读取配置生成关卡
             // 势力属性
             var levelData:Object = LevelData.level[Globals.level];
-            if (levelData.playerTeam)
+            if ("playerTeam" in levelData)
                 Globals.playerTeam = levelData.playerTeam;
             else
                 Globals.playerTeam = 1;
@@ -101,7 +101,7 @@ package Game {
                     Globals.teamGroups[i] = i;
             }
             var groupData:Array = levelData.group;
-            if (levelData.group)
+            if ("group" in levelData)
                 for(var group:int = 0; group < groupData.length; group++)
                     for(i = 0; i < groupData[group].length; i++)
                         Globals.teamGroups[groupData[group][i]] = group + 1;
@@ -114,12 +114,12 @@ package Game {
             for (i = 0; i < aiData.length; i++)
                 EntityHandler.addAI(aiData[i]);
             // bgm
-            if (levelData.bgm)
+            if ("bgm" in levelData)
                 GS.playMusic(levelData.bgm);
             else
                 GS.playMusic("bgm02");
             // 胜利条件
-            if (levelData.victoryCondition)
+            if ("victoryCondition" in levelData)
                 victoryType = VictoryTypeFactory.create(levelData.victoryCondition);
             else
                 victoryType = VictoryTypeFactory.create(VictoryTypeFactory.NORMAL_TYPE);

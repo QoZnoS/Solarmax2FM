@@ -149,7 +149,7 @@ package Entity.Node.States {
         }
 
         public function deserialize(obj:Object):void {
-            if (obj.captureTeam)
+            if ("captureTeam" in obj)
                 this.captureTeam = obj.captureTeam;
         }
     }
