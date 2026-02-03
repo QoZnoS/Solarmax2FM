@@ -14,6 +14,7 @@ package Entity.FX {
         private var deepColor:Boolean;
         private var state:int;
         private var layerCfg:Array;
+        private var angle:Number;
 
         public function WarpFX() {
             layerCfg = [];
@@ -28,12 +29,13 @@ package Entity.FX {
             var y:Number = config[1];
             var dx:Number = config[2] - x;
             var dy:Number = config[3] - y;
-            var angle:Number = Math.atan2(dy, dx);
+            this.angle = Math.atan2(dy, dx);
             this.distance = Math.sqrt(dx * dx + dy * dy);
             this.foreground = config[5];
             this.deepColor = config[6];
             this.size = 0;
             state = 0;
+            p.rotation = 0;
             p.x = x + Math.cos(angle) * distance * 0.5;
             p.y = y + Math.sin(angle) * distance * 0.5;
             p.width = distance;
@@ -65,9 +67,11 @@ package Entity.FX {
                     p.active = false;
                 }
             }
+            p.rotation = 0;
             p.scale = size;
             p.width = distance;
             p.scaleY *= 0.5;
+            p.rotation = angle;
             p.addToLayer();
         }
     }
