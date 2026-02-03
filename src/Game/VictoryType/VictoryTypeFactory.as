@@ -4,7 +4,7 @@ package Game.VictoryType {
     public class VictoryTypeFactory {
         public static const NONE_TYPE:String = "None";
         public static const NORMAL_TYPE:String = "Normal";
-        public static const TARGET_TYPE:String = "target";
+        public static const TARGET_TYPE:String = "Target";
         public static const TIME_TYPE:String = "Time";
 
         /** 存储类型到类路径的映射 */

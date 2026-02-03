@@ -1,4 +1,3 @@
-// 文件: BeamLine.as (射线特效)
 package Entity.FX {
     import UI.LayerFactory;
     import utils.CalcTools;
@@ -23,7 +22,7 @@ package Entity.FX {
         private static const STATE_SHRINK:int = 1;
 
         public function BeamLine() {
-            layerCfg = [];
+            layerCfg = [LayerFactory.ADD_IMAGE];
         }
 
         public function get imageName():String {
@@ -60,7 +59,8 @@ package Entity.FX {
             p.scaleY = 1;
             p.alpha = 0.75;
             p.rotation = angle;
-            layerCfg = [LayerFactory.ADD_IMAGE, foreground, deepColor];
+            layerCfg.length = 1;
+            layerCfg.push(foreground, deepColor);
         }
 
         public function update(dt:Number):void {

@@ -17,7 +17,7 @@ package Entity.FX {
         private var angle:Number;
 
         public function WarpFX() {
-            layerCfg = [];
+            layerCfg = [LayerFactory.ADD_IMAGE];
         }
 
         // 接受参数 x, y, prevX, prevY, color, foreground, deepColor
@@ -43,7 +43,8 @@ package Entity.FX {
             p.scale = 0;
             p.alpha = 0.25;
             p.rotation = angle;
-            layerCfg.push(LayerFactory.ADD_IMAGE, foreground, deepColor);
+            layerCfg.length = 1;
+            layerCfg.push(foreground, deepColor);
         }
 
         public function get imageName():String {

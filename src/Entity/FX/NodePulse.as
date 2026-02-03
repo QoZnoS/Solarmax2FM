@@ -20,7 +20,7 @@ package Entity.FX {
         private var targetX:Number;
 
         public function NodePulse() {
-            layerCfg = [];
+            layerCfg = [LayerFactory.ADD_GROW];
         }
 
         public function get imageName():String {
@@ -56,7 +56,8 @@ package Entity.FX {
             }
             p.scale = size;
             p.visible = true;
-            layerCfg = [LayerFactory.ADD_GROW, deepColor];
+            layerCfg.length = 1;
+            layerCfg.push(deepColor);
             p.addToLayer();
         }
 

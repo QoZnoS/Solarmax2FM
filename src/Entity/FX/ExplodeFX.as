@@ -1,4 +1,3 @@
-// 文件: ExplodeFX_new.as
 package Entity.FX {
     import UI.LayerFactory;
 
@@ -15,7 +14,7 @@ package Entity.FX {
         private var deepColor:Boolean;
 
         public function ExplodeFX() {
-            layerCfg = [];
+            layerCfg = [LayerFactory.ADD_IMAGE];
         }
 
         public function get imageName():String {
@@ -36,8 +35,8 @@ package Entity.FX {
             p.alpha = 0.5;
             this.size = 0;
             state = STATE_GROW;
-            
-            layerCfg = [LayerFactory.ADD_IMAGE, foreground, deepColor];
+            layerCfg.length = 1;
+            layerCfg.push(foreground, deepColor);
         }
 
         public function update(dt:Number):void {

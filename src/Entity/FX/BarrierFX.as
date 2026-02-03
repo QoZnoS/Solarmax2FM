@@ -4,6 +4,7 @@ package Entity.FX {
 
     public class BarrierFX implements IParticle {
         private var p:BasicParticle;
+        private var config:Array = [LayerFactory.ADD_FX];
 
         public function BarrierFX() {
         }
@@ -27,7 +28,7 @@ package Entity.FX {
 
         public function update(dt:Number):void {
         }
-        private var config:Array = [LayerFactory.ADD_FX];
+
         public function get layerConfig():Array {
             return config;
         }

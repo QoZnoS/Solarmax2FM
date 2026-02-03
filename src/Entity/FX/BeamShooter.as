@@ -1,4 +1,3 @@
-// 文件: BeamShooter.as (攻击塔特效)
 package Entity.FX {
     import UI.LayerFactory;
     import Entity.Node;
@@ -20,7 +19,7 @@ package Entity.FX {
         private var state:int;
 
         public function BeamShooter() {
-            layerCfg = [];
+            layerCfg = [LayerFactory.ADD_IMAGE];
         }
 
         public function get imageName():String {
@@ -61,7 +60,8 @@ package Entity.FX {
                     p.scale = node.moveState.image.scaleX;
                     break;
             }
-            layerCfg = [LayerFactory.ADD_IMAGE, foreground, deepColor];
+            layerCfg.length = 1;
+            layerCfg.push(foreground, deepColor);
         }
 
         public function update(dt:Number):void {
