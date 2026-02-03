@@ -5,6 +5,7 @@ package Entity.AI {
     import Entity.Node.NodeStaticLogic;
     import Entity.Node.NodeType;
     import Entity.EntityContainer;
+    import utils.GeneralFunctions;
 
     public class AdaptedAI extends BasicAI {
         public function AdaptedAI(rng:Rng, actionDelay:Number, startDelay:Number) {
@@ -25,6 +26,7 @@ package Entity.AI {
             var dy:Number = NaN;
             var distance:Number = NaN;
             var shipCount:Number = NaN;
+            var invalidActions:Vector.<String> = new Vector.<String>;
             var targetNode:Node = null;
             var senderNode:Node = null;
             var ships:int = 0;
@@ -68,7 +70,7 @@ package Entity.AI {
                 node.aiValue = distance + shipCount;
                 targets.push(node);
             }
-            targets.sortOn("aiValue", 16); // 依ai价值从小到大对targets进行排序
+            // targets.sortOn("aiValue", 16); // 依ai价值从小到大对targets进行排序
             if (targets.length > 0) { // 目标天体存在时
                 senders.length = 0;
                 for each (node in nodeArray) { // 计算出兵天体
@@ -90,9 +92,18 @@ package Entity.AI {
                     }
                     senders.push(node);
                 }
-                senders.sortOn("aiStrength", 16); // 依己方强度从小到大对出兵天体进行排序（由于强度记录的是相反数，此时看绝对值则是从大到小
-                for each (targetNode in targets) {
-                    for each (senderNode in senders) {
+                // senders.sortOn("aiStrength", 16); // 依己方强度从小到大对出兵天体进行排序（由于强度记录的是相反数，此时看绝对值则是从大到小
+                invalidActions.length = 0;
+                while (true) {
+                    if (invalidActions.length >= GeneralFunctions.getMinCount(targets, "aiValue") * GeneralFunctions.getMinCount(senders, "aiStrength"))
+                        break;
+                    targetNode = GeneralFunctions.getRandomMinByProperty(rng, targets, "aiValue") as Node; // 随机选择一个aiValue最小的目标
+                    senderNode = GeneralFunctions.getRandomMinByProperty(rng, senders, "aiStrength") as Node; // 随机选择一个aiStrength最小的出兵天体
+                    if (targetNode && senderNode) {
+                        if (invalidActions.indexOf(senderNode.tag + "," + targetNode.tag) == -1) // 检查是否是已经尝试过的操作
+                            invalidActions.push(senderNode.tag + "," + targetNode.tag); // 宣布操作已经尝试过
+                        else
+                            continue;
                         if (senderNode == targetNode || senderNode.nodeLinks[team].indexOf(targetNode) == -1)
                             continue; // 基本条件：出兵天体和目标天体不为同一个，且二者之间没有被拦截
                         if (senderNode.teamStrength(team) + targetNode.predictedGroupStrength(team) < targetNode.predictedOppStrength(team))
@@ -140,7 +151,7 @@ package Entity.AI {
                 }
                 targets.push(node);
             }
-            targets.sortOn("aiValue", 16);
+            // targets.sortOn("aiValue", 16);
             if (targets.length > 0) {
                 senders.length = 0;
                 for each (node in nodeArray) { // 计算出兵天体
@@ -164,9 +175,18 @@ package Entity.AI {
                     }
                     senders.push(node);
                 }
-                senders.sortOn("aiStrength", 16);
-                for each (targetNode in targets) {
-                    for each (senderNode in senders) {
+                // senders.sortOn("aiStrength", 16);
+                invalidActions.length = 0;
+                while (true) {
+                    if (invalidActions.length >= GeneralFunctions.getMinCount(targets, "aiValue") * GeneralFunctions.getMinCount(senders, "aiStrength"))
+                        break;
+                    targetNode = GeneralFunctions.getRandomMinByProperty(rng, targets, "aiValue") as Node; // 随机选择一个aiValue最小的目标
+                    senderNode = GeneralFunctions.getRandomMinByProperty(rng, senders, "aiStrength") as Node; // 随机选择一个aiStrength最小的出兵天体
+                    if (targetNode && senderNode) {
+                        if (invalidActions.indexOf(senderNode.tag + "," + targetNode.tag) == -1) // 检查是否是已经尝试过的操作
+                            invalidActions.push(senderNode.tag + "," + targetNode.tag); // 宣布操作已经尝试过
+                        else
+                            continue;
                         if (senderNode == targetNode || senderNode.nodeLinks[team].indexOf(targetNode) == -1)
                             continue; // 基本条件：出兵天体和目标天体不为同一个，且二者之间没有被拦截
                         if (senderNode.teamStrength(team) + targetNode.predictedGroupStrength(team) <= targetNode.predictedOppStrength(team))
@@ -225,7 +245,7 @@ package Entity.AI {
                 }
                 senders.push(node);
             }
-            senders.sortOn("aiStrength", 16); // 依飞船强度从小到大对出兵天体进行排序
+            // senders.sortOn("aiStrength", 16); // 依飞船强度从小到大对出兵天体进行排序
             if (senders.length > 0) {
                 targets.length = 0;
                 for each (node in nodeArray) { // 计算目标天体
@@ -243,24 +263,32 @@ package Entity.AI {
                         }
                         if ((node.nodeData.type == NodeType.DIFFUSION || node.nodeData.type == NodeType.CLONETURRET) && Globals.teamPops[team] < Globals.teamCaps[team] && node.teamShipCount(team) < 10)
                             dx = node.nodeData.x - centerX;
-                            dy = node.nodeData.y - centerY;
-                            distance = Math.sqrt(dx * dx + dy * dy) + rng.nextNumber() * 32;
-                            node.aiValue = -256 / distance * node.oppNodeLinks.length; // 扩散和航母按距离计算价值
+                        dy = node.nodeData.y - centerY;
+                        distance = Math.sqrt(dx * dx + dy * dy) + rng.nextNumber() * 32;
+                        node.aiValue = -256 / distance * node.oppNodeLinks.length; // 扩散和航母按距离计算价值
                     }
                     // if (Globals.level == 31 && node.nodeData.type == NodeType.STARBASE)
                     //     node.aiValue--; // 32关堡垒权重提高
                     if (EntityContainer.inAttackNodeCheck(node, team, NodeType.PULSECANNON, true)) {
                         if (node.aiValue > 0)
                             node.aiValue *= 10;
-                        else
-                            if(!node.nodeData.isWarp)
-                                node.aiValue /= 10;
+                        else if (!node.nodeData.isWarp)
+                            node.aiValue /= 10;
                     }
                     targets.push(node);
                 }
-                targets.sortOn("aiValue", 16);
-                for each (targetNode in targets) {
-                    for each (senderNode in senders) {
+                // targets.sortOn("aiValue", 16);
+                invalidActions.length = 0;
+                while (true) {
+                    if (invalidActions.length >= GeneralFunctions.getMinCount(targets, "aiValue") * GeneralFunctions.getMinCount(senders, "aiStrength"))
+                        break;
+                    targetNode = GeneralFunctions.getRandomMinByProperty(rng, targets, "aiValue") as Node; // 随机选择一个aiValue最小的目标
+                    senderNode = GeneralFunctions.getRandomMinByProperty(rng, senders, "aiStrength") as Node; // 随机选择一个aiStrength最小的出兵天体
+                    if (targetNode && senderNode) {
+                        if (invalidActions.indexOf(senderNode.tag + "," + targetNode.tag) == -1) // 检查是否是已经尝试过的操作
+                            invalidActions.push(senderNode.tag + "," + targetNode.tag); // 宣布操作已经尝试过
+                        else
+                            continue;
                         if (senderNode == targetNode || senderNode.nodeLinks[team].indexOf(targetNode) == -1)
                             continue; // 基本条件：出兵天体和目标天体不为同一个，且二者之间没有被拦截
                         if (targetNode.aiValue >= senderNode.aiValue)
