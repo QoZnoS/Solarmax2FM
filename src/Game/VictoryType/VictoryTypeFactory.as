@@ -30,20 +30,26 @@ package Game.VictoryType {
             _typeMap[type] = typeClass;
         }
 
-        public static function create(type:String, trigger:Object = null):IVictoryType {
+        public static function create(obj:Object):IVictoryType {
             if (!_ready)
                 init();
+
+            var type:String;
+            if (obj is String)
+                type = obj as String;
+            else
+                type = ("type" in obj) ? obj.type : NONE_TYPE;
 
             var typeClass:Class = _typeMap[type] as Class;
 
             if (typeClass) {
                 try {
-                    return new typeClass(trigger);
+                    return new typeClass(obj.trigger);
                 } catch (e:Error) {
                     trace("Error creating Victory for type", type, ":", e.message);
                 }
             }
-            return new NoneVictory(trigger);
+            return new NoneVictory(null);
         }
     }
 }
