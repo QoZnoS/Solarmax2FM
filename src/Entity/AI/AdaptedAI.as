@@ -5,6 +5,7 @@ package Entity.AI {
     import Entity.Node.NodeStaticLogic;
     import Entity.Node.NodeType;
     import Entity.EntityContainer;
+    import utils.GeneralFunctions;
 
     public class AdaptedAI extends BasicAI {
         public function AdaptedAI(rng:Rng, actionDelay:Number, startDelay:Number) {
@@ -68,7 +69,7 @@ package Entity.AI {
                 node.aiValue = distance + shipCount;
                 targets.push(node);
             }
-            targets.sortOn("aiValue", 16); // 依ai价值从小到大对targets进行排序
+            // targets.sortOn("aiValue", 16); // 依ai价值从小到大对targets进行排序
             if (targets.length > 0) { // 目标天体存在时
                 senders.length = 0;
                 for each (node in nodeArray) { // 计算出兵天体
@@ -90,30 +91,30 @@ package Entity.AI {
                     }
                     senders.push(node);
                 }
-                senders.sortOn("aiStrength", 16); // 依己方强度从小到大对出兵天体进行排序（由于强度记录的是相反数，此时看绝对值则是从大到小
-                for each (targetNode in targets) {
-                    for each (senderNode in senders) {
-                        if (senderNode == targetNode || senderNode.nodeLinks[team].indexOf(targetNode) == -1)
-                            continue; // 基本条件：出兵天体和目标天体不为同一个，且二者之间没有被拦截
-                        if (senderNode.teamStrength(team) + targetNode.predictedGroupStrength(team) < targetNode.predictedOppStrength(team))
-                            continue; // 出兵条件：出兵天体的强度和目标天体的预测强度之和高于目标天体的预测敌方强度
-                        if (!senderNode.nodeData.isWarp && EntityContainer.isInBlackhole(senderNode, targetNode, team))
-                            continue; // 路径上无有威胁的黑洞
-                        // 飞船数：目标天体上预测敌方强度的二倍减去预测己方强度与己方单体强度之商
-                        ships = (targetNode.predictedOppShipCount(team) * 2 - targetNode.predictedGroupShipCount(team)) / shipStrength;
-                        towerAttack = EntityContainer.getLengthInTowerRange(senderNode, targetNode, team) / 4.5 / shipSpeed; // 估算经过攻击天体损失的兵力（估损
-                        ships += Math.max(towerAttack, 0); // 为飞船数加上估损
-                        if (towerAttack > 0 && Globals.teamPops[team] < towerAttack)
-                            continue; // 条件：没有经过攻击天体或总兵力多于估损
-                        if (towerAttack > 0 && senderNode.teamShipCount(team) < towerAttack * 0.5)
-                            continue; // 条件：没有经过攻击天体或出兵天体强度高于估损的一半
-                        // if (Globals.level == 34 && targetNode.x == 912 && targetNode.y == 544)
-                        // trace("defending");
-                        // traceDebug("defending       " + senderNode.x + "." + senderNode.y + "  to  " + targetNode.x + "." + targetNode.y + "  ships:  " + ships);
-                        // trace("\"Defending!\" team: " + team + " sender: " + senderNode.tag + " target: " + targetNode.tag + " ships: " + ships + " towerAttack: " + towerAttack);
-                        NodeStaticLogic.sendAIShips(senderNode, team, targetNode, ships);
-                        return;
-                    }
+                // senders.sortOn("aiStrength", 16); // 依己方强度从小到大对出兵天体进行排序（由于强度记录的是相反数，此时看绝对值则是从大到小
+                while (true) {
+                    targetNode = GeneralFunctions.getRandomMinByProperty(targets, "aiValue") as Node;
+                    senderNode = GeneralFunctions.getRandomMinByProperty(senders, "aiStrength") as Node;
+                    if (senderNode == targetNode || senderNode.nodeLinks[team].indexOf(targetNode) == -1)
+                        continue; // 基本条件：出兵天体和目标天体不为同一个，且二者之间没有被拦截
+                    if (senderNode.teamStrength(team) + targetNode.predictedGroupStrength(team) < targetNode.predictedOppStrength(team))
+                        continue; // 出兵条件：出兵天体的强度和目标天体的预测强度之和高于目标天体的预测敌方强度
+                    if (!senderNode.nodeData.isWarp && EntityContainer.isInBlackhole(senderNode, targetNode, team))
+                        continue; // 路径上无有威胁的黑洞
+                    // 飞船数：目标天体上预测敌方强度的二倍减去预测己方强度与己方单体强度之商
+                    ships = (targetNode.predictedOppShipCount(team) * 2 - targetNode.predictedGroupShipCount(team)) / shipStrength;
+                    towerAttack = EntityContainer.getLengthInTowerRange(senderNode, targetNode, team) / 4.5 / shipSpeed; // 估算经过攻击天体损失的兵力（估损
+                    ships += Math.max(towerAttack, 0); // 为飞船数加上估损
+                    if (towerAttack > 0 && Globals.teamPops[team] < towerAttack)
+                        continue; // 条件：没有经过攻击天体或总兵力多于估损
+                    if (towerAttack > 0 && senderNode.teamShipCount(team) < towerAttack * 0.5)
+                        continue; // 条件：没有经过攻击天体或出兵天体强度高于估损的一半
+                    // if (Globals.level == 34 && targetNode.x == 912 && targetNode.y == 544)
+                    // trace("defending");
+                    // traceDebug("defending       " + senderNode.x + "." + senderNode.y + "  to  " + targetNode.x + "." + targetNode.y + "  ships:  " + ships);
+                    // trace("\"Defending!\" team: " + team + " sender: " + senderNode.tag + " target: " + targetNode.tag + " ships: " + ships + " towerAttack: " + towerAttack);
+                    NodeStaticLogic.sendAIShips(senderNode, team, targetNode, ships);
+                    return;
                 }
             }
             // #endregion
@@ -140,7 +141,7 @@ package Entity.AI {
                 }
                 targets.push(node);
             }
-            targets.sortOn("aiValue", 16);
+            // targets.sortOn("aiValue", 16);
             if (targets.length > 0) {
                 senders.length = 0;
                 for each (node in nodeArray) { // 计算出兵天体
@@ -164,40 +165,40 @@ package Entity.AI {
                     }
                     senders.push(node);
                 }
-                senders.sortOn("aiStrength", 16);
-                for each (targetNode in targets) {
-                    for each (senderNode in senders) {
-                        if (senderNode == targetNode || senderNode.nodeLinks[team].indexOf(targetNode) == -1)
-                            continue; // 基本条件：出兵天体和目标天体不为同一个，且二者之间没有被拦截
-                        if (senderNode.teamStrength(team) + targetNode.predictedGroupStrength(team) <= targetNode.predictedOppStrength(team))
-                            continue; // 出兵条件：出兵天体和目标天体的己方综合强度高于目标天体的预测敌方强度
-                        //trace(team + ": [" + senderNode.tag + ", " + targetNode.tag + ", " + EntityContainer.isInBlackhole(senderNode, targetNode, team) + "]");
-                        if (!senderNode.nodeData.isWarp && EntityContainer.isInBlackhole(senderNode, targetNode, team))
-                            continue; // 路径上无有威胁的黑洞
-                        // 基本飞船数：目标天体上预测敌方强度的二倍减去预测己方强度一半与单体强度之商
-                        ships = (targetNode.predictedOppStrength(team) * 2 - targetNode.predictedGroupStrength(team) * 0.5) / shipStrength;
-                        if (senderNode.predictedOppStrength(team) > senderNode.predictedGroupStrength(team))
-                            ships = senderNode.teamShipCount(team); // 预测敌方强度大于己方时，派出全部飞船
-                        if (ships < targetNode.nodeData.size * 200)
-                            ships = targetNode.nodeData.size * 200; // 飞船数不应低于目标的二倍标准兵力
-                        if (targetNode.nodeData.type == NodeType.DIFFUSION && Globals.teamGroups[targetNode.nodeData.team] == group)
-                            ships = 10 - targetNode.predictedTeamShipCount(team); // 给己方扩散补兵
-                        towerAttack = EntityContainer.getLengthInTowerRange(senderNode, targetNode, team) / 4.5 / shipSpeed; // 计算估损
-                        ships += Math.max(towerAttack, 0); // 为飞船数加上估损
-                        if (towerAttack > 0 && Globals.teamPops[team] < towerAttack)
-                            continue; // 总兵力不足估损时不派兵
-                        if (Globals.level == 31)
-                            if (towerAttack > 0 && senderNode.teamShipCount(team) < towerAttack * 2)
-                                continue; // 32关兵力不足估损二倍时换个目标
-                        if (towerAttack > 0 && senderNode.teamShipCount(team) < towerAttack * 0.5)
-                            continue; // 出兵天体强度低于估损的一半时不派兵
-                        // if (Globals.level == 34 && targetNode.x == 912 && targetNode.y == 544)
-                        // trace("attacking");
-                        // traceDebug("attacking       " + senderNode.x + "." + senderNode.y + "  to  " + targetNode.x + "." + targetNode.y + "  ships:  " + ships);
-                        // trace("\"Attacking!\" team: " + team + " sender: " + senderNode.tag + " target: " + targetNode.tag + " ships: " + ships + " towerAttack: " + towerAttack);
-                        NodeStaticLogic.sendAIShips(senderNode, team, targetNode, ships);
-                        return;
-                    }
+                // senders.sortOn("aiStrength", 16);
+                while (true) {
+                    targetNode = GeneralFunctions.getRandomMinByProperty(targets, "aiValue") as Node;
+                    senderNode = GeneralFunctions.getRandomMinByProperty(senders, "aiStrength") as Node;
+                    if (senderNode == targetNode || senderNode.nodeLinks[team].indexOf(targetNode) == -1)
+                        continue; // 基本条件：出兵天体和目标天体不为同一个，且二者之间没有被拦截
+                    if (senderNode.teamStrength(team) + targetNode.predictedGroupStrength(team) <= targetNode.predictedOppStrength(team))
+                        continue; // 出兵条件：出兵天体和目标天体的己方综合强度高于目标天体的预测敌方强度
+                    //trace(team + ": [" + senderNode.tag + ", " + targetNode.tag + ", " + EntityContainer.isInBlackhole(senderNode, targetNode, team) + "]");
+                    if (!senderNode.nodeData.isWarp && EntityContainer.isInBlackhole(senderNode, targetNode, team))
+                        continue; // 路径上无有威胁的黑洞
+                    // 基本飞船数：目标天体上预测敌方强度的二倍减去预测己方强度一半与单体强度之商
+                    ships = (targetNode.predictedOppStrength(team) * 2 - targetNode.predictedGroupStrength(team) * 0.5) / shipStrength;
+                    if (senderNode.predictedOppStrength(team) > senderNode.predictedGroupStrength(team))
+                        ships = senderNode.teamShipCount(team); // 预测敌方强度大于己方时，派出全部飞船
+                    if (ships < targetNode.nodeData.size * 200)
+                        ships = targetNode.nodeData.size * 200; // 飞船数不应低于目标的二倍标准兵力
+                    if (targetNode.nodeData.type == NodeType.DIFFUSION && Globals.teamGroups[targetNode.nodeData.team] == group)
+                        ships = 10 - targetNode.predictedTeamShipCount(team); // 给己方扩散补兵
+                    towerAttack = EntityContainer.getLengthInTowerRange(senderNode, targetNode, team) / 4.5 / shipSpeed; // 计算估损
+                    ships += Math.max(towerAttack, 0); // 为飞船数加上估损
+                    if (towerAttack > 0 && Globals.teamPops[team] < towerAttack)
+                        continue; // 总兵力不足估损时不派兵
+                    if (Globals.level == 31)
+                        if (towerAttack > 0 && senderNode.teamShipCount(team) < towerAttack * 2)
+                            continue; // 32关兵力不足估损二倍时换个目标
+                    if (towerAttack > 0 && senderNode.teamShipCount(team) < towerAttack * 0.5)
+                        continue; // 出兵天体强度低于估损的一半时不派兵
+                    // if (Globals.level == 34 && targetNode.x == 912 && targetNode.y == 544)
+                    // trace("attacking");
+                    // traceDebug("attacking       " + senderNode.x + "." + senderNode.y + "  to  " + targetNode.x + "." + targetNode.y + "  ships:  " + ships);
+                    // trace("\"Attacking!\" team: " + team + " sender: " + senderNode.tag + " target: " + targetNode.tag + " ships: " + ships + " towerAttack: " + towerAttack);
+                    NodeStaticLogic.sendAIShips(senderNode, team, targetNode, ships);
+                    return;
                 }
             }
             // #endregion
@@ -225,7 +226,7 @@ package Entity.AI {
                 }
                 senders.push(node);
             }
-            senders.sortOn("aiStrength", 16); // 依飞船强度从小到大对出兵天体进行排序
+            // senders.sortOn("aiStrength", 16); // 依飞船强度从小到大对出兵天体进行排序
             if (senders.length > 0) {
                 targets.length = 0;
                 for each (node in nodeArray) { // 计算目标天体
@@ -243,47 +244,46 @@ package Entity.AI {
                         }
                         if ((node.nodeData.type == NodeType.DIFFUSION || node.nodeData.type == NodeType.CLONETURRET) && Globals.teamPops[team] < Globals.teamCaps[team] && node.teamShipCount(team) < 10)
                             dx = node.nodeData.x - centerX;
-                            dy = node.nodeData.y - centerY;
-                            distance = Math.sqrt(dx * dx + dy * dy) + rng.nextNumber() * 32;
-                            node.aiValue = -256 / distance * node.oppNodeLinks.length; // 扩散和航母按距离计算价值
+                        dy = node.nodeData.y - centerY;
+                        distance = Math.sqrt(dx * dx + dy * dy) + rng.nextNumber() * 32;
+                        node.aiValue = -256 / distance * node.oppNodeLinks.length; // 扩散和航母按距离计算价值
                     }
                     // if (Globals.level == 31 && node.nodeData.type == NodeType.STARBASE)
                     //     node.aiValue--; // 32关堡垒权重提高
                     if (EntityContainer.inAttackNodeCheck(node, team, NodeType.PULSECANNON, true)) {
                         if (node.aiValue > 0)
                             node.aiValue *= 10;
-                        else
-                            if(!node.nodeData.isWarp)
-                                node.aiValue /= 10;
+                        else if (!node.nodeData.isWarp)
+                            node.aiValue /= 10;
                     }
                     targets.push(node);
                 }
-                targets.sortOn("aiValue", 16);
-                for each (targetNode in targets) {
-                    for each (senderNode in senders) {
-                        if (senderNode == targetNode || senderNode.nodeLinks[team].indexOf(targetNode) == -1)
-                            continue; // 基本条件：出兵天体和目标天体不为同一个，且二者之间没有被拦截
-                        if (targetNode.aiValue >= senderNode.aiValue)
-                            continue; // 条件：目标天体价值高于出兵天体价值
-                        if (senderNode.nodeLinks[team].indexOf(targetNode) == -1)
-                            continue; // 条件：出兵天体与目标天体之间不被拦截
-                        if (!senderNode.nodeData.isWarp && EntityContainer.isInBlackhole(senderNode, targetNode, team))
-                            continue; // 路径上无有威胁的黑洞
-                        ships = senderNode.teamShipCount(team); // 派出全部飞船
-                        towerAttack = EntityContainer.getLengthInTowerRange(senderNode, targetNode, team) / 4.5 / shipSpeed;
-                        ships += Math.max(towerAttack, 0); // 为飞船数加上估损
-                        if (towerAttack > 0 && Globals.teamPops[team] < towerAttack)
-                            continue; // 条件：总兵力不足估损时不派兵
-                        if (towerAttack > 0 && senderNode.teamShipCount(team) < towerAttack * 0.5)
-                            continue; // 出兵天体强度低于估损的一半时不派兵
-                        // if (Globals.level == 34 && targetNode.x == 912 && targetNode.y == 544)
-                        // trace("repositioning");
-                        // if (ships != 0)
-                        //     traceDebug("repositioning   " + senderNode.x + "." + senderNode.y + "  to  " + targetNode.x + "." + targetNode.y + "  ships:  " + ships);
-                        // trace("\"Repositioning!\" team: " + team + " sender: " + senderNode.tag + " target: " + targetNode.tag + " ships: " + ships + " towerAttack: " + towerAttack);
-                        NodeStaticLogic.sendAIShips(senderNode, team, targetNode, ships);
-                        return;
-                    }
+                // targets.sortOn("aiValue", 16);
+                while (true) {
+                    targetNode = GeneralFunctions.getRandomMinByProperty(targets, "aiValue") as Node;
+                    senderNode = GeneralFunctions.getRandomMinByProperty(senders, "aiStrength") as Node;
+                    if (senderNode == targetNode || senderNode.nodeLinks[team].indexOf(targetNode) == -1)
+                        continue; // 基本条件：出兵天体和目标天体不为同一个，且二者之间没有被拦截
+                    if (targetNode.aiValue >= senderNode.aiValue)
+                        continue; // 条件：目标天体价值高于出兵天体价值
+                    if (senderNode.nodeLinks[team].indexOf(targetNode) == -1)
+                        continue; // 条件：出兵天体与目标天体之间不被拦截
+                    if (!senderNode.nodeData.isWarp && EntityContainer.isInBlackhole(senderNode, targetNode, team))
+                        continue; // 路径上无有威胁的黑洞
+                    ships = senderNode.teamShipCount(team); // 派出全部飞船
+                    towerAttack = EntityContainer.getLengthInTowerRange(senderNode, targetNode, team) / 4.5 / shipSpeed;
+                    ships += Math.max(towerAttack, 0); // 为飞船数加上估损
+                    if (towerAttack > 0 && Globals.teamPops[team] < towerAttack)
+                        continue; // 条件：总兵力不足估损时不派兵
+                    if (towerAttack > 0 && senderNode.teamShipCount(team) < towerAttack * 0.5)
+                        continue; // 出兵天体强度低于估损的一半时不派兵
+                    // if (Globals.level == 34 && targetNode.x == 912 && targetNode.y == 544)
+                    // trace("repositioning");
+                    // if (ships != 0)
+                    //     traceDebug("repositioning   " + senderNode.x + "." + senderNode.y + "  to  " + targetNode.x + "." + targetNode.y + "  ships:  " + ships);
+                    // trace("\"Repositioning!\" team: " + team + " sender: " + senderNode.tag + " target: " + targetNode.tag + " ships: " + ships + " towerAttack: " + towerAttack);
+                    NodeStaticLogic.sendAIShips(senderNode, team, targetNode, ships);
+                    return;
                 }
             }
             // #endregion
