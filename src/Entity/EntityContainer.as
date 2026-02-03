@@ -411,20 +411,44 @@ package Entity {
          * @return Point 或 null
          */
         public static function nodesBlocked(node1:Node, node2:Node):Point {
-            var bar1:Point = null;
-            var bar2:Point = null;
+            var bar1x:Number, bar1y:Number, bar2x:Number, bar2y:Number;
             var intersection:Point = null;
             var i:int = 0;
             while (i < int(game.barrierLines.length)) {
-                bar1 = game.barrierLines[i][0];
-                bar2 = game.barrierLines[i][1];
-                intersection = getIntersection(node1.nodeData.x, node1.nodeData.y, node2.nodeData.x, node2.nodeData.y, bar1.x, bar1.y, bar2.x, bar2.y);
+                bar1x = game.barrierLines[i][0].nodeData.x;
+                bar1y = game.barrierLines[i][0].nodeData.y;
+                bar2x = game.barrierLines[i][1].nodeData.x;
+                bar2y = game.barrierLines[i][1].nodeData.y;
+                intersection = getIntersection(node1.nodeData.x, node1.nodeData.y, node2.nodeData.x, node2.nodeData.y, bar1x, bar1y, bar2x, bar2y);
                 if (intersection)
                     return intersection;
                 i++;
             }
             return null;
         }
+
+        /** 判断路径是否被拦截并计算拦截点
+         * @param x1 起点x
+         * @param y1 起点y
+         * @param x2 终点x
+         * @param y2 终点y
+         * @return Point 或 null
+         */
+        public static function lineBlocked(x1:Number, y1:Number, x2:Number, y2:Number):Point {
+            var intersection:Point = null;
+            var bar1x:Number, bar1y:Number, bar2x:Number, bar2y:Number;
+            for each (var bar:Array in game.barrierLines) {
+                bar1x = bar[0].nodeData.x;
+                bar1y = bar[0].nodeData.y;
+                bar2x = bar[1].nodeData.x;
+                bar2y = bar[1].nodeData.y;
+                intersection = getIntersection(x1, y1, x2, y2, bar1x, bar1y, bar2x, bar2y);
+                if (intersection)
+                    return intersection;
+            }
+            return null;
+        }
+
 
         /** 按指定 static 过滤数组中的元素，返回被过滤的元素数组
          * <p>元素必须包含 static 属性

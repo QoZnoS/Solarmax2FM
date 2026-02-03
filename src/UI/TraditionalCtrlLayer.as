@@ -253,7 +253,9 @@ package UI {
 
         //#region 计算工具
         private function getClosestNode(x:Number, y:Number):Node {
-            var localPoint:Point = convertQuad.globalToLocal(new Point(x, y));
+            var globalPoint:Point = EntityContainer.getPoint(x, y);
+            var localPoint:Point = EntityContainer.getPoint();
+            convertQuad.globalToLocal(globalPoint, localPoint)
             var closestNode:Node = null;
             var dx:Number = NaN;
             var dy:Number = NaN;
@@ -272,21 +274,9 @@ package UI {
                     closestNode = node;
                 }
             }
+            EntityContainer.returnPoint(globalPoint);
+            EntityContainer.returnPoint(localPoint);
             return closestNode;
-        }
-
-        private function lineBlocked(x1:Number, y1:Number, x2:Number, y2:Number):Point {
-            var intersection:Point = null;
-            var bar1:Point = null;
-            var bar2:Point = null;
-            for each (var bar:Array in game.barrierLines) {
-                bar1 = bar[0];
-                bar2 = bar[1];
-                intersection = EntityContainer.getIntersection(x1, y1, x2, y2, bar1.x, bar1.y, bar2.x, bar2.y);
-                if (intersection)
-                    return intersection;
-            }
-            return null;
         }
         //#endregion        
     }

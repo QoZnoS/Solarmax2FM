@@ -74,7 +74,7 @@ package UI {
                         else
                             Drawer.drawCircle(displayBatch, _Tx, _Ty, _Color, touch.hoverNode.nodeData.lineDist - 4, touch.hoverNode.nodeData.lineDist - 7, false, 0.8);
                     } else if (!node.nodeLinks[Globals.playerTeam].includes(touch.hoverNode))
-                        _Block = lineBlocked(node.nodeData.x, node.nodeData.y, _Tx, _Ty);
+                        _Block = EntityContainer.lineBlocked(node.nodeData.x, node.nodeData.y, _Tx, _Ty);
                     dx = _Tx - node.nodeData.x;
                     dy = _Ty - node.nodeData.y;
                     distance = Math.sqrt(dx * dx + dy * dy);
@@ -173,7 +173,9 @@ package UI {
 
         //#region 计算工具
         private function getClosestNode(touch:Touch):Node {
-            var localPoint:Point = convertQuad.globalToLocal(new Point(touch.globalX, touch.globalY));
+            var globalPoint:Point = EntityContainer.getPoint(touch.globalX, touch.globalY);
+            var localPoint:Point = EntityContainer.getPoint();
+            convertQuad.globalToLocal(globalPoint, localPoint)
             var closestNode:Node = null;
             var dx:Number = NaN;
             var dy:Number = NaN;
@@ -192,21 +194,9 @@ package UI {
                     closestNode = node;
                 }
             }
+            EntityContainer.returnPoint(globalPoint);
+            EntityContainer.returnPoint(localPoint);
             return closestNode;
-        }
-
-        private function lineBlocked(x1:Number, y1:Number, x2:Number, y2:Number):Point {
-            var intersection:Point = null;
-            var bar1:Point = null;
-            var bar2:Point = null;
-            for each (var bar:Array in game.barrierLines) {
-                bar1 = bar[0];
-                bar2 = bar[1];
-                intersection = EntityContainer.getIntersection(x1, y1, x2, y2, bar1.x, bar1.y, bar2.x, bar2.y);
-                if (intersection)
-                    return intersection;
-            }
-            return null;
         }
         //#endregion
     }
