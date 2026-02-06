@@ -347,6 +347,23 @@ package Entity {
             return strength;
         }
 
+        // 估算后续可能面对的非指定势力方最快占领速度（考虑属性）
+        public function predictedOppCaptureRisk(team:int):Number {
+            var risk:Number = 0;
+            var group:int = Globals.teamGroups[team];
+            var groupRisks:Vector.<int> = new Vector.<int>(Globals.teamCount);
+            for (var i:int = 0; i < ships.length; i++) {
+                var oppGroup:int = Globals.teamGroups[i];
+                if (oppGroup == group)
+                    continue;
+                var addRisk:Number = (ships[i].length + transitShips[i]) * Globals.teamDestroyingSpeeds[i];
+                groupRisks[oppGroup] += addRisk;
+            }
+            for each (i in groupRisks)
+                risk = Math.max(i, risk);
+            return risk;
+        }
+
         // 估算后续可能面对的非指定势力方最强飞船强度（无属性差分）
         public function predictedOppShipCount(team:int):int {
             var strength:int = 0;
@@ -467,6 +484,32 @@ package Entity {
                 if (node.nodeData.team == 0 || Globals.teamGroups[node.nodeData.team] != group || node.predictedOppShipCount(team) > 0)
                     oppNodeLinks.push(node);
             }
+        }
+
+        // 返回值越大，天体离作战前线越近
+        public function getOppCloseLinks(team:int):Number {
+            var group:int = Globals.teamGroups[team];
+            var link:Number = 0;
+            var dx:Number = 0;
+            var dy:Number = 0;
+            var distance:Number = 0;
+            if (this.nodeData.isWarp) {
+                return Infinity;
+            }
+            for each (var node:Node in nodeLinks[team]) {
+                if (node == this)
+                    continue;
+                if (node.nodeData.team == 0 || Globals.teamGroups[node.nodeData.team] != group || node.predictedOppShipCount(team) > 0){
+                    dx = node.nodeData.x - this.nodeData.x;
+                    dy = node.nodeData.y - this.nodeData.y;
+                    distance = Math.sqrt(dx * dx + dy * dy) + rng.nextNumber() * 32;
+                    if(distance)
+                        link += 64 / distance;
+                    else
+                        link = Infinity;
+                }
+            }
+            return link;
         }
 
         // #endregion

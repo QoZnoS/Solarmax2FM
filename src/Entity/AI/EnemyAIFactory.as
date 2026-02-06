@@ -7,6 +7,7 @@ package Entity.AI {
         public static const SIMPLE:String = "SimpleAI";
         public static const SMART:String = "SmartAI";
         public static const ADAPTED:String = "AdaptedAI";
+        public static const IMPROVED:String = "ImprovedAI";
         public static const DARK:String = "DarkAI";
         public static const FINAL:String = "FinalAI";
         public static const HARD:String = "HardAI";
@@ -22,6 +23,7 @@ package Entity.AI {
             registerAI(SIMPLE, SimpleAI);
             registerAI(SMART, SmartAI);
             registerAI(ADAPTED, AdaptedAI);
+            registerAI(IMPROVED, ImprovedAI);
             registerAI(DARK, DarkAI);
             registerAI(FINAL, FinalAI);
             registerAI(HARD, HardAI);
@@ -62,7 +64,10 @@ package Entity.AI {
                 case SIMPLE:
                     return 3;
                 case SMART:
+                case ADAPTED:
                     return 1.5;
+                case IMPROVED:
+                    return 0.75;
                 case HARD:
                     return 0;
                 case DARK:
@@ -79,7 +84,10 @@ package Entity.AI {
                 case SIMPLE:
                     return 3;
                 case SMART:
+                case ADAPTED:
                     return 1.5;
+                case IMPROVED:
+                    return 0.75;
                 case HARD:
                     return 1.5;
                 case DARK:

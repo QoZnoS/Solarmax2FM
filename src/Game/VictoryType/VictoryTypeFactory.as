@@ -6,6 +6,7 @@ package Game.VictoryType {
         public static const NORMAL_TYPE:String = "Normal";
         public static const TARGET_TYPE:String = "Target";
         public static const TIME_TYPE:String = "Time";
+        public static const ALL_OCCUPY_TYPE:String = "AllOccupy";
 
         /** 存储类型到类路径的映射 */
         private static var _typeMap:Dictionary = new Dictionary();
@@ -17,7 +18,7 @@ package Game.VictoryType {
             registerType(NORMAL_TYPE, NormalVictory);
             registerType(TARGET_TYPE, TargetVictory);
             registerType(TIME_TYPE, TimeVictory);
-
+            registerType(ALL_OCCUPY_TYPE, AllOccupyVictory);
             _ready = true;
         }
 
