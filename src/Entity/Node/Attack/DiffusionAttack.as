@@ -28,8 +28,7 @@ package Entity.Node.Attack {
                     if (oppGroup == group) {
                         allyTeams.push(teamId);
                         shipNum += node.ships[teamId].length;
-                    } else 
-                        return;
+                    }
                 }
             }
             if (allyTeams.length == 0 || shipNum == 0)
