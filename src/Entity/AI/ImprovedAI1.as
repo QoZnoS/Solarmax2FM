@@ -75,7 +75,8 @@ package Entity.AI {
                         dx = node.nodeData.x - senderNode.nodeData.x;
                         dy = node.nodeData.y - senderNode.nodeData.y;
                         distance = Math.sqrt(dx * dx + dy * dy) + rng.nextNumber() * 32;
-                        node.aiValue = distance;
+                        towerAttack = getTowerAttack(senderNode, node);
+                        node.aiValue = distance + towerAttack * 64;
                         if (EntityContainer.inAttackNodeCheck(node, team, NodeType.PULSECANNON, true)) {
                             if (node.aiValue > 0)
                                 node.aiValue *= 10;
@@ -159,7 +160,8 @@ package Entity.AI {
                         dx = node.nodeData.x - senderNode.nodeData.x;
                         dy = node.nodeData.y - senderNode.nodeData.y;
                         distance = Math.sqrt(dx * dx + dy * dy) + rng.nextNumber() * 32;
-                        node.aiValue = distance + risk;
+                        towerAttack = getTowerAttack(senderNode, node);
+                        node.aiValue = distance + risk + towerAttack * 64;
                     }
                     targetNode = GeneralFunctions.getRandomMinByProperty(rng, targets, "aiValue") as Node; // 随机选择一个aiValue最小的目标
                     if (targetNode && senderNode) {
@@ -248,7 +250,8 @@ package Entity.AI {
                         dx = node.nodeData.x - senderNode.nodeData.x;
                         dy = node.nodeData.y - senderNode.nodeData.y;
                         distance = Math.sqrt(dx * dx + dy * dy) + rng.nextNumber() * 32;
-                        node.aiValue = distance + risk;
+                        towerAttack = getTowerAttack(senderNode, node);
+                        node.aiValue = distance + risk + towerAttack * 64;
                         if (EntityContainer.inAttackNodeCheck(node, team, NodeType.PULSECANNON, true)) {
                             if (node.aiValue > 0)
                                 node.aiValue *= 10;
@@ -339,21 +342,26 @@ package Entity.AI {
                         break;
                     senderNode = GeneralFunctions.getRandomMinByProperty(rng, senders, "aiStrength") as Node; // 随机选择一个aiStrength最小的出兵天体
                     for each (node in targets) {
+                        towerAttack = getTowerAttack(senderNode, node);
+                        node.aiValue += towerAttack * 2;
                         if (node.nodeData.isWarp) {
                             dx = node.nodeData.x - senderNode.nodeData.x;
                             dy = node.nodeData.y - senderNode.nodeData.y;
                             distance = Math.sqrt(dx * dx + dy * dy) + rng.nextNumber() * 32;
-                            node.aiValue = -512 / distance * node.oppNodeLinks.length; // 传送按距离计算价值
+                            towerAttack = getTowerAttack(senderNode, node);
+                            node.aiValue = -512 / distance * node.oppNodeLinks.length + towerAttack; // 传送按距离计算价值
                         } else if (node.nodeData.type == NodeType.DIFFUSION && Globals.teamPops[team] < Globals.teamCaps[team] && node.teamShipCount(team) < (Globals.teamCaps[team] - Globals.teamPops[team]) / 3) {
                             dx = node.nodeData.x - senderNode.nodeData.x;
                             dy = node.nodeData.y - senderNode.nodeData.y;
                             distance = Math.sqrt(dx * dx + dy * dy) + rng.nextNumber() * 32;
-                            node.aiValue = -512 / distance * node.oppNodeLinks.length; // 扩散按距离计算价值
+                            towerAttack = getTowerAttack(senderNode, node);
+                            node.aiValue = -512 / distance * node.oppNodeLinks.length + towerAttack; // 扩散按距离计算价值
                         } else if (node.nodeData.type == NodeType.CLONETURRET && Globals.teamPops[team] < Globals.teamCaps[team]) {
                             dx = node.nodeData.x - senderNode.nodeData.x;
                             dy = node.nodeData.y - senderNode.nodeData.y;
                             distance = Math.sqrt(dx * dx + dy * dy) + rng.nextNumber() * 32;
-                            node.aiValue = -256 / distance * node.oppNodeLinks.length; // 航母按距离计算价值
+                            towerAttack = getTowerAttack(senderNode, node);
+                            node.aiValue = -256 / distance * node.oppNodeLinks.length + towerAttack * 4; // 航母按距离计算价值
                         }
                         if (node.nodeData.type == NodeType.CLONETURRET)
                             node.aiValue = -25;

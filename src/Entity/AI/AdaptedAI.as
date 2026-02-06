@@ -47,6 +47,10 @@ package Entity.AI {
             }
             centerX /= nodeCount;
             centerY /= nodeCount;
+            if (!centerX && centerX != 0) {
+                centerX = 512;
+                centerY = 384;
+            }
             // #region 防御
             targets.length = 0;
             for each (node in nodeArray) { // 计算目标天体
