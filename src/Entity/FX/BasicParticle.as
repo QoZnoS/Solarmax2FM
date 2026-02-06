@@ -85,13 +85,12 @@ package Entity.FX {
             var arrCache:String = layerArgs.shift();
             var functionRef:Function = LayerFactory.call(arrCache);
             layerArgs.unshift(image);
-            if (functionRef != null) {
+            if (functionRef != null)
                 functionRef.apply(null, layerArgs);
-                layerArgs.shift();
-                layerArgs.unshift(arrCache);
-            } else {
-                trace("Error: Layer function not found for type: " + pClass.layerConfig[0]);
-            }
+            else
+                trace("Error: Layer function not found for type: " + arrCache);
+            layerArgs.shift();
+            layerArgs.unshift(arrCache);
         }
 
         /**

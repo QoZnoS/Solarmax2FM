@@ -19,19 +19,30 @@ package Entity {
         private static var firstInactive:Vector.<int> // 每个粒子池一帧内第一个不活跃粒子
         private static var maxP:Vector.<int>; // 每个粒子池正在活跃的最大编号
 
+        public static const BARRIER:String = "FX";
+        public static const WARP:String = "warp";
+        public static const EXPLODE:String = "explode";
+        public static const FLASH:String = "flash";
+        public static const NODE_PULSE:String = "nodePulse";
+        public static const BEAM_LINE:String = "beamLine";
+        public static const BEAM_SHOOTER:String = "beamShooter";
+        public static const ONE_FRAME:String = "oneFrame";
+
         // 粒子池
         public function ParticleSystem() {
             throw new AbstractClassError();
         }
 
         public static function init():void {
-            registerType("FX", BarrierFX);
-            registerType("warp", WarpFX);
-            registerType("explode", ExplodeFX);
-            registerType("flash", FlashFX);
-            registerType("nodePulse", NodePulse);
-            registerType("beamLine", BeamLine);
-            registerType("beamShooter", BeamShooter);
+            registerType(BARRIER, BarrierFX);
+            registerType(WARP, WarpFX);
+            registerType(EXPLODE, ExplodeFX);
+            registerType(FLASH, FlashFX);
+            registerType(NODE_PULSE, NodePulse);
+            registerType(BEAM_LINE, BeamLine);
+            registerType(BEAM_SHOOTER, BeamShooter);
+            registerType(ONE_FRAME, OneFrameFX);
+
             // 初始化所有已注册类型
             for (var i:int = 0; i < _registerType.length; i++)
                 if (_particlePool.length < i + 1)

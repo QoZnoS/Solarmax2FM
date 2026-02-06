@@ -36,16 +36,19 @@ package Game.VictoryType {
                 init();
 
             var type:String;
+            var trigger:Object = null;
             if (obj is String)
                 type = obj as String;
-            else
+            else {
                 type = ("type" in obj) ? obj.type : NONE_TYPE;
+                trigger = ("trigger" in obj) ? obj.trigger : null;
+            }
 
             var typeClass:Class = _typeMap[type] as Class;
 
             if (typeClass) {
                 try {
-                    return new typeClass(obj.trigger);
+                    return new typeClass(trigger);
                 } catch (e:Error) {
                     trace("Error creating Victory for type", type, ":", e.message);
                 }

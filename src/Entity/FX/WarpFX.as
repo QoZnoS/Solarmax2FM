@@ -22,7 +22,6 @@ package Entity.FX {
 
         // 接受参数 x, y, prevX, prevY, color, foreground, deepColor
         public function init(p:BasicParticle, config:Array):void {
-            layerCfg.length = 0;
             this.p = p;
             p.texturePivotToCenter();
             var x:Number = config[0];

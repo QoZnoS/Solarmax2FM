@@ -17,13 +17,13 @@ package Entity {
         public static function addBarrier(x:Number, y:Number, angle:Number, color:uint):void {
             TEMP_ARRAY.length = 0;
             TEMP_ARRAY.push(x,y,angle,color);
-            ParticleSystem.addParticle("FX", TEMP_ARRAY);
+            ParticleSystem.addParticle(ParticleSystem.BARRIER, TEMP_ARRAY);
         }
 
         public static function addWarp(x:Number, y:Number, prevX:Number, prevY:Number, color:uint, foreground:Boolean, deepColor:Boolean):void {
             TEMP_ARRAY.length = 0;
             TEMP_ARRAY.push(x,y,prevX,prevY,color,foreground,deepColor);
-            ParticleSystem.addParticle("warp", TEMP_ARRAY);
+            ParticleSystem.addParticle(ParticleSystem.WARP, TEMP_ARRAY);
         }
 
         public static function addBeam(node:Node, ship:Ship):void {
@@ -35,13 +35,13 @@ package Entity {
         public static function addBeamShooter(node:Node):void {
             TEMP_ARRAY.length = 0;
             TEMP_ARRAY.push(node);
-            ParticleSystem.addParticle("beamShooter", TEMP_ARRAY);
+            ParticleSystem.addParticle(ParticleSystem.BEAM_SHOOTER, TEMP_ARRAY);
         }
 
         public static function addBeamLine(x1:Number, y1:Number, x2:Number, y2:Number, team:int):void {
             TEMP_ARRAY.length = 0;
             TEMP_ARRAY.push(x1, y1, x2, y2, team);
-            ParticleSystem.addParticle("beamLine", TEMP_ARRAY);
+            ParticleSystem.addParticle(ParticleSystem.BEAM_LINE, TEMP_ARRAY);
         }
 
         public static function addLightning(node1:Node, node2:Node, color:uint, deepColor:Boolean):void {
@@ -57,7 +57,7 @@ package Entity {
         public static function addPulse(node:Node, color:uint, type:int, deepColor:Boolean, delay:Number = 0):void {
             TEMP_ARRAY.length = 0;
             TEMP_ARRAY.push(node, color, type, deepColor, delay);
-            ParticleSystem.addParticle("nodePulse", TEMP_ARRAY);
+            ParticleSystem.addParticle(ParticleSystem.NODE_PULSE, TEMP_ARRAY);
         }
 
         public static function addDarkPulse(node:Node, color:uint, type:int, maxSize:Number, rate:Number, angle:Number, deepColor:Boolean, delay:Number = 0):void {
@@ -66,6 +66,13 @@ package Entity {
                 darkPulse = new DarkPulse();
             darkPulse.initPulse(game, node, color, type, maxSize, rate, angle, deepColor, delay);
             EntityContainer.addEntity(EntityContainer.INDEX_DARKPLUSES, darkPulse);
+        }
+
+        // 接受参数: imageName, x, y, size, color, alpha, angle, deepColor
+        public static function addOneFrame(imageName:String, x:Number, y:Number, size:Number, color:uint, alpha:Number, angle:Number, deepColor:Boolean):void {
+            TEMP_ARRAY.length = 0;
+            TEMP_ARRAY.push(imageName,x,y,size,color,alpha,angle,deepColor);
+            ParticleSystem.addParticle(ParticleSystem.ONE_FRAME, TEMP_ARRAY);
         }
 
         // type 0为扩散式 1为收缩式
@@ -81,13 +88,13 @@ package Entity {
         public static function addFlash(x:Number, y:Number, color:uint, foreground:Boolean, deepColor:Boolean):void {
             TEMP_ARRAY.length = 0;
             TEMP_ARRAY.push(x,y,color,foreground,deepColor);
-            ParticleSystem.addParticle("flash", TEMP_ARRAY);
+            ParticleSystem.addParticle(ParticleSystem.FLASH, TEMP_ARRAY);
         }
 
         public static function addExplosion(x:Number, y:Number, color:uint, foreground:Boolean, deepColor:Boolean):void {
             TEMP_ARRAY.length = 0;
             TEMP_ARRAY.push(x,y,color,foreground,deepColor);
-            ParticleSystem.addParticle("explode", TEMP_ARRAY);
+            ParticleSystem.addParticle(ParticleSystem.EXPLODE, TEMP_ARRAY);
         }
 
     }

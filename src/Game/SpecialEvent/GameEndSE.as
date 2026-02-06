@@ -196,7 +196,7 @@ package Game.SpecialEvent {
         public function deinit():void {
             LayerFactory.call(LayerFactory.REMOVE_GROW)(darkPulse);
             UIContainer.touchable = true;
-            Starling.juggler.removeTweens(Globals);
+            Starling.juggler.purge();
             Globals.soundVolume = soundVolume;
         }
 
