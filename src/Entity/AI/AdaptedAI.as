@@ -98,9 +98,12 @@ package Entity.AI {
                 }
                 // senders.sortOn("aiStrength", 16); // 依己方强度从小到大对出兵天体进行排序（由于强度记录的是相反数，此时看绝对值则是从大到小
                 invalidActions.length = 0;
-                while (true) {
-                    if (invalidActions.length >= GeneralFunctions.getMinCount(targets, "aiValue") * GeneralFunctions.getMinCount(senders, "aiStrength"))
-                        break;
+                while (targets.length > 0 && senders.length > 0) {
+                    if (invalidActions.length >= GeneralFunctions.getMinCount(targets, "aiValue") * GeneralFunctions.getMinCount(senders, "aiStrength")) {
+                        invalidActions.length = 0;
+                        targets = GeneralFunctions.popMinValues(targets, "aiValue", GeneralFunctions.getMinCount(targets, "aiValue"));
+                        senders = GeneralFunctions.popMinValues(senders, "aiStrength", GeneralFunctions.getMinCount(targets, "aiStrength"));
+                    }
                     targetNode = GeneralFunctions.getRandomMinByProperty(rng, targets, "aiValue") as Node; // 随机选择一个aiValue最小的目标
                     senderNode = GeneralFunctions.getRandomMinByProperty(rng, senders, "aiStrength") as Node; // 随机选择一个aiStrength最小的出兵天体
                     if (targetNode && senderNode) {
@@ -191,9 +194,12 @@ package Entity.AI {
                 }
                 // senders.sortOn("aiStrength", 16);
                 invalidActions.length = 0;
-                while (true) {
-                    if (invalidActions.length >= GeneralFunctions.getMinCount(targets, "aiValue") * GeneralFunctions.getMinCount(senders, "aiStrength"))
-                        break;
+                while (targets.length > 0 && senders.length > 0) {
+                    if (invalidActions.length >= GeneralFunctions.getMinCount(targets, "aiValue") * GeneralFunctions.getMinCount(senders, "aiStrength")) {
+                        invalidActions.length = 0;
+                        targets = GeneralFunctions.popMinValues(targets, "aiValue", GeneralFunctions.getMinCount(targets, "aiValue"));
+                        senders = GeneralFunctions.popMinValues(senders, "aiStrength", GeneralFunctions.getMinCount(targets, "aiStrength"));
+                    }
                     targetNode = GeneralFunctions.getRandomMinByProperty(rng, targets, "aiValue") as Node; // 随机选择一个aiValue最小的目标
                     senderNode = GeneralFunctions.getRandomMinByProperty(rng, senders, "aiStrength") as Node; // 随机选择一个aiStrength最小的出兵天体
                     if (targetNode && senderNode) {
@@ -322,9 +328,12 @@ package Entity.AI {
                 }
                 // targets.sortOn("aiValue", 16);
                 invalidActions.length = 0;
-                while (true) {
-                    if (invalidActions.length >= GeneralFunctions.getMinCount(targets, "aiValue") * GeneralFunctions.getMinCount(senders, "aiStrength"))
-                        break;
+                while (targets.length > 0 && senders.length > 0) {
+                    if (invalidActions.length >= GeneralFunctions.getMinCount(targets, "aiValue") * GeneralFunctions.getMinCount(senders, "aiStrength")) {
+                        invalidActions.length = 0;
+                        targets = GeneralFunctions.popMinValues(targets, "aiValue", GeneralFunctions.getMinCount(targets, "aiValue"));
+                        senders = GeneralFunctions.popMinValues(senders, "aiStrength", GeneralFunctions.getMinCount(targets, "aiStrength"));
+                    }
                     targetNode = GeneralFunctions.getRandomMinByProperty(rng, targets, "aiValue") as Node; // 随机选择一个aiValue最小的目标
                     senderNode = GeneralFunctions.getRandomMinByProperty(rng, senders, "aiStrength") as Node; // 随机选择一个aiStrength最小的出兵天体
                     if (targetNode && senderNode) {

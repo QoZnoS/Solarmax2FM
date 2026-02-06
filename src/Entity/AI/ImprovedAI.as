@@ -25,6 +25,7 @@ package Entity.AI {
             var distance:Number = NaN;
             var risk:Number = NaN;
             var invalidActions:Vector.<String> = new Vector.<String>;
+            var validCount:int = 0;
             var targetNode:Node = null;
             var senderNode:Node = null;
             var ships:int = 0;
@@ -45,7 +46,7 @@ package Entity.AI {
                     continue;
                 if (node.teamShipCount(team) == 0)
                     continue;
-                if (node.predictedOppStrength(team) > node.predictedGroupStrength(team)){
+                if (node.predictedOppStrength(team) > node.predictedGroupStrength(team)) {
                     node.aiStrength = -node.teamStrength(team);
                     if (EntityContainer.inAttackNodeCheck(node, team, NodeType.PULSECANNON, true)) {
                         if (node.aiStrength > 0)
@@ -67,23 +68,17 @@ package Entity.AI {
                     targets.push(node);
                 }
                 invalidActions.length = 0;
-                while (true) {
-                    if (invalidActions.length >= GeneralFunctions.getMinCount(targets, "aiValue") * GeneralFunctions.getMinCount(senders, "aiStrength"))
-                        break;
-                    senderNode = GeneralFunctions.getRandomMinByProperty(rng, senders, "aiStrength") as Node; // 随机选择一个aiStrength最小的出兵天体
-                    for each (node in targets) {
-                        dx = node.nodeData.x - senderNode.nodeData.x;
-                        dy = node.nodeData.y - senderNode.nodeData.y;
-                        distance = Math.sqrt(dx * dx + dy * dy) + rng.nextNumber() * 32;
-                        towerAttack = getTowerAttack(senderNode, node);
-                        node.aiValue = distance + towerAttack * 64;
-                        if (EntityContainer.inAttackNodeCheck(node, team, NodeType.PULSECANNON, true)) {
-                            if (node.aiValue > 0)
-                                node.aiValue *= 10;
-                            else
-                                node.aiValue /= 10;
-                        }
+                validCount = getValidCount("retreat", senders, targets, team, rng);
+                while (targets.length > 0 && senders.length > 0) {
+                    if (invalidActions.length >= validCount) {
+                        invalidActions.length = 0;
+                        senders = GeneralFunctions.popMinValues(senders, "aiStrength", GeneralFunctions.getMinCount(senders, "aiStrength"));
+                        validCount = getValidCount("retreat", senders, targets, team, rng);
                     }
+                    senderNode = GeneralFunctions.getRandomMinByProperty(rng, senders, "aiStrength") as Node; // 随机选择一个aiStrength最小的出兵天体
+                    if (!senderNode)
+                        break;
+                    getRetreatValue(senderNode, targets, team, rng);
                     targetNode = GeneralFunctions.getRandomMinByProperty(rng, targets, "aiValue") as Node; // 随机选择一个aiValue最小的目标
                     if (targetNode && senderNode) {
                         if (invalidActions.indexOf(senderNode.tag + "," + targetNode.tag) == -1) // 检查是否是已经尝试过的操作
@@ -131,7 +126,6 @@ package Entity.AI {
                     continue; // 条件2：有敌方
                 if (node.predictedGroupStrength(team) > node.predictedOppStrength(team) * 1.5)
                     continue; // 条件3：预测己方强度低于敌方1.5倍（即可能打不过敌方
-                risk = node.predictedGroupStrength(team) - node.predictedOppCaptureRisk(team);
                 targets.push(node);
             }
             if (targets.length > 0) { // 目标天体存在时
@@ -152,17 +146,17 @@ package Entity.AI {
                     senders.push(node);
                 }
                 invalidActions.length = 0;
-                while (true) {
-                    if (invalidActions.length >= GeneralFunctions.getMinCount(targets, "aiValue") * GeneralFunctions.getMinCount(senders, "aiStrength"))
-                        break;
-                    senderNode = GeneralFunctions.getRandomMinByProperty(rng, senders, "aiStrength") as Node; // 随机选择一个aiStrength最小的出兵天体
-                    for each (node in targets) {
-                        dx = node.nodeData.x - senderNode.nodeData.x;
-                        dy = node.nodeData.y - senderNode.nodeData.y;
-                        distance = Math.sqrt(dx * dx + dy * dy) + rng.nextNumber() * 32;
-                        towerAttack = getTowerAttack(senderNode, node);
-                        node.aiValue = distance + risk + towerAttack * 64;
+                validCount = getValidCount("defend", senders, targets, team, rng);
+                while (targets.length > 0 && senders.length > 0) {
+                    if (invalidActions.length >= validCount) {
+                        invalidActions.length = 0;
+                        senders = GeneralFunctions.popMinValues(senders, "aiStrength", GeneralFunctions.getMinCount(senders, "aiStrength"));
+                        validCount = getValidCount("defend", senders, targets, team, rng);
                     }
+                    senderNode = GeneralFunctions.getRandomMinByProperty(rng, senders, "aiStrength") as Node; // 随机选择一个aiStrength最小的出兵天体
+                    if (!senderNode)
+                        break;
+                    getDefendValue(senderNode, targets, team, rng);
                     targetNode = GeneralFunctions.getRandomMinByProperty(rng, targets, "aiValue") as Node; // 随机选择一个aiValue最小的目标
                     if (targetNode && senderNode) {
                         if (invalidActions.indexOf(senderNode.tag + "," + targetNode.tag) == -1) // 检查是否是已经尝试过的操作
@@ -215,7 +209,6 @@ package Entity.AI {
                 captureCost *= node.nodeData.hpMult;
                 if (node.predictedOppShipCount(team) == 0 && node.predictedGroupShipCount(team) > captureCost * node.nodeData.size * 1.5)
                     continue; // 条件：排除己方船数足够且无敌方的天体
-                risk = node.predictedOppStrength(team) - node.predictedGroupStrength(team);
                 targets.push(node);
             }
             if (targets.length > 0) {
@@ -242,23 +235,17 @@ package Entity.AI {
                     senders.push(node);
                 }
                 invalidActions.length = 0;
-                while (true) {
-                    if (invalidActions.length >= GeneralFunctions.getMinCount(targets, "aiValue") * GeneralFunctions.getMinCount(senders, "aiStrength"))
-                        break;
-                    senderNode = GeneralFunctions.getRandomMinByProperty(rng, senders, "aiStrength") as Node; // 随机选择一个aiStrength最小的出兵天体
-                    for each (node in targets) {
-                        dx = node.nodeData.x - senderNode.nodeData.x;
-                        dy = node.nodeData.y - senderNode.nodeData.y;
-                        distance = Math.sqrt(dx * dx + dy * dy) + rng.nextNumber() * 32;
-                        towerAttack = getTowerAttack(senderNode, node);
-                        node.aiValue = distance + risk + towerAttack * 64;
-                        if (EntityContainer.inAttackNodeCheck(node, team, NodeType.PULSECANNON, true)) {
-                            if (node.aiValue > 0)
-                                node.aiValue *= 10;
-                            else
-                                node.aiValue /= 10;
-                        }
+                validCount = getValidCount("attack", senders, targets, team, rng);
+                while (targets.length > 0 && senders.length > 0) {
+                    if (invalidActions.length >= validCount) {
+                        invalidActions.length = 0;
+                        senders = GeneralFunctions.popMinValues(senders, "aiStrength", GeneralFunctions.getMinCount(senders, "aiStrength"));
+                        validCount = getValidCount("attack", senders, targets, team, rng);
                     }
+                    senderNode = GeneralFunctions.getRandomMinByProperty(rng, senders, "aiStrength") as Node; // 随机选择一个aiStrength最小的出兵天体
+                    if (!senderNode)
+                        break;
+                    getAttackValue(senderNode, targets, team, rng);
                     targetNode = GeneralFunctions.getRandomMinByProperty(rng, targets, "aiValue") as Node; // 随机选择一个aiValue最小的目标
                     if (targetNode && senderNode) {
                         if (invalidActions.indexOf(senderNode.tag + "," + targetNode.tag) == -1) // 检查是否是已经尝试过的操作
@@ -335,41 +322,18 @@ package Entity.AI {
                     }
                     targets.push(node);
                 }
-                // targets.sortOn("aiValue", 16);
                 invalidActions.length = 0;
-                while (true) {
-                    if (invalidActions.length >= GeneralFunctions.getMinCount(targets, "aiValue") * GeneralFunctions.getMinCount(senders, "aiStrength"))
-                        break;
-                    senderNode = GeneralFunctions.getRandomMinByProperty(rng, senders, "aiStrength") as Node; // 随机选择一个aiStrength最小的出兵天体
-                    for each (node in targets) {
-                        towerAttack = getTowerAttack(senderNode, node);
-                        node.aiValue += towerAttack * 2;
-                        if (node.nodeData.isWarp) {
-                            dx = node.nodeData.x - senderNode.nodeData.x;
-                            dy = node.nodeData.y - senderNode.nodeData.y;
-                            distance = Math.sqrt(dx * dx + dy * dy) + rng.nextNumber() * 32;
-                            towerAttack = getTowerAttack(senderNode, node);
-                            node.aiValue = -512 / distance * node.oppNodeLinks.length + towerAttack; // 传送按距离计算价值
-                        } else if (node.nodeData.type == NodeType.DIFFUSION && Globals.teamPops[team] < Globals.teamCaps[team] && node.teamShipCount(team) < (Globals.teamCaps[team] - Globals.teamPops[team]) / 3) {
-                            dx = node.nodeData.x - senderNode.nodeData.x;
-                            dy = node.nodeData.y - senderNode.nodeData.y;
-                            distance = Math.sqrt(dx * dx + dy * dy) + rng.nextNumber() * 32;
-                            towerAttack = getTowerAttack(senderNode, node);
-                            node.aiValue = -512 / distance * node.oppNodeLinks.length + towerAttack; // 扩散按距离计算价值
-                        } else if (node.nodeData.type == NodeType.CLONETURRET && Globals.teamPops[team] < Globals.teamCaps[team]) {
-                            dx = node.nodeData.x - senderNode.nodeData.x;
-                            dy = node.nodeData.y - senderNode.nodeData.y;
-                            distance = Math.sqrt(dx * dx + dy * dy) + rng.nextNumber() * 32;
-                            towerAttack = getTowerAttack(senderNode, node);
-                            node.aiValue = -256 / distance * node.oppNodeLinks.length + towerAttack * 4; // 航母按距离计算价值
-                        }
-                        if (EntityContainer.inAttackNodeCheck(node, team, NodeType.PULSECANNON, true)) {
-                            if (node.aiValue > 0)
-                                node.aiValue *= 10;
-                            else
-                                node.aiValue /= 10;
-                        }
+                validCount = getValidCount("reposition", senders, targets, team, rng);
+                while (targets.length > 0 && senders.length > 0) {
+                    if (invalidActions.length >= validCount) {
+                        invalidActions.length = 0;
+                        senders = GeneralFunctions.popMinValues(senders, "aiStrength", GeneralFunctions.getMinCount(senders, "aiStrength"));
+                        validCount = getValidCount("reposition", senders, targets, team, rng);
                     }
+                    senderNode = GeneralFunctions.getRandomMinByProperty(rng, senders, "aiStrength") as Node; // 随机选择一个aiStrength最小的出兵天体
+                    if (!senderNode)
+                        break;
+                    getRepositionValue(senderNode, targets, team, rng);
                     targetNode = GeneralFunctions.getRandomMinByProperty(rng, targets, "aiValue") as Node; // 随机选择一个aiValue最小的目标
                     if (targetNode && senderNode) {
                         if (invalidActions.indexOf(senderNode.tag + "," + targetNode.tag) == -1) // 检查是否是已经尝试过的操作
@@ -505,8 +469,117 @@ package Entity.AI {
             // #endregion
         }
 
+        // #region aiValues
+        public function getRetreatValue(senderNode:Node, targets:Array, team:int, rng:Rng):void {
+            for each (var targetNode:Node in targets) {
+                var dx:Number = targetNode.nodeData.x - senderNode.nodeData.x;
+                var dy:Number = targetNode.nodeData.y - senderNode.nodeData.y;
+                var distance:Number = Math.sqrt(dx * dx + dy * dy) + rng.nextNumber() * 32;
+                var towerAttack:Number = getTowerAttack(senderNode, targetNode);
+
+                targetNode.aiValue = distance + towerAttack * 64;
+                if (EntityContainer.inAttackNodeCheck(targetNode, team, NodeType.PULSECANNON, true)) {
+                    if (targetNode.aiValue > 0)
+                        targetNode.aiValue *= 10;
+                    else
+                        targetNode.aiValue /= 10;
+                }
+            }
+        }
+
+        public function getDefendValue(senderNode:Node, targets:Array, team:int, rng:Rng):void {
+            for each (var targetNode:Node in targets) {
+                var dx:Number = targetNode.nodeData.x - senderNode.nodeData.x;
+                var dy:Number = targetNode.nodeData.y - senderNode.nodeData.y;
+                var distance:Number = Math.sqrt(dx * dx + dy * dy) + rng.nextNumber() * 32;
+                var towerAttack:Number = getTowerAttack(senderNode, targetNode);
+                var risk:Number = targetNode.predictedGroupStrength(team) - targetNode.predictedOppCaptureRisk(team);
+
+                targetNode.aiValue = distance + risk + towerAttack * 64;
+            }
+        }
+
+        public function getAttackValue(senderNode:Node, targets:Array, team:int, rng:Rng):void {
+            for each (var targetNode:Node in targets) {
+                var dx:Number = targetNode.nodeData.x - senderNode.nodeData.x;
+                var dy:Number = targetNode.nodeData.y - senderNode.nodeData.y;
+                var distance:Number = Math.sqrt(dx * dx + dy * dy) + rng.nextNumber() * 32;
+                var towerAttack:Number = getTowerAttack(senderNode, targetNode);
+                var risk:Number = targetNode.predictedOppStrength(team) - targetNode.predictedGroupStrength(team);
+
+                targetNode.aiValue = distance + risk + towerAttack * 64;
+                if (EntityContainer.inAttackNodeCheck(targetNode, team, NodeType.PULSECANNON, true)) {
+                    if (targetNode.aiValue > 0)
+                        targetNode.aiValue *= 10;
+                    else
+                        targetNode.aiValue /= 10;
+                }
+            }
+        }
+
+        public function getRepositionValue(senderNode:Node, targets:Array, team:int, rng:Rng):void {
+            for each (var node:Node in targets) {
+                var towerAttack:Number = getTowerAttack(senderNode, node);
+                node.aiValue += towerAttack * 2;
+                if (node.nodeData.isWarp) {
+                    var dx:Number = node.nodeData.x - senderNode.nodeData.x;
+                    var dy:Number = node.nodeData.y - senderNode.nodeData.y;
+                    var distance:Number = Math.sqrt(dx * dx + dy * dy) + rng.nextNumber() * 32;
+                    towerAttack = getTowerAttack(senderNode, node);
+                    node.aiValue = -512 / distance * node.oppNodeLinks.length + towerAttack; // 传送按距离计算价值
+                } else if (node.nodeData.type == NodeType.DIFFUSION && Globals.teamPops[team] < Globals.teamCaps[team] && node.teamShipCount(team) < (Globals.teamCaps[team] - Globals.teamPops[team]) / 3) {
+                    dx = node.nodeData.x - senderNode.nodeData.x;
+                    dy = node.nodeData.y - senderNode.nodeData.y;
+                    distance = Math.sqrt(dx * dx + dy * dy) + rng.nextNumber() * 32;
+                    towerAttack = getTowerAttack(senderNode, node);
+                    node.aiValue = -512 / distance * node.oppNodeLinks.length + towerAttack; // 扩散按距离计算价值
+                } else if (node.nodeData.type == NodeType.CLONETURRET && Globals.teamPops[team] < Globals.teamCaps[team]) {
+                    dx = node.nodeData.x - senderNode.nodeData.x;
+                    dy = node.nodeData.y - senderNode.nodeData.y;
+                    distance = Math.sqrt(dx * dx + dy * dy) + rng.nextNumber() * 32;
+                    towerAttack = getTowerAttack(senderNode, node);
+                    node.aiValue = -256 / distance * node.oppNodeLinks.length + towerAttack * 4; // 航母按距离计算价值
+                }
+                if (EntityContainer.inAttackNodeCheck(node, team, NodeType.PULSECANNON, true)) {
+                    if (node.aiValue > 0)
+                        node.aiValue *= 10;
+                    else
+                        node.aiValue /= 10;
+                }
+            }
+        }
+
+        // #endregion
+
+        private function getValidCount(type:String, senders:Array, targets:Array, team:int, rng:Rng):int {
+            var validCount:int = 0;
+            for each (var senderNode:Node in GeneralFunctions.getMins(senders, "aiStrength")) {
+                if (!senderNode)
+                    break;
+
+                switch (type) {
+                    case "retreat":
+                        getRetreatValue(senderNode, targets, team, rng);
+                        break;
+                    case "defend":
+                        getDefendValue(senderNode, targets, team, rng);
+                        break;
+                    case "attack":
+                        getAttackValue(senderNode, targets, team, rng);
+                        break;
+                    case "reposition":
+                        getRepositionValue(senderNode, targets, team, rng);
+                        break;
+                }
+
+                validCount += GeneralFunctions.getMinCount(targets, "aiValue");
+            }
+            return validCount;
+        }
+
         override public function get type():String {
             return EnemyAIFactory.IMPROVED;
         }
+
     }
 }
