@@ -1,19 +1,21 @@
 package Entity.AI {
     import utils.Rng;
     import Entity.Node;
-    import Entity.EntityContainer;
     import Entity.Node.NodeStaticLogic;
     import Entity.Node.NodeType;
     import Entity.EntityContainer;
     import utils.GeneralFunctions;
 
     public class ImprovedAI extends BasicAI {
+
         public function ImprovedAI(rng:Rng, actionDelay:Number, startDelay:Number) {
             super(rng, actionDelay, startDelay)
         }
 
         override public function update(dt:Number):void {
             if (!updateTimer(dt))
+                return;
+            if (EntityContainer.game.winningGroup == group)
                 return;
             updateImproved()
         }

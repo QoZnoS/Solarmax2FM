@@ -1,19 +1,21 @@
 package Entity.AI {
     import utils.Rng;
     import Entity.Node;
-    import Entity.EntityContainer;
     import Entity.Node.NodeStaticLogic;
     import Entity.Node.NodeType;
     import Entity.EntityContainer;
     import utils.GeneralFunctions;
 
     public class AdaptedAI extends BasicAI {
+
         public function AdaptedAI(rng:Rng, actionDelay:Number, startDelay:Number) {
             super(rng, actionDelay, startDelay)
         }
 
         override public function update(dt:Number):void {
             if (!updateTimer(dt))
+                return;
+            if (EntityContainer.game.winningGroup == group)
                 return;
             updateAdapted()
         }
@@ -292,7 +294,7 @@ package Entity.AI {
                     nodeGroup = Globals.teamGroups[node.nodeData.team];
                     if (node.nodeData.isAIinvisible)
                         continue;
-                    if (nodeGroup != group) 
+                    if (nodeGroup != group)
                         continue;
                     if (nodeGroup == group) {
                         node.getOppLinks(team);
@@ -302,14 +304,12 @@ package Entity.AI {
                             dy = node.nodeData.y - centerY;
                             distance = Math.sqrt(dx * dx + dy * dy) + rng.nextNumber() * 32;
                             node.aiValue = -512 / distance * node.oppNodeLinks.length; // 传送按距离计算价值
-                        }
-                        else if (node.nodeData.type == NodeType.DIFFUSION && Globals.teamPops[team] < Globals.teamCaps[team] && node.teamShipCount(team) < (Globals.teamCaps[team] - Globals.teamPops[team]) / 3) {
+                        } else if (node.nodeData.type == NodeType.DIFFUSION && Globals.teamPops[team] < Globals.teamCaps[team] && node.teamShipCount(team) < (Globals.teamCaps[team] - Globals.teamPops[team]) / 3) {
                             dx = node.nodeData.x - centerX;
                             dy = node.nodeData.y - centerY;
                             distance = Math.sqrt(dx * dx + dy * dy) + rng.nextNumber() * 32;
                             node.aiValue = -512 / distance * node.oppNodeLinks.length; // 扩散按距离计算价值
-                        }
-                        else if (node.nodeData.type == NodeType.CLONETURRET && Globals.teamPops[team] < Globals.teamCaps[team]) {
+                        } else if (node.nodeData.type == NodeType.CLONETURRET && Globals.teamPops[team] < Globals.teamCaps[team]) {
                             dx = node.nodeData.x - centerX;
                             dy = node.nodeData.y - centerY;
                             distance = Math.sqrt(dx * dx + dy * dy) + rng.nextNumber() * 32;
