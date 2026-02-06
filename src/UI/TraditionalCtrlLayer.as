@@ -11,6 +11,7 @@ package UI {
     import starling.display.QuadBatch;
     import Entity.Node.NodeStaticLogic;
     import Entity.EntityContainer;
+    import Entity.FX.SelectFade;
 
     public class TraditionalCtrlLayer extends Sprite {
 
@@ -242,12 +243,12 @@ package UI {
             var currentNode:Node = getClosestNode(x, y);
             if (!currentNode)
                 return;
-            FXHandler.addFade(currentNode.nodeData.x, currentNode.nodeData.y, currentNode.nodeData.size, 0xFFFFFF, 1, false);
+            FXHandler.addFade(currentNode.nodeData.x, currentNode.nodeData.y, currentNode.nodeData.size, 0xFFFFFF, SelectFade.TYPE_SHRINK);
             for each (var node:Node in selectedNodes) {
                 if (node == currentNode || !node.nodeLinks[Globals.playerTeam].includes(currentNode))
                     continue;
                 NodeStaticLogic.sendShips(node, Globals.playerTeam, currentNode);
-                FXHandler.addFade(node.nodeData.x, node.nodeData.y, node.nodeData.size, 0xFFFFFF, 0, false);
+                FXHandler.addFade(node.nodeData.x, node.nodeData.y, node.nodeData.size, 0xFFFFFF, SelectFade.TYPE_GROW);
             }
         }
 

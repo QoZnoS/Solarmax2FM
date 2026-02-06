@@ -1,4 +1,3 @@
-// 文件: NodePulse_new.as
 package Entity.FX {
     import UI.LayerFactory;
     import Entity.Node;

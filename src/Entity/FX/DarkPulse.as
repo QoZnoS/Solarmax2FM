@@ -14,8 +14,6 @@ package Entity.FX {
         public static const TYPE_BLOB:int = 2;
         public static const TYPE_BLOOM:int = 3;
         public static const TYPE_BLACKHOLE_ATTACK:int = 4;
-        public static const TYPE_BLACKHOLE:int = 5;
-        public static const TYPE_BLACKHOLE_FLARE:int = 6;
         public static const TYPE_DIFFUSION_ARC:int = 8;
         public static const TYPE_SHIP_PULSE_SHRINK:int = 9;
         public static const TYPE_SHIP_PULSE_GROW:int = 10;
@@ -50,14 +48,7 @@ package Entity.FX {
                     image.texture = Root.assets.getTexture("spot_glow");
                     break;
                 case TYPE_BLACKHOLE_ATTACK:
-                case TYPE_BLACKHOLE:
                     image.texture = Root.assets.getTexture("blackhole_pulse");
-                    break;
-                case TYPE_BLACKHOLE_FLARE:
-                    image.texture = Root.assets.getTexture("skill_light");
-                    break;
-                case 7:
-                    image.texture = Root.assets.getTexture("skill_glow");
                     break;
                 case TYPE_DIFFUSION_ARC:
                     var imageID:int = Math.floor(Math.random() * 16) + 1;
@@ -109,9 +100,6 @@ package Entity.FX {
                     image.scaleX = image.scaleY = size;
                     break;
                 case TYPE_BLACKHOLE_ATTACK:
-                case TYPE_BLACKHOLE:
-                case TYPE_BLACKHOLE_FLARE:
-                case 7:
                 case TYPE_DIFFUSION_ARC:
                     image.alpha = rate * 0.8;
                     image.scaleX = image.scaleY = maxSize;

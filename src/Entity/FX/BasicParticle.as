@@ -175,6 +175,10 @@ package Entity.FX {
             image.color = value;
         }
 
+        public function set pivot(value:Number):void {
+            image.pivotX = image.pivotY = value;
+        }
+
         public function get pivotX():Number {
             return image.pivotX;
         }
@@ -209,6 +213,8 @@ package Entity.FX {
 
         public function set texture(value:String):void {
             image.texture = Root.assets.getTexture(value);
+            image.width = image.texture.width;
+            image.height = image.texture.height;
         }
         // #endregion
     }

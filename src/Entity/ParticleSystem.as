@@ -27,6 +27,7 @@ package Entity {
         public static const BEAM_LINE:String = "beamLine";
         public static const BEAM_SHOOTER:String = "beamShooter";
         public static const ONE_FRAME:String = "oneFrame";
+        public static const SELECT_FADE:String = "selectFade";
 
         // 粒子池
         public function ParticleSystem() {
@@ -42,6 +43,7 @@ package Entity {
             registerType(BEAM_LINE, BeamLine);
             registerType(BEAM_SHOOTER, BeamShooter);
             registerType(ONE_FRAME, OneFrameFX);
+            registerType(SELECT_FADE, SelectFade);
 
             // 初始化所有已注册类型
             for (var i:int = 0; i < _registerType.length; i++)
@@ -64,12 +66,15 @@ package Entity {
             var length:int = _particlePool.length;
             for (var index:int = 0; index < length; index++) {
                 var pool:Vector.<BasicParticle> = _particlePool[index];
+                var max:int = 0;
                 for (var i:int = 0; i < maxP[index]; i++) {
                     var p:BasicParticle = pool[i];
-                    if (p.active)
-                        p.update(dt);
+                    if (!p.active)
+                        continue;
+                    p.update(dt);
+                    max = i + 1;
                 }
-                maxP[index] = i;
+                maxP[index] = max;
             }
         }
 

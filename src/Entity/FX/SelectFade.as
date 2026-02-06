@@ -1,12 +1,10 @@
 // type 0为扩散式 1为收缩式
 package Entity.FX {
-    import Game.GameScene;
-    import Entity.GameEntity;
     import utils.Drawer;
     import UI.LayerFactory;
     import starling.display.QuadBatch;
 
-    public class SelectFade extends GameEntity {
+    public class SelectFade implements IParticle {
 
         public static const TYPE_GROW:int = 0;
         public static const TYPE_SHRINK:int = 1;
@@ -18,26 +16,23 @@ package Entity.FX {
         private var color:uint;
         private var type:int;
         private var deepColor:Boolean;
+        private var p:BasicParticle;
 
         public function SelectFade() {
-            super();
         }
 
-        public function initSelectFade(gameScene:GameScene, x:Number, y:Number, size:Number, color:uint, type:int, deepColor:Boolean):void {
-            super.init(gameScene);
-            this.x = x;
-            this.y = y;
-            this.color = color;
-            this.deepColor = deepColor;
-            this.size = size;
-            this.type = type;
+        // 接受参数: x, y, size, color, type
+        public function init(p:BasicParticle, config:Array):void {
+            this.p = p;
+            this.x = config[0];
+            this.y = config[1];
+            this.color = config[2];
+            this.size = config[3];
+            this.type = config[4];
             alpha = 1;
         }
 
-        override public function deInit():void {
-        }
-
-        override public function update(dt:Number):void {
+        public function update(dt:Number):void {
             if (type == 0)
                 size += dt * 0.2;
             else
@@ -45,11 +40,19 @@ package Entity.FX {
             alpha -= dt * 4;
             if (alpha <= 0) {
                 alpha = 0;
-                active = false;
+                p.active = false;
             }
             var radius:Number = 150 * size - 4;
             var voidR:Number = Math.max(0, radius - 3);
             Drawer.drawCircle(LayerFactory.getLayer(LayerFactory.BEHAVIOR) as QuadBatch, x, y, color, radius, voidR, false, alpha);
+        }
+
+        public function get imageName():String {
+            return "halo";
+        }
+
+        public function get layerConfig():Array {
+            throw new Error("Method not implemented.");
         }
     }
 }

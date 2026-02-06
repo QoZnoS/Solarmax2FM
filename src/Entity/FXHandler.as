@@ -14,15 +14,16 @@ package Entity {
             throw new AbstractClassError();
         }
         private static var TEMP_ARRAY:Array = [];
+
         public static function addBarrier(x:Number, y:Number, angle:Number, color:uint):void {
             TEMP_ARRAY.length = 0;
-            TEMP_ARRAY.push(x,y,angle,color);
+            TEMP_ARRAY.push(x, y, angle, color);
             ParticleSystem.addParticle(ParticleSystem.BARRIER, TEMP_ARRAY);
         }
 
         public static function addWarp(x:Number, y:Number, prevX:Number, prevY:Number, color:uint, foreground:Boolean, deepColor:Boolean):void {
             TEMP_ARRAY.length = 0;
-            TEMP_ARRAY.push(x,y,prevX,prevY,color,foreground,deepColor);
+            TEMP_ARRAY.push(x, y, prevX, prevY, color, foreground, deepColor);
             ParticleSystem.addParticle(ParticleSystem.WARP, TEMP_ARRAY);
         }
 
@@ -71,29 +72,27 @@ package Entity {
         // 接受参数: imageName, x, y, size, color, alpha, angle, deepColor
         public static function addOneFrame(imageName:String, x:Number, y:Number, size:Number, color:uint, alpha:Number, angle:Number, deepColor:Boolean):void {
             TEMP_ARRAY.length = 0;
-            TEMP_ARRAY.push(imageName,x,y,size,color,alpha,angle,deepColor);
+            TEMP_ARRAY.push(imageName, x, y, size, color, alpha, angle, deepColor);
             ParticleSystem.addParticle(ParticleSystem.ONE_FRAME, TEMP_ARRAY);
         }
 
         // type 0为扩散式 1为收缩式
-        public static function addFade(x:Number, y:Number, size:Number, color:uint, type:int, deepColor:Boolean):void {
-            var selectFade:SelectFade = EntityContainer.getReserve(EntityContainer.INDEX_FADES) as SelectFade;
-            if (!selectFade)
-                selectFade = new SelectFade();
-            selectFade.initSelectFade(game, x, y, size, color, type, deepColor);
-            EntityContainer.addEntity(EntityContainer.INDEX_FADES, selectFade);
+        public static function addFade(x:Number, y:Number, size:Number, color:uint, type:int):void {
+            TEMP_ARRAY.length = 0;
+            TEMP_ARRAY.push(x, y, color, size, type);
+            ParticleSystem.addParticle(ParticleSystem.SELECT_FADE, TEMP_ARRAY);
         }
 
         // 摧毁飞船特效
         public static function addFlash(x:Number, y:Number, color:uint, foreground:Boolean, deepColor:Boolean):void {
             TEMP_ARRAY.length = 0;
-            TEMP_ARRAY.push(x,y,color,foreground,deepColor);
+            TEMP_ARRAY.push(x, y, color, foreground, deepColor);
             ParticleSystem.addParticle(ParticleSystem.FLASH, TEMP_ARRAY);
         }
 
         public static function addExplosion(x:Number, y:Number, color:uint, foreground:Boolean, deepColor:Boolean):void {
             TEMP_ARRAY.length = 0;
-            TEMP_ARRAY.push(x,y,color,foreground,deepColor);
+            TEMP_ARRAY.push(x, y, color, foreground, deepColor);
             ParticleSystem.addParticle(ParticleSystem.EXPLODE, TEMP_ARRAY);
         }
 

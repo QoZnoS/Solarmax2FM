@@ -13,27 +13,38 @@ package Entity.FX {
         public function OneFrameFX() {
             layerCfg = [LayerFactory.ADD_GROW];
         }
+
         // 接受参数: imageName, x, y, size, color, alpha, angle, deepColor
         public function init(p:BasicParticle, config:Array):void {
             this.p = p;
-            p.texture = config[0];
+            // p.texturePivotToCenter();
             p.rotation = 0;
+            p.texture = config[0];
             p.scale = 1;
-            p.texturePivotToCenter();
+            p.pivot = p.width * 0.5;
             p.x = config[1];
             p.y = config[2];
             p.scale = config[3];
             p.color = config[4];
-            p.alpha = config[6];
-            p.rotation = config[7];
-            this.deepColor = config[8];
+            p.alpha = config[5];
+            p.rotation = config[6];
+            this.deepColor = config[7];
             layerCfg.length = 1;
             layerCfg.push(deepColor);
+            p.visible = true;
+            pass = true;
             p.addToLayer();
         }
 
+        private var pass:Boolean;
+
         public function update(dt:Number):void {
-            p.active = false;
+            if (!pass) {
+                p.visible = false;
+                p.active = false;
+                return;
+            } else
+                pass = false;
         }
 
         public function get imageName():String {
