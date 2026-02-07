@@ -2,11 +2,11 @@
 // 天体标准兵力特指100*size
 package core.entities {
     import core.ai.IEnemyAI;
+    import core.factories.EnemyAIFactory;
 
     import scenes.GameScene;
 
     import utils.Rng;
-    import core.factories.EnemyAIFactory;
 
     public class EnemyAI extends GameEntity {
 
@@ -38,6 +38,7 @@ package core.entities {
             debugTrace.unshift(_text);
             debugTrace.pop();
         }
+
         // #endregion
 
         public function get team():int {

@@ -1,15 +1,14 @@
-// 处理各种特效
-
 package core {
     import core.entities.Node;
     import core.entities.Ship;
     import core.fx.legacy.DarkPulse;
     import core.fx.legacy.LightningFX;
 
+    import managers.Globals;
+
     import scenes.GameScene;
 
     import starling.errors.AbstractClassError;
-    import managers.Globals;
 
     public class FXHandler {
         public static var game:GameScene;

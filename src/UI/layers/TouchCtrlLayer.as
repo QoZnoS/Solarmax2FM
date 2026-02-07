@@ -1,25 +1,26 @@
 package ui.layers {
+    import core.EntityContainer;
+    import core.FXHandler;
     import core.entities.Node;
+    import core.fx.SelectFade;
+    import core.node.NodeStaticLogic;
 
     import flash.geom.Point;
 
+    import managers.Globals;
+
     import scenes.GameScene;
 
+    import starling.display.Quad;
     import starling.display.QuadBatch;
+    import starling.display.Sprite;
     import starling.events.Touch;
+    import starling.events.TouchEvent;
 
     import ui.UIContainer;
+    import ui.layers.LayerFactory;
 
     import utils.Drawer;
-    import starling.display.Sprite;
-    import starling.display.Quad;
-    import managers.Globals;
-    import core.EntityContainer;
-    import starling.events.TouchEvent;
-    import core.FXHandler;
-    import core.node.NodeStaticLogic;
-    import core.fx.SelectFade;
-    import ui.layers.LayerFactory;
 
     public class TouchCtrlLayer extends Sprite {
         private var convertQuad:Quad; // 转换触点坐标用

@@ -1,19 +1,19 @@
 package scenes.menus {
+    import managers.Globals;
+    import managers.LevelData;
+
     import scenes.TitleMenu;
 
+    import starling.core.Starling;
     import starling.display.Image;
+    import starling.display.Sprite;
+    import starling.events.Event;
+    import starling.text.TextField;
 
     import ui.components.MenuButton;
     import ui.components.OptionButton;
-    import starling.display.Sprite;
-    import starling.text.TextField;
-    import starling.core.Starling;
-    import managers.LevelData;
-    import managers.Globals;
-    import starling.events.Event;
 
     public class MapackMenu extends Sprite implements IMenu {
-
         private const COLOR:uint = 0xFF9DBB;
 
         private var components:Array;
@@ -137,7 +137,7 @@ package scenes.menus {
                     y -= 500;
             }
             mapacks[Globals.currentData].toggle();
-            if (mapacks.length <= 4){
+            if (mapacks.length <= 4) {
                 components[2].visible = components[3].visible = false;
                 return
             }

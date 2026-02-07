@@ -1,9 +1,9 @@
 package core.node {
     import flash.utils.Dictionary;
+
     import managers.Globals;
 
     public dynamic class NodeData extends Dictionary {
-
         // 内部维护的属性列表
         private var _serializableProps:Object = {};
 
@@ -92,7 +92,7 @@ package core.node {
                     vector = new Vector.<int>(Globals.teamCount);
                     vector[team] = int(obj[prop]);
                     this[prop] = vector;
-                } else if (obj[prop] is Array){
+                } else if (obj[prop] is Array) {
                     array = obj[prop] as Array;
                     vector = new Vector.<int>();
                     for (i = 0; i < array.length; i++)

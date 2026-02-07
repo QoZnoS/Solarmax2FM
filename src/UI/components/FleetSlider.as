@@ -1,9 +1,9 @@
 package ui.components {
-    import starling.events.Touch;
-    import starling.display.Sprite;
     import starling.display.Quad;
-    import starling.text.TextField;
+    import starling.display.Sprite;
+    import starling.events.Touch;
     import starling.events.TouchEvent;
+    import starling.text.TextField;
 
     public class FleetSlider extends Sprite {
         public static const TYPE_HORIZONTAL_SMALL:int = 1;
@@ -161,24 +161,24 @@ package ui.components {
             }
         }
 
-        public function get perc():Number{
+        public function get perc():Number {
             return this._total;
         }
 
-        public function set perc(_total:Number):void{
+        public function set perc(_total:Number):void {
             this._total = _total;
             update();
         }
 
-        public function get box_y():Number{
+        public function get box_y():Number {
             return _touchHeight * 0.5 - _boxHeight + 5;
         }
 
-        public function get box_x():Number{
+        public function get box_x():Number {
             return _touchWidth * 0.5 - _boxWidth * 0.5;
         }
 
-        public function set color(value:uint):void{
+        public function set color(value:uint):void {
             _boxQuad1.color = _boxQuad2.color = _boxQuad3.color = _boxQuad4.color = value;
             _quad1.color = _quad2.color = _label.color = value;
         }

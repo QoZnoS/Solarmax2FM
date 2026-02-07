@@ -1,15 +1,17 @@
 package core.fx {
     import core.entities.Node;
-    import ui.layers.LayerFactory;
+
     import managers.AudioManager;
+
+    import ui.layers.LayerFactory;
 
     public class NodePulse implements IParticle {
         private var p:BasicParticle;
         private var layerCfg:Array;
-        
+
         public static const TYPE_GROW:int = 0;
         public static const TYPE_SHRINK:int = 1;
-        
+
         private var type:int;
         private var size:Number;
         private var maxSize:Number;
@@ -92,7 +94,7 @@ package core.fx {
             if (!p.active)
                 p.layerCall(LayerFactory.REMOVE_GROW);
         }
-        
+
         public function get layerConfig():Array {
             return layerCfg;
         }

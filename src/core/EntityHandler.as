@@ -1,9 +1,10 @@
-// 处理实体反应
-
 package core {
     import core.entities.EnemyAI;
     import core.entities.Node;
     import core.entities.Ship;
+
+    import managers.AudioManager;
+    import managers.Globals;
 
     import scenes.GameScene;
     import scenes.ReplayScene;
@@ -11,8 +12,6 @@ package core {
     import starling.errors.AbstractClassError;
 
     import utils.Rng;
-    import managers.Globals;
-    import managers.AudioManager;
 
     public class EntityHandler {
         public static var game:GameScene;
@@ -32,7 +31,7 @@ package core {
                 rng = new Rng(game.rng.nextInt(), Rng.X32);
             else if (replay.visible)
                 rng = new Rng(replay.rng.nextInt(), Rng.X32);
-            else 
+            else
                 rng = new Rng(0, Rng.X32);
             var actionDelay:Number = ("actionDelay" in data) ? data.actionDelay : -1;
             var startDelay:Number = ("startDelay" in data) ? data.startDelay : -1;
@@ -49,7 +48,7 @@ package core {
                 rng = new Rng(game.rng.nextInt(), Rng.X32);
             else if (replay.visible)
                 rng = new Rng(replay.rng.nextInt(), Rng.X32);
-            else 
+            else
                 rng = new Rng(0, Rng.X32);
             node.initNode(game, rng, data);
             EntityContainer.addEntity(EntityContainer.INDEX_NODES, node);
@@ -71,7 +70,7 @@ package core {
                 rng = new Rng(game.rng.nextInt(), Rng.X32);
             else if (replay.visible)
                 rng = new Rng(replay.rng.nextInt(), Rng.X32);
-            else 
+            else
                 rng = new Rng(0, Rng.X32);
             ship.initShip(game, rng, team, node, productionEffect);
             EntityContainer.addEntity(EntityContainer.INDEX_SHIPS, ship);

@@ -1,15 +1,13 @@
 package core.fx {
-
-
     import ui.layers.LayerFactory;
 
     public class ExplodeFX implements IParticle {
         private var p:BasicParticle;
         private var layerCfg:Array;
-        
+
         private static const STATE_GROW:int = 0;
         private static const STATE_SHRINK:int = 1;
-        
+
         private var state:int;
         private var size:Number;
         private var foreground:Boolean;
@@ -32,7 +30,7 @@ package core.fx {
             p.color = config[2];
             this.foreground = config[3];
             this.deepColor = config[4];
-            
+
             p.scale = 0;
             p.alpha = 0.5;
             this.size = 0;
@@ -58,7 +56,7 @@ package core.fx {
             }
             p.addToLayer();
         }
-        
+
         public function get layerConfig():Array {
             return layerCfg;
         }

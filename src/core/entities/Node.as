@@ -1,42 +1,19 @@
-/* 计时器基本原理：取一个初始值，每帧为其减去这一帧的时间，计时归零时执行相应函数并重置计时器
-   需要的新功能：天体实时生成与摧毁
-
-   ai计时器：具有同等于势力数的项数，每一项均为倒计时
-   发送ai飞船时重置计时器为1s，ai统计出兵天体时只统计计时器为0的天体（存在特例）
-   相当于单个天体的AI出兵冷却时间，由 EnemyAI.as 决定是否采用
-
-   障碍机制：障碍生成时执行getBarrierLinks()计算需连接的障碍存进barrierLinks，这是单个障碍的一维数组
-   接着GameScene.as中执行getBarrierLines()计算所有障碍连接并存进barrierLines，这是单局游戏的二维数组，每一项均为需连接的[障碍A，障碍B]
-   接着GameScene.as中执行addBarriers()绘制障碍线
-
-   天体状态：
-   conflict：战争，存在两方及以上势力飞船时判定
-   capturing：占据，仅存在非己方势力飞船时判定
-
-   warps数组用于处理传送门目的地的特效，原理如下：
-   sendShips()或sendAIShips()中执行Ship.as中的warpTo()，飞船依次经过12阶段
-   在起飞阶段到达目的地后将目的地天体的warps中对应势力项改为true，接着天体在update()中检测warps数组播放特效
- */
 package core.entities {
+    import core.EntityContainer;
+    import core.factories.NodeStateFactory;
     import core.node.NodeData;
-    import core.node.states.INodeState;
-    import core.node.states.NodeAttackState;
-    import core.node.states.NodeBasicState;
-    import core.node.states.NodeBuildState;
-    import core.node.states.NodeCaptureState;
-    import core.node.states.NodeConflictState;
-    import core.node.states.NodeMoveState;
+    import core.node.NodeStaticLogic;
+    import core.node.states.*;
 
     import flash.utils.Dictionary;
 
+    import managers.Globals;
+
     import scenes.GameScene;
 
-    import utils.Rng;
-    import core.factories.NodeStateFactory;
     import starling.text.TextField;
-    import managers.Globals;
-    import core.node.NodeStaticLogic;
-    import core.EntityContainer;
+
+    import utils.Rng;
 
     public class Node extends GameEntity {
         // #region 类变量
@@ -289,18 +266,18 @@ package core.entities {
                 NodeStaticLogic.sendAIShips(this, nodeData.team, targetNode[i], shipArray[i]);
         }
 
-        public function divideShips() : void {  // 均匀分散飞船
+        public function divideShips():void { // 均匀分散飞船
             var nodeArray:Vector.<Node> = EntityContainer.nodes;
             var shipCount:int = int(ships[nodeData.team].length);
             var nodeCount:int = nodeArray.length - 1;
             for (var i:int = 0; i < nodeArray.length; i++) {
-                if(nodeArray[i].nodeData.isBarrier)
+                if (nodeArray[i].nodeData.isBarrier)
                     nodeCount--;
             }
             var shipNum:int = Math.max(int(shipCount / nodeCount), 1)
-            if(shipCount > 0) {
+            if (shipCount > 0) {
                 for (i = 0; i < nodeArray.length; i++) {
-                    if(!nodeArray[i].nodeData.isBarrier)
+                    if (!nodeArray[i].nodeData.isBarrier)
                         NodeStaticLogic.sendAIShips(this, nodeData.team, nodeArray[i], shipNum);
                 }
             }
@@ -508,11 +485,11 @@ package core.entities {
             for each (var node:Node in nodeLinks[team]) {
                 if (node == this)
                     continue;
-                if (node.nodeData.team == 0 || Globals.teamGroups[node.nodeData.team] != group || node.predictedOppShipCount(team) > 0){
+                if (node.nodeData.team == 0 || Globals.teamGroups[node.nodeData.team] != group || node.predictedOppShipCount(team) > 0) {
                     dx = node.nodeData.x - this.nodeData.x;
                     dy = node.nodeData.y - this.nodeData.y;
                     distance = Math.sqrt(dx * dx + dy * dy) + rng.nextNumber() * 32;
-                    if(distance)
+                    if (distance)
                         link += 64 / distance;
                     else
                         link = Infinity;

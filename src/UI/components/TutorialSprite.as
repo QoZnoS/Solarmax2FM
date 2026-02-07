@@ -1,13 +1,16 @@
 package ui.components {
+    import core.EntityContainer;
+    import core.entities.Node;
+
+    import managers.Globals;
+
     import starling.animation.DelayedCall;
+    import starling.core.Starling;
     import starling.display.Image;
     import starling.display.Sprite;
-    import ui.layers.LayerFactory;
-    import starling.core.Starling;
-    import managers.Globals;
-    import core.entities.Node;
-    import core.EntityContainer;
+
     import ui.UIContainer;
+    import ui.layers.LayerFactory;
 
     public class TutorialSprite extends Sprite {
         public static var TYPE_END:int = 0;

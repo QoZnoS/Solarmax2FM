@@ -1,7 +1,4 @@
 package core.fx {
-
-
-
     import ui.layers.LayerFactory;
 
     public class BarrierFX implements IParticle {

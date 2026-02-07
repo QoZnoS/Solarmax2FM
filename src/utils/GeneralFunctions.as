@@ -2,7 +2,6 @@ package utils {
     import utils.Rng;
 
     public class GeneralFunctions {
-
         public function GeneralFunctions() {
             throw new Error("静态类不允许实例化");
         }

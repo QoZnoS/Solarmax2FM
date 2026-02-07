@@ -1,17 +1,19 @@
 package core.node {
+    import core.FXHandler;
     import core.entities.Node;
     import core.entities.Ship;
+    import core.factories.AttackStrategyFactory;
+    import core.fx.NodePulse;
+
+    import managers.AudioManager;
+    import managers.Globals;
 
     import scenes.GameScene;
 
-    import utils.CalcTools;
-    import managers.Globals;
-    import ui.layers.LayerFactory;
-    import core.FXHandler;
-    import core.fx.NodePulse;
-    import managers.AudioManager;
-    import core.factories.AttackStrategyFactory;
     import ui.UIContainer;
+    import ui.layers.LayerFactory;
+
+    import utils.CalcTools;
 
     /** 静态类，函数均与dt无关 */
     public class NodeStaticLogic {
@@ -220,7 +222,7 @@ package core.node {
             var ship:Ship = null;
             var warp:Boolean = false; // 是否为传送门
             var ShipNumber:int = Math.min(ships, node.ships[team].length);
-            for (var i:int = 0; i < ShipNumber; i++) {// 遍历每个需调动的飞船
+            for (var i:int = 0; i < ShipNumber; i++) { // 遍历每个需调动的飞船
                 ship = node.ships[team][i];
                 if (ship.state != 0)
                     ShipNumber = Math.min(ShipNumber + 1, node.ships[team].length); // 这里是为了允许快速操作，跳过将要起飞的飞船并将循环次数增加1

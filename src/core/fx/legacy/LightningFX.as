@@ -5,10 +5,10 @@ package core.fx.legacy {
     import scenes.GameScene;
 
     import starling.display.Image;
+
     import ui.layers.LayerFactory;
 
     public class LightningFX extends GameEntity {
-
         public static const STATE_GROW:int = 0;
         public static const STATE_SHRINK:int = 1;
 

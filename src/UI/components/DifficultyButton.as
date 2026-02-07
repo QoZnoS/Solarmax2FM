@@ -1,15 +1,15 @@
 // 这个类提供难度按钮母版，星星通过在TitleMenu中调用按钮的showStar显示
-
 package ui.components {
     import flash.geom.Point;
 
-    import starling.display.Image;
-    import starling.events.Touch;
-    import starling.display.Sprite;
-    import starling.text.TextField;
-    import starling.display.Quad;
-    import starling.events.TouchEvent;
     import managers.AudioManager;
+
+    import starling.display.Image;
+    import starling.display.Quad;
+    import starling.display.Sprite;
+    import starling.events.Touch;
+    import starling.events.TouchEvent;
+    import starling.text.TextField;
 
     public class DifficultyButton extends Sprite {
         public static const btnText:Array = ["EASY", "NORMAL", "HARD"]

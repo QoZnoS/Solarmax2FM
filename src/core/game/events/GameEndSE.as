@@ -1,21 +1,23 @@
 package core.game.events {
+    import core.EntityContainer;
+    import core.FXHandler;
     import core.entities.Node;
     import core.entities.Ship;
+    import core.factories.SpecialEventFactory;
+    import core.node.NodeStaticLogic;
+
+    import managers.AudioManager;
+    import managers.Globals;
 
     import scenes.GameScene;
 
+    import starling.core.Starling;
     import starling.display.Image;
 
-    import utils.CalcTools;
-    import core.EntityContainer;
-    import ui.layers.LayerFactory;
-    import managers.Globals;
     import ui.UIContainer;
-    import starling.core.Starling;
-    import core.FXHandler;
-    import managers.AudioManager;
-    import core.node.NodeStaticLogic;
-    import core.factories.SpecialEventFactory;
+    import ui.layers.LayerFactory;
+
+    import utils.CalcTools;
 
     public class GameEndSE implements ISpecialEvent {
         private static const STATE_START:int = 0;
@@ -62,7 +64,7 @@ package core.game.events {
                     boss.nodeData.hp = 0.01;
                     triggerTimer = 24.34106748146577 - 2.5;
                     UIContainer.touchable = false;
-                    Starling.juggler.tween(Globals,10,{"soundVolume":0});
+                    Starling.juggler.tween(Globals, 10, {"soundVolume": 0});
                     // 特效
                     for (i = 0; i < 64; i++) {
                         FXHandler.addDarkPulse(boss, Globals.teamColors[Globals.playerTeam], 1, maxSize, rate, angle, deepColor, delay);

@@ -1,13 +1,13 @@
 package core.node.states {
+    import core.EntityHandler;
     import core.entities.Node;
     import core.entities.Ship;
-    import core.node.NodeData;
-    import managers.Globals;
-    import core.EntityHandler;
     import core.factories.NodeStateFactory;
+    import core.node.NodeData;
+
+    import managers.Globals;
 
     public class NodeConflictState implements INodeState {
-
         private var node:Node;
         private var nodeData:NodeData;
         private var ships:Vector.<Vector.<Ship>>;

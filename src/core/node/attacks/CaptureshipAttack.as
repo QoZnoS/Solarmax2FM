@@ -1,15 +1,14 @@
 package core.node.attacks {
-
-    import core.entities.Node;
-    import core.entities.Ship;
     import core.EntityContainer;
-    import managers.Globals;
     import core.EntityHandler;
     import core.FXHandler;
+    import core.entities.Node;
+    import core.entities.Ship;
+
     import managers.AudioManager;
+    import managers.Globals;
 
     public class CaptureshipAttack extends BasicAttack {
-
         private var capturing:Boolean = false;
 
         public function CaptureshipAttack(attackRate:Number, attackRange:Number, attackLast:Number) {

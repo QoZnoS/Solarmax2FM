@@ -1,7 +1,5 @@
 package core.game.lose {
-
-
-
+    import core.factories.LoseTypeFactory;
     public class NoneLose implements ILoseType {
         public function NoneLose(trigger:Object) {
         }

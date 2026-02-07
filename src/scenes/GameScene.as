@@ -1,36 +1,35 @@
-﻿/*EntityPool：nodes,ais,ships,warps,beams,pules,flashs,barriers,explosions,darkpulses,fades
-   实体池会记录场上的所有实体到对应的active列表中
- */
-package scenes {
+﻿package scenes {
+    import core.EntityContainer;
+    import core.EntityHandler;
     import core.EntityPool;
+    import core.FXHandler;
+    import core.ParticleSystem;
     import core.entities.Node;
     import core.entities.Ship;
+    import core.factories.SpecialEventFactory;
+    import core.factories.VictoryTypeFactory;
     import core.game.events.ISpecialEvent;
+    import core.node.NodeStaticLogic;
 
     import flash.ui.Keyboard;
 
+    import managers.AudioManager;
+    import managers.Globals;
+    import managers.LevelData;
+
+    import starling.core.Starling;
+    import starling.display.BlendMode;
+    import starling.display.Quad;
     import starling.events.EnterFrameEvent;
+    import starling.text.TextField;
+    import starling.utils.VAlign;
+
+    import ui.UIContainer;
+    import ui.layers.LayerFactory;
 
     import utils.CalcTools;
     import utils.ReplayData;
     import utils.Rng;
-    import starling.display.Quad;
-    import starling.text.TextField;
-    import core.node.NodeStaticLogic;
-    import core.EntityContainer;
-    import core.FXHandler;
-    import core.EntityHandler;
-    import starling.display.BlendMode;
-    import starling.utils.VAlign;
-    import ui.layers.LayerFactory;
-    import managers.LevelData;
-    import managers.Globals;
-    import managers.AudioManager;
-    import core.factories.VictoryTypeFactory;
-    import core.factories.SpecialEventFactory;
-    import ui.UIContainer;
-    import starling.core.Starling;
-    import core.ParticleSystem;
 
     public class GameScene extends BasicScene {
         // #region 类变量

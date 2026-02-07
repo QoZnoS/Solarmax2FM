@@ -1,11 +1,10 @@
 package ui.components {
-
-
-    import starling.display.Sprite;
-    import starling.text.TextField;
     import managers.Globals;
     import managers.LevelData;
+
+    import starling.display.Sprite;
     import starling.filters.ColorMatrixFilter;
+    import starling.text.TextField;
 
     public class LevelButtons extends Sprite {
         private var buttons:Vector.<Vector.<TextField>>;
@@ -29,8 +28,8 @@ package ui.components {
         public function updateSize():void {
             const FONT_SIZES:Array = ["Downlink12", "Downlink16", "Downlink20"];
             var fontName:String = FONT_SIZES[Globals.textSize];
-            for each(var btns:Vector.<TextField> in buttons) {
-                for each(var btn:TextField in btns) {
+            for each (var btns:Vector.<TextField> in buttons) {
+                for each (var btn:TextField in btns) {
                     btn.fontName = fontName;
                     btn.fontSize = -1;
                 }
@@ -40,7 +39,7 @@ package ui.components {
         public function update(_dt:Number, _level:int):void {
             var btn:TextField = null;
             for (var i:int = 0; i < buttons.length; i++) {
-                for each(btn in buttons[i]){
+                for each (btn in buttons[i]) {
                     var distance:Number = Math.abs(this.x - 512 + btn.x);
                     btn.alpha = (1 - Math.min(distance / 600, 1)) * 0.4;
                     if (i == 0)

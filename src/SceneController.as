@@ -1,16 +1,20 @@
 package {
     import flash.events.KeyboardEvent;
 
-    import utils.Popup;
-    import utils.ReplayData;
     import starling.display.Sprite;
-    import scenes.*;
-    import ui.UIContainer;
     import starling.core.Starling;
     import starling.display.Quad;
+    import starling.filters.ColorMatrixFilter;
+
     import managers.Globals;
     import managers.LevelData;
-    import starling.filters.ColorMatrixFilter;
+
+    import utils.Popup;
+    import utils.ReplayData;
+
+    import scenes.*;
+    
+    import ui.UIContainer;
     import ui.UIContainer;
 
     public class SceneController extends Sprite {
@@ -59,6 +63,7 @@ package {
 
         // #region 处理黑边
         private var blackQuad:Array;
+
         private function initBlackQuad():void {
             blackQuad = new Array();
             var quad1:Quad = new Quad(1024, 114, 0);
@@ -76,6 +81,7 @@ package {
         public function updateBlackQuad():void {
             blackQuad[0].visible = blackQuad[1].visible = Globals.blackQuad;
         }
+
         // #endregion
         // #region 私有方法，界面载入载出
         private function initGameScene(seed:uint = 0):void {
@@ -149,10 +155,10 @@ package {
          */
         public static function alert(label:String):void {
             var popup:Popup = new Popup(Popup.TYPE_INFORMATION, "ERROR");
-            if (!_s){
+            if (!_s) {
                 _alert = new Vector.<Popup>;
                 _alert.push(popup);
-            }else
+            } else
                 _s.addChild(popup);
             popup.addLabel(label);
         }
@@ -217,6 +223,7 @@ package {
             event.preventDefault();
             event.stopImmediatePropagation();
         }
+
         // #endregion
 
         // #region 神秘滤镜

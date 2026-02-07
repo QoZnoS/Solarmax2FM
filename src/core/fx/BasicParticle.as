@@ -1,11 +1,10 @@
 package core.fx {
-
     import starling.display.Image;
     import starling.textures.Texture;
+
     import ui.layers.LayerFactory;
 
     public class BasicParticle {
-
         // 粒子类型，与所用的贴图绑定，方便复用纹理资源
         private var type:String;
         private var pClass:IParticle;
@@ -42,6 +41,7 @@ package core.fx {
             }
         }
         private var _imagePivoted:Boolean = false;
+
         /** 对每个实例仅执行一次 */
         public function imagePivotToCenter():void {
             if (_imagePivoted)
@@ -58,6 +58,7 @@ package core.fx {
                 image.pivotY = 0;
             }
         }
+
         public function imagePovitYToCenter():void {
             if (_imagePivoted)
                 return;
@@ -72,6 +73,7 @@ package core.fx {
             }
         }
         private var _verticesAdjusted:Boolean = false;
+
         /** 对每个实例仅执行一次 */
         public function adjustVertices():void {
             if (_verticesAdjusted)
@@ -95,8 +97,8 @@ package core.fx {
 
         /**
          * 执行LayerFactory.call(method)，仅传入image参数
-         * @param method 
-         */ 
+         * @param method
+         */
         public function layerCall(method:String):void {
             var functionRef:Function = LayerFactory.call(method);
             if (functionRef != null) {

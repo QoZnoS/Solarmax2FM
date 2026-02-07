@@ -11,10 +11,11 @@
 
     import starling.core.Starling;
     import starling.utils.AssetManager;
-    import managers.EmbeddedAssets;
-    import managers.Globals;
     import starling.textures.Texture;
     import starling.utils.RectangleUtil;
+    
+    import managers.EmbeddedAssets;
+    import managers.Globals;
     import managers.AudioManager;
 
     [SWF(frameRate = "120", backgroundColor = "0x00000")]

@@ -1,11 +1,26 @@
 package scenes {
+    import core.node.NodeType;
+
     import flash.desktop.NativeApplication;
     import flash.geom.Point;
 
+    import managers.AudioManager;
+    import managers.Globals;
+    import managers.LevelData;
+
+    import starling.core.Starling;
+    import starling.display.BlendMode;
     import starling.display.Image;
+    import starling.display.Quad;
     import starling.display.QuadBatch;
+    import starling.display.Sprite;
     import starling.events.EnterFrameEvent;
+    import starling.events.Event;
     import starling.events.Touch;
+    import starling.events.TouchEvent;
+    import starling.text.TextField;
+    import starling.utils.HAlign;
+    import starling.utils.VAlign;
 
     import ui.components.DifficultyButton;
     import ui.components.LevelButtons;
@@ -13,19 +28,6 @@ package scenes {
 
     import utils.CalcTools;
     import utils.Drawer;
-    import starling.display.Sprite;
-    import starling.display.Quad;
-    import starling.text.TextField;
-    import managers.Globals;
-    import managers.LevelData;
-    import starling.utils.HAlign;
-    import starling.utils.VAlign;
-    import starling.display.BlendMode;
-    import core.node.NodeType;
-    import managers.AudioManager;
-    import starling.core.Starling;
-    import starling.events.Event;
-    import starling.events.TouchEvent;
 
     public class TitleMenu extends Sprite {
         public var cover:Quad; // 进入游戏和通关36时的白光遮罩
@@ -406,7 +408,7 @@ package scenes {
             Starling.juggler.removeTweens(previewBox);
             Starling.juggler.tween(this, Globals.transitionSpeed, {"alpha": 1,
                     "transition": "easeInOut"});
-            Starling.juggler.tween(previewBox, Globals.transitionSpeed, {"y":354,
+            Starling.juggler.tween(previewBox, Globals.transitionSpeed, {"y": 354,
                     "scaleX": 0.7,
                     "scaleY": 0.7,
                     "transition": "easeInOut"});
@@ -419,7 +421,7 @@ package scenes {
             Starling.juggler.tween(this, Globals.transitionSpeed, {"alpha": 0,
                     "transition": "easeInOut",
                     "onComplete": hide});
-            Starling.juggler.tween(previewBox, Globals.transitionSpeed, {"y":384,
+            Starling.juggler.tween(previewBox, Globals.transitionSpeed, {"y": 384,
                     "scaleX": 1,
                     "scaleY": 1,
                     "transition": "easeInOut"});

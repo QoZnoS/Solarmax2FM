@@ -1,24 +1,21 @@
 package scenes {
-
+    import core.EntityContainer;
+    import core.FXHandler;
     import core.entities.Node;
     import core.game.lose.ILoseType;
     import core.game.victory.IVictoryType;
 
     import flash.geom.Point;
 
+    import managers.Globals;
+
+    import starling.core.Starling;
+    import starling.display.Sprite;
     import starling.events.EnterFrameEvent;
 
-    import ui.UIContainer;
-
     import utils.Rng;
-    import starling.display.Sprite;
-    import starling.core.Starling;
-    import managers.Globals;
-    import core.FXHandler;
-    import core.EntityContainer;
 
     public class BasicScene extends Sprite {
-
         public var scene:SceneController
 
         public var victoryType:IVictoryType;

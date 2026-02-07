@@ -1,9 +1,9 @@
 package ui.layers {
+    import starling.core.Starling;
+    import starling.display.BlendMode;
     import starling.display.Image;
     import starling.display.QuadBatch;
     import starling.display.Sprite;
-    import starling.display.BlendMode;
-    import starling.core.Starling;
 
     /** 显示天体和飞船 */
     public class EntityLayer extends Sprite {
@@ -128,6 +128,7 @@ package ui.layers {
                 Starling.juggler.tween(batch, 5, {"alpha": 0,
                         "delay": 50});
         }
+
         //#endregion
         //#region 内部接口
         private function register():void {
@@ -143,7 +144,7 @@ package ui.layers {
         }
 
         private function removeBatchVector(batches:Vector.<QuadBatch>):void {
-            for each (var batch:QuadBatch in batches){
+            for each (var batch:QuadBatch in batches) {
                 Starling.juggler.removeTweens(batch);
                 batch.removeFromParent();
             }

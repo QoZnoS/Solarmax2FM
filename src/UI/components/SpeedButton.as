@@ -1,13 +1,14 @@
 package ui.components {
     import flash.geom.Point;
 
-    import starling.display.Image;
-    import starling.events.Touch;
-    import starling.display.Sprite;
-    import starling.display.Quad;
-    import starling.events.TouchEvent;
     import managers.AudioManager;
     import managers.Globals;
+
+    import starling.display.Image;
+    import starling.display.Quad;
+    import starling.display.Sprite;
+    import starling.events.Touch;
+    import starling.events.TouchEvent;
 
     public class SpeedButton extends Sprite {
         public var quad:Quad;
@@ -126,7 +127,7 @@ package ui.components {
             }
         }
 
-        public function set color(value:uint):void{
+        public function set color(value:uint):void {
             image.color = value;
         }
     }

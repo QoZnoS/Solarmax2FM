@@ -1,5 +1,4 @@
 package utils {
-
     import managers.Globals;
 
     public class ReplayData {
@@ -149,7 +148,7 @@ package utils {
             return result;
         }
 
-        public function get reading():Boolean{
+        public function get reading():Boolean {
             return _reading;
         }
 
@@ -163,21 +162,21 @@ package utils {
             // Deep copy vectors
             copy.frameTime = new Vector.<Number>(this.frameTime.length, true);
             for (var i:int = 0; i < this.frameTime.length; i++) {
-            copy.frameTime[i] = this.frameTime[i];
+                copy.frameTime[i] = this.frameTime[i];
             }
 
             copy.actionCL = new Vector.<int>(this.actionCL.length, true);
             for (i = 0; i < this.actionCL.length; i++) {
-            copy.actionCL[i] = this.actionCL[i];
+                copy.actionCL[i] = this.actionCL[i];
             }
 
             copy.rep = new Vector.<Vector.<int>>(this.rep.length, true);
             for (i = 0; i < this.rep.length; i++) {
-            var action:Vector.<int> = new Vector.<int>(4, true);
-            for (var j:int = 0; j < 4; j++) {
-                action[j] = this.rep[i][j];
-            }
-            copy.rep[i] = action;
+                var action:Vector.<int> = new Vector.<int>(4, true);
+                for (var j:int = 0; j < 4; j++) {
+                    action[j] = this.rep[i][j];
+                }
+                copy.rep[i] = action;
             }
 
             // Copy internal state

@@ -2,8 +2,9 @@
 package core.fx {
     import starling.display.QuadBatch;
 
-    import utils.Drawer;
     import ui.layers.LayerFactory;
+
+    import utils.Drawer;
 
     public class SelectFade implements IParticle {
 

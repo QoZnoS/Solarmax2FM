@@ -1,9 +1,7 @@
 // 鼠标悬停在操作方式上出现的文体提示框
 package ui.components {
-
-
-    import starling.display.Sprite;
     import starling.display.Quad;
+    import starling.display.Sprite;
     import starling.text.TextField;
 
     public class Tooltip extends Sprite {

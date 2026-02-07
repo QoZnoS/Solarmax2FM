@@ -1,24 +1,24 @@
 package scenes {
-
+    import core.EntityContainer;
+    import core.EntityHandler;
     import core.EntityPool;
     import core.entities.Node;
+    import core.node.NodeStaticLogic;
+    import core.node.NodeType;
 
+    import managers.Globals;
+
+    import starling.core.Starling;
     import starling.display.Image;
     import starling.display.QuadBatch;
     import starling.events.EnterFrameEvent;
 
-    import utils.Drawer;
-    import core.EntityHandler;
-    import core.node.NodeType;
-    import managers.Globals;
-    import core.EntityContainer;
     import ui.UIContainer;
-    import core.node.NodeStaticLogic;
-    import starling.core.Starling;
     import ui.layers.LayerFactory;
 
-    public class EditorScene extends BasicScene {
+    import utils.Drawer;
 
+    public class EditorScene extends BasicScene {
         // private const defaultNode:Object = {"x": 980,"y": 154,"type": "planet"};
         private const defaultNode:Object = {"x": 512, "y": 384, "type": "planet"};
 
@@ -82,38 +82,38 @@ package scenes {
 
         public function updateFocusNode():void {
             if (!focusNode)
-            return;
+                return;
             var best:NodePreview = null;
             var bestAlpha:Number = -1;
             var np:NodePreview;
             if (switchInRows) {
-            for each (np in rowPrefabs) {
-                if (np.nodeAlpha > bestAlpha) {
-                bestAlpha = np.nodeAlpha;
-                best = np;
+                for each (np in rowPrefabs) {
+                    if (np.nodeAlpha > bestAlpha) {
+                        bestAlpha = np.nodeAlpha;
+                        best = np;
+                    }
                 }
-            }
-            if (!best || bestAlpha <= 0)
-                return;
-            var newType:String = best.type;
-            NodeStaticLogic.changeType(focusNode, newType);
+                if (!best || bestAlpha <= 0)
+                    return;
+                var newType:String = best.type;
+                NodeStaticLogic.changeType(focusNode, newType);
             } else {
-            for each (np in columnPrefabs) {
-                if (np.nodeAlpha > bestAlpha) {
-                bestAlpha = np.nodeAlpha;
-                best = np;
+                for each (np in columnPrefabs) {
+                    if (np.nodeAlpha > bestAlpha) {
+                        bestAlpha = np.nodeAlpha;
+                        best = np;
+                    }
                 }
-            }
-            if (!best || bestAlpha <= 0)
-                return;
-            var col:uint = best.color;
-            var teamIndex:int = 0;
-            for (var ti:int = 0; ti < Globals.teamCount; ti++) {
-                if (uint(Globals.teamColors[ti]) == col) {
-                teamIndex = ti;
-                break;
+                if (!best || bestAlpha <= 0)
+                    return;
+                var col:uint = best.color;
+                var teamIndex:int = 0;
+                for (var ti:int = 0; ti < Globals.teamCount; ti++) {
+                    if (uint(Globals.teamColors[ti]) == col) {
+                        teamIndex = ti;
+                        break;
+                    }
                 }
-            }
                 NodeStaticLogic.changeTeam(focusNode, teamIndex, false);
             }
             focusNode.update(0);
@@ -226,11 +226,9 @@ package scenes {
     }
 }
 
-
-
+import core.node.NodeType;
 import starling.display.Image;
 import ui.layers.LayerFactory;
-import core.node.NodeType;
 
 class NodePreview {
     public var image:Image;

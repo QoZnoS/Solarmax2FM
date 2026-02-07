@@ -1,9 +1,8 @@
 package core.factories {
-
+    import core.game.events.*;
     import core.game.events.ISpecialEvent;
 
     import flash.utils.Dictionary;
-    import core.game.events.*;
 
     public class SpecialEventFactory {
         /** 原版1关提示 */

@@ -1,6 +1,5 @@
 package core.game.events {
     import scenes.GameScene;
-
     public interface ISpecialEvent {
         function update(dt:Number):void;
         function deinit():void;

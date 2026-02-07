@@ -1,18 +1,20 @@
 // 该类管理整个设置界面
 package scenes {
+    import managers.Globals;
+
+    import scenes.menus.IMenu;
     import scenes.menus.MapackMenu;
     import scenes.menus.ReplayMenu;
     import scenes.menus.SettingMenu;
     import scenes.menus.StaffMenu;
 
+    import starling.core.Starling;
+    import starling.display.Quad;
+    import starling.display.Sprite;
+    import starling.events.Event;
+
     import ui.components.MenuButton;
     import ui.components.OptionButton;
-    import starling.display.Sprite;
-    import scenes.menus.IMenu;
-    import starling.display.Quad;
-    import managers.Globals;
-    import starling.core.Starling;
-    import starling.events.Event;
 
     public class StartMenu extends Sprite {
         public var title:TitleMenu; // 接入标题类
@@ -47,7 +49,7 @@ package scenes {
             for (i = 0; i < MAX_PAGE; i++) {
                 pages.push(new OptionButton(pageName[i], COLOR, pages));
                 pages[i].x = 15;
-                pages[i].y = 160 + i*48;
+                pages[i].y = 160 + i * 48;
                 pages[i].label.fontName = "Downlink18";
                 pages[i].labelBG.width = pages[i].quad.width = 144;
                 pages[i].labelBG.height = 36;
@@ -70,7 +72,7 @@ package scenes {
         public function animateIn():void {
             this.alpha = 0;
             this.visible = true;
-            for(var i:int = 0; i < MAX_PAGE; i++)
+            for (var i:int = 0; i < MAX_PAGE; i++)
                 if (pages[i].toggled && !menus[i].visible)
                     menus[i].animateIn()
             Starling.juggler.removeTweens(this);
@@ -79,7 +81,7 @@ package scenes {
         }
 
         public function animateOut():void {
-            for(var i:int = 0; i < MAX_PAGE; i++)
+            for (var i:int = 0; i < MAX_PAGE; i++)
                 if (pages[i].toggled && menus[i].visible)
                     menus[i].animateOut()
             Starling.juggler.removeTweens(this);
@@ -97,8 +99,7 @@ package scenes {
         }
 
         public function on_page(click:Event):void {
-            for(var i:int = 0; i < MAX_PAGE; i++)
-            {
+            for (var i:int = 0; i < MAX_PAGE; i++) {
                 if (pages[i].toggled && !menus[i].visible)
                     menus[i].animateIn()
                 if (!pages[i].toggled && menus[i].visible)

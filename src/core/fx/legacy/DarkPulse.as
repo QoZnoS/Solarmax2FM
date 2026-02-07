@@ -8,6 +8,7 @@ package core.fx.legacy {
     import scenes.GameScene;
 
     import starling.display.Image;
+
     import ui.layers.LayerFactory;
 
     public class DarkPulse extends GameEntity {

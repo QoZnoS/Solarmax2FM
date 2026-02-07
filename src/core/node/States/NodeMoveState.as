@@ -1,18 +1,20 @@
 package core.node.states {
+    import core.EntityContainer;
     import core.entities.Node;
+    import core.factories.NodeStateFactory;
     import core.node.NodeData;
 
+    import managers.Globals;
+
+    import starling.animation.Transitions;
     import starling.display.Image;
     import starling.display.QuadBatch;
+    import starling.text.TextField;
+
+    import ui.layers.LayerFactory;
 
     import utils.CalcTools;
     import utils.Drawer;
-    import starling.text.TextField;
-    import managers.Globals;
-    import core.EntityContainer;
-    import ui.layers.LayerFactory;
-    import starling.animation.Transitions;
-    import core.factories.NodeStateFactory;
 
     public class NodeMoveState implements INodeState {
         public var node:Node;

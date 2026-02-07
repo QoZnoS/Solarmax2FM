@@ -1,10 +1,11 @@
 package core.game.victory {
-    import core.entities.Node;
-    import core.node.NodeData;
-    import managers.Globals;
     import core.EntityContainer;
-    import core.node.NodeType;
+    import core.entities.Node;
     import core.factories.VictoryTypeFactory;
+    import core.node.NodeData;
+    import core.node.NodeType;
+
+    import managers.Globals;
 
     public class NormalVictory implements IVictoryType {
         public function NormalVictory(trigger:Object) {

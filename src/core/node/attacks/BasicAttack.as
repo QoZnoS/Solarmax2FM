@@ -20,7 +20,7 @@ package core.node.attacks {
         }
 
         /** 更新计时器，返回能否攻击
-         * @param dt 
+         * @param dt
          * @return boolean
          */
         public function updateTimer(dt:Number):Boolean {
@@ -35,6 +35,7 @@ package core.node.attacks {
         public function get attackType():String {
             return "basic";
         }
+
         // #region getter/setter
         public function set attackTimer(value:Number):void {
             _timer = value;

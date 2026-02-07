@@ -1,14 +1,13 @@
 package core.node.attacks {
-
+    import core.EntityContainer;
+    import core.EntityHandler;
+    import core.FXHandler;
     import core.entities.Node;
     import core.entities.Ship;
-    import core.EntityContainer;
-    import core.FXHandler;
+
     import managers.AudioManager;
-    import core.EntityHandler;
 
     public class TowerAttack extends BasicAttack {
-
         public function TowerAttack(attackRate:Number, attackRange:Number, attackLast:Number) {
             super(attackRate, attackRange, attackLast)
         }

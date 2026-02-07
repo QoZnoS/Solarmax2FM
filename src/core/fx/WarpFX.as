@@ -1,7 +1,4 @@
 package core.fx {
-
-
-
     import ui.layers.LayerFactory;
 
     public class WarpFX implements IParticle {
@@ -51,6 +48,7 @@ package core.fx {
         public function get imageName():String {
             return "warp_glare";
         }
+
         public function get layerConfig():Array {
             return layerCfg;
         }

@@ -1,5 +1,4 @@
 package core.node {
-
     import managers.LevelData;
 
     public class NodeType {

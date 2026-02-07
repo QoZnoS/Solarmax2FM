@@ -1,10 +1,10 @@
 package core.node.states {
     import core.entities.Node;
     import core.entities.Ship;
+    import core.factories.NodeStateFactory;
+    import core.node.NodeStaticLogic;
 
     import managers.Globals;
-    import core.node.NodeStaticLogic;
-    import core.factories.NodeStateFactory;
 
     public class NodeBasicState implements INodeState {
         public var node:Node;

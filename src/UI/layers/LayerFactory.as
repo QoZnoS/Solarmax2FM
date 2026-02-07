@@ -1,11 +1,10 @@
-package ui.layers
-{
+package ui.layers {
     import flash.utils.Dictionary;
+
     import starling.display.DisplayObject;
     import starling.display.Sprite;
 
-    public class LayerFactory
-    {
+    public class LayerFactory {
         public static const BTN:String = "buttonLayer";
         public static const BTN_ADD:String = "buttonAddLayer";
         public static const BTN_NORMAL:String = "buttonNormalLayer";
@@ -13,7 +12,7 @@ package ui.layers
         public static const BEHAVIOR:String = "behaviorBatch";
         public static const LABEL:String = "labelLayer";
 
-        /** 
+        /**
          * 添加天体贴图
          * <p><code>node:Image</code>
          * <p><code>halo:Image</code>
@@ -22,7 +21,7 @@ package ui.layers
          */
         public static const ADD_NODE:String = "addNode";
 
-        /** 
+        /**
          * 移除天体贴图
          * <p><code>node:Image</code>
          * <p><code>halo:Image</code>

@@ -1,6 +1,5 @@
 package core.factories {
-    import core.game.lose.ILoseType;
-    import core.game.lose.NoneLose;
+    import core.game.lose.*;
 
     import flash.utils.Dictionary;
 

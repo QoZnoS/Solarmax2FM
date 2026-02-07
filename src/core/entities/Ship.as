@@ -1,16 +1,19 @@
 package core.entities {
+    import core.EntityContainer;
+    import core.FXHandler;
+
+    import managers.AudioManager;
+    import managers.Globals;
+
     import scenes.GameScene;
 
     import starling.display.Image;
     import starling.display.QuadBatch;
 
+    import ui.layers.LayerFactory;
+
     import utils.CalcTools;
     import utils.Rng;
-    import managers.Globals;
-    import core.FXHandler;
-    import managers.AudioManager;
-    import ui.layers.LayerFactory;
-    import core.EntityContainer;
 
     public class Ship extends GameEntity {
         // #region 类变量

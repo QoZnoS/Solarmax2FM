@@ -1,19 +1,20 @@
 package {
     import starling.display.Image;
     import starling.utils.AssetManager;
+    import starling.display.Sprite;
+    import starling.textures.Texture;
+    import starling.core.Starling;
 
     import utils.Drawer;
     import utils.ProgressBar;
     import utils.ScrollingBackground;
-    import starling.display.Sprite;
-    import starling.textures.Texture;
-    import starling.core.Starling;
+
     import managers.LevelData;
     import managers.AudioManager;
+    
     import core.ParticleSystem;
 
     public class Root extends Sprite {
-
         private static var sAssets:AssetManager;
         public static var bg:ScrollingBackground;
 

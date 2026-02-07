@@ -1,22 +1,24 @@
 package core.game.events {
+    import core.EntityContainer;
+    import core.EntityHandler;
+    import core.FXHandler;
     import core.entities.Node;
     import core.entities.Ship;
+    import core.factories.EnemyAIFactory;
+    import core.factories.SpecialEventFactory;
+    import core.node.NodeStaticLogic;
+
+    import managers.AudioManager;
+    import managers.Globals;
 
     import scenes.GameScene;
 
+    import starling.core.Starling;
     import starling.display.Image;
 
-    import utils.CalcTools;
-    import core.factories.EnemyAIFactory;
-    import core.EntityContainer;
     import ui.layers.LayerFactory;
-    import managers.Globals;
-    import core.FXHandler;
-    import managers.AudioManager;
-    import core.node.NodeStaticLogic;
-    import core.EntityHandler;
-    import starling.core.Starling;
-    import core.factories.SpecialEventFactory;
+
+    import utils.CalcTools;
 
     public class WhiteholeFallsSE implements ISpecialEvent {
         private static const STATE_START:int = 0;
@@ -30,10 +32,8 @@ package core.game.events {
         private var triggerTimer:Number;
         private var whiteHole:Image;
         private var targetTeam:int;
-        private var AI:Object = {
-            type:EnemyAIFactory.WHITEHOLE,
-            actionDelay:0.25
-        }
+        private var AI:Object = {type: EnemyAIFactory.WHITEHOLE,
+                actionDelay: 0.25}
 
         public function WhiteholeFallsSE(trigger:Object) {
             state = 0;
@@ -47,6 +47,7 @@ package core.game.events {
             whiteHole.visible = false;
             LayerFactory.call(LayerFactory.ADD_GROW)(whiteHole, Globals.teamDeepColors[targetTeam]);
         }
+
         public function update(dt:Number):void {
             var delay:Number = 0;
             var delayStep:Number = 1;
@@ -142,10 +143,10 @@ package core.game.events {
                     state = STATE_END;
                     break;
                 case STATE_END:
-                    if(checkWhiteHoleEnd() && whiteHole.alpha <= 0.01)
+                    if (checkWhiteHoleEnd() && whiteHole.alpha <= 0.01)
                         _game.gameOverTimer = 0.5;
-                        _game.winningGroup = Globals.playerTeam;
-                        _game.gameOver = true;
+                    _game.winningGroup = Globals.playerTeam;
+                    _game.gameOver = true;
                     expandWhiteHole(dt);
                     break;
                 default:
@@ -167,7 +168,7 @@ package core.game.events {
                 whiteHole.scaleY = whiteHole.scaleX -= dt * 3;
                 whiteHole.alpha -= dt / 10;
             }
-            if(triggerNode.buildState.buildRate < 80)
+            if (triggerNode.buildState.buildRate < 80)
                 triggerNode.buildState.buildRate = 80;
             else
                 triggerNode.buildState.buildRate += dt * 64;

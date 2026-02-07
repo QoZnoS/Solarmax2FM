@@ -1,19 +1,18 @@
 package core.game.victory {
-
-
-
-    import starling.text.TextField;
-    import starling.display.Quad;
-    import starling.utils.HAlign;
-    import starling.utils.VAlign;
-    import managers.Globals;
     import core.factories.VictoryTypeFactory;
 
-    public class TimeVictory implements IVictoryType {
+    import managers.Globals;
 
+    import starling.display.Quad;
+    import starling.text.TextField;
+    import starling.utils.HAlign;
+    import starling.utils.VAlign;
+
+    public class TimeVictory implements IVictoryType {
         private var time:Number;
         private var textField:TextField;
         private var background:Quad;
+
         //未完成，不应使用，文字应用特殊事件处理图层
         public function TimeVictory(trigger:Object) {
             time = trigger as Number;
@@ -34,7 +33,7 @@ package core.game.victory {
             time -= dt;
             var text:String = timeToString(time);
             textField.text = text;
-            if (time <= 0){
+            if (time <= 0) {
                 // UIContainer.entityLayer.removeChild(textField);
                 return Globals.playerTeam;
             }

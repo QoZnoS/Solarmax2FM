@@ -1,27 +1,27 @@
 package ui.layers {
+    import core.EntityContainer;
     import core.entities.Node;
 
     import flash.geom.Point;
 
+    import managers.Globals;
+
     import scenes.EditorScene;
 
+    import starling.animation.Transitions;
     import starling.animation.Tween;
+    import starling.core.Starling;
+    import starling.display.Quad;
     import starling.display.QuadBatch;
+    import starling.display.Sprite;
     import starling.events.Touch;
+    import starling.events.TouchEvent;
 
     import ui.UIContainer;
 
     import utils.Drawer;
-    import starling.display.Sprite;
-    import starling.display.Quad;
-    import starling.events.TouchEvent;
-    import starling.core.Starling;
-    import starling.animation.Transitions;
-    import core.EntityContainer;
-    import managers.Globals;
 
     public class EditorCtrlLayer extends Sprite {
-
         private var convertQuad:Quad; // 转换触点坐标用
         private var touchQuad:Quad;
         private var displayBatch:QuadBatch;

@@ -1,11 +1,8 @@
 package utils {
-
-
-    import starling.display.Sprite;
     import starling.display.Quad;
+    import starling.display.Sprite;
 
     public class ProgressBar extends Sprite {
-
         private var mBar:Quad;
         private var mBackground:Quad;
 

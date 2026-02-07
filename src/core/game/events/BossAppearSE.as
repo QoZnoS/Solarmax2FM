@@ -1,15 +1,16 @@
 package core.game.events {
+    import core.EntityHandler;
+    import core.FXHandler;
     import core.entities.Node;
+    import core.factories.SpecialEventFactory;
+
+    import managers.AudioManager;
+    import managers.Globals;
+    import managers.LevelData;
 
     import scenes.GameScene;
 
     import utils.CalcTools;
-    import managers.LevelData;
-    import managers.Globals;
-    import core.EntityHandler;
-    import core.FXHandler;
-    import managers.AudioManager;
-    import core.factories.SpecialEventFactory;
 
     public class BossAppearSE implements ISpecialEvent {
         private static const STATE_READY_APPEAR:int = 0;
@@ -161,19 +162,20 @@ package core.game.events {
         }
 
         private function checkAppearCondition():Boolean {
-            if (groupTrigger){
+            if (groupTrigger) {
                 var groupShipCounts:Vector.<int> = new Vector.<int>;
-                for (var i:int = 0; i < Globals.teamCount; i++){
+                for (var i:int = 0; i < Globals.teamCount; i++) {
                     if (groupShipCounts.length < Globals.teamGroups[i] + 1)
                         groupShipCounts.length = Globals.teamGroups[i] + 1;
-                    groupShipCounts[Globals.teamGroups[i]]+=Globals.teamPops[i];
+                    groupShipCounts[Globals.teamGroups[i]] += Globals.teamPops[i];
                     if (groupShipCounts[Globals.teamGroups[i]] > triggerShips)
                         return true;
                 }
-            } else for (var j:int = 0; j < Globals.teamCount; j++) {
-                if (Globals.teamPops[j] > triggerShips && Globals.teamCaps[j] > triggerShips)
-                    return true;
-            }
+            } else
+                for (var j:int = 0; j < Globals.teamCount; j++) {
+                    if (Globals.teamPops[j] > triggerShips && Globals.teamCaps[j] > triggerShips)
+                        return true;
+                }
             return false;
         }
 

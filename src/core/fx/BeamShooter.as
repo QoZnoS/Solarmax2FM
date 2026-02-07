@@ -1,10 +1,12 @@
 package core.fx {
     import core.entities.Node;
+    import core.node.NodeType;
+
+    import managers.Globals;
+
+    import ui.layers.LayerFactory;
 
     import utils.CalcTools;
-    import ui.layers.LayerFactory;
-    import managers.Globals;
-    import core.node.NodeType;
 
     public class BeamShooter implements IParticle {
         private var p:BasicParticle;
@@ -69,7 +71,7 @@ package core.fx {
         public function update(dt:Number):void {
             if (state == STATE_GROW) {
                 size += dt * 20;
-                if (size >= 1){
+                if (size >= 1) {
                     size = 1;
                     state = STATE_SHRINK;
                 }

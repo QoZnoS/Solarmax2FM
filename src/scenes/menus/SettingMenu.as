@@ -1,22 +1,22 @@
 package scenes.menus {
+    import managers.AudioManager;
+    import managers.Globals;
+
     import scenes.TitleMenu;
 
+    import starling.core.Starling;
+    import starling.display.Sprite;
     import starling.events.EnterFrameEvent;
+    import starling.events.Event;
     import starling.events.Touch;
+    import starling.events.TouchEvent;
+    import starling.text.TextField;
 
     import ui.components.OptionButton;
     import ui.components.OptionSlider;
     import ui.components.Tooltip;
-    import starling.display.Sprite;
-    import starling.text.TextField;
-    import managers.Globals;
-    import starling.core.Starling;
-    import managers.AudioManager;
-    import starling.events.Event;
-    import starling.events.TouchEvent;
 
     public class SettingMenu extends Sprite implements IMenu {
-
         private const windowStrings:Array = ["FULLSCREEN", "RESIZEABLE WINDOW"]; // 窗口模式文本
         private const aaStrings:Array = ["0x", "2x", "4x", "8x", "16x"]; // 抗锯齿文本
         private const sizeStrings:Array = ["SMALL", "MEDIUM", "LARGE"]; // 字体大小文本

@@ -1,8 +1,7 @@
 package core {
-    import core.fx.BasicParticle;
+    import core.fx.*;
 
     import starling.errors.AbstractClassError;
-    import core.fx.*;
 
     public class ParticleSystem {
         // 所有粒子必须先注册类型

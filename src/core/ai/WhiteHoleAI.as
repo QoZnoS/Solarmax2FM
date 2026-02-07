@@ -1,4 +1,4 @@
-package core.ai{
+package core.ai {
     import core.entities.Node;
 
     import utils.Rng;
@@ -17,7 +17,7 @@ package core.ai{
         public function updateWhiteHole():void {
             var node:Node = null;
             for each (node in nodeArray) {
-                if(node.nodeData.team == team)
+                if (node.nodeData.team == team)
                     node.divideShips();
             }
             return;

@@ -7,7 +7,6 @@ package core.node.states {
     import core.node.attacks.IAttackStrategy;
 
     public class NodeAttackState implements INodeState {
-
         private var node:Node;
         private var nodeData:NodeData;
         public var attackStrategy:IAttackStrategy; // 攻击策略

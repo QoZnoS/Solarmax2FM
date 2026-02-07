@@ -1,8 +1,6 @@
-package core.node.attacks
-{
+package core.node.attacks {
     import core.entities.Node;
-    
-    public interface IAttackStrategy{
+    public interface IAttackStrategy {
         function executeAttack(node:Node, dt:Number):void;
         function get attackType():String;
         function set attackTimer(value:Number):void

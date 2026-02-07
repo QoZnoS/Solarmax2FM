@@ -1,13 +1,13 @@
 package core.node.attacks {
 
+    import core.EntityContainer;
+    import core.EntityHandler;
     import core.entities.Node;
     import core.entities.Ship;
-    import core.EntityContainer;
+
     import managers.Globals;
-    import core.EntityHandler;
 
     public class CloneturretAttack extends BasicAttack {
-
         public function CloneturretAttack(attackRate:Number, attackRange:Number, attackLast:Number) {
             super(attackRate, attackRange, attackLast);
         }
@@ -28,12 +28,12 @@ package core.node.attacks {
             if (ships.length == 0)
                 return;
             var teams:Vector.<int> = new Vector.<int>();
-            for each(var _ship:Ship in ships){
+            for each (var _ship:Ship in ships) {
                 if (Globals.teamPops[_ship.team] < Globals.teamCaps[_ship.team])
                     teams.push(_ship.team);
             }
             if (teams.length == 0)
-                return;            
+                return;
             var ship:Ship = node.rng.randomIndex(ships);
             while (teams.indexOf(ship.team) == -1)
                 ship = node.rng.randomIndex(ships);

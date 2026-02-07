@@ -2,7 +2,6 @@ package core.entities {
     import scenes.GameScene;
 
     public class GameEntity {
-
         public var game:GameScene;
         public var active:Boolean;
 

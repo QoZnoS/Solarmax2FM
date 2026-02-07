@@ -1,10 +1,11 @@
 package core.node.attacks {
+    import core.EntityContainer;
+    import core.EntityHandler;
+    import core.FXHandler;
     import core.entities.Node;
     import core.entities.Ship;
+
     import managers.AudioManager;
-    import core.FXHandler;
-    import core.EntityHandler;
-    import core.EntityContainer;
     import managers.Globals;
 
     public class ElectromagneticAttack extends BasicAttack {
@@ -19,6 +20,7 @@ package core.node.attacks {
         // 存储链式攻击的状态
         private var chainAttacks:Vector.<ChainAttack> = new Vector.<ChainAttack>();
         private var chainTimer:Number = 0;
+
         // 链式攻击的状态类
         override public function executeAttack(node:Node, dt:Number):void {
             processChainAttacks(node, dt);
@@ -85,6 +87,7 @@ package core.node.attacks {
          * 寻找距离指定位置最近的两个飞船
          */
         private static const RNGFACTOR:Number = 50;
+
         private function findNearestShips(x:Number, y:Number, excludeShip:Ship, node:Node):Vector.<Ship> {
             var result:Vector.<Ship> = new Vector.<Ship>();
             var allShips:Vector.<Ship> = EntityContainer.ships;
@@ -114,8 +117,6 @@ package core.node.attacks {
 import core.entities.Ship;
 
 class ChainAttack {
-
-
     public var startX:Number;
     public var startY:Number;
     public var damage:Number;

@@ -2,20 +2,19 @@ package utils {
     import flash.events.MouseEvent;
     import flash.geom.Point;
 
-    import starling.events.Touch;
-
-    import ui.components.OptionButton;
-    import starling.display.Sprite;
-    import starling.display.Quad;
-    import starling.text.TextField;
-    import starling.utils.VAlign;
-    import starling.utils.HAlign;
     import starling.core.Starling;
+    import starling.display.Quad;
+    import starling.display.Sprite;
+    import starling.events.Touch;
     import starling.events.TouchEvent;
     import starling.events.TouchPhase;
+    import starling.text.TextField;
+    import starling.utils.HAlign;
+    import starling.utils.VAlign;
+
+    import ui.components.OptionButton;
 
     public class Popup extends Sprite {
-
         /** 信息提示版，确认后销毁自己，不需要回调 */
         public static const TYPE_INFORMATION:int = 0;
         /** 确认选项 */

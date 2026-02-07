@@ -1,19 +1,22 @@
 ﻿// 这是为改版制作的调试用类，在 Root.as 中实例化
-
 package {
     import starling.display.Sprite;
     import starling.text.TextField;
+    import starling.events.EnterFrameEvent;
+    import starling.filters.ColorMatrixFilter;
+
     import flash.ui.Keyboard;
 
-    import starling.events.EnterFrameEvent;
     import scenes.GameScene;
     import scenes.TitleMenu;
+
     import managers.Globals;
+
     import ui.UIContainer;
+    
     import core.EntityContainer;
     import core.entities.Node;
     import core.entities.EnemyAI;
-    import starling.filters.ColorMatrixFilter;
 
     public class Debug extends Sprite {
         private static var debug:Boolean; // debug 开启状态
@@ -92,6 +95,7 @@ package {
         }
 
         private var pause:Boolean = false;
+
         public static function on_key_down(keyCode:int):void {
             if (!debug)
                 return;
@@ -124,9 +128,9 @@ package {
                 case Keyboard.NUMBER_7:
                 case Keyboard.NUMBER_8:
                 case Keyboard.NUMBER_9:
-                    if(THIS.seed > uint.MAX_VALUE/10)
+                    if (THIS.seed > uint.MAX_VALUE / 10)
                         THIS.seed = 0
-                    THIS.seed = THIS.seed*10 + (keyCode-48);
+                    THIS.seed = THIS.seed * 10 + (keyCode - 48);
                     break;
                 case Keyboard.NUMPAD_0:
                 case Keyboard.NUMPAD_1:
@@ -138,9 +142,9 @@ package {
                 case Keyboard.NUMPAD_7:
                 case Keyboard.NUMPAD_8:
                 case Keyboard.NUMPAD_9:
-                    if(THIS.seed > uint.MAX_VALUE/10)
+                    if (THIS.seed > uint.MAX_VALUE / 10)
                         THIS.seed = 0
-                    THIS.seed = THIS.seed*10 + (keyCode-96);
+                    THIS.seed = THIS.seed * 10 + (keyCode - 96);
                     break;
                 case Keyboard.ENTER:
                 case Keyboard.NUMPAD_ENTER:
@@ -180,11 +184,11 @@ package {
                 THIS.debugLables[3].text = "";
                 THIS.debugLables[4].text = "";
                 THIS.debugLables[5].text = "";
-                // THIS.debugLables[1].text = EntityContainer.ais[EntityContainer.ais.length - 1].debugTrace[0];
-                // THIS.debugLables[2].text = EntityContainer.ais[EntityContainer.ais.length - 1].debugTrace[1];
-                // THIS.debugLables[3].text = EntityContainer.ais[EntityContainer.ais.length - 1].debugTrace[2];
-                // THIS.debugLables[4].text = EntityContainer.ais[EntityContainer.ais.length - 1].debugTrace[3];
-                // THIS.debugLables[5].text = EntityContainer.ais[EntityContainer.ais.length - 1].debugTrace[4];
+                    // THIS.debugLables[1].text = EntityContainer.ais[EntityContainer.ais.length - 1].debugTrace[0];
+                    // THIS.debugLables[2].text = EntityContainer.ais[EntityContainer.ais.length - 1].debugTrace[1];
+                    // THIS.debugLables[3].text = EntityContainer.ais[EntityContainer.ais.length - 1].debugTrace[2];
+                    // THIS.debugLables[4].text = EntityContainer.ais[EntityContainer.ais.length - 1].debugTrace[3];
+                    // THIS.debugLables[5].text = EntityContainer.ais[EntityContainer.ais.length - 1].debugTrace[4];
             } else {
                 THIS.debugLables[1].text = "seed: " + String(THIS.seed);
                 THIS.debugLables[2].text = "";
@@ -195,6 +199,7 @@ package {
         }
 
         private static var fpsCalculator:Array; // 帧率计算器
+
         private static function updateFPS():void {
             fpsCalculator[0]++;
             if (fpsCalculator[0] == 6)
@@ -205,6 +210,7 @@ package {
         }
 
         private var nodeTagLables:Array; // 显示天体tag和战争占据状态
+
         private static function updateTag():void {
             if (EntityContainer.nodes.length != THIS.nodeTagLables[0].length)
                 init_tag(); // 重置tag
@@ -284,13 +290,14 @@ package {
             (EntityContainer.ais[0] as EnemyAI).debugTrace[4] = null;
         }
 
-        private function createFilter():ColorMatrixFilter{
+        private function createFilter():ColorMatrixFilter {
             var filter:ColorMatrixFilter = new ColorMatrixFilter();
             filter.adjustBrightness(0.5);
             return filter;
         }
+
         // #endregion
-        public static function test():void{
+        public static function test():void {
         }
     }
 }

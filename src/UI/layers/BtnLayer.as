@@ -1,18 +1,20 @@
 package ui.layers {
     import flash.events.MouseEvent;
 
+    import managers.Globals;
+
     import scenes.EditorScene;
     import scenes.GameScene;
     import scenes.ReplayScene;
+
+    import starling.core.Starling;
+    import starling.display.BlendMode;
+    import starling.display.Sprite;
 
     import ui.UIContainer;
     import ui.components.FleetSlider;
     import ui.components.MenuButton;
     import ui.components.SpeedButton;
-    import starling.display.Sprite;
-    import starling.display.BlendMode;
-    import managers.Globals;
-    import starling.core.Starling;
 
     public class BtnLayer extends Sprite {
         /**
@@ -208,10 +210,10 @@ package ui.layers {
                 fleetSlider.perc = 1;
         }
 
-        public function set color(value:uint):void{
-            for each(var mBtn:MenuButton in gameBtn)
+        public function set color(value:uint):void {
+            for each (var mBtn:MenuButton in gameBtn)
                 mBtn.color = value;
-            for each(var sBtn:SpeedButton in speedBtns)
+            for each (var sBtn:SpeedButton in speedBtns)
                 sBtn.color = value;
             fleetSlider.color = value;
         }

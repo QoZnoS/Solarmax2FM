@@ -1,14 +1,13 @@
 package core.game.victory {
-
-    import core.entities.Node;
-    import core.node.NodeData;
-    import managers.Globals;
     import core.EntityContainer;
-    import core.node.NodeType;
+    import core.entities.Node;
     import core.factories.VictoryTypeFactory;
+    import core.node.NodeData;
+    import core.node.NodeType;
+
+    import managers.Globals;
 
     public class AllOccupyVictory implements IVictoryType {
-
         public function AllOccupyVictory(trigger:Object) {
         }
 
@@ -31,12 +30,11 @@ package core.game.victory {
                     if (node.buildState.buildRate != 0) {
                         winGroup = -1;
                         break;
-                    }
-                    else {
+                    } else {
                         for (var teamId:int = 1; teamId < node.ships.length; teamId++) {
                             if (node.ships[teamId].length)
                                 winGroup = -1;
-                                break;
+                            break;
                         }
                     }
                 }

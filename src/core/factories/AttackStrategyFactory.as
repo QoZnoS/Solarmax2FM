@@ -1,9 +1,7 @@
 package core.factories {
-    import core.node.attacks.BasicAttack;
-    import core.node.attacks.IAttackStrategy;
+    import core.node.attacks.*;
 
     import flash.utils.Dictionary;
-    import core.node.attacks.*;
 
     public class AttackStrategyFactory {
         public static const TOWER:String = "tower";
@@ -18,6 +16,7 @@ package core.factories {
         private static var _strategyMap:Dictionary = new Dictionary();
 
         private static var _ready:Boolean = false;
+
         private static function init():void {
             registerStrategy(TOWER, TowerAttack);
             registerStrategy(PULSECANNON, PulsecannonAttack);

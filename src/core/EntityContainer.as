@@ -1,16 +1,14 @@
 package core {
-    import core.entities.GameEntity;
-    import core.entities.Node;
-    import core.entities.Ship;
+    import core.entities.*;
+    import core.node.NodeType;
 
     import flash.geom.Point;
+
+    import managers.Globals;
 
     import scenes.GameScene;
 
     import starling.errors.AbstractClassError;
-    import core.entities.*;
-    import managers.Globals;
-    import core.node.NodeType;
 
     public class EntityContainer {
         public static var game:GameScene;

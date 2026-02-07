@@ -1,9 +1,5 @@
 package core.game.victory {
-
-
-
     import core.factories.VictoryTypeFactory;
-
     public class NoneVictory implements IVictoryType {
         public function NoneVictory(trigger:Object) {
         }

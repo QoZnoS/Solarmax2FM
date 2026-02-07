@@ -1,16 +1,13 @@
 package core.node.attacks {
-
-    import core.entities.Node;
-    import core.entities.Ship;
-    import managers.Globals;
     import core.EntityContainer;
     import core.EntityHandler;
     import core.FXHandler;
+    import core.entities.Node;
+    import core.entities.Ship;
+
+    import managers.Globals;
 
     public class PulsecannonAttack extends BasicAttack {
-
-        
-
         public function PulsecannonAttack(attackRate:Number, attackRange:Number, attackLast:Number) {
             super(attackRate, attackRange, attackLast)
         }

@@ -1,22 +1,24 @@
 package core.game.events {
+    import core.EntityContainer;
+    import core.EntityHandler;
+    import core.FXHandler;
     import core.entities.Node;
     import core.entities.Ship;
+    import core.factories.EnemyAIFactory;
+    import core.factories.SpecialEventFactory;
+    import core.node.NodeStaticLogic;
+
+    import managers.AudioManager;
+    import managers.Globals;
 
     import scenes.GameScene;
 
+    import starling.core.Starling;
     import starling.display.Image;
 
-    import utils.CalcTools;
-    import core.factories.EnemyAIFactory;
-    import core.EntityContainer;
     import ui.layers.LayerFactory;
-    import managers.Globals;
-    import starling.core.Starling;
-    import core.FXHandler;
-    import managers.AudioManager;
-    import core.node.NodeStaticLogic;
-    import core.EntityHandler;
-    import core.factories.SpecialEventFactory;
+
+    import utils.CalcTools;
 
     public class DarknessFallsSE implements ISpecialEvent {
         private static const STATE_START:int = 0;
@@ -30,10 +32,8 @@ package core.game.events {
         private var triggerTimer:Number;
         private var darkPulse:Image;
         private var targetTeam:int;
-        private var darkAI:Object = {
-            type:EnemyAIFactory.DARK,
-            actionDelay:0.25
-        }
+        private var darkAI:Object = {type: EnemyAIFactory.DARK,
+                actionDelay: 0.25}
 
         public function DarknessFallsSE(trigger:Object) {
             state = 0;
@@ -48,6 +48,7 @@ package core.game.events {
             LayerFactory.call(LayerFactory.ADD_GROW)(darkPulse, Globals.teamDeepColors[targetTeam]);
         }
         private var soundVolume:Number = Globals.soundVolume;
+
         public function update(dt:Number):void {
             var delay:Number = 0;
             var delayStep:Number = 1;
@@ -66,7 +67,7 @@ package core.game.events {
                     state = STATE_BOSSIN;
                     triggerNode.nodeData.hp = 99.99; // 天体满占领度但不占领特效
                     triggerTimer = 24.34106748146577 - 3; // 24.34106748146577为动画的总时间
-                    Starling.juggler.tween(Globals,5,{"soundVolume":0});
+                    Starling.juggler.tween(Globals, 5, {"soundVolume": 0});
                     // 播放动画
                     delay = 0;
                     delayStep = 1;

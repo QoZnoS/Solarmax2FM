@@ -1,27 +1,27 @@
 package ui.layers {
+    import core.EntityContainer;
+    import core.FXHandler;
     import core.entities.Node;
+    import core.fx.SelectFade;
+    import core.node.NodeStaticLogic;
 
     import flash.events.MouseEvent;
     import flash.geom.Point;
 
+    import managers.Globals;
+
     import scenes.GameScene;
 
+    import starling.core.Starling;
+    import starling.display.Quad;
     import starling.display.QuadBatch;
+    import starling.display.Sprite;
 
     import ui.UIContainer;
 
     import utils.Drawer;
-    import starling.display.Sprite;
-    import starling.display.Quad;
-    import managers.Globals;
-    import starling.core.Starling;
-    import core.EntityContainer;
-    import core.FXHandler;
-    import core.node.NodeStaticLogic;
-    import core.fx.SelectFade;
 
     public class TraditionalCtrlLayer extends Sprite {
-
         private var selectedNodes:Array;
         private var downx:Number;
         private var downy:Number;

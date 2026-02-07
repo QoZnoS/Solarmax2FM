@@ -1,16 +1,16 @@
 package core.game.victory {
-
     import core.entities.Node;
+    import core.factories.VictoryTypeFactory;
+
+    import managers.Globals;
 
     import starling.display.QuadBatch;
 
-    import utils.Drawer;
-    import managers.Globals;
     import ui.layers.LayerFactory;
-    import core.factories.VictoryTypeFactory;
+
+    import utils.Drawer;
 
     public class TargetVictory implements IVictoryType {
-
         public var target:Node;
 
         private var angle:Number;

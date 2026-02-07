@@ -1,17 +1,18 @@
 package core.node.attacks {
-    import core.entities.Node;
-    import core.entities.Ship;
-
-    import utils.CalcTools;
     import core.EntityContainer;
     import core.EntityHandler;
-    import managers.Globals;
     import core.FXHandler;
-    import starling.animation.Transitions;
+    import core.entities.Node;
+    import core.entities.Ship;
     import core.fx.OneFrameFX;
 
-    public class BlackholeAttack extends BasicAttack {
+    import managers.Globals;
 
+    import starling.animation.Transitions;
+
+    import utils.CalcTools;
+
+    public class BlackholeAttack extends BasicAttack {
         public function BlackholeAttack(attackRate:Number, attackRange:Number, attackLast:Number) {
             super(attackRate, attackRange, attackLast)
         }

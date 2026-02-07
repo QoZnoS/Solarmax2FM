@@ -1,17 +1,18 @@
 package ui {
+    import managers.Globals;
+
+    import starling.core.Starling;
+    import starling.display.Quad;
     import starling.display.QuadBatch;
+    import starling.display.Sprite;
 
     import ui.components.FleetSlider;
     import ui.layers.BtnLayer;
     import ui.layers.EditorCtrlLayer;
     import ui.layers.EntityLayer;
+    import ui.layers.LayerFactory;
     import ui.layers.TouchCtrlLayer;
     import ui.layers.TraditionalCtrlLayer;
-    import starling.display.Sprite;
-    import starling.display.Quad;
-    import ui.layers.LayerFactory;
-    import starling.core.Starling;
-    import managers.Globals;
 
     public class UIContainer extends Sprite {
         private var _gameContainer:Sprite;

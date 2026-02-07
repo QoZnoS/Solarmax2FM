@@ -1,6 +1,4 @@
 package core.fx {
-
-
     import ui.layers.LayerFactory;
 
     public class OneFrameFX implements IParticle {

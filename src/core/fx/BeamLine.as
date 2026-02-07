@@ -1,12 +1,14 @@
 package core.fx {
-    import utils.CalcTools;
-    import ui.layers.LayerFactory;
     import managers.Globals;
+
+    import ui.layers.LayerFactory;
+
+    import utils.CalcTools;
 
     public class BeamLine implements IParticle {
         private var p:BasicParticle;
         private var layerCfg:Array;
-        
+
         private var x1:Number;
         private var y1:Number;
         private var x2:Number;
@@ -18,7 +20,7 @@ package core.fx {
         private var deepColor:Boolean;
         private var foreground:Boolean;
         private var state:int;
-        
+
         private static const STATE_GROW:int = 0;
         private static const STATE_SHRINK:int = 1;
 
@@ -84,7 +86,7 @@ package core.fx {
             p.rotation = angle;
             p.addToLayer();
         }
-        
+
         public function get layerConfig():Array {
             return layerCfg;
         }

@@ -1,16 +1,16 @@
 package core.node.attacks {
+    import core.EntityContainer;
+    import core.EntityHandler;
+    import core.FXHandler;
     import core.entities.Node;
     import core.entities.Ship;
 
-    import utils.CalcTools;
-    import core.EntityContainer;
-    import managers.Globals;
-    import core.EntityHandler;
-    import core.FXHandler;
     import managers.AudioManager;
+    import managers.Globals;
+
+    import utils.CalcTools;
 
     public class DiffusionAttack extends BasicAttack {
-
         public function DiffusionAttack(attackRate:Number, attackRange:Number, attackLast:Number) {
             super(attackRate, attackRange, attackLast)
         }
@@ -77,7 +77,7 @@ package core.node.attacks {
                 else
                     AudioManager.playDiffusing(node.nodeData.x)
             }
-            
+
         }
 
         private function updateArc(node:Node, dt:Number):void {

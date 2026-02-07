@@ -1,16 +1,17 @@
 package scenes {
     import core.EntityPool;
     import core.entities.EndStar;
+    import core.entities.GameEntity;
+
+    import managers.Globals;
 
     import starling.display.Image;
+    import starling.display.Quad;
     import starling.display.QuadBatch;
+    import starling.display.Sprite;
     import starling.events.EnterFrameEvent;
 
     import utils.Drawer;
-    import starling.display.Sprite;
-    import starling.display.Quad;
-    import core.entities.GameEntity;
-    import managers.Globals;
 
     public class EndScene extends Sprite {
         public var stars:EntityPool;

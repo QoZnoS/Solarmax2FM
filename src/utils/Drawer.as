@@ -1,8 +1,8 @@
 package utils {
     import starling.display.Image;
     import starling.display.QuadBatch;
-    import starling.textures.Texture;
     import starling.events.Event;
+    import starling.textures.Texture;
 
     public class Drawer {
         private static var _quadImage:Image;

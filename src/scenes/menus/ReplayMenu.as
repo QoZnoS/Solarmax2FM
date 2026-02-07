@@ -1,25 +1,25 @@
 package scenes.menus {
     import flash.filesystem.File;
 
+    import managers.AudioManager;
+    import managers.Globals;
+    import managers.LevelData;
+
     import scenes.TitleMenu;
 
+    import starling.core.Starling;
+    import starling.display.Quad;
+    import starling.display.Sprite;
     import starling.events.EnterFrameEvent;
+    import starling.events.Event;
+    import starling.text.TextField;
 
     import ui.components.OptionButton;
 
     import utils.Popup;
     import utils.ReplayData;
-    import starling.display.Sprite;
-    import starling.core.Starling;
-    import starling.display.Quad;
-    import managers.LevelData;
-    import managers.Globals;
-    import starling.text.TextField;
-    import managers.AudioManager;
-    import starling.events.Event;
 
     public class ReplayMenu extends Sprite implements IMenu {
-
         private const COLOR:uint = 0xFF9DBB;
 
         private var title:TitleMenu;

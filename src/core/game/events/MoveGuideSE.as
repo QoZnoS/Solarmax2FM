@@ -1,12 +1,13 @@
 package core.game.events {
+    import core.EntityContainer;
     import core.entities.Node;
+    import core.factories.SpecialEventFactory;
+
+    import managers.Globals;
 
     import scenes.GameScene;
 
     import ui.components.TutorialSprite;
-    import core.EntityContainer;
-    import managers.Globals;
-    import core.factories.SpecialEventFactory;
 
     public class MoveGuideSE implements ISpecialEvent {
         private static const STATE_START:int = 0;

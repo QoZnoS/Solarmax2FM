@@ -2,11 +2,11 @@ package ui.components {
     import flash.geom.Point;
 
     import starling.display.Image;
-    import starling.events.Touch;
-    import starling.display.Sprite;
     import starling.display.Quad;
-    import starling.text.TextField;
+    import starling.display.Sprite;
+    import starling.events.Touch;
     import starling.events.TouchEvent;
+    import starling.text.TextField;
 
     public class OptionButton extends Sprite {
         public var quad:Quad;

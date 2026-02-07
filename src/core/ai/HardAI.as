@@ -35,6 +35,7 @@ package core.ai {
             }
             attackV1();
         }
+
         public function attackV1():void {
             var nodeGroup:int = -1;
             var senderGroup:int = -1;
@@ -201,6 +202,7 @@ package core.ai {
         }
         private var TEMP_QUENE:Array = new Array();
         private var TEMP_VISITED:Array = new Array();
+
         public function breadthFirstSearch(startNode:Node, targetNode:Node):Node { // 广度优先搜索，寻路算法
             if (startNode == targetNode)
                 return null;

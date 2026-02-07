@@ -1,10 +1,12 @@
-package managers{
+package managers {
     import com.greensock.TweenLite;
 
     import flash.media.SoundChannel;
     import flash.media.SoundMixer;
     import flash.media.SoundTransform;
+
     import starling.core.Starling;
+
     /**全局音频控制类 */
     public class AudioManager {
         private static var st:SoundTransform;

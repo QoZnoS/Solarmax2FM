@@ -100,6 +100,6 @@ package core.factories {
                 default:
                     return 1.5;
             }
-        }        
+        }
     }
 }

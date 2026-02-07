@@ -1,11 +1,10 @@
-// 静态文件不能使用 private 声明
+package managers {
+    import core.node.NodeType;
 
-package managers{
     import flash.filesystem.File;
     import flash.filesystem.FileStream;
     import flash.utils.ByteArray;
     import flash.utils.Dictionary;
-    import core.node.NodeType;
 
     public class LevelData {
         public static var file:File; // 文件
@@ -32,22 +31,22 @@ package managers{
                 load();
             var maxData:int = rawData.length;
             levelCache = new Vector.<Dictionary>(rawData.length, true);
-            for(var i:int = 0; i < maxData; i++)
+            for (var i:int = 0; i < maxData; i++)
                 levelCache[i] = new Dictionary;
 
             NodeType.init();
-            if (Globals.currentData >= rawData.length){
+            if (Globals.currentData >= rawData.length) {
                 SceneController.alert("The selected Mappack does not exist!");
                 Globals.currentData = 0;
             }
             updateLevelData();
-            
+
             Globals.initTeam();
             updateTeam();
         }
 
         public static function updateLevelData():void {
-            if (levelCache[Globals.currentData] && levelCache[Globals.currentData][Globals.currentDifficulty]){
+            if (levelCache[Globals.currentData] && levelCache[Globals.currentData][Globals.currentDifficulty]) {
                 level = levelCache[Globals.currentData][Globals.currentDifficulty];
                 return;
             }
@@ -93,7 +92,7 @@ package managers{
                     Globals.teamColors[i] = teamData.color;
                 if ("deepColor" in teamData)
                     Globals.teamDeepColors[i] = teamData.deepColor;
-                if ("colorEnhance" in  teamData)
+                if ("colorEnhance" in teamData)
                     Globals.teamColorEnhance[i] = teamData.colorEnhance;
                 if ("shipSpeed" in teamData)
                     Globals.teamShipSpeeds[i] = teamData.shipSpeed;
@@ -121,6 +120,7 @@ package managers{
                     Globals.teamShowLabels[i] = teamData.showLabel
             }
         }
+
         // 导入关卡文件
         public static function load():void {
             fileStream.open(file, "read"); // 以只读模式打开文件

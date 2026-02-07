@@ -1,9 +1,10 @@
 package core.game.events {
+    import core.factories.SpecialEventFactory;
+
     import scenes.GameScene;
 
-    import ui.components.TutorialSprite;
     import ui.UIContainer;
-    import core.factories.SpecialEventFactory;
+    import ui.components.TutorialSprite;
 
     public class FleetSliderGuideSE implements ISpecialEvent {
         private static const STATE_START:int = 0;

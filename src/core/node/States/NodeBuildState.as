@@ -1,12 +1,12 @@
 package core.node.states {
-    import core.entities.Node;
-    import core.node.NodeData;
     import core.EntityHandler;
-    import managers.Globals;
+    import core.entities.Node;
     import core.factories.NodeStateFactory;
+    import core.node.NodeData;
+
+    import managers.Globals;
 
     public class NodeBuildState implements INodeState {
-
         public var node:Node;
         public var nodeData:NodeData;
         public var buildTimer:Number; // 生产计时器
