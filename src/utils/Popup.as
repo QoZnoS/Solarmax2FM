@@ -1,16 +1,18 @@
 package utils {
+    import flash.events.MouseEvent;
+    import flash.geom.Point;
+
+    import starling.events.Touch;
+
+    import ui.components.OptionButton;
     import starling.display.Sprite;
     import starling.display.Quad;
-    import UI.Component.OptionButton;
     import starling.text.TextField;
     import starling.utils.VAlign;
     import starling.utils.HAlign;
-    import flash.geom.Point;
-    import starling.events.TouchEvent;
-    import starling.events.Touch;
-    import starling.events.TouchPhase;
-    import flash.events.MouseEvent;
     import starling.core.Starling;
+    import starling.events.TouchEvent;
+    import starling.events.TouchPhase;
 
     public class Popup extends Sprite {
 

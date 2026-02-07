@@ -6,14 +6,16 @@
     import flash.events.MouseEvent;
     import flash.filesystem.File;
     import flash.geom.Rectangle;
-    import flash.system.Capabilities;
     import flash.html.HTMLLoader;
+    import flash.system.Capabilities;
+
     import starling.core.Starling;
-    import starling.textures.Texture;
     import starling.utils.AssetManager;
+    import managers.EmbeddedAssets;
+    import managers.Globals;
+    import starling.textures.Texture;
     import starling.utils.RectangleUtil;
-    import utils.EmbeddedAssets;
-    import utils.GS;
+    import managers.AudioManager;
 
     [SWF(frameRate = "120", backgroundColor = "0x00000")]
     public class Main extends Sprite {
@@ -242,7 +244,7 @@
         public function on_deactivate(param1:*):void {
             if (!Globals.nohup) { // 调整后台运行
                 mStarling.stop();
-                GS.pauseMusic();
+                AudioManager.pauseMusic();
                 addChild(cover);
                 cover.addEventListener("click", on_resume);
             }
@@ -252,7 +254,7 @@
             cover.removeEventListener("click", on_resume);
             removeChild(cover);
             mStarling.start();
-            GS.resumeMusic();
+            AudioManager.resumeMusic();
         }
 
         public function get starling():Starling{

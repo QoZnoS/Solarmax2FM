@@ -1,14 +1,16 @@
 package {
-    import starling.core.Starling;
     import starling.display.Image;
-    import starling.display.Sprite;
-    import starling.textures.Texture;
     import starling.utils.AssetManager;
+
+    import utils.Drawer;
     import utils.ProgressBar;
     import utils.ScrollingBackground;
-    import utils.GS;
-    import utils.Drawer;
-    import Entity.ParticleSystem;
+    import starling.display.Sprite;
+    import starling.textures.Texture;
+    import starling.core.Starling;
+    import managers.LevelData;
+    import managers.AudioManager;
+    import core.ParticleSystem;
 
     public class Root extends Sprite {
 
@@ -54,7 +56,7 @@ package {
                             addChild(bg);
                             scene = new SceneController()
                             addChild(scene);
-                            GS.init();
+                            AudioManager.init();
                             ParticleSystem.init();
                         }, 0.05);
                     }

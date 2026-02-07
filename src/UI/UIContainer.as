@@ -1,9 +1,17 @@
-package UI {
-    import starling.display.Sprite;
-    import starling.core.Starling;
+package ui {
     import starling.display.QuadBatch;
+
+    import ui.components.FleetSlider;
+    import ui.layers.BtnLayer;
+    import ui.layers.EditorCtrlLayer;
+    import ui.layers.EntityLayer;
+    import ui.layers.TouchCtrlLayer;
+    import ui.layers.TraditionalCtrlLayer;
+    import starling.display.Sprite;
     import starling.display.Quad;
-    import UI.Component.FleetSlider;
+    import ui.layers.LayerFactory;
+    import starling.core.Starling;
+    import managers.Globals;
 
     public class UIContainer extends Sprite {
         private var _gameContainer:Sprite;
@@ -200,6 +208,10 @@ package UI {
 
         public static function set touchable(value:Boolean):void {
             _ui.touchable = value;
+        }
+
+        public static function get i():UIContainer {
+            return _ui;
         }
     }
 }

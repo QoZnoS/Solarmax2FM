@@ -1,0 +1,520 @@
+package core {
+    import core.entities.GameEntity;
+    import core.entities.Node;
+    import core.entities.Ship;
+
+    import flash.geom.Point;
+
+    import scenes.GameScene;
+
+    import starling.errors.AbstractClassError;
+    import core.entities.*;
+    import managers.Globals;
+    import core.node.NodeType;
+
+    public class EntityContainer {
+        public static var game:GameScene;
+        public static var INDEX_SHIPS:int = 0;
+        public static var INDEX_NODES:int = 1;
+        public static var INDEX_AIS:int = 2;
+        public static var INDEX_BEAMS:int = 3;
+        public static var INDEX_DARKPLUSES:int = 4;
+
+        private static var _entityPools:Vector.<EntityPool>;
+        private static const _ENTITY_POOL_COUNT:int = 5;
+        private static var _ready:Boolean = false;
+
+        // #region 实体池
+        public function EntityContainer() {
+            throw new AbstractClassError();
+        }
+
+        private static function init():void {
+            _entityPools = new Vector.<EntityPool>(_ENTITY_POOL_COUNT, true);
+            _pointPool = new Vector.<Point>;
+            for (var i:int = 0; i < _ENTITY_POOL_COUNT; i++)
+                _entityPools[i] = new EntityPool();
+            _ready = true;
+        }
+
+        public static function get entityPool():Vector.<EntityPool> {
+            if (!_ready)
+                init();
+            return _entityPools;
+        }
+
+        public static function get ships():Vector.<Ship> {
+            return Vector.<Ship>(_entityPools[INDEX_SHIPS].active);
+        }
+
+        public static function get ships_entity():Vector.<GameEntity> {
+            return _entityPools[INDEX_SHIPS].active;
+        }
+
+        public static function get nodes():Vector.<Node> {
+            return Vector.<Node>(_entityPools[INDEX_NODES].active);
+        }
+
+        public static function get ais():Vector.<EnemyAI> {
+            return Vector.<EnemyAI>(_entityPools[INDEX_AIS].active);
+        }
+
+        public static function addEntity(index:int, entity:GameEntity):void {
+            if (!_ready)
+                init();
+            _entityPools[index].addEntity(entity);
+        }
+
+        public static function getReserve(index:int):GameEntity {
+            if (!_ready)
+                init();
+            return _entityPools[index].getReserve();
+        }
+
+        // #endregion
+
+        // #region 天体
+
+        /** 搜寻范围内飞行中的飞船
+         * @param node 目标天体
+         * @param hostile 是否为敌对势力
+         * @return 飞船数组
+         */
+        public static function findShipsInRange(node:Node, hostile:Boolean = true):Vector.<Ship> {
+            // 预计算常用值
+            var nodeX:Number = node.nodeData.x;
+            var nodeY:Number = node.nodeData.y;
+            var range:Number = node.attackState.attackRange;
+            var rangeSquared:Number = range * range;
+            var nodeTeamGroup:int = Globals.teamGroups[node.nodeData.team];
+            // 重用结果数组
+            var result:Vector.<Ship> = TEMP_SHIP_RESULT;
+            result.length = 0;
+            var allShips:Vector.<GameEntity> = ships_entity;
+            var shipCount:int = allShips.length;
+            for (var i:int = 0; i < shipCount; i++) {
+                var ship:Ship = allShips[i] as Ship;
+                // 状态检查
+                if (ship.state != 3 || ship.warping)
+                    continue;
+                // 势力检查
+                var shipGroup:int = Globals.teamGroups[ship.team];
+                if ((shipGroup == nodeTeamGroup) == hostile)
+                    continue;
+                // 快速距离检查（使用平方距离避免Math.sqrt）
+                var dx:Number = ship.x - nodeX;
+                if (dx > range || dx < -range)
+                    continue;
+                var dy:Number = ship.y - nodeY;
+                if (dy > range || dy < -range)
+                    continue;
+                if (dx * dx + dy * dy < rangeSquared)
+                    result[result.length] = ship;
+            }
+            return result;
+        }
+
+        // 添加临时数组
+        private static var TEMP_SHIP_RESULT:Vector.<Ship> = new Vector.<Ship>();
+
+        /** 搜寻范围内的天体
+         * @param centerNode 目标天体
+         * @return 天体数组
+         */
+        public static function findNodeInRange(centerNode:Node):Array {
+            var dx:Number;
+            var dy:Number;
+            var node:Node;
+            var nodeInRange:Array = [];
+            var range:Number = centerNode.attackState.attackRange;
+            for each (node in nodes) {
+                dx = centerNode.nodeData.x - node.nodeData.x;
+                dy = centerNode.nodeData.y - node.nodeData.y;
+                if (dx > range || dx < -range || dy > range || dy < -range)
+                    continue;
+                if (Math.sqrt(dx * dx + dy * dy) < range)
+                    nodeInRange.push(node);
+            }
+            return nodeInRange;
+        }
+
+        /** 检测目标天体是否在**指定天体**攻击范围内
+         * @param centerNode 目标天体
+         * @param team **指定天体**势力
+         * @param type **指定天体**类型
+         * @param hostile team是否特指其敌对的势力，默认为false
+         * @return Boolean
+         */
+        public static function inAttackNodeCheck(centerNode:Node, team:int, type:String, hostile:Boolean = false):Boolean {
+            var inRange:Boolean = false;
+            var group:int = Globals.teamGroups[team];
+            var node:Node;
+            var dx:Number, dy:Number, range:Number;
+            for each (node in nodes) {
+                var nodeGroup:int = Globals.teamGroups[node.nodeData.team];
+                if (hostile ? group == nodeGroup : group != nodeGroup) // 排除不符合是否敌对要求的
+                    continue;
+                if (node.nodeData.team == 0) // 排除中立天体
+                    continue;
+                if (node.nodeData.type != type) // 排除不符合类型要求的天体
+                    continue;
+                if (node == centerNode) // 排除检查天体本身
+                    continue;
+
+                dx = centerNode.nodeData.x - node.nodeData.x;
+                dy = centerNode.nodeData.y - node.nodeData.y;
+                range = node.attackState.attackRange;
+                if (dx > range || dx < -range || dy > range || dy < -range)
+                    continue;
+                if (Math.sqrt(dx * dx + dy * dy) < range)
+                    inRange = true;
+            }
+            return inRange;
+        }
+
+        /** 根据状态过滤天体上的飞船
+         * @param node 目标天体
+         * @param state 目标状态
+         * @return 二层数组
+         */
+        public static function filterShipByStatic(node:Node, state:int):Vector.<Vector.<Ship>> {
+            var ships:Vector.<Vector.<Ship>> = new Vector.<Vector.<Ship>>;
+            for each (var shipArr:Vector.<Ship> in node.ships) {
+                var filterArr:Vector.<Ship> = new Vector.<Ship>;
+                for each (var ship:Ship in shipArr)
+                    if (ship.state == state)
+                        filterArr.push(ship);
+                ships.push(filterArr);
+            }
+            return ships;
+        }
+
+        // #endregion
+
+        // #region 飞船
+        public static function removeShipFromVector(vec:Vector.<Ship>, ship:Ship):void {
+            for (var i:int = vec.length - 1; i >= 0; i--)
+                if (vec[i] == ship)
+                    vec.splice(i, 1);
+        }
+
+        // #endregion
+
+        // #region AI
+        public static function getLengthInTowerRange(node1:Node, node2:Node, team:int):Number {
+            var group:int = Globals.teamGroups[team];
+            var node:Node = null;
+            var start:Point = null;
+            var end:Point = null;
+            var current:Point = null;
+            var length:Number = 0;
+            var result:Array;
+            var resultInside:Boolean;
+            var resultIntersects:Boolean;
+            var resultEnter:Point;
+            var resultExit:Point;
+
+            try {
+                // 从对象池获取Point
+                start = getPoint(node1.nodeData.x, node1.nodeData.y);
+                end = getPoint(node2.nodeData.x, node2.nodeData.y);
+                current = getPoint();
+
+                for each (node in nodes) {
+                    var nodeGroup:int = Globals.teamGroups[node.nodeData.team];
+                    if (node.nodeData.team == 0 || nodeGroup == group)
+                        continue;
+                    if (node.nodeData.type == NodeType.TOWER || node.nodeData.type == NodeType.STARBASE || node.nodeData.type == NodeType.CAPTURESHIP) {
+                        current.x = node.nodeData.x;
+                        current.y = node.nodeData.y;
+                        result = lineIntersectCircle(start, end, current, node.attackState.attackRange);
+                        resultInside = result[0];
+                        resultIntersects = result[1];
+                        resultEnter = result[2];
+                        resultExit = result[3];
+                        if (resultIntersects) {
+                            if (resultEnter && resultExit)
+                                length += Point.distance(resultEnter, resultExit);
+                            else if (resultEnter && !resultExit)
+                                length += Point.distance(resultEnter, end);
+                            else if (!resultEnter && resultExit)
+                                length += Point.distance(start, resultExit);
+                            else
+                                length += Point.distance(start, end);
+                        } else if (resultInside)
+                            length += Point.distance(start, end);
+                    }
+                }
+            } finally {
+                // 确保归还Point对象
+                returnPoint(start);
+                returnPoint(end);
+                returnPoint(current);
+            }
+
+            return length;
+        }
+
+        public static function isInBlackhole(node1:Node, node2:Node, team:int):Boolean {
+            var group:int = Globals.teamGroups[team];
+            var node:Node = null;
+            var start:Point = null;
+            var end:Point = null;
+            var current:Point = null;
+            var result:Array;
+            var resultInside:Boolean;
+            var resultIntersects:Boolean;
+            var resultEnter:Point;
+            var resultExit:Point;
+            var inBlackhole:Boolean = false;
+
+            try {
+                start = getPoint(node1.nodeData.x, node1.nodeData.y);
+                end = getPoint(node2.nodeData.x, node2.nodeData.y);
+                current = getPoint();
+
+                for each (node in nodes) {
+                    var nodeGroup:int = Globals.teamGroups[node.nodeData.team];
+                    if (node.nodeData.team == 0 || nodeGroup == group)
+                        continue;
+                    if (node.nodeData.type == NodeType.BLACKHOLE && (node.attackState.attackStrategy.attacking || node.attackState.attackStrategy.attackTimer < 1)) {
+                        current.x = node.nodeData.x;
+                        current.y = node.nodeData.y;
+                        result = lineIntersectCircle(start, end, current, node.attackState.attackRange);
+                        resultInside = result[0];
+                        resultIntersects = result[1];
+                        resultEnter = result[2];
+                        resultExit = result[3];
+                        if (resultIntersects || resultInside) {
+                            inBlackhole = true;
+                            break;
+                        }
+                    }
+                }
+            } finally {
+                returnPoint(start);
+                returnPoint(end);
+                returnPoint(current);
+            }
+
+            return inBlackhole;
+        }
+
+        public static function lineIntersectCircle(pointA:Point, pointB:Point, circleCenter:Point, circleRadius:Number = 1):Array {
+            var discriminant:Number = NaN;
+            var intersectionParam1:Number = NaN;
+            var intersectionParam2:Number = NaN;
+            var resultInside:Boolean = false;
+            var resultIntersects:Boolean = false;
+            var resultEnter:Point = null;
+            var resultExit:Point = null;
+            var lineSegmentLengthSquared:Number = (pointB.x - pointA.x) * (pointB.x - pointA.x) + (pointB.y - pointA.y) * (pointB.y - pointA.y);
+            var lineConstant:Number = 2 * ((pointB.x - pointA.x) * (pointA.x - circleCenter.x) + (pointB.y - pointA.y) * (pointA.y - circleCenter.y));
+            var circleConstant:Number = circleCenter.x * circleCenter.x + circleCenter.y * circleCenter.y + pointA.x * pointA.x + pointA.y * pointA.y - 2 * (circleCenter.x * pointA.x + circleCenter.y * pointA.y) - circleRadius * circleRadius;
+            if (lineConstant * lineConstant - 4 * lineSegmentLengthSquared * circleConstant <= 0) {
+                resultInside = false;
+            } else {
+                discriminant = Math.sqrt(lineConstant * lineConstant - 4 * lineSegmentLengthSquared * circleConstant);
+                intersectionParam1 = (-lineConstant + discriminant) / (2 * lineSegmentLengthSquared);
+                intersectionParam2 = (-lineConstant - discriminant) / (2 * lineSegmentLengthSquared);
+                if ((intersectionParam1 < 0 || intersectionParam1 > 1) && (intersectionParam2 < 0 || intersectionParam2 > 1)) {
+                    resultInside = !((intersectionParam1 < 0 && intersectionParam2 < 0) || (intersectionParam1 > 1 && intersectionParam2 > 1))
+                } else {
+                    if (0 <= intersectionParam2 && intersectionParam2 <= 1) {
+                        resultEnter = getPoint();
+                        resultEnter.x = pointA.x + intersectionParam2 * (pointB.x - pointA.x);
+                        resultEnter.y = pointA.y + intersectionParam2 * (pointB.y - pointA.y);
+                    }
+                    if (0 <= intersectionParam1 && intersectionParam1 <= 1) {
+                        resultExit = getPoint();
+                        resultExit.x = pointA.x + intersectionParam1 * (pointB.x - pointA.x);
+                        resultExit.y = pointA.y + intersectionParam1 * (pointB.y - pointA.y);
+                    }
+                    resultIntersects = true;
+                }
+            }
+            return [resultInside, resultIntersects, resultEnter, resultExit];
+        }
+
+        // #endregion
+
+        // #region 元素控制
+
+        /** 移除数组中的指定元素
+         * @param arr 目标数组
+         * @param element 目标元素
+         */
+        public static function removeElementFromArray(arr:Array, element:*):void {
+            for (var i:int = arr.length - 1; i >= 0; i--)
+                if (arr[i] == element)
+                    arr.splice(i, 1);
+        }
+
+        // #endregion
+
+        // #region 其他
+
+        /** 计算两条线的交点
+         * @param p1x p1y p2x p2y 第一条线的两端点
+         * @param p3x p3y p4x p4y 第二条线的两端点
+         * @return Point 或 null
+         */
+        public static function getIntersection(p1x:Number, p1y:Number, p2x:Number, p2y:Number, p3x:Number, p3y:Number, p4x:Number, p4y:Number):Point {
+            var dx1:Number = p2x - p1x;
+            var dy1:Number = p2y - p1y;
+            var dx2:Number = p4x - p3x;
+            var dy2:Number = p4y - p3y;
+            var denominator:Number = dy2 * dx1 - dx2 * dy1;
+            if (Math.abs(denominator) < Number.MIN_VALUE)
+                return null;
+            var dx3:Number = p1x - p3x;
+            var dy3:Number = p1y - p3y;
+            var t:Number = (dx2 * dy3 - dy2 * dx3) / denominator;
+            var u:Number = (dx1 * dy3 - dy1 * dx3) / denominator;
+            if (t >= 0 && t <= 1 && u >= 0 && u <= 1)
+                return new Point(p1x + t * dx1, p1y + t * dy1);
+            return null;
+        }
+
+        /**判断路径是否被拦截并计算拦截点
+         * @param node1
+         * @param node2
+         * @return Point 或 null
+         */
+        public static function nodesBlocked(node1:Node, node2:Node):Point {
+            var bar1x:Number, bar1y:Number, bar2x:Number, bar2y:Number;
+            var intersection:Point = null;
+            var i:int = 0;
+            while (i < int(game.barrierLines.length)) {
+                bar1x = game.barrierLines[i][0].nodeData.x;
+                bar1y = game.barrierLines[i][0].nodeData.y;
+                bar2x = game.barrierLines[i][1].nodeData.x;
+                bar2y = game.barrierLines[i][1].nodeData.y;
+                intersection = getIntersection(node1.nodeData.x, node1.nodeData.y, node2.nodeData.x, node2.nodeData.y, bar1x, bar1y, bar2x, bar2y);
+                if (intersection)
+                    return intersection;
+                i++;
+            }
+            return null;
+        }
+
+        /** 判断路径是否被拦截并计算拦截点
+         * @param x1 起点x
+         * @param y1 起点y
+         * @param x2 终点x
+         * @param y2 终点y
+         * @return Point 或 null
+         */
+        public static function lineBlocked(x1:Number, y1:Number, x2:Number, y2:Number):Point {
+            var intersection:Point = null;
+            var bar1x:Number, bar1y:Number, bar2x:Number, bar2y:Number;
+            for each (var bar:Array in game.barrierLines) {
+                bar1x = bar[0].nodeData.x;
+                bar1y = bar[0].nodeData.y;
+                bar2x = bar[1].nodeData.x;
+                bar2y = bar[1].nodeData.y;
+                intersection = getIntersection(x1, y1, x2, y2, bar1x, bar1y, bar2x, bar2y);
+                if (intersection)
+                    return intersection;
+            }
+            return null;
+        }
+
+
+        /** 按指定 static 过滤数组中的元素，返回被过滤的元素数组
+         * <p>元素必须包含 static 属性
+         * @param arr 目标数组
+         * @param static 目标状态
+         * @return 被过滤的元素组成的数组
+         */
+        public static function fliterByStatic(arr:Array, state:int):Array {
+            var fliterArr:Array = [];
+            for (var i:int = 0; i < arr.length; i++) {
+                if (arr[i].state != state)
+                    continue;
+
+                fliterArr.push(arr[i]);
+                arr.removeAt(i);
+                i--;
+            }
+            return fliterArr;
+        }
+
+        /** 安全访问 XML 数据
+         * <p>尝试访问指定路径的 XML 数据，若失败则返回默认值或抛出错误
+         * @param xmlData 目标 XML 数据
+         * @param path 访问路径
+         * @param defaultValue 默认值
+         * @return 访问结果
+         */
+        public static function safeXMLAccess(xmlData:XML, path:String, defaultValue:XMLList = null):XMLList {
+            try {
+                return xmlData..*.(name().localName == path);
+            } catch (error:Error) {
+                if (defaultValue != null)
+                    return defaultValue;
+                throw error;
+            }
+        }
+
+        // #endregion
+
+        // #region point对象池
+
+        private static var _pointPool:Vector.<Point> = new Vector.<Point>();
+        private static var _pointPoolIndex:int = 0;
+        private static const MAX_POOL_SIZE:int = 64; // 可根据需要调整
+
+        /**
+         * 从对象池获取一个Point对象
+         * @param x 初始x坐标，默认为0
+         * @param y 初始y坐标，默认为0
+         * @return Point对象
+         */
+        public static function getPoint(x:Number = 0, y:Number = 0):Point {
+            if (_pointPoolIndex > 0) {
+                // 从池中取出
+                _pointPoolIndex--;
+                var point:Point = _pointPool[_pointPoolIndex];
+                point.x = x;
+                point.y = y;
+                _pointPool[_pointPoolIndex] = null; // 清空引用，避免重复使用
+                return point;
+            } else {
+                // 池为空，创建新对象
+                return new Point(x, y);
+            }
+        }
+
+        /**
+         * 归还Point对象到池中
+         * @param point 要归还的Point对象
+         */
+        public static function returnPoint(point:Point):void {
+            if (!point)
+                return;
+
+            if (_pointPoolIndex < MAX_POOL_SIZE) {
+                // 重置Point
+                point.x = 0;
+                point.y = 0;
+                _pointPool[_pointPoolIndex] = point;
+                _pointPoolIndex++;
+            }
+            // 如果池已满，则丢弃该对象，让GC回收
+        }
+
+        /**
+         * 清空Point对象池
+         */
+        public static function clearPointPool():void {
+            for (var i:int = 0; i < _pointPoolIndex; i++)
+                _pointPool[i] = null;
+            _pointPoolIndex = 0;
+        }
+
+        // #endregion
+
+
+    }
+}

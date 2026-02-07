@@ -1,0 +1,133 @@
+// 这个类提供难度按钮母版，星星通过在TitleMenu中调用按钮的showStar显示
+
+package ui.components {
+    import flash.geom.Point;
+
+    import starling.display.Image;
+    import starling.events.Touch;
+    import starling.display.Sprite;
+    import starling.text.TextField;
+    import starling.display.Quad;
+    import starling.events.TouchEvent;
+    import managers.AudioManager;
+
+    public class DifficultyButton extends Sprite {
+        public static const btnText:Array = ["EASY", "NORMAL", "HARD"]
+
+        private var label:TextField;
+        private var icon:Image;
+        private var bg:Image;
+        private var quad:Quad;
+        private var down:Boolean;
+        private var hitPoint:Point;
+        private var buttonArray:Array;
+        public var toggled:Boolean;
+        public var starred:Boolean;
+
+        public function DifficultyButton(difficulty:int, buttonArray:Array) {
+            super();
+            this.buttonArray = buttonArray;
+            bg = new Image(Root.assets.getTexture("difficulty_btn01"));
+            bg.pivotX = bg.width * 0.5;
+            bg.pivotY = bg.height * 0.5;
+            bg.color = 0xFFAAAA;
+            bg.alpha = 0;
+            bg.touchable = false;
+            addChild(bg);
+            icon = new Image(Root.assets.getTexture("star2"));
+            icon.pivotX = icon.width * 0.5;
+            icon.pivotY = icon.height * 0.5;
+            icon.color = 0xFFAAAA;
+            icon.y = 10;
+            icon.alpha = 0.4;
+            addChild(icon);
+            starred = false;
+            label = new TextField(bg.width, 40, btnText[difficulty], "Downlink12", -1, 0xFFAAAA);
+            label.pivotX = bg.width * 0.5;
+            label.pivotY = 20;
+            label.y = -15;
+            label.alpha = 0.6;
+            addChild(label);
+            quad = new Quad(bg.width + 20, bg.height + 20, 16711680);
+            quad.pivotX = quad.width * 0.5;
+            quad.pivotY = quad.height * 0.5;
+            quad.alpha = 0;
+            addChild(quad);
+            this.blendMode = "add";
+            hitPoint = new Point(0, 0);
+            toggled = false;
+        }
+
+        public function init():void {
+            untoggle();
+            quad.addEventListener("touch", on_touch);
+        }
+
+        public function deInit():void {
+            quad.removeEventListener("touch", on_touch);
+        }
+
+        public function on_touch(touchEvent:TouchEvent):void {
+            var touch:Touch = touchEvent.getTouch(quad);
+            if (!touch) {
+                bg.alpha = toggled ? 0.4 : 0;
+                down = false;
+                return;
+            }
+            switch (touch.phase) {
+                case "hover":
+                    bg.alpha = 0.4;
+                    break;
+                case "began":
+                    bg.alpha = 0.7;
+                    down = true;
+                    break;
+                case "moved":
+                    if (down && !hitTest(touch.getLocation(this, hitPoint))) {
+                        bg.alpha = toggled ? 0.4 : 0;
+                        down = false;
+                    }
+                    break;
+                case "ended":
+                    if (down) {
+                        toggled = true;
+                        if (buttonArray) {
+                            bg.alpha = 0.4;
+                            for each (var button:DifficultyButton in buttonArray) {
+                                if (button == this)
+                                    continue;
+                                button.untoggle();
+                            }
+                        } else {
+                            toggled = false;
+                            bg.alpha = 0;
+                        }
+                        down = false;
+                        dispatchEventWith("clicked");
+                        AudioManager.playClick();
+                        break;
+                    }
+            }
+        }
+
+        public function toggle():void {
+            toggled = true;
+            bg.alpha = 0.4;
+        }
+
+        public function untoggle():void {
+            toggled = false;
+            bg.alpha = 0;
+        }
+
+        public function showStar(get:Boolean):void {
+            if (get && !starred) {
+                icon.texture = Root.assets.getTexture("star");
+                starred = true;
+            } else if (!get && starred) {
+                icon.texture = Root.assets.getTexture("star2");
+                starred = false;
+            }
+        }
+    }
+}

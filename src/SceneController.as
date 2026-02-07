@@ -1,18 +1,17 @@
 package {
-    import Menus.TitleMenu;
-    import Game.GameScene;
-    import Menus.EndScene;
-    import Game.Debug;
-    import starling.core.Starling;
     import flash.events.KeyboardEvent;
-    import starling.display.Sprite;
-    import starling.display.Quad;
-    import starling.filters.ColorMatrixFilter;
-    import UI.UIContainer;
+
     import utils.Popup;
-    import Game.ReplayScene;
     import utils.ReplayData;
-    import Game.EditorScene;
+    import starling.display.Sprite;
+    import scenes.*;
+    import ui.UIContainer;
+    import starling.core.Starling;
+    import starling.display.Quad;
+    import managers.Globals;
+    import managers.LevelData;
+    import starling.filters.ColorMatrixFilter;
+    import ui.UIContainer;
 
     public class SceneController extends Sprite {
         private static var _s:SceneController;
@@ -24,7 +23,7 @@ package {
         public var editorScene:EditorScene;
         public var endScene:EndScene;
         public var debug:Debug;
-        public var ui:UIContainer;
+        public var _ui:UIContainer;
 
         public var speedMult:Number;
 
@@ -37,7 +36,7 @@ package {
             editorScene = new EditorScene(this);
             endScene = new EndScene(this);
             debug = new Debug(this);
-            ui = new UIContainer(this);
+            _ui = new UIContainer(this);
             speedMult = 1;
             initTitleMenu(0);
             debug.init(gameScene, titleMenu);
@@ -46,14 +45,14 @@ package {
             addChild(replayScene);
             addChild(editorScene);
             addChild(endScene);
-            addChild(ui);
+            addChild(_ui);
             addChild(debug);
             Starling.current.nativeStage.addEventListener("keyDown", on_key_down);
             initBlackQuad();
 
-            ui.x = gameScene.x = ui.pivotX = gameScene.pivotX = 512;
-            ui.y = gameScene.y = ui.pivotY = gameScene.pivotY = 384;
-            gameScene.scaleX = gameScene.scaleY = ui.scale = 1;
+            _ui.x = gameScene.x = _ui.pivotX = gameScene.pivotX = 512;
+            _ui.y = gameScene.y = _ui.pivotY = gameScene.pivotY = 384;
+            gameScene.scaleX = gameScene.scaleY = _ui.scale = 1;
             for each (var popup:Popup in _alert)
                 addChild(popup)
         }
@@ -126,14 +125,14 @@ package {
         /**游玩关卡*/
         public function playMap(seed:uint = 0):void {
             speedMult = 1;
-            ui.initLevel(LevelData.level[Globals.level].gameScale);
+            _ui.initLevel(LevelData.level[Globals.level].gameScale);
             initGameScene(seed);
             debug.init_game();
         }
 
         public function replayMap(rep:ReplayData):void {
             speedMult = 1;
-            ui.initLevel();
+            _ui.initLevel();
             initReplayScene(rep);
             debug.init_game();
         }
@@ -141,7 +140,7 @@ package {
         /**编辑关卡*/
         public function editorMap():void {
             speedMult = 1;
-            ui.initEditor();
+            _ui.initEditor();
             editorScene.init();
         }
 
@@ -166,27 +165,27 @@ package {
                 case 0:
                     initTitleMenu();
                     titleMenu.animateIn();
-                    ui.deinitLevel();
+                    _ui.deinitLevel();
                     break;
                 case 1:
                     initTitleMenu();
                     titleMenu.animateIn();
                     titleMenu.nextLevel();
-                    ui.deinitLevel();
+                    _ui.deinitLevel();
                     break;
                 case 2:
                     initTitleMenu(1);
-                    ui.deinitLevel();
+                    _ui.deinitLevel();
                     // applyFilter();
                     break;
                 case 3:
                     initTitleMenu();
                     titleMenu.animateIn();
-                    ui.deinitEditor();
+                    _ui.deinitEditor();
                     break;
                 default:
                     initTitleMenu();
-                    ui.deinitLevel();
+                    _ui.deinitLevel();
                     break;
             }
         }

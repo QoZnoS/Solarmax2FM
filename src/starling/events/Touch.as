@@ -17,8 +17,7 @@ package starling.events
     import starling.display.DisplayObject;
     import starling.utils.MatrixUtil;
     import starling.utils.formatString;
-
-    import Entity.Node;
+    import core.entities.Node;
     
     use namespace starling_internal;
 

@@ -1,7 +1,8 @@
 package utils {
-    import starling.core.Starling;
     import starling.display.Image;
     import starling.display.Sprite;
+    import managers.Globals;
+    import starling.core.Starling;
 
     /**滚动背景 */
     public class ScrollingBackground extends Sprite {

@@ -1,5 +1,7 @@
 package utils {
 
+    import managers.Globals;
+
     public class ReplayData {
         public var seed:int;
         public var frame:int;
