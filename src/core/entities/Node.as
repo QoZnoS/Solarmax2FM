@@ -485,7 +485,7 @@ package core.entities {
             for each (var node:Node in nodeLinks[team]) {
                 if (node == this)
                     continue;
-                if (node.nodeData.team == 0 || Globals.teamGroups[node.nodeData.team] != group || node.predictedOppShipCount(team) > 0) {
+                if (Globals.teamGroups[node.nodeData.team] != group) {
                     dx = node.nodeData.x - this.nodeData.x;
                     dy = node.nodeData.y - this.nodeData.y;
                     distance = Math.sqrt(dx * dx + dy * dy) + rng.nextNumber() * 32;
