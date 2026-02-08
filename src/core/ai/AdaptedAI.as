@@ -269,6 +269,7 @@ package core.ai {
                 if (node.predictedOppShipCount(team) > 0 && node.predictedGroupStrength(team) > node.predictedOppStrength(team))
                     continue; // 条件：无敌方或打不过敌方
                 node.aiStrength = -node.teamStrength(team);
+                node.getOppLinks(team);
                 node.aiValue = -node.oppNodeLinks.length; // 按路径数计算价值
                 if (node.nodeData.type == NodeType.DIFFUSION && Globals.teamPops[team] < Globals.teamCaps[team] && node.teamShipCount(team) < (Globals.teamCaps[team] - Globals.teamPops[team]) / 3) {
                     dx = node.nodeData.x - centerX;
@@ -280,7 +281,7 @@ package core.ai {
                     dx = node.nodeData.x - centerX;
                     dy = node.nodeData.y - centerY;
                     distance = Math.sqrt(dx * dx + dy * dy) + rng.nextNumber() * 32;
-                    node.aiValue = -512 / distance * nodeArray.length; // 传送按距离计算价值
+                    node.aiValue = -512 / distance * node.oppNodeLinks.length; // 传送按距离计算价值
                 }
                 if (EntityContainer.inAttackNodeCheck(node, team, NodeType.PULSECANNON, true)) {
                     if (node.aiStrength > 0)

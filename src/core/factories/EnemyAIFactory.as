@@ -10,7 +10,9 @@ package core.factories {
         public static const SIMPLE:String = "SimpleAI";
         public static const SMART:String = "SmartAI";
         public static const ADAPTED:String = "AdaptedAI";
-        public static const IMPROVED:String = "ImprovedAI";
+        public static const RADICAL:String = "RadicalAI";
+        public static const BALANCED:String = "BalancedAI";
+        public static const CONSERVATIVE:String = "ConservativeAI";
         public static const DARK:String = "DarkAI";
         public static const FINAL:String = "FinalAI";
         public static const HARD:String = "HardAI";
@@ -26,7 +28,9 @@ package core.factories {
             registerAI(SIMPLE, SimpleAI);
             registerAI(SMART, SmartAI);
             registerAI(ADAPTED, AdaptedAI);
-            registerAI(IMPROVED, ImprovedAI);
+            registerAI(RADICAL, RadicalAI);
+            registerAI(BALANCED, BalancedAI);
+            registerAI(CONSERVATIVE, ConservativeAI);
             registerAI(DARK, DarkAI);
             registerAI(FINAL, FinalAI);
             registerAI(HARD, HardAI);
@@ -65,11 +69,13 @@ package core.factories {
         private static function getDefaultActionDelay(type:String):Number {
             switch (type) {
                 case SIMPLE:
+                case CONSERVATIVE:
                     return 3;
                 case SMART:
                 case ADAPTED:
+                case BALANCED:
                     return 1.5;
-                case IMPROVED:
+                case RADICAL:
                     return 0.75;
                 case HARD:
                     return 0;
@@ -85,11 +91,13 @@ package core.factories {
         private static function getDefaultStartDelay(type:String):Number {
             switch (type) {
                 case SIMPLE:
+                case CONSERVATIVE:
                     return 3;
                 case SMART:
                 case ADAPTED:
+                case BALANCED:
                     return 1.5;
-                case IMPROVED:
+                case RADICAL:
                     return 0.75;
                 case HARD:
                     return 1.5;
