@@ -17,8 +17,6 @@ package core.ai {
         override public function update(dt:Number):void {
             if (!updateTimer(dt))
                 return;
-            if (EntityContainer.game.winningGroup == group)
-                return;
             updateRadical()
         }
 
@@ -354,7 +352,7 @@ package core.ai {
                             trace("\"Try repositioning.\" team: " + team + " sender: " + senderNode.tag + " target: " + targetNode.tag + " but failed: THE_SAME_ONE_OR_BLOCKED");
                             continue; // 基本条件：出兵天体和目标天体不为同一个，且二者之间没有被拦截
                         }
-                        if (targetNode.aiValue >= senderNode.aiValue) {
+                        if (targetNode.aiValue > senderNode.aiValue) {
                             trace("\"Try repositioning.\" team: " + team + " sender: " + senderNode.tag + " target: " + targetNode.tag + " but failed: VALUELESS");
                             continue; // 条件：目标天体价值高于出兵天体价值
                         }
