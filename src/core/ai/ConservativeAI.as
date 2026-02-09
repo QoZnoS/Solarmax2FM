@@ -17,8 +17,6 @@ package core.ai {
         override public function update(dt:Number):void {
             if (!updateTimer(dt))
                 return;
-            if (EntityContainer.game.winningGroup == group)
-                return;
             updateConservative()
         }
 
