@@ -82,7 +82,7 @@ package core.node.attacks {
 
         private function updateArc(node:Node, dt:Number):void {
             var color:uint = Globals.teamColors[node.nodeData.team];
-            if (Globals.teamColorEnhance[node.nodeData.team])
+            if (Globals.teamColorEnhances[node.nodeData.team])
                 color = CalcTools.scaleColorToMax(color);
             var deepColor:Boolean = Globals.teamDeepColors[node.nodeData.team];
             var maxSize:Number = 2 * node.nodeData.size;

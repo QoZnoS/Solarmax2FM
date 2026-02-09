@@ -46,15 +46,15 @@ package scenes.menus {
         private var title:TitleMenu;
 
         public function SettingMenu(title:TitleMenu) {
-            this.title = title
-            init()
+            this.title = title;
+            init();
         }
 
         public function init():void {
             var i:int;
             var btn:OptionButton;
             // #region VIDEO
-            components = []
+            components = [];
             components.push(new TextField(200, 40, "VIDEO", "Downlink18", -1, COLOR));
             if (Globals.device == "PC")
                 components.push(new TextField(200, 40, "WINDOW MODE:", "Downlink12", -1, COLOR));
@@ -154,7 +154,7 @@ package scenes.menus {
             // #endregion
             // #region 添加实例化对象
             var y:Number = 100;
-            var lineHeight:Number = 540 / components.length * 2
+            var lineHeight:Number = 540 / components.length * 2;
             for (i = 0; i < components.length; i++) {
                 if (components[i] is TextField) {
                     addLabel(components[i], 100, y);
@@ -170,7 +170,7 @@ package scenes.menus {
                     this.addChild(components[i]);
                 }
             }
-            // #endregion        
+            // #endregion
             tooltip1 = new Tooltip(0);
             tooltip1.visible = false;
             tooltip1.x = controls[0].x;
@@ -204,7 +204,7 @@ package scenes.menus {
             resetBtn2.touchable = false;
             audioSlider.update();
             musicSlider.update();
-            this.visible = true
+            this.visible = true;
             Starling.juggler.removeTweens(this);
             Starling.juggler.tween(this, 0.15, {"alpha": 1});
             addEventListener("enterFrame", update);
@@ -221,7 +221,7 @@ package scenes.menus {
             this.visible = false;
         }
 
-        //#region 私有方法
+        // #region 私有方法
         private function addLabel(label:TextField, x:Number, y:Number, hAlign:String = "right"):void {
             label.hAlign = hAlign;
             label.vAlign = "top";
@@ -270,7 +270,7 @@ package scenes.menus {
 
         private function on_blackBorder(click:Event):void {
             blackBorders.indexOf(click.target) == 0 ? Globals.blackQuad = true : Globals.blackQuad = false;
-            title.scene.updateBlackQuad()
+            title.scene.updateBlackQuad();
         }
 
         private function on_pauseAllow(click:Event):void {
@@ -296,6 +296,6 @@ package scenes.menus {
             if (touch.phase == "hover")
                 tooltip2.visible = true;
         }
-        //#endregion
+        // #endregion
     }
 }

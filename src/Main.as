@@ -142,6 +142,7 @@
             NativeApplication.nativeApplication.addEventListener("activate", on_activate); // 监听程序得到焦点
             NativeApplication.nativeApplication.addEventListener("deactivate", on_deactivate); // 监听程序失去焦点
             stage.addEventListener("resize", on_resize); // 监听程序窗口缩放
+            on_resize(null); // 试图解决iOS设备上初始分辨率错误的问题
         }
 
         public function getPlatform():String {

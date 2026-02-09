@@ -1,6 +1,5 @@
 package scenes.menus {
-
-    public interface IMenu{
+    public interface IMenu {
         function init():void
         function deinit():void
         function animateIn():void

@@ -15,16 +15,18 @@ package scenes {
 
     import ui.components.MenuButton;
     import ui.components.OptionButton;
+    import scenes.menus.EmptyMenu;
+    import scenes.menus.TeamEditorMenu;
 
     public class StartMenu extends Sprite {
         public var title:TitleMenu; // 接入标题类
         private var menuBtn:MenuButton;
         private var menus:Vector.<IMenu>;
 
-        private const MAX_PAGE:int = 4;
+        private const MAX_PAGE:int = 8;
         private const COLOR:uint = 0xFF9DBB;
-        private const pageName:Array = ["SETTING", "MAPACKS", "STAFF", "REPLAY"]
-        private var pages:Array;
+        private const pageName:Array = ["SETTING", "MAPACKS", "STAFF", "REPLAY", "", "", "", ""];
+        public var pages:Array;
 
         public function StartMenu(titleMenu:TitleMenu) {
             super();
@@ -32,22 +34,28 @@ package scenes {
             var bg:Quad = new Quad(1024, 768, 0);
             bg.alpha = 0.65;
             addChild(bg);
-            menus = new Vector.<IMenu>(MAX_PAGE, true)
+            menus = new Vector.<IMenu>(MAX_PAGE, true);
             menus[0] = new SettingMenu(title);
             menus[1] = new MapackMenu(title);
             menus[2] = new StaffMenu(title);
             menus[3] = new ReplayMenu(title);
+            menus[4] = new EmptyMenu();
+            menus[5] = new EmptyMenu();
+            menus[6] = new EmptyMenu();
+            menus[7] = new TeamEditorMenu();
             for (var i:int = 0; i < MAX_PAGE; i++) {
                 menus[i].x = menus[i].pivotX = 512;
                 menus[i].y = menus[i].pivotY = 384;
                 if (i == 1 || i == 0)
                     menus[i].x += 72;
                 addChild(menus[i] as Sprite);
-                menus[i].animateOut()
+                menus[i].animateOut();
             }
-            pages = []
+            pages = [];
             for (i = 0; i < MAX_PAGE; i++) {
                 pages.push(new OptionButton(pageName[i], COLOR, pages));
+                if (pageName[i] == "")
+                    continue;
                 pages[i].x = 15;
                 pages[i].y = 160 + i * 48;
                 pages[i].label.fontName = "Downlink18";
@@ -56,10 +64,10 @@ package scenes {
                 pages[i].quad.height = 48;
                 pages[i].label.x += 4;
                 pages[i].label.y += 4;
-                pages[i].addEventListener("clicked", on_page)
-                addChild(pages[i])
+                pages[i].addEventListener("clicked", on_page);
+                addChild(pages[i]);
             }
-            pages[0].toggle()
+            pages[0].toggle();
             menuBtn = new MenuButton("btn_menu");
             menuBtn.x = 15 + Globals.margin;
             menuBtn.y = 124;
@@ -74,7 +82,7 @@ package scenes {
             this.visible = true;
             for (var i:int = 0; i < MAX_PAGE; i++)
                 if (pages[i].toggled && !menus[i].visible)
-                    menus[i].animateIn()
+                    menus[i].animateIn();
             Starling.juggler.removeTweens(this);
             Starling.juggler.tween(this, 0.15, {"alpha": 1});
             Globals.textSize == 2 ? menuBtn.setImage("btn_menu2x", 0.75) : menuBtn.setImage("btn_menu");
@@ -83,7 +91,7 @@ package scenes {
         public function animateOut():void {
             for (var i:int = 0; i < MAX_PAGE; i++)
                 if (pages[i].toggled && menus[i].visible)
-                    menus[i].animateOut()
+                    menus[i].animateOut();
             Starling.juggler.removeTweens(this);
             Starling.juggler.tween(this, 0.15, {"alpha": 0,
                     "onComplete": hide});
@@ -101,9 +109,9 @@ package scenes {
         public function on_page(click:Event):void {
             for (var i:int = 0; i < MAX_PAGE; i++) {
                 if (pages[i].toggled && !menus[i].visible)
-                    menus[i].animateIn()
+                    menus[i].animateIn();
                 if (!pages[i].toggled && menus[i].visible)
-                    menus[i].animateOut()
+                    menus[i].animateOut();
             }
         }
     }

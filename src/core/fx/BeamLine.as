@@ -48,7 +48,7 @@ package core.fx {
             this.distance = Math.sqrt(dx * dx + dy * dy);
             this.angle = Math.atan2(dy, dx);
             this.color = Globals.teamColors[team];
-            if (Globals.teamColorEnhance[team])
+            if (Globals.teamColorEnhances[team])
                 this.color = CalcTools.scaleColorToMax(this.color);
             this.deepColor = Globals.teamDeepColors[team];
             this.foreground = true;

@@ -47,7 +47,7 @@ package core.game.events {
             var angleStep:Number = Math.PI * 2 / 3;
             var maxSize:Number = 2;
             var color:uint = Globals.teamColors[triggerNodeData.team];
-            if (Globals.teamColorEnhance[triggerNodeData.team])
+            if (Globals.teamColorEnhances[triggerNodeData.team])
                 color = CalcTools.scaleColorToMax(color);
             var deepColor:Boolean = Globals.teamDeepColors[triggerNodeData.team];
             switch (state) {

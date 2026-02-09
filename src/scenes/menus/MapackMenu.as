@@ -68,7 +68,7 @@ package scenes.menus {
         }
 
         public function animateIn():void {
-            this.visible = true
+            this.visible = true;
             Starling.juggler.removeTweens(this);
             Starling.juggler.tween(this, 0.15, {"alpha": 1});
         }
@@ -139,7 +139,7 @@ package scenes.menus {
             mapacks[Globals.currentData].toggle();
             if (mapacks.length <= 4) {
                 components[2].visible = components[3].visible = false;
-                return
+                return;
             }
             mapPage == 0 ? components[2].visible = false : components[2].visible = true;
             mapPage == Math.floor(mapacks.length / 4) ? components[3].visible = false : components[3].visible = true;
@@ -164,13 +164,13 @@ package scenes.menus {
         private function on_prev(click:Event):void {
             if (mapPage > 0)
                 mapPage--;
-            on_refresh()
+            on_refresh();
         }
 
         private function on_next(click:Event):void {
             if (mapPage < mapacks.length - 1)
                 mapPage++;
-            on_refresh()
+            on_refresh();
         }
     }
 }

@@ -93,7 +93,7 @@ package managers {
                 if ("deepColor" in teamData)
                     Globals.teamDeepColors[i] = teamData.deepColor;
                 if ("colorEnhance" in teamData)
-                    Globals.teamColorEnhance[i] = teamData.colorEnhance;
+                    Globals.teamColorEnhances[i] = teamData.colorEnhance;
                 if ("shipSpeed" in teamData)
                     Globals.teamShipSpeeds[i] = teamData.shipSpeed;
                 if ("shipAttack" in teamData)

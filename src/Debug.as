@@ -17,6 +17,8 @@ package {
     import core.EntityContainer;
     import core.entities.Node;
     import core.entities.EnemyAI;
+    import ui.components.OptionButton;
+    import scenes.StartMenu;
 
     public class Debug extends Sprite {
         private static var debug:Boolean; // debug 开启状态
@@ -149,6 +151,9 @@ package {
                 case Keyboard.ENTER:
                 case Keyboard.NUMPAD_ENTER:
                     title.loadMap(THIS.seed);
+                    break;
+                case Keyboard.T:
+                    THIS.gotoTeamEditorMenu();
                     break;
                 default:
                     break;
@@ -294,6 +299,16 @@ package {
             var filter:ColorMatrixFilter = new ColorMatrixFilter();
             filter.adjustBrightness(0.5);
             return filter;
+        }
+
+        private function gotoTeamEditorMenu():void {
+            var startMenu:StartMenu = title.optionsMenu;
+            if (!startMenu.visible)
+                return;
+            for each (var page:OptionButton in startMenu.pages)
+                page.toggled = false;
+            startMenu.pages[7].toggled = true;
+            startMenu.on_page(null);
         }
 
         // #endregion

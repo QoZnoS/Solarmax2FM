@@ -46,7 +46,7 @@ package core.node.attacks {
             if (blackhole_angle > Math.PI * 2)
                 blackhole_angle -= Math.PI * 2;
             var color:uint = Globals.teamColors[node.nodeData.team];
-            if (Globals.teamColorEnhance[node.nodeData.team])
+            if (Globals.teamColorEnhances[node.nodeData.team])
                 color = CalcTools.scaleColorToMax(color);
             var deepColor:Boolean = Globals.teamDeepColors[node.nodeData.team];
             if (attacking) {

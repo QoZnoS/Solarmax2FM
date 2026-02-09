@@ -70,7 +70,7 @@ package core.node {
                 return;
             node.moveState.glow.visible = true;
             node.moveState.glow.color = Globals.teamColors[team]; // 设定光效颜色
-            if (Globals.teamColorEnhance[team])
+            if (Globals.teamColorEnhances[team])
                 node.moveState.glow.color = CalcTools.scaleColorToMax(Globals.teamColors[team]);
             LayerFactory.call(LayerFactory.ADD_GROW)(node.moveState.glow, Globals.teamDeepColors[team]);
             FXHandler.addPulse(node, Globals.teamColors[team], NodePulse.TYPE_GROW, Globals.teamDeepColors[team]);

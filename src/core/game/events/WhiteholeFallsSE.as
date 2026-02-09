@@ -56,7 +56,7 @@ package core.game.events {
             var angleStep:Number = Math.PI * 2 / 3;
             var maxSize:Number = 1;
             var color:uint = Globals.teamColors[targetTeam];
-            if (Globals.teamColorEnhance[targetTeam])
+            if (Globals.teamColorEnhances[targetTeam])
                 color = CalcTools.scaleColorToMax(color);
             var deepColor:Boolean = Globals.teamDeepColors[targetTeam];
             switch (state) {
@@ -160,7 +160,7 @@ package core.game.events {
             var y:Number = NaN;
             var distance:Number = NaN;
             var ship:Ship = null;
-            whiteHole.color = Globals.teamColorEnhance[targetTeam] ? CalcTools.scaleColorToMax(Globals.teamColors[targetTeam]) : Globals.teamColors[targetTeam];
+            whiteHole.color = Globals.teamColorEnhances[targetTeam] ? CalcTools.scaleColorToMax(Globals.teamColors[targetTeam]) : Globals.teamColors[targetTeam];
             Globals.teamDeepColors[targetTeam] ? whiteHole.blendMode = "normal" : whiteHole.blendMode = "add";
             if (!checkWhiteHoleEnd())
                 whiteHole.scaleY = whiteHole.scaleX += dt;

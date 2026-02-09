@@ -123,7 +123,7 @@ package core.node.states {
                     glow.alpha = 1;
                     glowing = false;
                     image.color = halo.color = glow.color = Globals.teamColors[nodeData.team];
-                    if (Globals.teamColorEnhance[nodeData.team])
+                    if (Globals.teamColorEnhances[nodeData.team])
                         halo.color = glow.color = CalcTools.scaleColorToMax(Globals.teamColors[nodeData.team]);
                     LayerFactory.call(LayerFactory.ADD_GROW)(halo, Globals.teamDeepColors[nodeData.team]);
                 }

@@ -12,7 +12,7 @@ package scenes.menus {
     import ui.components.OptionButton;
 
     public class StaffMenu extends Sprite implements IMenu {
-        private const staffString:Array = [["ORIGINAL", "Downlink18"], ["DESIGN, ART, CODE:", "Downlink12"], ["NICO TUASON", "Downlink12"], ["MUSIC:", "Downlink12"], ["JOHN CAMARA", "Downlink12"], ["PLAYTESTING:", "Downlink12"], ["TERRY TUASON", "Downlink12"], ["MODIFIED", "Downlink18"], ["CODE:", "Downlink12"], ["QoZnoS", "Downlink12"], ["SPECIAL THANKS:", "Downlink18"], ["Solarmax23333", "Downlink12"], ["supercluster", "Downlink12"], ["Solarmax33", "Downlink12"], ["Thirdsister", "Downlink12"], ["Tuetiedove", "Downlink12"], ["LinZhong", "Downlink12"]]
+        private const staffString:Array = [["ORIGINAL", "Downlink18"], ["DESIGN, ART, CODE:", "Downlink12"], ["NICO TUASON", "Downlink12"], ["MUSIC:", "Downlink12"], ["JOHN CAMARA", "Downlink12"], ["PLAYTESTING:", "Downlink12"], ["TERRY TUASON", "Downlink12"], ["MODIFIED", "Downlink18"], ["CODE:", "Downlink12"], ["QoZnoS", "Downlink12"], ["SPECIAL THANKS:", "Downlink18"], ["Solarmax23333", "Downlink12"], ["supercluster", "Downlink12"], ["Solarmax33", "Downlink12"], ["Thirdsister", "Downlink12"], ["Tuetiedove", "Downlink12"], ["LinZhong", "Downlink12"]];
         private const COLOR:uint = 0xFF9DBB;
         private const lineHeight:Number = 36;
 
@@ -49,12 +49,13 @@ package scenes.menus {
                 }
                 components[i].y = y;
                 if (components[i].text == "NICO TUASON") {
-                    nicobtn = new OptionButton("NICO TUASON", COLOR, null)
-                    nicobtn.x = components[i].x
-                    nicobtn.y = components[i].y
-                    components[i].visible = false
-                    nicobtn.addEventListener("clicked", invisibleMode)
-                    this.addChild(nicobtn)
+                    nicobtn = new OptionButton("NICO TUASON", COLOR, null);
+                    nicobtn.x = components[i].x;
+                    nicobtn.y = components[i].y;
+                    components[i].visible = false;
+                    nicobtn.addEventListener("clicked", invisibleMode);
+                    this.addChild(nicobtn);
+
                 }
             }
         }
@@ -64,7 +65,8 @@ package scenes.menus {
         }
 
         public function animateIn():void {
-            this.visible = true
+            this.visible = true;
+
             Starling.juggler.removeTweens(this);
             Starling.juggler.tween(this, 0.15, {"alpha": 1});
         }
@@ -87,14 +89,15 @@ package scenes.menus {
             this.addChild(label);
         }
 
-        private var nicoClickTime:int = 0
+        private var nicoClickTime:int = 0;
 
         private function invisibleMode(click:Event):void {
             if (title.currentIndex == 0)
                 return;
             nicoClickTime += 1;
-            nicobtn.label.color = uint(Math.random() * uint.MAX_VALUE)
-            AudioManager.playClick()
+            nicobtn.label.color = uint(Math.random() * uint.MAX_VALUE);
+            AudioManager.playClick();
+
             if (nicoClickTime == 5) {
                 nicoClickTime = 0;
                 nicobtn.label.color = COLOR;

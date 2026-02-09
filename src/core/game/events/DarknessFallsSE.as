@@ -57,7 +57,7 @@ package core.game.events {
             var angleStep:Number = Math.PI * 2 / 3;
             var maxSize:Number = 1;
             var color:uint = Globals.teamColors[targetTeam];
-            if (Globals.teamColorEnhance[targetTeam])
+            if (Globals.teamColorEnhances[targetTeam])
                 color = CalcTools.scaleColorToMax(color);
             var deepColor:Boolean = Globals.teamDeepColors[targetTeam];
             switch (state) {
@@ -154,7 +154,7 @@ package core.game.events {
             var y:Number = NaN;
             var distance:Number = NaN;
             var ship:Ship = null;
-            darkPulse.color = Globals.teamColorEnhance[targetTeam] ? CalcTools.scaleColorToMax(Globals.teamColors[targetTeam]) : Globals.teamColors[targetTeam];
+            darkPulse.color = Globals.teamColorEnhances[targetTeam] ? CalcTools.scaleColorToMax(Globals.teamColors[targetTeam]) : Globals.teamColors[targetTeam];
             Globals.teamDeepColors[targetTeam] ? darkPulse.blendMode = "normal" : darkPulse.blendMode = "add";
             darkPulse.scaleY = darkPulse.scaleX += dt * 0.5;
             if (chackDarkPulseEnd())

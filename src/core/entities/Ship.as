@@ -75,7 +75,7 @@ package core.entities {
             node.ships[team].push(this);
             image.alpha = 1;
             image.color = Globals.teamColors[team];
-            if (Globals.teamColorEnhance[team])
+            if (Globals.teamColorEnhances[team])
                 image.color = CalcTools.scaleColorToMax(image.color);
             image.scaleX = image.scaleY = 1;
             trail.alpha = 0;

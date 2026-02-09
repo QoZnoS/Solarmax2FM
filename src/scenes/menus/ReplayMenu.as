@@ -28,7 +28,7 @@ package scenes.menus {
 
         public function ReplayMenu(title:TitleMenu) {
             this.title = title;
-            init()
+            init();
         }
 
         public function init():void {
@@ -54,7 +54,7 @@ package scenes.menus {
         }
 
         public function animateIn():void {
-            this.visible = true
+            this.visible = true;
             Starling.juggler.removeTweens(this);
             Starling.juggler.tween(this, 0.15, {"alpha": 1});
             addEventListener("enterFrame", update);
@@ -70,6 +70,7 @@ package scenes.menus {
 
         private var repList:Vector.<ReplayData>;
         private var repFileNames:Vector.<String>;
+
         /** 回放按钮， 关卡， 总时长， 文件名 */
         private var components:Array;
         private var restartTime:Vector.<Number>;
@@ -139,7 +140,7 @@ package scenes.menus {
         private function resetRepList():void {
             for each (var repBtn:OptionButton in components)
                 removeChild(repBtn);
-            components = []
+            components = [];
             repList = new Vector.<ReplayData>;
             repFileNames = new Vector.<String>;
             restartTime = new Vector.<Number>;
@@ -156,7 +157,7 @@ package scenes.menus {
                     restartTime[i] += dt;
                 else
                     restartTime[i] -= dt;
-                restartTime[i] = Math.max(0, Math.min(1, restartTime[i]))
+                restartTime[i] = Math.max(0, Math.min(1, restartTime[i]));
                 restartHint[i].scaleX = Math.max(0, (restartTime[i] - 0.3) * 10 / 7);
                 if (restartTime[i] == 1) {
                     if (Globals.currentDifficulty != Globals.replay.difficulty) {
@@ -220,7 +221,7 @@ package scenes.menus {
         private function open_folder():void {
             var file:File = File.desktopDirectory;
             try {
-                file.browseForDirectory("选择路径")
+                file.browseForDirectory("选择路径");
             } catch (error:Error) {
                 file.requestPermission();
             }

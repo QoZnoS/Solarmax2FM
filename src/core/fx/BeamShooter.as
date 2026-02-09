@@ -41,7 +41,7 @@ package core.fx {
             p.x = x;
             p.y = y;
             this.color = Globals.teamColors[node.nodeData.team];
-            if (Globals.teamColorEnhance[node.nodeData.team])
+            if (Globals.teamColorEnhances[node.nodeData.team])
                 this.color = CalcTools.scaleColorToMax(this.color);
             this.deepColor = Globals.teamDeepColors[node.nodeData.team];
             this.foreground = true;
