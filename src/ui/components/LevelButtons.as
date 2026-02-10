@@ -60,8 +60,8 @@ package ui.components {
             }
             removeChildren(1);
             var levelData:Array = LevelData.level;
-            var filter:ColorMatrixFilter = new ColorMatrixFilter();
-            filter.adjustContrast(0.6); // 通过提高对比度来变相提高亮度
+            // var filter:ColorMatrixFilter = new ColorMatrixFilter();
+            // filter.adjustContrast(0.6); // 通过提高对比度来变相提高亮度
             for (i = 0; i < levelData.length; i++) {
                 var textVector:Vector.<TextField> = new Vector.<TextField>;
                 var levelText:String = levelData[i].name ? levelData[i].name : ((i + 1 < 10) ? ("0" + (i + 1).toString()) : (i + 1).toString());
@@ -74,7 +74,7 @@ package ui.components {
                 levelBtn.x = levelBtn2.x = (i + 1) * 120;
                 levelBtn.blendMode = "add";
                 levelBtn2.blendMode = "normal";
-                levelBtn.filter = levelBtn2.filter = filter;
+                // levelBtn.filter = levelBtn2.filter = filter;
                 addChild(levelBtn2);
                 addChild(levelBtn);
                 textVector.push(levelBtn);

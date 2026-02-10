@@ -54,8 +54,8 @@ package {
                             Drawer.init();
                             LevelData.init();
                             bg = new ScrollingBackground();
-                            addChild(bg);
                             scene = new SceneController()
+                            scene.addChildAt(bg, 0);
                             addChild(scene);
                             AudioManager.init();
                             ParticleSystem.init();

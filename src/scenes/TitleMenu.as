@@ -31,6 +31,7 @@ package scenes {
 
     public class TitleMenu extends Sprite {
         public var cover:Quad; // 进入游戏和通关36时的白光遮罩
+        public var titleBox:Sprite; // 根图层
         public var title:Image; // Solarmax2 标题
         public var title_blur:Image; // Solarmax2 标题模糊光圈
         public var credits:Array; // 显示作者信息
@@ -73,6 +74,8 @@ package scenes {
             dragging = false;
             hoverIndex = -1;
             super();
+            titleBox = new Sprite();
+            addChild(titleBox);
             quad = new Quad(2, 2, 16777215);
             quadImage = new Image(Root.assets.getTexture("quad8x4"));
             quadImage.adjustVertices();
@@ -80,9 +83,9 @@ package scenes {
             previewBox = new Sprite();
             previewLayer = new Sprite();
             uiLayer = new Sprite();
-            addChild(previewBox);
+            titleBox.addChild(previewBox);
             previewBox.addChild(previewLayer);
-            addChild(uiLayer);
+            titleBox.addChild(uiLayer);
             // 障碍线预览
             bQuad = new Quad(160, 6, 16733525);
             bQuad.pivotX = 80;
@@ -97,7 +100,7 @@ package scenes {
             title.color = 16755370;
             title.alpha = 0.5;
             title.blendMode = "add";
-            addChild(title);
+            titleBox.addChild(title);
             title_blur = new Image(Root.assets.getTexture("title_logo_blur"));
             title_blur.pivotX = title.width * 0.5;
             title_blur.pivotY = title.height * 0.5;
@@ -106,7 +109,7 @@ package scenes {
             title_blur.color = 16755370;
             title_blur.alpha = 0.3;
             title_blur.blendMode = "add";
-            addChild(title_blur);
+            titleBox.addChild(title_blur);
             credits = [];
             credits.push(new TextField(600, 40, "CREATED BY NICO TUASON", "Downlink12", -1, 16755370));
             credits.push(new TextField(600, 40, "MODIFIED BY QoZnoS", "Downlink12", -1, 16755370));
@@ -122,7 +125,7 @@ package scenes {
             levels = new LevelButtons();
             levels.x = title.x;
             levels.y = title.y + 200;
-            addChild(levels);
+            titleBox.addChild(levels);
             preview = new QuadBatch();
             preview.blendMode = "add";
             preview.alpha = 0.4;
@@ -148,14 +151,14 @@ package scenes {
             selector.y = levels.y - 1;
             selector.blendMode = "add";
             selector.alpha = 0;
-            addChild(selector);
+            titleBox.addChild(selector);
             cover = new Quad(1024, 768, 16777215);
             cover.blendMode = "add";
             cover.touchable = false;
-            addChild(cover);
+            titleBox.addChild(cover);
             touchQuad = new Quad(1024, 768, 16711680);
             touchQuad.alpha = 0;
-            addChild(touchQuad);
+            titleBox.addChild(touchQuad);
             difficultyHolder = new Sprite();
             difficultyButtons = [];
             var dBtn:DifficultyButton = null;
@@ -167,7 +170,7 @@ package scenes {
             }
             difficultyHolder.x = 412;
             difficultyHolder.y = 150;
-            addChild(difficultyHolder);
+            titleBox.addChild(difficultyHolder);
             starLabel = new TextField(120, 40, "0", "Downlink22", -1, 16755370);
             starLabel.hAlign = "right";
             starLabel.pivotX = 120;
@@ -176,7 +179,7 @@ package scenes {
             starLabel.x = 974 - Globals.margin;
             starLabel.blendMode = "add";
             starLabel.alpha = 0.5;
-            addChild(starLabel);
+            titleBox.addChild(starLabel);
             starIcon = new Image(Root.assets.getTexture("star"));
             starIcon.pivotX = starIcon.width * 0.5;
             starIcon.pivotY = starIcon.height * 0.5;
@@ -184,18 +187,18 @@ package scenes {
             starIcon.x = 994 - Globals.margin;
             starIcon.alpha = 0.4;
             starIcon.blendMode = "add";
-            addChild(starIcon);
+            titleBox.addChild(starIcon);
             menuBtn = new MenuButton("btn_menu");
             menuBtn.x = 15 + Globals.margin;
             menuBtn.y = 124;
             menuBtn.blendMode = "add";
-            addChild(menuBtn);
+            titleBox.addChild(menuBtn);
             editorBtn = new MenuButton("btn_close");
             editorBtn.x = menuBtn.width + 15 + Globals.margin * 2;
             editorBtn.y = 120;
             editorBtn.blendMode = "add";
             editorBtn.rotation = Math.PI / 4;
-            addChild(editorBtn);
+            titleBox.addChild(editorBtn);
             optionsMenu = new StartMenu(this);
             addChild(optionsMenu);
             optionsMenu.visible = false;

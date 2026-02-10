@@ -17,6 +17,7 @@ package scenes {
     import ui.components.OptionButton;
     import scenes.menus.EmptyMenu;
     import scenes.menus.TeamEditorMenu;
+    import starling.filters.BlurFilter;
 
     public class StartMenu extends Sprite {
         public var title:TitleMenu; // 接入标题类
@@ -32,7 +33,7 @@ package scenes {
             super();
             this.title = titleMenu;
             var bg:Quad = new Quad(1024, 768, 0);
-            bg.alpha = 0.65;
+            bg.alpha = 0.5;
             addChild(bg);
             menus = new Vector.<IMenu>(MAX_PAGE, true);
             menus[0] = new SettingMenu(title);
@@ -80,21 +81,29 @@ package scenes {
         public function animateIn():void {
             this.alpha = 0;
             this.visible = true;
+            menuBtn.touchable = true;
             for (var i:int = 0; i < MAX_PAGE; i++)
                 if (pages[i].toggled && !menus[i].visible)
                     menus[i].animateIn();
             Starling.juggler.removeTweens(this);
             Starling.juggler.tween(this, 0.15, {"alpha": 1});
             Globals.textSize == 2 ? menuBtn.setImage("btn_menu2x", 0.75) : menuBtn.setImage("btn_menu");
+            title.titleBox.filter = new BlurFilter();
+            title.scene.getChildAt(0).filter = new BlurFilter();
         }
 
         public function animateOut():void {
+            menuBtn.touchable = false;
             for (var i:int = 0; i < MAX_PAGE; i++)
                 if (pages[i].toggled && menus[i].visible)
                     menus[i].animateOut();
             Starling.juggler.removeTweens(this);
             Starling.juggler.tween(this, 0.15, {"alpha": 0,
                     "onComplete": hide});
+            title.titleBox.filter.dispose();
+            title.titleBox.filter = null;
+            title.scene.getChildAt(0).filter.dispose();
+            title.scene.getChildAt(0).filter = null;
         }
 
         public function hide():void {
