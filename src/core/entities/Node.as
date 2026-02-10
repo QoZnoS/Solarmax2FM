@@ -14,6 +14,7 @@ package core.entities {
     import starling.text.TextField;
 
     import utils.Rng;
+    import flash.globalization.NumberFormatter;
 
     public class Node extends GameEntity {
         // #region 类变量
@@ -529,53 +530,54 @@ package core.entities {
             return maxShips;
         }
 
-        // 返回指定势力的飞船数
-        public function hard_teamStrength(team:int):int {
-            var strength:int = 0;
+        // 返回指定势力的强度
+        public function hard_teamStrength(team:int):Number {
+            var strength:Number = 0;
             for each (var ship:Ship in ships[team])
                 if (ship.state == 0)
-                    strength++;
+                    strength += Math.sqrt(Globals.teamShipAttacks[team] * Globals.teamShipDefences[team]);
             return strength;
         }
 
         // 返回己方综合强度
-        public function hard_AllStrength(team:int):int {
+        public function hard_AllStrength(team:int):Number {
             var group:int = Globals.teamGroups[team];
-            var strength:int = 0;
+            var strength:Number = 0;
             for each (var ship:Ship in EntityContainer.ships_entity)
                 if (ship.node == this && Globals.teamGroups[ship.team] == group)
-                    strength++;
+                    strength += Math.sqrt(Globals.teamShipAttacks[ship.team] * Globals.teamShipDefences[ship.team]);
             return strength;
         }
         private var TEMP_INT:Vector.<int> = new Vector.<int>();
 
         // 返回敌方综合强度
-        public function hard_oppAllStrength(team:int):int {
+        public function hard_oppAllStrength(team:int):Number {
             if (nodeData.hard_oppAllStrengthCache[team] != -1)
                 return nodeData.hard_oppAllStrengthCache[team];
             var group:int = Globals.teamGroups[team];
-            var maxShips:int = 0;
+            var maxStrength:Number = 0;
             var teamGroups:Array = Globals.teamGroups;
             var globalShips:Vector.<GameEntity> = EntityContainer.ships_entity;
             var globalShipsLength:int = globalShips.length;
-            var groupShipCounts:Vector.<int> = TEMP_INT;
-            groupShipCounts.length = Globals.teamCount;
+            var groupStrengths:Vector.<int> = TEMP_INT;
+            groupStrengths.length = Globals.teamCount;
             for (var i:int = 0; i < Globals.teamCount; i++)
-                groupShipCounts[i] = 0;
+                groupStrengths[i] = 0;
             for (i = 0; i < globalShipsLength; i++) {
                 var ship:Ship = globalShips[i] as Ship;
                 if (ship.node != this)
                     continue;
                 var shipGroup:int = teamGroups[ship.team];
+                var teamStrength:Number = Math.sqrt(Globals.teamShipAttacks[ship.team] * Globals.teamShipDefences[ship.team]);
                 if (shipGroup == group)
                     continue;
-                var newCount:int = groupShipCounts[shipGroup] + 1;
-                groupShipCounts[shipGroup] = newCount;
-                if (newCount > maxShips)
-                    maxShips = newCount;
+                var newStrength:Number = groupStrengths[shipGroup] + teamStrength;
+                groupStrengths[shipGroup] = newStrength;
+                if (newStrength > maxStrength)
+                    maxStrength = newStrength;
             }
-            nodeData.hard_oppAllStrengthCache[team] = maxShips;
-            return maxShips;
+            nodeData.hard_oppAllStrengthCache[team] = maxStrength;
+            return maxStrength;
         }
 
         // 检查撤退时机是否合理
