@@ -14,8 +14,7 @@ package core.entities {
     import starling.text.TextField;
 
     import utils.Rng;
-    import flash.globalization.NumberFormatter;
-
+    
     public class Node extends GameEntity {
         // #region 类变量
         // 基本变量
