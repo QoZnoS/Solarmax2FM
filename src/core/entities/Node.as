@@ -14,7 +14,7 @@ package core.entities {
     import starling.text.TextField;
 
     import utils.Rng;
-    
+
     public class Node extends GameEntity {
         // #region 类变量
         // 基本变量
@@ -532,9 +532,10 @@ package core.entities {
         // 返回指定势力的强度
         public function hard_teamStrength(team:int):Number {
             var strength:Number = 0;
+            var step:Number = Math.sqrt(Globals.teamShipAttacks[team] * Globals.teamShipDefences[team])
             for each (var ship:Ship in ships[team])
                 if (ship.state == 0)
-                    strength += Math.sqrt(Globals.teamShipAttacks[team] * Globals.teamShipDefences[team]);
+                    strength += step;
             return strength;
         }
 
