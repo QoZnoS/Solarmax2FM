@@ -326,7 +326,7 @@ package core.entities {
                 var oppGroup:Number = Globals.teamGroups[i];
                 if (oppGroup == group)
                     continue;
-                groupStrengths[oppGroup] += ships[i].length * Globals.teamShipAttacks[i] * Globals.teamShipDefences[i];
+                groupStrengths[oppGroup] += ships[i].length * Math.sqrt(Globals.teamShipAttacks[i] * Globals.teamShipDefences[i]);
             }
             for each (i in groupStrengths)
                 strength = Math.max(i, strength);
@@ -378,7 +378,7 @@ package core.entities {
                 var oppGroup:int = Globals.teamGroups[i];
                 if (oppGroup == group)
                     continue;
-                var addStrength:Number = Number(ships[i].length + transitShips[i]) * Globals.teamShipAttacks[i] * Globals.teamShipDefences[i];
+                var addStrength:Number = Number(ships[i].length + transitShips[i]) * Math.sqrt(Globals.teamShipAttacks[i] * Globals.teamShipDefences[i]);
                 if (buildState.buildRate > 0 && (Globals.teamGroups[nodeData.team] == Globals.teamGroups[i]))
                     addStrength *= 1.25;
                 groupStrengths[oppGroup] += addStrength;
@@ -395,7 +395,7 @@ package core.entities {
 
         // 返回该势力飞船数（考虑属性）
         public function teamStrength(team:int):int {
-            return Number(ships[team].length) * Globals.teamShipAttacks[team] * Globals.teamShipDefences[team];
+            return Number(ships[team].length) * Math.sqrt(Globals.teamShipAttacks[team] * Globals.teamShipDefences[team]);
         }
 
         // 返回该队伍飞船数（无属性差分）
@@ -414,7 +414,7 @@ package core.entities {
             var group:int = Globals.teamGroups[team];
             for (var i:int = 0; i < ships.length; i++)
                 if (Globals.teamGroups[i] == group)
-                    strength += Number(ships[i].length) * Globals.teamShipAttacks[i] * Globals.teamShipDefences[i];
+                    strength += Number(ships[i].length) * Math.sqrt(Globals.teamShipAttacks[i] * Globals.teamShipDefences[i]);
             return strength;
         }
 
@@ -430,7 +430,7 @@ package core.entities {
         // 预测该势力可能的强度（考虑属性）
         public function predictedTeamStrength(team:int):int {
             var group:int = Globals.teamGroups[team];
-            var strength:Number = Number(ships[team].length + transitGroupShips[group]) * Globals.teamShipAttacks[team] * Globals.teamShipDefences[team];
+            var strength:Number = Number(ships[team].length + transitGroupShips[group]) * Math.sqrt(Globals.teamShipAttacks[team] * Globals.teamShipDefences[team]);
             if (buildState.buildRate > 0 && team == nodeData.team)
                 strength *= 1.25;
             return strength;
@@ -454,7 +454,7 @@ package core.entities {
             var group:int = Globals.teamGroups[team];
             for (var i:int = 0; i < ships.length; i++)
                 if (Globals.teamGroups[i] == group)
-                    strength += Number(ships[i].length + transitShips[i]) * Globals.teamShipAttacks[i] * Globals.teamShipDefences[i];
+                    strength += Number(ships[i].length + transitShips[i]) * Math.sqrt(Globals.teamShipAttacks[i] * Globals.teamShipDefences[i]);
             if (buildState.buildRate > 0 && group == Globals.teamGroups[nodeData.team])
                 strength *= 1.25;
             return strength;
