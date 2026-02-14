@@ -20,8 +20,8 @@ package managers {
         private static var musicPaused:Boolean = false;
 
         public static function init():void {
-            st = new SoundTransform(Globals.soundVolume);
-            mt = new SoundTransform(Globals.musicVolume);
+            st = new SoundTransform(SaveManager.soundVolume);
+            mt = new SoundTransform(SaveManager.musicVolume);
         }
 
         public static function update(dt:Number):void {
@@ -34,8 +34,8 @@ package managers {
         }
 
         public static function updateTransforms():void {
-            st.volume = Globals.soundVolume;
-            mt.volume = Globals.musicVolume;
+            st.volume = SaveManager.soundVolume;
+            mt.volume = SaveManager.musicVolume;
             if (musicChannel)
                 musicChannel.soundTransform = mt;
         }
@@ -50,7 +50,7 @@ package managers {
             if (name != lastSong) {
                 if (musicChannel) {
                     prevChannel = musicChannel;
-                    transform = new SoundTransform(Globals.musicVolume, 0);
+                    transform = new SoundTransform(SaveManager.musicVolume, 0);
                     Starling.juggler.tween(transform, 1, {"volume": 0,
                             "onUpdate": function():void
                             {
@@ -63,7 +63,7 @@ package managers {
                 transform2 = new SoundTransform(0, 0);
                 musicChannel = Root.assets.playSound(name, 0, loopVal, transform2);
                 if (musicChannel) {
-                    Starling.juggler.tween(transform2, 0.5, {"volume": Globals.musicVolume,
+                    Starling.juggler.tween(transform2, 0.5, {"volume": SaveManager.musicVolume,
                             "onUpdate": function():void
                             {
                                 if (musicChannel)
@@ -74,7 +74,7 @@ package managers {
                 lastSong = name;
                 transform2 = new SoundTransform(0, 0);
                 musicChannel = Root.assets.playSound(name, 0, loopVal, transform2);
-                Starling.juggler.tween(transform2, 0.5, {"volume": Globals.musicVolume,
+                Starling.juggler.tween(transform2, 0.5, {"volume": SaveManager.musicVolume,
                         "onUpdate": function():void
                         {
                             if (musicChannel)
@@ -86,7 +86,7 @@ package managers {
         public static function fadeOutMusic(time:Number):void {
             var transform:SoundTransform;
             if (musicChannel) {
-                transform = new SoundTransform(Globals.musicVolume, 0);
+                transform = new SoundTransform(SaveManager.musicVolume, 0);
                 Starling.juggler.tween(transform, time, {"volume": 0,
                         "onUpdate": function():void
                         {
@@ -110,7 +110,7 @@ package managers {
                 if (lastSong == "")
                     return;
                 prevChannel = musicChannel;
-                transform = new SoundTransform(Globals.musicVolume, 0);
+                transform = new SoundTransform(SaveManager.musicVolume, 0);
                 lastPosition = prevChannel.position;
                 TweenLite.to(transform, 1, {"volume": 0,
                         "onUpdate": function():void
@@ -143,7 +143,7 @@ package managers {
             }
             transform = new SoundTransform(0, 0);
             musicChannel = Root.assets.playSound(lastSong, startPos, loop, transform);
-            Starling.juggler.tween(transform, 0.5, {"volume": Globals.musicVolume,
+            Starling.juggler.tween(transform, 0.5, {"volume": SaveManager.musicVolume,
                     "onUpdate": function():void
                     {
                         if (musicChannel)
@@ -152,7 +152,7 @@ package managers {
         }
 
         public static function playSound(name:String, volume:Number = 1, pan:Number = 0):void {
-            st.volume = volume * Globals.soundVolume;
+            st.volume = volume * SaveManager.soundVolume;
             if (st.volume == 0)
                 return;
             st.pan = pan;
@@ -160,7 +160,7 @@ package managers {
         }
 
         public static function playSoundLikeMusic(name:String, volume:Number = 1, pan:Number = 0):void {
-            st.volume = volume * Globals.musicVolume;
+            st.volume = volume * SaveManager.musicVolume;
             st.pan = pan;
             Root.assets.playSound(name, 0, 0, st);
         }

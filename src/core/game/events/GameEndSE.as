@@ -18,6 +18,7 @@ package core.game.events {
     import ui.layers.LayerFactory;
 
     import utils.CalcTools;
+    import managers.SaveManager;
 
     public class GameEndSE implements ISpecialEvent {
         private static const STATE_START:int = 0;
@@ -42,7 +43,7 @@ package core.game.events {
         }
 
         private var slowMult:Number = 1;
-        private var soundVolume:Number = Globals.soundVolume;
+        private var soundVolume:Number = SaveManager.soundVolume;
 
         public function update(dt:Number):void {
             var i:int = 0;
@@ -84,11 +85,11 @@ package core.game.events {
                     }
                     FXHandler.addDarkPulse(boss, Globals.teamColors[Globals.playerTeam], 2, 2.5, 0.75, 0, deepColor, delay - 5.5);
                     FXHandler.addDarkPulse(boss, Globals.teamColors[Globals.playerTeam], 2, 2.5, 1, 0, deepColor, delay - 4.5);
-                    if (Globals.levelReached == Globals.level)
-                        Globals.levelReached = Globals.level + 1;
-                    if (Globals.levelData[Globals.level] < Globals.currentDifficulty)
-                        Globals.levelData[Globals.level] = Globals.currentDifficulty;
-                    Globals.save();
+                    if (SaveManager.levelReached == Globals.level)
+                        SaveManager.levelReached = Globals.level + 1;
+                    if (SaveManager.levelData[Globals.level] < SaveManager.currentDifficulty)
+                        SaveManager.levelData[Globals.level] = SaveManager.currentDifficulty;
+                    SaveManager.save();
                     AudioManager.playMusic("bgm07", false);
                     UIContainer.invisibleMode()
                     break;
@@ -204,7 +205,7 @@ package core.game.events {
             LayerFactory.call(LayerFactory.REMOVE_GROW)(darkPulse);
             UIContainer.touchable = true;
             Starling.juggler.purge();
-            Globals.soundVolume = soundVolume;
+            SaveManager.soundVolume = soundVolume;
         }
 
         public function get type():String {

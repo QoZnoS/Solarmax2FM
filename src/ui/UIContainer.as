@@ -13,6 +13,7 @@ package ui {
     import ui.layers.LayerFactory;
     import ui.layers.TouchCtrlLayer;
     import ui.layers.TraditionalCtrlLayer;
+    import managers.SaveManager;
 
     public class UIContainer extends Sprite {
         private var _gameContainer:Sprite;
@@ -76,7 +77,7 @@ package ui {
                 _scale = scale;
             else
                 _scale = 1;
-            if (Globals.touchControls) {
+            if (SaveManager.touchControls) {
                 _touchCL.visible = true;
                 _touchCL.init();
             } else {
@@ -91,17 +92,17 @@ package ui {
             _gameContainer.scaleX = _gameContainer.scaleY = _scale * 0.7;
             _gameContainer.y = 354;
             _btnL.alpha = 0;
-            Starling.juggler.tween(_gameContainer, Globals.transitionSpeed, {"alpha": 1,
+            Starling.juggler.tween(_gameContainer, SaveManager.transitionSpeed, {"alpha": 1,
                     "scaleX": _scale,
                     "scaleY": _scale,
                     "y": 384,
                     "transition": "easeInOut"});
-            Starling.juggler.tween(_btnL, Globals.transitionSpeed, {"alpha": 1,
+            Starling.juggler.tween(_btnL, SaveManager.transitionSpeed, {"alpha": 1,
                     "transition": "easeInOut"});
         }
 
         public function deinitLevel():void {
-            if (Globals.touchControls) {
+            if (SaveManager.touchControls) {
                 _touchCL.visible = false;
                 _touchCL.deinit();
             } else {
@@ -112,12 +113,12 @@ package ui {
 
             Starling.juggler.removeTweens(_gameContainer);
             Starling.juggler.removeTweens(_btnL);
-            Starling.juggler.tween(_gameContainer, Globals.transitionSpeed, {"alpha": 0,
+            Starling.juggler.tween(_gameContainer, SaveManager.transitionSpeed, {"alpha": 0,
                     "scaleX": _scale * 0.7,
                     "scaleY": _scale * 0.7,
                     "y": 354,
                     "transition": "easeInOut"});
-            Starling.juggler.tween(_btnL, Globals.transitionSpeed, {"alpha": 0,
+            Starling.juggler.tween(_btnL, SaveManager.transitionSpeed, {"alpha": 0,
                     "onComplete": function():void {
                         _btnL.deinitLevel();
                         _entityL.deinit();
@@ -127,12 +128,12 @@ package ui {
 
         public function restartLevel():void {
             Starling.juggler.removeTweens(_gameContainer);
-            Starling.juggler.tween(_gameContainer, Globals.transitionSpeed / 5, {"alpha": 0,
+            Starling.juggler.tween(_gameContainer, SaveManager.transitionSpeed / 5, {"alpha": 0,
                     "scaleX": _scale - 0.15,
                     "scaleY": _scale - 0.15,
                     "y": 354,
                     "transition": "easeIn"});
-            Starling.juggler.tween(_gameContainer, Globals.transitionSpeed / 5 * 4, {"delay": Globals.transitionSpeed / 5,
+            Starling.juggler.tween(_gameContainer, SaveManager.transitionSpeed / 5 * 4, {"delay": SaveManager.transitionSpeed / 5,
                     "alpha": 1,
                     "scaleX": _scale,
                     "scaleY": _scale,
@@ -152,12 +153,12 @@ package ui {
             _gameContainer.scaleX = _gameContainer.scaleY = _scale * 0.7;
             _gameContainer.y = 354;
             _btnL.alpha = 0;
-            Starling.juggler.tween(_gameContainer, Globals.transitionSpeed, {"alpha": 1,
+            Starling.juggler.tween(_gameContainer, SaveManager.transitionSpeed, {"alpha": 1,
                     "scaleX": _scale,
                     "scaleY": _scale,
                     "y": 384,
                     "transition": "easeInOut"});
-            Starling.juggler.tween(_btnL, Globals.transitionSpeed, {"alpha": 1,
+            Starling.juggler.tween(_btnL, SaveManager.transitionSpeed, {"alpha": 1,
                     "transition": "easeInOut"});
         }
 
@@ -168,12 +169,12 @@ package ui {
 
             Starling.juggler.removeTweens(_gameContainer);
             Starling.juggler.removeTweens(_btnL);
-            Starling.juggler.tween(_gameContainer, Globals.transitionSpeed, {"alpha": 0,
+            Starling.juggler.tween(_gameContainer, SaveManager.transitionSpeed, {"alpha": 0,
                     "scaleX": _scale * 0.7,
                     "scaleY": _scale * 0.7,
                     "y": 354,
                     "transition": "easeInOut"});
-            Starling.juggler.tween(_btnL, Globals.transitionSpeed, {"alpha": 0,
+            Starling.juggler.tween(_btnL, SaveManager.transitionSpeed, {"alpha": 0,
                     "onComplete": function():void {
                         _btnL.deinitEditor();
                         _entityL.deinit();
@@ -184,7 +185,7 @@ package ui {
         public function update():void {
             _behaviorB.reset();
             _entityL.reset();
-            Globals.touchControls ? _touchCL.draw() : _tradiCL.draw();
+            SaveManager.touchControls ? _touchCL.draw() : _tradiCL.draw();
             if (_editorCL.visible)
                 _editorCL.draw();
         }

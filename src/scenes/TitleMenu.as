@@ -28,6 +28,7 @@ package scenes {
 
     import utils.CalcTools;
     import utils.Drawer;
+    import managers.SaveManager;
 
     public class TitleMenu extends Sprite {
         public var cover:Quad; // 进入游戏和通关36时的白光遮罩
@@ -385,7 +386,7 @@ package scenes {
         }
 
         public function on_editor(click:Event):void {
-            Starling.juggler.advanceTime(Globals.transitionSpeed);
+            Starling.juggler.advanceTime(SaveManager.transitionSpeed);
             scene.editorMap();
             animateOut();
             AudioManager.playClick();
@@ -396,7 +397,7 @@ package scenes {
         }
 
         public function on_difficultyButton(click:Event):void {
-            Globals.currentDifficulty = DifficultyButton.btnText[difficultyButtons.indexOf(click.target)].toLowerCase();
+            SaveManager.currentDifficulty = DifficultyButton.btnText[difficultyButtons.indexOf(click.target)].toLowerCase();
             LevelData.updateLevelData();
             levels.updateLevels();
             getBarrierData();
@@ -409,9 +410,9 @@ package scenes {
             this.visible = true;
             Starling.juggler.removeTweens(this);
             Starling.juggler.removeTweens(previewBox);
-            Starling.juggler.tween(this, Globals.transitionSpeed, {"alpha": 1,
+            Starling.juggler.tween(this, SaveManager.transitionSpeed, {"alpha": 1,
                     "transition": "easeInOut"});
-            Starling.juggler.tween(previewBox, Globals.transitionSpeed, {"y": 354,
+            Starling.juggler.tween(previewBox, SaveManager.transitionSpeed, {"y": 354,
                     "scaleX": 0.7,
                     "scaleY": 0.7,
                     "transition": "easeInOut"});
@@ -421,10 +422,10 @@ package scenes {
             deInit();
             Starling.juggler.removeTweens(this);
             Starling.juggler.removeTweens(previewBox);
-            Starling.juggler.tween(this, Globals.transitionSpeed, {"alpha": 0,
+            Starling.juggler.tween(this, SaveManager.transitionSpeed, {"alpha": 0,
                     "transition": "easeInOut",
                     "onComplete": hide});
-            Starling.juggler.tween(previewBox, Globals.transitionSpeed, {"y": 384,
+            Starling.juggler.tween(previewBox, SaveManager.transitionSpeed, {"y": 384,
                     "scaleX": 1,
                     "scaleY": 1,
                     "transition": "easeInOut"});
@@ -439,12 +440,12 @@ package scenes {
                 return;
             Starling.juggler.delayCall(function():void {
                 currentIndex = Globals.level + 2;
-                scrollTo(currentIndex, Globals.transitionSpeed);
-            }, Globals.transitionSpeed * 0.75);
+                scrollTo(currentIndex, SaveManager.transitionSpeed);
+            }, SaveManager.transitionSpeed * 0.75);
         }
 
         public function on_resize():void {
-            if (Globals.textSize == 2)
+            if (SaveManager.textSize == 2)
                 menuBtn.setImage("btn_menu2x", 0.75);
             else
                 menuBtn.setImage("btn_menu");
@@ -452,10 +453,10 @@ package scenes {
         }
 
         public function on_reset():void {
-            Globals.levelReached = 0;
-            for each (var star:int in Globals.levelData)
+            SaveManager.levelReached = 0;
+            for each (var star:int in SaveManager.levelData)
                 star = 0;
-            Globals.save();
+            SaveManager.save();
             initAfterEnd();
         }
 
@@ -483,7 +484,7 @@ package scenes {
                     levels.x += (targetX - (levels.x - 512)) * 0.1;
                 }
             }
-            var minX:Number = 512 - levels.width + 100 + (LevelData.level.length - (Math.min(Globals.levelReached, LevelData.level.length - 1) + 1)) * 120;
+            var minX:Number = 512 - levels.width + 100 + (LevelData.level.length - (Math.min(SaveManager.levelReached, LevelData.level.length - 1) + 1)) * 120;
             levels.x = Math.max(minX, Math.min(512, levels.x));
             levels.update(dt, hoverIndex);
             currentIndex = -Math.round((levels.x - 512) / 120);
@@ -494,7 +495,7 @@ package scenes {
             scale = 1 - Math.abs(levels.x + currentIndex * 120 - 512) / 60;
             radiu = 48 * scale;
             voidR = radiu - 2;
-            if (Globals.textSize == 2)
+            if (SaveManager.textSize == 2)
                 voidR = radiu - 3;
             if (voidR < 0)
                 voidR = 0;
@@ -506,7 +507,7 @@ package scenes {
                     difficultyBtn.scaleX = difficultyBtn.scaleY = difficultyBtn.alpha = scale;
                 else
                     difficultyBtn.scaleX = difficultyBtn.scaleY = difficultyBtn.alpha = 0;
-                if (Globals.levelData[currentIndex - 1] > 0 && difficultyButtons.indexOf(difficultyBtn) + 1 <= Globals.levelData[currentIndex - 1])
+                if (SaveManager.levelData[currentIndex - 1] > 0 && difficultyButtons.indexOf(difficultyBtn) + 1 <= SaveManager.levelData[currentIndex - 1])
                     difficultyBtn.showStar(true);
                 else
                     difficultyBtn.showStar(false);
@@ -523,7 +524,7 @@ package scenes {
 
         public function updateStarCount():void {
             var allStar:int = 0;
-            for each (var star:int in Globals.levelData)
+            for each (var star:int in SaveManager.levelData)
                 allStar += star;
             starLabel.text = allStar.toString();
         }
@@ -620,7 +621,7 @@ package scenes {
                         if (downIndex > 0 && downIndex == currentIndex)
                             loadMap();
                         else {
-                            level = Math.min(Globals.levelReached, LevelData.level.length - 1);
+                            level = Math.min(SaveManager.levelReached, LevelData.level.length - 1);
                             if (downIndex <= level + 1)
                                 scrollTo(downIndex);
                         }
@@ -639,9 +640,9 @@ package scenes {
         }
 
         public function scrollToCurrent():void {
-            var levelReached:int = Math.min(Globals.levelReached, LevelData.level.length - 1);
+            var levelReached:int = Math.min(SaveManager.levelReached, LevelData.level.length - 1);
             if (levelReached > 0) {
-                scrollTo(levelReached + 1, Globals.transitionSpeed);
+                scrollTo(levelReached + 1, SaveManager.transitionSpeed);
                 currentIndex = levelReached + 1;
             }
         }
@@ -649,7 +650,7 @@ package scenes {
         // #endregion
         // #region 功能函数
         public function loadMap(seed:uint = 0):void {
-            Starling.juggler.advanceTime(Globals.transitionSpeed);
+            Starling.juggler.advanceTime(SaveManager.transitionSpeed);
             Globals.level = currentIndex - 1;
             scene.playMap(seed);
             animateOut();

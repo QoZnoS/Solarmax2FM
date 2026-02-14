@@ -17,6 +17,7 @@ package scenes {
     import ui.layers.LayerFactory;
 
     import utils.Drawer;
+    import managers.SaveManager;
 
     public class EditorScene extends BasicScene {
         // private const defaultNode:Object = {"x": 980,"y": 154,"type": "planet"};
@@ -119,7 +120,7 @@ package scenes {
             focusNode.update(0);
             var offset:Number = switchInRows ? (best.image.x - focusNode.nodeData.x) : (best.image.y - focusNode.nodeData.y);
             var target:Number = switchDistance - offset;
-            Starling.juggler.tween(this, Globals.transitionSpeed, {switchDistance: target});
+            Starling.juggler.tween(this, SaveManager.transitionSpeed, {switchDistance: target});
         }
 
         public function drawSuperSwitchBar():void {
@@ -220,7 +221,7 @@ package scenes {
         public function quit():void {
             animateOut();
             scene.exit2TitleMenu(3);
-            Starling.juggler.tween(this, Globals.transitionSpeed, {onComplete: deInit});
+            Starling.juggler.tween(this, SaveManager.transitionSpeed, {onComplete: deInit});
         }
 
     }

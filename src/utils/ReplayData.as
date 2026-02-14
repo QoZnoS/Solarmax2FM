@@ -1,5 +1,6 @@
 package utils {
     import managers.Globals;
+    import managers.SaveManager;
 
     public class ReplayData {
         public var seed:int;
@@ -24,7 +25,7 @@ package utils {
             this.actionCL = new Vector.<int>;
             this.rep = new Vector.<Vector.<int>>;
             this.level = Vector.<String>([mappack, level, ""]);
-            this.difficulty = Globals.currentDifficulty;
+            this.difficulty = SaveManager.currentDifficulty;
             // level[0] = mappack, level[1] = level;
             _writing = true;
             _reading = false;

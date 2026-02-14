@@ -9,6 +9,7 @@ package ui.components {
     import starling.display.Sprite;
     import starling.events.Touch;
     import starling.events.TouchEvent;
+    import managers.SaveManager;
 
     public class SpeedButton extends Sprite {
         public var quad:Quad;
@@ -108,7 +109,7 @@ package ui.components {
                         scene.speedMult *= 2;
                     break;
             }
-            buttonArray[1].setImage("btn_speed" + scene.speedMult + "x", 0.75 + 0.6 * Globals.textSize);
+            buttonArray[1].setImage("btn_speed" + scene.speedMult + "x", 0.75 + 0.6 * SaveManager.textSize);
             buttonArray[1].x = buttonArray[2].x - buttonArray[1].width * 0.8;
             buttonArray[1].image.alpha = 0.6;
             if (scene.speedMult == 1)

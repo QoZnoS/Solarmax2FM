@@ -18,6 +18,7 @@ package scenes {
     import scenes.menus.EmptyMenu;
     import scenes.menus.TeamEditorMenu;
     import starling.filters.BlurFilter;
+    import managers.SaveManager;
 
     public class StartMenu extends Sprite {
         public var title:TitleMenu; // 接入标题类
@@ -87,7 +88,7 @@ package scenes {
                     menus[i].animateIn();
             Starling.juggler.removeTweens(this);
             Starling.juggler.tween(this, 0.15, {"alpha": 1});
-            Globals.textSize == 2 ? menuBtn.setImage("btn_menu2x", 0.75) : menuBtn.setImage("btn_menu");
+            SaveManager.textSize == 2 ? menuBtn.setImage("btn_menu2x", 0.75) : menuBtn.setImage("btn_menu");
             title.titleBox.filter = new BlurFilter();
             title.scene.getChildAt(0).filter = new BlurFilter();
         }
@@ -111,7 +112,7 @@ package scenes {
         }
 
         public function on_menu(click:Event):void {
-            Globals.save();
+            SaveManager.save();
             animateOut();
         }
 

@@ -18,6 +18,7 @@ package scenes.menus {
 
     import utils.Popup;
     import utils.ReplayData;
+    import managers.SaveManager;
 
     public class ReplayMenu extends Sprite implements IMenu {
         private const COLOR:uint = 0xFF9DBB;
@@ -85,7 +86,7 @@ package scenes.menus {
             var j:int = 0;
             for (var i:int = 0; i < len; i++) {
                 rep = repList[i];
-                if (rep.level[0] != LevelData.rawData[Globals.currentData].name)
+                if (rep.level[0] != LevelData.rawData[SaveManager.currentData].name)
                     continue;
                 repBtn = new OptionButton(rep.level[0], COLOR);
                 repBtn.label.height = 20;
@@ -160,8 +161,8 @@ package scenes.menus {
                 restartTime[i] = Math.max(0, Math.min(1, restartTime[i]));
                 restartHint[i].scaleX = Math.max(0, (restartTime[i] - 0.3) * 10 / 7);
                 if (restartTime[i] == 1) {
-                    if (Globals.currentDifficulty != Globals.replay.difficulty) {
-                        Globals.currentDifficulty = Globals.replay.difficulty;
+                    if (SaveManager.currentDifficulty != Globals.replay.difficulty) {
+                        SaveManager.currentDifficulty = Globals.replay.difficulty;
                         LevelData.updateLevelData();
                     }
                     for each (var level:Object in LevelData.level)
@@ -181,10 +182,10 @@ package scenes.menus {
             var index:int = components.indexOf(click.target);
             if (index == -1 || restartTime[index] > 0.3)
                 return;
-            Starling.juggler.advanceTime(Globals.transitionSpeed);
+            Starling.juggler.advanceTime(SaveManager.transitionSpeed);
             Globals.replay = repList[index].deepCopy;
-            if (Globals.currentDifficulty != Globals.replay.difficulty) {
-                Globals.currentDifficulty = Globals.replay.difficulty;
+            if (SaveManager.currentDifficulty != Globals.replay.difficulty) {
+                SaveManager.currentDifficulty = Globals.replay.difficulty;
                 LevelData.updateLevelData();
             }
             title.animateOut();
@@ -207,7 +208,7 @@ package scenes.menus {
                 if (f.extension == "s2rp") {
                     var repName:String = f.name.split(".")[0];
                     Globals.load_replay(repName);
-                    if (Globals.replay.level[0] == LevelData.rawData[Globals.currentData].name)
+                    if (Globals.replay.level[0] == LevelData.rawData[SaveManager.currentData].name)
                         f.deleteFile();
                 }
             }

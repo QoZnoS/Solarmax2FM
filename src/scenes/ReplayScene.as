@@ -19,6 +19,7 @@ package scenes {
 
     import utils.ReplayData;
     import utils.Rng;
+    import managers.SaveManager;
 
     public class ReplayScene extends BasicScene {
         public var rep:ReplayData;
@@ -129,13 +130,13 @@ package scenes {
         public function quit():void {
             animateOut();
             scene.exit2TitleMenu(0);
-            Starling.juggler.tween(this, Globals.transitionSpeed, {onComplete: deInit});
+            Starling.juggler.tween(this, SaveManager.transitionSpeed, {onComplete: deInit});
         }
 
         public function restart():void {
             UIContainer.i.restartLevel();
             Starling.juggler.removeTweens(this);
-            Starling.juggler.tween(this, Globals.transitionSpeed / 5, {"onComplete": function():void
+            Starling.juggler.tween(this, SaveManager.transitionSpeed / 5, {"onComplete": function():void
             {
                 deInit();
                 init(repBak.deepCopy);

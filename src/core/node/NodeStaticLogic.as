@@ -14,6 +14,7 @@ package core.node {
     import ui.layers.LayerFactory;
 
     import utils.CalcTools;
+    import managers.SaveManager;
 
     /** 静态类，函数均与dt无关 */
     public class NodeStaticLogic {
@@ -26,7 +27,7 @@ package core.node {
          */
         public static function updateLabelSizes(node:Node):void {
             var i:int = 0;
-            switch (Globals.textSize) {
+            switch (SaveManager.textSize) {
                 case 0:
                     for (i = 0; i < Globals.teamCount; i++) { // 设定战斗状态下每个势力的文本
                         node.moveState.captureLabels[i].fontName = "Downlink10";

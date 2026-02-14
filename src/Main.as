@@ -17,6 +17,7 @@
     import managers.EmbeddedAssets;
     import managers.Globals;
     import managers.AudioManager;
+    import managers.SaveManager;
 
     [SWF(frameRate = "120", backgroundColor = "0x00000")]
     public class Main extends Sprite {
@@ -51,7 +52,7 @@
             Globals.device = getPlatform();
             Globals.margin = 0; // 边距，影响按钮到左右两侧的相对位置
             scaleFactor = 2; // 比例因子，缩放贴图大小，值越大图越小
-            Globals.textSize = 1; // 文本大小参数
+            SaveManager.textSize = 1; // 文本大小参数
             assetDir = "2048px"; // 图片文件夹
             background = new Background(); // 创建背景实例
             Globals.main = this; // 
@@ -71,7 +72,7 @@
             stage.scaleMode = "noScale";
             stage.align = "TL";
             // 根据全屏模式设定窗口大小
-            if (Globals.fullscreen) {
+            if (SaveManager.fullscreen) {
                 stage.stageWidth = stage.fullScreenWidth;
                 stage.stageHeight = stage.fullScreenHeight;
                 stage.displayState = "fullScreenInteractive";
@@ -105,7 +106,7 @@
             mStarling.stage.stageWidth = stageWidth;
             mStarling.stage.stageHeight = stageHeight;
             mStarling.enableErrorChecking = Capabilities.isDebugger;
-            mStarling.antiAliasing = Math.pow(2, Globals.antialias);
+            mStarling.antiAliasing = Math.pow(2, SaveManager.antialias);
             // 设置背景位置、尺寸和平滑度
             background.x = mStarling.viewPort.x;
             background.y = mStarling.viewPort.y;
@@ -178,7 +179,7 @@
         public function on_fullscreen():void {
             if (Globals.device == "Mobile")
                 return;
-            if (Globals.fullscreen) {
+            if (SaveManager.fullscreen) {
                 stage.stageWidth = stage.fullScreenWidth;
                 stage.stageHeight = stage.fullScreenHeight;
                 stage.displayState = "fullScreenInteractive";
@@ -237,14 +238,14 @@
         }
 
         public function on_antialias():void {
-            mStarling.antiAliasing = Math.pow(2, Globals.antialias);
+            mStarling.antiAliasing = Math.pow(2, SaveManager.antialias);
         }
 
         public function on_activate(param1:*):void {
         }
 
         public function on_deactivate(param1:*):void {
-            if (!Globals.nohup) { // 调整后台运行
+            if (!SaveManager.nohup) { // 调整后台运行
                 mStarling.stop();
                 AudioManager.pauseMusic();
                 addChild(cover);

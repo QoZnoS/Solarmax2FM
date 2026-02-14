@@ -15,6 +15,7 @@ package scenes.menus {
     import ui.components.OptionButton;
     import ui.components.OptionSlider;
     import ui.components.Tooltip;
+    import managers.SaveManager;
 
     public class SettingMenu extends Sprite implements IMenu {
         private const windowStrings:Array = ["FULLSCREEN", "RESIZEABLE WINDOW"]; // 窗口模式文本
@@ -190,15 +191,15 @@ package scenes.menus {
         }
 
         public function animateIn():void {
-            Globals.fullscreen ? fullscreen[0].toggle() : fullscreen[1].toggle();
-            Globals.touchControls ? controls[0].toggle() : controls[1].toggle();
-            antialias[Globals.antialias].toggle();
-            textsizes[Globals.textSize].toggle();
-            fleetSliderPositions[Globals.fleetSliderPosition].toggle();
-            audioSlider.total = Globals.soundVolume;
-            musicSlider.total = Globals.musicVolume;
-            Globals.blackQuad ? blackBorders[0].toggle() : blackBorders[1].toggle();
-            Globals.nohup ? pauseAllows[1].toggle() : pauseAllows[0].toggle();
+            SaveManager.fullscreen ? fullscreen[0].toggle() : fullscreen[1].toggle();
+            SaveManager.touchControls ? controls[0].toggle() : controls[1].toggle();
+            antialias[SaveManager.antialias].toggle();
+            textsizes[SaveManager.textSize].toggle();
+            fleetSliderPositions[SaveManager.fleetSliderPosition].toggle();
+            audioSlider.total = SaveManager.soundVolume;
+            musicSlider.total = SaveManager.musicVolume;
+            SaveManager.blackQuad ? blackBorders[0].toggle() : blackBorders[1].toggle();
+            SaveManager.nohup ? pauseAllows[1].toggle() : pauseAllows[0].toggle();
             Starling.juggler.removeTweens(resetBtn2);
             resetBtn2.alpha = 0;
             resetBtn2.touchable = false;
@@ -231,31 +232,31 @@ package scenes.menus {
         }
 
         private function update(e:EnterFrameEvent):void {
-            Globals.soundVolume = audioSlider.total;
-            Globals.musicVolume = musicSlider.total;
+            SaveManager.soundVolume = audioSlider.total;
+            SaveManager.musicVolume = musicSlider.total;
             AudioManager.updateTransforms();
         }
 
         private function on_fullscreen(click:Event):void {
-            fullscreen.indexOf(click.target) == 0 ? Globals.fullscreen = true : Globals.fullscreen = false;
+            fullscreen.indexOf(click.target) == 0 ? SaveManager.fullscreen = true : SaveManager.fullscreen = false;
             Globals.main.on_fullscreen();
         }
 
         private function on_antialias(click:Event):void {
-            Globals.antialias = antialias.indexOf(click.target);
+            SaveManager.antialias = antialias.indexOf(click.target);
         }
 
         private function on_textsize(click:Event):void {
-            Globals.textSize = textsizes.indexOf(click.target);
+            SaveManager.textSize = textsizes.indexOf(click.target);
             title.on_resize();
         }
 
         private function on_controls(click:Event):void {
-            controls.indexOf(click.target) == 0 ? Globals.touchControls = true : Globals.touchControls = false;
+            controls.indexOf(click.target) == 0 ? SaveManager.touchControls = true : SaveManager.touchControls = false;
         }
 
         private function on_fleetSliderPosition(click:Event):void {
-            Globals.fleetSliderPosition = fleetSliderPositions.indexOf(click.target);
+            SaveManager.fleetSliderPosition = fleetSliderPositions.indexOf(click.target);
         }
 
         private function on_show_reset(click:Event):void {
@@ -269,12 +270,12 @@ package scenes.menus {
         }
 
         private function on_blackBorder(click:Event):void {
-            blackBorders.indexOf(click.target) == 0 ? Globals.blackQuad = true : Globals.blackQuad = false;
+            blackBorders.indexOf(click.target) == 0 ? SaveManager.blackQuad = true : SaveManager.blackQuad = false;
             title.scene.updateBlackQuad();
         }
 
         private function on_pauseAllow(click:Event):void {
-            pauseAllows.indexOf(click.target) == 0 ? Globals.nohup = false : Globals.nohup = true;
+            pauseAllows.indexOf(click.target) == 0 ? SaveManager.nohup = false : SaveManager.nohup = true;
         }
 
         private function on_tooltip1(touchEvent:TouchEvent):void {

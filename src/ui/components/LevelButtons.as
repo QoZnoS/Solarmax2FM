@@ -5,6 +5,7 @@ package ui.components {
     import starling.display.Sprite;
     import starling.filters.ColorMatrixFilter;
     import starling.text.TextField;
+    import managers.SaveManager;
 
     public class LevelButtons extends Sprite {
         private var buttons:Vector.<Vector.<TextField>>;
@@ -27,7 +28,7 @@ package ui.components {
 
         public function updateSize():void {
             const FONT_SIZES:Array = ["Downlink12", "Downlink16", "Downlink20"];
-            var fontName:String = FONT_SIZES[Globals.textSize];
+            var fontName:String = FONT_SIZES[SaveManager.textSize];
             for each (var btns:Vector.<TextField> in buttons) {
                 for each (var btn:TextField in btns) {
                     btn.fontName = fontName;
@@ -44,7 +45,7 @@ package ui.components {
                     btn.alpha = (1 - Math.min(distance / 600, 1)) * 0.4;
                     if (i == 0)
                         btn.alpha *= 2;
-                    if (i > Globals.levelReached + 1)
+                    if (i > SaveManager.levelReached + 1)
                         btn.alpha *= 0.3;
                     else if (i == _level)
                         btn.alpha = 0.5;

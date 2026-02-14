@@ -19,6 +19,7 @@ package core.game.events {
     import ui.layers.LayerFactory;
 
     import utils.CalcTools;
+    import managers.SaveManager;
 
     public class DarknessFallsSE implements ISpecialEvent {
         private static const STATE_START:int = 0;
@@ -47,7 +48,7 @@ package core.game.events {
             darkPulse.visible = false;
             LayerFactory.call(LayerFactory.ADD_GROW)(darkPulse, Globals.teamDeepColors[targetTeam]);
         }
-        private var soundVolume:Number = Globals.soundVolume;
+        private var soundVolume:Number = SaveManager.soundVolume;
 
         public function update(dt:Number):void {
             var delay:Number = 0;
@@ -192,7 +193,7 @@ package core.game.events {
         public function deinit():void {
             LayerFactory.call(LayerFactory.REMOVE_GROW)(darkPulse);
             Starling.juggler.removeTweens(Globals);
-            Globals.soundVolume = soundVolume;
+            SaveManager.soundVolume = soundVolume;
         }
 
         public function get type():String {

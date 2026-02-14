@@ -15,6 +15,7 @@ package ui.layers {
     import ui.components.FleetSlider;
     import ui.components.MenuButton;
     import ui.components.SpeedButton;
+    import managers.SaveManager;
 
     public class BtnLayer extends Sprite {
         /**
@@ -50,7 +51,7 @@ package ui.layers {
         public function initLevel():void {
             touchable = true;
             //#region 界面按钮
-            if (Globals.textSize <= 1) {
+            if (SaveManager.textSize <= 1) {
                 gameBtn[0] = new MenuButton("btn_close");
                 gameBtn[1] = new MenuButton("btn_pause");
                 gameBtn[2] = new MenuButton("btn_restart");
@@ -75,9 +76,9 @@ package ui.layers {
             for (i = 0; i < 3; i++) {
                 var _SpeedBtn:SpeedButton = new SpeedButton(scene, "btn_play" + (i + 1).toString(), speedBtns);
                 if (i == 1)
-                    _SpeedBtn = new SpeedButton(scene, "btn_speed1x", speedBtns, 0.75 + 0.6 * Globals.textSize);
+                    _SpeedBtn = new SpeedButton(scene, "btn_speed1x", speedBtns, 0.75 + 0.6 * SaveManager.textSize);
                 else
-                    _SpeedBtn = new SpeedButton(scene, "btn_play" + (i + 1).toString(), speedBtns, 0.6 + 0.4 * Globals.textSize);
+                    _SpeedBtn = new SpeedButton(scene, "btn_play" + (i + 1).toString(), speedBtns, 0.6 + 0.4 * SaveManager.textSize);
                 _SpeedBtn.x = 870 + i * (gameBtn[1].width - 2); // 计算x坐标
                 _SpeedBtn.y = 124; // 设定y坐标
                 _SpeedBtn.init();
@@ -93,7 +94,7 @@ package ui.layers {
             speedBtns[0].x = speedBtns[1].x - speedBtns[0].width * 1.25;
             //#endregion
             //#region 分兵条
-            switch (Globals.fleetSliderPosition) {
+            switch (SaveManager.fleetSliderPosition) {
                 case 0: // 左
                     fleetSlider = new FleetSlider(FleetSlider.TYPE_VERTICAL)
                     fleetSlider.y = 210;
@@ -105,7 +106,7 @@ package ui.layers {
                     fleetSlider.x = 950;
                     break;
                 case 1: // 下
-                    if (Globals.textSize <= 1) {
+                    if (SaveManager.textSize <= 1) {
                         fleetSlider = new FleetSlider(FleetSlider.TYPE_HORIZONTAL_SMALL)
                         fleetSlider.x = 256;
                         fleetSlider.y = 640 - fleetSlider.height * 0.5;

@@ -12,6 +12,7 @@ package scenes.menus {
 
     import ui.components.MenuButton;
     import ui.components.OptionButton;
+    import managers.SaveManager;
 
     public class MapackMenu extends Sprite implements IMenu {
         private const COLOR:uint = 0xFF9DBB;
@@ -136,7 +137,7 @@ package scenes.menus {
                 if (y > 600)
                     y -= 500;
             }
-            mapacks[Globals.currentData].toggle();
+            mapacks[SaveManager.currentData].toggle();
             if (mapacks.length <= 4) {
                 components[2].visible = components[3].visible = false;
                 return;
@@ -149,8 +150,8 @@ package scenes.menus {
         }
 
         private function on_choose_map(click:Event):void {
-            Globals.currentData = mapacks.indexOf(click.target);
-            Globals.save();
+            SaveManager.currentData = mapacks.indexOf(click.target);
+            SaveManager.save();
             LevelData.updateLevelData();
             Globals.initTeam();
             LevelData.updateTeam();

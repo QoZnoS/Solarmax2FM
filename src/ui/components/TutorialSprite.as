@@ -11,6 +11,7 @@ package ui.components {
 
     import ui.UIContainer;
     import ui.layers.LayerFactory;
+    import managers.SaveManager;
 
     public class TutorialSprite extends Sprite {
         public static var TYPE_END:int = 0;
@@ -52,7 +53,7 @@ package ui.components {
         }
 
         public function show():void {
-            if (!Globals.touchControls)
+            if (!SaveManager.touchControls)
                 return;
             switch (type) {
                 case TYPE_L1:
@@ -91,7 +92,7 @@ package ui.components {
         private function showL2():void {
             var x:Number = NaN;
             var y:Number = NaN;
-            switch (Globals.fleetSliderPosition) {
+            switch (SaveManager.fleetSliderPosition) {
                 case 0:
                     arrow.rotation = Math.PI;
                     x = UIContainer.fleetSlider.x + 50;

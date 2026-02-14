@@ -14,6 +14,7 @@ package scenes {
     import starling.events.EnterFrameEvent;
 
     import utils.Rng;
+    import managers.SaveManager;
 
     public class BasicScene extends Sprite {
         public var scene:SceneController
@@ -40,12 +41,12 @@ package scenes {
         public function animateIn():void {
             this.alpha = 0;
             this.visible = true;
-            Starling.juggler.tween(this, Globals.transitionSpeed, {"alpha": 1,
+            Starling.juggler.tween(this, SaveManager.transitionSpeed, {"alpha": 1,
                     "transition": "easeInOut"});
         }
 
         public function animateOut():void {
-            Starling.juggler.tween(this, Globals.transitionSpeed, {"alpha": 0,
+            Starling.juggler.tween(this, SaveManager.transitionSpeed, {"alpha": 0,
                     "transition": "easeInOut"});
         }
 

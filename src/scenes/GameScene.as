@@ -30,6 +30,7 @@
     import utils.CalcTools;
     import utils.ReplayData;
     import utils.Rng;
+    import managers.SaveManager;
 
     public class GameScene extends BasicScene {
         // #region 类变量
@@ -96,7 +97,7 @@
                 Globals.playerTeam = 1;
             Globals.teamGroups = Globals.defaultGroups.slice();
             for (i = 0; i < Globals.teamCount; i++) {
-                var teamData:Object = LevelData.rawData[Globals.currentData].team[i];
+                var teamData:Object = LevelData.rawData[SaveManager.currentData].team[i];
                 if ("group" in teamData)
                     Globals.teamGroups[i] = teamData.group;
                 else
@@ -133,9 +134,9 @@
                 specialEvents.push(se);
             }
             // #endregion
-            Globals.replay = new ReplayData(LevelData.rawData[Globals.currentData].name, LevelData.level[Globals.level].name, rng.seed);
+            Globals.replay = new ReplayData(LevelData.rawData[SaveManager.currentData].name, LevelData.level[Globals.level].name, rng.seed);
             for each (var label:TextField in popLabels) {
-                switch (Globals.textSize) {
+                switch (SaveManager.textSize) {
                     case 0:
                     case 1:
                         label.fontName = "Downlink12";
@@ -193,22 +194,22 @@
         public function quit():void {
             animateOut();
             scene.exit2TitleMenu(0);
-            Starling.juggler.tween(this, Globals.transitionSpeed, {onComplete: deInit});
+            Starling.juggler.tween(this, SaveManager.transitionSpeed, {onComplete: deInit});
         }
 
         public function next():void {
             animateOut();
-            Starling.juggler.tween(this, Globals.transitionSpeed, {onComplete: deInit});
-            if (!Globals.levelData[Globals.level])
-                Globals.levelData.push(0);
-            if (Globals.levelData[Globals.level] < Globals.difficultyInt)
-                Globals.levelData[Globals.level] = Globals.difficultyInt;
-            if (Globals.levelReached < Globals.level + 1) {
-                Globals.levelReached = Globals.level + 1;
-                Globals.save();
+            Starling.juggler.tween(this, SaveManager.transitionSpeed, {onComplete: deInit});
+            if (!SaveManager.levelData[Globals.level])
+                SaveManager.levelData.push(0);
+            if (SaveManager.levelData[Globals.level] < Globals.difficultyInt)
+                SaveManager.levelData[Globals.level] = Globals.difficultyInt;
+            if (SaveManager.levelReached < Globals.level + 1) {
+                SaveManager.levelReached = Globals.level + 1;
+                SaveManager.save();
                 scene.exit2TitleMenu(1);
             } else{
-                Globals.save();
+                SaveManager.save();
                 scene.exit2TitleMenu(0);
             }
         }
@@ -220,7 +221,7 @@
         public function restart():void {
             UIContainer.i.restartLevel();
             Starling.juggler.removeTweens(this);
-            Starling.juggler.tween(this, Globals.transitionSpeed / 5, {"onComplete": function():void
+            Starling.juggler.tween(this, SaveManager.transitionSpeed / 5, {"onComplete": function():void
             {
                 deInit();
                 init();

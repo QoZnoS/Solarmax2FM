@@ -35,9 +35,9 @@ package managers {
                 levelCache[i] = new Dictionary;
 
             NodeType.init();
-            if (Globals.currentData >= rawData.length) {
+            if (SaveManager.currentData >= rawData.length) {
                 SceneController.alert("The selected Mappack does not exist!");
-                Globals.currentData = 0;
+                SaveManager.currentData = 0;
             }
             updateLevelData();
 
@@ -46,15 +46,15 @@ package managers {
         }
 
         public static function updateLevelData():void {
-            if (levelCache[Globals.currentData] && levelCache[Globals.currentData][Globals.currentDifficulty]) {
-                level = levelCache[Globals.currentData][Globals.currentDifficulty];
+            if (levelCache[SaveManager.currentData] && levelCache[SaveManager.currentData][SaveManager.currentDifficulty]) {
+                level = levelCache[SaveManager.currentData][SaveManager.currentDifficulty];
                 return;
             }
 
-            var originalLevel:Object = rawData[Globals.currentData].level;
+            var originalLevel:Object = rawData[SaveManager.currentData].level;
             var cache:Array = deepClone(originalLevel) as Array;
             process(cache);
-            levelCache[Globals.currentData][Globals.currentDifficulty] = cache;
+            levelCache[SaveManager.currentData][SaveManager.currentDifficulty] = cache;
             level = cache;
         }
 
@@ -72,7 +72,7 @@ package managers {
                     var baseKey:String = key.replace(/\/.*$/, "");
                     var diff:String = key.substr(key.lastIndexOf("/") + 1);
                     // 判断当前难度是否匹配
-                    if (Globals.currentDifficulty == diff)
+                    if (SaveManager.currentDifficulty == diff)
                         obj[baseKey] = obj[key];
                     delete obj[key];
                 } else if (obj[key] is Object)
@@ -81,9 +81,9 @@ package managers {
         }
 
         public static function updateTeam():void {
-            var len:int = rawData[Globals.currentData].team.length;
+            var len:int = rawData[SaveManager.currentData].team.length;
             for (var i:int = 0; i < len; i++) {
-                var teamData:Object = rawData[Globals.currentData].team[i];
+                var teamData:Object = rawData[SaveManager.currentData].team[i];
                 if ("group" in teamData)
                     Globals.teamGroups[i] = teamData.group;
                 else

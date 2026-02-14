@@ -16,6 +16,7 @@ package {
     
     import ui.UIContainer;
     import ui.UIContainer;
+    import managers.SaveManager;
 
     public class SceneController extends Sprite {
         private static var _s:SceneController;
@@ -79,7 +80,7 @@ package {
         }
 
         public function updateBlackQuad():void {
-            blackQuad[0].visible = blackQuad[1].visible = Globals.blackQuad;
+            blackQuad[0].visible = blackQuad[1].visible = SaveManager.blackQuad;
         }
 
         // #endregion
