@@ -9,6 +9,7 @@ package scenes.menus {
 
     import ui.components.OptionButton;
     import ui.components.OptionSlider;
+
     import starling.utils.HAlign;
 
     public class AdvancedSettingMenu extends Sprite implements IMenu {
@@ -81,6 +82,13 @@ package scenes.menus {
             marginSlider = new OptionSlider(1);
             marginSlider.init();
             components.push({type: "slider", obj: marginSlider});
+
+            var unlockAllLabel:TextField = new TextField(LABEL_WIDTH, 40, "UNLOCK ALL LEVEL:", "Downlink12", -1, COLOR);
+            components.push({type: "label", obj: unlockAllLabel, align: "right"});
+
+            var unlockAllBtn:OptionButton = new OptionButton("unlock", COLOR);
+            unlockAllBtn.addEventListener("clicked", on_unlockAll);
+            components.push({type: "buttonGroup", obj: [unlockAllBtn]});
 
             // 执行布局
             layoutComponents();
@@ -190,6 +198,12 @@ package scenes.menus {
             var target:OptionButton = click.target as OptionButton;
             var index:int = pauseAllows.indexOf(target);
             SaveManager.nohup = (index == 1);
+        }
+
+        private function on_unlockAll(click:Event):void {
+            SaveManager.levelReached = 999;
+            SaveManager.save();
+            SceneController.s.titleMenu.initAfterEnd();
         }
     }
 }
