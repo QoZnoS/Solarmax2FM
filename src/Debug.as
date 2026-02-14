@@ -113,7 +113,7 @@ package {
                 case Keyboard.Z:
                     scene.applyFilter()
                     break;
-                case Keyboard.C:
+                case Keyboard.P:
                     THIS.pause = !THIS.pause;
                     if (THIS.pause)
                         Globals.main.starling.stop();
@@ -154,6 +154,9 @@ package {
                     break;
                 case Keyboard.T:
                     THIS.gotoTeamEditorMenu();
+                    break;
+                case Keyboard.A:
+                    THIS.gotoAdvancedSettingMenu();
                     break;
                 default:
                     break;
@@ -308,6 +311,16 @@ package {
             for each (var page:OptionButton in startMenu.pages)
                 page.toggled = false;
             startMenu.pages[7].toggled = true;
+            startMenu.on_page(null);
+        }
+
+        private function gotoAdvancedSettingMenu():void {
+            var startMenu:StartMenu = title.optionsMenu;
+            if (!startMenu.visible)
+                return;
+            for each (var page:OptionButton in startMenu.pages)
+                page.toggled = false;
+            startMenu.pages[6].toggled = true;
             startMenu.on_page(null);
         }
 

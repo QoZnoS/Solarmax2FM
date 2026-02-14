@@ -14,7 +14,6 @@ package managers {
         public static var stageWidth:Number = 1920; // 画面宽度
         public static var stageHeight:Number = 1080; // 画面高度
         public static var device:String = "pc"; // 设备类型
-        public static var maxMarginTeam:int = 8; // 最大边距势力数，合作中势力数达到该值时兵力文本显示与战争状态相同
         // #region 
         public static var teamGroups:Array = [0, 1, 2, 3, 4, 5, 6]; // 势力所属的队伍
         public static var teamColors:Array = [0xCCCCCC, 0x5FB6FF, 0xFF5D93, 0xFF8C5A, 0xCAFF6E, 0x999999, 0x000000]; // 势力颜色

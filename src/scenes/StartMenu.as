@@ -19,6 +19,7 @@ package scenes {
     import scenes.menus.TeamEditorMenu;
     import starling.filters.BlurFilter;
     import managers.SaveManager;
+    import scenes.menus.AdvancedSettingMenu;
 
     public class StartMenu extends Sprite {
         public var title:TitleMenu; // 接入标题类
@@ -43,7 +44,7 @@ package scenes {
             menus[3] = new ReplayMenu(title);
             menus[4] = new EmptyMenu();
             menus[5] = new EmptyMenu();
-            menus[6] = new EmptyMenu();
+            menus[6] = new AdvancedSettingMenu();
             menus[7] = new TeamEditorMenu();
             for (var i:int = 0; i < MAX_PAGE; i++) {
                 menus[i].x = menus[i].pivotX = 512;

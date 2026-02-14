@@ -31,8 +31,6 @@ package scenes.menus {
         private var textsizes:Array;
         private var controls:Array;
         private var fleetSliderPositions:Array;
-        private var blackBorders:Array; // 黑边
-        private var pauseAllows:Array; // 允许暂停
         private var audioSlider:OptionSlider;
         private var musicSlider:OptionSlider;
         private var satSlider:OptionSlider;
@@ -65,8 +63,8 @@ package scenes.menus {
                 btn.x = 330 + i * 140;
                 btn.addEventListener("clicked", on_fullscreen);
                 fullscreen.push(btn);
-                if (Globals.device == "PC")
-                    components.push(fullscreen);
+                // if (Globals.device == "PC")
+                components.push(fullscreen);
             }
             components.push(new TextField(200, 40, "ANTI-ALIASING:", "Downlink12", -1, COLOR));
             antialias = [];
@@ -120,24 +118,6 @@ package scenes.menus {
                 fleetSliderPositions.push(btn);
             }
             components.push(fleetSliderPositions);
-            components.push(new TextField(200, 40, "BLACK BORDER:", "Downlink12", -1, COLOR));
-            blackBorders = [];
-            for (i = 0; i < yesORno.length; i++) {
-                btn = new OptionButton(yesORno[i], COLOR, blackBorders);
-                btn.x = 330 + i * 90;
-                btn.addEventListener("clicked", on_blackBorder);
-                blackBorders.push(btn);
-            }
-            components.push(blackBorders);
-            components.push(new TextField(200, 40, "ALLOW PAUSE:", "Downlink12", -1, COLOR));
-            pauseAllows = [];
-            for (i = 0; i < yesORno.length; i++) {
-                btn = new OptionButton(yesORno[i], COLOR, pauseAllows);
-                btn.x = 330 + i * 90;
-                btn.addEventListener("clicked", on_pauseAllow);
-                pauseAllows.push(btn);
-            }
-            components.push(pauseAllows);
             components.push(new TextField(200, 40, "SAVE FILE:", "Downlink12", -1, COLOR));
             resetBtn = new OptionButton("RESET PROGRESS", 16742263, null);
             resetBtn.x = 330;
@@ -198,8 +178,6 @@ package scenes.menus {
             fleetSliderPositions[SaveManager.fleetSliderPosition].toggle();
             audioSlider.total = SaveManager.soundVolume;
             musicSlider.total = SaveManager.musicVolume;
-            SaveManager.blackQuad ? blackBorders[0].toggle() : blackBorders[1].toggle();
-            SaveManager.nohup ? pauseAllows[1].toggle() : pauseAllows[0].toggle();
             Starling.juggler.removeTweens(resetBtn2);
             resetBtn2.alpha = 0;
             resetBtn2.touchable = false;
@@ -267,15 +245,6 @@ package scenes.menus {
         private function on_reset(click:Event):void {
             title.on_reset();
             title.optionsMenu.animateOut();
-        }
-
-        private function on_blackBorder(click:Event):void {
-            blackBorders.indexOf(click.target) == 0 ? SaveManager.blackQuad = true : SaveManager.blackQuad = false;
-            title.scene.updateBlackQuad();
-        }
-
-        private function on_pauseAllow(click:Event):void {
-            pauseAllows.indexOf(click.target) == 0 ? SaveManager.nohup = false : SaveManager.nohup = true;
         }
 
         private function on_tooltip1(touchEvent:TouchEvent):void {
