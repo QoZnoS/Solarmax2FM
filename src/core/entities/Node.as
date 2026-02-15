@@ -138,7 +138,7 @@ package core.entities {
             if (nodeData.isBarrier)
                 return;
 
-            var globalNodes:Vector.<Node> = EntityContainer.nodes;
+            var globalNodes:Vector.<GameEntity> = EntityContainer.nodes;
             var teamCount:int = Globals.teamCount;
             var teamGroups:Array = Globals.teamGroups;
             var nodesLength:int = globalNodes.length;
@@ -160,7 +160,7 @@ package core.entities {
 
             // 填充基准列表
             for (j = 0; j < nodesLength; j++) {
-                node = globalNodes[j];
+                node = globalNodes[j] as Node;
                 if (node == this || node.nodeData.isUntouchable)
                     continue;
                 if (EntityContainer.nodesBlocked(this, node) == null)
@@ -202,7 +202,7 @@ package core.entities {
 
                 // 构建warp条件下的特殊列表
                 for (j = 0; j < nodesLength; j++) {
-                    node = globalNodes[j];
+                    node = globalNodes[j] as Node;
                     if (node == this || node.nodeData.isUntouchable)
                         continue;
                     warpLinks[warpLinks.length] = node;
@@ -217,7 +217,8 @@ package core.entities {
         }
 
         public function resetCache():void {
-            nodeData.hard_oppAllStrengthCache = new Vector.<int>(Globals.teamCount, true);
+            if (!nodeData.hard_oppAllStrengthCache)
+                nodeData.hard_oppAllStrengthCache = new Vector.<int>(Globals.teamCount, true);
             for (var i:int = 0; i < Globals.teamCount; i++)
                 nodeData.hard_oppAllStrengthCache[i] = -1;
         }
@@ -231,7 +232,7 @@ package core.entities {
             var dy:Number = NaN;
             var distance:Number = NaN;
             var ship:Number = NaN;
-            var nodeArray:Vector.<Node> = EntityContainer.nodes;
+            var nodeArray:Vector.<GameEntity> = EntityContainer.nodes;
             var targetNode:Array = [];
             var shipArray:Array = [];
             for each (node in nodeArray) { // 按距离计算每个目标天体的价值
@@ -267,18 +268,18 @@ package core.entities {
         }
 
         public function divideShips():void { // 均匀分散飞船
-            var nodeArray:Vector.<Node> = EntityContainer.nodes;
+            var nodeArray:Vector.<GameEntity> = EntityContainer.nodes;
             var shipCount:int = int(ships[nodeData.team].length);
             var nodeCount:int = nodeArray.length - 1;
             for (var i:int = 0; i < nodeArray.length; i++) {
-                if (nodeArray[i].nodeData.isBarrier)
+                if ((nodeArray[i] as Node).nodeData.isBarrier)
                     nodeCount--;
             }
             var shipNum:int = Math.max(int(shipCount / nodeCount), 1)
             if (shipCount > 0) {
                 for (i = 0; i < nodeArray.length; i++) {
-                    if (!nodeArray[i].nodeData.isBarrier)
-                        NodeStaticLogic.sendAIShips(this, nodeData.team, nodeArray[i], shipNum);
+                    if (!(nodeArray[i] as Node).nodeData.isBarrier)
+                        NodeStaticLogic.sendAIShips(this, nodeData.team, (nodeArray[i] as Node), shipNum);
                 }
             }
         }
@@ -290,7 +291,7 @@ package core.entities {
                 transitShips[i] = 0;
             for (i = 0; i < transitGroupShips.length; i++) // 重置数组
                 transitGroupShips[i] = 0;
-            for each (var ship:Ship in EntityContainer.ships_entity) {
+            for each (var ship:Ship in EntityContainer.ships) {
                 var shipGroup:int = Globals.teamGroups[ship.team];
                 if (!(ship.node == this && ship.state == 3))
                     continue; // 飞船在飞行中且飞向自身
@@ -503,26 +504,29 @@ package core.entities {
         // 返回飞向自身的最强非己方飞船数
         public function hard_getOppTransitShips(team:int):int {
             var group:int = Globals.teamGroups[team];
-            var ships:Array = [];
-            for (var i:int = 0; i < Globals.teamCount; i++)
-                ships.push([]);
-            for each (var ship:Ship in EntityContainer.ships_entity) {
+            if (!nodeData.hard_ships)
+                nodeData.hard_ships = [];
+            while (nodeData.hard_ships.length < Globals.teamCount)
+                nodeData.hard_ships.push([]);
+            for each (var arr:Array in nodeData.hard_ships)
+                arr.length = 0;
+            for each (var ship:Ship in EntityContainer.ships) {
                 if (ship.state == 0 || ship.node != this)
                     continue; // 排除未起飞的和不飞向自身的飞船
-                ships[ship.team].push(ship);
+                nodeData.hard_ships[ship.team].push(ship);
             }
             var groupShips:Vector.<int> = new Vector.<int>();
             var maxShips:int = 0;
-            for (i = 0; i < Globals.teamCount; i++) {
+            for (var i:int = 0; i < Globals.teamCount; i++) {
                 var oppGroup:int = Globals.teamGroups[i];
                 if (oppGroup == group)
                     continue; // 排除己方
                 if (groupShips.length < oppGroup + 1) {
                     groupShips.length = oppGroup + 1;
-                    groupShips[oppGroup] = ships[i].length;
+                    groupShips[oppGroup] = nodeData.hard_ships[i].length;
                     continue;
                 }
-                groupShips[oppGroup] += ships[i].length;
+                groupShips[oppGroup] += nodeData.hard_ships[i].length;
             }
             for each (i in groupShips)
                 maxShips = Math.max(i, maxShips);
@@ -543,7 +547,7 @@ package core.entities {
         public function hard_AllStrength(team:int):Number {
             var group:int = Globals.teamGroups[team];
             var strength:Number = 0;
-            for each (var ship:Ship in EntityContainer.ships_entity)
+            for each (var ship:Ship in EntityContainer.ships)
                 if (ship.node == this && Globals.teamGroups[ship.team] == group)
                     strength += Math.sqrt(Globals.teamShipAttacks[ship.team] * Globals.teamShipDefences[ship.team]);
             return strength;
@@ -557,7 +561,7 @@ package core.entities {
             var group:int = Globals.teamGroups[team];
             var maxStrength:Number = 0;
             var teamGroups:Array = Globals.teamGroups;
-            var globalShips:Vector.<GameEntity> = EntityContainer.ships_entity;
+            var globalShips:Vector.<GameEntity> = EntityContainer.ships;
             var globalShipsLength:int = globalShips.length;
             var groupStrengths:Vector.<int> = TEMP_INT;
             groupStrengths.length = Globals.teamCount;
@@ -582,28 +586,31 @@ package core.entities {
 
         // 检查撤退时机是否合理
         public function hard_retreatCheck(team:int):Boolean {
-            var ships:Array = [];
             var group:int = Globals.teamGroups[team];
-            for (var i:int = 0; i < Globals.teamCount; i++)
-                ships.push([]);
-            for each (var ship:Ship in EntityContainer.ships_entity) {
+            if (!nodeData.hard_ships)
+                nodeData.hard_ships = [];
+            while (nodeData.hard_ships.length < Globals.teamCount)
+                nodeData.hard_ships.push([]);
+            for each (var arr:Array in nodeData.hard_ships)
+                arr.length = 0;
+            for each (var ship:Ship in EntityContainer.ships) {
                 if (ship.node != this || Globals.teamGroups[ship.team] == group)
                     continue; // 排除不飞向自身的飞船和己方飞船
                 if (ship.targetDist / ship.jumpSpeed < 1 || ship.state == 0)
-                    ships[ship.team].push(ship); // 记录一秒后抵达的和已经抵达的飞船数
+                    nodeData.hard_ships[ship.team].push(ship); // 记录一秒后抵达的和已经抵达的飞船数
             }
             var groupShips:Vector.<int> = new Vector.<int>();
             var maxShips:int = 0;
-            for (i = 0; i < ships.length; i++) {
+            for (var i:int = 0; i < nodeData.hard_ships.length; i++) {
                 var oppGroup:int = Globals.teamGroups[i];
                 if (oppGroup == group)
                     continue; // 排除己方
                 if (groupShips.length < oppGroup + 1) {
                     groupShips.length = oppGroup + 1;
-                    groupShips[oppGroup] = ships[i].length;
+                    groupShips[oppGroup] = nodeData.hard_ships[i].length;
                     continue;
                 }
-                groupShips[oppGroup] += ships[i].length;
+                groupShips[oppGroup] += nodeData.hard_ships[i].length;
             }
             for each (i in groupShips)
                 maxShips = Math.max(i, maxShips);

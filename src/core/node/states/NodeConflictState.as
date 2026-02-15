@@ -18,6 +18,8 @@ package core.node.states {
 
         public function NodeConflictState(node:Node) {
             this.node = node;
+            activeTeams = new Vector.<int>();
+            activeGroups = new Vector.<int>();
         }
 
         public function init():void {
@@ -35,8 +37,8 @@ package core.node.states {
         }
 
         private function statTeam():Boolean {
-            activeTeams = new Vector.<int>();
-            activeGroups = new Vector.<int>();
+            activeTeams.length = 0;
+            activeGroups.length = 0;
             totalShips = 0;
             for (var teamId:int = 0; teamId < ships.length; teamId++) {
                 if (ships[teamId].length > 0) {

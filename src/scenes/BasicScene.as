@@ -98,7 +98,7 @@ package scenes {
             _barrierNodes.length = 0;
             var totalNodes:int = EntityContainer.nodes.length;
             for (i = 0; i < totalNodes; i++) {
-                node1 = EntityContainer.nodes[i];
+                node1 = EntityContainer.nodes[i] as Node;
                 if (node1.nodeData.isBarrier)
                     _barrierNodes.push(node1);
             }
@@ -112,7 +112,7 @@ package scenes {
                     var linkIndex:int = node1.nodeData.barrierLinks[j];
                     if (linkIndex >= totalNodes)
                         continue;
-                    node2 = EntityContainer.nodes[linkIndex];
+                    node2 = EntityContainer.nodes[linkIndex] as Node;
                     if (!node2.nodeData.isBarrier)
                         continue;
                     // 创建连接线ID（按节点ID排序，确保唯一性）

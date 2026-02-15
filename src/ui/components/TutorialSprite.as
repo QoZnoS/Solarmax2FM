@@ -12,6 +12,7 @@ package ui.components {
     import ui.UIContainer;
     import ui.layers.LayerFactory;
     import managers.SaveManager;
+    import core.entities.GameEntity;
 
     public class TutorialSprite extends Sprite {
         public static var TYPE_END:int = 0;
@@ -70,19 +71,20 @@ package ui.components {
         private function showL1():void {
             var x:Number = NaN;
             var y:Number = NaN;
-            var nodeArray:Vector.<Node> = EntityContainer.nodes;
+            var nodeA:Node = EntityContainer.nodes[0] as Node;
+            var nodeB:Node = EntityContainer.nodes[1] as Node;
             arrow.rotation = -Math.PI / 2;
-            arrow.x = nodeArray[0].nodeData.x;
-            arrow.y = nodeArray[0].nodeData.y + 60;
+            arrow.x = nodeA.nodeData.x;
+            arrow.y = nodeA.nodeData.y + 60;
             Starling.juggler.tween(arrow, 1, {"alpha": 0.8,
-                    "y": nodeArray[0].nodeData.y + 30,
+                    "y": nodeA.nodeData.y + 30,
                     "delay": 1,
                     "transition": "easeOut"});
-            Starling.juggler.tween(arrow, 2, {"x": nodeArray[1].nodeData.x,
-                    "y": nodeArray[1].nodeData.y + 10,
+            Starling.juggler.tween(arrow, 2, {"x": nodeB.nodeData.x,
+                    "y": nodeB.nodeData.y + 10,
                     "delay": 2,
                     "transition": "easeInOut"});
-            Starling.juggler.tween(arrow, 1, {"y": nodeArray[1].nodeData.y + 40,
+            Starling.juggler.tween(arrow, 1, {"y": nodeB.nodeData.y + 40,
                     "alpha": 0,
                     "delay": 4,
                     "transition": "easeIn"});

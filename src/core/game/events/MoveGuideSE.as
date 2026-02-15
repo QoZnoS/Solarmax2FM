@@ -20,7 +20,7 @@ package core.game.events {
         public function MoveGuideSE(trigger:Object) {
             tutorial = new TutorialSprite();
             tutorial.init(TutorialSprite.TYPE_L1);
-            if (EntityContainer.nodes[0].ships[1].length == 0)
+            if ((EntityContainer.nodes[0] as Node).ships[1].length == 0)
                 tutorial.type = TutorialSprite.TYPE_END;
             state = STATE_START;
         }
@@ -28,7 +28,7 @@ package core.game.events {
         public function update(dt:Number):void {
             switch (state) {
                 case STATE_START:
-                    if (EntityContainer.nodes[0].ships[1].length < 60) {
+                    if ((EntityContainer.nodes[0] as Node).ships[1].length < 60) {
                         state = STATE_END;
                         tutorial.type = TutorialSprite.TYPE_END;
                     }

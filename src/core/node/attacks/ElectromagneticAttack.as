@@ -7,6 +7,7 @@ package core.node.attacks {
 
     import managers.AudioManager;
     import managers.Globals;
+    import core.entities.GameEntity;
 
     public class ElectromagneticAttack extends BasicAttack {
         public function ElectromagneticAttack(attackRate:Number, attackRange:Number, attackLast:Number) {
@@ -90,7 +91,7 @@ package core.node.attacks {
 
         private function findNearestShips(x:Number, y:Number, excludeShip:Ship, node:Node):Vector.<Ship> {
             var result:Vector.<Ship> = new Vector.<Ship>();
-            var allShips:Vector.<Ship> = EntityContainer.ships;
+            var allShips:Vector.<GameEntity> = EntityContainer.ships;
             // 用于存储距离和飞船的映射
             var distances:Array = [];
             var nodeTeamGroup:int = Globals.teamGroups[node.nodeData.team];

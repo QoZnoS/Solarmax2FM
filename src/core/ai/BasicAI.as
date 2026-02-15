@@ -21,7 +21,7 @@ package core.ai {
         }
 
         public function initAI(rng:Rng, actionDelay:Number, startDelay:Number):void {
-            this._nodes = EntityContainer.nodes;
+            this._nodes = Vector.<Node>(EntityContainer.nodes);
             this._rng = rng;
             this.maxActionDelay = actionDelay;
             this.actionDelay = startDelay;

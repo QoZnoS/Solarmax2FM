@@ -41,20 +41,16 @@ package core {
             return _entityPools;
         }
 
-        public static function get ships():Vector.<Ship> {
-            return Vector.<Ship>(_entityPools[INDEX_SHIPS].active);
-        }
-
-        public static function get ships_entity():Vector.<GameEntity> {
+        public static function get ships():Vector.<GameEntity> {
             return _entityPools[INDEX_SHIPS].active;
         }
 
-        public static function get nodes():Vector.<Node> {
-            return Vector.<Node>(_entityPools[INDEX_NODES].active);
+        public static function get nodes():Vector.<GameEntity> {
+            return _entityPools[INDEX_NODES].active;
         }
 
-        public static function get ais():Vector.<EnemyAI> {
-            return Vector.<EnemyAI>(_entityPools[INDEX_AIS].active);
+        public static function get ais():Vector.<GameEntity> {
+            return _entityPools[INDEX_AIS].active;
         }
 
         public static function addEntity(index:int, entity:GameEntity):void {
@@ -88,7 +84,7 @@ package core {
             // 重用结果数组
             var result:Vector.<Ship> = TEMP_SHIP_RESULT;
             result.length = 0;
-            var allShips:Vector.<GameEntity> = ships_entity;
+            var allShips:Vector.<GameEntity> = ships;
             var shipCount:int = allShips.length;
             for (var i:int = 0; i < shipCount; i++) {
                 var ship:Ship = allShips[i] as Ship;

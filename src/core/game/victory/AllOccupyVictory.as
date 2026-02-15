@@ -12,7 +12,7 @@ package core.game.victory {
         }
 
         public function update(dt:Number):int {
-            var winGroup:int = Globals.teamGroups[EntityContainer.nodes[0].nodeData.team];
+            var winGroup:int = Globals.teamGroups[(EntityContainer.nodes[0] as Node).nodeData.team];
             for each (var node:Node in EntityContainer.nodes) {
                 var nodeData:NodeData = node.nodeData;
                 var nodeGroup:int = Globals.teamGroups[nodeData.team];

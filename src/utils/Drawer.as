@@ -10,10 +10,6 @@ package utils {
         private static var _quadTexture:Texture;
         private static var _quadTexture2:Texture;
 
-        public function Drawer() {
-            throw new Error("静态类不允许实例化");
-        }
-
         public static function init():void {
             _quadImage = new Image(Root.assets.getTexture("quad"));
             _quadImage.adjustVertices();

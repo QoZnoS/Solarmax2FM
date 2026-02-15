@@ -19,6 +19,7 @@ package core.node.states {
 
         public function NodeCaptureState(node:Node) {
             this.node = node;
+            teams = new Vector.<int>;
         }
 
         public function init():void {
@@ -36,18 +37,17 @@ package core.node.states {
             var hpRate:Number = 0;
             if (node.capturing || (nodeData.hp != MAX_HP && captureGroup == capturingGroup && nodeData.team != NEUTRAL_TEAM))
                 hpRate = nodeData.hp / MAX_HP;
-            var shipCounts:Array = new Array();
-            for each (var team:int in capturingTeams)
-                shipCounts.push(ships[team].length);
-            node.moveState.updateCaptureLabel(capturingTeams, captureTeam, shipCounts, hpRate);
+            node.moveState.updateCaptureLabel(capturingTeams, captureTeam, hpRate);
         }
 
         private static const MAX_HP:Number = 100;
         private static const NEUTRAL_TEAM:int = 0;
         private static const CAPTURE_RATE_MULTIPLIER:Number = 10;
 
+        private var teams:Vector.<int>;
+
         private function checkCaptureState():Boolean {
-            var teams:Vector.<int> = new Vector.<int>();
+            teams.length = 0;
             var group:int = -1;
             var shipNum:int = 0;
             captureGroup = Globals.teamGroups[captureTeam];

@@ -16,6 +16,7 @@ package core.node.states {
     import utils.CalcTools;
     import utils.Drawer;
     import managers.SaveManager;
+    import flash.utils.Dictionary;
 
     public class NodeMoveState implements INodeState {
         public var node:Node;
@@ -53,7 +54,7 @@ package core.node.states {
         public function init():void {
             this.nodeData = node.nodeData;
             if (nodeData.orbitNode != -1)
-                orbitNode = EntityContainer.nodes[nodeData.orbitNode]
+                orbitNode = EntityContainer.nodes[nodeData.orbitNode] as Node
             captureLabels.length = 0;
             conflictLabels.length = 0;
             var textField:TextField;
@@ -74,8 +75,8 @@ package core.node.states {
             _originalHaloScale = halo.scaleX;
             _originalGlowScale = glow.scaleX;
 
-            startEaseX = 61.8033988750 - Transitions.getTransition(Transitions.EASE_OUT)(1 / SaveManager.maxMarginTeam) * 118.196601125;
-            startEaseY = 57.1894889582 - Transitions.getTransition(Transitions.EASE_OUT)(1 / SaveManager.maxMarginTeam) * 122.8105110418;
+            startEaseX = 61.8033988750 - EASE_OUT_FUNC(1 / SaveManager.maxMarginTeam) * 118.196601125;
+            startEaseY = 57.1894889582 - EASE_OUT_FUNC(1 / SaveManager.maxMarginTeam) * 122.8105110418;
         }
 
         private function addTextField(vec:Vector.<TextField>, team:int):void {
@@ -99,7 +100,7 @@ package core.node.states {
         // #region update
         public function update(dt:Number):void {
             if (nodeData.orbitNode != -1)
-                orbitNode = EntityContainer.nodes[nodeData.orbitNode];
+                orbitNode = EntityContainer.nodes[nodeData.orbitNode] as Node;
             orbitSpeed = nodeData.orbitSpeed;
             updateImagePositions();
             if (orbitNode)
@@ -138,16 +139,15 @@ package core.node.states {
             }
         }
 
-        private static const START_ANGLE:Number = -Math.PI / 2; // 起始角度（12点钟方向）
-        private static const ARC_ADJUSTMENT:Number = 0.006366197723675814; // 弧线绘制微调值
-
         public function updateConflictLabels(activeTeams:Vector.<int>, totalShips:int):void {
             var currentAngle:Number = 567; // 随便找一个范围之外的数（
             var labelAngleStep:Number = Math.PI * 2 / activeTeams.length;
-            var activeGroup:Vector.<Vector.<int>> = new Vector.<Vector.<int>>;
             var i:int = 0;
-            for (i = 0; i < Globals.teamCount; i++)
-                activeGroup.push(new Vector.<int>);
+            for each (var vec:Vector.<int> in reusableActiveGroup)
+                vec.length = 0;
+            while (reusableActiveGroup.length < Globals.teamCount)
+                reusableActiveGroup.push(new Vector.<int>());
+            var activeGroup:Vector.<Vector.<int>> = reusableActiveGroup;
             for each (i in activeTeams)
                 activeGroup[Globals.teamGroups[i]].push(i);
 
@@ -171,7 +171,7 @@ package core.node.states {
                     if (currentAngle == 567)
                         currentAngle = START_ANGLE - Math.PI * node.ships[teamId].length / totalShips
                 }
-                Drawer.drawMultiGradientCircleOptimized(LayerFactory.getLayer(LayerFactory.BEHAVIOR) as QuadBatch, nodeData.x, nodeData.y, colorArr, nodeData.lineDist, nodeData.lineDist - 2, false, 1, arcRatio - ARC_ADJUSTMENT, currentAngle + 0.01);
+                Drawer.drawMultiGradientCircleOptimized(BEHAVIOR, nodeData.x, nodeData.y, colorArr, nodeData.lineDist, nodeData.lineDist - 2, false, 1, arcRatio - ARC_ADJUSTMENT, currentAngle + 0.01);
                 currentAngle += Math.PI * 2 * arcRatio;
             }
         }
@@ -180,45 +180,51 @@ package core.node.states {
             var teamLabel:TextField = conflictLabels[teamId];
             teamLabel.x = nodeData.x + Math.cos(labelAngle) * labelDist;
             teamLabel.y = nodeData.y + Math.sin(labelAngle) * labelDist;
-            teamLabel.text = shipCount.toString();
+            var lastCount:int = lastShipCounts[teamLabel] || 0;
+            if (lastCount != shipCount) {
+                teamLabel.text = shipCount.toString();
+                lastShipCounts[teamLabel] = shipCount;
+            }
             teamLabel.visible = Globals.teamShowLabels[teamId];
         }
 
-        public function updateCaptureLabel(capturingTeams:Vector.<int>, captureTeam:int, shipCounts:Array, hpRate:Number):void {
+        public function updateCaptureLabel(capturingTeams:Vector.<int>, captureTeam:int, hpRate:Number):void {
             var labelAngleStep:Number = Math.min(Math.PI * 2 / SaveManager.maxMarginTeam, Math.PI * 2 / capturingTeams.length);
-            var startAngle:Number;
+            var startAngle:Number, teamId:int;
             if (SaveManager.maxMarginTeam == 1)
                 startAngle = capturingTeams.length == 1 ? 1.06396404148 : -Math.PI / 2;
             else
                 startAngle = 1.06396404148;
-            for (var teamId:int = 0; teamId < Globals.teamCount; teamId++) {
-                if (capturingTeams.indexOf(teamId) == -1) {
-                    captureLabels[teamId].visible = false;
-                    continue;
-                }
+            for (var idx:int = 0; idx < capturingTeams.length; idx++) {
+                teamId = capturingTeams[idx];
                 var shipCount:int = node.ships[teamId].length;
-                var labelAngle:Number = startAngle + capturingTeams.indexOf(teamId) * labelAngleStep - Math.PI * (capturingTeams.length - 1) / SaveManager.maxMarginTeam;
+                var labelAngle:Number = startAngle + idx * labelAngleStep - Math.PI * (capturingTeams.length - 1) / SaveManager.maxMarginTeam;
                 node.moveState.updateCooperateLabel(teamId, labelAngle, shipCount, capturingTeams.length);
             }
+            // 将未参与的队伍标签隐藏
+            for (teamId = 0; teamId < Globals.teamCount; teamId++)
+                if (capturingTeams.indexOf(teamId) == -1)
+                    captureLabels[teamId].visible = false;
             if (hpRate != 0) {
                 var arcAngle:Number = START_ANGLE - Math.PI * hpRate;
-                Drawer.drawCircle(LayerFactory.getLayer(LayerFactory.BEHAVIOR) as QuadBatch, nodeData.x, nodeData.y, Globals.teamColors[captureTeam], nodeData.lineDist, nodeData.lineDist - 2, false, 0.1);
-                Drawer.drawCircle(LayerFactory.getLayer(LayerFactory.BEHAVIOR) as QuadBatch, nodeData.x, nodeData.y, Globals.teamColors[captureTeam], nodeData.lineDist, nodeData.lineDist - 2, false, 0.7, hpRate, arcAngle);
+                Drawer.drawCircle(BEHAVIOR, nodeData.x, nodeData.y, Globals.teamColors[captureTeam], nodeData.lineDist, nodeData.lineDist - 2, false, 0.1);
+                Drawer.drawCircle(BEHAVIOR, nodeData.x, nodeData.y, Globals.teamColors[captureTeam], nodeData.lineDist, nodeData.lineDist - 2, false, 0.7, hpRate, arcAngle);
             }
         }
-
-        private var startEaseX:Number;
-        private var startEaseY:Number;
 
         private function updateCooperateLabel(teamId:int, labelAngle:Number, shipCount:int, teamCount:int):void {
             var teamLabel:TextField = captureLabels[teamId];
             if (teamCount == 2)
                 teamCount = 2.2;
-            var easeX:Number = Math.min(180, Transitions.getTransition(Transitions.EASE_OUT)(teamCount / SaveManager.maxMarginTeam) * 118.196601125 + startEaseX);
-            var easeY:Number = Math.min(180, Transitions.getTransition(Transitions.EASE_OUT)(teamCount / SaveManager.maxMarginTeam) * 122.8105110418 + startEaseY);
+            var easeX:Number = Math.min(180, EASE_OUT_FUNC(teamCount / SaveManager.maxMarginTeam) * 118.196601125 + startEaseX);
+            var easeY:Number = Math.min(180, EASE_OUT_FUNC(teamCount / SaveManager.maxMarginTeam) * 122.8105110418 + startEaseY);
             teamLabel.x = nodeData.x + Math.cos(labelAngle) * easeX * nodeData.size;
             teamLabel.y = nodeData.y + Math.sin(labelAngle) * easeY * nodeData.size;
-            teamLabel.text = shipCount.toString();
+            var lastCount:int = lastShipCounts[teamLabel] || 0;
+            if (lastCount != shipCount) {
+                teamLabel.text = shipCount.toString();
+                lastShipCounts[teamLabel] = shipCount;
+            }
             teamLabel.visible = Globals.teamShowLabels[teamId];
         }
 
@@ -235,7 +241,7 @@ package core.node.states {
         // #endregion
 
         public function setOrbitNode(nodeTag:int, orbitSpeed:Number = 0.1, clockwise:Boolean = true):void {
-            this.orbitNode = EntityContainer.nodes[nodeTag];
+            this.orbitNode = EntityContainer.nodes[nodeTag] as Node;
             var dx:Number = nodeData.x - orbitNode.nodeData.x;
             var dy:Number = nodeData.y - orbitNode.nodeData.y;
             this.orbitDist = Math.sqrt(dx * dx + dy * dy);
@@ -262,9 +268,6 @@ package core.node.states {
         public function get scale():Number {
             return _scale;
         }
-        private var _originalImageScale:Number;
-        private var _originalHaloScale:Number;
-        private var _originalGlowScale:Number;
 
         public function set scale(val:Number):void {
             _scale = val;
@@ -279,5 +282,18 @@ package core.node.states {
 
         public function deserialize(obj:Object):void {
         }
+
+        private static const EASE_OUT_FUNC:Function = Transitions.getTransition(Transitions.EASE_OUT);
+        private static const BEHAVIOR:QuadBatch = LayerFactory.getLayer(LayerFactory.BEHAVIOR) as QuadBatch;
+        private static const START_ANGLE:Number = -Math.PI / 2; // 起始角度（12点钟方向）
+        private static const ARC_ADJUSTMENT:Number = 0.006366197723675814; // 弧线绘制微调值
+
+        private var reusableActiveGroup:Vector.<Vector.<int>> = new Vector.<Vector.<int>>();
+        private var startEaseX:Number;
+        private var startEaseY:Number;
+        private var _originalImageScale:Number;
+        private var _originalHaloScale:Number;
+        private var _originalGlowScale:Number;
+        private var lastShipCounts:Dictionary = new Dictionary(); // 键为 TextField，值为 int
     }
 }
