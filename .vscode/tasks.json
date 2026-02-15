@@ -131,7 +131,6 @@
 			"air": "windows",
 			"asconfig": "asconfig.json",
 			"group": "build",
-			"dependsOn": "Update asconfig for Windows release",
 			"problemMatcher": [],
 			"label": "Adobe AIR: package Windows release"
 		},
@@ -143,7 +142,6 @@
 				"kind": "build",
 				"isDefault": true
 			},
-			"dependsOn": "Update asconfig for Windows debug",
 			"problemMatcher": [],
 			"label": "ActionScript: compile debug - asconfig.json"
 		},
@@ -153,7 +151,6 @@
 			"air": "android",
 			"asconfig": "asconfig.json",
 			"group": "build",
-			"dependsOn": "Update asconfig for Android release",
 			"problemMatcher": [],
 			"label": "Adobe AIR: package Android release - asconfig.json"
 		},
@@ -163,7 +160,6 @@
 			"air": "ios",
 			"asconfig": "asconfig.json",
 			"group": "build",
-			"dependsOn": "Update asconfig for iOS release",
 			"problemMatcher": [],
 			"label": "Adobe AIR: package iOS release - asconfig.json"
 		},
@@ -173,7 +169,6 @@
 			"air": "android",
 			"asconfig": "asconfig.json",
 			"group": "build",
-			"dependsOn": "Update asconfig for Android debug",
 			"problemMatcher": [],
 			"label": "Adobe AIR: package Android debug - asconfig.json"
 		},
@@ -183,6 +178,16 @@
 			"dependsOn": [
 				"Update asconfig for Windows debug",
 				"ActionScript: compile debug - asconfig.json"
+			],
+			"group": "build",
+			"problemMatcher": []
+		},
+		{
+			"label": "Windows Profile Release Build",
+			"dependsOrder": "sequence",
+			"dependsOn": [
+				"Update asconfig for Windows debug",
+				"Adobe AIR: package Windows release"
 			],
 			"group": "build",
 			"problemMatcher": []
