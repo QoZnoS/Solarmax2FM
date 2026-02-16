@@ -2,10 +2,6 @@ package utils {
     import utils.Rng;
 
     public class GeneralFunctions {
-        public function GeneralFunctions() {
-            throw new Error("静态类不允许实例化");
-        }
-
         /**
          * 从数组中随机选取一个具有最小属性值的对象
          * 使用单次遍历算法，数组无需预先排序
@@ -122,10 +118,48 @@ package utils {
                 }
             }
             var toRemove:int = Math.min(n, minIndices.length);
-            for (i = toRemove - 1; i >= 0; i--) {
-                arr.splice(minIndices[i], 1);
-            }
+            for (i = toRemove - 1; i >= 0; i--)
+                removeAt(arr, minIndices[i]);
             return arr;
         }
+
+        /**
+         * 移除指定位置元素，低性能
+         * @param arr 
+         * @param index 
+         */
+        public static function removeAt(arr:Array, index:int):void {
+            for (var i:int = index; i < arr.length - 1; i++)
+                arr[i] = arr[i + 1];
+            arr.length = arr.length - 1; // 缩短 Vector
+        }
+        
+        /**
+         * 移除指定位置元素，高性能但破坏顺序
+         * @param arr 
+         * @param index 
+         */
+        public static function removeAtUnordered(arr:Array, index:int):void {
+            arr[index] = arr[arr.length - 1];
+            arr.pop();
+        }
+
+        /**
+         * 移除数组中的指定元素
+         * @param arr 目标数组
+         * @param element 目标元素
+         */
+        public static function removeElementFromArray(arr:Array, element:*):void {
+            var writeIndex:int = 0;
+            for (var i:int = 0; i < arr.length; i++) {
+                if (arr[i] == element)
+                    continue;
+                if (writeIndex != i)
+                    arr[writeIndex] = arr[i];
+                writeIndex++;
+            }
+            arr.length = writeIndex; // 释放尾部元素
+        }
+
     }
 }

@@ -108,8 +108,8 @@ package core {
             return result;
         }
 
-        // 添加临时数组
         private static var TEMP_SHIP_RESULT:Vector.<Ship> = new Vector.<Ship>();
+        private static var TEMP_ARRAY:Array = new Array;
 
         /** 搜寻范围内的天体
          * @param centerNode 目标天体
@@ -119,8 +119,9 @@ package core {
             var dx:Number;
             var dy:Number;
             var node:Node;
-            var nodeInRange:Array = [];
+            var nodeInRange:Array = TEMP_ARRAY;
             var range:Number = centerNode.attackState.attackRange;
+            nodeInRange.length = 0;
             for each (node in nodes) {
                 dx = centerNode.nodeData.x - node.nodeData.x;
                 dy = centerNode.nodeData.y - node.nodeData.y;
@@ -169,27 +170,33 @@ package core {
         /** 根据状态过滤天体上的飞船
          * @param node 目标天体
          * @param state 目标状态
+         * @param output 返回值，传入后会自动清空元素
          * @return 二层数组
          */
-        public static function filterShipByStatic(node:Node, state:int):Vector.<Vector.<Ship>> {
-            var ships:Vector.<Vector.<Ship>> = new Vector.<Vector.<Ship>>;
-            for each (var shipArr:Vector.<Ship> in node.ships) {
-                var filterArr:Vector.<Ship> = new Vector.<Ship>;
-                for each (var ship:Ship in shipArr)
+        public static function filterShipByState(node:Node, state:int, output:Vector.<Vector.<Ship>>):void {
+            for each (var vec:Vector.<Ship> in output)
+                vec.length = 0;
+            while (output.length < Globals.teamCount)
+                output.push(new Vector.<Ship>);
+            for (var i:int = 0; i < Globals.teamCount; i++)
+                for each (var ship:Ship in node.ships[i])
                     if (ship.state == state)
-                        filterArr.push(ship);
-                ships.push(filterArr);
-            }
-            return ships;
+                        output[i].push(ship);
         }
 
         // #endregion
 
         // #region 飞船
         public static function removeShipFromVector(vec:Vector.<Ship>, ship:Ship):void {
-            for (var i:int = vec.length - 1; i >= 0; i--)
+            var writeIndex:int = 0;
+            for (var i:int = 0; i < vec.length; i++) {
                 if (vec[i] == ship)
-                    vec.splice(i, 1);
+                    continue;
+                if (writeIndex != i)
+                    vec[writeIndex] = vec[i];
+                writeIndex++;
+            }
+            vec.length = writeIndex; // 释放尾部元素
         }
 
         // #endregion
@@ -207,13 +214,10 @@ package core {
             var resultIntersects:Boolean;
             var resultEnter:Point;
             var resultExit:Point;
-
             try {
-                // 从对象池获取Point
                 start = getPoint(node1.nodeData.x, node1.nodeData.y);
                 end = getPoint(node2.nodeData.x, node2.nodeData.y);
                 current = getPoint();
-
                 for each (node in nodes) {
                     var nodeGroup:int = Globals.teamGroups[node.nodeData.team];
                     if (node.nodeData.team == 0 || nodeGroup == group)
@@ -240,12 +244,10 @@ package core {
                     }
                 }
             } finally {
-                // 确保归还Point对象
                 returnPoint(start);
                 returnPoint(end);
                 returnPoint(current);
             }
-
             return length;
         }
 
@@ -261,12 +263,10 @@ package core {
             var resultEnter:Point;
             var resultExit:Point;
             var inBlackhole:Boolean = false;
-
             try {
                 start = getPoint(node1.nodeData.x, node1.nodeData.y);
                 end = getPoint(node2.nodeData.x, node2.nodeData.y);
                 current = getPoint();
-
                 for each (node in nodes) {
                     var nodeGroup:int = Globals.teamGroups[node.nodeData.team];
                     if (node.nodeData.team == 0 || nodeGroup == group)
@@ -290,7 +290,6 @@ package core {
                 returnPoint(end);
                 returnPoint(current);
             }
-
             return inBlackhole;
         }
 
@@ -305,43 +304,34 @@ package core {
             var lineSegmentLengthSquared:Number = (pointB.x - pointA.x) * (pointB.x - pointA.x) + (pointB.y - pointA.y) * (pointB.y - pointA.y);
             var lineConstant:Number = 2 * ((pointB.x - pointA.x) * (pointA.x - circleCenter.x) + (pointB.y - pointA.y) * (pointA.y - circleCenter.y));
             var circleConstant:Number = circleCenter.x * circleCenter.x + circleCenter.y * circleCenter.y + pointA.x * pointA.x + pointA.y * pointA.y - 2 * (circleCenter.x * pointA.x + circleCenter.y * pointA.y) - circleRadius * circleRadius;
-            if (lineConstant * lineConstant - 4 * lineSegmentLengthSquared * circleConstant <= 0) {
-                resultInside = false;
-            } else {
-                discriminant = Math.sqrt(lineConstant * lineConstant - 4 * lineSegmentLengthSquared * circleConstant);
-                intersectionParam1 = (-lineConstant + discriminant) / (2 * lineSegmentLengthSquared);
-                intersectionParam2 = (-lineConstant - discriminant) / (2 * lineSegmentLengthSquared);
-                if ((intersectionParam1 < 0 || intersectionParam1 > 1) && (intersectionParam2 < 0 || intersectionParam2 > 1)) {
-                    resultInside = !((intersectionParam1 < 0 && intersectionParam2 < 0) || (intersectionParam1 > 1 && intersectionParam2 > 1))
+            try {
+                if (lineConstant * lineConstant - 4 * lineSegmentLengthSquared * circleConstant <= 0) {
+                    resultInside = false;
                 } else {
-                    if (0 <= intersectionParam2 && intersectionParam2 <= 1) {
-                        resultEnter = getPoint();
-                        resultEnter.x = pointA.x + intersectionParam2 * (pointB.x - pointA.x);
-                        resultEnter.y = pointA.y + intersectionParam2 * (pointB.y - pointA.y);
+                    discriminant = Math.sqrt(lineConstant * lineConstant - 4 * lineSegmentLengthSquared * circleConstant);
+                    intersectionParam1 = (-lineConstant + discriminant) / (2 * lineSegmentLengthSquared);
+                    intersectionParam2 = (-lineConstant - discriminant) / (2 * lineSegmentLengthSquared);
+                    if ((intersectionParam1 < 0 || intersectionParam1 > 1) && (intersectionParam2 < 0 || intersectionParam2 > 1)) {
+                        resultInside = !((intersectionParam1 < 0 && intersectionParam2 < 0) || (intersectionParam1 > 1 && intersectionParam2 > 1))
+                    } else {
+                        if (0 <= intersectionParam2 && intersectionParam2 <= 1) {
+                            resultEnter = getPoint();
+                            resultEnter.x = pointA.x + intersectionParam2 * (pointB.x - pointA.x);
+                            resultEnter.y = pointA.y + intersectionParam2 * (pointB.y - pointA.y);
+                        }
+                        if (0 <= intersectionParam1 && intersectionParam1 <= 1) {
+                            resultExit = getPoint();
+                            resultExit.x = pointA.x + intersectionParam1 * (pointB.x - pointA.x);
+                            resultExit.y = pointA.y + intersectionParam1 * (pointB.y - pointA.y);
+                        }
+                        resultIntersects = true;
                     }
-                    if (0 <= intersectionParam1 && intersectionParam1 <= 1) {
-                        resultExit = getPoint();
-                        resultExit.x = pointA.x + intersectionParam1 * (pointB.x - pointA.x);
-                        resultExit.y = pointA.y + intersectionParam1 * (pointB.y - pointA.y);
-                    }
-                    resultIntersects = true;
                 }
+            } finally {
+                returnPoint(resultEnter);
+                returnPoint(resultExit);
             }
             return [resultInside, resultIntersects, resultEnter, resultExit];
-        }
-
-        // #endregion
-
-        // #region 元素控制
-
-        /** 移除数组中的指定元素
-         * @param arr 目标数组
-         * @param element 目标元素
-         */
-        public static function removeElementFromArray(arr:Array, element:*):void {
-            for (var i:int = arr.length - 1; i >= 0; i--)
-                if (arr[i] == element)
-                    arr.splice(i, 1);
         }
 
         // #endregion
@@ -351,9 +341,10 @@ package core {
         /** 计算两条线的交点
          * @param p1x p1y p2x p2y 第一条线的两端点
          * @param p3x p3y p4x p4y 第二条线的两端点
+         * @param output 输出值，若存在则不创建新对象
          * @return Point 或 null
          */
-        public static function getIntersection(p1x:Number, p1y:Number, p2x:Number, p2y:Number, p3x:Number, p3y:Number, p4x:Number, p4y:Number):Point {
+        public static function getIntersection(p1x:Number, p1y:Number, p2x:Number, p2y:Number, p3x:Number, p3y:Number, p4x:Number, p4y:Number, output:Point = null):Point {
             var dx1:Number = p2x - p1x;
             var dy1:Number = p2y - p1y;
             var dx2:Number = p4x - p3x;
@@ -365,17 +356,23 @@ package core {
             var dy3:Number = p1y - p3y;
             var t:Number = (dx2 * dy3 - dy2 * dx3) / denominator;
             var u:Number = (dx1 * dy3 - dy1 * dx3) / denominator;
-            if (t >= 0 && t <= 1 && u >= 0 && u <= 1)
-                return new Point(p1x + t * dx1, p1y + t * dy1);
+            if (t >= 0 && t <= 1 && u >= 0 && u <= 1) {
+                if (output == null)
+                    output = new Point();
+                output.x = p1x + t * dx1;
+                output.y = p1y + t * dy1;
+                return output;
+            }
             return null;
         }
 
         /**判断路径是否被拦截并计算拦截点
          * @param node1
          * @param node2
+         * @param output 输出值，若存在则不创建新对象
          * @return Point 或 null
          */
-        public static function nodesBlocked(node1:Node, node2:Node):Point {
+        public static function nodesBlocked(node1:Node, node2:Node, output:Point = null):Point {
             var bar1x:Number, bar1y:Number, bar2x:Number, bar2y:Number;
             var intersection:Point = null;
             var i:int = 0;
@@ -384,7 +381,7 @@ package core {
                 bar1y = game.barrierLines[i][0].nodeData.y;
                 bar2x = game.barrierLines[i][1].nodeData.x;
                 bar2y = game.barrierLines[i][1].nodeData.y;
-                intersection = getIntersection(node1.nodeData.x, node1.nodeData.y, node2.nodeData.x, node2.nodeData.y, bar1x, bar1y, bar2x, bar2y);
+                intersection = getIntersection(node1.nodeData.x, node1.nodeData.y, node2.nodeData.x, node2.nodeData.y, bar1x, bar1y, bar2x, bar2y, output);
                 if (intersection)
                     return intersection;
                 i++;
@@ -413,44 +410,6 @@ package core {
             }
             return null;
         }
-
-
-        /** 按指定 static 过滤数组中的元素，返回被过滤的元素数组
-         * <p>元素必须包含 static 属性
-         * @param arr 目标数组
-         * @param static 目标状态
-         * @return 被过滤的元素组成的数组
-         */
-        public static function fliterByStatic(arr:Array, state:int):Array {
-            var fliterArr:Array = [];
-            for (var i:int = 0; i < arr.length; i++) {
-                if (arr[i].state != state)
-                    continue;
-
-                fliterArr.push(arr[i]);
-                arr.removeAt(i);
-                i--;
-            }
-            return fliterArr;
-        }
-
-        /** 安全访问 XML 数据
-         * <p>尝试访问指定路径的 XML 数据，若失败则返回默认值或抛出错误
-         * @param xmlData 目标 XML 数据
-         * @param path 访问路径
-         * @param defaultValue 默认值
-         * @return 访问结果
-         */
-        public static function safeXMLAccess(xmlData:XML, path:String, defaultValue:XMLList = null):XMLList {
-            try {
-                return xmlData..*.(name().localName == path);
-            } catch (error:Error) {
-                if (defaultValue != null)
-                    return defaultValue;
-                throw error;
-            }
-        }
-
         // #endregion
 
         // #region point对象池

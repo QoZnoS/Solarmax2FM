@@ -20,6 +20,7 @@ package ui.layers {
     import ui.UIContainer;
 
     import utils.Drawer;
+    import utils.GeneralFunctions;
 
     public class TraditionalCtrlLayer extends Sprite {
         private var selectedNodes:Array;
@@ -212,7 +213,7 @@ package ui.layers {
         public function on_mouseUp(mouse:MouseEvent):void {
             var x:Number = NaN;
             var y:Number = NaN;
-            var node:Node = null;
+            var node:Node = null, i:int = 0;
             mouseDown = false;
             if (game.alpha < 0.5)
                 return;
@@ -220,12 +221,12 @@ package ui.layers {
                 return;
             x = (mouse.stageX - Starling.current.viewPort.x) / Starling.contentScaleFactor;
             y = (mouse.stageY - Starling.current.viewPort.y) / Starling.contentScaleFactor;
-            node = getClosestNode(x, y);
+            node = getClosestNode(x, y), i = selectedNodes.indexOf(node);
             if (mouse.shiftKey) {
-                if (node && selectedNodes.indexOf(node) == -1)
+                if (node && i == -1)
                     selectedNodes.push(node);
-                else if (node && selectedNodes.indexOf(node) != -1)
-                    selectedNodes.splice(selectedNodes.indexOf(node), 1);
+                else if (node && i != -1)
+                    GeneralFunctions.removeAt(selectedNodes, i);
             } else {
                 selectedNodes.length = 0;
                 if (node)

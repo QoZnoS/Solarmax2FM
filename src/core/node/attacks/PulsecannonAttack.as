@@ -9,7 +9,8 @@ package core.node.attacks {
 
     public class PulsecannonAttack extends BasicAttack {
         public function PulsecannonAttack(attackRate:Number, attackRange:Number, attackLast:Number) {
-            super(attackRate, attackRange, attackLast)
+            super(attackRate, attackRange, attackLast);
+            ships = new Vector.<Vector.<Ship>>;
         }
 
         override public function executeAttack(_Node:Node, dt:Number):void {
@@ -20,18 +21,19 @@ package core.node.attacks {
             var ship:Ship;
             for each (var node:Node in nodes) {
                 if (node == _Node)
-                    continue
-                var ships:Vector.<Vector.<Ship>> = EntityContainer.filterShipByStatic(node, 0);
+                    continue;
+                EntityContainer.filterShipByState(node, 0, ships);
                 for (var i:int = 0; i < Globals.teamCount; i++) {
                     var iGroup:int = Globals.teamGroups[i];
                     if (iGroup == group)
-                        continue
+                        continue;
+
                     for (var j:int = 0; j < 5; j++) {
                         if (ships[i].length == 0)
                             break;
-                        ship = node.rng.randomIndex(ships[i])
+                        ship = node.rng.randomIndex(ships[i]);
                         EntityContainer.removeShipFromVector(ships[i], ship);
-                        EntityHandler.destroyShip(ship)
+                        EntityHandler.destroyShip(ship);
                     }
                 }
             }
@@ -41,5 +43,7 @@ package core.node.attacks {
         override public function get attackType():String {
             return "pulsecannon";
         }
+
+        private var ships:Vector.<Vector.<Ship>>;
     }
 }

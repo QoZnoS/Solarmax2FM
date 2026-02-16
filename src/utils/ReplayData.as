@@ -1,5 +1,4 @@
 package utils {
-    import managers.Globals;
     import managers.SaveManager;
 
     public class ReplayData {

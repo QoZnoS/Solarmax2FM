@@ -158,7 +158,7 @@ package core.node.states {
                 if (activeGroup[i].length == 0)
                     continue;
                 var arcRatio:Number = 0;
-                var colorArr:Array = [];
+                colorArr.length = 0;
                 // 渲染兵力数字并计算队伍弧长
                 for each (var teamId:int in activeGroup[i]) {
                     var shipCount:int = node.ships[teamId].length;
@@ -289,6 +289,7 @@ package core.node.states {
         private static const ARC_ADJUSTMENT:Number = 0.006366197723675814; // 弧线绘制微调值
 
         private var reusableActiveGroup:Vector.<Vector.<int>> = new Vector.<Vector.<int>>();
+        private var colorArr:Array = [];
         private var startEaseX:Number;
         private var startEaseY:Number;
         private var _originalImageScale:Number;

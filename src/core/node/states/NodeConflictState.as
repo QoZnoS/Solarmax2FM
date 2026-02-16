@@ -13,6 +13,7 @@ package core.node.states {
         private var ships:Vector.<Vector.<Ship>>;
         private var activeTeams:Vector.<int>;
         private var activeGroups:Vector.<int>;
+        private var attackForces:Vector.<Number>;
         private var totalShips:int;
         private static const BASE_ATTACK_FACTOR:Number = 10; // 攻击力基础系数
 
@@ -20,6 +21,7 @@ package core.node.states {
             this.node = node;
             activeTeams = new Vector.<int>();
             activeGroups = new Vector.<int>();
+            attackForces = new Vector.<Number>();
         }
 
         public function init():void {
@@ -31,7 +33,7 @@ package core.node.states {
         }
 
         public function update(dt:Number):void {
-            var attackForces:Vector.<Number> = calcAttackForce(dt);
+            calcAttackForce(dt);
             processCombatDamage(attackForces);
             node.moveState.updateConflictLabels(activeTeams, totalShips);
         }
@@ -51,8 +53,8 @@ package core.node.states {
             return (activeGroups.length > 1);
         }
 
-        private function calcAttackForce(dt:Number):Vector.<Number> {
-            var attackForces:Vector.<Number> = new Vector.<Number>();
+        private function calcAttackForce(dt:Number):void {
+            attackForces.length = 0;
             for each (var attackingTeamId:int in activeTeams) {
                 var activeShips:int = 0;
                 for each (var ship:Ship in ships[attackingTeamId])
@@ -68,7 +70,6 @@ package core.node.states {
                 var attackForce:Number = (BASE_ATTACK_FACTOR * activeShips * attackMultiplier * dt) / (activeTeams.length - allyTeamsNum);
                 attackForces.push(attackForce);
             }
-            return attackForces;
         }
 
         private function processCombatDamage(attackForces:Vector.<Number>):void {
