@@ -63,6 +63,8 @@ package core.entities {
             trail.setVertexAlpha(2, 0);
             pulse = new Image(Root.assets.getTexture("ship_pulse"));
             pulse.pivotX = pulse.pivotY = pulse.width * 0.5;
+
+            trailLength = 0;
         }
 
         public function initShip(gameScene:GameScene, rng:Rng, team:int, node:Node, productionEffect:Boolean = true):void {
@@ -307,9 +309,9 @@ package core.entities {
             }
             jumpDist += jumpSpeed * dt;
             trail.rotation = 0;
-            trailLength = 16 * (jumpSpeed / 50 - 0.5);
-            if (trailLength > 75)
-                trailLength = 4 * (jumpSpeed / 50 + 13.5625);
+            trailLength = 2 * (jumpSpeed - Globals.teamShipSpeeds[team]);
+            if (trailLength > 100)
+                trailLength = (jumpSpeed + Globals.teamShipSpeeds[team] * 6) / 8;
             trailLength = Math.min(trailLength, targetDist);
             trail.width = trailLength;
             trail.rotation = jumpAngle;
@@ -335,7 +337,7 @@ package core.entities {
                 distance = dx * dx + dy * dy;
                 angle = Math.atan2(dy, dx);
                 moved = followShip.jumpSpeed * 5 * dt;
-                if (distance < moved * moved) {
+                if (distance - moved * moved < rng.nextRange(2, 18) * rng.nextRange(2, 18)) {
                     dx = node.nodeData.x + Math.cos(orbitAngle) * orbitDist - x;
                     dy = node.nodeData.y + Math.sin(orbitAngle) * orbitDist * 0.15 - y;
                     jumpAngle = Math.atan2(dy, dx);
@@ -348,6 +350,7 @@ package core.entities {
                     y += Math.sin(angle) * moved;
                     jumpSpeed = followShip.jumpSpeed;
                     jumpAngle = angle;
+                    trailLength = followShip.trailLength;
                 }
             } else {
                 dx = node.nodeData.x + Math.cos(orbitAngle) * orbitDist - x;
@@ -356,15 +359,13 @@ package core.entities {
                 jumpAngle = Math.atan2(dy, dx);
                 state = 3;
                 followShip = null;
-                jumpSpeed = Globals.teamShipSpeeds[team];
+                jumpSpeed = trailLength / 2 + Globals.teamShipSpeeds[team];
+                if (trailLength > 100)
+                    jumpSpeed = trailLength * 8 - Globals.teamShipSpeeds[team] * 6;
                 targetDist = Math.sqrt(distance);
             }
             image.scaleX = Math.max(2, image.scaleX - dt * 100);
             image.scaleY = 1 - image.scaleX / 6 * 0.25;
-            trailLength = 16 * (jumpSpeed / 50 - 0.5);
-            if (trailLength > 75)
-                trailLength = 4 * (jumpSpeed / 50 + 13.5625);
-            trailLength = Math.min(trailLength, targetDist);
             trail.width = trailLength;
             trail.rotation = jumpAngle;
             image.rotation = jumpAngle;
