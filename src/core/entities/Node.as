@@ -158,17 +158,14 @@ package core.entities {
 
             var baseLinks:Vector.<Node> = nodeLinks[0];
             var i:int, j:int, node:Node;
-            var point:Point = EntityContainer.getPoint();
             // 填充基准列表
             for (j = 0; j < nodesLength; j++) {
                 node = globalNodes[j] as Node;
                 if (node == this || node.nodeData.isUntouchable)
                     continue;
-                point = EntityContainer.nodesBlocked(this, node, point);
-                if (point == null)
+                if (!EntityContainer.isBlocked(this, node))
                     baseLinks[baseLinks.length] = node; // 避免push调用
             }
-            EntityContainer.returnPoint(point);
 
             var baseLength:int = baseLinks.length;
 

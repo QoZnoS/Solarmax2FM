@@ -10,6 +10,7 @@ package core.ai {
     import managers.Globals;
 
     import utils.Rng;
+    import utils.GeneralFunctions;
 
     public class HardAI extends BasicAI {
         public function HardAI(rng:Rng, actionDelay:Number, startDelay:Number) {
@@ -113,7 +114,7 @@ package core.ai {
                     var towerAttack:Number = hard_getTowerAttackUltra(senderNode, targetClose);
                     targetNode.aiValue += towerAttack * 4; // 估损权重
                 }
-                targets.sortOn("aiValue", 16);
+                GeneralFunctions.sortOnField(targets, "aiValue", 16);
                 for each (targetNode in targets) { // 再派兵
                     targetGroup = Globals.teamGroups[targetNode.nodeData.team];
                     targetClose = breadthFirstSearch(senderNode, targetNode);

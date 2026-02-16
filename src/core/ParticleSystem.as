@@ -16,7 +16,6 @@ package core {
         // 显然池中粒子总数总是等同于场上同时存在的最大粒子数量
         // 由于每帧遍历超大向量可能产生性能问题，以下变量专用于减少遍历次数
         private static var frame:int // 帧
-        private static var recycleFrame:int // 上一次回收粒子的帧
         private static var firstInactive:Vector.<int> // 每个粒子池一帧内第一个不活跃粒子
         private static var maxP:Vector.<int>; // 每个粒子池正在活跃的最大编号
 
@@ -60,15 +59,21 @@ package core {
             for each (var pool:Vector.<BasicParticle> in _particlePool)
                 for each (var p:BasicParticle in pool)
                     p.reset();
+            for (var i:int = 0; i < firstInactive.length; i++) {
+                firstInactive[i] = 0;
+                maxP[i] = 0;
+            }
         }
 
         public static function update(dt:Number):void {
             frame++;
             var length:int = _particlePool.length;
+            for (var i:int = 0; i < firstInactive.length; i++)
+                firstInactive[i] = 0;
             for (var index:int = 0; index < length; index++) {
                 var pool:Vector.<BasicParticle> = _particlePool[index];
                 var max:int = 0;
-                for (var i:int = 0; i < maxP[index]; i++) {
+                for (i = 0; i < maxP[index]; i++) {
                     var p:BasicParticle = pool[i];
                     if (!p.active)
                         continue;
@@ -85,55 +90,51 @@ package core {
                 throw new Error("particle type not registered");
 
             var pool:Vector.<BasicParticle> = _particlePool[index];
-            var maxActiveIndex:int = maxP[index];
-            var inactiveIndex:int = firstInactive[index];
-            var recycled:Boolean = false;
+            var reused:Boolean = false;
+            var start:int = firstInactive[index]; // 当前帧已扫描到的位置提示
 
-            // 如果上一帧回收过粒子，则从上一次回收的位置开始查找
-            if (recycleFrame == frame && inactiveIndex < pool.length) {
-                var p:BasicParticle = pool[inactiveIndex];
-                if (!p.active) {
-                    p.reset();
-                    p.init(config);
-                    maxP[index] = Math.max(maxActiveIndex, inactiveIndex + 1);
-                    firstInactive[index] = inactiveIndex + 1;
-                    recycleFrame = frame;
-                    recycled = true;
+            // 1. 从 firstInactive 位置开始向后查找不活跃粒子
+            for (var i:int = start; i < pool.length; i++) {
+                if (!pool[i].active) {
+                    reuseParticle(index, i, config);
+                    firstInactive[index] = i + 1; // 下次从下一个位置开始
+                    reused = true;
+                    break;
                 }
             }
 
-            // 如果未回收成功，则查找整个池
-            if (!recycled) {
-                // 如果池中已有粒子，查找第一个不活跃的
-                for (var i:int = 0; i < maxActiveIndex; i++) {
-                    var p2:BasicParticle = pool[i];
-                    if (!p2.active) {
-                        p2.reset();
-                        p2.init(config);
-                        // 更新firstInactive为下一个位置，但不超过当前maxP
-                        if (i == inactiveIndex)
-                            firstInactive[index] = i + 1;
-                        recycled = true;
-                        recycleFrame = frame;
+            // 2. 如果未找到，再从 0 到 start-1 扫描（覆盖 start 之前的空洞）
+            if (!reused) {
+                for (i = 0; i < start; i++) {
+                    if (!pool[i].active) {
+                        reuseParticle(index, i, config);
+                        firstInactive[index] = i + 1;
+                        reused = true;
                         break;
                     }
                 }
             }
 
-            // 如果仍未找到可复用的粒子，创建新粒子
-            if (!recycled) {
+            // 3. 仍未找到，则创建新粒子
+            if (!reused) {
                 var pClass:Class = _typeClass[index];
                 var newParticle:BasicParticle = new BasicParticle(type, new pClass());
                 newParticle.init(config);
                 pool.push(newParticle);
-                maxP[index] = pool.length;
-                // 新粒子加入后，firstInactive指向池末尾
-                firstInactive[index] = pool.length;
+                maxP[index] = pool.length; // 新粒子在末尾，更新最大索引
+                firstInactive[index] = pool.length; // 无空闲位置，指向末尾之后
             }
+        }
 
-            // 如果当前帧与回收帧不同，重置firstInactive
-            if (recycleFrame != frame)
-                firstInactive[index] = 0;
+        // 辅助函数：复用指定索引的粒子
+        private static function reuseParticle(typeIndex:int, particleIndex:int, config:Array):void {
+            var pool:Vector.<BasicParticle> = _particlePool[typeIndex];
+            var p:BasicParticle = pool[particleIndex];
+            p.reset();
+            p.init(config);
+            // 更新 maxP：可能粒子索引大于当前 maxP，需要扩展活跃范围
+            if (particleIndex + 1 > maxP[typeIndex])
+                maxP[typeIndex] = particleIndex + 1;
         }
 
         public static function registerType(type:String, particleClass:Class):void {

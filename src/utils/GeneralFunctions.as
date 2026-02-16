@@ -125,19 +125,19 @@ package utils {
 
         /**
          * 移除指定位置元素，低性能
-         * @param arr 
-         * @param index 
+         * @param arr
+         * @param index
          */
         public static function removeAt(arr:Array, index:int):void {
             for (var i:int = index; i < arr.length - 1; i++)
                 arr[i] = arr[i + 1];
             arr.length = arr.length - 1; // 缩短 Vector
         }
-        
+
         /**
          * 移除指定位置元素，高性能但破坏顺序
-         * @param arr 
-         * @param index 
+         * @param arr
+         * @param index
          */
         public static function removeAtUnordered(arr:Array, index:int):void {
             arr[index] = arr[arr.length - 1];
@@ -159,6 +159,109 @@ package utils {
                 writeIndex++;
             }
             arr.length = writeIndex; // 释放尾部元素
+        }
+
+        /**
+         * 静态比较函数，用于比较两个对象在指定字段上的值。
+         * 支持 CASEINSENSITIVE(1)、DESCENDING(2)、NUMERIC(16) 标志。
+         * 字段缺失（undefined）和 NaN 被视为最小值。
+         */
+        private static function compareByField(a:Object, b:Object, field:String, flags:int):int {
+            var valA:* = a[field];
+            var valB:* = b[field];
+
+            // 数值转换
+            if (flags & 16) {
+                valA = Number(valA);
+                valB = Number(valB);
+            }
+
+            // 大小写不敏感
+            if (flags & 1) {
+                if (valA is String)
+                    valA = String(valA).toLowerCase();
+                if (valB is String)
+                    valB = String(valB).toLowerCase();
+            }
+
+            // undefined 处理
+            var aUndef:Boolean = (valA === undefined);
+            var bUndef:Boolean = (valB === undefined);
+            if (aUndef && bUndef)
+                return 0;
+            if (aUndef)
+                return -1;
+            if (bUndef)
+                return 1;
+
+            // NaN 处理
+            var aNaN:Boolean = (typeof valA === 'number' && isNaN(valA));
+            var bNaN:Boolean = (typeof valB === 'number' && isNaN(valB));
+            if (aNaN && bNaN)
+                return 0;
+            if (aNaN)
+                return -1;
+            if (bNaN)
+                return 1;
+
+            // 正常比较
+            var cmp:int = 0;
+            if (valA < valB)
+                cmp = -1;
+            else if (valA > valB)
+                cmp = 1;
+
+            // 降序
+            if (flags & 2)
+                cmp = -cmp;
+            return cmp;
+        }
+
+        /**
+         * 快速排序递归段，仅对数组的一部分进行排序。
+         */
+        private static function quickSortSegment(arr:Array, left:int, right:int, field:String, flags:int):void {
+            if (left >= right)
+                return;
+
+            // 选择中间元素作为基准（避免最坏情况）
+            var pivotIdx:int = int((left + right) / 2);
+            var tmp:Object = arr[pivotIdx];
+            arr[pivotIdx] = arr[right];
+            arr[right] = tmp;
+
+            var storeIdx:int = left;
+            for (var i:int = left; i < right; i++) {
+                if (compareByField(arr[i], arr[right], field, flags) <= 0) {
+                    tmp = arr[i];
+                    arr[i] = arr[storeIdx];
+                    arr[storeIdx] = tmp;
+                    storeIdx++;
+                }
+            }
+            // 基准归位
+            tmp = arr[storeIdx];
+            arr[storeIdx] = arr[right];
+            arr[right] = tmp;
+
+            // 递归排序左右子段
+            quickSortSegment(arr, left, storeIdx - 1, field, flags);
+            quickSortSegment(arr, storeIdx + 1, right, field, flags);
+        }
+
+        /**
+         * 原地排序数组，根据单个字段和选项。
+         * 与原生 sortOn 的单字段版本行为一致，但忽略 UNIQUESORT(4) 和 RETURNINDEXEDARRAY(8) 选项。
+         * @param arr       要排序的数组（元素应为对象）
+         * @param field     用于排序的字段名（字符串）
+         * @param flags     排序选项（数值，可组合：1=大小写不敏感，2=降序，16=数值比较）
+         */
+        public static function sortOnField(arr:Array, field:String, flags:int = 0):void {
+            if (arr.length <= 1)
+                return;
+            // 屏蔽无关选项
+            flags &= ~(4 | 8);
+            quickSortSegment(arr, 0, arr.length - 1, field, flags);
         }
 
     }

@@ -31,6 +31,7 @@
     import utils.ReplayData;
     import utils.Rng;
     import managers.SaveManager;
+    import flash.utils.Dictionary;
 
     public class GameScene extends BasicScene {
         // #region 类变量
@@ -257,7 +258,6 @@
 
         public function countTeamCaps(dt:Number):void {
             for (var team:int = 0; team < Globals.teamCount; team++) {
-                // 重置兵力
                 Globals.teamCaps[team] = 0;
                 Globals.teamPops[team] = 0;
             }
@@ -267,7 +267,10 @@
                 Globals.teamPops[ship.team]++;
             EntityContainer.ships.length < 1024 ? Globals.exOptimization = 0 : (EntityContainer.ships.length < 8192 ? Globals.exOptimization = 1 : Globals.exOptimization = 2);
 
-            popLabels[0].text = popLabels[1].text = "POPULATION : " + Globals.teamPops[Globals.playerTeam] + " / " + Globals.teamCaps[Globals.playerTeam];
+            if (lastPopCounts != Globals.teamPops[Globals.playerTeam]) {
+                popLabels[0].text = popLabels[1].text = "POPULATION : " + Globals.teamPops[Globals.playerTeam] + " / " + Globals.teamCaps[Globals.playerTeam];
+                lastPopCounts = Globals.teamPops[Globals.playerTeam];
+            }
             if (popLabels[1].alpha > 0)
                 popLabels[1].alpha = Math.max(0, popLabels[1].alpha - dt * 0.5);
             if (popLabels[2].alpha > 0) {
@@ -344,5 +347,7 @@
                     UIContainer.fleetSlider.perc = 1;
             }
         }
+
+        private var lastPopCounts:int = -1;
     }
 }

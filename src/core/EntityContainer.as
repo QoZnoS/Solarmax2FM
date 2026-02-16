@@ -410,6 +410,32 @@ package core {
             }
             return null;
         }
+
+        public static function lineSegmentsIntersect(ax1:Number, ay1:Number, ax2:Number, ay2:Number, bx1:Number, by1:Number, bx2:Number, by2:Number):Boolean {
+            var d1:Number = (bx2 - bx1) * (ay1 - by1) - (by2 - by1) * (ax1 - bx1);
+            var d2:Number = (bx2 - bx1) * (ay2 - by1) - (by2 - by1) * (ax2 - bx1);
+            var d3:Number = (ax2 - ax1) * (by1 - ay1) - (ay2 - ay1) * (bx1 - ax1);
+            var d4:Number = (ax2 - ax1) * (by2 - ay1) - (ay2 - ay1) * (bx2 - ax1);
+            return (d1 * d2 < 0) && (d3 * d4 < 0);
+        }
+
+        public static function isBlocked(node1:Node, node2:Node):Boolean {
+            var x1:Number = node1.nodeData.x;
+            var y1:Number = node1.nodeData.y;
+            var x2:Number = node2.nodeData.x;
+            var y2:Number = node2.nodeData.y;
+            for each (var bar:Array in game.barrierLines) {
+                var bx1:Number = bar[0].nodeData.x;
+                var by1:Number = bar[0].nodeData.y;
+                var bx2:Number = bar[1].nodeData.x;
+                var by2:Number = bar[1].nodeData.y;
+                if (lineSegmentsIntersect(x1, y1, x2, y2, bx1, by1, bx2, by2)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         // #endregion
 
         // #region point对象池

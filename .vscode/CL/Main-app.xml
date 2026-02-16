@@ -385,6 +385,18 @@
         <!-- <maxD3D></maxD3D> -->
     <!-- </windows> -->
 
+    <!-- System configuration options -->
+    <systemConfig>
+        <!-- Option to check for stack overflow issues within JIT-generated code. Historically was "always" which is the default here -->
+        <!-- <stackOverflowChecks>always|never|debugOnly</stackOverflowChecks> !-->
+	<!-- The number of 4kb blocks to use as the lower collection limit for GC. Higher values means less frequent GC but more memory usage. Default 5120 = 20MB -->
+        <gcCollectionThreshold>256</gcCollectionThreshold>
+	<!-- The target efficiency coefficent for the GC ('G') i.e. ratio of GC work to program work. Default value is 0.25, value must be 0.01 to 1.0 -->
+        <gcEfficiency>1.0</gcEfficiency>
+	<!-- The maximum time spent in incremental marking slots per frame ('P'), in milliseconds. Default value is 5 -->
+        <!-- <gcMarkingTime>5</gcMarkingTime> !-->
+    </systemConfig>
+
     <!-- List of AIR Native Extensions to be loaded by the application -->
     <!-- Optional attribute 'delayLoad' can be used to delay the loading of the
          extension itself until it's requested via AS3 (ExtensionContext.loadExtension) -->
