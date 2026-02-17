@@ -44,7 +44,7 @@ package {
             _ui = new UIContainer(this);
             speedMult = 1;
             initTitleMenu(0);
-            debug.init(gameScene, titleMenu);
+            debug.init(gameScene, titleMenu, replayScene);
             addChild(titleMenu);
             addChild(gameScene);
             addChild(replayScene);

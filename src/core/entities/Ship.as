@@ -47,6 +47,8 @@ package core.entities {
         public var currentBatch:QuadBatch;
         public var prevForeground:Boolean;
 
+        public var tag:int;
+
         private var frame:int;
 
         // #endregion
@@ -65,10 +67,14 @@ package core.entities {
             pulse.pivotX = pulse.pivotY = pulse.width * 0.5;
 
             trailLength = 0;
+            tag = 0;
         }
 
         public function initShip(gameScene:GameScene, rng:Rng, team:int, node:Node, productionEffect:Boolean = true):void {
             frame = 0;
+            for each (var ship:Ship in node.ships[team])
+                if (ship.tag > tag)
+                    tag = ship.tag + 1;
             super.init(gameScene);
             this.team = team;
             this.node = node;
@@ -571,8 +577,10 @@ package core.entities {
             return {
                 x:x,
                 y:y,
+                tag:tag,
                 tx:tx,
                 ty:ty,
+                node:node.tag,
                 team:team,
                 orbitDist:orbitDist,
                 orbitAngle:orbitAngle,

@@ -13,7 +13,7 @@ package {
     import managers.Globals;
 
     import ui.UIContainer;
-    
+
     import core.EntityContainer;
     import core.entities.Node;
     import core.entities.EnemyAI;
@@ -22,11 +22,17 @@ package {
     import core.entities.Ship;
     import flash.filesystem.FileStream;
     import flash.filesystem.File;
+    import scenes.ReplayScene;
+    import flash.utils.ByteArray;
+    import flash.net.ObjectEncoding;
+    import flash.utils.CompressionAlgorithm;
+    import flash.filesystem.FileMode;
 
     public class Debug extends Sprite {
         private static var debug:Boolean; // debug 开启状态
         private static var game:GameScene; // GameScene 接口
         private static var title:TitleMenu; // TitleMenu 接口
+        private static var replay:ReplayScene; // ReplayScene 接口
         private static var scene:SceneController;
         private static var THIS:Debug;
 
@@ -43,9 +49,10 @@ package {
             scene = scene;
         }
 
-        public function init(gameScene:GameScene, titleMenu:TitleMenu):void {
+        public function init(gameScene:GameScene, titleMenu:TitleMenu, replayScene:ReplayScene):void {
             game = gameScene;
             title = titleMenu;
+            replay = replayScene;
             debug = false;
             THIS = this;
             fpsCalculator = [0, 0, 0, 0, 0, 0, 0];
@@ -53,7 +60,7 @@ package {
             nodeTagLables = [[], [], []];
             seed = 0;
             addDebugView();
-            addEventListener("enterFrame", update);
+            // addEventListener("enterFrame", update);
             startDebugMode();
 
             tagLayer = new Sprite();
@@ -85,24 +92,20 @@ package {
 
         // #endregion
         // #region 调试函数调用工具
-        public static function update(e:EnterFrameEvent):void {
+        public static function update(dt:Number):void {
             if (!debug) {
                 clear_tag();
                 return;
             }
-            THIS.dt = e.passedTime;
+            THIS.dt = dt;
             updateFPS();
             updateDebugLabel();
             if (game.visible)
                 updateTag();
             else
                 clear_tag();
-            if (game.visible) {
-                var dt:Number = e.passedTime;
-                dt *= game.alpha;
-                dt *= scene.speedMult;
+            if (game.visible || replay.visible)
                 deserializeGame(dt);
-            }
         }
 
         private var pause:Boolean = false;
@@ -301,19 +304,15 @@ package {
         }
 
         private static var gameData:Array;
+
         private static function deserializeGame(dt:Number):void {
-            var data:Object = {
-                dt:dt,
-                nodes:[],
-                ships:[],
-                ais:[]
-            };
+            var data:Object = {dt: dt,
+                    nodes: [],
+                    ships: []};
             for each (var node:Node in EntityContainer.nodes)
                 data.nodes.push(node.toJSON());
             for each (var ships:Ship in EntityContainer.ships)
                 data.ships.push(ships.toJSON());
-            for each (var ai:EnemyAI in EntityContainer.ais)
-                data.ais.push(ai.toJSON());
             gameData.push(data);
         }
 
@@ -355,10 +354,16 @@ package {
         }
 
         private function outputGameData():void {
-            var fileStream:FileStream = new FileStream();
-            fileStream.open(File.applicationStorageDirectory.resolvePath("gameData.txt"), "write");
-            fileStream.writeUTFBytes(JSON.stringify(gameData));
-            fileStream.close(); // 关闭文件
+            var json:String = JSON.stringify(gameData);
+            var bytes:ByteArray = new ByteArray();
+            bytes.writeUTFBytes(json);
+            bytes.compress(CompressionAlgorithm.DEFLATE); // 使用 DEFLATE 压缩
+
+            var file:File = File.applicationStorageDirectory.resolvePath("gameData.dat");
+            var stream:FileStream = new FileStream();
+            stream.open(file, FileMode.WRITE);
+            stream.writeBytes(bytes);
+            stream.close();
         }
 
         // #endregion

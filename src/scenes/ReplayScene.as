@@ -88,11 +88,12 @@ package scenes {
                 dt = frameData[0];
                 frameData.shift();
             }
-            countTeamCaps(dt); // 统计兵力
             AudioManager.update(dt); // 更新音效计时器
+            // EntityHandler.removeAllAI();
+            Debug.update(dt);
+            countTeamCaps(dt); // 统计兵力
             UIContainer.i.update();
             scene.gameScene.winningGroup = -1;
-            EntityHandler.removeAllAI();
             for each (var pool:EntityPool in EntityContainer.entityPool) // 依次执行所有实体的更新函数
                 pool.update(dt);
             for each (var se:ISpecialEvent in specialEvents) // 依次执行所有特殊事件的更新函数

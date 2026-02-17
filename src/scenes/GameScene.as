@@ -241,7 +241,7 @@
             AudioManager.update(dt); // 更新音效计时器
             dt *= this.alpha; // 速度随能见度变化
             dt *= scene.speedMult;
-            Debug.update(e);
+            Debug.update(dt);
             Globals.replay.addAction(dt);
             updateGame(dt);
             ParticleSystem.update(dt);
