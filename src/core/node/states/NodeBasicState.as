@@ -18,14 +18,12 @@ package core.node.states {
 
         public function init():void {
             warps.length = 0;
-            for (var i:int = 0; i < Globals.teamCount; i++) {
+            for (var i:int = 0; i < Globals.teamCount; i++)
                 warps.push(false);
-            }
             winPulseTimer = 0;
         }
 
         public function deinit():void {
-
         }
 
         public function update(dt:Number):void {

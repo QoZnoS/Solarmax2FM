@@ -73,7 +73,7 @@ package core.entities {
         public function initShip(gameScene:GameScene, rng:Rng, team:int, node:Node, productionEffect:Boolean = true):void {
             frame = 0;
             for each (var ship:Ship in node.ships[team])
-                if (ship.tag > tag)
+                if (ship.tag <= tag)
                     tag = ship.tag + 1;
             super.init(gameScene);
             this.team = team;
@@ -97,6 +97,8 @@ package core.entities {
             orbitSpeed = rng.nextNumber() * 0.15 + 0.05;
             x = node.nodeData.x + Math.cos(orbitAngle) * orbitDist;
             y = node.nodeData.y + Math.sin(orbitAngle) * orbitDist * 0.15;
+            tx = 0;
+            ty = 0;
             trailLength = 2;
             resetChargeRate();
             jumpDist = 0;
@@ -120,6 +122,9 @@ package core.entities {
             state = 0;
             warping = false;
             followShip = null;
+            node = null;
+            preNode = null;
+            jumpAngle = 0;
         }
 
         // #region 更新

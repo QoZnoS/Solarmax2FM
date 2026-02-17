@@ -653,7 +653,6 @@ package core.entities {
                 nodeData:nodeData.toJSON(),
                 statePool:statePoolData,
                 aiTimers:aiTimers.concat(),
-                transitShips:transitShips.concat(),
                 rng:rng.toJSON()
             };
         }

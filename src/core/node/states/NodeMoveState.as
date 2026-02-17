@@ -95,6 +95,9 @@ package core.node.states {
                 LayerFactory.removeChild(LayerFactory.LABEL, conflictLabels[i]);
             }
             orbitNode = null;
+            orbitSpeed = 0.1;
+            orbitDist = 0;
+            orbitAngle = 0;
         }
 
         // #region update

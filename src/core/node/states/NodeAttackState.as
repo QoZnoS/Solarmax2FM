@@ -20,6 +20,7 @@ package core.node.states {
         }
 
         public function deinit():void {
+            this.attackStrategy = null;
         }
 
         public function update(dt:Number):void {

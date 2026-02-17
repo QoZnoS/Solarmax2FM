@@ -30,6 +30,9 @@ package core.node.states {
         }
 
         public function deinit():void {
+            activeTeams.length = 0;
+            activeGroups.length = 0;
+            totalShips = 0;
         }
 
         public function update(dt:Number):void {
