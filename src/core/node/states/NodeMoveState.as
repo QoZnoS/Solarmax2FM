@@ -252,7 +252,12 @@ package core.node.states {
         }
 
         public function toJSON(k:String):* {
-            throw new Error("Method not implemented.");
+            return {
+                orbitNode:orbitNode ? orbitNode.nodeData.tag : -1,
+                orbitSpeed:orbitSpeed,
+                orbitDist:orbitDist,
+                orbitAngle:orbitAngle
+            };
         }
 
         public function get enable():Boolean {

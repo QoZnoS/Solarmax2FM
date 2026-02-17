@@ -99,7 +99,11 @@ package core.node.states {
         }
 
         public function toJSON(k:String):* {
-            return null;
+            return {
+                activeTeams:activeTeams,
+                totalShips:totalShips,
+                attackForces:attackForces
+            };
         }
 
         public function get enable():Boolean {

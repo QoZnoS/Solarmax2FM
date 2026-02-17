@@ -27,7 +27,7 @@ package core.node.states {
         }
 
         public function toJSON(k:String):* {
-            throw new Error("Method not implemented.");
+            return attackStrategy.toJSON();
         }
 
         public function get enable():Boolean {

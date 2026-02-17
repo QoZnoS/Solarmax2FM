@@ -64,5 +64,13 @@ package core.ai {
         public function get rng():Rng {
             return _rng;
         }
+
+        public function toJSON():* {
+            return {
+                type:type,
+                team:team,
+                actionDelay:actionDelay
+            };
+        }
     }
 }

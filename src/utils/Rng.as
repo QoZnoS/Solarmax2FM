@@ -67,6 +67,14 @@ package utils {
         public function get seed():uint {
             return this._seed;
         }
+
+        public function toJSON():* {
+            return {
+                seed:seed,
+                type:_generator is Xorshift128 ? X128 : _generator is Xorshift32 ? X32 : X0,
+                state:_generator.state
+            };
+        }
     }
 }
 
@@ -101,6 +109,10 @@ internal class Xorshift128 implements Generator {
     public function nextRange(min:int, max:int):int {
         return min + (nextInt() % (max - min + 1));
     }
+
+    public function get state():* {
+        return _state.concat(); // 返回状态副本以防外部修改
+    }
 }
 
 internal class Xorshift32 implements Generator {
@@ -126,6 +138,10 @@ internal class Xorshift32 implements Generator {
     public function nextRange(min:int, max:int):int {
         return min + (nextInt() % (max - min + 1));
     }
+
+    public function get state():* {
+        return _state;
+    }
 }
 
 internal class LCG implements Generator {
@@ -148,10 +164,15 @@ internal class LCG implements Generator {
     public function nextRange(min:int, max:int):int {
         return min + (nextInt() % (max - min + 1));
     }
+
+    public function get state():* {
+        return _state;
+    }
 }
 
 internal interface Generator {
     function nextInt():uint
     function nextNumber():Number
     function nextRange(min:int, max:int):int
+    function get state():* // 用于序列化内部状态
 }

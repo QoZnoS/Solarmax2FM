@@ -566,5 +566,28 @@ package core.entities {
             return closestNode;
         }
         // #endregion
+
+        public function toJSON():* {
+            return {
+                x:x,
+                y:y,
+                tx:tx,
+                ty:ty,
+                team:team,
+                orbitDist:orbitDist,
+                orbitAngle:orbitAngle,
+                orbitSpeed:orbitSpeed,
+                jumpDist:jumpDist,
+                jumpAngle:jumpAngle,
+                jumpSpeed:jumpSpeed,
+                chargeRate:chargeRate,
+                trailLength:trailLength,
+                hp:hp,
+                warping:warping,
+                foreground:foreground,
+                state:state,
+                rng:rng.toJSON()
+            };
+        }
     }
 }

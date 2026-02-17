@@ -36,6 +36,17 @@ package core.node.attacks {
             return "basic";
         }
 
+        public function toJSON():* {
+            return {
+                attackType:attackType,
+                attackTimer:attackTimer,
+                attackRate:attackRate,
+                attackRange:attackRange,
+                attackLast:attackLast,
+                attacking:attacking
+            };
+        }
+
         // #region getter/setter
         public function set attackTimer(value:Number):void {
             _timer = value;

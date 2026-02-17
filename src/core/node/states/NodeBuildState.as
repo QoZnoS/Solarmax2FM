@@ -34,7 +34,10 @@ package core.node.states {
         }
 
         public function toJSON(k:String):* {
-            throw new Error("Method not implemented.");
+            return {
+                buildRate:buildRate,
+                buildTimer:buildTimer
+            };
         }
 
         // #region S33加的队伍判断

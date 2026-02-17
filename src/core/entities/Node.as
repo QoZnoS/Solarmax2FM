@@ -643,5 +643,32 @@ package core.entities {
         public function get buildState():NodeBuildState {
             return statePool[NodeStateFactory.BUILD] as NodeBuildState;
         }
+
+        public function toJSON():* {
+            var statePoolData:Object = {};
+            for (var key:String in statePool)
+                statePoolData[key] = statePool[key].toJSON();
+            return {
+                tag:tag,
+                nodeData:nodeData.toJSON(),
+                statePool:statePoolData,
+                ships:ships.map(function (teamShips:Vector.<Ship>):Vector.<Ship> {
+                    return teamShips.map(function (ship:Ship):Object {
+                        return ship.toJSON();
+                    });
+                }),
+                 nodeLinks:nodeLinks.map(function (links:Vector.<Node>):Vector.<Node> {
+                    return links.map(function (node:Node):int {
+                        return EntityContainer.nodes.indexOf(node);
+                    });
+                }),
+                 oppNodeLinks:oppNodeLinks.map(function (node:Node):int {
+                    return node.tag;
+                }),
+                aiTimers:aiTimers.concat(),
+                transitShips:transitShips.concat(),
+                rng:rng.toJSON()
+            };
+        }
     }
 }

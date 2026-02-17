@@ -60,7 +60,7 @@ package core.node {
             return _serializableProps[prop] === true;
         }
 
-        public function toJSON(k:String):* {
+        public function toJSON():* {
             var output:Object = {};
             var keys:Array = [];
             for (var key:String in this)

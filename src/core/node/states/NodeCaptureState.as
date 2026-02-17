@@ -132,7 +132,9 @@ package core.node.states {
         }
 
         public function toJSON(k:String):* {
-            throw new Error("Method not implemented.");
+            return {
+                captureTeam:captureTeam
+            };
         }
 
         public function get enable():Boolean {
