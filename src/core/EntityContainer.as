@@ -416,7 +416,7 @@ package core {
             var d2:Number = (bx2 - bx1) * (ay2 - by1) - (by2 - by1) * (ax2 - bx1);
             var d3:Number = (ax2 - ax1) * (by1 - ay1) - (ay2 - ay1) * (bx1 - ax1);
             var d4:Number = (ax2 - ax1) * (by2 - ay1) - (ay2 - ay1) * (bx2 - ax1);
-            return (d1 * d2 < 0) && (d3 * d4 < 0);
+            return (d1 * d2 <= 0) && (d3 * d4 <= 0);
         }
 
         public static function isBlocked(node1:Node, node2:Node):Boolean {
