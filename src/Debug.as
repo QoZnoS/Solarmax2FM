@@ -61,7 +61,7 @@ package {
             seed = 0;
             addDebugView();
             // addEventListener("enterFrame", update);
-            startDebugMode();
+            // startDebugMode();
 
             tagLayer = new Sprite();
             tagLayer.x = tagLayer.pivotX = 512;
