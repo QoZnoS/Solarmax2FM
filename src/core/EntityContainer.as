@@ -199,6 +199,7 @@ package core {
             vec.length = writeIndex; // 释放尾部元素
         }
 
+        public static var shipTagCounter:int = 0;
         // #endregion
 
         // #region AI

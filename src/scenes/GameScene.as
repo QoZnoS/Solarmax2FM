@@ -90,6 +90,7 @@
             this.frameCount = 0;
             LayerFactory.addChildAt(LayerFactory.BTN_ADD, cover, 0);
             var i:int = 0;
+            EntityContainer.shipTagCounter = 0;
             rng = new Rng(seed);
             // #region 读取配置生成关卡
             // 势力属性

@@ -68,13 +68,12 @@ package core.entities {
 
             trailLength = 0;
             tag = 0;
+            jumpAngle = 0;
         }
 
         public function initShip(gameScene:GameScene, rng:Rng, team:int, node:Node, productionEffect:Boolean = true):void {
             frame = 0;
-            for each (var ship:Ship in node.ships[team])
-                if (ship.tag <= tag)
-                    tag = ship.tag + 1;
+            this.tag = EntityContainer.shipTagCounter++;
             super.init(gameScene);
             this.team = team;
             this.node = node;

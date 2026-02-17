@@ -32,12 +32,13 @@ package core.node.states {
         public function deinit():void {
             activeTeams.length = 0;
             activeGroups.length = 0;
+            attackForces.length = 0;
             totalShips = 0;
         }
 
         public function update(dt:Number):void {
             calcAttackForce(dt);
-            processCombatDamage(attackForces);
+            processCombatDamage();
             node.moveState.updateConflictLabels(activeTeams, totalShips);
         }
 
@@ -75,7 +76,7 @@ package core.node.states {
             }
         }
 
-        private function processCombatDamage(attackForces:Vector.<Number>):void {
+        private function processCombatDamage():void {
             for (var defenderIndex:int = 0; defenderIndex < activeTeams.length; defenderIndex++) {
                 var defendingTeamId:int = activeTeams[defenderIndex];
                 var defendingGroupId:int = Globals.teamGroups[defendingTeamId];

@@ -68,6 +68,10 @@ package utils {
             return this._seed;
         }
 
+        public function get state():uint {
+            return _generator is Xorshift128 || _generator is Xorshift32 ? _generator.state[0] : _generator.state;
+        }
+
         public function toJSON():* {
             return {
                 seed:seed,

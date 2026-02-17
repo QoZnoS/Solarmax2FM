@@ -197,8 +197,8 @@ package managers {
             for (var group:String in replayGroups) {
                 var arr:Array = replayGroups[group];
                 arr.sortOn("modDate", Array.NUMERIC);
-                // 每组最多保留20个
-                while (arr.length >= 20) {
+                // 每组最多保留16个
+                while (arr.length >= 16) {
                     var oldestMeta:Object = arr[0];
                     try {
                         oldestMeta.file.deleteFile(); // 同步删除文件

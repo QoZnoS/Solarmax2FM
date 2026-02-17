@@ -88,7 +88,8 @@ package utils {
         public function save(player:String):Array {
             _writing = _reading = false;
             level[2] = player;
-            var output:Array = [[level[0], level[1], seed, level[2]]];
+            // 将难度作为第五个元素加入
+            var output:Array = [[level[0], level[1], seed, level[2], difficulty]];
             var arr:Array = [];
             var len:int = actionCL.length;
             for (var i:int = 0; i < len; i++) {
@@ -107,7 +108,11 @@ package utils {
             rep.length = 0;
             // 读取关卡信息
             var arr:Array = data.shift();
-            level[0] = arr[0], level[1] = arr[1], seed = arr[2], level[2] = arr[3];
+            level[0] = arr[0];
+            level[1] = arr[1];
+            seed = arr[2];
+            level[2] = arr[3];
+            difficulty = arr[4];
             var totalActions:int = 0;
             // 读取每帧数据
             for each (arr in data) {
@@ -117,7 +122,10 @@ package utils {
                 actionCL.push(totalActions);
                 for (var i:int = 0; i < actionsInFrame; i++) {
                     var action:Vector.<int> = new Vector.<int>(4, true);
-                    action[0] = arr[1 + i * 4], action[1] = arr[2 + i * 4], action[2] = arr[3 + i * 4], action[3] = arr[4 + i * 4];
+                    action[0] = arr[1 + i * 4];
+                    action[1] = arr[2 + i * 4];
+                    action[2] = arr[3 + i * 4];
+                    action[3] = arr[4 + i * 4];
                     rep.push(action);
                 }
             }
