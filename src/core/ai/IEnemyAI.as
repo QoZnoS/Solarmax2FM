@@ -4,5 +4,6 @@ package core.ai {
         function get type():String
         function set team(team:int):void
         function get team():int
+        function toJSON():*;
     }
 }

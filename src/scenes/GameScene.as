@@ -31,7 +31,6 @@
     import utils.ReplayData;
     import utils.Rng;
     import managers.SaveManager;
-    import flash.utils.Dictionary;
 
     public class GameScene extends BasicScene {
         // #region 类变量
@@ -44,6 +43,8 @@
         public var popLabels:Vector.<TextField>;
 
         public var specialEvents:Vector.<ISpecialEvent>;
+
+        public var frameCount:int; // 已经执行的帧数
 
         // #endregion
         public function GameScene(scene:SceneController) {
@@ -86,6 +87,7 @@
         public function init(seed:uint = 0):void {
             this.alpha = 0;
             this.visible = true;
+            this.frameCount = 0;
             LayerFactory.addChildAt(LayerFactory.BTN_ADD, cover, 0);
             var i:int = 0;
             rng = new Rng(seed);
@@ -233,6 +235,7 @@
         // #region 逐帧更新
         override public function update(e:EnterFrameEvent):void {
             var dt:Number = e.passedTime;
+            this.frameCount++;
             if (this.alpha == 0)
                 return;
             AudioManager.update(dt); // 更新音效计时器

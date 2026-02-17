@@ -19,6 +19,9 @@ package {
     import core.entities.EnemyAI;
     import ui.components.OptionButton;
     import scenes.StartMenu;
+    import core.entities.Ship;
+    import flash.filesystem.FileStream;
+    import flash.filesystem.File;
 
     public class Debug extends Sprite {
         private static var debug:Boolean; // debug 开启状态
@@ -94,6 +97,12 @@ package {
                 updateTag();
             else
                 clear_tag();
+            if (game.visible) {
+                var dt:Number = e.passedTime;
+                dt *= game.alpha;
+                dt *= scene.speedMult;
+                deserializeGame(dt);
+            }
         }
 
         private var pause:Boolean = false;
@@ -158,6 +167,9 @@ package {
                 case Keyboard.A:
                     THIS.gotoAdvancedSettingMenu();
                     break;
+                case Keyboard.G:
+                    THIS.outputGameData();
+                    break;
                 default:
                     break;
             }
@@ -166,6 +178,7 @@ package {
         // 进入游戏时触发一次
         public function init_game():void {
             tagLayer.scaleX = tagLayer.scaleY = UIContainer.scale;
+            gameData = [];
             // init_tag();
         }
 
@@ -287,6 +300,23 @@ package {
             THIS.nodeTagLables = [[], [], []];
         }
 
+        private static var gameData:Array;
+        private static function deserializeGame(dt:Number):void {
+            var data:Object = {
+                dt:dt,
+                nodes:[],
+                ships:[],
+                ais:[]
+            };
+            for each (var node:Node in EntityContainer.nodes)
+                data.nodes.push(node.toJSON());
+            for each (var ships:Ship in EntityContainer.ships)
+                data.ships.push(ships.toJSON());
+            for each (var ai:EnemyAI in EntityContainer.ais)
+                data.ais.push(ai.toJSON());
+            gameData.push(data);
+        }
+
         // #endregion
         // #region 调试函数，手动触发
 
@@ -322,6 +352,13 @@ package {
                 page.toggled = false;
             startMenu.pages[6].toggled = true;
             startMenu.on_page(null);
+        }
+
+        private function outputGameData():void {
+            var fileStream:FileStream = new FileStream();
+            fileStream.open(File.applicationStorageDirectory.resolvePath("gameData.txt"), "write");
+            fileStream.writeUTFBytes(JSON.stringify(gameData));
+            fileStream.close(); // 关闭文件
         }
 
         // #endregion

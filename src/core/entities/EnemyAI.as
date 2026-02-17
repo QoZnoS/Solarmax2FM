@@ -44,5 +44,9 @@ package core.entities {
         public function get team():int {
             return ai.team;
         }
+
+        public function toJSON():* {
+            return ai.toJSON();
+        }
     }
 }
