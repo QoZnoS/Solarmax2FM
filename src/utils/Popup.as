@@ -1,20 +1,13 @@
 package utils {
-    import flash.events.MouseEvent;
-    import flash.geom.Point;
-
-    import starling.core.Starling;
     import starling.display.Quad;
     import starling.display.Sprite;
-    import starling.events.Touch;
-    import starling.events.TouchEvent;
-    import starling.events.TouchPhase;
     import starling.text.TextField;
     import starling.utils.HAlign;
     import starling.utils.VAlign;
 
     import ui.components.OptionButton;
 
-    public class Popup extends Sprite {
+    public class Popup extends MoveableSprite {
         /** 信息提示版，确认后销毁自己，不需要回调 */
         public static const TYPE_INFORMATION:int = 0;
         /** 确认选项 */
@@ -24,7 +17,6 @@ package utils {
 
         private var type:int = 0;
         private var popupContainer:Sprite;
-        private var bg:Quad;
         private var cover:Quad;
         private var acceptBtn:OptionButton;
         private var rejectBtn:OptionButton;
@@ -38,13 +30,14 @@ package utils {
             this.type = type;
             cover = new Quad(1024, 768);
             cover.alpha = 0;
-            bg = new Quad(560, 270, 0x000000);
+            var bg:Quad = new Quad(560, 270, 0x000000);
             bg.alpha = 0.4;
             bg.x = 512;
             bg.y = 384;
             bg.pivotX = 280;
             bg.pivotY = 135;
             bg.touchable = true;
+            this.bg = bg;
             popupContainer = new Sprite();
             popupContainer.x = popupContainer.pivotX = 512;
             popupContainer.y = popupContainer.pivotY = 384;
@@ -117,94 +110,6 @@ package utils {
                     break;
             }
         }
-
-        //#region 拖动缩放相关逻辑
-        private var dragable:Boolean = false;
-        private var isDragging:Boolean = false;
-        private var dragOffsetX:Number = 0;
-        private var dragOffsetY:Number = 0;
-
-        private var scaleable:Boolean = false;
-        private var isScaling:Boolean = false;
-        private var initialDistance:Number = 0;
-        private var initialScale:Number = 1;
-
-        override public function dispose():void {
-            if (dragable)
-                removeEventListener(TouchEvent.TOUCH, onTouch);
-            if (scaleable)
-                Starling.current.nativeStage.removeEventListener(MouseEvent.MOUSE_WHEEL, onMouseWheel);
-            super.dispose();
-        }
-
-        public function enableDrag():void {
-            dragable = true;
-            addEventListener(TouchEvent.TOUCH, onTouch);
-        }
-
-        public function enableScale():void {
-            scaleable = true;
-            Starling.current.nativeStage.addEventListener(MouseEvent.MOUSE_WHEEL, onMouseWheel);
-        }
-
-        private function onTouch(event:TouchEvent):void {
-            // 双指缩放
-            if (scaleable) {
-                var touches:Vector.<Touch> = event.getTouches(this);
-                if (touches.length == 2) {
-                    var t1:Touch = touches[0];
-                    var t2:Touch = touches[1];
-                    var p1:Point = t1.getLocation(this);
-                    var p2:Point = t2.getLocation(this);
-                    var dist:Number = Point.distance(p1, p2);
-
-                    if (!isScaling) {
-                        isScaling = true;
-                        initialDistance = dist;
-                        initialScale = popupContainer.scaleX;
-                    } else {
-                        var scale:Number = initialScale * (dist / initialDistance);
-                        scale = Math.max(0.5, Math.min(2, scale));
-                        popupContainer.scaleX = popupContainer.scaleY = scale;
-                    }
-                    isDragging = false; // 禁止拖动
-                    return;
-                } else {
-                    isScaling = false;
-                }
-            }
-
-            // 单指拖动
-            if (dragable) {
-                var touch:Touch = event.getTouch(this);
-                if (!touch)
-                    return;
-
-                if (touch.phase == TouchPhase.BEGAN) {
-                    if (touch.isTouching(bg)) {
-                        isDragging = true;
-                        var localPos:Point = touch.getLocation(this);
-                        dragOffsetX = popupContainer.x - localPos.x;
-                        dragOffsetY = popupContainer.y - localPos.y;
-                    }
-                } else if (touch.phase == TouchPhase.MOVED && isDragging) {
-                    var movePos:Point = touch.getLocation(this.parent);
-                    popupContainer.x = Math.max(Math.min(movePos.x + dragOffsetX, 1024 - popupContainer.width / 2), popupContainer.width / 2);
-                    popupContainer.y = Math.max(Math.min(movePos.y + dragOffsetY, 768 - popupContainer.height / 2), popupContainer.height / 2);
-                } else if (touch.phase == TouchPhase.ENDED) {
-                    isDragging = false;
-                }
-            }
-        }
-
-        // 鼠标滚轮缩放
-        private function onMouseWheel(e:MouseEvent):void {
-            var scale:Number = popupContainer.scaleX + (e.delta > 0 ? 0.1 : -0.1);
-            scale = Math.max(0.5, Math.min(2, scale));
-            popupContainer.scaleX = popupContainer.scaleY = scale;
-        }
-
-        //#endregion
 
         /**<code>accept.addEventListener("clicked", 回调函数)</code>*/
         public function get accept():OptionButton {
