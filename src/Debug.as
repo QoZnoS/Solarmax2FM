@@ -147,7 +147,7 @@ package {
                     THIS.outputGameData();
                     break;
                 case Keyboard.I: // 打开种子输入
-                    NumberInput.awake(THIS, THIS.debugLables[1]);
+                    NumberInput.awake(THIS, THIS.debugLables[1], 3);
                     break;
                 default:
                     break;
