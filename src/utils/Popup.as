@@ -16,8 +16,6 @@ package utils {
         private const COLOR:uint = 0xFF9DBB;
 
         private var type:int = 0;
-        private var popupContainer:Sprite;
-        private var cover:Quad;
         private var acceptBtn:OptionButton;
         private var rejectBtn:OptionButton;
         private var labels:Vector.<TextField>;
@@ -28,22 +26,7 @@ package utils {
          */
         public function Popup(type:int = TYPE_INFORMATION, ... prop) {
             this.type = type;
-            cover = new Quad(1024, 768);
-            cover.alpha = 0;
-            var bg:Quad = new Quad(560, 270, 0x000000);
-            bg.alpha = 0.4;
-            bg.x = 512;
-            bg.y = 384;
-            bg.pivotX = 280;
-            bg.pivotY = 135;
-            bg.touchable = true;
-            this.bg = bg;
-            popupContainer = new Sprite();
-            popupContainer.x = popupContainer.pivotX = 512;
-            popupContainer.y = popupContainer.pivotY = 384;
-            addChild(cover);
-            addChild(popupContainer);
-            popupContainer.addChild(bg);
+            setBox(560, 270);
             switch (type) {
                 case TYPE_INFORMATION:
                     var title:TextField = new TextField(512, 40, prop[0], "Downlink18", -1, COLOR);
@@ -51,7 +34,7 @@ package utils {
                     title.y = 249; //384-135
                     title.vAlign = title.hAlign = "center";
                     title.touchable = false;
-                    popupContainer.addChild(title);
+                    addChild(title);
                     break;
                 case TYPE_CHOOSE:
                     var info:TextField = new TextField(512, 200, prop[0], "Downlink18", -1, COLOR);
@@ -59,7 +42,7 @@ package utils {
                     info.y = 180;
                     info.vAlign = info.hAlign = "center";
                     info.touchable = false;
-                    popupContainer.addChild(info);
+                    addChild(info);
                     break;
                 default:
                     break;
@@ -75,7 +58,7 @@ package utils {
             label.vAlign = VAlign.TOP;
             label.hAlign = HAlign.LEFT;
             label.touchable = false;
-            popupContainer.addChild(label);
+            addChild(label);
             labels.push(label)
         }
 
@@ -87,7 +70,7 @@ package utils {
                     acceptBtn.y = 491;
                     acceptBtn.quad.color = COLOR;
                     acceptBtn.quad.alpha = 0.2;
-                    popupContainer.addChild(acceptBtn);
+                    addChild(acceptBtn);
                     acceptBtn.addEventListener("clicked", on_accept_deinit)
                     break;
                 case TYPE_CHOOSE:
@@ -96,14 +79,14 @@ package utils {
                     acceptBtn.y = 480;
                     acceptBtn.quad.color = COLOR;
                     acceptBtn.quad.alpha = 0.2;
-                    popupContainer.addChild(acceptBtn);
+                    addChild(acceptBtn);
                     acceptBtn.addEventListener("clicked", on_accept_deinit)
                     rejectBtn = new OptionButton("REJECL", COLOR);
                     rejectBtn.x = 610;
                     rejectBtn.y = 480;
                     rejectBtn.quad.color = COLOR;
                     rejectBtn.quad.alpha = 0.2;
-                    popupContainer.addChild(rejectBtn);
+                    addChild(rejectBtn);
                     rejectBtn.addEventListener("clicked", on_accept_deinit)
                     break;
                 default:
