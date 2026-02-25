@@ -17,6 +17,7 @@ package {
     import ui.UIContainer;
     import ui.UIContainer;
     import managers.SaveManager;
+    import utils.NumberInput;
 
     public class SceneController extends Sprite {
         private static var _s:SceneController;
@@ -60,6 +61,8 @@ package {
             gameScene.scaleX = gameScene.scaleY = _ui.scale = 1;
             for each (var popup:Popup in _alert)
                 addChild(popup)
+
+            new NumberInput();
         }
 
         // #region 处理黑边
@@ -221,6 +224,8 @@ package {
             }
             if (gameScene.visible)
                 gameScene.on_key_down(event.keyCode)
+            if (NumberInput.visible)
+                NumberInput.on_key_down(event);
             event.preventDefault();
             event.stopImmediatePropagation();
         }

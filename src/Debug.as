@@ -2,7 +2,6 @@
 package {
     import starling.display.Sprite;
     import starling.text.TextField;
-    import starling.events.EnterFrameEvent;
     import starling.filters.ColorMatrixFilter;
 
     import flash.ui.Keyboard;
@@ -24,9 +23,9 @@ package {
     import flash.filesystem.File;
     import scenes.ReplayScene;
     import flash.utils.ByteArray;
-    import flash.net.ObjectEncoding;
     import flash.utils.CompressionAlgorithm;
     import flash.filesystem.FileMode;
+    import utils.NumberInput;
 
     public class Debug extends Sprite {
         private static var debug:Boolean; // debug 开启状态
@@ -88,6 +87,7 @@ package {
                 addChild(label);
                 y += 12;
             }
+            updateDebugLabel();
         }
 
         // #endregion
@@ -132,46 +132,22 @@ package {
                     else
                         Globals.main.starling.start();
                     break;
-                case Keyboard.NUMBER_0:
-                case Keyboard.NUMBER_1:
-                case Keyboard.NUMBER_2:
-                case Keyboard.NUMBER_3:
-                case Keyboard.NUMBER_4:
-                case Keyboard.NUMBER_5:
-                case Keyboard.NUMBER_6:
-                case Keyboard.NUMBER_7:
-                case Keyboard.NUMBER_8:
-                case Keyboard.NUMBER_9:
-                    if (THIS.seed > uint.MAX_VALUE / 10)
-                        THIS.seed = 0
-                    THIS.seed = THIS.seed * 10 + (keyCode - 48);
-                    break;
-                case Keyboard.NUMPAD_0:
-                case Keyboard.NUMPAD_1:
-                case Keyboard.NUMPAD_2:
-                case Keyboard.NUMPAD_3:
-                case Keyboard.NUMPAD_4:
-                case Keyboard.NUMPAD_5:
-                case Keyboard.NUMPAD_6:
-                case Keyboard.NUMPAD_7:
-                case Keyboard.NUMPAD_8:
-                case Keyboard.NUMPAD_9:
-                    if (THIS.seed > uint.MAX_VALUE / 10)
-                        THIS.seed = 0
-                    THIS.seed = THIS.seed * 10 + (keyCode - 96);
-                    break;
                 case Keyboard.ENTER:
                 case Keyboard.NUMPAD_ENTER:
-                    title.loadMap(THIS.seed);
+                    if (!NumberInput.visible)
+                        title.loadMap(THIS.seed);
                     break;
-                case Keyboard.T:
+                case Keyboard.T: // 进入设置/势力编辑器页面
                     THIS.gotoTeamEditorMenu();
                     break;
-                case Keyboard.A:
+                case Keyboard.A: // 进入设置/高级设置页面
                     THIS.gotoAdvancedSettingMenu();
                     break;
-                case Keyboard.G:
+                case Keyboard.G: // 导出记录数据
                     THIS.outputGameData();
+                    break;
+                case Keyboard.I: // 打开种子输入
+                    NumberInput.awake(THIS, THIS.debugLables[1]);
                     break;
                 default:
                     break;
