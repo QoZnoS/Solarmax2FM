@@ -30,7 +30,7 @@ package managers {
             if (file.exists)
                 load();
             var maxData:int = rawData.length;
-            levelCache = new Vector.<Dictionary>(rawData.length, true);
+            levelCache = new Vector.<Dictionary>(maxData, true);
             for (var i:int = 0; i < maxData; i++)
                 levelCache[i] = new Dictionary;
 
@@ -56,6 +56,13 @@ package managers {
             process(cache);
             levelCache[SaveManager.currentData][SaveManager.currentDifficulty] = cache;
             level = cache;
+        }
+
+        public static function clearDataCache():void {
+            var maxData:int = rawData.length;
+            levelCache = new Vector.<Dictionary>(maxData, true);
+            for (var i:int = 0; i < maxData; i++)
+                levelCache[i] = new Dictionary;
         }
 
         public static function deepClone(obj:*):* {

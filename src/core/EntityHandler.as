@@ -33,7 +33,7 @@ package core {
                 rng = new Rng(replay.rng.nextInt(), Rng.X32);
             else
                 rng = new Rng(0, Rng.X32);
-            trace("AI created! seed: " + (game.visible ? game.rng.state : replay.visible ? replay.rng.state : 0).toString())
+            // trace("AI created! seed: " + (game.visible ? game.rng.state : replay.visible ? replay.rng.state : 0).toString())
             var actionDelay:Number = ("actionDelay" in data) ? data.actionDelay : -1;
             var startDelay:Number = ("startDelay" in data) ? data.startDelay : -1;
             enemyAI.initAI(game, rng, data.team, data.type, actionDelay, startDelay);
@@ -51,7 +51,7 @@ package core {
                 rng = new Rng(replay.rng.nextInt(), Rng.X32);
             else
                 rng = new Rng(0, Rng.X32);
-            trace("node created! seed: " + (game.visible ? game.rng.state : replay.visible ? replay.rng.state : 0).toString())
+            // trace("node created! seed: " + (game.visible ? game.rng.state : replay.visible ? replay.rng.state : 0).toString())
             node.initNode(game, rng, data);
             EntityContainer.addEntity(EntityContainer.INDEX_NODES, node);
             node.tag = EntityContainer.nodes.length - 1;
@@ -74,7 +74,7 @@ package core {
                 rng = new Rng(replay.rng.nextInt(), Rng.X32);
             else
                 rng = new Rng(0, Rng.X32);
-            trace("ship created! seed: " + (game.visible ? game.rng.state : replay.visible ? replay.rng.state : 0).toString())
+            // trace("ship created! seed: " + (game.visible ? game.rng.state : replay.visible ? replay.rng.state : 0).toString())
             ship.initShip(game, rng, team, node, productionEffect);
             EntityContainer.addEntity(EntityContainer.INDEX_SHIPS, ship);
             return ship;

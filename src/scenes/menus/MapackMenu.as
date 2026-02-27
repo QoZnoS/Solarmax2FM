@@ -96,6 +96,7 @@ package scenes.menus {
         private function on_refresh():void {
             if (_ready)
                 LevelData.init();
+            LevelData.clearDataCache();
             title.getBarrierData();
             title.getOrbitData();
             title.getMoreInfoTexts();

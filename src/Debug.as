@@ -26,6 +26,11 @@ package {
     import flash.utils.CompressionAlgorithm;
     import flash.filesystem.FileMode;
     import utils.NumberInput;
+    import managers.LevelData;
+    import utils.CalcTools;
+    import flash.desktop.Clipboard;
+    import flash.desktop.ClipboardFormats;
+    import managers.SaveManager;
 
     public class Debug extends Sprite {
         private static var debug:Boolean; // debug 开启状态
@@ -116,8 +121,9 @@ package {
             switch (keyCode) {
                 case Keyboard.Q: // Q 启用 Debug 模式，已移至 Root.as 中
                     break;
-                case Keyboard.S: // 跳关
-                    game.next();
+                case Keyboard.S: // 跳关，也用于打开种子输入
+                    if (game.visible)
+                        game.next();
                     break;
                 case Keyboard.W:
                     test();
@@ -146,8 +152,15 @@ package {
                 case Keyboard.G: // 导出记录数据
                     THIS.outputGameData();
                     break;
-                case Keyboard.I: // 打开种子输入
-                    NumberInput.awake(THIS, THIS.debugLables[1], 3);
+                case Keyboard.O: // 导出关卡到剪切板
+                    THIS.outputCurrentLevel();
+                    break;
+                case Keyboard.I: // 从剪切板导入关卡
+                    THIS.inputCurrentLevel();
+                    break;
+                case Keyboard.S: // 打开种子输入，也用于跳关
+                    if (!game.visible)
+                        NumberInput.awake(THIS, THIS.debugLables[1], 1);
                     break;
                 default:
                     break;
@@ -340,6 +353,40 @@ package {
             stream.open(file, FileMode.WRITE);
             stream.writeBytes(bytes);
             stream.close();
+        }
+
+        private function outputCurrentLevel():void {
+            Globals.level = title.currentIndex - 1;
+            var json:String = JSON.stringify(LevelData.rawData[SaveManager.currentData].level[Globals.level]);
+            trace(json)
+            var bytes:ByteArray = new ByteArray();
+            bytes.writeUTFBytes(json);
+            bytes.compress();
+            var output:String = CalcTools.chineseEncode(bytes);
+            var clipboard:Clipboard = Clipboard.generalClipboard;
+            clipboard.setData(ClipboardFormats.TEXT_FORMAT, output);
+        }
+
+        private function inputCurrentLevel():void {
+            Globals.level = title.currentIndex - 1;
+            try {
+                var clipboard:Clipboard = Clipboard.generalClipboard;
+                clipboard.getData(ClipboardFormats.TEXT_FORMAT);
+                var str:String = clipboard.getData(ClipboardFormats.TEXT_FORMAT) as String;
+                var bytes:ByteArray = CalcTools.chineseDecode(str);
+                bytes.uncompress();
+                trace(bytes)
+                var output:Object = JSON.parse(bytes.readUTFBytes(bytes.length));
+                LevelData.rawData[SaveManager.currentData].level[Globals.level] = output;
+                LevelData.clearDataCache();
+                LevelData.updateLevelData();
+                title.getBarrierData();
+                title.getOrbitData();
+                title.getMoreInfoTexts();
+                title.levels.updateLevels();
+            } catch (error:Error) {
+                SceneController.alert("Failed to load level: " + error.message);
+            }
         }
 
         // #endregion

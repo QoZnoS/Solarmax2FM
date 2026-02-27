@@ -65,7 +65,7 @@ package scenes {
             if ("ai" in level) {
                 for (i = 0; i < level.ai.length; i++) {
                     rng.nextInt();
-                    trace("AI skepped! seed: " + rng.state.toString());
+                    // trace("AI skepped! seed: " + rng.state.toString());
                 }
             }
             // bgm
