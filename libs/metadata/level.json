@@ -95,7 +95,12 @@
                                 "capture": {
                                     "captureTeam": 1
                                 },
-                                "attack": {}
+                                "attack": {
+                                    "type": "basic",
+                                    "attackRate": 0.1,
+                                    "attackRange": 180,
+                                    "attackLast": 5
+                                }
                             }
                         },
                         {
@@ -104,7 +109,30 @@
                             "type": "planet"
                         }
                     ],
-                    "ai": [],
+                    "ai/easy": [
+                        {
+                            "team": 2,
+                            "type": "SimpleAI",
+                            "actionDelay": 3,
+                            "startDelay": 3
+                        }
+                    ],
+                    "ai/normal": [
+                        {
+                            "team": 2,
+                            "type": "SmartAI",
+                            "actionDelay": 1.5,
+                            "startDelay": 1.5
+                        }
+                    ],
+                    "ai/hard": [
+                        {
+                            "team": 2,
+                            "type": "HardAI",
+                            "actionDelay": 0,
+                            "startDelay": 1.5
+                        }
+                    ],
                     "gameScale": 1,
                     "bgm": "bgm02",
                     "group": [[1,2],[3,4]],
@@ -140,28 +168,12 @@
                             "type": "planet"
                         }
                     ],
-                    "ai/easy": [
+                    "ai": [
                         {
                             "team": 2,
-                            "type": "SimpleAI",
-                            "actionDelay": 3,
-                            "startDelay": 3
-                        }
-                    ],
-                    "ai/normal": [
-                        {
-                            "team": 2,
-                            "type": "SmartAI",
-                            "actionDelay": 1.5,
-                            "startDelay": 1.5
-                        }
-                    ],
-                    "ai/hard": [
-                        {
-                            "team": 2,
-                            "type": "HardAI",
-                            "actionDelay": 0,
-                            "startDelay": 1.5
+                            "type/easy": "SimpleAI",
+                            "type/normal": "SmartAI",
+                            "type": "HardAI"
                         }
                     ],
                     "bgm": "bgm02"

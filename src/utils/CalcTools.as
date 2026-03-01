@@ -356,6 +356,42 @@ package utils {
         // #endregion
 
 
+        public static function byteArrayToBase64(bytes:ByteArray):String {
+            const base64Chars:String = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
+            var result:Array = [];
+            var i:int = 0;
+            var byte1:int, byte2:int, byte3:int, enc1:int, enc2:int, enc3:int, enc4:int;
+            
+            bytes.position = 0;
+            while (i < bytes.length) {
+                byte1 = bytes[i++] & 0xff;
+                if (i < bytes.length) {
+                    byte2 = bytes[i++] & 0xff;
+                    if (i < bytes.length) {
+                        byte3 = bytes[i++] & 0xff;
+                        enc1 = byte1 >> 2;
+                        enc2 = ((byte1 & 3) << 4) | (byte2 >> 4);
+                        enc3 = ((byte2 & 15) << 2) | (byte3 >> 6);
+                        enc4 = byte3 & 63;
+                    } else {
+                        enc1 = byte1 >> 2;
+                        enc2 = ((byte1 & 3) << 4) | (byte2 >> 4);
+                        enc3 = ((byte2 & 15) << 2);
+                        enc4 = 64; // '='
+                    }
+                } else {
+                    enc1 = byte1 >> 2;
+                    enc2 = ((byte1 & 3) << 4);
+                    enc3 = 64; // '='
+                    enc4 = 64; // '='
+                }
+                result.push(base64Chars.charAt(enc1));
+                result.push(base64Chars.charAt(enc2));
+                result.push(base64Chars.charAt(enc3));
+                result.push(base64Chars.charAt(enc4));
+            }
+            return result.join("");
+        }
 
 
 

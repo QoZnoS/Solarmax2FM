@@ -1,36 +1,38 @@
 ﻿// 这是为改版制作的调试用类，在 Root.as 中实例化
 package {
-    import starling.display.Sprite;
-    import starling.text.TextField;
-    import starling.filters.ColorMatrixFilter;
-
-    import flash.ui.Keyboard;
-
-    import scenes.GameScene;
-    import scenes.TitleMenu;
-
-    import managers.Globals;
-
-    import ui.UIContainer;
-
     import core.EntityContainer;
-    import core.entities.Node;
     import core.entities.EnemyAI;
-    import ui.components.OptionButton;
-    import scenes.StartMenu;
+    import core.entities.Node;
     import core.entities.Ship;
-    import flash.filesystem.FileStream;
-    import flash.filesystem.File;
-    import scenes.ReplayScene;
-    import flash.utils.ByteArray;
-    import flash.utils.CompressionAlgorithm;
-    import flash.filesystem.FileMode;
-    import utils.NumberInput;
-    import managers.LevelData;
-    import utils.CalcTools;
+
     import flash.desktop.Clipboard;
     import flash.desktop.ClipboardFormats;
+    import flash.filesystem.File;
+    import flash.filesystem.FileMode;
+    import flash.filesystem.FileStream;
+    import flash.ui.Keyboard;
+    import flash.utils.ByteArray;
+    import flash.utils.CompressionAlgorithm;
+
+    import managers.Globals;
+    import managers.LevelData;
     import managers.SaveManager;
+    import managers.metadata.LevelBinaryCodec;
+
+    import scenes.GameScene;
+    import scenes.ReplayScene;
+    import scenes.StartMenu;
+    import scenes.TitleMenu;
+
+    import starling.display.Sprite;
+    import starling.filters.ColorMatrixFilter;
+    import starling.text.TextField;
+
+    import ui.UIContainer;
+    import ui.components.OptionButton;
+
+    import utils.CalcTools;
+    import utils.NumberInput;
 
     public class Debug extends Sprite {
         private static var debug:Boolean; // debug 开启状态
@@ -357,12 +359,10 @@ package {
 
         private function outputCurrentLevel():void {
             Globals.level = title.currentIndex - 1;
-            var json:String = JSON.stringify(LevelData.rawData[SaveManager.currentData].level[Globals.level]);
-            trace(json)
-            var bytes:ByteArray = new ByteArray();
-            bytes.writeUTFBytes(json);
-            bytes.compress();
-            var output:String = CalcTools.chineseEncode(bytes);
+            var level:Object = LevelData.rawData[SaveManager.currentData].level[Globals.level];
+            var bytes:ByteArray = LevelBinaryCodec.compress(level); // 第一次压缩：结构化数据
+            bytes.compress(CompressionAlgorithm.LZMA); // 第二次压缩：LZMA
+            var output:String = CalcTools.chineseEncode(bytes); // 转码为汉字编码
             var clipboard:Clipboard = Clipboard.generalClipboard;
             clipboard.setData(ClipboardFormats.TEXT_FORMAT, output);
         }
@@ -374,9 +374,9 @@ package {
                 clipboard.getData(ClipboardFormats.TEXT_FORMAT);
                 var str:String = clipboard.getData(ClipboardFormats.TEXT_FORMAT) as String;
                 var bytes:ByteArray = CalcTools.chineseDecode(str);
-                bytes.uncompress();
-                trace(bytes)
-                var output:Object = JSON.parse(bytes.readUTFBytes(bytes.length));
+                bytes.uncompress(CompressionAlgorithm.LZMA);
+                var output:Object = LevelBinaryCodec.decompress(bytes);
+
                 LevelData.rawData[SaveManager.currentData].level[Globals.level] = output;
                 LevelData.clearDataCache();
                 LevelData.updateLevelData();
