@@ -264,5 +264,22 @@ package utils {
             quickSortSegment(arr, 0, arr.length - 1, field, flags);
         }
 
+        /**
+         * 汉字提取，过率字符串中Unicode码为4E00~9FFF的字符
+         * 用于导入关卡
+         * @param input 
+         * @return 
+         */
+        public static function extractChinese(input:String):String {
+            var result:String = "";
+            for (var i:int = 0; i < input.length; i++) {
+                var charCode:uint = input.charCodeAt(i);
+                if (charCode >= 0x4E00 && charCode <= 0x9FFF)
+                    result += input.charAt(i);
+            }
+            return result;
+        }
+
+
     }
 }

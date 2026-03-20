@@ -33,6 +33,7 @@ package {
 
     import utils.CalcTools;
     import utils.NumberInput;
+    import utils.GeneralFunctions;
 
     public class Debug extends Sprite {
         private static var debug:Boolean; // debug 开启状态
@@ -123,9 +124,11 @@ package {
             switch (keyCode) {
                 case Keyboard.Q: // Q 启用 Debug 模式，已移至 Root.as 中
                     break;
-                case Keyboard.S: // 跳关，也用于打开种子输入
+                case Keyboard.S: // 跳关，打开种子输入
                     if (game.visible)
                         game.next();
+                    if (!game.visible)
+                        NumberInput.awake(THIS, THIS.debugLables[1], 1);
                     break;
                 case Keyboard.W:
                     test();
@@ -159,10 +162,6 @@ package {
                     break;
                 case Keyboard.I: // 从剪切板导入关卡
                     THIS.inputCurrentLevel();
-                    break;
-                case Keyboard.S: // 打开种子输入，也用于跳关
-                    if (!game.visible)
-                        NumberInput.awake(THIS, THIS.debugLables[1], 1);
                     break;
                 default:
                     break;
@@ -372,7 +371,7 @@ package {
             try {
                 var clipboard:Clipboard = Clipboard.generalClipboard;
                 clipboard.getData(ClipboardFormats.TEXT_FORMAT);
-                var str:String = clipboard.getData(ClipboardFormats.TEXT_FORMAT) as String;
+                var str:String = GeneralFunctions.extractChinese(clipboard.getData(ClipboardFormats.TEXT_FORMAT) as String);
                 var bytes:ByteArray = CalcTools.chineseDecode(str);
                 bytes.uncompress(CompressionAlgorithm.LZMA);
                 var output:Object = LevelBinaryCodec.decompress(bytes);

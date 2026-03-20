@@ -1,5 +1,6 @@
 package managers.metadata {
     import flash.utils.ByteArray;
+    import flash.utils.Endian;
 
     /**
      * 关卡数据二进制编解码器（优化版）
@@ -76,6 +77,7 @@ package managers.metadata {
         //--------------------------------------------------------------------------
         public static function compress(data:Object):ByteArray {
             var bytes:ByteArray = new ByteArray();
+            bytes.endian = Endian.LITTLE_ENDIAN;
             // 收集动态字符串（不在预定义表中）
             var dynamicStrings:Array = [];
             var dynamicMap:Object = {};
@@ -94,6 +96,7 @@ package managers.metadata {
         }
 
         public static function decompress(bytes:ByteArray):Object {
+            bytes.endian = Endian.LITTLE_ENDIAN;
             // 读取动态字符串表
             var dynCount:int = readVarInt(bytes);
             var dynamicStrings:Array = [];
