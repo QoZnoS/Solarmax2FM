@@ -37,7 +37,7 @@ package utils {
         }
 
         /**
-         * 生成 [0, 1) 范围的浮点数
+         * 生成 [0, 1) 范围的浮点数 实测期望值位0.49
          */
         public function nextNumber():Number {
             return _generator.nextNumber()
@@ -107,7 +107,7 @@ internal class Xorshift128 implements Generator {
     }
 
     public function nextNumber():Number {
-        return nextInt() / uint.MAX_VALUE;
+        return nextInt() / int.MAX_VALUE;
     }
 
     public function nextRange(min:int, max:int):int {
@@ -136,7 +136,7 @@ internal class Xorshift32 implements Generator {
     }
 
     public function nextNumber():Number {
-        return nextInt() / uint.MAX_VALUE;
+        return nextInt() / int.MAX_VALUE;
     }
 
     public function nextRange(min:int, max:int):int {

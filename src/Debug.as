@@ -34,6 +34,7 @@ package {
     import utils.CalcTools;
     import utils.NumberInput;
     import utils.GeneralFunctions;
+    import utils.Rng;
 
     public class Debug extends Sprite {
         private static var debug:Boolean; // debug 开启状态
@@ -162,6 +163,24 @@ package {
                     break;
                 case Keyboard.I: // 从剪切板导入关卡
                     THIS.inputCurrentLevel();
+                    break;
+                case Keyboard.F1:
+                    THIS.testF1();
+                    break;
+                case Keyboard.F2:
+                    THIS.testF2();
+                    break;
+                case Keyboard.F3:
+                    THIS.testF3();
+                    break;
+                case Keyboard.F4:
+                    THIS.testF4();
+                    break;
+                case Keyboard.F5:
+                    THIS.testF5();
+                    break;
+                case Keyboard.F6:
+                    THIS.testF6();
                     break;
                 default:
                     break;
@@ -388,6 +407,33 @@ package {
             }
         }
 
+        private function testF1():void {
+            var rng:Rng = new Rng();
+            var sum:Number = 0;
+            for(var i:int = 0; i < 100000; i++)
+                sum += rng.nextNumber();
+            trace(sum/100000);
+        }
+
+        private function testF2():void {
+
+        }
+
+        private function testF3():void {
+
+        }
+
+        private function testF4():void {
+
+        }
+
+        private function testF5():void {
+
+        }
+
+        private function testF6():void {
+
+        }
         // #endregion
         public static function test():void {
         }
