@@ -37,7 +37,6 @@ package core.ai {
             var nodeCount:int = 0;
             var nodeGroup:int = -1;
             for each (node in nodeArray) { // 计算己方天体的几何中心
-                node.getTransitShips(team);
                 if (node.nodeData.team != team)
                     continue;
                 centerX += node.nodeData.x;

@@ -31,9 +31,6 @@ package core.ai {
             var nodeGroup:int = -1;
             var shipStrength:Number = Math.sqrt(Globals.teamShipAttacks[team] * Globals.teamShipDefences[team]); //单体强度
             var shipSpeed:Number = Globals.teamShipSpeeds[team] / 50; //单体速度
-            for each (node in nodeArray) {
-                node.getTransitShips(team);
-            }
             // #region 防御
             targets.length = 0;
             for each (node in nodeArray) { // 计算目标天体

@@ -43,7 +43,6 @@ package core.ai {
             var shipStrength:Number = Math.sqrt(Globals.teamShipAttacks[team] * Globals.teamShipDefences[team]); //单体强度
             var shipSpeed:Number = Globals.teamShipSpeeds[team] / 50; //单体速度
             for each (node in nodeArray) {
-                node.getTransitShips(team);
                 if (node.nodeData.team == team) {
                     centerX += node.nodeData.x;
                     centerY += node.nodeData.y;

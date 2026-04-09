@@ -37,9 +37,6 @@ package core.ai {
             var captureCost:Number = 0;
             var shipStrength:Number = Math.sqrt(Globals.teamShipAttacks[team] * Globals.teamShipDefences[team]); //单体强度
             var shipSpeed:Number = Globals.teamShipSpeeds[team] / 50; //单体速度
-            for each (node in nodeArray) {
-                node.getTransitShips(team);
-            }
             // #region 撤退
             senders.length = 0;
             for each (node in nodeArray) { // 计算出兵天体
