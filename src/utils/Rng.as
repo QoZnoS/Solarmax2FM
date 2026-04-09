@@ -37,7 +37,7 @@ package utils {
         }
 
         /**
-         * 生成 [0, 1) 范围的浮点数 实测期望值位0.49
+         * 生成 [0, 1) 范围的浮点数 实测期望值为0.49
          */
         public function nextNumber():Number {
             return _generator.nextNumber()
