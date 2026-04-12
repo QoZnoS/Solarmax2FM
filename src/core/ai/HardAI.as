@@ -30,7 +30,7 @@ package core.ai {
                     surrender = false; // 有己方天体则不认输
             if (surrender && Globals.teamPops[team] < 30)
                 return;
-            if (nodeArray[0].nodeData.type == NodeType.DILATOR && nodeArray[0].nodeData.team == team && nodeArray[0].hard_AllStrength(team) * 0.6 < nodeArray[0].hard_oppAllStrength(team)) {
+            if (nodeArray[0].nodeData.type == NodeType.DILATOR && nodeArray[0].nodeData.team == team && SituationAssessor.hard_AllStrength(nodeArray[0], team) * 0.6 < SituationAssessor.hard_oppAllStrength(nodeArray[0], team)) {
                 blackDefend();
                 return;
             }
@@ -49,14 +49,14 @@ package core.ai {
                 nodeGroup = Globals.teamGroups[node.nodeData.team];
                 if (!senderCheckBasic(node))
                     continue;
-                if (node.hard_oppAllStrength(team) != 0 || node.conflict) { // (预)战争状态
-                    if (node.hard_teamStrength(team) * 0.6 > node.hard_oppAllStrength(team)) {
-                        if (nodeGroup != group && node.hard_teamStrength(team) < node.nodeData.size * 200)
+                if (SituationAssessor.hard_oppAllStrength(node, team) != 0 || node.conflict) { // (预)战争状态
+                    if (SituationAssessor.hard_teamStrength(node, team) * 0.6 > SituationAssessor.hard_oppAllStrength(node, team)) {
+                        if (nodeGroup != group && SituationAssessor.hard_teamStrength(node, team) < node.nodeData.size * 200)
                             continue; // 保留占据兵力
                         senders.push(node); // 己方过强时出兵（损失不到五分之一）
                         node.senderType = "overflow"; // 类型：兵力溢出
-                    } else if (node.hard_AllStrength(team) < node.hard_oppAllStrength(team)) {
-                        if (!node.hard_retreatCheck(team))
+                    } else if (SituationAssessor.hard_AllStrength(node, team) < SituationAssessor.hard_oppAllStrength(node, team)) {
+                        if (!SituationAssessor.hard_retreatCheck(node, team))
                             continue; // 战术撤退时机检测
                         senders.push(node); // 己方过弱时出兵
                         node.senderType = "retreat"; // 类型：战术撤退
@@ -81,8 +81,8 @@ package core.ai {
                 captureGroup = Globals.teamGroups[node.captureState.captureTeam];
                 if (!targetCheckBasic(node))
                     continue;
-                if (node.hard_oppAllStrength(team) != 0) { // (预)战争状态
-                    if (node.hard_AllStrength(team) * 0.866 < node.hard_oppAllStrength(team)) {
+                if (SituationAssessor.hard_oppAllStrength(node, team) != 0) { // (预)战争状态
+                    if (SituationAssessor.hard_AllStrength(node, team) * 0.866 < SituationAssessor.hard_oppAllStrength(node, team)) {
                         targets.push(node); // 己方强度不足时作为目标（损失超过一半）
                         node.targetType = "lack"; // 类型：兵力不足
                     }
@@ -101,7 +101,7 @@ package core.ai {
                 senderGroup = Globals.teamGroups[senderNode.nodeData.team];
                 for each (var targetNode:Node in targets) { // 先排序
                     distance = calcDistence(senderNode, targetNode) + rng.nextNumber() * 32;
-                    targetNode.aiValue = distance * 0.8 + targetNode.hard_oppAllStrength(team);
+                    targetNode.aiValue = distance * 0.8 + SituationAssessor.hard_oppAllStrength(targetNode, team);
                     if (targetNode.attackState.attackRate != 0)
                         targetNode.aiValue += getTowerAIValue();
                     if (targetNode.nodeData.type == NodeType.STARBASE)
@@ -122,23 +122,23 @@ package core.ai {
                         continue;
                     if (targetClose.nodeData.isWarp && senderNode.nodeData.isWarp && senderGroup == group)
                         continue; // 避免传送门之间反复横跳
-                    var ships:Number = senderNode.hard_teamStrength(team);
+                    var ships:Number = SituationAssessor.hard_teamStrength(senderNode, team);
                     if (senderNode.senderType == "overflow") {
                         if (senderGroup != group)
                             ships -= senderNode.nodeData.size * 200; // 尝试占领时减少派兵数量
-                        ships -= Math.floor(senderNode.hard_oppAllStrength(team) * 1.667); // 兵力溢出时减少派兵数量
+                        ships -= Math.floor(SituationAssessor.hard_oppAllStrength(senderNode, team) * 1.667); // 兵力溢出时减少派兵数量
                     }
                     if (targetNode.targetType == "lack") {
                         if (targetGroup == group)
-                            ships = Math.min(ships, Math.floor(targetNode.hard_oppAllStrength(team) * 1.2 - targetNode.hard_AllStrength(team)) + 4); // 目标兵力不足时防止派兵过度
+                            ships = Math.min(ships, Math.floor(SituationAssessor.hard_oppAllStrength(targetNode, team) * 1.2 - SituationAssessor.hard_AllStrength(targetNode, team)) + 4); // 目标兵力不足时防止派兵过度
                         else
-                            ships = Math.min(ships, Math.floor(targetNode.hard_oppAllStrength(team) * 1.6 - targetNode.hard_AllStrength(team))); // 目标兵力不足时防止派兵过度
+                            ships = Math.min(ships, Math.floor(SituationAssessor.hard_oppAllStrength(targetNode, team) * 1.6 - SituationAssessor.hard_AllStrength(targetNode, team))); // 目标兵力不足时防止派兵过度
                     }
                     ships = Math.max(ships, ((hard_distance(senderNode, targetNode) * targetNode.buildState.buildRate / 50) * 1.2 + 3));
                     towerAttack = hard_getTowerAttackUltra(senderNode, targetClose);
                     if (towerAttack > 0 && ships < towerAttack + 30)
                         continue; // 派出的兵力不超估损30兵时不派兵
-                    if (ships - towerAttack < targetNode.hard_oppAllStrength(team) - targetNode.hard_AllStrength(team))
+                    if (ships - towerAttack < SituationAssessor.hard_oppAllStrength(targetNode, team) - SituationAssessor.hard_AllStrength(targetNode, team))
                         continue; // 己方兵力不足敌方时不派兵
                     NodeStaticLogic.sendAIShips(senderNode, team, targetClose, ships);
                     // traceDebug("attackV1: " + senderNode.senderType + " " + senderNode.tag + " -> " + targetNode.tag + " " + targetNode.targetType + " ships: " + ships + " guessDieShips: " + towerAttack);
@@ -153,14 +153,14 @@ package core.ai {
                 for each (var node:Node in nodeArray) {
                     if (!senderCheckBasic(node) || !moveCheckBasic(node, boss))
                         continue;
-                    if (boss.hard_AllStrength(team) * 0.6 < boss.hard_oppAllStrength(team))
-                        NodeStaticLogic.sendAIShips(node, team, boss, node.hard_teamStrength(team)); // 回防
+                    if (SituationAssessor.hard_AllStrength(boss, team) * 0.6 < SituationAssessor.hard_oppAllStrength(boss, team))
+                        NodeStaticLogic.sendAIShips(node, team, boss, SituationAssessor.hard_teamStrength(node, team)); // 回防
                 }
             }
         }
 
         public function senderCheckBasic(node:Node):Boolean { // 判断能否出兵
-            if (node.hard_teamStrength(team) == 0)
+            if (SituationAssessor.hard_teamStrength(node, team) == 0)
                 return false; // 无己方飞船不出兵
             return true;
         }

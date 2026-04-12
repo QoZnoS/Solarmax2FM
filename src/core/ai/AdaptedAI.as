@@ -59,22 +59,22 @@ package core.ai {
             targets.length = 0;
             for each (node in nodeArray) { // 计算目标天体
                 nodeGroup = Globals.teamGroups[node.nodeData.team];
-                if (node.nodeData.type == NodeType.DILATOR && node.teamShipCount(team) > 0) {
+                if (node.nodeData.type == NodeType.DILATOR && SituationAssessor.teamStrength(node, team, false) > 0) {
                     node.unloadShips();
                     return;
                 }
                 if (node.nodeData.isAIinvisible)
                     continue;
-                if (nodeGroup != group && node.predictedGroupShipCount(team) == 0)
+                if (nodeGroup != group && SituationAssessor.predictedGroupStrength(node, team, false) == 0)
                     continue; // 条件1：为己方天体或有己方飞船（包括飞行中的）
-                if (node.predictedOppShipCount(team) == 0)
+                if (SituationAssessor.predictedOppStrength(node, team, false) == 0)
                     continue; // 条件2：有敌方
-                if (node.predictedGroupStrength(team) > node.predictedOppStrength(team) * 2)
+                if (SituationAssessor.predictedGroupStrength(node, team) > SituationAssessor.predictedOppStrength(node, team) * 2)
                     continue; // 条件3：预测己方强度低于敌方两倍（即可能打不过敌方
                 dx = node.nodeData.x - centerX;
                 dy = node.nodeData.y - centerY;
                 distance = Math.sqrt(dx * dx + dy * dy) + rng.nextNumber() * 32;
-                risk = node.predictedGroupStrength(team) - node.predictedOppCaptureRisk(team);
+                risk = SituationAssessor.predictedGroupStrength(node, team) - SituationAssessor.predictedOppCaptureRisk(node, team);
                 node.aiValue = distance + risk;
                 targets.push(node);
             }
@@ -85,13 +85,13 @@ package core.ai {
                     nodeGroup = Globals.teamGroups[node.nodeData.team];
                     if (node.nodeData.isAIinvisible)
                         continue;
-                    if (node.aiTimers[team] > 0 || node.teamShipCount(team) == 0)
+                    if (node.aiTimers[team] > 0 || SituationAssessor.teamStrength(node, team, false) == 0)
                         continue; // 基本条件：该天体己方ai倒计时为0且该天体己方强度不为0
-                    if (nodeGroup != group && node.predictedGroupStrength(team) > node.predictedOppStrength(team))
+                    if (nodeGroup != group && SituationAssessor.predictedGroupStrength(node, team) > SituationAssessor.predictedOppStrength(node, team))
                         continue; // 条件：是己方天体或预测己方强度低于敌方
-                    if (node.predictedOppShipCount(team) > 0 && node.predictedGroupStrength(team) > node.predictedOppStrength(team))
+                    if (SituationAssessor.predictedOppStrength(node, team, false) > 0 && SituationAssessor.predictedGroupStrength(node, team) > SituationAssessor.predictedOppStrength(node, team))
                         continue; // 条件：没有敌方或预测己方强度低于敌方
-                    node.aiStrength = -node.groupStrength(team); // 将该天体己方强度记为己方船数的相反数
+                    node.aiStrength = -SituationAssessor.groupStrength(node, team); // 将该天体己方强度记为己方船数的相反数
                     if (EntityContainer.inAttackNodeCheck(node, team, NodeType.PULSECANNON, true)) {
                         if (node.aiStrength > 0)
                             node.aiStrength /= 10;
@@ -119,7 +119,7 @@ package core.ai {
                             trace("\"Try defending.\" team: " + team + " sender: " + senderNode.tag + " target: " + targetNode.tag + " but failed: THE_SAME_ONE_OR_BLOCKED");
                             continue; // 基本条件：出兵天体和目标天体不为同一个，且二者之间没有被拦截
                         }
-                        if (senderNode.teamStrength(team) + targetNode.predictedGroupStrength(team) < targetNode.predictedOppStrength(team)) {
+                        if (SituationAssessor.teamStrength(senderNode, team) + SituationAssessor.predictedGroupStrength(targetNode, team) < SituationAssessor.predictedOppStrength(targetNode, team)) {
                             trace("\"Try defending.\" team: " + team + " sender: " + senderNode.tag + " target: " + targetNode.tag + " but failed: TOO_WEAK");
                             continue; // 出兵条件：出兵天体的强度和目标天体的预测强度之和高于目标天体的预测敌方强度
                         }
@@ -128,14 +128,14 @@ package core.ai {
                             continue; // 路径上无有威胁的黑洞
                         }
                         // 飞船数：目标天体上预测敌方强度的二倍减去预测己方强度与己方单体强度之商
-                        ships = (targetNode.predictedOppShipCount(team) * 2 - targetNode.predictedGroupShipCount(team)) / shipStrength;
+                        ships = (SituationAssessor.predictedOppStrength(targetNode, team, false) * 2 - SituationAssessor.predictedGroupStrength(targetNode, team, false)) / shipStrength;
                         towerAttack = EntityContainer.getLengthInTowerRange(senderNode, targetNode, team) / 4.5 / shipSpeed; // 估算经过攻击天体损失的兵力（估损
                         ships += Math.max(towerAttack, 0); // 为飞船数加上估损
                         if (towerAttack > 0 && Globals.teamPops[team] < towerAttack) {
                             trace("\"Try defending.\" team: " + team + " sender: " + senderNode.tag + " target: " + targetNode.tag + " but failed: FATAL_TOWER_COST");
                             continue; // 条件：没有经过攻击天体或总兵力多于估损
                         }
-                        if (towerAttack > 0 && senderNode.teamShipCount(team) < towerAttack * 0.5) {
+                        if (towerAttack > 0 && SituationAssessor.teamStrength(senderNode, team, false) < towerAttack * 0.5) {
                             trace("\"Try defending.\" team: " + team + " sender: " + senderNode.tag + " target: " + targetNode.tag + " but failed: DANGEROUS_TOWER_COST");
                             continue; // 条件：没有经过攻击天体或出兵天体强度高于估损的一半
                         }
@@ -153,14 +153,14 @@ package core.ai {
             targets.length = 0;
             for each (node in nodeArray) { // 计算目标天体
                 nodeGroup = Globals.teamGroups[node.nodeData.team];
-                if (nodeGroup == group && ((node.nodeData.type != NodeType.DIFFUSION || node.predictedTeamShipCount(team) > (Globals.teamCaps[team] - Globals.teamPops[team]) / 3) || Globals.teamPops[team] >= Globals.teamCaps[team]) || node.nodeData.isAIinvisible)
+                if (nodeGroup == group && ((node.nodeData.type != NodeType.DIFFUSION || SituationAssessor.predictedTeamStrength(node, team, false) > (Globals.teamCaps[team] - Globals.teamPops[team]) / 3) || Globals.teamPops[team] >= Globals.teamCaps[team]) || node.nodeData.isAIinvisible)
                     continue; // 己方少兵扩散应纳入考虑范围
-                if (node.predictedOppShipCount(team) == 0 && node.predictedGroupShipCount(team) > node.nodeData.size * 150)
+                if (SituationAssessor.predictedOppStrength(node, team, false) == 0 && SituationAssessor.predictedGroupStrength(node, team, false) > node.nodeData.size * 150)
                     continue; // 条件：排除己方船数足够且无敌方的天体
                 dx = node.nodeData.x - centerX;
                 dy = node.nodeData.y - centerY;
                 distance = Math.sqrt(dx * dx + dy * dy) + rng.nextNumber() * 32;
-                risk = node.predictedOppStrength(team) - node.predictedGroupStrength(team);
+                risk = SituationAssessor.predictedOppStrength(node, team) - SituationAssessor.predictedGroupStrength(node, team);
                 node.aiValue = distance + risk;
                 //trace(node.tag);
                 //trace(EntityContainer.inAttackNodeCheck(node, team, NodeType.PULSECANNON, true));
@@ -179,15 +179,15 @@ package core.ai {
                     nodeGroup = Globals.teamGroups[node.nodeData.team];
                     if (node.nodeData.isAIinvisible)
                         continue;
-                    if (node.aiTimers[team] > 0 || node.teamShipCount(team) == 0)
+                    if (node.aiTimers[team] > 0 || SituationAssessor.teamStrength(node, team, false) == 0)
                         continue; // 基本条件：该天体己方ai倒计时为0且该天体己方强度不为0
-                    if (node.predictedOppShipCount(team) == 0 && node.capturing)
+                    if (SituationAssessor.predictedOppStrength(node, team, false) == 0 && node.capturing)
                         continue; // 条件：天体不被己方占据
-                    if (nodeGroup != group && node.predictedGroupStrength(team) > node.predictedOppStrength(team))
+                    if (nodeGroup != group && SituationAssessor.predictedGroupStrength(node, team) > SituationAssessor.predictedOppStrength(node, team))
                         continue; // 条件：是己方天体或预测己方强度低于敌方
-                    if (node.predictedOppShipCount(team) > 0 && node.predictedGroupStrength(team) > node.predictedOppStrength(team))
+                    if (SituationAssessor.predictedOppStrength(node, team, false) > 0 && SituationAssessor.predictedGroupStrength(node, team) > SituationAssessor.predictedOppStrength(node, team))
                         continue; // 条件：没有敌方或预测己方强度低于敌方
-                    node.aiStrength = -node.groupStrength(team);
+                    node.aiStrength = -SituationAssessor.groupStrength(node, team);
                     if (EntityContainer.inAttackNodeCheck(node, team, NodeType.PULSECANNON, true)) {
                         if (node.aiStrength > 0)
                             node.aiStrength /= 10;
@@ -215,7 +215,7 @@ package core.ai {
                             trace("\"Try attacking.\" team: " + team + " sender: " + senderNode.tag + " target: " + targetNode.tag + " but failed: THE_SAME_ONE_OR_BLOCKED");
                             continue; // 基本条件：出兵天体和目标天体不为同一个，且二者之间没有被拦截
                         }
-                        if (senderNode.teamStrength(team) + targetNode.predictedGroupStrength(team) <= targetNode.predictedOppStrength(team)) {
+                        if (SituationAssessor.teamStrength(senderNode, team) + SituationAssessor.predictedGroupStrength(targetNode, team) <= SituationAssessor.predictedOppStrength(targetNode, team)) {
                             trace("\"Try attacking.\" team: " + team + " sender: " + senderNode.tag + " target: " + targetNode.tag + " but failed: TOO_WEAK");
                             continue; // 出兵条件：出兵天体和目标天体的己方综合强度高于目标天体的预测敌方强度
                         }
@@ -225,11 +225,11 @@ package core.ai {
                             continue; // 路径上无有威胁的黑洞
                         }
                         // 基本飞船数：目标天体上预测敌方强度的二倍减去预测己方强度一半与单体强度之商
-                        ships = (targetNode.predictedOppStrength(team) * 2 - targetNode.predictedGroupStrength(team) * 0.5) / shipStrength;
+                        ships = (SituationAssessor.predictedOppStrength(targetNode, team) * 2 - SituationAssessor.predictedGroupStrength(targetNode, team) * 0.5) / shipStrength;
                         if (targetNode.nodeData.type == NodeType.DIFFUSION && Globals.teamGroups[targetNode.nodeData.team] == group)
-                            ships = (Globals.teamCaps[team] - Globals.teamPops[team]) / 3 - targetNode.predictedTeamShipCount(team); // 给己方扩散补兵
-                        if (senderNode.predictedOppStrength(team) > senderNode.predictedGroupStrength(team))
-                            ships = senderNode.teamShipCount(team); // 预测敌方强度大于己方时，派出全部飞船
+                            ships = (Globals.teamCaps[team] - Globals.teamPops[team]) / 3 - SituationAssessor.predictedTeamStrength(targetNode, team, false); // 给己方扩散补兵
+                        if (SituationAssessor.predictedOppStrength(senderNode, team) > SituationAssessor.predictedGroupStrength(senderNode, team))
+                            ships = SituationAssessor.teamStrength(senderNode, team, false); // 预测敌方强度大于己方时，派出全部飞船
                         if (ships < targetNode.nodeData.size * 200)
                             ships = targetNode.nodeData.size * 200; // 飞船数不应低于目标的二倍标准兵力
                         towerAttack = EntityContainer.getLengthInTowerRange(senderNode, targetNode, team) / 4.5 / shipSpeed; // 计算估损
@@ -239,11 +239,11 @@ package core.ai {
                             continue; // 总兵力不足估损时不派兵
                         }
                         if (Globals.level == 31)
-                            if (towerAttack > 0 && senderNode.teamShipCount(team) < towerAttack * 2) {
+                            if (towerAttack > 0 && SituationAssessor.teamStrength(senderNode, team, false) < towerAttack * 2) {
                                 trace("\"Try attacking.\" team: " + team + " sender: " + senderNode.tag + " target: " + targetNode.tag + " but failed: DANGEROUS_TOWER_COST");
                                 continue; // 32关兵力不足估损二倍时换个目标
                             }
-                        if (towerAttack > 0 && senderNode.teamShipCount(team) < towerAttack * 0.5) {
+                        if (towerAttack > 0 && SituationAssessor.teamStrength(senderNode, team, false) < towerAttack * 0.5) {
                             trace("\"Try attacking.\" team: " + team + " sender: " + senderNode.tag + " target: " + targetNode.tag + " but failed: DANGEROUS_TOWER_COST");
                             continue; // 出兵天体强度低于估损的一半时不派兵
                         }
@@ -263,24 +263,23 @@ package core.ai {
                 nodeGroup = Globals.teamGroups[node.nodeData.team];
                 if (node.nodeData.isAIinvisible)
                     continue;
-                if (nodeGroup != group && node.predictedOppShipCount(team) == 0 && node.groupShipCount(team) > 0)
+                if (nodeGroup != group && SituationAssessor.predictedOppStrength(node, team, false) == 0 && SituationAssessor.groupStrength(node, team, false) > 0)
                     continue; // 条件：没在锁星
-                if (node.predictedOppShipCount(team) > 0 && node.predictedGroupStrength(team) > node.predictedOppStrength(team))
+                if (SituationAssessor.predictedOppStrength(node, team, false) > 0 && SituationAssessor.predictedGroupStrength(node, team) > SituationAssessor.predictedOppStrength(node, team))
                     continue; // 条件：无敌方或打不过敌方
-                node.aiStrength = -node.teamStrength(team);
-                node.getOppLinks(team);
-                node.aiValue = -node.oppNodeLinks.length; // 按路径数计算价值
-                if (node.nodeData.type == NodeType.DIFFUSION && Globals.teamPops[team] < Globals.teamCaps[team] && node.teamShipCount(team) < (Globals.teamCaps[team] - Globals.teamPops[team]) / 3) {
+                node.aiStrength = -SituationAssessor.teamStrength(node, team);
+                node.aiValue = -node.oppNodeLinks[team].length; // 按路径数计算价值
+                if (node.nodeData.type == NodeType.DIFFUSION && Globals.teamPops[team] < Globals.teamCaps[team] && SituationAssessor.teamStrength(node, team, false) < (Globals.teamCaps[team] - Globals.teamPops[team]) / 3) {
                     dx = node.nodeData.x - centerX;
                     dy = node.nodeData.y - centerY;
                     distance = Math.sqrt(dx * dx + dy * dy) + rng.nextNumber() * 32;
-                    node.aiValue = -256 / distance * node.oppNodeLinks.length; // 扩散按距离计算价值
+                    node.aiValue = -256 / distance * node.oppNodeLinks[team].length; // 扩散按距离计算价值
                 }
                 if (node.nodeData.isWarp) {
                     dx = node.nodeData.x - centerX;
                     dy = node.nodeData.y - centerY;
                     distance = Math.sqrt(dx * dx + dy * dy) + rng.nextNumber() * 32;
-                    node.aiValue = -512 / distance * node.oppNodeLinks.length; // 传送按距离计算价值
+                    node.aiValue = -512 / distance * node.oppNodeLinks[team].length; // 传送按距离计算价值
                 }
                 if (EntityContainer.inAttackNodeCheck(node, team, NodeType.PULSECANNON, true)) {
                     if (node.aiStrength > 0)
@@ -300,23 +299,22 @@ package core.ai {
                     if (nodeGroup != group)
                         continue;
                     if (nodeGroup == group) {
-                        node.getOppLinks(team);
-                        node.aiValue = -node.oppNodeLinks.length; // 按路径数计算价值
+                        node.aiValue = -node.oppNodeLinks[team].length; // 按路径数计算价值
                         if (node.nodeData.isWarp) {
                             dx = node.nodeData.x - centerX;
                             dy = node.nodeData.y - centerY;
                             distance = Math.sqrt(dx * dx + dy * dy) + rng.nextNumber() * 32;
-                            node.aiValue = -512 / distance * node.oppNodeLinks.length; // 传送按距离计算价值
-                        } else if (node.nodeData.type == NodeType.DIFFUSION && Globals.teamPops[team] < Globals.teamCaps[team] && node.teamShipCount(team) < (Globals.teamCaps[team] - Globals.teamPops[team]) / 3) {
+                            node.aiValue = -512 / distance * node.oppNodeLinks[team].length; // 传送按距离计算价值
+                        } else if (node.nodeData.type == NodeType.DIFFUSION && Globals.teamPops[team] < Globals.teamCaps[team] && SituationAssessor.teamStrength(node, team, false) < (Globals.teamCaps[team] - Globals.teamPops[team]) / 3) {
                             dx = node.nodeData.x - centerX;
                             dy = node.nodeData.y - centerY;
                             distance = Math.sqrt(dx * dx + dy * dy) + rng.nextNumber() * 32;
-                            node.aiValue = -512 / distance * node.oppNodeLinks.length; // 扩散按距离计算价值
+                            node.aiValue = -512 / distance * node.oppNodeLinks[team].length; // 扩散按距离计算价值
                         } else if (node.nodeData.type == NodeType.CLONETURRET && Globals.teamPops[team] < Globals.teamCaps[team]) {
                             dx = node.nodeData.x - centerX;
                             dy = node.nodeData.y - centerY;
                             distance = Math.sqrt(dx * dx + dy * dy) + rng.nextNumber() * 32;
-                            node.aiValue = -256 / distance * node.oppNodeLinks.length; // 航母按距离计算价值
+                            node.aiValue = -256 / distance * node.oppNodeLinks[team].length; // 航母按距离计算价值
                         }
                     }
                     // if (Globals.level == 31 && node.nodeData.type == NodeType.STARBASE)
@@ -356,14 +354,14 @@ package core.ai {
                             trace("\"Try repositioning.\" team: " + team + " sender: " + senderNode.tag + " target: " + targetNode.tag + " but failed: DANGEROUS_BLACKHOLE");
                             continue; // 路径上无有威胁的黑洞
                         }
-                        ships = senderNode.teamShipCount(team); // 派出全部飞船
+                        ships = SituationAssessor.teamStrength(senderNode, team, false); // 派出全部飞船
                         towerAttack = EntityContainer.getLengthInTowerRange(senderNode, targetNode, team) / 4.5 / shipSpeed;
                         ships += Math.max(towerAttack, 0); // 为飞船数加上估损
                         if (towerAttack > 0 && Globals.teamPops[team] < towerAttack) {
                             trace("\"Try repositioning.\" team: " + team + " sender: " + senderNode.tag + " target: " + targetNode.tag + " but failed: FATAL_TOWER_COST");
                             continue; // 条件：总兵力不足估损时不派兵
                         }
-                        if (towerAttack > 0 && senderNode.teamShipCount(team) < towerAttack * 0.5) {
+                        if (towerAttack > 0 && SituationAssessor.teamStrength(senderNode, team, false) < towerAttack * 0.5) {
                             trace("\"Try repositioning.\" team: " + team + " sender: " + senderNode.tag + " target: " + targetNode.tag + " but failed: DANGEROUS_TOWER_COST");
                             continue; // 出兵天体强度低于估损的一半时不派兵
                         }
