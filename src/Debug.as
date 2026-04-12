@@ -408,7 +408,7 @@ package {
         }
 
         private function testF1():void {
-            var rng:Rng = new Rng();
+            var rng:Rng = new Rng(0, Rng.X32);
             var sum:Number = 0;
             for(var i:int = 0; i < 100000; i++)
                 sum += rng.nextNumber();
@@ -416,7 +416,10 @@ package {
         }
 
         private function testF2():void {
-
+            var sum:Number = 0;
+            for(var i:int = 0; i < 100000; i++)
+                sum += Math.random();
+            trace(sum/100000);
         }
 
         private function testF3():void {

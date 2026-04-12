@@ -136,7 +136,7 @@ internal class Xorshift32 implements Generator {
     }
 
     public function nextNumber():Number {
-        return nextInt() / int.MAX_VALUE;
+        return nextInt() / uint.MAX_VALUE;
     }
 
     public function nextRange(min:int, max:int):int {

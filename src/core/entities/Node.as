@@ -147,15 +147,10 @@ package core.entities {
             var isWarp:Boolean = nodeData.isWarp;
 
             // 确保数组长度正确
-            if (nodeLinks.length != teamCount)
-                nodeLinks.length = teamCount;
+            while (nodeLinks.length < teamCount)
+                nodeLinks.push(new Vector.<Node>);
 
             // 预计算nodeLinks[0]（基准列表）
-            if (!nodeLinks[0])
-                nodeLinks[0] = new Vector.<Node>();
-            else
-                nodeLinks[0].length = 0;
-
             var baseLinks:Vector.<Node> = nodeLinks[0];
             var i:int, j:int, node:Node;
             // 填充基准列表
@@ -175,32 +170,17 @@ package core.entities {
 
                 // 检查是否需要复制基准列表
                 if (!(group == nodeTeamGroup && isWarp)) {
-                    // 复制基准列表，重用现有Vector
-                    if (!nodeLinks[i]) {
-                        nodeLinks[i] = new Vector.<Node>(baseLength);
-                        // 直接复制元素
-                        for (j = 0; j < baseLength; j++)
-                            nodeLinks[i][j] = baseLinks[j];
-                    } else {
-                        // 重用现有数组，调整大小并复制
-                        var targetLinks:Vector.<Node> = nodeLinks[i];
-                        if (targetLinks.length != baseLength)
-                            targetLinks.length = baseLength;
-                        for (j = 0; j < baseLength; j++)
-                            targetLinks[j] = baseLinks[j];
-                    }
+                    var targetLinks:Vector.<Node> = nodeLinks[i];
+                    if (targetLinks.length != baseLength)
+                        targetLinks.length = baseLength;
+                    for (j = 0; j < baseLength; j++)
+                        targetLinks[j] = baseLinks[j];
                     continue;
                 }
 
-                // 需要构建特殊列表
-                if (!nodeLinks[i])
-                    nodeLinks[i] = new Vector.<Node>();
-                else
-                    nodeLinks[i].length = 0;
-
-                var warpLinks:Vector.<Node> = nodeLinks[i];
-
                 // 构建warp条件下的特殊列表
+                nodeLinks[i].length = 0;
+                var warpLinks:Vector.<Node> = nodeLinks[i];
                 for (j = 0; j < nodesLength; j++) {
                     node = globalNodes[j] as Node;
                     if (node == this || node.nodeData.isUntouchable)
@@ -234,15 +214,15 @@ package core.entities {
         }
 
         public function updateOppLinks():void {
+            if (nodeData.isBarrier)
+                return;
+                
             var group:int = Globals.teamGroups[team];
             var teamCount:int = Globals.teamCount;
-            if (oppNodeLinks.length != teamCount)
-                oppNodeLinks.length = teamCount;
-            for each (var nodeVec:Vector.<Node> in oppNodeLinks){
-                if (!nodeVec)
-                    nodeVec = new Vector.<Node>;
+            while (oppNodeLinks.length < teamCount)
+                oppNodeLinks.push(new Vector.<Node>);
+            for each (var nodeVec:Vector.<Node> in oppNodeLinks)
                 nodeVec.length = 0;
-            }
             for (var team:int = 0; team < teamCount; team++) {
                 for each (var node:Node in nodeLinks[team]) {
                     if (node == this)
