@@ -238,8 +238,11 @@ package core.entities {
             var teamCount:int = Globals.teamCount;
             if (oppNodeLinks.length != teamCount)
                 oppNodeLinks.length = teamCount;
-            for each (var nodeVec:Vector.<Node> in oppNodeLinks)
+            for each (var nodeVec:Vector.<Node> in oppNodeLinks){
+                if (!nodeVec)
+                    nodeVec = new Vector.<Node>;
                 nodeVec.length = 0;
+            }
             for (var team:int = 0; team < teamCount; team++) {
                 for each (var node:Node in nodeLinks[team]) {
                     if (node == this)
