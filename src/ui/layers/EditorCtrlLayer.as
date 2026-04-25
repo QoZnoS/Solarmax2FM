@@ -24,7 +24,6 @@ package ui.layers {
     public class EditorCtrlLayer extends Sprite {
         private var convertQuad:Quad; // 转换触点坐标用
         private var touchQuad:Quad;
-        private var displayBatch:QuadBatch;
         private var touches:Vector.<Touch>;
         private var editor:EditorScene;
 
@@ -36,7 +35,6 @@ package ui.layers {
 
         public function EditorCtrlLayer(_ui:UIContainer) {
             this.editor = _ui.scene.editorScene;
-            this.displayBatch = LayerFactory.getLayer(LayerFactory.BEHAVIOR) as QuadBatch;
             this.touchQuad = _ui.touchQuad;
             convertQuad = new Quad(1024, 768, 16711680);
             convertQuad.alpha = 0;
@@ -154,6 +152,7 @@ package ui.layers {
         public function draw():void {
             const color:uint = 0xFFFFFF;
             var node:Node;
+            var displayBatch:QuadBatch = LayerFactory.getLayer(LayerFactory.BEHAVIOR) as QuadBatch;
             for each (var touch:Touch in touches) {
                 if (touch.hoverNode) {
                     Drawer.drawCircle(displayBatch, touch.hoverNode.nodeData.x, touch.hoverNode.nodeData.y, Globals.teamColors[touch.hoverNode.nodeData.team], touch.hoverNode.nodeData.lineDist - 4, touch.hoverNode.nodeData.size * 25 * 2, true, 0.5);
