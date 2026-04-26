@@ -64,6 +64,7 @@ package core.fx {
             p.rotation = angle;
             layerCfg.length = 1;
             layerCfg.push(foreground, deepColor);
+            p.addToLayer();
         }
 
         public function update(dt:Number):void {
@@ -84,7 +85,6 @@ package core.fx {
             p.alpha = size;
             p.scaleY = size * 0.5;
             p.rotation = angle;
-            p.addToLayer();
         }
 
         public function get layerConfig():Array {

@@ -43,6 +43,7 @@ package core.fx {
             p.rotation = angle;
             layerCfg.length = 1;
             layerCfg.push(foreground, deepColor);
+            p.addToLayer();
         }
 
         public function get imageName():String {
@@ -72,7 +73,6 @@ package core.fx {
             p.width = distance;
             p.scaleY *= 0.5;
             p.rotation = angle;
-            p.addToLayer();
         }
     }
 }

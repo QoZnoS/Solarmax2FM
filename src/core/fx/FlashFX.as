@@ -37,6 +37,7 @@ package core.fx {
             state = STATE_GROW;
             layerCfg.length = 1;
             layerCfg.push(foreground, deepColor);
+            p.addToLayer();
         }
 
         public function update(dt:Number):void {
@@ -54,7 +55,6 @@ package core.fx {
                 }
             }
             p.scale = size;
-            p.addToLayer();
         }
 
         public function get layerConfig():Array {

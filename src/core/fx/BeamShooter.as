@@ -66,6 +66,7 @@ package core.fx {
             }
             layerCfg.length = 1;
             layerCfg.push(foreground, deepColor);
+            p.addToLayer();
         }
 
         public function update(dt:Number):void {
@@ -86,7 +87,6 @@ package core.fx {
             p.alpha = size;
             if (type == NodeType.TOWER)
                 p.scale = size;
-            p.addToLayer();
         }
 
         public function get layerConfig():Array {
