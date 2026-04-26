@@ -1,7 +1,7 @@
 // =================================================================================================
 //
 //	Starling Framework
-//	Copyright 2011 Gamua OG. All Rights Reserved.
+//	Copyright Gamua GmbH. All Rights Reserved.
 //
 //	This program is free software. You can redistribute and/or modify it
 //	in accordance with the terms of the accompanying license agreement.
@@ -15,10 +15,10 @@
 package starling.animation
 {
     import flash.utils.Dictionary;
-    
+
     import starling.errors.AbstractClassError;
-    
-    /** The Transitions class contains static methods that define easing functions. 
+
+    /** The Transitions class contains static methods that define easing functions.
      *  Those functions are used by the Tween class to execute animations.
      * 
      *  <p>Here is a visual representation of the available transitions:</p> 
@@ -27,8 +27,15 @@ package starling.animation
      *  <p>You can define your own transitions through the "registerTransition" function. A 
      *  transition function must have the following signature, where <code>ratio</code> is 
      *  in the range 0-1:</p>
-     *  
+     *
      *  <pre>function myTransition(ratio:Number):Number</pre>
+     *
+     *  <p>Also have a look at the "BezierEasing" class, which provides a very easy way of
+     *  adding custom transitions.</p>
+     *
+     *  @see starling.animation.BezierEasing
+     *  @see starling.animation.Juggler
+     *  @see starling.animation.Tween
      */
     public class Transitions
     {        
