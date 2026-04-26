@@ -7,7 +7,7 @@ package scenes {
 
     import starling.display.Image;
     import starling.display.Quad;
-    import starling.display.QuadBatch;
+    import starling.display.MeshBatch;
     import starling.display.Sprite;
     import starling.events.EnterFrameEvent;
 
@@ -15,7 +15,7 @@ package scenes {
 
     public class EndScene extends Sprite {
         public var stars:EntityPool;
-        public var batch:QuadBatch;
+        public var batch:MeshBatch;
         public var cover:Quad;
         public var quadImage:Image;
         public var pulseSize:Number;
@@ -30,7 +30,7 @@ package scenes {
             quadImage = new Image(Root.assets.getTexture("quad"));
             quadImage.adjustVertices();
             stars = new EntityPool();
-            batch = new QuadBatch();
+            batch = new MeshBatch();
             addChild(batch);
             cover = new Quad(1024, 768, 16777215);
             cover.blendMode = "add";

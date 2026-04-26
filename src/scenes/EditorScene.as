@@ -10,7 +10,7 @@ package scenes {
 
     import starling.core.Starling;
     import starling.display.Image;
-    import starling.display.QuadBatch;
+    import starling.display.MeshBatch;
     import starling.events.EnterFrameEvent;
 
     import ui.UIContainer;
@@ -131,10 +131,10 @@ package scenes {
             var yTop:Number = focusNode.nodeData.y - focusNode.nodeData.lineDist;
             var xRight:Number = focusNode.nodeData.x + focusNode.nodeData.lineDist;
             var yBottom:Number = focusNode.nodeData.y + focusNode.nodeData.lineDist;
-            Drawer.drawTweenedLine(LayerFactory.getLayer(LayerFactory.BEHAVIOR) as QuadBatch, xLeft - 512, yTop, xRight + 512, yTop, 0x00FF00, 2, 0.5);
-            Drawer.drawTweenedLine(LayerFactory.getLayer(LayerFactory.BEHAVIOR) as QuadBatch, xLeft - 512, yBottom, xRight + 512, yBottom, 0x00FF00, 2, 0.5);
-            Drawer.drawTweenedLine(LayerFactory.getLayer(LayerFactory.BEHAVIOR) as QuadBatch, xLeft, yTop - 384, xLeft, yBottom + 384, 0x00FF00, 2, 0.5);
-            Drawer.drawTweenedLine(LayerFactory.getLayer(LayerFactory.BEHAVIOR) as QuadBatch, xRight, yTop - 384, xRight, yBottom + 384, 0x00FF00, 2, 0.5);
+            Drawer.drawTweenedLine(LayerFactory.getLayer(LayerFactory.BEHAVIOR) as MeshBatch, xLeft - 512, yTop, xRight + 512, yTop, 0x00FF00, 2, 0.5);
+            Drawer.drawTweenedLine(LayerFactory.getLayer(LayerFactory.BEHAVIOR) as MeshBatch, xLeft - 512, yBottom, xRight + 512, yBottom, 0x00FF00, 2, 0.5);
+            Drawer.drawTweenedLine(LayerFactory.getLayer(LayerFactory.BEHAVIOR) as MeshBatch, xLeft, yTop - 384, xLeft, yBottom + 384, 0x00FF00, 2, 0.5);
+            Drawer.drawTweenedLine(LayerFactory.getLayer(LayerFactory.BEHAVIOR) as MeshBatch, xRight, yTop - 384, xRight, yBottom + 384, 0x00FF00, 2, 0.5);
 
             var fx:Number = focusNode.nodeData.x;
             var fy:Number = focusNode.nodeData.y;

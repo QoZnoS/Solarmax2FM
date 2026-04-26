@@ -4,7 +4,7 @@ package core.game.victory {
 
     import managers.Globals;
 
-    import starling.display.QuadBatch;
+    import starling.display.MeshBatch;
 
     import ui.layers.LayerFactory;
 
@@ -23,10 +23,10 @@ package core.game.victory {
         public function update(dt:Number):int {
             if (target.nodeData.team == Globals.playerTeam)
                 return Globals.playerTeam;
-            Drawer.drawCircle(LayerFactory.getLayer(LayerFactory.BEHAVIOR) as QuadBatch, target.nodeData.x, target.nodeData.y, 0xFFFFFF, target.nodeData.lineDist - 5, target.nodeData.lineDist - 7, false, 1, 0.125, angle);
-            Drawer.drawCircle(LayerFactory.getLayer(LayerFactory.BEHAVIOR) as QuadBatch, target.nodeData.x, target.nodeData.y, 0xFFFFFF, target.nodeData.lineDist - 5, target.nodeData.lineDist - 7, false, 1, 0.125, angle + Math.PI * 0.5);
-            Drawer.drawCircle(LayerFactory.getLayer(LayerFactory.BEHAVIOR) as QuadBatch, target.nodeData.x, target.nodeData.y, 0xFFFFFF, target.nodeData.lineDist - 5, target.nodeData.lineDist - 7, false, 1, 0.125, angle + Math.PI * 1);
-            Drawer.drawCircle(LayerFactory.getLayer(LayerFactory.BEHAVIOR) as QuadBatch, target.nodeData.x, target.nodeData.y, 0xFFFFFF, target.nodeData.lineDist - 5, target.nodeData.lineDist - 7, false, 1, 0.125, angle + Math.PI * 1.5);
+            Drawer.drawCircle(LayerFactory.getLayer(LayerFactory.BEHAVIOR) as MeshBatch, target.nodeData.x, target.nodeData.y, 0xFFFFFF, target.nodeData.lineDist - 5, target.nodeData.lineDist - 7, false, 1, 0.125, angle);
+            Drawer.drawCircle(LayerFactory.getLayer(LayerFactory.BEHAVIOR) as MeshBatch, target.nodeData.x, target.nodeData.y, 0xFFFFFF, target.nodeData.lineDist - 5, target.nodeData.lineDist - 7, false, 1, 0.125, angle + Math.PI * 0.5);
+            Drawer.drawCircle(LayerFactory.getLayer(LayerFactory.BEHAVIOR) as MeshBatch, target.nodeData.x, target.nodeData.y, 0xFFFFFF, target.nodeData.lineDist - 5, target.nodeData.lineDist - 7, false, 1, 0.125, angle + Math.PI * 1);
+            Drawer.drawCircle(LayerFactory.getLayer(LayerFactory.BEHAVIOR) as MeshBatch, target.nodeData.x, target.nodeData.y, 0xFFFFFF, target.nodeData.lineDist - 5, target.nodeData.lineDist - 7, false, 1, 0.125, angle + Math.PI * 1.5);
             angle += Math.PI / 256;
             if (angle > Math.PI * 2)
                 angle -= Math.PI * 2;

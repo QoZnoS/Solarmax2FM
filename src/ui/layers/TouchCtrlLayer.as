@@ -12,7 +12,7 @@ package ui.layers {
     import scenes.GameScene;
 
     import starling.display.Quad;
-    import starling.display.QuadBatch;
+    import starling.display.MeshBatch;
     import starling.display.Sprite;
     import starling.events.Touch;
     import starling.events.TouchEvent;
@@ -25,7 +25,7 @@ package ui.layers {
     public class TouchCtrlLayer extends Sprite {
         private var convertQuad:Quad; // 转换触点坐标用
         private var touchQuad:Quad;
-        private var displayBatch:QuadBatch;
+        private var displayBatch:MeshBatch;
         private var touches:Vector.<Touch>;
         private var game:GameScene;
 
@@ -38,7 +38,7 @@ package ui.layers {
         }
 
         public function init():void {
-            this.displayBatch = LayerFactory.getLayer(LayerFactory.BEHAVIOR) as QuadBatch;
+            this.displayBatch = LayerFactory.getLayer(LayerFactory.BEHAVIOR) as MeshBatch;
             touchQuad.addEventListener("touch", on_touch); // 按操作方式添加事件监听器
             touches = new Vector.<Touch>;
         }

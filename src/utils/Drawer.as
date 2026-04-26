@@ -1,6 +1,6 @@
 package utils {
     import starling.display.Image;
-    import starling.display.QuadBatch;
+    import starling.display.MeshBatch;
     import starling.events.Event;
     import starling.textures.Texture;
 
@@ -20,14 +20,14 @@ package utils {
         }
 
         /**绘制直线
-         * @param layer 图层，关卡内请使用<code>LayerFactory.getLayer(LayerFactory.BEHAVIOR) as QuadBatch</code>，关卡外需自备图层
+         * @param layer 图层，关卡内请使用<code>LayerFactory.getLayer(LayerFactory.BEHAVIOR) as MeshBatch</code>，关卡外需自备图层
          * @param x1,y1 直线起点
          * @param x2,y2 直线终点
          * @param color 直线颜色
          * @param width 直线宽度
          * @param alpha 直线可见度
          */
-        public static function drawLine(layer:QuadBatch, x1:Number, y1:Number, x2:Number, y2:Number, color:uint, width:Number = 2, alpha:Number = 1):void {
+        public static function drawLine(layer:MeshBatch, x1:Number, y1:Number, x2:Number, y2:Number, color:uint, width:Number = 2, alpha:Number = 1):void {
             var quadImage:Image = _quadImage;
             if (width <= 3)
                 quadImage = _quadImage2;
@@ -51,7 +51,7 @@ package utils {
         }
 
         /**绘制虚线（未使用）
-         * @param layer 图层，关卡内请使用<code>LayerFactory.getLayer(LayerFactory.BEHAVIOR) as QuadBatch</code>，关卡外需自备图层
+         * @param layer 图层，关卡内请使用<code>LayerFactory.getLayer(LayerFactory.BEHAVIOR) as MeshBatch</code>，关卡外需自备图层
          * @param x1,y1 虚线起点
          * @param x2,y2 虚线终点
          * @param color 虚线颜色
@@ -59,7 +59,7 @@ package utils {
          * @param alpha 虚线可见度
          * @param startStep 虚线起始步长
          */
-        public static function drawDashedLine(layer:QuadBatch, x1:Number, y1:Number, x2:Number, y2:Number, color:uint, width:Number = 2, alpha:Number = 1, startStep:Number = 0):void {
+        public static function drawDashedLine(layer:MeshBatch, x1:Number, y1:Number, x2:Number, y2:Number, color:uint, width:Number = 2, alpha:Number = 1, startStep:Number = 0):void {
             var step:int = 0;
             var dx:Number = x2 - x1;
             var dy:Number = y2 - y1;
@@ -90,7 +90,7 @@ package utils {
          * @param alpha
          * @param progress
          */
-        public static function drawTweenedLine(layer:QuadBatch, x1:Number, y1:Number, x2:Number, y2:Number, color:uint, width:Number = 2, alpha:Number = 1, progress:Number = 1):void {
+        public static function drawTweenedLine(layer:MeshBatch, x1:Number, y1:Number, x2:Number, y2:Number, color:uint, width:Number = 2, alpha:Number = 1, progress:Number = 1):void {
             var dx:Number = x2 - x1;
             var dy:Number = y2 - y1;
             var angle:Number = Math.atan2(dy, dx);
@@ -101,7 +101,7 @@ package utils {
         }
 
         /**绘制圆形
-         * @param layer 图层，关卡内请使用<code>LayerFactory.getLayer(LayerFactory.BEHAVIOR) as QuadBatch</code>，关卡外需自备图层
+         * @param layer 图层，关卡内请使用<code>LayerFactory.getLayer(LayerFactory.BEHAVIOR) as MeshBatch</code>，关卡外需自备图层
          * @param x,y 圆心坐标
          * @param color 线条颜色
          * @param R 实心半径
@@ -112,7 +112,7 @@ package utils {
          * @param angle 起始角度
          * @param lineCount 绘制精度（线条数）
          */
-        public static function drawCircle(layer:QuadBatch, x:Number, y:Number, color:uint, R:Number, voidR:Number = 0, blur:Boolean = false, alpha:Number = 1, cycleCount:Number = 1, angle:Number = 0, lineCount:int = 64):void {
+        public static function drawCircle(layer:MeshBatch, x:Number, y:Number, color:uint, R:Number, voidR:Number = 0, blur:Boolean = false, alpha:Number = 1, cycleCount:Number = 1, angle:Number = 0, lineCount:int = 64):void {
             var quadImage:Image = _quadImage;
             if (R - voidR <= 3)
                 quadImage = _quadImage2;
@@ -144,7 +144,7 @@ package utils {
         }
 
         /**绘制虚线圆
-         * @param layer 图层，关卡内请使用<code>LayerFactory.getLayer(LayerFactory.BEHAVIOR) as QuadBatch</code>，关卡外需自备图层
+         * @param layer 图层，关卡内请使用<code>LayerFactory.getLayer(LayerFactory.BEHAVIOR) as MeshBatch</code>，关卡外需自备图层
          * @param x,y 圆心坐标
          * @param color 线条颜色
          * @param R 实心半径
@@ -155,7 +155,7 @@ package utils {
          * @param angle 起始角度
          * @param lineCount 绘制精度（线条数）
          */
-        public static function drawDashedCircle(layer:QuadBatch, x:Number, y:Number, color:uint, R:Number, voidR:Number = 0, blur:Boolean = false, alpha:Number = 1, cycleCount:Number = 1, angle:Number = 0, lineCount:int = 64):void {
+        public static function drawDashedCircle(layer:MeshBatch, x:Number, y:Number, color:uint, R:Number, voidR:Number = 0, blur:Boolean = false, alpha:Number = 1, cycleCount:Number = 1, angle:Number = 0, lineCount:int = 64):void {
             var quadImage:Image = _quadImage;
             if (R - voidR <= 3)
                 quadImage = _quadImage2;
@@ -188,7 +188,7 @@ package utils {
 
         /**
          * 绘制渐变色圆弧
-         * @param layer 图层，关卡内请使用<code>LayerFactory.getLayer(LayerFactory.BEHAVIOR) as QuadBatch</code>，关卡外需自备图层
+         * @param layer 图层，关卡内请使用<code>LayerFactory.getLayer(LayerFactory.BEHAVIOR) as MeshBatch</code>，关卡外需自备图层
          * @param x,y 圆心坐标
          * @param colorA 起始颜色
          * @param colorB 结束颜色
@@ -201,7 +201,7 @@ package utils {
          * @param lineCount 绘制精度（线条数）
          * @param gradientMode 渐变模式：0=径向渐变，1=顺时针渐变，2=逆时针渐变
          */
-        public static function drawGradientCircle(layer:QuadBatch, x:Number, y:Number, colorA:uint, colorB:uint, R:Number, voidR:Number = 0, blur:Boolean = false, alpha:Number = 1, cycleCount:Number = 1, angle:Number = 0, lineCount:int = 64, gradientMode:int = 0):void {
+        public static function drawGradientCircle(layer:MeshBatch, x:Number, y:Number, colorA:uint, colorB:uint, R:Number, voidR:Number = 0, blur:Boolean = false, alpha:Number = 1, cycleCount:Number = 1, angle:Number = 0, lineCount:int = 64, gradientMode:int = 0):void {
             // 根据条件选择纹理
             var texture:Texture = (R - voidR <= 3) ? _quadTexture2 : _quadTexture;
 
@@ -328,7 +328,7 @@ package utils {
          * @param angle 起始角度
          * @param lineCount 绘制精度
          */
-        public static function drawMultiGradientCircle(layer:QuadBatch, x:Number, y:Number, colors:Array, R:Number, voidR:Number = 0, blur:Boolean = false, alpha:Number = 1, cycleCount:Number = 1, angle:Number = 0, lineCount:int = 64):void {
+        public static function drawMultiGradientCircle(layer:MeshBatch, x:Number, y:Number, colors:Array, R:Number, voidR:Number = 0, blur:Boolean = false, alpha:Number = 1, cycleCount:Number = 1, angle:Number = 0, lineCount:int = 64):void {
             if (colors.length < 2) {
                 // 如果只有一个颜色，使用单色绘制
                 drawCircle(layer, x, y, colors[0], R, voidR, blur, alpha, cycleCount, angle, lineCount);
@@ -419,7 +419,7 @@ package utils {
         private static var _imagePool:Array = [];
         private static var _imagePoolSize:int = 0;
 
-        public static function drawMultiGradientCircleOptimized(layer:QuadBatch, x:Number, y:Number, colors:Array, R:Number, voidR:Number = 0, blur:Boolean = false, alpha:Number = 1, cycleCount:Number = 1, angle:Number = 0, lineCount:int = 64):void {
+        public static function drawMultiGradientCircleOptimized(layer:MeshBatch, x:Number, y:Number, colors:Array, R:Number, voidR:Number = 0, blur:Boolean = false, alpha:Number = 1, cycleCount:Number = 1, angle:Number = 0, lineCount:int = 64):void {
 
             if (colors.length < 2) {
                 drawCircle(layer, x, y, colors[0], R, voidR, blur, alpha, cycleCount, angle, lineCount);

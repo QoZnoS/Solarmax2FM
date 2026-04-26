@@ -264,7 +264,7 @@ package starling.text
             return sprite;
         }
         
-        /** Draws text into a QuadBatch. */
+        /** Draws text into a MeshBatch. */
         public function fillMeshBatch(meshBatch:MeshBatch, width:Number, height:Number, text:String,
                                       format:TextFormat, options:TextOptions=null):void
         {

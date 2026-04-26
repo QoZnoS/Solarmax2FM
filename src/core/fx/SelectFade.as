@@ -1,6 +1,6 @@
 // type 0为扩散式 1为收缩式
 package core.fx {
-    import starling.display.QuadBatch;
+    import starling.display.MeshBatch;
 
     import ui.layers.LayerFactory;
 
@@ -46,7 +46,7 @@ package core.fx {
             }
             var radius:Number = 150 * size - 4;
             var voidR:Number = Math.max(0, radius - 3);
-            Drawer.drawCircle(LayerFactory.getLayer(LayerFactory.BEHAVIOR) as QuadBatch, x, y, color, radius, voidR, false, alpha);
+            Drawer.drawCircle(LayerFactory.getLayer(LayerFactory.BEHAVIOR) as MeshBatch, x, y, color, radius, voidR, false, alpha);
         }
 
         public function get imageName():String {

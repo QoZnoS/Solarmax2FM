@@ -3,7 +3,7 @@ package ui {
 
     import starling.core.Starling;
     import starling.display.Quad;
-    import starling.display.QuadBatch;
+    import starling.display.MeshBatch;
     import starling.display.Sprite;
 
     import ui.components.FleetSlider;
@@ -19,7 +19,7 @@ package ui {
         private var _gameContainer:Sprite;
         private var _entityL:EntityLayer;
         private var _controlL:Sprite;
-        private var _behaviorB:QuadBatch;
+        private var _behaviorB:MeshBatch;
         private var _touchCL:TouchCtrlLayer;
         private var _tradiCL:TraditionalCtrlLayer;
         private var _editorCL:EditorCtrlLayer;
@@ -39,7 +39,7 @@ package ui {
             touchQuad = new Quad(1024, 768, 16711680);
             _entityL = new EntityLayer();
             _controlL = new Sprite();
-            _behaviorB = new QuadBatch();
+            _behaviorB = new MeshBatch();
             _touchCL = new TouchCtrlLayer(this);
             _tradiCL = new TraditionalCtrlLayer(this);
             _editorCL = new EditorCtrlLayer(this);

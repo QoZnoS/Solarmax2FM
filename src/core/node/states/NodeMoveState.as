@@ -8,7 +8,7 @@ package core.node.states {
 
     import starling.animation.Transitions;
     import starling.display.Image;
-    import starling.display.QuadBatch;
+    import starling.display.MeshBatch;
     import starling.text.TextField;
 
     import ui.layers.LayerFactory;
@@ -292,7 +292,7 @@ package core.node.states {
         }
 
         private static const EASE_OUT_FUNC:Function = Transitions.getTransition(Transitions.EASE_OUT);
-        private static const BEHAVIOR:QuadBatch = LayerFactory.getLayer(LayerFactory.BEHAVIOR) as QuadBatch;
+        private static const BEHAVIOR:MeshBatch = LayerFactory.getLayer(LayerFactory.BEHAVIOR) as MeshBatch;
         private static const START_ANGLE:Number = -Math.PI / 2; // 起始角度（12点钟方向）
         private static const ARC_ADJUSTMENT:Number = 0.006366197723675814; // 弧线绘制微调值
 

@@ -12,7 +12,7 @@ package ui.layers {
     import starling.animation.Tween;
     import starling.core.Starling;
     import starling.display.Quad;
-    import starling.display.QuadBatch;
+    import starling.display.MeshBatch;
     import starling.display.Sprite;
     import starling.events.Touch;
     import starling.events.TouchEvent;
@@ -152,7 +152,7 @@ package ui.layers {
         public function draw():void {
             const color:uint = 0xFFFFFF;
             var node:Node;
-            var displayBatch:QuadBatch = LayerFactory.getLayer(LayerFactory.BEHAVIOR) as QuadBatch;
+            var displayBatch:MeshBatch = LayerFactory.getLayer(LayerFactory.BEHAVIOR) as MeshBatch;
             for each (var touch:Touch in touches) {
                 if (touch.hoverNode) {
                     Drawer.drawCircle(displayBatch, touch.hoverNode.nodeData.x, touch.hoverNode.nodeData.y, Globals.teamColors[touch.hoverNode.nodeData.team], touch.hoverNode.nodeData.lineDist - 4, touch.hoverNode.nodeData.size * 25 * 2, true, 0.5);

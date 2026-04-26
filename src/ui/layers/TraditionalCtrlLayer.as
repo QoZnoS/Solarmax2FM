@@ -14,7 +14,7 @@ package ui.layers {
 
     import starling.core.Starling;
     import starling.display.Quad;
-    import starling.display.QuadBatch;
+    import starling.display.MeshBatch;
     import starling.display.Sprite;
 
     import ui.UIContainer;
@@ -32,8 +32,8 @@ package ui.layers {
         private var dragging:Boolean;
         private var rightDown:Boolean;
         private var game:GameScene;
-        private var displayBatch:QuadBatch;
-        private var mouseBatch:QuadBatch;
+        private var displayBatch:MeshBatch;
+        private var mouseBatch:MeshBatch;
         private var dragQuad:Quad;
         private var dragLine:Quad;
         private var convertQuad:Quad;
@@ -43,7 +43,7 @@ package ui.layers {
             dragQuad = new Quad(10, 10, Globals.teamColors[1]);
             dragLine = new Quad(2, 2, Globals.teamColors[1]);
             selectedNodes = [];
-            mouseBatch = new QuadBatch();
+            mouseBatch = new MeshBatch();
             addChild(mouseBatch);
             convertQuad = new Quad(1024, 768, 16711680);
             convertQuad.alpha = 0;
@@ -52,7 +52,7 @@ package ui.layers {
 
 
         public function init():void {
-            this.displayBatch = LayerFactory.getLayer(LayerFactory.BEHAVIOR) as QuadBatch;
+            this.displayBatch = LayerFactory.getLayer(LayerFactory.BEHAVIOR) as MeshBatch;
             Starling.current.nativeStage.addEventListener("mouseDown", on_mouseDown);
             Starling.current.nativeStage.addEventListener("mouseMove", on_mouseMove);
             Starling.current.nativeStage.addEventListener("mouseUp", on_mouseUp);

@@ -2,58 +2,58 @@ package ui.layers {
     import starling.core.Starling;
     import starling.display.BlendMode;
     import starling.display.Image;
-    import starling.display.QuadBatch;
+    import starling.display.MeshBatch;
     import starling.display.Sprite;
 
     /** 显示天体和飞船 */
     public class EntityLayer extends Sprite {
         // 背景ADD混合层
         private var bgAddBatch:Sprite;
-        private var shipsBGBatchs:Vector.<QuadBatch>; // 天体背后常规飞船
+        private var shipsBGBatchs:Vector.<MeshBatch>; // 天体背后常规飞船
 
         // 背景NORMAL混合层
         private var bgNormalBatch:Sprite;
-        private var shipsBGBatchbs:Vector.<QuadBatch>; // 天体背后黑色飞船
+        private var shipsBGBatchbs:Vector.<MeshBatch>; // 天体背后黑色飞船
         private var nodeBatch:Sprite; // 天体
         private var nodeGlowNormal:Sprite; // 天体光晕(NORMAL部分)
 
         // 前景ADD混合层
         private var fgAddBatch:Sprite;
         private var nodeGlow:Sprite; // 天体光晕(ADD部分)
-        private var shipsFGBatchs:Vector.<QuadBatch>; // 天体前方常规飞船
-        private var fx:QuadBatch; // 特效
+        private var shipsFGBatchs:Vector.<MeshBatch>; // 天体前方常规飞船
+        private var fx:MeshBatch; // 特效
 
         // 前景NORMAL混合层
         private var fgNormalBatch:Sprite;
-        private var shipsFGBatchbs:Vector.<QuadBatch>; // 天体前方黑色飞船
+        private var shipsFGBatchbs:Vector.<MeshBatch>; // 天体前方黑色飞船
         private var labels:Sprite; // 标签
 
         // 特殊效果层
-        private var blackholePulseBatch:QuadBatch; // 黑洞特效
+        private var blackholePulseBatch:MeshBatch; // 黑洞特效
 
         public function EntityLayer() {
-            blackholePulseBatch = new QuadBatch();
+            blackholePulseBatch = new MeshBatch();
             blackholePulseBatch.blendMode = BlendMode.MULTIPLY;
 
             bgAddBatch = new Sprite();
             bgAddBatch.blendMode = BlendMode.ADD;
-            shipsBGBatchs = new Vector.<QuadBatch>();
+            shipsBGBatchs = new Vector.<MeshBatch>();
 
             bgNormalBatch = new Sprite();
             bgNormalBatch.blendMode = BlendMode.NORMAL;
-            shipsBGBatchbs = new Vector.<QuadBatch>();
+            shipsBGBatchbs = new Vector.<MeshBatch>();
             nodeBatch = new Sprite();
             nodeGlowNormal = new Sprite();
 
             fgAddBatch = new Sprite();
             fgAddBatch.blendMode = BlendMode.ADD;
             nodeGlow = new Sprite();
-            shipsFGBatchs = new Vector.<QuadBatch>();
-            fx = new QuadBatch();
+            shipsFGBatchs = new Vector.<MeshBatch>();
+            fx = new MeshBatch();
 
             fgNormalBatch = new Sprite();
             fgNormalBatch.blendMode = BlendMode.NORMAL;
-            shipsFGBatchbs = new Vector.<QuadBatch>();
+            shipsFGBatchbs = new Vector.<MeshBatch>();
             labels = new Sprite();
 
             register();
@@ -64,23 +64,23 @@ package ui.layers {
             addChild(blackholePulseBatch);
 
             addChild(bgAddBatch);
-            shipsBGBatchs.push(new QuadBatch());
+            shipsBGBatchs.push(new MeshBatch());
             bgAddBatch.addChild(shipsBGBatchs[0]);
 
             addChild(bgNormalBatch);
-            shipsBGBatchbs.push(new QuadBatch());
+            shipsBGBatchbs.push(new MeshBatch());
             bgNormalBatch.addChild(shipsBGBatchbs[0]);
             bgNormalBatch.addChild(nodeBatch);
             bgNormalBatch.addChild(nodeGlowNormal);
 
             addChild(fgAddBatch);
             fgAddBatch.addChild(nodeGlow);
-            shipsFGBatchs.push(new QuadBatch());
+            shipsFGBatchs.push(new MeshBatch());
             fgAddBatch.addChild(shipsFGBatchs[0]);
             fgAddBatch.addChild(fx);
 
             addChild(fgNormalBatch);
-            shipsFGBatchbs.push(new QuadBatch());
+            shipsFGBatchbs.push(new MeshBatch());
             fgNormalBatch.addChild(shipsFGBatchbs[0]);
             fgNormalBatch.addChild(labels);
             labels.alpha = 1;
@@ -112,7 +112,7 @@ package ui.layers {
         }
 
         public function invisibleMode():void {
-            var batch:QuadBatch;
+            var batch:MeshBatch;
             Starling.juggler.tween(labels, 5, {"alpha": 0,
                     "delay": 22});
             for each (batch in shipsBGBatchbs)
@@ -143,16 +143,16 @@ package ui.layers {
             LayerFactory.registerLayer(LayerFactory.LABEL, labels);
         }
 
-        private function removeBatchVector(batches:Vector.<QuadBatch>):void {
-            for each (var batch:QuadBatch in batches) {
+        private function removeBatchVector(batches:Vector.<MeshBatch>):void {
+            for each (var batch:MeshBatch in batches) {
                 Starling.juggler.removeTweens(batch);
                 batch.removeFromParent();
             }
             batches.length = 0;
         }
 
-        private function resetBatchVector(batches:Vector.<QuadBatch>):void {
-            for each (var batch:QuadBatch in batches)
+        private function resetBatchVector(batches:Vector.<MeshBatch>):void {
+            for each (var batch:MeshBatch in batches)
                 batch.reset();
         }
 
@@ -172,11 +172,11 @@ package ui.layers {
             }
         }
 
-        private function getEmptyBatch(batches:Vector.<QuadBatch>, parent:Sprite):QuadBatch {
-            for each (var batch:QuadBatch in batches)
+        private function getEmptyBatch(batches:Vector.<MeshBatch>, parent:Sprite):MeshBatch {
+            for each (var batch:MeshBatch in batches)
                 if (batch.numQuads <= 2048)
                     return batch
-            var newBatch:QuadBatch = new QuadBatch();
+            var newBatch:MeshBatch = new MeshBatch();
             batches.push(newBatch);
             parent.addChild(newBatch);
             return newBatch;

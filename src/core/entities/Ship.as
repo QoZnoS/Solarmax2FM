@@ -8,7 +8,7 @@ package core.entities {
     import scenes.GameScene;
 
     import starling.display.Image;
-    import starling.display.QuadBatch;
+    import starling.display.MeshBatch;
 
     import ui.layers.LayerFactory;
 
@@ -44,7 +44,7 @@ package core.entities {
 
         public var rng:Rng;
 
-        public var currentBatch:QuadBatch;
+        public var currentBatch:MeshBatch;
         public var prevForeground:Boolean;
 
         public var tag:int;
