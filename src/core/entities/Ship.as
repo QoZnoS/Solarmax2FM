@@ -60,7 +60,6 @@ package core.entities {
             trail = new Image(Root.assets.getTexture("quad8x4"));
             trail.pivotX = trail.width;
             trail.pivotY = trail.height * 0.5;
-            trail.adjustVertices();
             trail.setVertexAlpha(0, 0);
             trail.setVertexAlpha(2, 0);
             pulse = new Image(Root.assets.getTexture("ship_pulse"));

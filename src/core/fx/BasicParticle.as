@@ -72,15 +72,6 @@ package core.fx {
                 image.pivotY = 0;
             }
         }
-        private var _verticesAdjusted:Boolean = false;
-
-        /** 对每个实例仅执行一次 */
-        public function adjustVertices():void {
-            if (_verticesAdjusted)
-                return;
-            _verticesAdjusted = true;
-            image.adjustVertices();
-        }
 
         public function addToLayer():void {
             var layerArgs:Array = pClass.layerConfig;

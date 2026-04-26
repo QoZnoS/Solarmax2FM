@@ -41,7 +41,6 @@ package core.fx {
             this.y2 = config[3];
             var team:int = config[4];
             p.imagePovitYToCenter();
-            p.adjustVertices();
 
             var dx:Number = x2 - x1;
             var dy:Number = y2 - y1;

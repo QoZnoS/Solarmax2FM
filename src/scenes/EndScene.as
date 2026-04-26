@@ -28,7 +28,6 @@ package scenes {
             super();
             this.scene = scene
             quadImage = new Image(Root.assets.getTexture("quad"));
-            quadImage.adjustVertices();
             stars = new EntityPool();
             batch = new MeshBatch();
             addChild(batch);

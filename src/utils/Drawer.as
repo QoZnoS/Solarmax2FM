@@ -12,9 +12,7 @@ package utils {
 
         public static function init():void {
             _quadImage = new Image(Root.assets.getTexture("quad"));
-            _quadImage.adjustVertices();
             _quadImage2 = new Image(Root.assets.getTexture("quad8x4"));
-            _quadImage2.adjustVertices();
             _quadTexture = Root.assets.getTexture("quad");
             _quadTexture2 = Root.assets.getTexture("quad8x4");
         }
@@ -212,7 +210,6 @@ package utils {
             for (var i:int = 0; i < lineNumber; i++) {
                 // 每次循环创建新的Image实例
                 var quadImage:Image = new Image(texture);
-                quadImage.adjustVertices();
 
                 quadImage.x = x;
                 quadImage.y = y;
@@ -347,7 +344,6 @@ package utils {
             for (var i:int = 0; i < lineNumber; i++) {
                 // 每次循环创建新的Image实例，避免状态污染
                 var quadImage:Image = new Image(texture);
-                quadImage.adjustVertices();
 
                 quadImage.x = x;
                 quadImage.y = y;
@@ -438,10 +434,8 @@ package utils {
                 if (_imagePoolSize > 0) {
                     quadImage = _imagePool[--_imagePoolSize];
                     quadImage.texture = texture;
-                    quadImage.adjustVertices();
                 } else {
                     quadImage = new Image(texture);
-                    quadImage.adjustVertices();
                 }
 
                 quadImage.x = x;

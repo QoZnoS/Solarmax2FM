@@ -76,7 +76,6 @@ package scenes {
             addChild(titleBox);
             quad = new Quad(2, 2, 16777215);
             quadImage = new Image(Root.assets.getTexture("quad8x4"));
-            quadImage.adjustVertices();
             deltaScroll = new Point(0, 0);
             previewBox = new Sprite();
             previewLayer = new Sprite();

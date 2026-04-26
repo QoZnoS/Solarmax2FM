@@ -26,7 +26,6 @@ package core.fx.legacy {
             super();
             image = new Image(Root.assets.getTexture("lightning0" + imageID.toString()));
             image.pivotY = image.height * 0.5;
-            //image.adjustVertices();
             foreground = true;
         }
 
