@@ -1,6 +1,4 @@
 package ui {
-    import managers.Globals;
-
     import starling.core.Starling;
     import starling.display.Quad;
     import starling.display.MeshBatch;
@@ -139,7 +137,6 @@ package ui {
                     "scaleY": _scale,
                     "y": 384,
                     "transition": "easeInOut"});
-            _entityL.reset();
         }
 
         public function initEditor():void {
@@ -183,14 +180,12 @@ package ui {
         }
 
         public function update():void {
-            _behaviorB.reset();
-            _entityL.reset();
             SaveManager.touchControls ? _touchCL.draw() : _tradiCL.draw();
             if (_editorCL.visible)
                 _editorCL.draw();
         }
 
-        public function set scale(scale:Number):void {
+        override public function set scale(scale:Number):void {
             this._scale = scale;
         }
 

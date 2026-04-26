@@ -111,10 +111,8 @@ package core.entities {
                 pulse.visible = true;
                 pulse.scaleX = pulse.scaleY = 1;
             }
-            if (orbitAngle > 0 && orbitAngle < Math.PI)
-                foreground = true;
-            else
-                foreground = false;
+            updateImage();
+            updateForeground();
         }
 
         override public function deInit():void {
@@ -181,7 +179,6 @@ package core.entities {
                 trail.width = trailLength;
                 trail.rotation = jumpAngle;
                 updateForeground()
-                drawTrail();
             }
             if (!node.conflict && !node.capturing)
                 hp = Math.min(100, hp + dt * 50);
@@ -190,9 +187,6 @@ package core.entities {
             x = node.nodeData.x + Math.cos(orbitAngle) * orbitDist;
             y = node.nodeData.y + Math.sin(orbitAngle) * orbitDist * 0.15;
             updateForeground()
-            drawImage();
-            if (pulse.alpha > 0)
-                drawPulse();
         }
 
         // 制动飞船
@@ -205,11 +199,7 @@ package core.entities {
             }
             image.scaleY = 1 - image.scaleX / 6 * 0.25;
             image.rotation = jumpAngle;
-            if (orbitAngle > 0 && orbitAngle < Math.PI)
-                foreground = true;
-            else
-                foreground = false;
-            drawImage();
+            updateForeground();
         }
 
         // 准备起飞
@@ -239,7 +229,6 @@ package core.entities {
                 }
             }
             image.rotation = jumpAngle;
-            drawImage();
         }
 
         // 飞行状态下的更新
@@ -328,8 +317,6 @@ package core.entities {
             image.rotation = jumpAngle;
             trail.visible = true;
             updateForeground()
-            drawImage();
-            drawTrail();
         }
 
         // 跟随飞船
@@ -379,8 +366,6 @@ package core.entities {
             trail.width = trailLength;
             trail.rotation = jumpAngle;
             image.rotation = jumpAngle;
-            drawImage();
-            drawTrail();
         }
 
         // 重置制动速度
@@ -391,43 +376,21 @@ package core.entities {
         // #endregion
         // #region 绘制贴图
         private function updateForeground():void {
-            if (orbitAngle > 0 && orbitAngle < Math.PI)
-                foreground = true;
-            else
-                foreground = false;
+            var prevForeground:Boolean = foreground;
+            foreground = orbitAngle > 0 && orbitAngle < Math.PI;
+            if (prevForeground != foreground)
+                updateImage();
         }
 
         private function updateImage():void {
             image.x = x;
             image.y = y;
-        }
-
-        // 绘制贴图
-        private function drawImage():void {
-            //  if (Globals.exOptimization > 1)
-            //     if (node.ships[team].length > 1024)
-            //        if (rng.nextNumber() > 1024/game.ships.active.length)
-            //           return;
-            image.x = x;
-            image.y = y;
-            LayerFactory.call(LayerFactory.ADD_IMAGE)(image, foreground, Globals.teamDeepColors[team])
-        }
-
-        // 绘制拖尾
-        private function drawTrail():void {
-            // if (Globals.exOptimization > 0)
-            //     return;
             trail.x = x;
             trail.y = y;
-            LayerFactory.call(LayerFactory.ADD_IMAGE)(trail, foreground, Globals.teamDeepColors[team])
-        }
-
-        // 绘制光圈
-        private function drawPulse():void {
-            // if (Globals.exOptimization > 0)
-            //     return;
             pulse.x = x;
             pulse.y = y;
+            LayerFactory.call(LayerFactory.ADD_IMAGE)(image, foreground, Globals.teamDeepColors[team])
+            LayerFactory.call(LayerFactory.ADD_IMAGE)(trail, foreground, Globals.teamDeepColors[team])
             LayerFactory.call(LayerFactory.ADD_IMAGE)(pulse, foreground, Globals.teamDeepColors[team])
         }
 
