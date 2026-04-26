@@ -12,15 +12,12 @@ package scenes {
     import starling.display.BlendMode;
     import starling.display.Image;
     import starling.display.Quad;
-    import starling.display.QuadBatch;
     import starling.display.Sprite;
     import starling.events.EnterFrameEvent;
     import starling.events.Event;
     import starling.events.Touch;
     import starling.events.TouchEvent;
     import starling.text.TextField;
-    import starling.utils.HAlign;
-    import starling.utils.VAlign;
 
     import ui.components.DifficultyButton;
     import ui.components.LevelButtons;

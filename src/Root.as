@@ -1,9 +1,8 @@
 package {
     import starling.display.Image;
-    import starling.utils.AssetManager;
+    import starling.assets.AssetManager;
     import starling.display.Sprite;
     import starling.textures.Texture;
-    import starling.core.Starling;
 
     import utils.Drawer;
     import utils.ProgressBar;
@@ -11,8 +10,9 @@ package {
 
     import managers.LevelData;
     import managers.AudioManager;
-    
+
     import core.ParticleSystem;
+    import starling.assets.AssetReference;
 
     public class Root extends Sprite {
         private static var sAssets:AssetManager;
@@ -42,28 +42,22 @@ package {
             progressBar.x = (background.width - progressBar.width) / 2;
             progressBar.y = background.height * 0.55;
             addChild(progressBar);
-            assets.loadQueue((function():* {
-                var onProgress:Function = function(param1:Number):void {
-                    var ratio:Number = param1;
-                    progressBar.ratio = ratio;
-                    if (ratio == 1) // 加载完成时
-                    {
-                        Starling.juggler.delayCall(function():void {
-                            progressBar.removeFromParent(true);
-                            removeChildAt(0);
-                            Drawer.init();
-                            LevelData.init();
-                            bg = new ScrollingBackground();
-                            scene = new SceneController()
-                            scene.addChildAt(bg, 0);
-                            addChild(scene);
-                            AudioManager.init();
-                            ParticleSystem.init();
-                        }, 0.05);
-                    }
-                }; // 声明函数对象
-                return onProgress;
-            })());
+            assets.loadQueue(function(manager:AssetManager):void {
+                progressBar.removeFromParent(true);
+                removeChildAt(0);
+                Drawer.init();
+                LevelData.init();
+                bg = new ScrollingBackground();
+                scene = new SceneController()
+                scene.addChildAt(bg, 0);
+                addChild(scene);
+                AudioManager.init();
+                ParticleSystem.init();
+            }, function(error:String, reference:AssetReference):void {
+                trace("加载失败: " + error + " 资源名: " + reference.name);
+            }, function(ratio:Number):void {
+                progressBar.ratio = ratio;
+            });
         }
     }
 }

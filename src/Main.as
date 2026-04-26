@@ -10,7 +10,6 @@
     import flash.system.Capabilities;
 
     import starling.core.Starling;
-    import starling.utils.AssetManager;
     import starling.textures.Texture;
     import starling.utils.RectangleUtil;
     
@@ -18,6 +17,7 @@
     import managers.Globals;
     import managers.AudioManager;
     import managers.SaveManager;
+    import starling.assets.AssetManager;
 
     [SWF(frameRate = "120", backgroundColor = "0x00000")]
     public class Main extends Sprite {
@@ -86,13 +86,13 @@
             stageHeight = 768;
             // 为Starling插件启用多点触控和丢失上下文处理
             Starling.multitouchEnabled = true;
-            Starling.handleLostContext = true;
             // 根据屏幕和舞台尺寸计算视口矩形
             fullScreenWidth = Globals.stageWidth = stage.stageWidth;
             fullScreenHeight = Globals.stageHeight = stage.stageHeight;
             // 获取应用程序目录并创建 AssetManager
             appDir = File.applicationDirectory;
-            assets = new AssetManager(scaleFactor, true);
+            assets = new AssetManager(scaleFactor);
+            assets.textureOptions.mipMapping = true;
             // assets.verbose = Capabilities.isDebugger;
             // 将音频、字体和纹理资源加入队列
             assets.enqueue(appDir.resolvePath("audio"), appDir.resolvePath("fonts/" + assetDir), appDir.resolvePath("textures/" + assetDir), appDir.resolvePath("metadata"));
