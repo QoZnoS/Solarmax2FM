@@ -26,26 +26,26 @@ package utils {
          * @param alpha 直线可见度
          */
         public static function drawLine(layer:MeshBatch, x1:Number, y1:Number, x2:Number, y2:Number, color:uint, width:Number = 2, alpha:Number = 1):void {
-            var quadImage:Image = _quadImage;
-            if (width <= 3)
-                quadImage = _quadImage2;
-            quadImage.color = color;
-            quadImage.setVertexAlpha(2, 1);
-            quadImage.setVertexAlpha(3, 1);
-            quadImage.alpha = alpha;
-            quadImage.rotation = 0;
+            var quadImage:Image = (width <= 3) ? _quadImage2 : _quadImage;
             var dx:Number = x2 - x1;
             var dy:Number = y2 - y1;
             var angle:Number = Math.atan2(dy, dx);
             var distance:Number = Math.sqrt(dx * dx + dy * dy);
             quadImage.x = x1;
             quadImage.y = y1;
+            quadImage.rotation = angle;
+            quadImage.color = color;
             quadImage.setVertexPosition(0, 0, 0);
             quadImage.setVertexPosition(1, distance, 0);
             quadImage.setVertexPosition(2, 0, width);
             quadImage.setVertexPosition(3, distance, width);
-            quadImage.rotation = angle;
-            layer.addImage(quadImage);
+            quadImage.setVertexAlpha(0, 1);
+            quadImage.setVertexAlpha(1, 1);
+            quadImage.setVertexAlpha(2, 1);
+            quadImage.setVertexAlpha(3, 1);
+            quadImage.alpha = alpha;
+            // quadImage.rotation = 0;
+            layer.addMesh(quadImage);
         }
 
         /**绘制虚线（未使用）
@@ -111,9 +111,7 @@ package utils {
          * @param lineCount 绘制精度（线条数）
          */
         public static function drawCircle(layer:MeshBatch, x:Number, y:Number, color:uint, R:Number, voidR:Number = 0, blur:Boolean = false, alpha:Number = 1, cycleCount:Number = 1, angle:Number = 0, lineCount:int = 64):void {
-            var quadImage:Image = _quadImage;
-            if (R - voidR <= 3)
-                quadImage = _quadImage2;
+            var quadImage:Image = (R - voidR <= 3) ? _quadImage2 : _quadImage;
             quadImage.color = color;
             if (blur) {
                 quadImage.setVertexAlpha(2, 0);
@@ -122,6 +120,8 @@ package utils {
                 quadImage.setVertexAlpha(2, 1);
                 quadImage.setVertexAlpha(3, 1);
             }
+            quadImage.setVertexAlpha(0, 1);
+            quadImage.setVertexAlpha(1, 1);
             quadImage.alpha = alpha;
             quadImage.rotation = 0;
             var angleStep:Number = Math.PI * 2 / lineCount;
@@ -135,8 +135,7 @@ package utils {
                 quadImage.setVertexPosition(1, Math.cos(angle + angleStep) * R, Math.sin(angle + angleStep) * R);
                 quadImage.setVertexPosition(2, Math.cos(angle) * voidR, Math.sin(angle) * voidR);
                 quadImage.setVertexPosition(3, Math.cos(angle + angleStep) * voidR, Math.sin(angle + angleStep) * voidR);
-                quadImage.vertexChanged();
-                layer.addImage(quadImage);
+                layer.addMesh(quadImage);
                 angle += angleStep;
             }
         }
@@ -165,6 +164,8 @@ package utils {
                 quadImage.setVertexAlpha(2, 1);
                 quadImage.setVertexAlpha(3, 1);
             }
+            quadImage.setVertexAlpha(0, 1);
+            quadImage.setVertexAlpha(1, 1);
             quadImage.alpha = alpha;
             quadImage.rotation = 0;
             var angleStep:Number = Math.PI * 2 / lineCount;
@@ -178,8 +179,7 @@ package utils {
                 quadImage.setVertexPosition(1, Math.cos(angle + angleStep) * R, Math.sin(angle + angleStep) * R);
                 quadImage.setVertexPosition(2, Math.cos(angle) * voidR, Math.sin(angle) * voidR);
                 quadImage.setVertexPosition(3, Math.cos(angle + angleStep) * voidR, Math.sin(angle + angleStep) * voidR);
-                quadImage.vertexChanged();
-                layer.addImage(quadImage);
+                layer.addMesh(quadImage);
                 angle += angleStep * 2;
             }
         }
@@ -267,6 +267,8 @@ package utils {
                     quadImage.setVertexAlpha(2, 1);
                     quadImage.setVertexAlpha(3, 1);
                 }
+                quadImage.setVertexAlpha(0, 1);
+                quadImage.setVertexAlpha(1, 1);
 
                 // 设置顶点位置
                 quadImage.setVertexPosition(0, Math.cos(angle) * R, Math.sin(angle) * R);
@@ -274,8 +276,7 @@ package utils {
                 quadImage.setVertexPosition(2, Math.cos(angle) * voidR, Math.sin(angle) * voidR);
                 quadImage.setVertexPosition(3, Math.cos(angle + currentAngleStep) * voidR, Math.sin(angle + currentAngleStep) * voidR);
 
-                quadImage.vertexChanged();
-                layer.addImage(quadImage);
+                layer.addMesh(quadImage);
 
                 angle += currentAngleStep;
             }
@@ -369,6 +370,8 @@ package utils {
                     quadImage.setVertexAlpha(2, 1);
                     quadImage.setVertexAlpha(3, 1);
                 }
+                quadImage.setVertexAlpha(0, 1);
+                quadImage.setVertexAlpha(1, 1);
                 quadImage.alpha = alpha;
 
                 // 设置顶点位置
@@ -377,8 +380,7 @@ package utils {
                 quadImage.setVertexPosition(2, Math.cos(angle) * voidR, Math.sin(angle) * voidR);
                 quadImage.setVertexPosition(3, Math.cos(angle + currentAngleStep) * voidR, Math.sin(angle + currentAngleStep) * voidR);
 
-                quadImage.vertexChanged();
-                layer.addImage(quadImage);
+                layer.addMesh(quadImage);
 
                 // 角度递增
                 angle += currentAngleStep;
@@ -466,8 +468,7 @@ package utils {
                 quadImage.setVertexPosition(2, Math.cos(angle) * voidR, Math.sin(angle) * voidR);
                 quadImage.setVertexPosition(3, Math.cos(angle + currentAngleStep) * voidR, Math.sin(angle + currentAngleStep) * voidR);
 
-                quadImage.vertexChanged();
-                layer.addImage(quadImage);
+                layer.addMesh(quadImage);
 
                 // 将Image放回对象池供下一帧使用
                 quadImage.addEventListener(Event.REMOVED_FROM_STAGE, onImageRemoved);
