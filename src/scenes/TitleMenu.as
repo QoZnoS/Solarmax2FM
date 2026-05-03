@@ -26,6 +26,7 @@ package scenes {
     import utils.CalcTools;
     import utils.Drawer;
     import managers.SaveManager;
+    import starling.display.MeshBatch;
 
     public class TitleMenu extends Sprite {
         public var cover:Quad; // 进入游戏和通关36时的白光遮罩
