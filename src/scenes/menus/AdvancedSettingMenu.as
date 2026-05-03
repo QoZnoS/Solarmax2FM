@@ -10,7 +10,7 @@ package scenes.menus {
     import ui.components.OptionButton;
     import ui.components.OptionSlider;
 
-    import starling.utils.HAlign;
+    import starling.utils.Align;
 
     public class AdvancedSettingMenu extends Sprite implements IMenu {
         // ========== 布局常量 ==========
@@ -39,13 +39,15 @@ package scenes.menus {
 
         public function init():void {
             // 标题
-            var titleText:TextField = new TextField(400, 40, "ADVANCED SETTINGS", "Downlink18", -1, COLOR);
-            titleText.hAlign = HAlign.CENTER;
+            var titleText:TextField = new TextField(400, 40, "ADVANCED SETTINGS");
+            titleText.format.setTo("downlink", 18, COLOR);
+            titleText.format.horizontalAlign = Align.CENTER;
             components.push({type: "label", obj: titleText, align: "center"});
 
             // 黑边选项
-            var blackLabel:TextField = new TextField(LABEL_WIDTH, 40, "BLACK BORDER:", "Downlink12", -1, COLOR);
-            components.push({type: "label", obj: blackLabel, align: "right"});
+            var blackLabel:TextField = new TextField(LABEL_WIDTH, 40, "BLACK BORDER:");
+            blackLabel.format.setTo("downlink", 12, COLOR);
+            components.push({type: "label", obj: blackLabel, align: Align.RIGHT});
 
             blackBorders = [];
             for (var i:int = 0; i < YES_NO.length; i++) {
@@ -56,8 +58,9 @@ package scenes.menus {
             components.push({type: "buttonGroup", obj: blackBorders});
 
             // 允许暂停选项
-            var pauseLabel:TextField = new TextField(LABEL_WIDTH, 40, "ALLOW PAUSE:", "Downlink12", -1, COLOR);
-            components.push({type: "label", obj: pauseLabel, align: "right"});
+            var pauseLabel:TextField = new TextField(LABEL_WIDTH, 40, "ALLOW PAUSE:");
+            pauseLabel.format.setTo("downlink", 12, COLOR);
+            components.push({type: "label", obj: pauseLabel, align: Align.RIGHT});
 
             pauseAllows = [];
             for (i = 0; i < YES_NO.length; i++) {
@@ -68,23 +71,26 @@ package scenes.menus {
             components.push({type: "buttonGroup", obj: pauseAllows});
 
             // 过渡速度
-            var transLabel:TextField = new TextField(LABEL_WIDTH, 40, "TRANSITION SPEED:", "Downlink12", -1, COLOR);
-            components.push({type: "label", obj: transLabel, align: "right"});
+            var transLabel:TextField = new TextField(LABEL_WIDTH, 40, "TRANSITION SPEED:");
+            transLabel.format.setTo("downlink", 12, COLOR);
+            components.push({type: "label", obj: transLabel, align: Align.RIGHT});
 
             transitionSlider = new OptionSlider(1); // 中等大小
             transitionSlider.init();
             components.push({type: "slider", obj: transitionSlider});
 
             // 最大边距势力数
-            var marginLabel:TextField = new TextField(LABEL_WIDTH, 40, "MAX MARGIN TEAM:", "Downlink12", -1, COLOR);
-            components.push({type: "label", obj: marginLabel, align: "right"});
+            var marginLabel:TextField = new TextField(LABEL_WIDTH, 40, "MAX MARGIN TEAM:");
+            marginLabel.format.setTo("downlink", 12, COLOR);
+            components.push({type: "label", obj: marginLabel, align: Align.RIGHT});
 
             marginSlider = new OptionSlider(1);
             marginSlider.init();
             components.push({type: "slider", obj: marginSlider});
 
-            var unlockAllLabel:TextField = new TextField(LABEL_WIDTH, 40, "UNLOCK ALL LEVEL:", "Downlink12", -1, COLOR);
-            components.push({type: "label", obj: unlockAllLabel, align: "right"});
+            var unlockAllLabel:TextField = new TextField(LABEL_WIDTH, 40, "UNLOCK ALL LEVEL:");
+            unlockAllLabel.format.setTo("downlink", 12, COLOR);
+            components.push({type: "label", obj: unlockAllLabel, align: Align.RIGHT});
 
             var unlockAllBtn:OptionButton = new OptionButton("unlock", COLOR);
             unlockAllBtn.addEventListener("clicked", on_unlockAll);
@@ -103,10 +109,10 @@ package scenes.menus {
                         var label:TextField = item.obj as TextField;
                         label.x = START_X;
                         label.y = currentY;
-                        if (item.align == "right")
-                            label.hAlign = "right";
-                        else if (item.align == "left")
-                            label.hAlign = "left";
+                        if (item.align == Align.RIGHT)
+                            label.format.horizontalAlign = Align.RIGHT;
+                        else if (item.align == Align.LEFT)
+                            label.format.horizontalAlign = Align.LEFT;
                         addChild(label);
                         break;
 
@@ -127,7 +133,7 @@ package scenes.menus {
                         break;
                 }
 
-                if (item.type == "label" && (item.obj as TextField).fontName == "Downlink18")
+                if (item.type == "label" && (item.obj as TextField).format.size == 18)
                     currentY += LINE_HEIGHT;
                 else if (item.type != "label")
                     currentY += LINE_HEIGHT;

@@ -10,9 +10,11 @@ package scenes.menus {
 
     import ui.UIContainer;
     import ui.components.OptionButton;
+    import starling.utils.Align;
+    import starling.text.TextFormat;
 
     public class StaffMenu extends Sprite implements IMenu {
-        private const staffString:Array = [["ORIGINAL", "Downlink18"], ["DESIGN, ART, CODE:", "Downlink12"], ["NICO TUASON", "Downlink12"], ["MUSIC:", "Downlink12"], ["JOHN CAMARA", "Downlink12"], ["PLAYTESTING:", "Downlink12"], ["TERRY TUASON", "Downlink12"], ["MODIFIED", "Downlink18"], ["CODE:", "Downlink12"], ["QoZnoS", "Downlink12"], ["SPECIAL THANKS:", "Downlink18"], ["Solarmax23333", "Downlink12"], ["supercluster", "Downlink12"], ["Solarmax33", "Downlink12"], ["Thirdsister", "Downlink12"], ["Tuetiedove", "Downlink12"], ["LinZhong", "Downlink12"]];
+        private const staffString:Array = [["ORIGINAL", 18], ["DESIGN, ART, CODE:", 12], ["NICO TUASON", 12], ["MUSIC:", 12], ["JOHN CAMARA", 12], ["PLAYTESTING:", 12], ["TERRY TUASON", 12], ["MODIFIED", 18], ["CODE:", 12], ["QoZnoS", 12], ["SPECIAL THANKS:", 18], ["Solarmax23333", 12], ["supercluster", 12], ["Solarmax33", 12], ["Thirdsister", 12], ["Tuetiedove", 12], ["LinZhong", 12]];
         private const COLOR:uint = 0xFF9DBB;
         private const lineHeight:Number = 36;
 
@@ -29,12 +31,12 @@ package scenes.menus {
 
         public function init():void {
             for each (var strings:Array in staffString) {
-                components.push(new TextField(400, 40, strings[0], strings[1], -1, COLOR));
+                components.push(new TextField(400, 40, strings[0], new TextFormat("downlink", strings[1], COLOR)));
             }
             var y:Number = 120;
             var side:int = 0;
             for (var i:int = 0; i < components.length; i++) {
-                if (components[i].fontName == "Downlink18") {
+                if (components[i].fontName == 18) {
                     addLabel(components[i], 312, y, "center");
                     y += lineHeight * 1.6;
                 } else {
@@ -81,9 +83,9 @@ package scenes.menus {
             this.visible = false;
         }
 
-        private function addLabel(label:TextField, x:Number, y:Number, hAlign:String = "right"):void {
-            label.hAlign = hAlign;
-            label.vAlign = "top";
+        private function addLabel(label:TextField, x:Number, y:Number, hAlign:String = Align.RIGHT):void {
+            label.format.horizontalAlign = hAlign;
+            label.format.verticalAlign = Align.TOP;
             label.x = x;
             label.y = y;
             this.addChild(label);
@@ -95,12 +97,12 @@ package scenes.menus {
             if (title.currentIndex == 0)
                 return;
             nicoClickTime += 1;
-            nicobtn.label.color = uint(Math.random() * uint.MAX_VALUE);
+            nicobtn.label.format.color = uint(Math.random() * uint.MAX_VALUE);
             AudioManager.playClick();
 
             if (nicoClickTime == 5) {
                 nicoClickTime = 0;
-                nicobtn.label.color = COLOR;
+                nicobtn.label.format.color = COLOR;
                 title.on_menu(null);
                 title.loadMap();
                 UIContainer.invisibleMode();

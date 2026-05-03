@@ -5,8 +5,6 @@ package core.game.victory {
 
     import starling.display.Quad;
     import starling.text.TextField;
-    import starling.utils.HAlign;
-    import starling.utils.VAlign;
 
     public class TimeVictory implements IVictoryType {
         private var time:Number;
@@ -18,13 +16,12 @@ package core.game.victory {
             time = trigger as Number;
             background = new Quad(80, 26, 0xFFFFFF);
             background.alpha = 0.2;
-            textField = new TextField(80, 30, "12:00", "Downlink18", -1, 0xFF0000);
+            textField = new TextField(80, 30, "12:00");
+            textField.format.setTo("downlink", 18, 0xFF0000);
             textField.alpha = 0.8;
             background.x = textField.x = 480;
             background.y = 144;
             textField.y = 140;
-            textField.hAlign = HAlign.CENTER;
-            textField.vAlign = VAlign.CENTER
             // UIContainer.entityLayer.addChildAt(background, 0);
             // UIContainer.entityLayer.addChildAt(textField, 1);
         }

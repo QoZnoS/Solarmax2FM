@@ -28,7 +28,7 @@ package ui.components {
         private var _type:int;
 
         public function FleetSlider(type:int) {
-            var font:String = null;
+            var fontSize:int = -1;
             this._type = type;
             super();
             switch (_type) {
@@ -39,7 +39,7 @@ package ui.components {
                     _boxWidth = 50;
                     _boxHeight = 20;
                     _thickness = 2;
-                    font = "Downlink12";
+                    fontSize = 12;
                     break;
                 case TYPE_HORIZONTAL_LARGE:
                     _touchWidth = 640;
@@ -47,7 +47,7 @@ package ui.components {
                     _boxWidth = 80;
                     _boxHeight = 30;
                     _thickness = 2;
-                    font = "Downlink18";
+                    fontSize = 18;
                     break;
                 case TYPE_VERTICAL:
                     _touchWidth = 40;
@@ -55,27 +55,29 @@ package ui.components {
                     _boxWidth = 50;
                     _boxHeight = 20;
                     _thickness = 2;
-                    font = "Downlink12";
+                    fontSize = 12;
                     break;
             }
             if (_type == TYPE_VERTICAL) {
-                _label = new TextField(_boxWidth * 2, _boxHeight, "100%", font, -1, 16755370);
+                _label = new TextField(_boxWidth * 2, _boxHeight, "100%");
+                _label.format.setTo("downlink", fontSize, 0xFFAAAA)
                 _label.pivotX = _boxWidth;
                 _label.pivotY = _label.y = _boxHeight * 0.5;
                 _label.x = _boxWidth * 0.5;
-                _quad1 = new Quad(_thickness, _touchHeight, 16755370);
+                _quad1 = new Quad(_thickness, _touchHeight, 0xFFAAAA);
                 _quad1.x = _boxWidth * 0.5 - _thickness * 0.5;
-                _quad2 = new Quad(_thickness, _touchHeight, 16755370);
+                _quad2 = new Quad(_thickness, _touchHeight, 0xFFAAAA);
                 _quad2.pivotY = _quad2.y = _touchHeight;
                 _quad2.x = _boxWidth * 0.5 - _thickness * 0.5;
             } else {
-                _label = new TextField(_boxWidth, _boxHeight * 2, "100%", font, -1, 16755370);
+                _label = new TextField(_boxWidth, _boxHeight * 2, "100%");
+                _label.format.setTo("downlink", fontSize, 0xFFAAAA)
                 _label.pivotX = _label.x = _boxWidth * 0.5;
                 _label.pivotY = _boxHeight;
                 _label.y = _boxHeight * 0.5;
-                _quad1 = new Quad(_touchWidth, _thickness, 16755370);
+                _quad1 = new Quad(_touchWidth, _thickness, 0xFFAAAA);
                 _quad1.y = _boxHeight * 0.5 - _thickness * 0.5;
-                _quad2 = new Quad(_touchWidth, _thickness, 16755370);
+                _quad2 = new Quad(_touchWidth, _thickness, 0xFFAAAA);
                 _quad2.pivotX = _quad2.x = _touchWidth;
                 _quad2.y = _boxHeight * 0.5 - _thickness * 0.5;
             }
@@ -87,19 +89,19 @@ package ui.components {
             _quad2.alpha = 0.25;
             addChild(_quad2);
             _box = new Sprite();
-            _boxQuad1 = new Quad(_boxWidth, _thickness, 16755370);
+            _boxQuad1 = new Quad(_boxWidth, _thickness, 0xFFAAAA);
             _boxQuad1.x = -_boxWidth * 0.5;
             _boxQuad1.y = -_boxHeight * 0.5 - _thickness;
             _box.addChild(_boxQuad1);
-            _boxQuad2 = new Quad(_boxWidth, _thickness, 16755370);
+            _boxQuad2 = new Quad(_boxWidth, _thickness, 0xFFAAAA);
             _boxQuad2.x = -_boxWidth * 0.5;
             _boxQuad2.y = _boxHeight * 0.5;
             _box.addChild(_boxQuad2);
-            _boxQuad3 = new Quad(_thickness, _boxHeight, 16755370);
+            _boxQuad3 = new Quad(_thickness, _boxHeight, 0xFFAAAA);
             _boxQuad3.x = -_boxWidth * 0.5;
             _boxQuad3.y = -_boxHeight * 0.5;
             _box.addChild(_boxQuad3);
-            _boxQuad4 = new Quad(_thickness, _boxHeight, 16755370);
+            _boxQuad4 = new Quad(_thickness, _boxHeight, 0xFFAAAA);
             _boxQuad4.x = _boxWidth * 0.5 - _thickness;
             _boxQuad4.y = -_boxHeight * 0.5;
             _box.addChild(_boxQuad4);
@@ -180,7 +182,7 @@ package ui.components {
 
         public function set color(value:uint):void {
             _boxQuad1.color = _boxQuad2.color = _boxQuad3.color = _boxQuad4.color = value;
-            _quad1.color = _quad2.color = _label.color = value;
+            _quad1.color = _quad2.color = _label.format.color = value;
         }
     }
 }

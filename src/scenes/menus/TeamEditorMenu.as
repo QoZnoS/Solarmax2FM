@@ -159,7 +159,8 @@ package scenes.menus {
             // 初始化数据
             dataList.push(["Color", "DeepColor", "ColorEnhance", "ShipSpeed", "ShipAttack", "ShipDefence", "Repairing\nSpeed", "Colonizing\nSpeed", "Destroying\nSpeed", "Decolonizing\nSpeed", "Construction\nStrength", "NodeBuild", "NodePop", "ShowLabel"])
             for (var i:int = 0; i < dataList[0].length; i++) {
-                var label:TextField = new TextField(DATA_LABEL_WIDTH, DATA_LABEL_HEIGHT, dataList[0][i], "Downlink18", -1, TITLE_TEXT_COLOR);
+                var label:TextField = new TextField(DATA_LABEL_WIDTH, DATA_LABEL_HEIGHT, dataList[0][i]);
+                label.format.setTo("downlink", 18, TITLE_TEXT_COLOR);
                 label.x = i * DATA_LABEL_X_SPACING + 5;
                 label.y = DATA_BAR_TITLE_Y;
                 dataBar.addChild(label);
@@ -211,10 +212,11 @@ package scenes.menus {
 
                 dataList.push([Globals.teamColors[i], Globals.teamDeepColors[i], Globals.teamColorEnhances[i], Globals.teamShipSpeeds[i], Globals.teamShipAttacks[i], Globals.teamShipDefences[i], Globals.teamRepairingSpeeds[i], Globals.teamColonizingSpeeds[i], Globals.teamDestroyingSpeeds[i], Globals.teamDecolonizingSpeeds[i], Globals.teamConstructionStrengths[i], Globals.teamNodeBuilds[i], Globals.teamNodePops[i], Globals.teamShowLabels[i]]);
                 for (j = 0; j < dataList[i + 1].length; j++) {
-                    var dataLabel:TextField = new TextField(DATA_LABEL_WIDTH, DATA_LABEL_HEIGHT, String(dataList[i + 1][j]), "Downlink18", -1, DATA_TEXT_COLOR);
+                    var dataLabel:TextField = new TextField(DATA_LABEL_WIDTH, DATA_LABEL_HEIGHT, String(dataList[i + 1][j]));
+                    dataLabel.format.setTo("downlink", 18, DATA_TEXT_COLOR);
                     if (j == DATA_COLOR_INDEX) {
                         dataLabel.text = "0x" + uint(dataList[i + 1][j]).toString(16).toUpperCase();
-                        dataLabel.color = Globals.teamColors[i];
+                        dataLabel.format.color = Globals.teamColors[i];
                     }
                     dataLabel.x = j * DATA_LABEL_X_SPACING + 5;
                     dataLabel.y = DATA_LABEL_BASE_Y + i * PREVIEW_IMAGE_Y_SPACING;

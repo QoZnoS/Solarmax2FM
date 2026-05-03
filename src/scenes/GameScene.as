@@ -22,7 +22,6 @@
     import starling.display.Quad;
     import starling.events.EnterFrameEvent;
     import starling.text.TextField;
-    import starling.utils.VAlign;
 
     import ui.UIContainer;
     import ui.layers.LayerFactory;
@@ -31,6 +30,7 @@
     import utils.ReplayData;
     import utils.Rng;
     import managers.SaveManager;
+    import starling.utils.Align;
 
     public class GameScene extends BasicScene {
         // #region 类变量
@@ -54,7 +54,7 @@
             FXHandler.game = this;
             EntityHandler.game = this;
             // 通关时的遮罩
-            cover = new Quad(1024, 768, 16777215);
+            cover = new Quad(1024, 768, 0xFFFFFF);
             cover.touchable = false;
             cover.blendMode = BlendMode.ADD;
             cover.alpha = 0;
@@ -63,13 +63,13 @@
             this.visible = false;
             gameOver = true;
             popLabels = new Vector.<TextField>(3, true);
-            var color:Number = 16755370;
-            popLabels[0] = new TextField(600, 40, "POPULATION : 50 / 50", "Downlink12", -1, color);
-            popLabels[1] = new TextField(600, 40, "POPULATION : 50 / 50", "Downlink12", -1, color);
-            popLabels[2] = new TextField(200, 40, "+ 30", "Downlink12", -1, color);
+            var color:Number = 0xFFAAAA;
+            popLabels[0] = new TextField(600, 40, "POPULATION : 50 / 50");
+            popLabels[1] = new TextField(600, 40, "POPULATION : 50 / 50");
+            popLabels[2] = new TextField(200, 40, "+ 30");
             for (var i:int = 0; i < 3; i++) {
                 var label:TextField = popLabels[i];
-                label.vAlign = label.hAlign = VAlign.CENTER;
+                label.format.setTo("downlink", 12, color);
                 label.pivotX = 300;
                 label.pivotY = 20;
                 label.alpha = 0.8;
@@ -78,7 +78,7 @@
                 label.touchable = false;
             }
             popLabels[1].alpha = 0;
-            popLabels[2].hAlign = "left";
+            popLabels[2].format.horizontalAlign = Align.LEFT;
             popLabels[2].pivotX = 0;
             popLabels[2].alpha = 0;
         }
@@ -143,15 +143,14 @@
                 switch (SaveManager.textSize) {
                     case 0:
                     case 1:
-                        label.fontName = "Downlink12";
+                        label.format.size = 12;
                         break;
                     case 2:
-                        label.fontName = "Downlink18";
+                        label.format.size = 18;
                 }
-                label.color = Globals.teamColors[Globals.playerTeam];
+                label.format.color = Globals.teamColors[Globals.playerTeam];
                 if (Globals.teamColorEnhances[Globals.playerTeam])
-                    label.color = CalcTools.scaleColorToMax(label.color);
-                label.fontSize = -1;
+                    label.format.color = CalcTools.scaleColorToMax(label.format.color);
                 if (Globals.teamDeepColors[Globals.playerTeam])
                     LayerFactory.addChild(LayerFactory.BTN_NORMAL,label);
                 else

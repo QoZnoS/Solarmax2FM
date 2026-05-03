@@ -79,15 +79,16 @@ package {
 
         private function addDebugView():void {
             var y:Number = 100;
-            debugLables.push(new TextField(1000, 40, "DebugView", "Downlink12", -1, 16777215));
-            debugLables.push(new TextField(1000, 40, "DebugView", "Downlink12", -1, 16777215));
-            debugLables.push(new TextField(1000, 40, "DebugView", "Downlink12", -1, 16777215));
-            debugLables.push(new TextField(1000, 40, "DebugView", "Downlink12", -1, 16777215));
-            debugLables.push(new TextField(1000, 40, "DebugView", "Downlink12", -1, 16777215));
-            debugLables.push(new TextField(1000, 40, "DebugView", "Downlink12", -1, 16777215));
+            debugLables.push(new TextField(1000, 40, "DebugView"));
+            debugLables.push(new TextField(1000, 40, "DebugView"));
+            debugLables.push(new TextField(1000, 40, "DebugView"));
+            debugLables.push(new TextField(1000, 40, "DebugView"));
+            debugLables.push(new TextField(1000, 40, "DebugView"));
+            debugLables.push(new TextField(1000, 40, "DebugView"));
             for each (var label:TextField in debugLables) {
-                label.vAlign = "top";
-                label.hAlign = "left";
+                label.format.setTo("downlink", 12, 0xFFFFFF)
+                label.format.horizontalAlign = "top";
+                label.format.verticalAlign = "left";
                 label.x = 40;
                 label.y = y;
                 label.alpha = 1;
@@ -270,8 +271,9 @@ package {
             clear_tag();
             for each (var node:Node in EntityContainer.nodes) {
                 node.tag = EntityContainer.nodes.indexOf(node);
-                var label:TextField = new TextField(60, 48, String(node.tag), "Downlink12", -1, 16777215);
-                label.vAlign = label.hAlign = "center";
+                var label:TextField = new TextField(60, 48, String(node.tag));
+                label.format.setTo("downlink", 12, 0xFFFFFF);
+                label.format.horizontalAlign = label.format.verticalAlign = "center";
                 label.pivotX = -30;
                 label.pivotY = -24;
                 label.alpha = 1;
@@ -279,8 +281,9 @@ package {
                 label.visible = true;
                 THIS.tagLayer.addChild(label);
                 THIS.nodeTagLables[0].push(label);
-                label = new TextField(60, 48, "conflict", "Downlink12", -1, 16777215);
-                label.vAlign = label.hAlign = "center";
+                label = new TextField(60, 48, "conflict");
+                label.format.setTo("downlink", 12, 0xFFFFFF);
+                label.format.horizontalAlign = label.format.verticalAlign = "center";
                 label.pivotX = -30;
                 label.pivotY = -24;
                 label.alpha = 1;
@@ -288,8 +291,9 @@ package {
                 label.visible = false;
                 THIS.tagLayer.addChild(label);
                 THIS.nodeTagLables[1].push(label);
-                label = new TextField(60, 48, "capture", "Downlink12", -1, 16777215);
-                label.vAlign = label.hAlign = "center";
+                label = new TextField(60, 48, "capture");
+                label.format.setTo("downlink", 12, 0xFFFFFF);
+                label.format.horizontalAlign = label.format.verticalAlign = "center";
                 label.pivotX = -30;
                 label.pivotY = -24;
                 label.alpha = 1;

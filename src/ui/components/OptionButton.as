@@ -7,6 +7,7 @@ package ui.components {
     import starling.events.Touch;
     import starling.events.TouchEvent;
     import starling.text.TextField;
+    import starling.utils.Align;
 
     public class OptionButton extends Sprite {
         public var quad:Quad;
@@ -30,9 +31,10 @@ package ui.components {
             super();
             this.buttonArray = buttonArray;
             labelArray = [];
-            label = new TextField(240, 40, text, "Downlink12", -1, color);
-            label.hAlign = "left";
-            label.vAlign = "top";
+            label = new TextField(240, 40, text);
+            label.format.setTo("downlink", 12, color);
+            label.format.horizontalAlign = Align.LEFT;
+            label.format.verticalAlign = Align.TOP;
             label.touchable = false;
             addChild(label);
             labelBG = new Quad(label.textBounds.width + 12, label.textBounds.height + 12, color);
@@ -101,9 +103,10 @@ package ui.components {
             labelBG.alpha = 0;
         }
 
-        public function addLabel(label:TextField, x:Number, y:Number, hAlign:String = "left"):void {
-            label.hAlign = hAlign;
-            label.vAlign = "top";
+        public function addLabel(label:TextField, size:Number, color:Number, x:Number, y:Number, hAlign:String = Align.LEFT):void {
+            label.format.setTo("downlink", size, color);
+            label.format.horizontalAlign = hAlign;
+            label.format.verticalAlign = Align.TOP;
             label.x = x;
             label.y = y;
             label.touchable = false;

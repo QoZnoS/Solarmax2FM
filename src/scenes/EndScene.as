@@ -31,7 +31,7 @@ package scenes {
             stars = new EntityPool();
             batch = new MeshBatch();
             addChild(batch);
-            cover = new Quad(1024, 768, 16777215);
+            cover = new Quad(1024, 768, 0xFFFFFF);
             cover.blendMode = "add";
             cover.alpha = 0;
             addChild(cover);
@@ -98,7 +98,6 @@ package scenes {
             stars.deInit();
             cover.alpha = 0;
             cover.visible = false;
-            batch.reset();
             this.visible = false;
             this.touchable = false;
             removeEventListener("enterFrame", update);
@@ -142,7 +141,6 @@ package scenes {
             if (alpha < 0)
                 alpha = 0;
             var quality:int = 8 + pulseSize / 512 * 248;
-            batch.reset();
             Drawer.drawCircle(batch, 512, 384, Globals.teamColors[1], pulseSize, model, true, alpha, 1, 0, quality);
             Globals.teamColors[1] == 0 ? batch.blendMode = "normal" : batch.blendMode = "add";
         }

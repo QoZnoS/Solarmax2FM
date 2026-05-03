@@ -25,7 +25,7 @@ package ui.components {
             this.buttonArray = buttonArray;
             this.scene = scene;
             image = new Image(Root.assets.getTexture(texture));
-            image.color = 16755370;
+            image.color = 0xFFAAAA;
             image.alpha = 0.3;
             addChild(image);
             quad = new Quad(image.width + 20, image.height + 20, 16711680);

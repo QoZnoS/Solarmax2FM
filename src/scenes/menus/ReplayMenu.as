@@ -94,9 +94,9 @@ package scenes.menus {
                 repBtn.quad.alpha = 0.5;
                 repBtn.quad.width = repBtn.labelBG.width = 196;
                 repBtn.quad.height = repBtn.labelBG.height = 88;
-                repBtn.addLabel(new TextField(196, 20, "level: " + rep.level[1], "Downlink12", -1, COLOR), 0, 18);
-                repBtn.addLabel(new TextField(196, 20, "Time: " + rep.totalTime, "Downlink12", -1, COLOR), 0, 38);
-                repBtn.addLabel(new TextField(196, 20, repFileNames[i], "Downlink12", -1, COLOR), 0, 58);
+                repBtn.addLabel(new TextField(196, 20, "level: " + rep.level[1]), 12, COLOR, 0, 18);
+                repBtn.addLabel(new TextField(196, 20, "Time: " + rep.totalTime), 12, COLOR, 0, 38);
+                repBtn.addLabel(new TextField(196, 20, repFileNames[i]), 12, COLOR, 0, 58);
                 repBtn.x = 180 + 200 * (j % 4);
                 repBtn.y = 160 + 92 * int(j / 4);
                 repBtn.addEventListener("clicked", playRep);

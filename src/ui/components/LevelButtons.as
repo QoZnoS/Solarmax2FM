@@ -13,7 +13,8 @@ package ui.components {
         public function LevelButtons() {
             super();
             buttons = new Vector.<Vector.<TextField>>;
-            var startBtn:TextField = new TextField(100, 40, "S2", "Downlink16", -1, 16755370);
+            var startBtn:TextField = new TextField(100, 40, "S2");
+            startBtn.format.setTo("downlink", 16, 0xFFAAAA);
             startBtn.pivotX = 50;
             startBtn.pivotY = 20;
             startBtn.alpha = 0.6;
@@ -27,12 +28,12 @@ package ui.components {
         }
 
         public function updateSize():void {
-            const FONT_SIZES:Array = ["Downlink12", "Downlink16", "Downlink20"];
-            var fontName:String = FONT_SIZES[SaveManager.textSize];
+            const FONT_SIZES:Array = [12, 16, 20];
+            var fontSize:int = FONT_SIZES[SaveManager.textSize];
             for each (var btns:Vector.<TextField> in buttons) {
                 for each (var btn:TextField in btns) {
-                    btn.fontName = fontName;
-                    btn.fontSize = -1;
+                    btn.format.font = "downlink";
+                    btn.format.size = fontSize;
                 }
             }
         }
@@ -67,8 +68,10 @@ package ui.components {
                 var textVector:Vector.<TextField> = new Vector.<TextField>;
                 var levelText:String = levelData[i].name ? levelData[i].name : ((i + 1 < 10) ? ("0" + (i + 1).toString()) : (i + 1).toString());
                 var buttonColor:uint = levelData[i].color ? levelData[i].color : 0xFFAAAA;
-                var levelBtn:TextField = new TextField(100, 200, levelText, "Downlink16", -1, buttonColor);
-                var levelBtn2:TextField = new TextField(100, 200, levelText, "Downlink16", -1, buttonColor);
+                var levelBtn:TextField = new TextField(100, 200, levelText);
+                levelBtn.format.setTo("downlink", 16, buttonColor);
+                var levelBtn2:TextField = new TextField(100, 200, levelText);
+                levelBtn2.format.setTo("downlink", 16, buttonColor);
                 levelBtn.pivotX = levelBtn2.pivotX = 50;
                 levelBtn.pivotY = levelBtn2.pivotY = 100;
                 levelBtn.alpha = levelBtn2.alpha = 0.3;

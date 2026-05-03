@@ -22,7 +22,7 @@ package ui.components {
         public function MenuButton(texture:String, size:Number = 1) {
             super();
             image = new Image(Root.assets.getTexture(texture));
-            image.color = 16755370;
+            image.color = 0xFFAAAA;
             addChild(image);
             quad = new Quad(image.width + 20, image.height + 20, 16711680);
             addChild(quad);

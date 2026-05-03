@@ -25,7 +25,7 @@ package ui.components {
         public var thickness:Number;
 
         public function OptionSlider(size:int) {
-            var texture:String = null;
+            var fontSize:int = -1;
             super();
             var color:uint = 0xFF9DBB;
             switch (size) {
@@ -36,7 +36,7 @@ package ui.components {
                     boxWidth = 50;
                     boxHeight = 18;
                     thickness = 1;
-                    texture = "Downlink12";
+                    fontSize = 12;
                     break;
                 case 2:
                     touchWidth = 512;
@@ -44,9 +44,10 @@ package ui.components {
                     boxWidth = 80;
                     boxHeight = 24;
                     thickness = 2;
-                    texture = "Downlink18";
+                    fontSize = 18;
             }
-            label = new TextField(boxWidth, boxHeight * 2, "100%", texture, -1, color);
+            label = new TextField(boxWidth, boxHeight * 2, "100%");
+            label.format.setTo("downlink", fontSize, color);
             label.pivotX = label.x = boxWidth * 0.5;
             label.pivotY = boxHeight;
             label.y = boxHeight * 0.5;

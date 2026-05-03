@@ -27,6 +27,7 @@ package scenes {
     import utils.Drawer;
     import managers.SaveManager;
     import starling.display.MeshBatch;
+    import starling.utils.Align;
 
     public class TitleMenu extends Sprite {
         public var cover:Quad; // 进入游戏和通关36时的白光遮罩
@@ -75,7 +76,7 @@ package scenes {
             super();
             titleBox = new Sprite();
             addChild(titleBox);
-            quad = new Quad(2, 2, 16777215);
+            quad = new Quad(2, 2, 0xFFFFFF);
             quadImage = new Image(Root.assets.getTexture("quad8x4"));
             deltaScroll = new Point(0, 0);
             previewBox = new Sprite();
@@ -95,7 +96,7 @@ package scenes {
             title.pivotY = title.height * 0.5;
             title.x = 512;
             title.y = 384;
-            title.color = 16755370;
+            title.color = 0xFFAAAA;
             title.alpha = 0.5;
             title.blendMode = "add";
             titleBox.addChild(title);
@@ -104,15 +105,16 @@ package scenes {
             title_blur.pivotY = title.height * 0.5;
             title_blur.x = 512;
             title_blur.y = 384;
-            title_blur.color = 16755370;
+            title_blur.color = 0xFFAAAA;
             title_blur.alpha = 0.3;
             title_blur.blendMode = "add";
             titleBox.addChild(title_blur);
             credits = [];
-            credits.push(new TextField(600, 40, "CREATED BY NICO TUASON", "Downlink12", -1, 16755370));
-            credits.push(new TextField(600, 40, "MODIFIED BY QoZnoS", "Downlink12", -1, 16755370));
+            credits.push(new TextField(600, 40, "CREATED BY NICO TUASON"));
+            credits.push(new TextField(600, 40, "MODIFIED BY QoZnoS"));
             for (i = 0; i < credits.length; i++) // 留作彩蛋 :P
             {
+                credits[i].format.setTo("downlink", 12, 0xFFAAAA);
                 credits[i].pivotX = 300;
                 credits[i].pivotY = 20;
                 credits[i].x = title.x;
@@ -144,13 +146,13 @@ package scenes {
             shapeImage = new Image(Root.assets.getTexture("planet_shape"));
             shapeImage.pivotX = shapeImage.pivotY = shapeImage.width * 0.5;
             selector = new MeshBatch();
-            Drawer.drawCircle(selector, 0, 0, 16755370, 48, 46);
+            Drawer.drawCircle(selector, 0, 0, 0xFFAAAA, 48, 46);
             selector.x = title.x;
             selector.y = levels.y - 1;
             selector.blendMode = "add";
             selector.alpha = 0;
             titleBox.addChild(selector);
-            cover = new Quad(1024, 768, 16777215);
+            cover = new Quad(1024, 768, 0xFFFFFF);
             cover.blendMode = "add";
             cover.touchable = false;
             titleBox.addChild(cover);
@@ -169,8 +171,9 @@ package scenes {
             difficultyHolder.x = 412;
             difficultyHolder.y = 150;
             titleBox.addChild(difficultyHolder);
-            starLabel = new TextField(120, 40, "0", "Downlink22", -1, 16755370);
-            starLabel.hAlign = "right";
+            starLabel = new TextField(120, 40, "0");
+            starLabel.format.setTo("downlink", 22, 0xFFAAAA);
+            starLabel.format.horizontalAlign = Align.RIGHT;
             starLabel.pivotX = 120;
             starLabel.pivotY = 20;
             starLabel.y = 137;
@@ -211,13 +214,12 @@ package scenes {
             var levelData:Array = LevelData.level;
             for (var i:int = 0; i < levelData.length; i++) {
                 var text:String = "";
-                infoText = new TextField(400, 100, text, "Downlink18", -1, 16755370);
+                infoText = new TextField(400, 100, text);
+                infoText.format.setTo("downlink", 18, 0xFFAAAA);
                 infoText.pivotX = 200;
                 infoText.pivotY = 50;
                 infoText.x = 512;
                 infoText.y = 192;
-                infoText.hAlign = HAlign.CENTER;
-                infoText.vAlign = VAlign.CENTER;
                 infoText.blendMode = BlendMode.ADD;
                 infoText.alpha = 0.5;
                 infoText.visible = false;
@@ -488,7 +490,6 @@ package scenes {
             var scale:Number = (levels.x - 512) / -(levels.width - 100);
             Root.bg.setX(Root.bg.x + (-scale * 1024 * 3 - Root.bg.x) * 0.05);
             updatePreview();
-            selector.reset();
             scale = 1 - Math.abs(levels.x + currentIndex * 120 - 512) / 60;
             radiu = 48 * scale;
             voidR = radiu - 2;
@@ -496,7 +497,7 @@ package scenes {
                 voidR = radiu - 3;
             if (voidR < 0)
                 voidR = 0;
-            Drawer.drawCircle(selector, 0, 0, 16755370, radiu, voidR);
+            Drawer.drawCircle(selector, 0, 0, 0xFFAAAA, radiu, voidR);
             selector.blendMode = "add";
             selector.alpha = scale * 0.5;
             for each (var difficultyBtn:DifficultyButton in difficultyButtons) {
@@ -527,9 +528,6 @@ package scenes {
         }
 
         private function updatePreview():void {
-            preview.reset();
-            preview2.reset();
-            previewQuad.reset();
             for each (var infoText:TextField in infoTexts)
                 infoText.visible = false;
             if (currentIndex > 0 && LevelData.level[currentIndex - 1]) {
@@ -556,9 +554,9 @@ package scenes {
                     if (node.team ? Globals.teamColorEnhances[node.team] : Globals.teamColorEnhances[0])
                         shapeImage.color = CalcTools.scaleColorToMax(shapeImage.color);
                     if (node.team ? Globals.teamDeepColors[node.team] : Globals.teamDeepColors[0])
-                        preview2.addImage(shapeImage);
+                        preview2.addMesh(shapeImage);
                     else
-                        preview.addImage(shapeImage);
+                        preview.addMesh(shapeImage);
                 }
                 for each (var _barrier:Array in barrierData[currentIndex - 1]) {
                     bQuad.rotation = 0;
@@ -566,14 +564,14 @@ package scenes {
                     bQuad.x = _barrier[0];
                     bQuad.y = _barrier[1];
                     bQuad.rotation = _barrier[3];
-                    previewQuad.addQuad(bQuad);
+                    previewQuad.addMesh(bQuad);
                 }
                 for each (orbit in orbitData[currentIndex - 1]) {
                     x = Number(levelData.node[orbit[0]].x);
                     y = Number(levelData.node[orbit[0]].y);
                     distence = orbit[1] * scale + 2;
                     inDistence = Math.max(0, distence - 2);
-                    Drawer.drawCircle(preview, x, y, 16777215, distence, inDistence, false, 0.5, 1, 0, 128);
+                    Drawer.drawCircle(preview, x, y, 0xFFFFFF, distence, inDistence, false, 0.5, 1, 0, 128);
                 }
 
                 var info:TextField = infoTexts[currentIndex - 1];

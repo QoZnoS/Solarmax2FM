@@ -42,7 +42,8 @@ package ui.components {
             icon.alpha = 0.4;
             addChild(icon);
             starred = false;
-            label = new TextField(bg.width, 40, btnText[difficulty], "Downlink12", -1, 0xFFAAAA);
+            label = new TextField(bg.width, 40, btnText[difficulty]);
+            label.format.setTo("downlink", 12, 0xFFAAAA);
             label.pivotX = bg.width * 0.5;
             label.pivotY = 20;
             label.y = -15;

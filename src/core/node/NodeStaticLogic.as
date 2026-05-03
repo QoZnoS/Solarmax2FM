@@ -30,26 +30,20 @@ package core.node {
             switch (SaveManager.textSize) {
                 case 0:
                     for (i = 0; i < Globals.teamCount; i++) { // 设定战斗状态下每个势力的文本
-                        node.moveState.captureLabels[i].fontName = "Downlink10";
-                        node.moveState.captureLabels[i].fontSize = -1;
-                        node.moveState.conflictLabels[i].fontName = "Downlink10";
-                        node.moveState.conflictLabels[i].fontSize = -1;
+                        node.moveState.captureLabels[i].format.size = 10;
+                        node.moveState.conflictLabels[i].format.size = 10;
                     }
                     break;
                 case 1:
                     for (i = 0; i < Globals.teamCount; i++) {
-                        node.moveState.captureLabels[i].fontName = "Downlink12";
-                        node.moveState.captureLabels[i].fontSize = -1;
-                        node.moveState.conflictLabels[i].fontName = "Downlink12";
-                        node.moveState.conflictLabels[i].fontSize = -1;
+                        node.moveState.captureLabels[i].format.size = 12;
+                        node.moveState.conflictLabels[i].format.size = 12;
                     }
                     break;
                 case 2:
                     for (i = 0; i < Globals.teamCount; i++) {
-                        node.moveState.captureLabels[i].fontName = "Downlink18";
-                        node.moveState.captureLabels[i].fontSize = -1;
-                        node.moveState.conflictLabels[i].fontName = "Downlink18";
-                        node.moveState.conflictLabels[i].fontSize = -1;
+                        node.moveState.captureLabels[i].format.size = 18;
+                        node.moveState.conflictLabels[i].format.size = 18;
                     }
                     return;
             }
@@ -77,15 +71,15 @@ package core.node {
             FXHandler.addPulse(node, Globals.teamColors[team], NodePulse.TYPE_GROW, Globals.teamDeepColors[team]);
             AudioManager.playCapture(node.nodeData.x); // 播放占领音效
             if (nodeTeam != Globals.playerTeam && team == Globals.playerTeam && node.nodeData.popVal > 0) {
-                game.popLabels[1].color = 65280;
+                game.popLabels[1].format.color = 0x00FF00;
                 game.popLabels[1].alpha = 1;
-                game.popLabels[2].color = 3407667;
+                game.popLabels[2].format.color = 0x33FF33;
                 game.popLabels[2].alpha = 1;
                 game.popLabels[2].text = "+ " + node.nodeData.popVal;
             } else if (nodeTeam == Globals.playerTeam && team != Globals.playerTeam && node.nodeData.popVal > 0) {
-                game.popLabels[1].color = 16711680;
+                game.popLabels[1].format.color = 0xFF0000;
                 game.popLabels[1].alpha = 1;
-                game.popLabels[2].color = 16724787;
+                game.popLabels[2].format.color = 0xFF3333;
                 game.popLabels[2].alpha = 1;
                 game.popLabels[2].text = "- " + node.nodeData.popVal;
             }

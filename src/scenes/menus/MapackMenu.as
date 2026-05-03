@@ -13,6 +13,7 @@ package scenes.menus {
     import ui.components.MenuButton;
     import ui.components.OptionButton;
     import managers.SaveManager;
+    import starling.utils.Align;
 
     public class MapackMenu extends Sprite implements IMenu {
         private const COLOR:uint = 0xFF9DBB;
@@ -33,7 +34,8 @@ package scenes.menus {
         }
 
         public function init():void {
-            var text:TextField = new TextField(200, 40, "MAP MANAGER", "Downlink18", -1, COLOR);
+            var text:TextField = new TextField(200, 40, "MAP MANAGER");
+            text.format.setTo("downlink", 18, COLOR);
             components.push(text);
             addLabel(text, 412, 122, "center");
             var btn:MenuButton = new MenuButton("btn_restart");
@@ -85,9 +87,9 @@ package scenes.menus {
         }
 
         // #region 私有方法
-        private function addLabel(label:TextField, x:Number, y:Number, hAlign:String = "right"):void {
-            label.hAlign = hAlign;
-            label.vAlign = "top";
+        private function addLabel(label:TextField, x:Number, y:Number, hAlign:String = Align.RIGHT):void {
+            label.format.horizontalAlign = hAlign;
+            label.format.verticalAlign = Align.TOP;
             label.x = x;
             label.y = y;
             this.addChild(label);
@@ -112,18 +114,18 @@ package scenes.menus {
             var y:Number = 160;
             for (var i:int = 0; i < LevelData.rawData.length; i++) {
                 dataQuad = new OptionButton(LevelData.rawData[i].name, COLOR, mapacks);
-                dataQuad.label.fontName = "Downlink18";
+                dataQuad.label.format.size = 18;
                 dataQuad.label.width = 700;
                 dataQuad.label.x += 40;
-                dataQuad.addLabel(new TextField(40, 40, "#" + i, "Downlink18", -1, COLOR), 0, 0);
-                dataQuad.addLabel(new TextField(600, 40, LevelData.rawData[i].describe1, "Downlink12", -1, COLOR), 40, 25);
+                dataQuad.addLabel(new TextField(40, 40, "#" + i), 18, COLOR, 0, 0);
+                dataQuad.addLabel(new TextField(600, 40, LevelData.rawData[i].describe1), 12, COLOR, 40, 25);
                 if ("describe2" in LevelData.rawData[i])
-                    dataQuad.addLabel(new TextField(600, 40, LevelData.rawData[i].describe2, "Downlink12", -1, COLOR), 40, 40);
+                    dataQuad.addLabel(new TextField(600, 40, LevelData.rawData[i].describe2), 12, COLOR, 40, 40);
                 if ("describe3" in LevelData.rawData[i])
-                    dataQuad.addLabel(new TextField(600, 40, LevelData.rawData[i].describe3, "Downlink12", -1, COLOR), 40, 55);
+                    dataQuad.addLabel(new TextField(600, 40, LevelData.rawData[i].describe3), 12, COLOR, 40, 55);
                 if ("describe4" in LevelData.rawData[i])
-                    dataQuad.addLabel(new TextField(600, 40, LevelData.rawData[i].describe4, "Downlink12", -1, COLOR), 40, 70);
-                dataQuad.addLabel(new TextField(600, 40, "MAPPER: " + LevelData.rawData[i].mapper, "Downlink12", -1, COLOR), 40, 90);
+                    dataQuad.addLabel(new TextField(600, 40, LevelData.rawData[i].describe4), 12, COLOR, 40, 70);
+                dataQuad.addLabel(new TextField(600, 40, "MAPPER: " + LevelData.rawData[i].mapper), 12, COLOR, 40, 90);
                 dataQuad.addImage(new Image(Root.assets.getTexture(LevelData.rawData[i].icon)));
                 dataQuad.quad.color = 0x000000;
                 dataQuad.quad.alpha = 0.5;

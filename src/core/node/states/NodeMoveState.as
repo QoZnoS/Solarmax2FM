@@ -80,8 +80,8 @@ package core.node.states {
         }
 
         private function addTextField(vec:Vector.<TextField>, team:int):void {
-            var textField:TextField = new TextField(60, 48, "00", "Downlink12", -1, Globals.teamColors[team]);
-            textField.vAlign = textField.hAlign = "center";
+            var textField:TextField = new TextField(60, 48, "00");
+            textField.format.setTo("downlink", 12, Globals.teamColors[team]);
             textField.pivotX = 30;
             textField.pivotY = 24;
             vec.push(textField);

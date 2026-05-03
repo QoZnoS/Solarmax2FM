@@ -1,11 +1,8 @@
 package utils {
-    import starling.display.Quad;
-    import starling.display.Sprite;
     import starling.text.TextField;
-    import starling.utils.HAlign;
-    import starling.utils.VAlign;
 
     import ui.components.OptionButton;
+    import starling.utils.Align;
 
     public class Popup extends MoveableSprite {
         /** 信息提示版，确认后销毁自己，不需要回调 */
@@ -29,18 +26,18 @@ package utils {
             setBox(560, 270);
             switch (type) {
                 case TYPE_INFORMATION:
-                    var title:TextField = new TextField(512, 40, prop[0], "Downlink18", -1, COLOR);
+                    var title:TextField = new TextField(512, 40, prop[0]);
+                    title.format.setTo("downlink", 18, COLOR);
                     title.x = 256;
                     title.y = 249; //384-135
-                    title.vAlign = title.hAlign = "center";
                     title.touchable = false;
                     addChild(title);
                     break;
                 case TYPE_CHOOSE:
-                    var info:TextField = new TextField(512, 200, prop[0], "Downlink18", -1, COLOR);
+                    var info:TextField = new TextField(512, 200, prop[0]);
+                    info.format.setTo("downlink", 18, COLOR);
                     info.x = 256;
                     info.y = 180;
-                    info.vAlign = info.hAlign = "center";
                     info.touchable = false;
                     addChild(info);
                     break;
@@ -52,11 +49,12 @@ package utils {
         }
 
         public function addLabel(text:String):void {
-            var label:TextField = new TextField(512, 270, text, "Downlink12", -1, COLOR);
+            var label:TextField = new TextField(512, 270, text);
+            label.format.setTo("downlink", 12, COLOR);
             label.x = 256;
             label.y = 289;
-            label.vAlign = VAlign.TOP;
-            label.hAlign = HAlign.LEFT;
+            label.format.horizontalAlign = Align.TOP;
+            label.format.verticalAlign = Align.LEFT;
             label.touchable = false;
             addChild(label);
             labels.push(label)

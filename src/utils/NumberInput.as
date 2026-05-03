@@ -2,10 +2,10 @@ package utils {
     import starling.display.Sprite;
     import starling.text.TextField;
     import flash.ui.Keyboard;
-    import starling.utils.HAlign;
     import ui.components.OptionButton;
     import flash.events.KeyboardEvent;
     import starling.events.Event;
+    import starling.utils.Align;
 
     public class NumberInput extends MoveableSprite {
 
@@ -37,15 +37,17 @@ package utils {
 
         private function initUI():void {
             setBox(320, 430); // 80*40 一格 4*6 布局 80 50
-            numberPrevText = new TextField(316, 40, prevValue, "Downlink18", -1, COLOR / 2);
+            numberPrevText = new TextField(316, 40, prevValue);
+            numberPrevText.format.setTo("downlink", 18, COLOR / 2);
             numberPrevText.x = 348;
             numberPrevText.y = 171;
-            numberPrevText.hAlign = HAlign.RIGHT;
+            numberPrevText.format.horizontalAlign = Align.RIGHT;
             numberPrevText.touchable = false;
-            numberText = new TextField(316, 40, inputValue, "Downlink24", -1, COLOR);
+            numberText = new TextField(316, 40, inputValue);
+            numberText.format.setTo("downlink", 24, COLOR)
             numberText.x = 348;
             numberText.y = 221;
-            numberText.hAlign = HAlign.RIGHT;
+            numberText.format.horizontalAlign = Align.RIGHT;
             numberText.touchable = false;
             addChild(numberText);
             addChild(numberPrevText);
@@ -58,7 +60,8 @@ package utils {
                 var btn:OptionButton = new OptionButton(btnText[i], COLOR, btnArr);
                 btn.x = x;
                 btn.y = y;
-                btn.label.fontName = "Downlink18";
+                btn.label.format.font = "downlink";
+                btn.label.format.size = 18;
                 btn.quad.width = btn.labelBG.width = 80;
                 btn.quad.height = btn.labelBG.height = 50;
                 btn.addEventListener("clicked", on_btn);
