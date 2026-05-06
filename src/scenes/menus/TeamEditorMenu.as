@@ -106,6 +106,11 @@ package scenes.menus {
         private var dataBox:Sprite; // 信息栏遮罩层 - 支持横向滚动
         private var dataLayer:Sprite; // 信息内容层
 
+        // 2.8 特供遮罩 以后再重构
+        private var listMask:Quad;
+        private var dataBarMask:Quad;
+        private var dataMask:Quad;
+
         // 预览数据
         private var previewImages:Array; // [[node, halo], ...]
         private var dataList:Array; // 信息数据
@@ -128,9 +133,12 @@ package scenes.menus {
         public function init():void {
             // 初始化列表区域（左侧，竖向滚动）
             listBox = new Sprite();
-            listBox.clipRect = new Rectangle(LIST_BOX_X, LIST_BOX_Y, LIST_BOX_WIDTH, LIST_BOX_HEIGHT);
             listLayer = new Sprite();
             previewLayer = new Sprite();
+            listMask = new Quad(LIST_BOX_WIDTH, LIST_BOX_HEIGHT, 0x0);
+            listMask.x = LIST_BOX_X;
+            listMask.y = LIST_BOX_Y;
+            listBox.mask = listMask;
             
             addChild(listBox);
             listBox.addChild(listLayer);
@@ -138,16 +146,22 @@ package scenes.menus {
 
             // 初始化信息栏顶部（右上）
             dataBarBox = new Sprite();
-            dataBarBox.clipRect = new Rectangle(DATA_BAR_BOX_X, DATA_BAR_BOX_Y, DATA_BAR_BOX_WIDTH, DATA_BAR_BOX_HEIGHT);
             dataBar = new Sprite();
+            dataBarMask = new Quad(DATA_BAR_BOX_WIDTH, DATA_BAR_BOX_HEIGHT, 0x0);
+            dataBarMask.x = DATA_BAR_BOX_X;
+            dataBarMask.y = DATA_BAR_BOX_Y;
+            dataBarBox.mask = dataBarMask;
             
             addChild(dataBarBox);
             dataBarBox.addChild(dataBar);
 
             // 初始化信息栏（右下，横向和竖向滚动）
             dataBox = new Sprite();
-            dataBox.clipRect = new Rectangle(DATA_BOX_X, DATA_BOX_Y, DATA_BOX_WIDTH, DATA_BOX_HEIGHT);
             dataLayer = new Sprite();
+            dataMask = new Quad(DATA_BOX_WIDTH, DATA_BOX_HEIGHT, 0x0);
+            dataMask.x = DATA_BOX_X;
+            dataMask.y = DATA_BOX_Y;
+            dataBox.mask = dataMask;
             
             addChild(dataBox);
             dataBox.addChild(dataLayer);

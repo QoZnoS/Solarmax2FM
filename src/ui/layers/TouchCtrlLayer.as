@@ -131,7 +131,7 @@ package ui.layers {
                 return;
             for each (var touch:Touch in touchArray) {
                 if (!touch.downNodes)
-                    touch.downNodes = [];
+                    touch.downNodes = new Vector.<Node>;
                 touch.downNodes.length = 0;
                 var node:Node = getClosestNode(touch);
                 if (node && touch.downNodes.indexOf(node) == -1)
@@ -148,7 +148,7 @@ package ui.layers {
                 return;
             for each (var touch:Touch in touchArray) {
                 if (!touch.downNodes)
-                    touch.downNodes = [];
+                    touch.downNodes = new Vector.<Node>;
                 var node:Node = getClosestNode(touch);
                 if (node && touch.downNodes.indexOf(node) == -1 && touch.downNodes.length == 0)
                     touch.downNodes.push(node);

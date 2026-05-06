@@ -87,8 +87,8 @@ package {
             debugLables.push(new TextField(1000, 40, "DebugView"));
             for each (var label:TextField in debugLables) {
                 label.format.setTo("downlink", 12, 0xFFFFFF)
-                label.format.horizontalAlign = "top";
-                label.format.verticalAlign = "left";
+                label.format.horizontalAlign = "left";
+                label.format.verticalAlign = "top";
                 label.x = 40;
                 label.y = y;
                 label.alpha = 1;

@@ -69,7 +69,6 @@ package ui.layers {
         }
 
         public function draw():void {
-            mouseBatch.reset();
             var quadtypeX:Number = NaN;
             var quadtypeY:Number = NaN;
             var i:int = 0;
@@ -91,7 +90,7 @@ package ui.layers {
                 dragQuad.width = dragx - downx;
                 dragQuad.height = dragy - downy;
                 dragQuad.alpha = 0.2;
-                mouseBatch.addQuad(dragQuad);
+                mouseBatch.addMesh(dragQuad);
                 quadtypeX = dragx - downx > 0 ? 1 : -1;
                 quadtypeY = dragy - downy > 0 ? 1 : -1;
                 dragLine.alpha = 0.5;
@@ -99,18 +98,18 @@ package ui.layers {
                 dragLine.height = quadtypeY;
                 dragLine.x = downx - quadtypeX;
                 dragLine.y = downy - quadtypeY;
-                mouseBatch.addQuad(dragLine);
+                mouseBatch.addMesh(dragLine);
                 dragLine.x = downx - quadtypeX;
                 dragLine.y = downy + dragQuad.height * quadtypeY;
-                mouseBatch.addQuad(dragLine);
+                mouseBatch.addMesh(dragLine);
                 dragLine.width = quadtypeX;
                 dragLine.height = dragQuad.height * quadtypeY;
                 dragLine.x = downx - quadtypeX;
                 dragLine.y = downy;
-                mouseBatch.addQuad(dragLine);
+                mouseBatch.addMesh(dragLine);
                 dragLine.x = downx + dragQuad.width * quadtypeX;
                 dragLine.y = downy;
-                mouseBatch.addQuad(dragLine);
+                mouseBatch.addMesh(dragLine);
                 if (dragQuad.color != 0x000000)
                     mouseBatch.blendMode = "add";
                 for each (node1 in EntityContainer.nodes) {

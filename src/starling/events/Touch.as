@@ -15,6 +15,7 @@ package starling.events
     import starling.display.DisplayObject;
     import starling.utils.Pool;
     import starling.utils.StringUtil;
+    import core.entities.Node;
 
     /** A Touch object contains information about the presence or movement of a finger
      *  or the mouse on the screen.
@@ -53,6 +54,9 @@ package starling.events
         private var _height:Number;
         private var _cancelled:Boolean;
         private var _bubbleChain:Vector.<EventDispatcher>;
+
+        public var hoverNode:Node;
+        public var downNodes:Vector.<Node>;
         
         /** Helper object. */
         private static var sHelperPoint:Point = new Point();

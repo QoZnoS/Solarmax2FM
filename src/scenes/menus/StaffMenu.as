@@ -36,7 +36,7 @@ package scenes.menus {
             var y:Number = 120;
             var side:int = 0;
             for (var i:int = 0; i < components.length; i++) {
-                if (components[i].fontName == 18) {
+                if (components[i].format.size == 18) {
                     addLabel(components[i], 312, y, "center");
                     y += lineHeight * 1.6;
                 } else {

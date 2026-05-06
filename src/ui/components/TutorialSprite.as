@@ -2,9 +2,6 @@ package ui.components {
     import core.EntityContainer;
     import core.entities.Node;
 
-    import managers.Globals;
-
-    import starling.animation.DelayedCall;
     import starling.core.Starling;
     import starling.display.Image;
     import starling.display.Sprite;
@@ -12,7 +9,6 @@ package ui.components {
     import ui.UIContainer;
     import ui.layers.LayerFactory;
     import managers.SaveManager;
-    import core.entities.GameEntity;
 
     public class TutorialSprite extends Sprite {
         public static var TYPE_END:int = 0;
@@ -20,7 +16,7 @@ package ui.components {
         public static var TYPE_L2:int = 2;
 
         private var arrow:Image;
-        private var loop:DelayedCall;
+        private var loopId:uint = 0;
         public var type:int;
 
         public function TutorialSprite() {
@@ -46,9 +42,9 @@ package ui.components {
         public function deInit():void {
             LayerFactory.removeChild(LayerFactory.BTN_ADD, arrow);
             Starling.juggler.removeTweens(arrow);
-            if (loop)
-                Starling.juggler.remove(loop);
-            loop = null;
+            if (loopId != 0)
+                Starling.juggler.removeByID(loopId);
+            loopId = 0;
             arrow.visible = false;
             arrow.alpha = 0;
         }
@@ -88,7 +84,7 @@ package ui.components {
                     "alpha": 0,
                     "delay": 4,
                     "transition": "easeIn"});
-            loop = Starling.juggler.delayCall(show, 6);
+            loopId = Starling.juggler.delayCall(show, 6);
         }
 
         private function showL2():void {
@@ -112,7 +108,7 @@ package ui.components {
                             "alpha": 0,
                             "delay": 4,
                             "transition": "easeIn"});
-                    loop = Starling.juggler.delayCall(show, 6);
+                    loopId = Starling.juggler.delayCall(show, 6);
                     break;
                 case 2:
                     arrow.rotation = 0;
@@ -131,7 +127,7 @@ package ui.components {
                             "alpha": 0,
                             "delay": 4,
                             "transition": "easeIn"});
-                    loop = Starling.juggler.delayCall(show, 6);
+                    loopId = Starling.juggler.delayCall(show, 6);
                     break;
                 case 1:
                     x = 512 + UIContainer.fleetSlider.box_x;
@@ -150,7 +146,7 @@ package ui.components {
                             "alpha": 0,
                             "delay": 4,
                             "transition": "easeIn"});
-                    loop = Starling.juggler.delayCall(show, 6);
+                    loopId = Starling.juggler.delayCall(show, 6);
             }
         }
     }

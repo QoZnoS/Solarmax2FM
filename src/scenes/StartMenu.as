@@ -61,7 +61,7 @@ package scenes {
                     continue;
                 pages[i].x = 15;
                 pages[i].y = 160 + i * 48;
-                pages[i].label.fontName = "Downlink18";
+                pages[i].label.format.size = "Downlink18";
                 pages[i].labelBG.width = pages[i].quad.width = 144;
                 pages[i].labelBG.height = 36;
                 pages[i].quad.height = 48;

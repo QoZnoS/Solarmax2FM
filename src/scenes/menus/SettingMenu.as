@@ -141,7 +141,7 @@ package scenes.menus {
             for (i = 0; i < components.length; i++) {
                 if (components[i] is TextField) {
                     addLabel(components[i], 100, y);
-                    components[i].fontName == "Downlink18" ? y += lineHeight * 1.25 : y += lineHeight;
+                    components[i].format.size == 18 ? y += lineHeight * 1.25 : y += lineHeight;
                     components[i].y = y;
                 } else if (components[i] is Array) {
                     for (var j:int = 0; j < components[i].length; j++) {
