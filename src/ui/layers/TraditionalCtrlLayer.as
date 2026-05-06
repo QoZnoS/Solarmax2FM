@@ -69,6 +69,7 @@ package ui.layers {
         }
 
         public function draw():void {
+            mouseBatch.clear();
             var quadtypeX:Number = NaN;
             var quadtypeY:Number = NaN;
             var i:int = 0;

@@ -181,6 +181,7 @@ package ui {
 
         public function update():void {
             SaveManager.touchControls ? _touchCL.draw() : _tradiCL.draw();
+            _behaviorB.clear();
             if (_editorCL.visible)
                 _editorCL.draw();
         }

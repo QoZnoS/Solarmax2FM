@@ -141,6 +141,7 @@ package scenes {
             if (alpha < 0)
                 alpha = 0;
             var quality:int = 8 + pulseSize / 512 * 248;
+            batch.clear();
             Drawer.drawCircle(batch, 512, 384, Globals.teamColors[1], pulseSize, model, true, alpha, 1, 0, quality);
             Globals.teamColors[1] == 0 ? batch.blendMode = "normal" : batch.blendMode = "add";
         }

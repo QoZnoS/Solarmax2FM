@@ -497,6 +497,7 @@ package scenes {
                 voidR = radiu - 3;
             if (voidR < 0)
                 voidR = 0;
+            selector.clear();
             Drawer.drawCircle(selector, 0, 0, 0xFFAAAA, radiu, voidR);
             selector.blendMode = "add";
             selector.alpha = scale * 0.5;
@@ -528,6 +529,9 @@ package scenes {
         }
 
         private function updatePreview():void {
+            preview.clear();
+            preview2.clear();
+            previewQuad.clear();
             for each (var infoText:TextField in infoTexts)
                 infoText.visible = false;
             if (currentIndex > 0 && LevelData.level[currentIndex - 1]) {
