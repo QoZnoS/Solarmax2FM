@@ -20,6 +20,7 @@ package scenes {
     import starling.filters.BlurFilter;
     import managers.SaveManager;
     import scenes.menus.AdvancedSettingMenu;
+    import starling.utils.Align;
 
     public class StartMenu extends Sprite {
         public var title:TitleMenu; // 接入标题类
@@ -61,7 +62,9 @@ package scenes {
                     continue;
                 pages[i].x = 15;
                 pages[i].y = 160 + i * 48;
-                pages[i].label.format.size = "Downlink18";
+                pages[i].label.format.setTo("downlink", 18, COLOR);
+                pages[i].label.format.horizontalAlign = Align.LEFT;
+                pages[i].label.format.verticalAlign = Align.TOP;
                 pages[i].labelBG.width = pages[i].quad.width = 144;
                 pages[i].labelBG.height = 36;
                 pages[i].quad.height = 48;

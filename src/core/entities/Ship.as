@@ -147,6 +147,7 @@ package core.entities {
             }
             if (!node.active)
                 moveTo(closestNode()); // 飞船所属天体消失时自动飞向最近的天体（不含障碍，存在随机数
+            updateImage();
         }
 
         // 围绕天体旋转
@@ -377,8 +378,7 @@ package core.entities {
         private function updateForeground():void {
             var prevForeground:Boolean = foreground;
             foreground = orbitAngle > 0 && orbitAngle < Math.PI;
-            if (prevForeground != foreground)
-                updateImage();
+            // if (prevForeground != foreground)
         }
 
         private function updateImage():void {

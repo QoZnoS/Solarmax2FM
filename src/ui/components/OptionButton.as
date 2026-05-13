@@ -8,6 +8,7 @@ package ui.components {
     import starling.events.TouchEvent;
     import starling.text.TextField;
     import starling.utils.Align;
+    import starling.display.BlendMode;
 
     public class OptionButton extends Sprite {
         public var quad:Quad;
@@ -35,19 +36,20 @@ package ui.components {
             label.format.setTo("downlink", 12, color);
             label.format.horizontalAlign = Align.LEFT;
             label.format.verticalAlign = Align.TOP;
+            label.alpha = 0.7
             label.touchable = false;
-            addChild(label);
             labelBG = new Quad(label.textBounds.width + 12, label.textBounds.height + 12, color);
             labelBG.x = -6;
             labelBG.y = -2;
             labelBG.alpha = 0;
             labelBG.touchable = false;
-            addChild(labelBG);
-            quad = new Quad(labelBG.width + 4, labelBG.height + 4, 16711680);
+            quad = new Quad(labelBG.width + 4, labelBG.height + 4, 0xFF0000);
             quad.x = labelBG.x - 2;
             quad.y = labelBG.y - 2;
             quad.alpha = 0;
             addChild(quad);
+            addChild(label);
+            addChild(labelBG);
             hitPoint = new Point(0, 0);
             toggled = false;
             quad.addEventListener("touch", on_touch);
@@ -109,9 +111,10 @@ package ui.components {
             label.format.verticalAlign = Align.TOP;
             label.x = x;
             label.y = y;
+            label.alpha = 0.7;
             label.touchable = false;
             labelArray.push(label);
-            addChildAt(label, 0);
+            addChild(label);
         }
 
         public function addImage(image:Image, scale:Number = 1):void {

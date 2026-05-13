@@ -53,8 +53,8 @@ package utils {
             label.format.setTo("downlink", 12, COLOR);
             label.x = 256;
             label.y = 289;
-            label.format.horizontalAlign = Align.TOP;
-            label.format.verticalAlign = Align.LEFT;
+            label.format.horizontalAlign = Align.LEFT;
+            label.format.verticalAlign = Align.TOP;
             label.touchable = false;
             addChild(label);
             labels.push(label)
