@@ -8,7 +8,6 @@ package ui.components {
     import starling.events.TouchEvent;
     import starling.text.TextField;
     import starling.utils.Align;
-    import starling.display.BlendMode;
 
     public class OptionButton extends Sprite {
         public var quad:Quad;
@@ -36,7 +35,7 @@ package ui.components {
             label.format.setTo("downlink", 12, color);
             label.format.horizontalAlign = Align.LEFT;
             label.format.verticalAlign = Align.TOP;
-            label.alpha = 0.7
+            label.alpha = 1;
             label.touchable = false;
             labelBG = new Quad(label.textBounds.width + 12, label.textBounds.height + 12, color);
             labelBG.x = -6;
@@ -112,6 +111,7 @@ package ui.components {
             label.x = x;
             label.y = y;
             label.alpha = 0.7;
+            this.label.alpha = 0.7;
             label.touchable = false;
             labelArray.push(label);
             addChild(label);

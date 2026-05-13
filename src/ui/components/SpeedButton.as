@@ -2,7 +2,6 @@ package ui.components {
     import flash.geom.Point;
 
     import managers.AudioManager;
-    import managers.Globals;
 
     import starling.display.Image;
     import starling.display.Quad;

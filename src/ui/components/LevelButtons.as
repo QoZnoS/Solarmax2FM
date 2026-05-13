@@ -1,9 +1,7 @@
 package ui.components {
-    import managers.Globals;
     import managers.LevelData;
 
     import starling.display.Sprite;
-    import starling.filters.ColorMatrixFilter;
     import starling.text.TextField;
     import managers.SaveManager;
 
