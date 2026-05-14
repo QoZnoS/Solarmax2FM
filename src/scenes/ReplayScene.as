@@ -33,7 +33,7 @@ package scenes {
             visible = false;
             EntityHandler.replay = this;
         }
-
+        // TODO: 进度条
         public function init(rep:ReplayData):void {
             this.alpha = 1;
             this.visible = true;

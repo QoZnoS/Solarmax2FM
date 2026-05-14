@@ -45,7 +45,6 @@ package {
             assets.loadQueue(function(manager:AssetManager):void {
                 progressBar.removeFromParent(true);
                 removeChildAt(0);
-                Drawer.init();
                 LevelData.init();
                 bg = new ScrollingBackground();
                 scene = new SceneController()

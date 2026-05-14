@@ -1,22 +1,9 @@
 package utils {
-    import starling.display.Image;
     import starling.display.MeshBatch;
     import starling.events.Event;
-    import starling.textures.Texture;
+    import starling.display.Quad;
 
     public class Drawer {
-        private static var _quadImage:Image;
-        private static var _quadImage2:Image;
-        private static var _quadTexture:Texture;
-        private static var _quadTexture2:Texture;
-
-        public static function init():void {
-            _quadImage = new Image(Root.assets.getTexture("quad"));
-            _quadImage2 = new Image(Root.assets.getTexture("quad8x4"));
-            _quadTexture = Root.assets.getTexture("quad");
-            _quadTexture2 = Root.assets.getTexture("quad8x4");
-        }
-
         /**绘制直线
          * @param layer 图层，关卡内请使用<code>LayerFactory.getLayer(LayerFactory.BEHAVIOR) as MeshBatch</code>，关卡外需自备图层
          * @param x1,y1 直线起点
@@ -26,26 +13,23 @@ package utils {
          * @param alpha 直线可见度
          */
         public static function drawLine(layer:MeshBatch, x1:Number, y1:Number, x2:Number, y2:Number, color:uint, width:Number = 2, alpha:Number = 1):void {
-            var quadImage:Image = (width <= 3) ? _quadImage2 : _quadImage;
+            var quad:Quad = getQuad();
             var dx:Number = x2 - x1;
             var dy:Number = y2 - y1;
             var angle:Number = Math.atan2(dy, dx);
             var distance:Number = Math.sqrt(dx * dx + dy * dy);
-            quadImage.x = x1;
-            quadImage.y = y1;
-            quadImage.rotation = angle;
-            quadImage.color = color;
-            quadImage.setVertexPosition(0, 0, 0);
-            quadImage.setVertexPosition(1, distance, 0);
-            quadImage.setVertexPosition(2, 0, width);
-            quadImage.setVertexPosition(3, distance, width);
-            quadImage.setVertexAlpha(0, 1);
-            quadImage.setVertexAlpha(1, 1);
-            quadImage.setVertexAlpha(2, 1);
-            quadImage.setVertexAlpha(3, 1);
-            quadImage.alpha = alpha;
-            // quadImage.rotation = 0;
-            layer.addMesh(quadImage);
+            quad.x = x1;
+            quad.y = y1;
+            quad.rotation = angle;
+            quad.color = color;
+            quad.setVertexPosition(0, 0, 0);
+            quad.setVertexPosition(1, distance, 0);
+            quad.setVertexPosition(2, 0, width);
+            quad.setVertexPosition(3, distance, width);
+            setQuadAlpha(quad, alpha, false);
+            // quad.rotation = 0;
+            layer.addMesh(quad);
+            recycleQuad(quad);
         }
 
         /**绘制虚线（未使用）
@@ -102,7 +86,7 @@ package utils {
          * @param layer 图层，关卡内请使用<code>LayerFactory.getLayer(LayerFactory.BEHAVIOR) as MeshBatch</code>，关卡外需自备图层
          * @param x,y 圆心坐标
          * @param color 线条颜色
-         * @param R 实心半径
+         * @param r 实心半径
          * @param voidR 空心半径
          * @param blur 是否有虚化
          * @param alpha 可见度
@@ -110,33 +94,20 @@ package utils {
          * @param angle 起始角度
          * @param lineCount 绘制精度（线条数）
          */
-        public static function drawCircle(layer:MeshBatch, x:Number, y:Number, color:uint, R:Number, voidR:Number = 0, blur:Boolean = false, alpha:Number = 1, cycleCount:Number = 1, angle:Number = 0, lineCount:int = 64):void {
-            var quadImage:Image = (R - voidR <= 3) ? _quadImage2 : _quadImage;
-            quadImage.color = color;
-            if (blur) {
-                quadImage.setVertexAlpha(2, 0);
-                quadImage.setVertexAlpha(3, 0);
-            } else {
-                quadImage.setVertexAlpha(2, 1);
-                quadImage.setVertexAlpha(3, 1);
-            }
-            quadImage.setVertexAlpha(0, 1);
-            quadImage.setVertexAlpha(1, 1);
-            quadImage.alpha = alpha;
-            quadImage.rotation = 0;
+        public static function drawCircle(layer:MeshBatch, x:Number, y:Number, color:uint, r:Number, voidR:Number = 0, blur:Boolean = false, alpha:Number = 1, cycleCount:Number = 1, angle:Number = 0, lineCount:int = 64):void {
             var angleStep:Number = Math.PI * 2 / lineCount;
             var lineNumber:int = Math.ceil(lineCount * cycleCount);
+            var totalAngle:Number = Math.PI * 2 * cycleCount;
             for (var i:int = 0; i < lineNumber; i++) {
-                quadImage.x = x;
-                quadImage.y = y;
-                if (i == lineNumber - 1)
-                    angleStep = Math.PI * 2 * cycleCount - angleStep * (lineNumber - 1);
-                quadImage.setVertexPosition(0, Math.cos(angle) * R, Math.sin(angle) * R);
-                quadImage.setVertexPosition(1, Math.cos(angle + angleStep) * R, Math.sin(angle + angleStep) * R);
-                quadImage.setVertexPosition(2, Math.cos(angle) * voidR, Math.sin(angle) * voidR);
-                quadImage.setVertexPosition(3, Math.cos(angle + angleStep) * voidR, Math.sin(angle + angleStep) * voidR);
-                layer.addMesh(quadImage);
-                angle += angleStep;
+                var quad:Quad = getQuad(x, y);
+                quad.color = color;
+                quad.alpha = alpha;
+                var currentAngle:Number = (i == lineNumber - 1) ? totalAngle - angleStep * (lineNumber - 1) : angleStep;
+                setQuadVertex(quad, angle, currentAngle, r, voidR);
+                setQuadAlpha(quad, alpha, blur);
+                layer.addMesh(quad);
+                recycleQuad(quad);
+                angle += currentAngle;
             }
         }
 
@@ -144,7 +115,7 @@ package utils {
          * @param layer 图层，关卡内请使用<code>LayerFactory.getLayer(LayerFactory.BEHAVIOR) as MeshBatch</code>，关卡外需自备图层
          * @param x,y 圆心坐标
          * @param color 线条颜色
-         * @param R 实心半径
+         * @param r 实心半径
          * @param voidR 空心半径
          * @param blur 是否有虚化
          * @param alpha 可见度
@@ -152,133 +123,24 @@ package utils {
          * @param angle 起始角度
          * @param lineCount 绘制精度（线条数）
          */
-        public static function drawDashedCircle(layer:MeshBatch, x:Number, y:Number, color:uint, R:Number, voidR:Number = 0, blur:Boolean = false, alpha:Number = 1, cycleCount:Number = 1, angle:Number = 0, lineCount:int = 64):void {
-            var quadImage:Image = _quadImage;
-            if (R - voidR <= 3)
-                quadImage = _quadImage2;
-            quadImage.color = color;
-            if (blur) {
-                quadImage.setVertexAlpha(2, 0);
-                quadImage.setVertexAlpha(3, 0);
-            } else {
-                quadImage.setVertexAlpha(2, 1);
-                quadImage.setVertexAlpha(3, 1);
-            }
-            quadImage.setVertexAlpha(0, 1);
-            quadImage.setVertexAlpha(1, 1);
-            quadImage.alpha = alpha;
-            quadImage.rotation = 0;
-            var angleStep:Number = Math.PI * 2 / lineCount;
-            var lineNumber:int = Math.ceil(lineCount * cycleCount) * 0.5;
-            for (var i:int = 0; i < lineNumber; i++) {
-                quadImage.x = x;
-                quadImage.y = y;
-                if (i == lineNumber - 1)
-                    angle = Math.PI * 2 / lineCount - angleStep * 3;
-                quadImage.setVertexPosition(0, Math.cos(angle) * R, Math.sin(angle) * R);
-                quadImage.setVertexPosition(1, Math.cos(angle + angleStep) * R, Math.sin(angle + angleStep) * R);
-                quadImage.setVertexPosition(2, Math.cos(angle) * voidR, Math.sin(angle) * voidR);
-                quadImage.setVertexPosition(3, Math.cos(angle + angleStep) * voidR, Math.sin(angle + angleStep) * voidR);
-                layer.addMesh(quadImage);
-                angle += angleStep * 2;
-            }
-        }
+        public static function drawDashedCircle(layer:MeshBatch, x:Number, y:Number, color:uint, r:Number, voidR:Number = 0, blur:Boolean = false, alpha:Number = 1, cycleCount:Number = 1, angle:Number = 0, lineCount:int = 64):void {
+            var totalSegments:int = Math.ceil(lineCount * cycleCount);
+            var angleStep:Number = (Math.PI * 2 * cycleCount) / totalSegments;
+            var startAngle:Number = angle;
 
-        /**
-         * 绘制渐变色圆弧
-         * @param layer 图层，关卡内请使用<code>LayerFactory.getLayer(LayerFactory.BEHAVIOR) as MeshBatch</code>，关卡外需自备图层
-         * @param x,y 圆心坐标
-         * @param colorA 起始颜色
-         * @param colorB 结束颜色
-         * @param R 实心半径
-         * @param voidR 空心半径
-         * @param blur 是否有虚化
-         * @param alpha 可见度
-         * @param cycleCount 绘制次数，0.25次即为1/4圆
-         * @param angle 起始角度
-         * @param lineCount 绘制精度（线条数）
-         * @param gradientMode 渐变模式：0=径向渐变，1=顺时针渐变，2=逆时针渐变
-         */
-        public static function drawGradientCircle(layer:MeshBatch, x:Number, y:Number, colorA:uint, colorB:uint, R:Number, voidR:Number = 0, blur:Boolean = false, alpha:Number = 1, cycleCount:Number = 1, angle:Number = 0, lineCount:int = 64, gradientMode:int = 0):void {
-            // 根据条件选择纹理
-            var texture:Texture = (R - voidR <= 3) ? _quadTexture2 : _quadTexture;
-
-            var angleStep:Number = Math.PI * 2 / lineCount;
-            var lineNumber:int = Math.ceil(lineCount * cycleCount);
-            var totalAngle:Number = Math.PI * 2 * cycleCount;
-
-            for (var i:int = 0; i < lineNumber; i++) {
-                // 每次循环创建新的Image实例
-                var quadImage:Image = new Image(texture);
-
-                quadImage.x = x;
-                quadImage.y = y;
-
-                var currentAngleStep:Number = angleStep;
-                if (i == lineNumber - 1) {
-                    currentAngleStep = totalAngle - angleStep * (lineNumber - 1);
+            for (var i:int = 0; i < totalSegments; i++) {
+                // 只绘制偶数段（或奇数段），实现虚线效果
+                if (i % 2 == 0) {
+                    var quad:Quad = getQuad(x, y);
+                    quad.color = color;
+                    quad.alpha = alpha;
+                    var segStart:Number = startAngle + i * angleStep;
+                    var segEnd:Number = segStart + angleStep;
+                    setQuadVertex(quad, segStart, segEnd - segStart, r, voidR);
+                    setQuadAlpha(quad, alpha, blur);
+                    layer.addMesh(quad);
+                    recycleQuad(quad);
                 }
-
-                // 根据渐变模式计算颜色
-                var startProgress:Number, endProgress:Number;
-                var startColor:uint, endColor:uint;
-
-                switch (gradientMode) {
-                    case 1: // 顺时针渐变
-                        startProgress = i / lineNumber;
-                        endProgress = (i + 1) / lineNumber;
-                        startColor = interpolateColor(colorA, colorB, startProgress);
-                        endColor = interpolateColor(colorA, colorB, endProgress);
-
-                        setVertexColor(quadImage, 0, startColor, alpha);
-                        setVertexColor(quadImage, 1, endColor, alpha);
-                        setVertexColor(quadImage, 2, startColor, blur ? 0 : alpha);
-                        setVertexColor(quadImage, 3, endColor, blur ? 0 : alpha);
-                        break;
-
-                    case 2: // 逆时针渐变
-                        startProgress = 1 - i / lineNumber;
-                        endProgress = 1 - (i + 1) / lineNumber;
-                        startColor = interpolateColor(colorA, colorB, startProgress);
-                        endColor = interpolateColor(colorA, colorB, endProgress);
-
-                        setVertexColor(quadImage, 0, startColor, alpha);
-                        setVertexColor(quadImage, 1, endColor, alpha);
-                        setVertexColor(quadImage, 2, startColor, blur ? 0 : alpha);
-                        setVertexColor(quadImage, 3, endColor, blur ? 0 : alpha);
-                        break;
-
-                    case 0: // 径向渐变
-                    default:
-                        var innerColor:uint = interpolateColor(colorA, colorB, voidR / R);
-                        var outerColor:uint = interpolateColor(colorA, colorB, 1);
-
-                        setVertexColor(quadImage, 0, outerColor, alpha);
-                        setVertexColor(quadImage, 1, outerColor, alpha);
-                        setVertexColor(quadImage, 2, innerColor, blur ? 0 : alpha);
-                        setVertexColor(quadImage, 3, innerColor, blur ? 0 : alpha);
-                        break;
-                }
-
-                if (blur) {
-                    quadImage.setVertexAlpha(2, 0);
-                    quadImage.setVertexAlpha(3, 0);
-                } else {
-                    quadImage.setVertexAlpha(2, 1);
-                    quadImage.setVertexAlpha(3, 1);
-                }
-                quadImage.setVertexAlpha(0, 1);
-                quadImage.setVertexAlpha(1, 1);
-
-                // 设置顶点位置
-                quadImage.setVertexPosition(0, Math.cos(angle) * R, Math.sin(angle) * R);
-                quadImage.setVertexPosition(1, Math.cos(angle + currentAngleStep) * R, Math.sin(angle + currentAngleStep) * R);
-                quadImage.setVertexPosition(2, Math.cos(angle) * voidR, Math.sin(angle) * voidR);
-                quadImage.setVertexPosition(3, Math.cos(angle + currentAngleStep) * voidR, Math.sin(angle + currentAngleStep) * voidR);
-
-                layer.addMesh(quadImage);
-
-                angle += currentAngleStep;
             }
         }
 
@@ -302,89 +164,6 @@ package utils {
             var b:Number = aB + (bB - aB) * progress;
 
             return (Math.round(r) << 16) | (Math.round(g) << 8) | Math.round(b);
-        }
-
-        /**
-         * 设置顶点颜色（考虑透明度）
-         */
-        private static function setVertexColor(image:Image, vertexID:int, color:uint, alpha:Number):void {
-            var alphaByte:int = Math.round(alpha * 255);
-            var argbColor:uint = (alphaByte << 24) | (color & 0xFFFFFF);
-            image.setVertexColor(vertexID, argbColor);
-        }
-
-        /**
-         * 绘制多色渐变圆弧
-         * @param layer 图层
-         * @param x,y 圆心坐标
-         * @param colors 颜色数组（至少2个颜色）例如：[0xFF0000, 0x00FF00, 0x0000FF]
-         * @param R 实心半径
-         * @param voidR 空心半径
-         * @param blur 是否有虚化
-         * @param alpha 可见度
-         * @param cycleCount 绘制次数
-         * @param angle 起始角度
-         * @param lineCount 绘制精度
-         */
-        public static function drawMultiGradientCircle(layer:MeshBatch, x:Number, y:Number, colors:Array, R:Number, voidR:Number = 0, blur:Boolean = false, alpha:Number = 1, cycleCount:Number = 1, angle:Number = 0, lineCount:int = 64):void {
-            if (colors.length < 2) {
-                // 如果只有一个颜色，使用单色绘制
-                drawCircle(layer, x, y, colors[0], R, voidR, blur, alpha, cycleCount, angle, lineCount);
-                return;
-            }
-
-            // 根据条件选择纹理，创建局部Image实例
-            var texture:Texture = (R - voidR <= 3) ? _quadTexture2 : _quadTexture;
-
-            var angleStep:Number = Math.PI * 2 / lineCount;
-            var lineNumber:int = Math.ceil(lineCount * cycleCount);
-
-            // 计算总角度
-            var totalAngle:Number = Math.PI * 2 * cycleCount;
-
-            for (var i:int = 0; i < lineNumber; i++) {
-                // 每次循环创建新的Image实例，避免状态污染
-                var quadImage:Image = new Image(texture);
-
-                quadImage.x = x;
-                quadImage.y = y;
-
-                // 计算当前角度对应的实际角度步长
-                var currentAngleStep:Number = angleStep;
-                if (i == lineNumber - 1) {
-                    currentAngleStep = totalAngle - angleStep * (lineNumber - 1);
-                }
-
-                // 计算当前段的进度
-                var progress:Number = (i / lineNumber);
-                progress = progress % 1.0; // 确保在0-1范围内
-
-                // 获取当前段的颜色
-                var color:uint = getMultiGradientColor(colors, progress);
-                quadImage.color = color;
-
-                if (blur) {
-                    quadImage.setVertexAlpha(2, 0);
-                    quadImage.setVertexAlpha(3, 0);
-                } else {
-                    quadImage.setVertexAlpha(2, 1);
-                    quadImage.setVertexAlpha(3, 1);
-                }
-                quadImage.setVertexAlpha(0, 1);
-                quadImage.setVertexAlpha(1, 1);
-                quadImage.alpha = alpha;
-
-                // 设置顶点位置
-                quadImage.setVertexPosition(0, Math.cos(angle) * R, Math.sin(angle) * R);
-                quadImage.setVertexPosition(1, Math.cos(angle + currentAngleStep) * R, Math.sin(angle + currentAngleStep) * R);
-                quadImage.setVertexPosition(2, Math.cos(angle) * voidR, Math.sin(angle) * voidR);
-                quadImage.setVertexPosition(3, Math.cos(angle + currentAngleStep) * voidR, Math.sin(angle + currentAngleStep) * voidR);
-
-                layer.addMesh(quadImage);
-
-                // 角度递增
-                angle += currentAngleStep;
-            }
         }
 
         /**
@@ -415,75 +194,87 @@ package utils {
          * 如果在同一帧内需要大量调用，可以使用这个版本
          */
         private static var _imagePool:Array = [];
-        private static var _imagePoolSize:int = 0;
+        private static var _quadPoolSize:int = 0;
 
-        public static function drawMultiGradientCircleOptimized(layer:MeshBatch, x:Number, y:Number, colors:Array, R:Number, voidR:Number = 0, blur:Boolean = false, alpha:Number = 1, cycleCount:Number = 1, angle:Number = 0, lineCount:int = 64):void {
-
+        public static function drawMultiGradientCircleOptimized(layer:MeshBatch, x:Number, y:Number, colors:Array, r:Number, voidR:Number = 0, blur:Boolean = false, alpha:Number = 1, cycleCount:Number = 1, angle:Number = 0, lineCount:int = 64):void {
             if (colors.length < 2) {
-                drawCircle(layer, x, y, colors[0], R, voidR, blur, alpha, cycleCount, angle, lineCount);
+                drawCircle(layer, x, y, colors[0], r, voidR, blur, alpha, cycleCount, angle, lineCount);
                 return;
             }
-
-            var texture:Texture = (R - voidR <= 3) ? _quadTexture2 : _quadTexture;
             var angleStep:Number = Math.PI * 2 / lineCount;
             var lineNumber:int = Math.ceil(lineCount * cycleCount);
             var totalAngle:Number = Math.PI * 2 * cycleCount;
-
             for (var i:int = 0; i < lineNumber; i++) {
-                var quadImage:Image;
-
-                // 从对象池获取或创建新的Image
-                if (_imagePoolSize > 0) {
-                    quadImage = _imagePool[--_imagePoolSize];
-                    quadImage.texture = texture;
-                } else {
-                    quadImage = new Image(texture);
-                }
-
-                quadImage.x = x;
-                quadImage.y = y;
-
-                var currentAngleStep:Number = angleStep;
-                if (i == lineNumber - 1) {
-                    currentAngleStep = totalAngle - angleStep * (lineNumber - 1);
-                }
-
+                var quad:Quad = getQuad(x, y);
+                var currentAngle:Number = angleStep;
+                if (i == lineNumber - 1)
+                    currentAngle = totalAngle - angleStep * (lineNumber - 1);
                 var progress:Number = (i / lineNumber);
                 progress = progress % 1.0;
-
                 var color:uint = getMultiGradientColor(colors, progress);
-                quadImage.color = color;
-
-                if (blur) {
-                    quadImage.setVertexAlpha(2, 0);
-                    quadImage.setVertexAlpha(3, 0);
-                } else {
-                    quadImage.setVertexAlpha(2, 1);
-                    quadImage.setVertexAlpha(3, 1);
-                }
-                quadImage.alpha = alpha;
-
-                quadImage.setVertexPosition(0, Math.cos(angle) * R, Math.sin(angle) * R);
-                quadImage.setVertexPosition(1, Math.cos(angle + currentAngleStep) * R, Math.sin(angle + currentAngleStep) * R);
-                quadImage.setVertexPosition(2, Math.cos(angle) * voidR, Math.sin(angle) * voidR);
-                quadImage.setVertexPosition(3, Math.cos(angle + currentAngleStep) * voidR, Math.sin(angle + currentAngleStep) * voidR);
-
-                layer.addMesh(quadImage);
-
-                // 将Image放回对象池供下一帧使用
-                quadImage.addEventListener(Event.REMOVED_FROM_STAGE, onImageRemoved);
-
-                angle += currentAngleStep;
+                quad.color = color;
+                setQuadAlpha(quad, alpha, blur);
+                setQuadVertex(quad, angle, currentAngle, r, voidR);
+                layer.addMesh(quad);
+                recycleQuad(quad);
+                angle += currentAngle;
             }
         }
 
-        private static function onImageRemoved(event:Event):void {
-            var image:Image = event.target as Image;
-            image.removeEventListener(Event.REMOVED_FROM_STAGE, onImageRemoved);
-
-            if (_imagePoolSize < 100) { // 限制对象池大小
-                _imagePool[_imagePoolSize++] = image;
+        private static function setQuadAlpha(quad:Quad, alpha:Number, blur:Boolean):void {
+            if (blur) {
+                quad.setVertexAlpha(0, 0.5);
+                quad.setVertexAlpha(1, 0.5);
+                quad.setVertexAlpha(2, 0);
+                quad.setVertexAlpha(3, 0);
+            } else {
+                quad.setVertexAlpha(0, alpha);
+                quad.setVertexAlpha(1, alpha);
+                quad.setVertexAlpha(2, alpha);
+                quad.setVertexAlpha(3, alpha);
             }
+            // quad.alpha = alpha;
         }
+
+        private static function setQuadVertex(quad:Quad, angle:Number, currentAngle:Number, r:Number, voidR:Number):void {
+            // 计算四个顶点位置（梯形）
+            var x0:Number = Math.cos(angle) * r;
+            var y0:Number = Math.sin(angle) * r;
+            var x1:Number = Math.cos(angle + currentAngle) * r;
+            var y1:Number = Math.sin(angle + currentAngle) * r;
+            var x2:Number = Math.cos(angle) * voidR;
+            var y2:Number = Math.sin(angle) * voidR;
+            var x3:Number = Math.cos(angle + currentAngle) * voidR;
+            var y3:Number = Math.sin(angle + currentAngle) * voidR;
+            // 设置顶点位置（Quad 的顶点顺序：0-左下，1-右下，2-左上，3-右上？实际为 0-左上，1-右上，2-左下，3-右下）
+            quad.setVertexPosition(0, x0, y0);
+            quad.setVertexPosition(1, x1, y1);
+            quad.setVertexPosition(2, x2, y2);
+            quad.setVertexPosition(3, x3, y3);
+        }
+
+        private static function recycleQuad(quad:Quad):void {
+            if (_quadPoolSize < 300)
+                _imagePool[_quadPoolSize++] = quad;
+            else
+                quad.dispose(); // 池满时释放，避免内存泄漏
+        }
+
+        private static function getQuad(x:Number = 0, y:Number = 0):Quad {
+            var quad:Quad;
+            if (_quadPoolSize > 0)
+                quad = _imagePool[--_quadPoolSize];
+            else
+                quad = new Quad(4, 4);
+            setQuadAlpha(quad, 1, false);
+            quad.texture = null;
+            quad.x = x;
+            quad.y = y;
+            quad.rotation = 0; // 确保旋转重置
+            quad.scaleX = quad.scaleY = 1;
+            quad.color = 0xFFFFFF; // 重置颜色
+            return quad;
+        }
+
     }
 }
