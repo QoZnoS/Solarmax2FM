@@ -213,22 +213,52 @@ package core.entities {
             }
         }
 
+        private function hasOppStrength(node:Node, targetGroup:int):Boolean {
+            var teamCount:int = Globals.teamCount;
+            var teamGroups:Array = Globals.teamGroups;
+            var shipsVec:Vector.<Vector.<Ship>> = node.ships;
+            var transitVec:Vector.<int> = node.transitShips;
+            for (var team:int = 0; team < teamCount; team++) {
+                var oppGroup:int = teamGroups[team];
+                if (oppGroup == targetGroup)
+                    continue;
+                if (shipsVec[team].length + transitVec[team] > 0)
+                    return true;
+            }
+            return false;
+        }
+        // TODO: 按需调用
         public function updateOppLinks():void {
             if (nodeData.isBarrier)
                 return;
-                
-            var group:int = Globals.teamGroups[team];
+            var group:int = Globals.teamGroups[nodeData.team];
             var teamCount:int = Globals.teamCount;
+            var teamGroups:Array = Globals.teamGroups;
             while (oppNodeLinks.length < teamCount)
                 oppNodeLinks.push(new Vector.<Node>);
-            for each (var nodeVec:Vector.<Node> in oppNodeLinks)
-                nodeVec.length = 0;
-            for (var team:int = 0; team < teamCount; team++) {
-                for each (var node:Node in nodeLinks[team]) {
-                    if (node == this)
+            for (var i:int = 0; i < oppNodeLinks.length; i++)
+                oppNodeLinks[i].length = 0;
+
+            for (var t:int = 0; t < teamCount; t++) {
+                var targetGroup:int = teamGroups[t];
+                var links:Vector.<Node> = nodeLinks[t];
+                var oppVec:Vector.<Node> = oppNodeLinks[t];
+                var linkLen:int = links.length;
+                for (var j:int = 0; j < linkLen; j++) {
+                    var targetNode:Node = links[j];
+                    if (targetNode == this)
                         continue;
-                    if (node.nodeData.team == 0 || Globals.teamGroups[node.nodeData.team] != group || SituationAssessor.predictedOppStrength(node, team, false) > 0)
-                        oppNodeLinks[team].push(node);
+                    var targetTeam:int = targetNode.nodeData.team;
+                    var targetNodeGroup:int = teamGroups[targetTeam];
+                    // 中立 或 不同组 → 直接加入
+                    if (targetTeam == 0 || targetNodeGroup != group) {
+                        oppVec.push(targetNode);
+                        continue;
+                    }
+                    // 同组且非中立 → 需计算敌对强度
+                    if (hasOppStrength(targetNode, targetGroup)) {
+                        oppVec.push(targetNode);
+                    }
                 }
             }
         }
@@ -299,6 +329,7 @@ package core.entities {
                 }
             }
         }
+
         // #endregion
         public function get basicState():NodeBasicState {
             return statePool[NodeStateFactory.BASIC] as NodeBasicState;
