@@ -1,5 +1,4 @@
-﻿// 这是为改版制作的调试用类，在 Root.as 中实例化
-package {
+﻿package {
     import core.EntityContainer;
     import core.entities.EnemyAI;
     import core.entities.Node;
@@ -35,12 +34,14 @@ package {
     import utils.NumberInput;
     import utils.GeneralFunctions;
     import utils.Rng;
+    import scenes.EditorScene;
 
     public class Debug extends Sprite {
         private static var debug:Boolean; // debug 开启状态
         private static var game:GameScene; // GameScene 接口
         private static var title:TitleMenu; // TitleMenu 接口
         private static var replay:ReplayScene; // ReplayScene 接口
+        private static var editor:EditorScene; // EditorScene 接口
         private static var scene:SceneController;
         private static var THIS:Debug;
 
@@ -182,6 +183,24 @@ package {
                     break;
                 case Keyboard.F6:
                     THIS.testF6();
+                    break;
+                case Keyboard.NUMBER_1:
+                    THIS.testN1();
+                    break;
+                case Keyboard.NUMBER_2:
+                    THIS.testN2();
+                    break;
+                case Keyboard.NUMBER_3:
+                    THIS.testN3();
+                    break;
+                case Keyboard.NUMBER_4:
+                    THIS.testN4();
+                    break;
+                case Keyboard.NUMBER_5:
+                    THIS.testN5();
+                    break;
+                case Keyboard.NUMBER_6:
+                    THIS.testN6();
                     break;
                 default:
                     break;
@@ -441,6 +460,29 @@ package {
         private function testF6():void {
 
         }
+
+        private function testN1():void {
+        }
+
+        private function testN2():void {
+        }
+
+        private function testN3():void {
+
+        }
+
+        private function testN4():void {
+
+        }
+
+        private function testN5():void {
+
+        }
+
+        private function testN6():void {
+
+        }
+
         // #endregion
         public static function test():void {
         }

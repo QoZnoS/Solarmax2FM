@@ -13,16 +13,10 @@ package ui.layers {
         private var touches:Vector.<Touch>;
         private var editor:EditorScene;
 
-        private const TOUCH_ON_SWITCH:String = "touch_on_switch";
-        private const TOUCH_ON_SWITCH_MOVE:String = "touch_on_switch_move";
-        private const TOUCH_ON_CHOOSE:String = "touch_on_choose";
-        private const TOUCH_ON_CHOOSE_MOVE:String = "touch_on_choose_move";
-        private const TOUCH_NONE:String = "touch_none";
-
         public function EditorCtrlLayer(_ui:UIContainer) {
             this.editor = _ui.scene.editorScene;
             this.touchQuad = _ui.touchQuad;
-            convertQuad = new Quad(1024, 768, 16711680);
+            convertQuad = new Quad(1024, 768, 0xFF0000);
             convertQuad.alpha = 0;
             addChild(convertQuad);
         }
