@@ -22,10 +22,11 @@ package core.fx {
             p.rotation = config[2];
             p.color = config[3];
             p.addToLayer();
-            p.active = false;
+            // p.active = false;
         }
 
         public function update(dt:Number):void {
+            p.active = false;
         }
 
         public function get layerConfig():Array {

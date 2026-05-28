@@ -51,6 +51,9 @@
         private var tagLayer:Sprite;
 
         private var seed:uint;
+        // 仅在编辑器模式下可用的鼠标坐标
+        private var touchX:Number;
+        private var touchY:Number;
 
         // #region 初始化
         public function Debug(scene:SceneController) {
@@ -58,10 +61,11 @@
             scene = scene;
         }
 
-        public function init(gameScene:GameScene, titleMenu:TitleMenu, replayScene:ReplayScene):void {
+        public function init(gameScene:GameScene, titleMenu:TitleMenu, replayScene:ReplayScene, editorScene:EditorScene):void {
             game = gameScene;
             title = titleMenu;
             replay = replayScene;
+            editor = editorScene;
             debug = false;
             THIS = this;
             fpsCalculator = [0, 0, 0, 0, 0, 0, 0];
@@ -348,6 +352,11 @@
             gameData.push(data);
         }
 
+        public static function updateTouch(x:Number, y:Number):void {
+            THIS.touchX = x;
+            THIS.touchY = y;
+        } 
+
         // #endregion
         // #region 调试函数，手动触发
 
@@ -462,17 +471,31 @@
         }
 
         private function testN1():void {
+            if (!editor.visible)
+                return;
+            var output:String = editor.exeCode(EditorScene.ADD, [{"type":"planet", "x":touchX, "y":touchY, "size":0.3}]);
+            trace(output);
         }
 
         private function testN2():void {
+            if (!editor.visible)
+                return;
+            var output:String = editor.undo();
+            trace(output);
         }
 
         private function testN3():void {
-
+            if (!editor.visible)
+                return;
+            var output:String = editor.exeCode(EditorScene.MOVE, [0, touchX, touchY]);
+            trace(output);
         }
 
         private function testN4():void {
-
+            if (!editor.visible)
+                return;
+            var output:String = editor.redo();
+            trace(output);
         }
 
         private function testN5():void {

@@ -58,5 +58,23 @@ package core {
                 i++;
             }
         }
+
+        public function updateActive():void {
+            var gameEntity:GameEntity = null;
+            var l:int = int(active.length); // 活跃实体的总数
+            var i:int = 0; // 遍历值，遍历活跃实体的项
+            while (i < l) {
+                gameEntity = active[i];
+                if (!gameEntity.active) { // 若实体处于非活跃状态
+                    gameEntity.deInit(); // 执行该实体的deInit
+                    reserve.push(gameEntity); // 将其加入保留实体
+                    active[i] = active[l - 1]; // 替换活跃实体的遍历项为最后一项
+                    active.pop(); // 删去活跃实体的最后一项
+                    l--;
+                    i--;
+                }
+                i++;
+            }
+        }
     }
 }

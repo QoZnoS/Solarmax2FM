@@ -23,16 +23,17 @@ package ui.layers {
 
         public function init():void {
             touchQuad.addEventListener("touch", on_touch);
-            touches = new Vector.<Touch>;
         }
 
         public function deinit():void {
             touchQuad.removeEventListener("touch", on_touch);
-            touches = new Vector.<Touch>;
         }
 
         private function on_touch(touchEvent:TouchEvent):void {
             touches = touchEvent.getTouches(touchQuad);
+            if (touches.length == 0)
+                return;
+            Debug.updateTouch(touches[0].globalX, touches[0].globalY);
         }
 
         public function draw():void {
