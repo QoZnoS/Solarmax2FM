@@ -14,12 +14,31 @@ package scenes {
         // private const defaultNode:Object = {"x": 980,"y": 154,"type": "planet"};
         private const defaultNode:Object = {"x": 990, "y": 620, "type": "planet", "size": 0.5};
 
+        // #region 指令常量
         /** 移动天体
          * @param node:int (tag)
          * @param x:Number
          * @param y:Number
          */
         public static const MOVE:String = "moveNode";
+
+        /** 修改天体类型
+         * @param node:int (tag)
+         * @param type:String (NodeType)
+         */
+        public static const CTYPE:String = "changeType";
+
+        /** 修改天体势力
+         * @param node:int (tag)
+         * @param team:int
+         */
+        public static const CTEAM:String = "changeTeam";
+
+        /** 修改天体Size
+         * @param node:int (tag)
+         * @param size:Number
+         */
+        public static const CSIZE:String = "changeSize";
 
         /** 添加指定天体
          * @param node:Object
@@ -30,6 +49,7 @@ package scenes {
          * @param node:int (tag)
          */
         public static const DELETE:String = "deleteNode";
+        // #endregion
 
         public function EditorScene(scene:SceneController) {
             super(scene);
@@ -38,6 +58,7 @@ package scenes {
             _initRegisterCommand();
         }
 
+        // #region 界面方法
         public function init():void {
             this.alpha = 1;
             this.visible = true;
@@ -71,10 +92,23 @@ package scenes {
             UIContainer.i.update();
             EntityContainer.entityPool[EntityContainer.INDEX_NODES].updateActive();
         }
+        // #endregion
 
         // #region factories & objectPool 命令工厂和命令对象池
         private var _cmdMap:Dictionary = new Dictionary();
         private var _cmdUsage:Dictionary = new Dictionary();
+
+        private function _initRegisterCommand():void {
+            cmdPool = new Vector.<ICommand>;
+            cmdUndoStack = new Vector.<ICommand>;
+            cmdRedoStack = new Vector.<ICommand>;
+            registerCommand(ADD, AddNode, [Object]);
+            registerCommand(DELETE, DeleteNode, [Node]);
+            registerCommand(MOVE, ModNode, [ModNode.MOVE, Node, Number, Number]);
+            registerCommand(CTYPE, ModNode, [ModNode.TYPE, Node, String]);
+            registerCommand(CTEAM, ModNode, [ModNode.TEAM, Node, int]);
+            registerCommand(CSIZE, ModNode, [ModNode.TYPE, Node, Number]);
+        }
 
         /** 统一管理所有可用命令和命令的用法，对上层执行进行转译
          * 可以添加自定义的ICommand实现，并使用自定义的调用方式配置
@@ -89,14 +123,6 @@ package scenes {
             _cmdUsage[type] = usage;
         }
 
-        private function _initRegisterCommand():void {
-            cmdPool = new Vector.<ICommand>;
-            cmdUndoStack = new Vector.<ICommand>;
-            cmdRedoStack = new Vector.<ICommand>;
-            registerCommand(ADD, AddNode, [Object]);
-            registerCommand(MOVE, ModNode, [Node, ModNode.MOVE, Number, Number]);
-        }
-
         public function exeCode(type:String, params:Array):String {
             // 检查命令类型是否已注册
             var usage:Array = _cmdUsage[type];
@@ -106,9 +132,10 @@ package scenes {
             // 计算必须参数的最小数量（usage 中 Class 类型的数量）
             var requiredCount:int = 0;
             for each (var item:Object in usage)
-                if (item is Class) requiredCount++;
+                if (item is Class)
+                    requiredCount++;
             if (params.length < requiredCount)
-                return "Error: insufficient parameters, expected at least " + requiredCount +", got " + params.length;
+                return "Error: insufficient parameters, expected at least " + requiredCount + ", got " + params.length;
 
             var cmd:ICommand = _getCmd(type);
             if (!cmd)
@@ -170,7 +197,7 @@ package scenes {
             if (cmdRedoStack.length == 0)
                 return "no command could redo.";
             var cmd:ICommand = cmdRedoStack.pop();
-            var output:String = cmd.exeCode();
+            var output:String = "redo " + cmd.exeCode();
             cmdUndoStack.push(cmd);
             return output;
         }
@@ -178,6 +205,7 @@ package scenes {
         private var cmdPool:Vector.<ICommand>; // 可使用的命令对象池
         private var cmdUndoStack:Vector.<ICommand>; // 撤回命令栈
         private var cmdRedoStack:Vector.<ICommand>; // 重做命令栈
+
         /**
          * 获取命令对象
          * @param type 对象类型
@@ -201,8 +229,7 @@ package scenes {
             return cmd;
         }
         // #endregion
-
-
+        
         // #region utils
         private var TEMP_ARR:Array;
 
@@ -218,6 +245,7 @@ package scenes {
 
 import core.EntityHandler;
 import core.entities.Node;
+import core.node.NodeStaticLogic;
 
 /** 构造函数声明参数类型， set param 应用参数 */
 interface ICommand {
@@ -257,6 +285,38 @@ class AddNode implements ICommand {
     }
 }
 
+class DeleteNode implements ICommand {
+    var data:Object;
+    var node:Node;
+
+    public function DeleteNode(node:Object = null) {
+    }
+
+    public function exeCode():String {
+        try {
+            EntityHandler.removeNode(node);
+        } catch (error:Error) {
+            return "Error: " + error.message;
+        }
+        return "remove node.";
+    }
+
+    public function undo():String {
+        try {
+            node = EntityHandler.addNode(data);
+        } catch (error:Error) {
+            return "Error: " + error.message;
+        }
+        node.update(0);
+        return "undo remove node.";
+    }
+
+    public function set params(arr:Array):void {
+        this.node = arr[0];
+        this.data = arr[0].nodeData.toJSON();
+    }
+}
+
 class ModNode implements ICommand {
     private var node:Node;
     private var type:String;
@@ -266,6 +326,9 @@ class ModNode implements ICommand {
     private var prevValue2:Object;
 
     public static const MOVE:String = "move";
+    public static const TYPE:String = "type";
+    public static const TEAM:String = "team";
+    public static const SIZE:String = "size";
 
     public function ModNode(node:Node = null, type:String = null, value:Object = null, value2:Object = null) {
     }
@@ -279,6 +342,21 @@ class ModNode implements ICommand {
                 node.nodeData.x = value as Number;
                 node.nodeData.y = value2 as Number;
                 output = "move node " + node.tag + " to point ( " + value + " , " + value2 + " )";
+                break;
+            case TYPE:
+                prevValue = node.nodeData.type;
+                NodeStaticLogic.changeType(node, value as String);
+                output = "change node " + node.tag + " type to " + value;
+                break;
+            case TEAM:
+                prevValue = node.nodeData.team;
+                NodeStaticLogic.changeTeam(node, value as int, false);
+                output = "change node " + node.tag + " team to " + value;
+                break;
+            case SIZE:
+                prevValue = node.nodeData.size;
+                NodeStaticLogic.changeSize(node, value as Number);
+                output = "change node " + node.tag + " size to " + value;
                 break;
             default:
                 break;
@@ -297,6 +375,18 @@ class ModNode implements ICommand {
                 node.nodeData.y = prevValue2 as Number;
                 output = "undo move node " + node.tag + " from ( " + value + " , " + value2 + " )" + " to ( " + prevValue + " , " + prevValue2 + " )";
                 break;
+            case TYPE:
+                NodeStaticLogic.changeType(node, prevValue as String);
+                output = "undo change node " + node.tag + " form type " + prevValue + " to type " + value;
+                break;
+            case TEAM:
+                NodeStaticLogic.changeTeam(node, prevValue as int, false);
+                output = "undo change node " + node.tag + " form team " + prevValue + " to team " + value;
+                break;
+            case SIZE:
+                NodeStaticLogic.changeSize(node, prevValue as Number);
+                output = "undo change node " + node.tag + " form size " + prevValue + " to size " + value;
+                break;
             default:
                 break;
         }
@@ -307,8 +397,8 @@ class ModNode implements ICommand {
     }
 
     public function set params(arr:Array):void {
-        this.node = arr[0];
-        this.type = arr[1];
+        this.type = arr[0];
+        this.node = arr[1];
         this.value = arr[2];
         if (arr.length >= 4)
             this.value2 = arr[3];
