@@ -16,37 +16,37 @@ package scenes {
 
         // #region 指令常量
         /** 移动天体
-         * @param node:int (tag)
-         * @param x:Number
-         * @param y:Number
+         * <p> node:int (tag)
+         * <p> x:Number
+         * <p> y:Number
          */
         public static const MOVE:String = "moveNode";
 
         /** 修改天体类型
-         * @param node:int (tag)
-         * @param type:String (NodeType)
+         * <p> node:int (tag)
+         * <p> type:String (NodeType)
          */
         public static const CTYPE:String = "changeType";
 
         /** 修改天体势力
-         * @param node:int (tag)
-         * @param team:int
+         * <p> node:int (tag)
+         * <p> team:int
          */
         public static const CTEAM:String = "changeTeam";
 
         /** 修改天体Size
-         * @param node:int (tag)
-         * @param size:Number
+         * <p> node:int (tag)
+         * <p> size:Number
          */
         public static const CSIZE:String = "changeSize";
 
         /** 添加指定天体
-         * @param node:Object
+         * <p> node:Object
          */
         public static const ADD:String = "addNode";
 
         /** 删除天体
-         * @param node:int (tag)
+         * <p> node:int (tag)
          */
         public static const DELETE:String = "deleteNode";
         // #endregion
@@ -89,7 +89,7 @@ package scenes {
 
         override public function update(e:EnterFrameEvent):void {
             var dt:Number = e.passedTime;
-            UIContainer.i.update();
+            UIContainer.i.update(dt);
             EntityContainer.entityPool[EntityContainer.INDEX_NODES].updateActive();
         }
         // #endregion
@@ -229,7 +229,7 @@ package scenes {
             return cmd;
         }
         // #endregion
-        
+
         // #region utils
         private var TEMP_ARR:Array;
 

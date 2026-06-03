@@ -179,11 +179,11 @@ package ui {
                     "transition": "easeInOut"});
         }
 
-        public function update():void {
+        public function update(dt:Number = 0):void {
             _behaviorB.clear();
             SaveManager.touchControls ? _touchCL.draw() : _tradiCL.draw();
             if (_editorCL.visible)
-                _editorCL.draw();
+                _editorCL.update(dt);
         }
 
         override public function set scale(scale:Number):void {

@@ -15,6 +15,8 @@ package core.node {
 
     import utils.CalcTools;
     import managers.SaveManager;
+    import core.node.states.NodeMoveState;
+    import flash.geom.Point;
 
     /** 静态类，函数均与dt无关 */
     public class NodeStaticLogic {
@@ -296,6 +298,30 @@ package core.node {
             FXHandler.addDarkPulse(node, Globals.teamColors[team], 3, 18 * node.nodeData.size, 28 * node.nodeData.size, 0, Globals.teamDeepColors[team]);
         }
 
+        // #endregion
+
+        // #region 贴图控制，仅限编辑器模式
+        public static function setImagePoint(node:Node, point:Point):void {
+            var x:Number = point.x, y:Number = point.y;
+            var ms:NodeMoveState = node.moveState;
+            ms.image.x = ms.halo.x = ms.glow.x = x;
+            ms.image.y = ms.halo.y = ms.glow.y = y;
+        }
+
+        public static function setImageScale(node:Node, scale:Number):void {
+            node.moveState.scale = scale;
+        }
+
+        public static function setImageAlpha(node:Node, alpha:Number):void {
+            var ms:NodeMoveState = node.moveState;
+            ms.image.alpha = ms.halo.alpha = ms.glow.alpha = alpha;
+        }
+        /** 重置天体位置 scale=1 alpha=1 */
+        public static function resetImage(node:Node):void {
+            node.moveState.updateImagePositions();
+            setImageScale(node, 1);
+            setImageAlpha(node, 1);
+        }
         // #endregion
 
     }

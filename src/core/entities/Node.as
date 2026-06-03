@@ -14,7 +14,6 @@ package core.entities {
     import starling.text.TextField;
 
     import utils.Rng;
-    import flash.geom.Point;
     import core.ai.SituationAssessor;
 
     public class Node extends GameEntity {
