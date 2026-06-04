@@ -162,7 +162,7 @@ package core.node {
             node.moveState.halo.readjustSize();
             node.moveState.halo.scaleY = node.moveState.halo.scaleX = 1;
             node.moveState.halo.pivotY = node.moveState.halo.pivotX = node.moveState.halo.width * 0.5;
-            var get:Number = LevelData.nodeData.node.(@name == node.nodeData.type).scale;
+            var get:Number = NodeType.getDefaultScale(node.nodeData.type, size);
             if (node.nodeData.type == NodeType.PLANET) {
                 node.moveState.halo.scaleY = node.moveState.halo.scaleX = size * 0.5;
                 node.moveState.image.scaleX = node.moveState.image.scaleY = node.moveState.glow.scaleX = node.moveState.glow.scaleY = size;

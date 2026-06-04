@@ -62,7 +62,7 @@ package ui.layers {
 
         private function drawStart():void {
             for each (var touch:Touch in touches) {
-                if (touch.hoverNode) {
+                if (touch.hoverNode && touch.hoverNode.active) {
                     var nd:NodeData = touch.hoverNode.nodeData;
                     Drawer.drawCircle(displayBatch, nd.x, nd.y, Globals.teamColors[nd.team], nd.lineDist - 4, nd.size * 25 * 2, true, 0.5);
                     if (touch.hoverNode.attackState.attackRate > 0)
@@ -128,13 +128,14 @@ package ui.layers {
             }
         }
         // #region start face function
-        /** 鼠标悬停 */
         private function startHover(touchEvent:TouchEvent):void {
             var touchArray:Vector.<Touch> = touchEvent.getTouches(touchQuad, TouchPhase.HOVER);
             if (!touchArray)
                 return;
             for each (var touch:Touch in touchArray) {
                 touch.hoverNode = getClosestNode(touch);
+                touch.getLocation(convertQuad, editor.mousePoint);
+                editor.hoverNode = touch.hoverNode;
             }
         }
 
@@ -150,8 +151,11 @@ package ui.layers {
                 if (node && touch.downNodes.indexOf(node) == -1)
                     touch.downNodes.push(node);
                 touch.hoverNode = null;
-                if (node)
+                if (node) {
                     touch.hoverNode = node;
+                    if (getMovedDistance(touch) > 10 || touch.duration > 1)
+                        faceType = MOVE_FACE;
+                }
             }
         }
 
@@ -216,12 +220,15 @@ package ui.layers {
                 faceType = START_FACE;
             }
         }
-
         // #endregion
 
         // #endregion
 
-        //#region 计算工具
+        // #region 动画
+
+        // #endregion
+
+        // #region 计算工具
         private function getClosestNode(touch:Touch):Node {
             var globalPoint:Point = EntityContainer.getPoint(touch.globalX, touch.globalY);
             var localPoint:Point = EntityContainer.getPoint();
@@ -267,7 +274,7 @@ package ui.layers {
             TEMP_ARR.length = 0;
             return TEMP_ARR;
         }
-        //#endregion
+        // #endregion
 
     }
 }

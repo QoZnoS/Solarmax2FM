@@ -90,6 +90,18 @@ package core.node {
             return typeVectorCache;
         }
 
+        public static function typeStr2Int(str:String):int {
+            return getTypeVector().indexOf(str);
+        }
+
+        public static function typeInt2Str(i:int):String {
+            return getTypeVector()[i];
+        }
+
+        public static function getTypeCount():int {
+            return getTypeVector().length;
+        }
+
         /** 获取默认天体大小 */
         public static function getDefaultSize(type:String):Number {
             return getCachedValue(type, "defaultSize") as Number;

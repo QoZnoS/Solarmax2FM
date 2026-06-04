@@ -223,7 +223,9 @@ package {
                     break;
             }
             if (gameScene.visible)
-                gameScene.on_key_down(event.keyCode)
+                gameScene.on_key_down(event.keyCode);
+            if (editorScene.visible)
+                editorScene.on_key_down(event);
             if (NumberInput.visible)
                 NumberInput.on_key_down(event);
             event.preventDefault();

@@ -471,31 +471,19 @@
         }
 
         private function testN1():void {
-            if (!editor.visible)
-                return;
-            var output:String = editor.exeCode(EditorScene.ADD, [{"type":"planet", "x":touchX, "y":touchY, "size":0.3}]);
-            trace(output);
+
         }
 
         private function testN2():void {
-            if (!editor.visible)
-                return;
-            var output:String = editor.undo();
-            trace(output);
+
         }
 
         private function testN3():void {
-            if (!editor.visible)
-                return;
-            var output:String = editor.exeCode(EditorScene.MOVE, [0, touchX, touchY]);
-            trace(output);
+
         }
 
         private function testN4():void {
-            if (!editor.visible)
-                return;
-            var output:String = editor.redo();
-            trace(output);
+
         }
 
         private function testN5():void {
