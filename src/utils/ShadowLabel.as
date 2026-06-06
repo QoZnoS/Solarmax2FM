@@ -15,8 +15,8 @@ package utils {
          * @param height         文本框高度
          * @param text           文本内容
          * @param format         TextFormat（字体名、大小、颜色）
-         * @param shadowOffsetX  阴影 X 偏移（默认 1）
-         * @param shadowOffsetY  阴影 Y 偏移（默认 1）
+         * @param shadowOffsetX  阴影 X 偏移（默认 0）
+         * @param shadowOffsetY  阴影 Y 偏移（默认 2）
          * @param shadowColor    阴影颜色（默认 0x000000）
          * @param shadowAlpha    阴影透明度（默认 0.5）
          */

@@ -12,6 +12,7 @@ package scenes.menus {
     import starling.utils.Align;
     import utils.ShadowLabel;
     import starling.text.TextFormat;
+    import i18n.I18n;
 
     public class AdvancedSettingMenu extends Sprite implements IMenu {
         // ========== 布局常量 ==========
@@ -23,7 +24,7 @@ package scenes.menus {
         private const BTN_Y_FIX:Number = 12;
 
         private const COLOR:uint = 0xFF9DBB;
-        private const YES_NO:Array = ["YES", "NO"];
+        private var YES_NO:Array;
 
         private var components:Array; // 所有UI元素（按顺序）
 
@@ -32,21 +33,35 @@ package scenes.menus {
         private var pauseAllows:Array; // OptionButton数组
         private var transitionSlider:OptionSlider;
         private var marginSlider:OptionSlider;
+        private var unlockAllBtn:OptionButton;
+
+        /** 所有使用了 I18n 的 ShadowLabel 引用 */
+        private var _i18nLabels:Vector.<ShadowLabel>;
 
         public function AdvancedSettingMenu() {
             components = [];
+            _i18nLabels = new Vector.<ShadowLabel>();
+            I18n.addEventListener(Event.CHANGE, on_languageChanged);
             init();
         }
 
+        private function _initStrings():void {
+            YES_NO = [I18n._("game.yes"), I18n._("game.no")];
+        }
+
         public function init():void {
+            _i18nLabels.length = 0;
+            _initStrings();
             // 标题
-            var titleText:ShadowLabel = new ShadowLabel(400, 40, "ADVANCED SETTINGS", new TextFormat("downlink", 18, COLOR));
+            var titleText:ShadowLabel = new ShadowLabel(400, 40, I18n._("adv.title"), new TextFormat("downlink", 18, COLOR));
             titleText.format.horizontalAlign = Align.CENTER;
             components.push({type: "label", obj: titleText, align: "center"});
+            _i18nLabels.push(titleText);
 
             // 黑边选项
-            var blackLabel:ShadowLabel = new ShadowLabel(LABEL_WIDTH, 40, "BLACK BORDER:", new TextFormat("downlink", 12, COLOR));
+            var blackLabel:ShadowLabel = new ShadowLabel(LABEL_WIDTH, 40, I18n._("adv.blackBorder"), new TextFormat("downlink", 12, COLOR));
             components.push({type: "label", obj: blackLabel, align: Align.RIGHT});
+            _i18nLabels.push(blackLabel);
 
             blackBorders = [];
             for (var i:int = 0; i < YES_NO.length; i++) {
@@ -57,8 +72,9 @@ package scenes.menus {
             components.push({type: "buttonGroup", obj: blackBorders});
 
             // 允许暂停选项
-            var pauseLabel:ShadowLabel = new ShadowLabel(LABEL_WIDTH, 40, "ALLOW PAUSE:", new TextFormat("downlink", 12, COLOR));
+            var pauseLabel:ShadowLabel = new ShadowLabel(LABEL_WIDTH, 40, I18n._("adv.allowPause"), new TextFormat("downlink", 12, COLOR));
             components.push({type: "label", obj: pauseLabel, align: Align.RIGHT});
+            _i18nLabels.push(pauseLabel);
 
             pauseAllows = [];
             for (i = 0; i < YES_NO.length; i++) {
@@ -69,25 +85,28 @@ package scenes.menus {
             components.push({type: "buttonGroup", obj: pauseAllows});
 
             // 过渡速度
-            var transLabel:ShadowLabel = new ShadowLabel(LABEL_WIDTH, 40, "TRANSITION SPEED:", new TextFormat("downlink", 12, COLOR));
+            var transLabel:ShadowLabel = new ShadowLabel(LABEL_WIDTH, 40, I18n._("adv.transSpeed"), new TextFormat("downlink", 12, COLOR));
             components.push({type: "label", obj: transLabel, align: Align.RIGHT});
+            _i18nLabels.push(transLabel);
 
             transitionSlider = new OptionSlider(1); // 中等大小
             transitionSlider.init();
             components.push({type: "slider", obj: transitionSlider});
 
             // 最大边距势力数
-            var marginLabel:ShadowLabel = new ShadowLabel(LABEL_WIDTH, 40, "MAX MARGIN TEAM:", new TextFormat("downlink", 12, COLOR));
+            var marginLabel:ShadowLabel = new ShadowLabel(LABEL_WIDTH, 40, I18n._("adv.maxMargin"), new TextFormat("downlink", 12, COLOR));
             components.push({type: "label", obj: marginLabel, align: Align.RIGHT});
+            _i18nLabels.push(marginLabel);
 
             marginSlider = new OptionSlider(1);
             marginSlider.init();
             components.push({type: "slider", obj: marginSlider});
 
-            var unlockAllLabel:ShadowLabel = new ShadowLabel(LABEL_WIDTH, 40, "UNLOCK ALL LEVEL:", new TextFormat("downlink", 12, COLOR));
+            var unlockAllLabel:ShadowLabel = new ShadowLabel(LABEL_WIDTH, 40, I18n._("adv.unlockAll"), new TextFormat("downlink", 12, COLOR));
             components.push({type: "label", obj: unlockAllLabel, align: Align.RIGHT});
+            _i18nLabels.push(unlockAllLabel);
 
-            var unlockAllBtn:OptionButton = new OptionButton("unlock", COLOR);
+            unlockAllBtn = new OptionButton(I18n._("adv.unlock"), COLOR);
             unlockAllBtn.addEventListener("clicked", on_unlockAll);
             components.push({type: "buttonGroup", obj: [unlockAllBtn]});
 
@@ -205,6 +224,23 @@ package scenes.menus {
             SaveManager.levelReached = 999;
             SaveManager.save();
             SceneController.s.titleMenu.initAfterEnd();
+        }
+
+        private function on_languageChanged(e:Event):void {
+            _initStrings();
+            var labelKeys:Array = ["adv.title", "adv.blackBorder", "adv.allowPause", "adv.transSpeed", "adv.maxMargin", "adv.unlockAll"];
+            for (var i:int = 0; i < _i18nLabels.length; i++)
+                _i18nLabels[i].text = I18n._(labelKeys[i]);
+            for (var j:int = 0; j < blackBorders.length; j++) {
+                blackBorders[j].label.text = YES_NO[j];
+                blackBorders[j].resizeToText();
+            }
+            for (j = 0; j < pauseAllows.length; j++) {
+                pauseAllows[j].label.text = YES_NO[j];
+                pauseAllows[j].resizeToText();
+            }
+            unlockAllBtn.label.text = I18n._("adv.unlock");
+            unlockAllBtn.resizeToText();
         }
     }
 }

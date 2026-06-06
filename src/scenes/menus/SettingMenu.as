@@ -18,19 +18,22 @@ package scenes.menus {
     import starling.text.TextFormat;
     import starling.utils.Align;
     import utils.ShadowLabel;
+    import i18n.I18n;
 
     public class SettingMenu extends Sprite implements IMenu {
-        private const windowStrings:Array = ["FULLSCREEN", "RESIZEABLE WINDOW"]; // 窗口模式文本
-        private const aaStrings:Array = ["0x", "2x", "4x", "8x", "16x"]; // 抗锯齿文本
-        private const sizeStrings:Array = ["SMALL", "MEDIUM", "LARGE"]; // 字体大小文本
-        private const controlStrings:Array = ["MULTI-TOUCH", "TRADITIONAL"]; // 控制方式文本
-        private const fleetSliderPositionStrings:Array = ["LEFT", "DOWN", "RIGHT"]; // 分兵条位置
-        private const yesORno:Array = ["YES", "NO"];
+        private var windowStrings:Array; // 窗口模式文本
+        private const aaStrings:Array = ["0x", "2x", "4x", "8x", "16x"]; // 抗锯齿文本（无翻译）
+        private var sizeStrings:Array; // 字体大小文本
+        private var languageStrings:Array; // 可用语言
+        private var controlStrings:Array; // 控制方式文本
+        private var fleetSliderPositionStrings:Array; // 分兵条位置
+        private var yesORno:Array;
         private const COLOR:uint = 0xFF9DBB;
 
         private var fullscreen:Array;
         private var antialias:Array;
         private var textsizes:Array;
+        private var languages:Array;
         private var controls:Array;
         private var fleetSliderPositions:Array;
         private var audioSlider:OptionSlider;
@@ -43,22 +46,53 @@ package scenes.menus {
         private var tooltip2:Tooltip;
 
         private var components:Array;
+        /** 所有使用了 I18n 的 ShadowLabel 引用 */
+        private var _i18nLabels:Vector.<ShadowLabel>;
+        private var _i18nLabelCode:Vector.<String>;
+        /** 所有使用了 I18n 的 OptionButton 组 */
+        private var _i18nButtonGroups:Array;
 
         private var title:TitleMenu;
 
         public function SettingMenu(title:TitleMenu) {
             this.title = title;
+            _i18nLabels = new Vector.<ShadowLabel>();
+            _i18nLabelCode = new Vector.<String>();
+            _i18nButtonGroups = [];
+            I18n.addEventListener(Event.CHANGE, on_languageChanged);
             init();
+        }
+
+        /** 初始化所有可变字符串数组（语言切换时也会调用） */
+        private function _initStrings():void {
+            windowStrings = [I18n._("setting.fullscreen"), I18n._("setting.resizable")];
+            sizeStrings = [I18n._("setting.small"), I18n._("setting.medium"), I18n._("setting.large")];
+            languageStrings = I18n.availableLanguages;
+            controlStrings = [I18n._("setting.multitouch"), I18n._("setting.traditional")];
+            fleetSliderPositionStrings = [I18n._("setting.left"), I18n._("setting.down"), I18n._("setting.right")];
+            yesORno = [I18n._("game.yes"), I18n._("game.no")];
+        }
+
+        /** 添加一个 i18n 标签并记录引用 */
+        private function _addI18nLabel(w:int, h:int, key:String, fmt:TextFormat):ShadowLabel {
+            var label:ShadowLabel = new ShadowLabel(w, h, I18n._(key), fmt);
+            _i18nLabels.push(label);
+            _i18nLabelCode.push(key);
+            return label;
         }
 
         public function init():void {
             var i:int;
             var btn:OptionButton;
+            _i18nLabels.length = 0;
+            _i18nLabelCode.length = 0;
+            _i18nButtonGroups.length = 0;
+            _initStrings();
             // #region VIDEO
             components = [];
-            components.push(new ShadowLabel(200, 40, "VIDEO", new TextFormat("downlink", 18, COLOR)));
+            components.push(_addI18nLabel(200, 40, "setting.video", new TextFormat("downlink", 18, COLOR)));
             if (Globals.device == "PC")
-                components.push(new ShadowLabel(200, 40, "WINDOW MODE:", new TextFormat("downlink", 12, COLOR)));
+                components.push(_addI18nLabel(200, 40, "setting.windowMode", new TextFormat("downlink", 12, COLOR)));
             fullscreen = [];
             for (i = 0; i < windowStrings.length; i++) {
                 btn = new OptionButton(windowStrings[i], COLOR, fullscreen);
@@ -68,7 +102,18 @@ package scenes.menus {
                 // if (Globals.device == "PC")
                 components.push(fullscreen);
             }
-            components.push(new ShadowLabel(200, 40, "ANTI-ALIASING:", new TextFormat("downlink", 12, COLOR)));
+            _i18nButtonGroups.push({keys: ["setting.fullscreen", "setting.resizable"], btns: fullscreen});
+            components.push(_addI18nLabel(200, 40, "setting.language", new TextFormat("downlink", 12, COLOR)));
+            languages = [];
+            for (i = 0; i < languageStrings.length; i++) {
+                btn = new OptionButton(languageStrings[i], COLOR, languages);
+                btn.x = 330 + i * 140;
+                btn.addEventListener("clicked", on_language);
+                languages.push(btn);
+                components.push(languages);
+            }
+            _i18nButtonGroups.push({keys: null, btns: languages});
+            components.push(_addI18nLabel(200, 40, "setting.antialias", new TextFormat("downlink", 12, COLOR)));
             antialias = [];
             for (i = 0; i < aaStrings.length; i++) {
                 btn = new OptionButton(aaStrings[i], COLOR, antialias);
@@ -79,21 +124,21 @@ package scenes.menus {
             }
             // #endregion
             // #region AUDIO
-            components.push(new ShadowLabel(200, 40, "AUDIO", new TextFormat("downlink", 18, COLOR)));
-            components.push(new ShadowLabel(200, 40, "MUSIC VOLUME:", new TextFormat("downlink", 12, COLOR)));
+            components.push(_addI18nLabel(200, 40, "setting.audio", new TextFormat("downlink", 18, COLOR)));
+            components.push(_addI18nLabel(200, 40, "setting.musicVol", new TextFormat("downlink", 12, COLOR)));
             musicSlider = new OptionSlider(1);
             musicSlider.x = 330;
             musicSlider.init();
             components.push(musicSlider);
-            components.push(new ShadowLabel(200, 40, "SOUND VOLUME:", new TextFormat("downlink", 12, COLOR)));
+            components.push(_addI18nLabel(200, 40, "setting.soundVol", new TextFormat("downlink", 12, COLOR)));
             audioSlider = new OptionSlider(1);
             audioSlider.x = 330;
             audioSlider.init();
             components.push(audioSlider);
             // #endregion
             // #region GAME
-            components.push(new ShadowLabel(200, 40, "V1.2.0    GAME", new TextFormat("downlink", 18, COLOR)));
-            components.push(new ShadowLabel(200, 40, "UI SIZE:", new TextFormat("downlink", 12, COLOR)));
+            components.push(_addI18nLabel(200, 40, "setting.game", new TextFormat("downlink", 18, COLOR)));
+            components.push(_addI18nLabel(200, 40, "setting.uiSize", new TextFormat("downlink", 12, COLOR)));
             textsizes = [];
             for (i = 0; i < sizeStrings.length; i++) {
                 btn = new OptionButton(sizeStrings[i], COLOR, textsizes);
@@ -102,7 +147,8 @@ package scenes.menus {
                 textsizes.push(btn);
             }
             components.push(textsizes);
-            components.push(new ShadowLabel(200, 40, "CONTROL METHOD:", new TextFormat("downlink", 12, COLOR)));
+            _i18nButtonGroups.push({keys: ["setting.small", "setting.medium", "setting.large"], btns: textsizes});
+            components.push(_addI18nLabel(200, 40, "setting.control", new TextFormat("downlink", 12, COLOR)));
             controls = [];
             for (i = 0; i < controlStrings.length; i++) {
                 btn = new OptionButton(controlStrings[i], COLOR, controls);
@@ -111,7 +157,8 @@ package scenes.menus {
                 controls.push(btn);
             }
             components.push(controls);
-            components.push(new ShadowLabel(200, 40, "FLEETSLIDER POSITION:", new TextFormat("downlink", 12, COLOR)));
+            _i18nButtonGroups.push({keys: ["setting.multitouch", "setting.traditional"], btns: controls});
+            components.push(_addI18nLabel(200, 40, "setting.fleetPos", new TextFormat("downlink", 12, COLOR)));
             fleetSliderPositions = [];
             for (i = 0; i < fleetSliderPositionStrings.length; i++) {
                 btn = new OptionButton(fleetSliderPositionStrings[i], COLOR, fleetSliderPositions);
@@ -120,17 +167,18 @@ package scenes.menus {
                 fleetSliderPositions.push(btn);
             }
             components.push(fleetSliderPositions);
-            components.push(new ShadowLabel(200, 40, "SAVE FILE:", new TextFormat("downlink", 12, COLOR)));
-            resetBtn = new OptionButton("RESET PROGRESS", 0xFF7777, null);
+            _i18nButtonGroups.push({keys: ["setting.left", "setting.down", "setting.right"], btns: fleetSliderPositions});
+            components.push(_addI18nLabel(200, 40, "setting.saveFile", new TextFormat("downlink", 12, COLOR)));
+            resetBtn = new OptionButton(I18n._("setting.resetProgress"), 0xFF7777, null);
             resetBtn.x = 330;
             resetBtn.addEventListener("clicked", on_show_reset);
             components.push(resetBtn);
-            resetBtn2 = new OptionButton("CONFIRM?", 0xFF2222, null);
+            resetBtn2 = new OptionButton(I18n._("setting.confirm"), 0xFF2222, null);
             resetBtn2.x = 330 + resetBtn.width - 60;
             resetBtn2.addEventListener("clicked", on_reset);
             resetBtn2.touchable = false;
             components.push(resetBtn2);
-            exitBtn = new OptionButton("EXIT GAME", COLOR, null);
+            exitBtn = new OptionButton(I18n._("setting.exitGame"), COLOR, null);
             exitBtn.x = 660;
             exitBtn.addEventListener("clicked", title.on_quit);
             components.push(exitBtn);
@@ -177,6 +225,7 @@ package scenes.menus {
             SaveManager.touchControls ? controls[0].toggle() : controls[1].toggle();
             antialias[SaveManager.antialias].toggle();
             textsizes[SaveManager.textSize].toggle();
+            languages[I18n.getLanguageIDByRegisteCode(SaveManager.languages)].toggle();
             fleetSliderPositions[SaveManager.fleetSliderPosition].toggle();
             audioSlider.total = SaveManager.soundVolume;
             musicSlider.total = SaveManager.musicVolume;
@@ -229,6 +278,61 @@ package scenes.menus {
         private function on_textsize(click:Event):void {
             SaveManager.textSize = textsizes.indexOf(click.target);
             title.on_resize();
+        }
+
+        private function on_language(click:Event):void {
+            I18n.setLocale(I18n.getLanguageCodeByRegisteID(languages.indexOf(click.target)));
+        }
+
+        /** 语言变更回调 — 刷新所有文本 */
+        private function on_languageChanged(e:Event):void {
+            refreshTexts();
+            languages[I18n.getLanguageIDByRegisteCode(SaveManager.languages)].toggle();
+        }
+
+        /** 刷新所有使用 I18n 的文本 */
+        public function refreshTexts():void {
+            _initStrings();
+            // 刷新所有标签文本
+            for (var i:int = 0; i < _i18nLabels.length; i++)
+                _i18nLabels[i].text = I18n._(_i18nLabelCode[i]);
+            // 刷新按钮组
+            for each (var group:Object in _i18nButtonGroups) {
+                var btns:Array = group.btns;
+                var keys:Array = group.keys;
+                if (keys) {
+                    for (i = 0; i < btns.length; i++) {
+                        btns[i].label.text = I18n._(keys[i]);
+                        btns[i].resizeToText();
+                    }
+                } else {
+                    // language 按钮（显示 displayName）
+                    for (i = 0; i < btns.length; i++) {
+                        btns[i].label.text = languageStrings[i];
+                        btns[i].resizeToText();
+                    }
+                }
+            }
+            // 单独按钮
+            resetBtn.label.text = I18n._("setting.resetProgress");
+            resetBtn.resizeToText();
+            resetBtn2.label.text = I18n._("setting.confirm");
+            resetBtn2.resizeToText();
+            exitBtn.label.text = I18n._("setting.exitGame");
+            exitBtn.resizeToText();
+            // 重建 Tooltip
+            tooltip1.removeFromParent();
+            tooltip2.removeFromParent();
+            tooltip1 = new Tooltip(0);
+            tooltip1.visible = false;
+            tooltip1.x = controls[0].x;
+            tooltip1.y = controls[0].y;
+            addChild(tooltip1);
+            tooltip2 = new Tooltip(1);
+            tooltip2.visible = false;
+            tooltip2.x = controls[1].x;
+            tooltip2.y = controls[1].y;
+            addChild(tooltip2);
         }
 
         private function on_controls(click:Event):void {

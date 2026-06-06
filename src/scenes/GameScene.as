@@ -32,6 +32,7 @@
     import starling.utils.Align;
     import utils.ShadowLabel;
     import starling.text.TextFormat;
+    import i18n.I18n;
 
     public class GameScene extends BasicScene {
         // #region 类变量
@@ -65,8 +66,8 @@
             gameOver = true;
             popLabels = new Vector.<ShadowLabel>(3, true);
             var color:Number = 0xFFAAAA;
-            popLabels[0] = new ShadowLabel(600, 40, "POPULATION : 50 / 50", new TextFormat("downlink", 12, color));
-            popLabels[1] = new ShadowLabel(600, 40, "POPULATION : 50 / 50", new TextFormat("downlink", 12, color));
+            popLabels[0] = new ShadowLabel(600, 40, I18n._("game.population"), new TextFormat("downlink", 12, color));
+            popLabels[1] = new ShadowLabel(600, 40, I18n._("game.population"), new TextFormat("downlink", 12, color));
             popLabels[2] = new ShadowLabel(200, 40, "+ 30", new TextFormat("downlink", 12, color));
             for (var i:int = 0; i < 3; i++) {
                 var label:ShadowLabel = popLabels[i];
@@ -156,6 +157,7 @@
                 else
                     LayerFactory.addChild(LayerFactory.BTN_ADD,label);
             }
+            popLabels[0].text = popLabels[1].text = I18n._("game.population", Globals.teamPops[Globals.playerTeam], Globals.teamCaps[Globals.playerTeam]);
             // UIContainer.btnLayer.color = Globals.teamColors[Globals.playerTeam];
             // 执行一些初始化函数
             initBarrierLines();
@@ -271,7 +273,7 @@
             EntityContainer.ships.length < 1024 ? Globals.exOptimization = 0 : (EntityContainer.ships.length < 8192 ? Globals.exOptimization = 1 : Globals.exOptimization = 2);
 
             if (lastPopCounts != Globals.teamPops[Globals.playerTeam]) {
-                popLabels[0].text = popLabels[1].text = "POPULATION : " + Globals.teamPops[Globals.playerTeam] + " / " + Globals.teamCaps[Globals.playerTeam];
+                popLabels[0].text = popLabels[1].text = I18n._("game.population", Globals.teamPops[Globals.playerTeam], Globals.teamCaps[Globals.playerTeam]);
                 lastPopCounts = Globals.teamPops[Globals.playerTeam];
             }
             if (popLabels[1].alpha > 0)

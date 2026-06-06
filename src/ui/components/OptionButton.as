@@ -125,5 +125,13 @@ package ui.components {
             image.touchable = false;
             addChild(image);
         }
+
+        /** 根据当前 label 文本重新计算 labelBG / quad 的尺寸 */
+        public function resizeToText():void {
+            labelBG.width  = label.textBounds.width + 12;
+            labelBG.height = label.textBounds.height + 8;
+            quad.width  = labelBG.width + 4;
+            quad.height = labelBG.height + 4;
+        }
     }
 }

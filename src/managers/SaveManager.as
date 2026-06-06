@@ -19,6 +19,7 @@ package managers {
         public static var nohup:Boolean = false; // 禁用暂停，playerData.txt第二十一项，levelData后第四项
         public static var fleetSliderPosition:int = 1; // 分兵条位置
         public static var maxMarginTeam:int = 8; // 最大边距势力数，合作中势力数达到该值时兵力文本显示与战争状态相同
+        public static var languages:String = "zh_cn"; // 语言，详见i18n/languages
 
         private static var file:File; // 文件
         private static var fileStream:FileStream;
@@ -48,9 +49,11 @@ package managers {
                 blackQuad = playerData[18];
                 currentData = playerData[19];
                 nohup = playerData[20];
+                if (playerData.length >= 22)
+                    languages = playerData[21];
             } catch (error:Error) {
                 // 储存默认数据到playerData.txt
-                playerData = [levelReached, soundVolume, musicVolume, transitionSpeed, 0, textSize, 0, fullscreen, antialias, 0, 0, 0, 0, 0, 0, touchControls, levelData, currentDifficulty, blackQuad, currentData, nohup];
+                playerData = [levelReached, soundVolume, musicVolume, transitionSpeed, 0, textSize, 0, fullscreen, antialias, 0, 0, 0, 0, 0, 0, touchControls, levelData, currentDifficulty, blackQuad, currentData, nohup, languages];
                 if (!file.exists) { // 如果文件不存在
                     save(); // 保存存档文件到本地
                 } else { // 如果文件存在

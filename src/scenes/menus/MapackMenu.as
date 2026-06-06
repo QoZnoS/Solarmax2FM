@@ -16,6 +16,7 @@ package scenes.menus {
     import starling.utils.Align;
     import utils.ShadowLabel;
     import starling.text.TextFormat;
+    import i18n.I18n;
 
     public class MapackMenu extends Sprite implements IMenu {
         private const COLOR:uint = 0xFF9DBB;
@@ -32,11 +33,12 @@ package scenes.menus {
             this.title = title;
             components = [];
             mapacks = [];
+            I18n.addEventListener(Event.CHANGE, on_languageChanged);
             init();
         }
 
         public function init():void {
-            var text:ShadowLabel = new ShadowLabel(200, 40, "MAP MANAGER", new TextFormat("downlink", 18, COLOR));
+            var text:ShadowLabel = new ShadowLabel(200, 40, I18n._("mappack.title"), new TextFormat("downlink", 18, COLOR));
             components.push(text);
             addLabel(text, 412, 122, "center");
             var btn:MenuButton = new MenuButton("btn_restart");
@@ -114,20 +116,21 @@ package scenes.menus {
             }
             var y:Number = 160;
             for (var i:int = 0; i < LevelData.rawData.length; i++) {
-                dataQuad = new OptionButton(LevelData.rawData[i].name, COLOR, mapacks);
+                var rd:Object = LevelData.rawData[i];
+                dataQuad = new OptionButton(LevelData.getLocalizedField(rd, "name"), COLOR, mapacks);
                 dataQuad.label.format.size = 18;
                 dataQuad.label.width = 700;
                 dataQuad.label.x += 40;
                 dataQuad.addLabel(new TextField(40, 40, "#" + i), 18, COLOR, 0, 0);
-                dataQuad.addLabel(new TextField(600, 40, LevelData.rawData[i].describe1), 12, COLOR, 40, 25);
-                if ("describe2" in LevelData.rawData[i])
-                    dataQuad.addLabel(new TextField(600, 40, LevelData.rawData[i].describe2), 12, COLOR, 40, 40);
-                if ("describe3" in LevelData.rawData[i])
-                    dataQuad.addLabel(new TextField(600, 40, LevelData.rawData[i].describe3), 12, COLOR, 40, 55);
-                if ("describe4" in LevelData.rawData[i])
-                    dataQuad.addLabel(new TextField(600, 40, LevelData.rawData[i].describe4), 12, COLOR, 40, 70);
-                dataQuad.addLabel(new TextField(600, 40, "MAPPER: " + LevelData.rawData[i].mapper), 12, COLOR, 40, 90);
-                dataQuad.addImage(new Image(Root.assets.getTexture(LevelData.rawData[i].icon)));
+                dataQuad.addLabel(new TextField(600, 40, LevelData.getLocalizedField(rd, "describe1")), 12, COLOR, 40, 25);
+                if ("describe2" in rd || ("describe2." + SaveManager.languages) in rd)
+                    dataQuad.addLabel(new TextField(600, 40, LevelData.getLocalizedField(rd, "describe2")), 12, COLOR, 40, 40);
+                if ("describe3" in rd || ("describe3." + SaveManager.languages) in rd)
+                    dataQuad.addLabel(new TextField(600, 40, LevelData.getLocalizedField(rd, "describe3")), 12, COLOR, 40, 55);
+                if ("describe4" in rd || ("describe4." + SaveManager.languages) in rd)
+                    dataQuad.addLabel(new TextField(600, 40, LevelData.getLocalizedField(rd, "describe4")), 12, COLOR, 40, 70);
+                dataQuad.addLabel(new TextField(600, 40, I18n._("level.mapper", [LevelData.getLocalizedField(rd, "mapper")])), 12, COLOR, 40, 90);
+                dataQuad.addImage(new Image(Root.assets.getTexture(LevelData.getLocalizedField(rd, "icon"))));
                 dataQuad.quad.color = 0x000000;
                 dataQuad.quad.alpha = 0.5;
                 dataQuad.quad.width = dataQuad.labelBG.width = 768;
@@ -175,6 +178,10 @@ package scenes.menus {
         private function on_next(click:Event):void {
             if (mapPage < mapacks.length - 1)
                 mapPage++;
+            on_refresh();
+        }
+
+        private function on_languageChanged(e:Event):void {
             on_refresh();
         }
     }

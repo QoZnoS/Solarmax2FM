@@ -19,6 +19,7 @@ package scenes.menus {
     import utils.Popup;
     import utils.ReplayData;
     import managers.SaveManager;
+    import i18n.I18n;
 
     public class ReplayMenu extends Sprite implements IMenu {
         private const COLOR:uint = 0xFF9DBB;
@@ -38,12 +39,12 @@ package scenes.menus {
             btn.y = 128;
             // addChild(btn);
             btn.addEventListener("clicked", open_folder);
-            btn = new OptionButton("refresh", COLOR);
+            btn = new OptionButton(I18n._("replay.refresh"), COLOR);
             btn.x = 216;
             btn.y = 128;
             addChild(btn);
             btn.addEventListener("clicked", refresh);
-            clearBtn = new OptionButton("Clear replay file", COLOR);
+            clearBtn = new OptionButton(I18n._("replay.clearFile"), COLOR);
             clearBtn.x = 512;
             clearBtn.y = 128;
             addChild(clearBtn);
@@ -102,8 +103,8 @@ package scenes.menus {
                 quad.alpha = 0.4;
                 quad.scaleX = 0;
                 repBtn.addChild(quad);
-                repBtn.addLabel(new TextField(196, 20, "level: " + rep.level[1]), 12, COLOR, 0, 18);
-                repBtn.addLabel(new TextField(196, 20, "Time: " + rep.totalTime), 12, COLOR, 0, 38);
+                repBtn.addLabel(new TextField(196, 20, I18n._("replay.level", [rep.level[1]])), 12, COLOR, 0, 18);
+                repBtn.addLabel(new TextField(196, 20, I18n._("replay.time", [rep.totalTime])), 12, COLOR, 0, 38);
                 repBtn.addLabel(new TextField(196, 20, repFileNames[i]), 12, COLOR, 0, 58);
                 addChild(repBtn);
                 components.push(repBtn);
@@ -193,7 +194,7 @@ package scenes.menus {
         }
 
         private function clearRep_Confirm():void {
-            var popup:Popup = new Popup(Popup.TYPE_CHOOSE, "Confirm delete all of replay?");
+            var popup:Popup = new Popup(Popup.TYPE_CHOOSE, I18n._("replay.confirmDelete"));
             popup.enableDrag();
             popup.accept.addEventListener("clicked", clearRep);
             addChild(popup);
@@ -222,7 +223,7 @@ package scenes.menus {
         private function open_folder():void {
             var file:File = File.desktopDirectory;
             try {
-                file.browseForDirectory("选择路径");
+                file.browseForDirectory(I18n._("replay.selectPath"));
             } catch (error:Error) {
                 file.requestPermission();
             }

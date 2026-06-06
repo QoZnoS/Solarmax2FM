@@ -21,6 +21,7 @@ package scenes {
     import managers.SaveManager;
     import scenes.menus.AdvancedSettingMenu;
     import starling.utils.Align;
+    import i18n.I18n;
 
     public class StartMenu extends Sprite {
         public var title:TitleMenu; // 接入标题类
@@ -29,12 +30,16 @@ package scenes {
 
         private const MAX_PAGE:int = 8;
         private const COLOR:uint = 0xFF9DBB;
-        private const pageName:Array = ["SETTING", "MAPACKS", "STAFF", "REPLAY", "测试", "", "", ""];
+        private var pageName:Array;
+        private var pageNameKeys:Array; // i18n keys for each page
         public var pages:Array;
 
         public function StartMenu(titleMenu:TitleMenu) {
             super();
             this.title = titleMenu;
+            pageNameKeys = ["menu.setting", "menu.mappacks", "menu.staff", "menu.replay", "", "", "", ""];
+            _buildPageNames();
+            I18n.addEventListener(Event.CHANGE, on_languageChanged);
             var bg:Quad = new Quad(1024, 768, 0);
             bg.alpha = 0.5;
             addChild(bg);
@@ -126,6 +131,24 @@ package scenes {
                     menus[i].animateIn();
                 if (!pages[i].toggled && menus[i].visible)
                     menus[i].animateOut();
+            }
+        }
+
+        private function _buildPageNames():void {
+            pageName = [];
+            for (var i:int = 0; i < pageNameKeys.length; i++) {
+                if (pageNameKeys[i] == "")
+                    pageName.push("");
+                else
+                    pageName.push(I18n._(pageNameKeys[i]));
+            }
+        }
+
+        private function on_languageChanged(e:Event):void {
+            _buildPageNames();
+            for (var i:int = 0; i < pages.length; i++) {
+                if (pages[i] && pages[i].label && pageName[i] != "")
+                    pages[i].label.text = pageName[i];
             }
         }
     }

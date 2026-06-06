@@ -11,11 +11,14 @@ package ui.components {
     import starling.events.TouchEvent;
     import utils.ShadowLabel;
     import starling.text.TextFormat;
+    import i18n.I18n;
+    import starling.events.Event;
 
     public class DifficultyButton extends Sprite {
-        public static const btnText:Array = ["EASY", "NORMAL", "HARD"]
+        public static var btnText:Array = [I18n._("diff.easy"), I18n._("diff.normal"), I18n._("diff.hard")];
 
         private var label:ShadowLabel;
+        private var difficulty:int;
         private var icon:Image;
         private var bg:Image;
         private var quad:Quad;
@@ -28,6 +31,7 @@ package ui.components {
         public function DifficultyButton(difficulty:int, buttonArray:Array) {
             super();
             this.buttonArray = buttonArray;
+            this.difficulty = difficulty;
             bg = new Image(Root.assets.getTexture("difficulty_btn01"));
             bg.pivotX = bg.width * 0.5;
             bg.pivotY = bg.height * 0.5;
@@ -57,6 +61,7 @@ package ui.components {
             this.blendMode = "add";
             hitPoint = new Point(0, 0);
             toggled = false;
+            I18n.addEventListener(Event.CHANGE, on_languageChanged);
         }
 
         public function init():void {
@@ -129,6 +134,11 @@ package ui.components {
                 icon.texture = Root.assets.getTexture("star2");
                 starred = false;
             }
+        }
+
+        private function on_languageChanged(e:Event):void {
+            btnText = [I18n._("diff.easy"), I18n._("diff.normal"), I18n._("diff.hard")];
+            label.text = btnText[difficulty];
         }
     }
 }

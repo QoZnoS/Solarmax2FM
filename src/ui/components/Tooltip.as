@@ -4,6 +4,7 @@ package ui.components {
     import starling.display.Sprite;
     import starling.text.TextField;
     import starling.utils.Align;
+    import i18n.I18n;
 
     public class Tooltip extends Sprite {
         public var bg:Quad;
@@ -17,7 +18,7 @@ package ui.components {
                 bg = new Quad(400, 100, 0);
                 bg.alpha = 0.9;
                 addChild(bg);
-                title = new TextField(380, 40, "MULTI-TOUCH CONTROLS");
+                title = new TextField(380, 40, I18n._("tooltip.multitouch.title"));
                 title.format.setTo("downlink", 16, 0xFFFFFF)
                 title.format.horizontalAlign = Align.LEFT;
                 title.format.verticalAlign = Align.TOP;
@@ -26,12 +27,12 @@ package ui.components {
                 addChild(title);
                 content = new TextField(380, 100, "");
                 content.format.setTo("downlink", 10, 0xFFFFFF)
-                content.text = "+ Hold LEFT CLICK on a planet and drag onto target\n\n+ SCROLL WHEEL to change move percentage";
+                content.text = I18n._("tooltip.multitouch.content");
             } else {
                 bg = new Quad(400, 200, 0);
                 bg.alpha = 0.9;
                 addChild(bg);
-                title = new TextField(380, 40, "TRADITIONAL CONTROLS");
+                title = new TextField(380, 40, I18n._("tooltip.traditional.title"));
                 title.format.setTo("downlink", 16, 0xFFFFFF)
                 title.format.horizontalAlign = Align.LEFT;
                 title.format.verticalAlign = Align.TOP;
@@ -40,7 +41,7 @@ package ui.components {
                 addChild(title);
                 content = new TextField(380, 200, "");
                 content.format.setTo("downlink", 10, 0xFFFFFF)
-                content.text = "+ LEFT CLICK on a planet to select it\n\n+ LEFT LICK and drag a box to select planets\n\n+ Hold SHIFT and LEFT CLICK to add or remove planets\n\n+ LEFT CLICK on empty space to deselect\n\n+ RIGHT CLICK on a planet to move ships\n\n+ SCROLL WHEEL to change move percentage";
+                content.text = I18n._("tooltip.traditional.content");
             }
             content.format.horizontalAlign = Align.LEFT;
             content.format.verticalAlign = Align.TOP;

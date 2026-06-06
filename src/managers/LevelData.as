@@ -6,6 +6,8 @@ package managers {
     import flash.utils.ByteArray;
     import flash.utils.Dictionary;
 
+    import i18n.I18n;
+
     public class LevelData {
         public static var file:File; // 文件
         public static var fileStream:FileStream;
@@ -134,6 +136,18 @@ package managers {
             var data:String = String(fileStream.readMultiByte(fileStream.bytesAvailable, "utf-8"));
             rawData = JSON.parse(data).data;
             fileStream.close(); // 关闭文件
+        }
+
+        /**
+         * 根据当前语言获取字段值
+         * 优先查找 fieldName.langCode（如 "name.zh_cn"），找不到则回退到 fieldName
+         */
+        public static function getLocalizedField(rawDataItem:Object, fieldName:String):String {
+            var langCode:String = SaveManager.languages;
+            var key:String = fieldName + "." + langCode;
+            if (key in rawDataItem && rawDataItem[key] != null)
+                return rawDataItem[key];
+            return rawDataItem[fieldName] || "";
         }
     }
 }

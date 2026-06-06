@@ -29,6 +29,7 @@ package scenes {
     import starling.utils.Align;
     import utils.ShadowLabel;
     import starling.text.TextFormat;
+    import i18n.I18n;
 
     public class TitleMenu extends Sprite {
         public var cover:Quad; // 进入游戏和通关36时的白光遮罩
@@ -111,8 +112,8 @@ package scenes {
             title_blur.blendMode = "add";
             titleBox.addChild(title_blur);
             credits = [];
-            credits.push(new ShadowLabel(600, 40, "CREATED BY NICO TUASON", new TextFormat("downlink", 12, 0xFFAAAA)));
-            credits.push(new ShadowLabel(600, 40, "MODIFIED BY QoZnoS", new TextFormat("downlink", 12, 0xFFAAAA)));
+            credits.push(new ShadowLabel(600, 40, I18n._("title.createdBy"), new TextFormat("downlink", 12, 0xFFAAAA)));
+            credits.push(new ShadowLabel(600, 40, I18n._("title.modifiedBy"), new TextFormat("downlink", 12, 0xFFAAAA)));
             for (i = 0; i < credits.length; i++) // 留作彩蛋 :P
             {
                 credits[i].pivotX = 300;

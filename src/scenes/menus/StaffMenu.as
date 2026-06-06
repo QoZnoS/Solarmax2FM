@@ -12,9 +12,10 @@ package scenes.menus {
     import starling.utils.Align;
     import starling.text.TextFormat;
     import utils.ShadowLabel;
+    import i18n.I18n;
 
     public class StaffMenu extends Sprite implements IMenu {
-        private const staffString:Array = [["ORIGINAL", 18], ["DESIGN, ART, CODE:", 12], ["NICO TUASON", 12], ["MUSIC:", 12], ["JOHN CAMARA", 12], ["PLAYTESTING:", 12], ["TERRY TUASON", 12], ["MODIFIED", 18], ["CODE:", 12], ["QoZnoS", 12], ["SPECIAL THANKS:", 18], ["Solarmax23333", 12], ["supercluster", 12], ["Solarmax33", 12], ["Thirdsister", 12], ["Tuetiedove", 12], ["LinZhong", 12]];
+        private var staffString:Array; // [text, fontSize, isI18nKey] 元组
         private const COLOR:uint = 0xFF9DBB;
         private const lineHeight:Number = 36;
 
@@ -26,10 +27,35 @@ package scenes.menus {
         public function StaffMenu(title:TitleMenu):void {
             this.title = title;
             components = [];
+            I18n.addEventListener(Event.CHANGE, on_languageChanged);
             init();
         }
 
+        /** 构建 staffString 数组：三元组 [text, fontSize, i18nKey|null] */
+        private function _buildStaffStrings():void {
+            staffString = [
+                [I18n._("staff.original"), 18, "staff.original"],
+                [I18n._("staff.design"), 12, "staff.design"],
+                ["NICO TUASON", 12, null],
+                [I18n._("staff.music"), 12, "staff.music"],
+                ["JOHN CAMARA", 12, null],
+                [I18n._("staff.playtesting"), 12, "staff.playtesting"],
+                ["TERRY TUASON", 12, null],
+                [I18n._("staff.modified"), 18, "staff.modified"],
+                [I18n._("staff.code"), 12, "staff.code"],
+                ["QoZnoS", 12, null],
+                [I18n._("staff.thanks"), 18, "staff.thanks"],
+                ["Solarmax23333", 12, null],
+                ["supercluster", 12, null],
+                ["Solarmax33", 12, null],
+                [I18n._("staff.thirdsister"), 12, "staff.thirdsister"],
+                ["Tuetiedove", 12, null],
+                ["林中散步", 12, null]
+            ];
+        }
+
         public function init():void {
+            _buildStaffStrings();
             for each (var strings:Array in staffString) {
                 components.push(new ShadowLabel(400, 40, strings[0], new TextFormat("downlink", strings[1], COLOR)));
             }
@@ -92,6 +118,15 @@ package scenes.menus {
         }
 
         private var nicoClickTime:int = 0;
+
+        private function on_languageChanged(e:Event):void {
+            _buildStaffStrings();
+            for (var i:int = 0; i < staffString.length; i++)
+                if (i < components.length)
+                    components[i].text = staffString[i][0];
+            if (nicobtn)
+                nicobtn.label.text = "NICO TUASON";
+        }
 
         private function invisibleMode(click:Event):void {
             if (title.currentIndex == 0)
