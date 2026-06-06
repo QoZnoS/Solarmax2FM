@@ -40,12 +40,12 @@ package ui.layers {
         public function deinit():void {
             touchQuad.removeEventListener("touch", on_touch);
         }
+
         // #endregion
 
         // #region 绘制逻辑
         public function draw():void {
-            switch(faceType)
-            {
+            switch (faceType) {
                 case START_FACE:
                     drawStart();
                     break;
@@ -127,6 +127,7 @@ package ui.layers {
                     break;
             }
         }
+
         // #region start face function
         private function startHover(touchEvent:TouchEvent):void {
             var touchArray:Vector.<Touch> = touchEvent.getTouches(touchQuad, TouchPhase.HOVER);
@@ -169,6 +170,7 @@ package ui.layers {
                         faceType = MOVE_FACE;
             }
         }
+
         // #endregion
         // #region move face function
         private function moveBegan(touchEvent:TouchEvent):void {
@@ -220,6 +222,23 @@ package ui.layers {
                 faceType = START_FACE;
             }
         }
+
+        // #endregion
+
+        // #region node face function
+        private function nodeBegan(touchEvent:TouchEvent):void {
+            var touchArray:Vector.<Touch> = touchEvent.getTouches(touchQuad, TouchPhase.BEGAN);
+        }
+
+        private function nodeMoved(touchEvent:TouchEvent):void {
+            var touchArray:Vector.<Touch> = touchEvent.getTouches(touchQuad, TouchPhase.MOVED);
+        }
+
+        private function nodeEnded(touchEvent:TouchEvent):void {
+            var touchArray:Vector.<Touch> = touchEvent.getTouches(touchQuad, TouchPhase.ENDED);
+        }
+
+
         // #endregion
 
         // #endregion
@@ -268,6 +287,7 @@ package ui.layers {
         }
 
         private var TEMP_ARR:Array;
+
         private function createParameterArray():Array {
             if (!TEMP_ARR)
                 TEMP_ARR = [];

@@ -95,7 +95,7 @@
             assets.textureOptions.mipMapping = true;
             // assets.verbose = Capabilities.isDebugger;
             // 将音频、字体和纹理资源加入队列
-            assets.enqueue(appDir.resolvePath("audio"), appDir.resolvePath("fonts/" + assetDir), appDir.resolvePath("textures/" + assetDir), appDir.resolvePath("metadata"));
+            assets.enqueue(appDir.resolvePath("audio"), appDir.resolvePath("textures/" + assetDir), appDir.resolvePath("metadata"));
             assets.enqueue("backgrounds/" + assetDir + "/bg01.png");
             assets.enqueue("backgrounds/" + assetDir + "/bg02.png");
             assets.enqueue("backgrounds/" + assetDir + "/bg03.png");

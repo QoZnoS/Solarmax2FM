@@ -202,7 +202,7 @@ package starling.text
             if (_options.autoSize != TextFieldAutoSize.NONE)
             {
                 _textBounds = _meshBatch.getBounds(_meshBatch, _textBounds);
-
+                
                 if (isHorizontalAutoSize)
                 {
                     _meshBatch.x = _textBounds.x = -_textBounds.x;
@@ -292,6 +292,15 @@ package starling.text
         {
             if (_requiresRecomposition) recompose();
             if (_textBounds == null) _textBounds = _meshBatch.getBounds(this);
+
+            // 将 TTF 行高修正为与 .fnt 一致 (lineHeight/size = 47/36 ≈ 1.306)
+            if (_format.font && _format.font.toLowerCase() == "downlink") {
+                var targetHeight:Number = Number(_format.size) * (47.0 / 36.0);
+                if (_textBounds.height > targetHeight) {
+                    _textBounds.height = targetHeight;
+                }
+            }
+            
             getTransformationMatrix(targetSpace, sMatrix);
             return RectangleUtil.getBounds(_textBounds, sMatrix, out);
         }

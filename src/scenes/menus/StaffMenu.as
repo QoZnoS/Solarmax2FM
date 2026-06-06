@@ -6,12 +6,12 @@ package scenes.menus {
     import starling.core.Starling;
     import starling.display.Sprite;
     import starling.events.Event;
-    import starling.text.TextField;
 
     import ui.UIContainer;
     import ui.components.OptionButton;
     import starling.utils.Align;
     import starling.text.TextFormat;
+    import utils.ShadowLabel;
 
     public class StaffMenu extends Sprite implements IMenu {
         private const staffString:Array = [["ORIGINAL", 18], ["DESIGN, ART, CODE:", 12], ["NICO TUASON", 12], ["MUSIC:", 12], ["JOHN CAMARA", 12], ["PLAYTESTING:", 12], ["TERRY TUASON", 12], ["MODIFIED", 18], ["CODE:", 12], ["QoZnoS", 12], ["SPECIAL THANKS:", 18], ["Solarmax23333", 12], ["supercluster", 12], ["Solarmax33", 12], ["Thirdsister", 12], ["Tuetiedove", 12], ["LinZhong", 12]];
@@ -31,7 +31,7 @@ package scenes.menus {
 
         public function init():void {
             for each (var strings:Array in staffString) {
-                components.push(new TextField(400, 40, strings[0], new TextFormat("downlink", strings[1], COLOR)));
+                components.push(new ShadowLabel(400, 40, strings[0], new TextFormat("downlink", strings[1], COLOR)));
             }
             var y:Number = 120;
             var side:int = 0;
@@ -83,7 +83,7 @@ package scenes.menus {
             this.visible = false;
         }
 
-        private function addLabel(label:TextField, x:Number, y:Number, hAlign:String = Align.RIGHT):void {
+        private function addLabel(label:ShadowLabel, x:Number, y:Number, hAlign:String = Align.RIGHT):void {
             label.format.horizontalAlign = hAlign;
             label.format.verticalAlign = Align.TOP;
             label.x = x;

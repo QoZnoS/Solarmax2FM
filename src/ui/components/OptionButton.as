@@ -8,11 +8,13 @@ package ui.components {
     import starling.events.TouchEvent;
     import starling.text.TextField;
     import starling.utils.Align;
+    import utils.ShadowLabel;
+    import starling.text.TextFormat;
 
     public class OptionButton extends Sprite {
         public var quad:Quad;
         public var labelBG:Quad;
-        public var label:TextField;
+        public var label:ShadowLabel;
         public var down:Boolean;
         public var hitPoint:Point;
         public var buttonArray:Array;
@@ -31,13 +33,12 @@ package ui.components {
             super();
             this.buttonArray = buttonArray;
             labelArray = [];
-            label = new TextField(240, 40, text);
-            label.format.setTo("downlink", 12, color);
+            label = new ShadowLabel(240, 40, text, new TextFormat("downlink", 12, color), 0, 2);
             label.format.horizontalAlign = Align.LEFT;
             label.format.verticalAlign = Align.TOP;
             label.alpha = 1;
             label.touchable = false;
-            labelBG = new Quad(label.textBounds.width + 12, label.textBounds.height + 12, color);
+            labelBG = new Quad(label.textBounds.width + 12, label.textBounds.height + 8, color);
             labelBG.x = -6;
             labelBG.y = -2;
             labelBG.alpha = 0;

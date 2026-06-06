@@ -3,6 +3,7 @@ package utils {
 
     import ui.components.OptionButton;
     import starling.utils.Align;
+    import starling.text.TextFormat;
 
     public class Popup extends MoveableSprite {
         /** 信息提示版，确认后销毁自己，不需要回调 */
@@ -26,16 +27,14 @@ package utils {
             setBox(560, 270);
             switch (type) {
                 case TYPE_INFORMATION:
-                    var title:TextField = new TextField(512, 40, prop[0]);
-                    title.format.setTo("downlink", 18, COLOR);
+                    var title:ShadowLabel = new ShadowLabel(512, 40, prop[0], new TextFormat("downlink", 18, COLOR));
                     title.x = 256;
                     title.y = 249; //384-135
                     title.touchable = false;
                     addChild(title);
                     break;
                 case TYPE_CHOOSE:
-                    var info:TextField = new TextField(512, 200, prop[0]);
-                    info.format.setTo("downlink", 18, COLOR);
+                    var info:ShadowLabel = new ShadowLabel(512, 200, prop[0], new TextFormat("downlink", 18, COLOR));
                     info.x = 256;
                     info.y = 180;
                     info.touchable = false;

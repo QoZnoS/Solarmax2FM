@@ -7,9 +7,10 @@ package scenes.menus {
     import starling.events.TouchEvent;
     import starling.events.Touch;
     import flash.events.MouseEvent;
-    import flash.geom.Rectangle;
     import starling.text.TextField;
     import starling.display.Quad;
+    import utils.ShadowLabel;
+    import starling.text.TextFormat;
 
     public class TeamEditorMenu extends Sprite implements IMenu {
         
@@ -173,8 +174,7 @@ package scenes.menus {
             // 初始化数据
             dataList.push(["Color", "DeepColor", "ColorEnhance", "ShipSpeed", "ShipAttack", "ShipDefence", "Repairing\nSpeed", "Colonizing\nSpeed", "Destroying\nSpeed", "Decolonizing\nSpeed", "Construction\nStrength", "NodeBuild", "NodePop", "ShowLabel"])
             for (var i:int = 0; i < dataList[0].length; i++) {
-                var label:TextField = new TextField(DATA_LABEL_WIDTH, DATA_LABEL_HEIGHT, dataList[0][i]);
-                label.format.setTo("downlink", 18, TITLE_TEXT_COLOR);
+                var label:ShadowLabel = new ShadowLabel(DATA_LABEL_WIDTH, DATA_LABEL_HEIGHT, dataList[0][i], new TextFormat("downlink", 18, TITLE_TEXT_COLOR));
                 label.x = i * DATA_LABEL_X_SPACING + 5;
                 label.y = DATA_BAR_TITLE_Y;
                 dataBar.addChild(label);

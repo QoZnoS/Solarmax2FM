@@ -3,7 +3,8 @@ package ui.components {
     import starling.display.Sprite;
     import starling.events.Touch;
     import starling.events.TouchEvent;
-    import starling.text.TextField;
+    import utils.ShadowLabel;
+    import starling.text.TextFormat;
 
     public class FleetSlider extends Sprite {
         public static const TYPE_HORIZONTAL_SMALL:int = 1;
@@ -13,7 +14,7 @@ package ui.components {
         private var _quad1:Quad;
         private var _quad2:Quad;
         private var _touchQuad:Quad;
-        private var _label:TextField;
+        private var _label:ShadowLabel;
         private var _total:Number;
         private var _box:Sprite;
         private var _boxQuad1:Quad;
@@ -59,8 +60,7 @@ package ui.components {
                     break;
             }
             if (_type == TYPE_VERTICAL) {
-                _label = new TextField(_boxWidth * 2, _boxHeight, "100%");
-                _label.format.setTo("downlink", fontSize, 0xFFAAAA)
+                _label = new ShadowLabel(_boxWidth * 2, _boxHeight, "100%", new TextFormat("downlink", fontSize, 0xFFAAAA));
                 _label.pivotX = _boxWidth;
                 _label.pivotY = _label.y = _boxHeight * 0.5;
                 _label.x = _boxWidth * 0.5;
@@ -70,8 +70,7 @@ package ui.components {
                 _quad2.pivotY = _quad2.y = _touchHeight;
                 _quad2.x = _boxWidth * 0.5 - _thickness * 0.5;
             } else {
-                _label = new TextField(_boxWidth, _boxHeight * 2, "100%");
-                _label.format.setTo("downlink", fontSize, 0xFFAAAA)
+                _label = new ShadowLabel(_boxWidth, _boxHeight * 2, "100%", new TextFormat("downlink", fontSize, 0xFFAAAA));
                 _label.pivotX = _label.x = _boxWidth * 0.5;
                 _label.pivotY = _boxHeight;
                 _label.y = _boxHeight * 0.5;

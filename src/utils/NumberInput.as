@@ -1,11 +1,11 @@
 package utils {
     import starling.display.Sprite;
-    import starling.text.TextField;
     import flash.ui.Keyboard;
     import ui.components.OptionButton;
     import flash.events.KeyboardEvent;
     import starling.events.Event;
     import starling.utils.Align;
+    import starling.text.TextFormat;
 
     public class NumberInput extends MoveableSprite {
 
@@ -15,10 +15,10 @@ package utils {
 
         private static var inputValue:String = "0";
         private static var prevValue:String = "";
-        private static var numberText:TextField; // 计算器中显示的计算值
-        private static var numberPrevText:TextField; // 计算器中显示的计算过程
+        private static var numberText:ShadowLabel; // 计算器中显示的计算值
+        private static var numberPrevText:ShadowLabel; // 计算器中显示的计算过程
         private static var textPrefix:String;
-        private static var outText:TextField;
+        private static var outText:ShadowLabel;
 
         private const COLOR:uint = 0xFF9DBB;
 
@@ -37,14 +37,12 @@ package utils {
 
         private function initUI():void {
             setBox(320, 430); // 80*40 一格 4*6 布局 80 50
-            numberPrevText = new TextField(316, 40, prevValue);
-            numberPrevText.format.setTo("downlink", 18, COLOR / 2);
+            numberPrevText = new ShadowLabel(316, 40, prevValue, new TextFormat("downlink", 18, COLOR / 2));
             numberPrevText.x = 348;
             numberPrevText.y = 171;
             numberPrevText.format.horizontalAlign = Align.RIGHT;
             numberPrevText.touchable = false;
-            numberText = new TextField(316, 40, inputValue);
-            numberText.format.setTo("downlink", 24, COLOR)
+            numberText = new ShadowLabel(316, 40, inputValue, new TextFormat("downlink", 24, COLOR / 2));
             numberText.x = 348;
             numberText.y = 221;
             numberText.format.horizontalAlign = Align.RIGHT;
@@ -86,7 +84,7 @@ package utils {
          * <p> 2 - Number
          * <p> 3 - Coordinate 坐标模式
          */
-        public static function awake(layer:Sprite, numberText:TextField, type:int = 0):void {
+        public static function awake(layer:Sprite, numberText:ShadowLabel, type:int = 0):void {
             displayer = layer;
             displayer.addChild(THIS);
             THIS.enableDrag();

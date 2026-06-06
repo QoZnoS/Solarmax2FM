@@ -10,7 +10,6 @@ package scenes.menus {
     import starling.events.Event;
     import starling.events.Touch;
     import starling.events.TouchEvent;
-    import starling.text.TextField;
 
     import ui.components.OptionButton;
     import ui.components.OptionSlider;
@@ -18,6 +17,7 @@ package scenes.menus {
     import managers.SaveManager;
     import starling.text.TextFormat;
     import starling.utils.Align;
+    import utils.ShadowLabel;
 
     public class SettingMenu extends Sprite implements IMenu {
         private const windowStrings:Array = ["FULLSCREEN", "RESIZEABLE WINDOW"]; // 窗口模式文本
@@ -56,9 +56,9 @@ package scenes.menus {
             var btn:OptionButton;
             // #region VIDEO
             components = [];
-            components.push(new TextField(200, 40, "VIDEO", new TextFormat("downlink", 18, COLOR)));
+            components.push(new ShadowLabel(200, 40, "VIDEO", new TextFormat("downlink", 18, COLOR)));
             if (Globals.device == "PC")
-                components.push(new TextField(200, 40, "WINDOW MODE:", new TextFormat("downlink", 12, COLOR)));
+                components.push(new ShadowLabel(200, 40, "WINDOW MODE:", new TextFormat("downlink", 12, COLOR)));
             fullscreen = [];
             for (i = 0; i < windowStrings.length; i++) {
                 btn = new OptionButton(windowStrings[i], COLOR, fullscreen);
@@ -68,7 +68,7 @@ package scenes.menus {
                 // if (Globals.device == "PC")
                 components.push(fullscreen);
             }
-            components.push(new TextField(200, 40, "ANTI-ALIASING:", new TextFormat("downlink", 12, COLOR)));
+            components.push(new ShadowLabel(200, 40, "ANTI-ALIASING:", new TextFormat("downlink", 12, COLOR)));
             antialias = [];
             for (i = 0; i < aaStrings.length; i++) {
                 btn = new OptionButton(aaStrings[i], COLOR, antialias);
@@ -79,21 +79,21 @@ package scenes.menus {
             }
             // #endregion
             // #region AUDIO
-            components.push(new TextField(200, 40, "AUDIO", new TextFormat("downlink", 18, COLOR)));
-            components.push(new TextField(200, 40, "MUSIC VOLUME:", new TextFormat("downlink", 12, COLOR)));
+            components.push(new ShadowLabel(200, 40, "AUDIO", new TextFormat("downlink", 18, COLOR)));
+            components.push(new ShadowLabel(200, 40, "MUSIC VOLUME:", new TextFormat("downlink", 12, COLOR)));
             musicSlider = new OptionSlider(1);
             musicSlider.x = 330;
             musicSlider.init();
             components.push(musicSlider);
-            components.push(new TextField(200, 40, "SOUND VOLUME:", new TextFormat("downlink", 12, COLOR)));
+            components.push(new ShadowLabel(200, 40, "SOUND VOLUME:", new TextFormat("downlink", 12, COLOR)));
             audioSlider = new OptionSlider(1);
             audioSlider.x = 330;
             audioSlider.init();
             components.push(audioSlider);
             // #endregion
             // #region GAME
-            components.push(new TextField(200, 40, "V1.2.0    GAME", new TextFormat("downlink", 18, COLOR)));
-            components.push(new TextField(200, 40, "UI SIZE:", new TextFormat("downlink", 12, COLOR)));
+            components.push(new ShadowLabel(200, 40, "V1.2.0    GAME", new TextFormat("downlink", 18, COLOR)));
+            components.push(new ShadowLabel(200, 40, "UI SIZE:", new TextFormat("downlink", 12, COLOR)));
             textsizes = [];
             for (i = 0; i < sizeStrings.length; i++) {
                 btn = new OptionButton(sizeStrings[i], COLOR, textsizes);
@@ -102,7 +102,7 @@ package scenes.menus {
                 textsizes.push(btn);
             }
             components.push(textsizes);
-            components.push(new TextField(200, 40, "CONTROL METHOD:", new TextFormat("downlink", 12, COLOR)));
+            components.push(new ShadowLabel(200, 40, "CONTROL METHOD:", new TextFormat("downlink", 12, COLOR)));
             controls = [];
             for (i = 0; i < controlStrings.length; i++) {
                 btn = new OptionButton(controlStrings[i], COLOR, controls);
@@ -111,7 +111,7 @@ package scenes.menus {
                 controls.push(btn);
             }
             components.push(controls);
-            components.push(new TextField(200, 40, "FLEETSLIDER POSITION:", new TextFormat("downlink", 12, COLOR)));
+            components.push(new ShadowLabel(200, 40, "FLEETSLIDER POSITION:", new TextFormat("downlink", 12, COLOR)));
             fleetSliderPositions = [];
             for (i = 0; i < fleetSliderPositionStrings.length; i++) {
                 btn = new OptionButton(fleetSliderPositionStrings[i], COLOR, fleetSliderPositions);
@@ -120,7 +120,7 @@ package scenes.menus {
                 fleetSliderPositions.push(btn);
             }
             components.push(fleetSliderPositions);
-            components.push(new TextField(200, 40, "SAVE FILE:", new TextFormat("downlink", 12, COLOR)));
+            components.push(new ShadowLabel(200, 40, "SAVE FILE:", new TextFormat("downlink", 12, COLOR)));
             resetBtn = new OptionButton("RESET PROGRESS", 0xFF7777, null);
             resetBtn.x = 330;
             resetBtn.addEventListener("clicked", on_show_reset);
@@ -139,7 +139,7 @@ package scenes.menus {
             var y:Number = 100;
             var lineHeight:Number = 540 / components.length * 2;
             for (i = 0; i < components.length; i++) {
-                if (components[i] is TextField) {
+                if (components[i] is ShadowLabel) {
                     addLabel(components[i], 100, y);
                     components[i].format.size == 18 ? y += lineHeight * 1.25 : y += lineHeight;
                     components[i].y = y;
@@ -203,7 +203,7 @@ package scenes.menus {
         }
 
         // #region 私有方法
-        private function addLabel(label:TextField, x:Number, y:Number, hAlign:String = Align.RIGHT):void {
+        private function addLabel(label:ShadowLabel, x:Number, y:Number, hAlign:String = Align.RIGHT):void {
             label.format.horizontalAlign = hAlign;
             label.format.verticalAlign = Align.TOP;
             label.x = x;

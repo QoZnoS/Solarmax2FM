@@ -21,7 +21,6 @@
     import starling.display.BlendMode;
     import starling.display.Quad;
     import starling.events.EnterFrameEvent;
-    import starling.text.TextField;
 
     import ui.UIContainer;
     import ui.layers.LayerFactory;
@@ -31,6 +30,8 @@
     import utils.Rng;
     import managers.SaveManager;
     import starling.utils.Align;
+    import utils.ShadowLabel;
+    import starling.text.TextFormat;
 
     public class GameScene extends BasicScene {
         // #region 类变量
@@ -40,7 +41,7 @@
         public var gameOverTimer:Number;
         public var winningGroup:int;
 
-        public var popLabels:Vector.<TextField>;
+        public var popLabels:Vector.<ShadowLabel>;
 
         public var specialEvents:Vector.<ISpecialEvent>;
 
@@ -62,14 +63,13 @@
             this.alpha = 0;
             this.visible = false;
             gameOver = true;
-            popLabels = new Vector.<TextField>(3, true);
+            popLabels = new Vector.<ShadowLabel>(3, true);
             var color:Number = 0xFFAAAA;
-            popLabels[0] = new TextField(600, 40, "POPULATION : 50 / 50");
-            popLabels[1] = new TextField(600, 40, "POPULATION : 50 / 50");
-            popLabels[2] = new TextField(200, 40, "+ 30");
+            popLabels[0] = new ShadowLabel(600, 40, "POPULATION : 50 / 50", new TextFormat("downlink", 12, color));
+            popLabels[1] = new ShadowLabel(600, 40, "POPULATION : 50 / 50", new TextFormat("downlink", 12, color));
+            popLabels[2] = new ShadowLabel(200, 40, "+ 30", new TextFormat("downlink", 12, color));
             for (var i:int = 0; i < 3; i++) {
-                var label:TextField = popLabels[i];
-                label.format.setTo("downlink", 12, color);
+                var label:ShadowLabel = popLabels[i];
                 label.pivotX = 300;
                 label.pivotY = 20;
                 label.alpha = 0.8;
@@ -139,7 +139,7 @@
             }
             // #endregion
             Globals.replay = new ReplayData(LevelData.rawData[SaveManager.currentData].name, LevelData.level[Globals.level].name, rng.seed);
-            for each (var label:TextField in popLabels) {
+            for each (var label:ShadowLabel in popLabels) {
                 switch (SaveManager.textSize) {
                     case 0:
                     case 1:
@@ -184,7 +184,7 @@
             for each (var se:ISpecialEvent in specialEvents)
                 se.deinit();
             removeEventListener("enterFrame", update); // 移除更新帧监听器
-            for each (var label:TextField in popLabels) {
+            for each (var label:ShadowLabel in popLabels) {
                 if (Globals.teamDeepColors[Globals.playerTeam])
                     LayerFactory.removeChild(LayerFactory.BTN_NORMAL, label);
                 else

@@ -14,6 +14,8 @@ package scenes.menus {
     import ui.components.OptionButton;
     import managers.SaveManager;
     import starling.utils.Align;
+    import utils.ShadowLabel;
+    import starling.text.TextFormat;
 
     public class MapackMenu extends Sprite implements IMenu {
         private const COLOR:uint = 0xFF9DBB;
@@ -34,8 +36,7 @@ package scenes.menus {
         }
 
         public function init():void {
-            var text:TextField = new TextField(200, 40, "MAP MANAGER");
-            text.format.setTo("downlink", 18, COLOR);
+            var text:ShadowLabel = new ShadowLabel(200, 40, "MAP MANAGER", new TextFormat("downlink", 18, COLOR));
             components.push(text);
             addLabel(text, 412, 122, "center");
             var btn:MenuButton = new MenuButton("btn_restart");
@@ -87,7 +88,7 @@ package scenes.menus {
         }
 
         // #region 私有方法
-        private function addLabel(label:TextField, x:Number, y:Number, hAlign:String = Align.RIGHT):void {
+        private function addLabel(label:ShadowLabel, x:Number, y:Number, hAlign:String = Align.RIGHT):void {
             label.format.horizontalAlign = hAlign;
             label.format.verticalAlign = Align.TOP;
             label.x = x;

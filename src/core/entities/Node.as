@@ -11,8 +11,6 @@ package core.entities {
 
     import scenes.GameScene;
 
-    import starling.text.TextField;
-
     import utils.Rng;
     import core.ai.SituationAssessor;
 
@@ -54,7 +52,6 @@ package core.entities {
         }
 
         private function resetArray():void {
-            var textField:TextField = null; // 文本
             ships = new Vector.<Vector.<Ship>>; // 第一维储存的每个数组对应一个势力，第二维数组用于储存飞船的引用，一个值指代一个飞船，二维数组的长度表示该天体上该势力的飞船总数
             transitShips = new Vector.<int>();
             transitGroupShips = new Vector.<int>();

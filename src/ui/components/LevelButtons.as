@@ -2,24 +2,24 @@ package ui.components {
     import managers.LevelData;
 
     import starling.display.Sprite;
-    import starling.text.TextField;
     import managers.SaveManager;
+    import utils.ShadowLabel;
+    import starling.text.TextFormat;
 
     public class LevelButtons extends Sprite {
-        private var buttons:Vector.<Vector.<TextField>>;
+        private var buttons:Vector.<Vector.<ShadowLabel>>;
 
         public function LevelButtons() {
             super();
-            buttons = new Vector.<Vector.<TextField>>;
-            var startBtn:TextField = new TextField(100, 40, "S2");
-            startBtn.format.setTo("downlink", 16, 0xFFAAAA);
+            buttons = new Vector.<Vector.<ShadowLabel>>;
+            var startBtn:ShadowLabel = new ShadowLabel(100, 40, "S2", new TextFormat("downlink", 16, 0xFFAAAA));
             startBtn.pivotX = 50;
             startBtn.pivotY = 20;
             startBtn.alpha = 0.6;
             startBtn.blendMode = "add";
             startBtn.x = 0;
             addChild(startBtn);
-            var startVct:Vector.<TextField> = new Vector.<TextField>;
+            var startVct:Vector.<ShadowLabel> = new Vector.<ShadowLabel>;
             startVct.push(startBtn);
             buttons.push(startVct);
             updateLevels();
@@ -28,8 +28,8 @@ package ui.components {
         public function updateSize():void {
             const FONT_SIZES:Array = [12, 16, 20];
             var fontSize:int = FONT_SIZES[SaveManager.textSize];
-            for each (var btns:Vector.<TextField> in buttons) {
-                for each (var btn:TextField in btns) {
+            for each (var btns:Vector.<ShadowLabel> in buttons) {
+                for each (var btn:ShadowLabel in btns) {
                     btn.format.font = "downlink";
                     btn.format.size = fontSize;
                 }
@@ -37,7 +37,7 @@ package ui.components {
         }
 
         public function update(_dt:Number, _level:int):void {
-            var btn:TextField = null;
+            var btn:ShadowLabel = null;
             for (var i:int = 0; i < buttons.length; i++) {
                 for each (btn in buttons[i]) {
                     var distance:Number = Math.abs(this.x - 512 + btn.x);
@@ -63,13 +63,11 @@ package ui.components {
             // var filter:ColorMatrixFilter = new ColorMatrixFilter();
             // filter.adjustContrast(0.6); // 通过提高对比度来变相提高亮度
             for (i = 0; i < levelData.length; i++) {
-                var textVector:Vector.<TextField> = new Vector.<TextField>;
+                var textVector:Vector.<ShadowLabel> = new Vector.<ShadowLabel>;
                 var levelText:String = levelData[i].name ? levelData[i].name : ((i + 1 < 10) ? ("0" + (i + 1).toString()) : (i + 1).toString());
                 var buttonColor:uint = levelData[i].color ? levelData[i].color : 0xFFAAAA;
-                var levelBtn:TextField = new TextField(100, 200, levelText);
-                levelBtn.format.setTo("downlink", 16, buttonColor);
-                var levelBtn2:TextField = new TextField(100, 200, levelText);
-                levelBtn2.format.setTo("downlink", 16, buttonColor);
+                var levelBtn:ShadowLabel = new ShadowLabel(100, 200, levelText, new TextFormat("downlink", 16, buttonColor));
+                var levelBtn2:ShadowLabel = new ShadowLabel(100, 200, levelText, new TextFormat("downlink", 16, buttonColor));
                 levelBtn.pivotX = levelBtn2.pivotX = 50;
                 levelBtn.pivotY = levelBtn2.pivotY = 100;
                 levelBtn.alpha = levelBtn2.alpha = 0.3;

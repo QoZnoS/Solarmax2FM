@@ -5,12 +5,13 @@ package scenes.menus {
     import starling.display.Sprite;
     import starling.events.EnterFrameEvent;
     import starling.events.Event;
-    import starling.text.TextField;
 
     import ui.components.OptionButton;
     import ui.components.OptionSlider;
 
     import starling.utils.Align;
+    import utils.ShadowLabel;
+    import starling.text.TextFormat;
 
     public class AdvancedSettingMenu extends Sprite implements IMenu {
         // ========== 布局常量 ==========
@@ -39,14 +40,12 @@ package scenes.menus {
 
         public function init():void {
             // 标题
-            var titleText:TextField = new TextField(400, 40, "ADVANCED SETTINGS");
-            titleText.format.setTo("downlink", 18, COLOR);
+            var titleText:ShadowLabel = new ShadowLabel(400, 40, "ADVANCED SETTINGS", new TextFormat("downlink", 18, COLOR));
             titleText.format.horizontalAlign = Align.CENTER;
             components.push({type: "label", obj: titleText, align: "center"});
 
             // 黑边选项
-            var blackLabel:TextField = new TextField(LABEL_WIDTH, 40, "BLACK BORDER:");
-            blackLabel.format.setTo("downlink", 12, COLOR);
+            var blackLabel:ShadowLabel = new ShadowLabel(LABEL_WIDTH, 40, "BLACK BORDER:", new TextFormat("downlink", 12, COLOR));
             components.push({type: "label", obj: blackLabel, align: Align.RIGHT});
 
             blackBorders = [];
@@ -58,8 +57,7 @@ package scenes.menus {
             components.push({type: "buttonGroup", obj: blackBorders});
 
             // 允许暂停选项
-            var pauseLabel:TextField = new TextField(LABEL_WIDTH, 40, "ALLOW PAUSE:");
-            pauseLabel.format.setTo("downlink", 12, COLOR);
+            var pauseLabel:ShadowLabel = new ShadowLabel(LABEL_WIDTH, 40, "ALLOW PAUSE:", new TextFormat("downlink", 12, COLOR));
             components.push({type: "label", obj: pauseLabel, align: Align.RIGHT});
 
             pauseAllows = [];
@@ -71,8 +69,7 @@ package scenes.menus {
             components.push({type: "buttonGroup", obj: pauseAllows});
 
             // 过渡速度
-            var transLabel:TextField = new TextField(LABEL_WIDTH, 40, "TRANSITION SPEED:");
-            transLabel.format.setTo("downlink", 12, COLOR);
+            var transLabel:ShadowLabel = new ShadowLabel(LABEL_WIDTH, 40, "TRANSITION SPEED:", new TextFormat("downlink", 12, COLOR));
             components.push({type: "label", obj: transLabel, align: Align.RIGHT});
 
             transitionSlider = new OptionSlider(1); // 中等大小
@@ -80,16 +77,14 @@ package scenes.menus {
             components.push({type: "slider", obj: transitionSlider});
 
             // 最大边距势力数
-            var marginLabel:TextField = new TextField(LABEL_WIDTH, 40, "MAX MARGIN TEAM:");
-            marginLabel.format.setTo("downlink", 12, COLOR);
+            var marginLabel:ShadowLabel = new ShadowLabel(LABEL_WIDTH, 40, "MAX MARGIN TEAM:", new TextFormat("downlink", 12, COLOR));
             components.push({type: "label", obj: marginLabel, align: Align.RIGHT});
 
             marginSlider = new OptionSlider(1);
             marginSlider.init();
             components.push({type: "slider", obj: marginSlider});
 
-            var unlockAllLabel:TextField = new TextField(LABEL_WIDTH, 40, "UNLOCK ALL LEVEL:");
-            unlockAllLabel.format.setTo("downlink", 12, COLOR);
+            var unlockAllLabel:ShadowLabel = new ShadowLabel(LABEL_WIDTH, 40, "UNLOCK ALL LEVEL:", new TextFormat("downlink", 12, COLOR));
             components.push({type: "label", obj: unlockAllLabel, align: Align.RIGHT});
 
             var unlockAllBtn:OptionButton = new OptionButton("unlock", COLOR);
@@ -106,7 +101,7 @@ package scenes.menus {
             for each (var item:Object in components) {
                 switch (item.type) {
                     case "label":
-                        var label:TextField = item.obj as TextField;
+                        var label:ShadowLabel = item.obj as ShadowLabel;
                         label.x = START_X;
                         label.y = currentY;
                         if (item.align == Align.RIGHT)
@@ -133,7 +128,7 @@ package scenes.menus {
                         break;
                 }
 
-                if (item.type == "label" && (item.obj as TextField).format.size == 18)
+                if (item.type == "label" && (item.obj as ShadowLabel).format.size == 18)
                     currentY += LINE_HEIGHT;
                 else if (item.type != "label")
                     currentY += LINE_HEIGHT;

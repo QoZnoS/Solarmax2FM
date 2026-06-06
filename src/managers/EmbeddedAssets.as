@@ -6,7 +6,5 @@ package managers{
         public static const startup_png:Class;
         [Embed(source = "/_assets/downlink.ttf", fontName="downlink", embedAsCFF="false")]
         private static const downlink:Class;
-        [Embed(source = "/_assets/MFYueHei.otf", fontName="mfYueHei", embedAsCFF="false")]
-        private static const mfYueHei:Class;
     }
 }

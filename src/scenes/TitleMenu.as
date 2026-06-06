@@ -17,7 +17,6 @@ package scenes {
     import starling.events.Event;
     import starling.events.Touch;
     import starling.events.TouchEvent;
-    import starling.text.TextField;
 
     import ui.components.DifficultyButton;
     import ui.components.LevelButtons;
@@ -28,6 +27,8 @@ package scenes {
     import managers.SaveManager;
     import starling.display.MeshBatch;
     import starling.utils.Align;
+    import utils.ShadowLabel;
+    import starling.text.TextFormat;
 
     public class TitleMenu extends Sprite {
         public var cover:Quad; // 进入游戏和通关36时的白光遮罩
@@ -59,14 +60,14 @@ package scenes {
         public var difficultyButtons:Array;
         public var difficultyHolder:Sprite;
         public var starIcon:Image;
-        public var starLabel:TextField;
+        public var starLabel:ShadowLabel;
 
         private var downIndex:int;
         private var dragging:Boolean;
         private var hoverIndex:int;
         public var scene:SceneController;
 
-        private var infoTexts:Vector.<TextField> = new Vector.<TextField>();
+        private var infoTexts:Vector.<ShadowLabel> = new Vector.<ShadowLabel>();
 
         public function TitleMenu(sce:SceneController) {
             this.scene = sce;
@@ -110,11 +111,10 @@ package scenes {
             title_blur.blendMode = "add";
             titleBox.addChild(title_blur);
             credits = [];
-            credits.push(new TextField(600, 40, "CREATED BY NICO TUASON"));
-            credits.push(new TextField(600, 40, "MODIFIED BY QoZnoS"));
+            credits.push(new ShadowLabel(600, 40, "CREATED BY NICO TUASON", new TextFormat("downlink", 12, 0xFFAAAA)));
+            credits.push(new ShadowLabel(600, 40, "MODIFIED BY QoZnoS", new TextFormat("downlink", 12, 0xFFAAAA)));
             for (i = 0; i < credits.length; i++) // 留作彩蛋 :P
             {
-                credits[i].format.setTo("downlink", 12, 0xFFAAAA);
                 credits[i].pivotX = 300;
                 credits[i].pivotY = 20;
                 credits[i].x = title.x;
@@ -171,8 +171,7 @@ package scenes {
             difficultyHolder.x = 412;
             difficultyHolder.y = 150;
             titleBox.addChild(difficultyHolder);
-            starLabel = new TextField(120, 40, "0");
-            starLabel.format.setTo("downlink", 22, 0xFFAAAA);
+            starLabel = new ShadowLabel(120, 40, "0", new TextFormat("downlink", 22, 0xFFAAAA));
             starLabel.format.horizontalAlign = Align.RIGHT;
             starLabel.pivotX = 120;
             starLabel.pivotY = 20;
@@ -210,12 +209,11 @@ package scenes {
         }
 
         public function getMoreInfoTexts():void {
-            var infoText:TextField = null;
+            var infoText:ShadowLabel = null;
             var levelData:Array = LevelData.level;
             for (var i:int = 0; i < levelData.length; i++) {
                 var text:String = "";
-                infoText = new TextField(400, 100, text);
-                infoText.format.setTo("downlink", 18, 0xFFAAAA);
+                infoText = new ShadowLabel(400, 100, text, new TextFormat("downlink", 18, 0xFFAAAA));
                 infoText.pivotX = 200;
                 infoText.pivotY = 50;
                 infoText.x = 512;
@@ -517,7 +515,7 @@ package scenes {
             } else if (title.alpha > 0)
                 title.alpha = Math.max(0, title.alpha - dt * 0.5);
             title_blur.alpha = title.alpha * 0.6;
-            for each (var text:TextField in credits)
+            for each (var text:ShadowLabel in credits)
                 text.alpha = title.alpha / 0.5 * 0.2;
         }
 
@@ -532,7 +530,7 @@ package scenes {
             preview.clear();
             preview2.clear();
             previewQuad.clear();
-            for each (var infoText:TextField in infoTexts)
+            for each (var infoText:ShadowLabel in infoTexts)
                 infoText.visible = false;
             if (currentIndex > 0 && LevelData.level[currentIndex - 1]) {
                 var orbit:Array = null;
@@ -578,7 +576,7 @@ package scenes {
                     Drawer.drawCircle(preview, x, y, 0xFFFFFF, distence, inDistence, false, 0.5, 1, 0, 128);
                 }
 
-                var info:TextField = infoTexts[currentIndex - 1];
+                var info:ShadowLabel = infoTexts[currentIndex - 1];
                 info.visible = true;
                 info.alpha = 0.5 * scale;
                 info.scaleX = info.scaleY = scale;

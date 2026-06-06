@@ -29,7 +29,7 @@ package scenes {
 
         private const MAX_PAGE:int = 8;
         private const COLOR:uint = 0xFF9DBB;
-        private const pageName:Array = ["SETTING", "MAPACKS", "STAFF", "REPLAY", "", "", "", ""];
+        private const pageName:Array = ["SETTING", "MAPACKS", "STAFF", "REPLAY", "测试", "", "", ""];
         public var pages:Array;
 
         public function StartMenu(titleMenu:TitleMenu) {
@@ -61,7 +61,7 @@ package scenes {
                 if (pageName[i] == "")
                     continue;
                 pages[i].x = 15;
-                pages[i].y = 160 + i * 48;
+                pages[i].y = 168 + i * 48;
                 pages[i].label.format.setTo("downlink", 18, COLOR);
                 pages[i].label.format.horizontalAlign = Align.LEFT;
                 pages[i].label.format.verticalAlign = Align.TOP;
@@ -69,7 +69,7 @@ package scenes {
                 pages[i].labelBG.height = 36;
                 pages[i].quad.height = 48;
                 pages[i].label.x += 4;
-                pages[i].label.y += 4;
+                pages[i].label.y += 2;
                 pages[i].addEventListener("clicked", on_page);
                 addChild(pages[i]);
             }

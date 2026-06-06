@@ -5,13 +5,14 @@ package ui.components {
     import starling.display.Sprite;
     import starling.events.Touch;
     import starling.events.TouchEvent;
-    import starling.text.TextField;
+    import utils.ShadowLabel;
+    import starling.text.TextFormat;
 
     public class OptionSlider extends Sprite {
         public var quad1:Quad;
         public var quad2:Quad;
         public var touchQuad:Quad;
-        public var label:TextField;
+        public var label:ShadowLabel;
         public var total:Number;
         public var box:Sprite;
         public var boxQuad1:Quad;
@@ -46,13 +47,11 @@ package ui.components {
                     thickness = 2;
                     fontSize = 18;
             }
-            label = new TextField(boxWidth, boxHeight * 2, "100%");
-            label.format.setTo("downlink", fontSize, color);
+            label = new ShadowLabel(boxWidth, boxHeight * 2, "100%", new TextFormat("downlink", fontSize, color));
             label.pivotX = label.x = boxWidth * 0.5;
             label.pivotY = boxHeight;
             label.y = boxHeight * 0.5;
             label.alpha = 0.8;
-            label.pivotX -= 2;
             label.touchable = false;
             addChild(label);
             quad1 = new Quad(touchWidth, thickness, color);

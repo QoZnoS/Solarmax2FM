@@ -9,12 +9,13 @@ package ui.components {
     import starling.display.Sprite;
     import starling.events.Touch;
     import starling.events.TouchEvent;
-    import starling.text.TextField;
+    import utils.ShadowLabel;
+    import starling.text.TextFormat;
 
     public class DifficultyButton extends Sprite {
         public static const btnText:Array = ["EASY", "NORMAL", "HARD"]
 
-        private var label:TextField;
+        private var label:ShadowLabel;
         private var icon:Image;
         private var bg:Image;
         private var quad:Quad;
@@ -42,8 +43,7 @@ package ui.components {
             icon.alpha = 0.4;
             addChild(icon);
             starred = false;
-            label = new TextField(bg.width, 40, btnText[difficulty]);
-            label.format.setTo("downlink", 12, 0xFFAAAA);
+            label = new ShadowLabel(bg.width, 40, btnText[difficulty], new TextFormat("downlink", 12, 0xFFAAAA));
             label.pivotX = bg.width * 0.5;
             label.pivotY = 20;
             label.y = -15;

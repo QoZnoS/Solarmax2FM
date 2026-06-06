@@ -57,10 +57,6 @@
 				"path": "backgrounds/"
 			},
 			{
-				"file": "libs/fonts/",
-				"path": "fonts/"
-			},
-			{
 				"file": "libs/textures/",
 				"path": "textures/"
 			},
