@@ -16,6 +16,7 @@ package ui.components {
 
     public class DifficultyButton extends Sprite {
         public static var btnText:Array = [I18n._("diff.easy"), I18n._("diff.normal"), I18n._("diff.hard")];
+        public static var diff:Array = ["easy", "normal", "hard"];
 
         private var label:ShadowLabel;
         private var difficulty:int;

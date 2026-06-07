@@ -80,7 +80,8 @@ package scenes {
                 se.game = scene.gameScene;
                 specialEvents.push(se);
             }
-            initBarrierLines();
+            // initBarrierLines();
+            // 暂时不处理回放的障碍逻辑，重点关注回放正确性
             addEventListener("enterFrame", update); // 添加帧监听器，每帧执行一次update
             animateIn();
         }

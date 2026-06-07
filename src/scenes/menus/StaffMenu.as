@@ -49,7 +49,7 @@ package scenes.menus {
                 ["supercluster", 12, null],
                 ["Solarmax33", 12, null],
                 [I18n._("staff.thirdsister"), 12, "staff.thirdsister"],
-                ["Tuetiedove", 12, null],
+                ["鸠鸠爱摆烂", 12, null],
                 ["林中散步", 12, null]
             ];
         }

@@ -337,7 +337,54 @@ package core {
 
         // #endregion
 
-        // #region 其他
+        // #region 交点计算
+
+        // 缓存每条 barrier line 的 AABB（轴对齐包围盒）
+        private static var _barrierAABBs:Vector.<Number>; // [minX0, minY0, maxX0, maxY0, minX1, ...]
+        private static var _hasOrbitingBarriers:Boolean;
+
+        public static function get hasOrbitingBarriers():Boolean {
+            return _hasOrbitingBarriers;
+        }
+
+        /** initBarrierLines() 之后调用一次 */
+        public static function cacheBarrierAABBs():void {
+            _barrierAABBs = new Vector.<Number>(game.barrierLines.length * 4, true);
+            _hasOrbitingBarriers = false;
+            for (var i:int = 0; i < game.barrierLines.length; i++) {
+                var bar:Array = game.barrierLines[i];
+                var n1:Node = bar[0], n2:Node = bar[1];
+                // 检查 barrier 天体是否有轨道
+                if (n1.moveState.orbitNode || n2.moveState.orbitNode)
+                    _hasOrbitingBarriers = true;
+                var base:int = i * 4;
+                _barrierAABBs[base]     = Math.min(n1.nodeData.x, n2.nodeData.x);
+                _barrierAABBs[base + 1] = Math.min(n1.nodeData.y, n2.nodeData.y);
+                _barrierAABBs[base + 2] = Math.max(n1.nodeData.x, n2.nodeData.x);
+                _barrierAABBs[base + 3] = Math.max(n1.nodeData.y, n2.nodeData.y);
+            }
+        }
+        public static var barrierAABBDirty:Boolean = true;
+        /** 每帧调用：更新有轨道 barrier 的 AABB */
+        public static function updateBarrierAABBs():void {
+            if (!_hasOrbitingBarriers && barrierAABBDirty)
+                return;
+            barrierAABBDirty = false;
+            for (var i:int = 0; i < game.barrierLines.length; i++) {
+                var bar:Array = game.barrierLines[i];
+                var n1:Node = bar[0], n2:Node = bar[1];
+                var changed:Boolean = false;
+                if (n1.moveState.orbitNode || n2.moveState.orbitNode)
+                    changed = true;
+                if (!changed) 
+                    continue;
+                var base:int = i * 4;
+                _barrierAABBs[base]     = Math.min(n1.nodeData.x, n2.nodeData.x);
+                _barrierAABBs[base + 1] = Math.min(n1.nodeData.y, n2.nodeData.y);
+                _barrierAABBs[base + 2] = Math.max(n1.nodeData.x, n2.nodeData.x);
+                _barrierAABBs[base + 3] = Math.max(n1.nodeData.y, n2.nodeData.y);
+            }
+        }
 
         /** 计算两条线的交点
          * @param p1x p1y p2x p2y 第一条线的两端点
@@ -421,18 +468,28 @@ package core {
         }
 
         public static function isBlocked(node1:Node, node2:Node):Boolean {
-            var x1:Number = node1.nodeData.x;
-            var y1:Number = node1.nodeData.y;
-            var x2:Number = node2.nodeData.x;
-            var y2:Number = node2.nodeData.y;
-            for each (var bar:Array in game.barrierLines) {
-                var bx1:Number = bar[0].nodeData.x;
-                var by1:Number = bar[0].nodeData.y;
-                var bx2:Number = bar[1].nodeData.x;
-                var by2:Number = bar[1].nodeData.y;
-                if (lineSegmentsIntersect(x1, y1, x2, y2, bx1, by1, bx2, by2)) {
+            if (game.barrierLines.length == 0)
+                return false;
+            var x1:Number = node1.nodeData.x, y1:Number = node1.nodeData.y;
+            var x2:Number = node2.nodeData.x, y2:Number = node2.nodeData.y;
+            
+            // 计算查询线段的 AABB
+            var qMinX:Number = x1 < x2 ? x1 : x2;
+            var qMaxX:Number = x1 > x2 ? x1 : x2;
+            var qMinY:Number = y1 < y2 ? y1 : y2;
+            var qMaxY:Number = y1 > y2 ? y1 : y2;
+            var barCount:int = game.barrierLines.length;
+            for (var i:int = 0; i < barCount; i++) {
+                var base:int = i * 4;
+                // AABB 快速拒绝：两个包围盒不相交 → 不可能相交
+                if (_barrierAABBs[base + 2] < qMinX || _barrierAABBs[base] > qMaxX ||
+                    _barrierAABBs[base + 3] < qMinY || _barrierAABBs[base + 1] > qMaxY)
+                    continue;
+                var bar:Array = game.barrierLines[i];
+                var bx1:Number = bar[0].nodeData.x, by1:Number = bar[0].nodeData.y;
+                var bx2:Number = bar[1].nodeData.x, by2:Number = bar[1].nodeData.y;
+                if (lineSegmentsIntersect(x1, y1, x2, y2, bx1, by1, bx2, by2))
                     return true;
-                }
             }
             return false;
         }

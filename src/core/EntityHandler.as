@@ -55,6 +55,9 @@ package core {
             node.initNode(game, rng, data);
             EntityContainer.addEntity(EntityContainer.INDEX_NODES, node);
             node.tag = EntityContainer.nodes.length - 1;
+            if (Node.isStaticLinksReady)
+                Node.invalidateStaticLinks();
+            return node;
             return node;
         }
 

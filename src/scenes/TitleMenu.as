@@ -395,7 +395,7 @@ package scenes {
         }
 
         public function on_difficultyButton(click:Event):void {
-            SaveManager.currentDifficulty = DifficultyButton.btnText[difficultyButtons.indexOf(click.target)].toLowerCase();
+            SaveManager.currentDifficulty = DifficultyButton.diff[difficultyButtons.indexOf(click.target)].toLowerCase();
             LevelData.updateLevelData();
             levels.updateLevels();
             getBarrierData();

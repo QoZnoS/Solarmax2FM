@@ -161,6 +161,8 @@
             // UIContainer.btnLayer.color = Globals.teamColors[Globals.playerTeam];
             // 执行一些初始化函数
             initBarrierLines();
+            EntityContainer.cacheBarrierAABBs();
+            Node.precomputeStaticLinks();
             cover.alpha = 0;
             gameOver = false;
             gameOverTimer = 3;
@@ -252,8 +254,11 @@
         public function updateGame(dt:Number):void {
             countTeamCaps(dt); // 统计兵力
             UIContainer.i.update();
-            for each (var pool:EntityPool in EntityContainer.entityPool) // 依次执行所有实体的更新函数
+            EntityContainer.barrierAABBDirty = true;
+            for each (var pool:EntityPool in EntityContainer.entityPool) {// 依次执行所有实体的更新函数
                 pool.update(dt);
+                EntityContainer.updateBarrierAABBs();
+            }
             winningGroup = victoryType.update(dt);
             for each (var se:ISpecialEvent in specialEvents) // 依次执行所有特殊事件的更新函数
                 se.update(dt);

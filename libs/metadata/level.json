@@ -11056,12 +11056,15 @@
             ]
         },
         {
-            "name": "New World",
-            "mapper": "Tuetledove",
-            "describe1": "You have discovered a brand-new area. While exploring this area, you have found many devices that you have never seen before, but they also make you",
-            "describe2": "",
-            "describe3": "feel strangely familiar. Your enemies have also discovered this area. It seems that a new battle is about to begin...",
-            "describe4": "",
+            "name.en": "New World",
+            "name.zh_cn": "新世界",
+            "mapper": "鸠鸠爱摆烂",
+            "describe1.en": "You have discovered a brand-new area. While exploring this area, you have ",
+            "describe2.en": "found many devices that you have never seen before, but they also make you",
+            "describe3.en": "feel strangely familiar. Your enemies have also discovered this area. It seems that ",
+            "describe4.en": "a new battle is about to begin...",
+            "describe1.zh_cn":"你发现了一片全新的区域，在探索的过程中，你发现了许多你从未见过的装置，",
+            "describe2.zh_cn":"但它们又莫名让你感到熟系，你的敌人也发现了这片区域，看来一场新的战斗要开始了......",
             "icon": "solarmax3",
             "team": [
                 {
@@ -11247,7 +11250,7 @@
                         }
                     ],
                     "name": "03",
-                    "color": "0xFFAAAA",
+                    "color": "0x00FF00",
                     "bgm": "bgm02"
                 },
                 {
@@ -14293,7 +14296,7 @@
                         }
                     ],
                     "name": "26",
-                    "color/easy": "0xFFAAAA",
+                    "color/easy": "0x00FF00",
                     "color": "0x0000FF",
                     "color/hard": "0xFFFF00",
                     "bgm": "bgm05"
@@ -14687,7 +14690,7 @@
                         }
                     ],
                     "name": "29",
-                    "color/easy": "0xFFAAAA",
+                    "color/easy": "0x00FF00",
                     "color": "0x0000FF",
                     "color/hard": "0xFFFF00",
                     "bgm": "bgm05"
@@ -14901,7 +14904,7 @@
                         }
                     ],
                     "name": "30",
-                    "color/easy": "0xFFAAAA",
+                    "color/easy": "0x00FF00",
                     "color": "0xFFFF00",
                     "bgm": "bgm05"
                 },
@@ -15475,7 +15478,7 @@
                         }
                     ],
                     "name": "32",
-                    "color": "0xFFAAAA",
+                    "color": "0x00FF00",
                     "color/hard": "0x0000FF",
                     "bgm": "bgm05"
                 },
@@ -16737,7 +16740,7 @@
                     "name": "35",
                     "color/easy": "0x00FF00",
                     "color/normal": "0x0000FF",
-                    "color": "0xFF0000",
+                    "color": "0xFFFF00",
                     "bgm": "bgm06",
                     "gameScale": 0.85
                 },
@@ -17085,7 +17088,7 @@
                         }
                     ],
                     "name": "36",
-                    "color/easy": "0x00FF00",
+                    "color/easy": "0x0000FF",
                     "color/normal": "0x0000FF",
                     "color/hard": "0xFFFF00",
                     "color": "0xFF0000",
@@ -17271,7 +17274,7 @@
                         {
                             "x": 128,
                             "startShips": 22,
-                            "startShips/lecacy": 18,
+                            "startShips/legacy": 18,
                             "y": 576,
                             "type": "planet",
                             "team": 1
@@ -17279,7 +17282,7 @@
                         {
                             "x": 128,
                             "startShips": 22,
-                            "startShips/lecacy": 18,
+                            "startShips/legacy": 18,
                             "y": 192,
                             "type": "planet",
                             "team": 1
@@ -17367,42 +17370,50 @@
                         {
                             "x": 256,
                             "y": 448,
-                            "type": "warp"
+                            "type": "warp",
+                            "team/hard": 1
                         },
                         {
                             "x": 256,
                             "y": 320,
-                            "type": "warp"
+                            "type": "warp",
+                            "team/hard": 1
                         },
                         {
                             "x": 384,
                             "y": 448,
-                            "type": "warp"
+                            "type": "warp",
+                            "team/hard": 1
                         },
                         {
                             "x": 384,
                             "y": 320,
-                            "type": "warp"
+                            "type": "warp",
+                            "team/hard": 1
                         },
                         {
                             "x": 512,
                             "y": 448,
-                            "type": "warp"
+                            "type": "warp",
+                            "team/hard": 1
                         },
                         {
                             "x": 512,
                             "y": 320,
-                            "type": "warp"
+                            "type": "warp",
+                            "team/hard": 1
                         },
                         {
                             "x": 640,
                             "y": 448,
-                            "type": "warp"
+                            "type": "warp",
+                            "team/hard": 1
                         },
                         {
                             "x": 640,
                             "y": 320,
-                            "type": "warp"
+                            "type": "warp",
+                            "team/hard": 1
                         },
                         {
                             "x": 768,

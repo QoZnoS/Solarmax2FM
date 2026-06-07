@@ -21,7 +21,7 @@ package core.entities {
         public var statePool:Dictionary;
         // 状态变量
         public var ships:Vector.<Vector.<Ship>>; // 第一维储存的每个数组对应一个势力，第二维数组用于储存飞船的引用，一个值指代一个飞船，二维数组的长度表示该天体上该势力的飞船总数
-        public var nodeLinks:Vector.<Vector.<Node>>; // 各个势力在该天体上的飞船可到达的其他天体
+        private var _nodeLinks:Vector.<Vector.<Node>>; // 各个势力在该天体上的飞船可到达的其他天体
         public var transitShips:Vector.<int>; // 飞向自身的飞船
         public var transitGroupShips:Vector.<int>; // 飞向自身的队伍的飞船
         public var rng:Rng;
@@ -29,7 +29,7 @@ package core.entities {
         public var aiValue:Number; // ai价值
         public var aiStrength:Number; // ai强度
         public var aiTimers:Array; // ai计时器
-        public var oppNodeLinks:Vector.<Vector.<Node>>; // 各个势力可到达的有前往价值的天体
+        private var _oppNodeLinks:Vector.<Vector.<Node>>; // 各个势力可到达的有前往价值的天体
         public var breadthFirstSearchNode:Node; // hardAI 寻路，标记父节点
         public var senderType:String; // hardAI 出兵动机
         public var targetType:String; // hardAI 需求动机
@@ -45,9 +45,9 @@ package core.entities {
         // #endregion
         public function Node() {
             super();
-            nodeLinks = new Vector.<Vector.<Node>>;
+            _nodeLinks = new Vector.<Vector.<Node>>;
             shipActions = new Vector.<Array>;
-            oppNodeLinks = new Vector.<Vector.<Node>>;
+            _oppNodeLinks = new Vector.<Vector.<Node>>;
             statePool = NodeStateFactory.createStatePool(this);
         }
 
@@ -103,8 +103,8 @@ package core.entities {
                 transitShips[i] = 0;
             }
             // 移除其他参数
-            nodeLinks.length = 0;
-            oppNodeLinks.length = 0;
+            _nodeLinks.length = 0;
+            _oppNodeLinks.length = 0;
             for each (var state:INodeState in statePool)
                 state.deinit();
         }
@@ -117,9 +117,9 @@ package core.entities {
                     state.update(dt);
             updateTimer(dt); // 更新各种计时器
             updateNodeLinks();
+            _oppLinksDirty = true;
             updateShipAction();
             updateTransitShips();
-            updateOppLinks();
             resetCache();
         }
 
@@ -130,62 +130,187 @@ package core.entities {
             if (triggerTimer > 0)
                 triggerTimer = Math.max(0, triggerTimer - dt);
         }
+        // #region 更新 nodeLink
+        private static var _staticBaseLinks:Object = {};   // tag → Vector.<Node>
+        private static var _staticWarpLinks:Object = {};   // tag → Vector.<Node>
+        private static var _isStaticLinksReady:Boolean = false;
+
+        public static function precomputeStaticLinks():void {
+            _staticBaseLinks = {};
+            _staticWarpLinks = {};
+            var nodes:Vector.<GameEntity> = EntityContainer.nodes;
+            for each (var obj:GameEntity in nodes) {
+                var n:Node = obj as Node;
+                if (n.nodeData.isBarrier) 
+                    continue;
+                if (n.moveState.orbitNode) 
+                    continue;
+                n._precomputeBaseLinks();
+                n._precomputeWarpLinks();
+            }
+            _isStaticLinksReady = true;
+        }
+
+        private function _precomputeBaseLinks():void {
+            var globalNodes:Vector.<GameEntity> = EntityContainer.nodes;
+            var nLen:int = globalNodes.length;
+            var base:Vector.<Node> = new Vector.<Node>;
+            for (var j:int = 0; j < nLen; j++) {
+                var other:Node = globalNodes[j] as Node;
+                if (other == this || other.nodeData.isUntouchable) 
+                    continue;
+                if (!EntityContainer.isBlocked(this, other))
+                    base[base.length] = other;
+            }
+            _staticBaseLinks[tag] = base;
+        }
+
+        private function _precomputeWarpLinks():void {
+            var globalNodes:Vector.<GameEntity> = EntityContainer.nodes;
+            var nLen:int = globalNodes.length;
+            var warp:Vector.<Node> = new Vector.<Node>;
+            for (var j:int = 0; j < nLen; j++) {
+                var other:Node = globalNodes[j] as Node;
+                if (other == this || other.nodeData.isUntouchable) 
+                    continue;
+                warp[warp.length] = other;
+            }
+            _staticWarpLinks[tag] = warp;
+        }
+
+        public static function invalidateStaticLinks():void {
+            _staticBaseLinks = {};
+            _staticWarpLinks = {};
+            _isStaticLinksReady = false;
+        }
+
+        public static function get isStaticLinksReady():Boolean {
+            return _isStaticLinksReady;
+        }
 
         public function updateNodeLinks():void {
             if (nodeData.isBarrier)
                 return;
 
-            var globalNodes:Vector.<GameEntity> = EntityContainer.nodes;
+            // 公共准备
+            _ensureNodeLinksCapacity();
             var teamCount:int = Globals.teamCount;
             var teamGroups:Array = Globals.teamGroups;
-            var nodesLength:int = globalNodes.length;
-            var nodeTeamGroup:int = teamGroups[nodeData.team];
+            var myGroup:int = teamGroups[nodeData.team];
             var isWarp:Boolean = nodeData.isWarp;
+            var isOrbiting:Boolean = moveState.orbitNode != null;
 
-            // 确保数组长度正确
-            while (nodeLinks.length < teamCount)
-                nodeLinks.push(new Vector.<Node>);
+            // ====== 路径 A: 静态快车道 ======
+            // 条件：节点本身无轨道 / 全局无轨道barrier / 静态缓存已就绪 / tag在缓存中
+            if (!isOrbiting && !EntityContainer.hasOrbitingBarriers && _isStaticLinksReady) {
+                var cachedBase:Vector.<Node> = _staticBaseLinks[tag];
+                if (cachedBase) {
+                    _assignStaticLinks(teamCount, teamGroups, myGroup, isWarp);
+                    return;
+                }
+                // tag 不在缓存中（中途加入的天体）→ 回退路径 B
+            }
 
-            // 预计算nodeLinks[0]（基准列表）
-            var baseLinks:Vector.<Node> = nodeLinks[0];
-            var i:int, j:int, node:Node;
-            // 填充基准列表
-            for (j = 0; j < nodesLength; j++) {
-                node = globalNodes[j] as Node;
+            // ====== 路径 B: 动态计算 ======
+            // 场景：轨道节点 / 轨道barrier / 中途加入的天体 / 静态缓存未就绪
+            _computeNodeLinksDynamic(teamCount, teamGroups, myGroup, isWarp);
+        }
+
+        /** 确保 _nodeLinks 数组长度足够 */
+        private function _ensureNodeLinksCapacity():void {
+            var tc:int = Globals.teamCount;
+            while (_nodeLinks.length < tc)
+                _nodeLinks.push(new Vector.<Node>);
+        }
+
+        /** 路径 A: 直接引用预计算的静态列表 */
+        private function _assignStaticLinks(teamCount:int, teamGroups:Array, myGroup:int, isWarp:Boolean):void {
+            var base:Vector.<Node> = _staticBaseLinks[tag];
+            var warp:Vector.<Node> = _staticWarpLinks[tag];
+            for (var i:int = 0; i < teamCount; i++) {
+                _nodeLinks[i] = (teamGroups[i] == myGroup && isWarp) ? warp : base;
+            }
+        }
+
+        /** 路径 B: 每帧基于实时坐标完整计算 */
+        private function _computeNodeLinksDynamic(teamCount:int, teamGroups:Array, myGroup:int, isWarp:Boolean):void {
+            var globalNodes:Vector.<GameEntity> = EntityContainer.nodes;
+            var nodesLength:int = globalNodes.length;
+
+            // --- 第 1 步: 计算 team[0] 的 baseLinks（屏障过滤后的可达天体列表）---
+            var baseLinks:Vector.<Node> = _nodeLinks[0];
+            baseLinks.length = 0;  // ★ 先清空再填充，修复追加不清空的 bug
+
+            for (var j:int = 0; j < nodesLength; j++) {
+                var node:Node = globalNodes[j] as Node;
                 if (node == this || node.nodeData.isUntouchable)
                     continue;
                 if (!EntityContainer.isBlocked(this, node))
-                    baseLinks[baseLinks.length] = node; // 避免push调用
+                    baseLinks[baseLinks.length] = node;
             }
+            var baseLen:int = baseLinks.length;
 
-            var baseLength:int = baseLinks.length;
-
-            // 处理其他team
-            for (i = 1; i < teamCount; i++) {
+            // --- 第 2 步: 为每个 team 填充列表 ---
+            for (var i:int = 1; i < teamCount; i++) {
                 var group:int = teamGroups[i];
 
-                // 检查是否需要复制基准列表
-                if (!(group == nodeTeamGroup && isWarp)) {
-                    var targetLinks:Vector.<Node> = nodeLinks[i];
-                    if (targetLinks.length != baseLength)
-                        targetLinks.length = baseLength;
-                    for (j = 0; j < baseLength; j++)
-                        targetLinks[j] = baseLinks[j];
-                    continue;
-                }
-
-                // 构建warp条件下的特殊列表
-                nodeLinks[i].length = 0;
-                var warpLinks:Vector.<Node> = nodeLinks[i];
-                for (j = 0; j < nodesLength; j++) {
-                    node = globalNodes[j] as Node;
-                    if (node == this || node.nodeData.isUntouchable)
-                        continue;
-                    warpLinks[warpLinks.length] = node;
+                if (group == myGroup && isWarp) {
+                    // Warp 条件: 不经过屏障，所有非自身非不可选中的天体都可达
+                    _nodeLinks[i].length = 0;
+                    var wl:Vector.<Node> = _nodeLinks[i];
+                    for (j = 0; j < nodesLength; j++) {
+                        node = globalNodes[j] as Node;
+                        if (node == this || node.nodeData.isUntouchable)
+                            continue;
+                        wl[wl.length] = node;
+                    }
+                } else {
+                    // 非 warp: 复制 baseLinks
+                    var tgt:Vector.<Node> = _nodeLinks[i];
+                    tgt.length = baseLen;
+                    for (var k:int = 0; k < baseLen; k++)
+                        tgt[k] = baseLinks[k];
                 }
             }
         }
 
+        private var _oppLinksDirty:Boolean = true;
+        public function updateOppLinks():void {
+            _oppLinksDirty = false;
+            if (nodeData.isBarrier)
+                return;
+            var group:int = Globals.teamGroups[nodeData.team];
+            var teamCount:int = Globals.teamCount;
+            var teamGroups:Array = Globals.teamGroups;
+            while (_oppNodeLinks.length < teamCount)
+                _oppNodeLinks.push(new Vector.<Node>);
+            for (var i:int = 0; i < _oppNodeLinks.length; i++)
+                _oppNodeLinks[i].length = 0;
+
+            for (var t:int = 0; t < teamCount; t++) {
+                var targetGroup:int = teamGroups[t];
+                var links:Vector.<Node> = nodeLinks[t];
+                var oppVec:Vector.<Node> = _oppNodeLinks[t];
+                var linkLen:int = links.length;
+                for (var j:int = 0; j < linkLen; j++) {
+                    var targetNode:Node = links[j];
+                    if (targetNode == this)
+                        continue;
+                    var targetTeam:int = targetNode.nodeData.team;
+                    var targetNodeGroup:int = teamGroups[targetTeam];
+                    // 中立 或 不同组 → 直接加入
+                    if (targetTeam == 0 || targetNodeGroup != group) {
+                        oppVec.push(targetNode);
+                        continue;
+                    }
+                    // 同组且非中立 → 需计算敌对强度
+                    if (hasOppStrength(targetNode, targetGroup)) {
+                        oppVec.push(targetNode);
+                    }
+                }
+            }
+        }
+        // #endregion
         public function updateShipAction():void {
             for each (var action:Array in shipActions)
                 NodeStaticLogic.moveShips(this, action[0], action[1], action[2]);
@@ -223,41 +348,7 @@ package core.entities {
             }
             return false;
         }
-        // TODO: 按需调用
-        public function updateOppLinks():void {
-            if (nodeData.isBarrier)
-                return;
-            var group:int = Globals.teamGroups[nodeData.team];
-            var teamCount:int = Globals.teamCount;
-            var teamGroups:Array = Globals.teamGroups;
-            while (oppNodeLinks.length < teamCount)
-                oppNodeLinks.push(new Vector.<Node>);
-            for (var i:int = 0; i < oppNodeLinks.length; i++)
-                oppNodeLinks[i].length = 0;
 
-            for (var t:int = 0; t < teamCount; t++) {
-                var targetGroup:int = teamGroups[t];
-                var links:Vector.<Node> = nodeLinks[t];
-                var oppVec:Vector.<Node> = oppNodeLinks[t];
-                var linkLen:int = links.length;
-                for (var j:int = 0; j < linkLen; j++) {
-                    var targetNode:Node = links[j];
-                    if (targetNode == this)
-                        continue;
-                    var targetTeam:int = targetNode.nodeData.team;
-                    var targetNodeGroup:int = teamGroups[targetTeam];
-                    // 中立 或 不同组 → 直接加入
-                    if (targetTeam == 0 || targetNodeGroup != group) {
-                        oppVec.push(targetNode);
-                        continue;
-                    }
-                    // 同组且非中立 → 需计算敌对强度
-                    if (hasOppStrength(targetNode, targetGroup)) {
-                        oppVec.push(targetNode);
-                    }
-                }
-            }
-        }
 
         public function resetCache():void {
             if (!nodeData.hard_oppAllStrengthCache)
@@ -327,6 +418,7 @@ package core.entities {
         }
 
         // #endregion
+        // #region getter
         public function get basicState():NodeBasicState {
             return statePool[NodeStateFactory.BASIC] as NodeBasicState;
         }
@@ -351,6 +443,16 @@ package core.entities {
             return statePool[NodeStateFactory.BUILD] as NodeBuildState;
         }
 
+        public function get oppNodeLinks():Vector.<Vector.<Node>> {
+            if (_oppLinksDirty)
+                updateOppLinks();
+            return _oppNodeLinks;
+        }
+
+        public function get nodeLinks():Vector.<Vector.<Node>> {
+            return _nodeLinks;
+        }
+        // #endregion
         public function toJSON():* {
             var statePoolData:Object = {};
             for (var key:String in statePool)

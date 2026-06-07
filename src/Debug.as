@@ -119,8 +119,8 @@
                 updateTag();
             else
                 clear_tag();
-            if (game.visible || replay.visible)
-                deserializeGame(dt);
+            // if (game.visible || replay.visible)
+            //     deserializeGame(dt);
         }
 
         private var pause:Boolean = false;
