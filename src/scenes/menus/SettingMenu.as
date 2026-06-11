@@ -202,17 +202,21 @@ package scenes.menus {
                 }
             }
             // #endregion
-            tooltip1 = new Tooltip(0);
+            tooltip1 = new Tooltip();
             tooltip1.visible = false;
             tooltip1.x = controls[0].x;
             tooltip1.y = controls[0].y;
             addChild(tooltip1);
+            tooltip1.title = I18n._("tooltip.multitouch.title");
+            tooltip1.content = I18n._("tooltip.multitouch.content");
             controls[0].quad.addEventListener("touch", on_tooltip1);
-            tooltip2 = new Tooltip(1);
+            tooltip2 = new Tooltip();
             tooltip2.visible = false;
             tooltip2.x = controls[1].x;
             tooltip2.y = controls[1].y;
             addChild(tooltip2);
+            tooltip2.title = I18n._("tooltip.traditional.title");
+            tooltip2.content = I18n._("tooltip.traditional.content");
             controls[1].quad.addEventListener("touch", on_tooltip2);
         }
 
@@ -320,19 +324,10 @@ package scenes.menus {
             resetBtn2.resizeToText();
             exitBtn.label.text = I18n._("setting.exitGame");
             exitBtn.resizeToText();
-            // 重建 Tooltip
-            tooltip1.removeFromParent();
-            tooltip2.removeFromParent();
-            tooltip1 = new Tooltip(0);
-            tooltip1.visible = false;
-            tooltip1.x = controls[0].x;
-            tooltip1.y = controls[0].y;
-            addChild(tooltip1);
-            tooltip2 = new Tooltip(1);
-            tooltip2.visible = false;
-            tooltip2.x = controls[1].x;
-            tooltip2.y = controls[1].y;
-            addChild(tooltip2);
+            tooltip1.title = I18n._("tooltip.multitouch.title");
+            tooltip1.content = I18n._("tooltip.multitouch.content");
+            tooltip2.title = I18n._("tooltip.traditional.title");
+            tooltip2.content = I18n._("tooltip.traditional.content");
         }
 
         private function on_controls(click:Event):void {
