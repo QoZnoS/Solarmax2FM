@@ -16,8 +16,8 @@ package core.node.states {
     import utils.Drawer;
     import managers.SaveManager;
     import flash.utils.Dictionary;
-    import utils.ShadowLabel;
     import starling.text.TextFormat;
+    import starling.text.TextField;
 
     public class NodeMoveState implements INodeState {
         public var node:Node;
@@ -25,8 +25,8 @@ package core.node.states {
         public var glow:Image; // 光效图片
         public var image:Image; // 天体图片
         public var halo:Image; // 光圈图片
-        public var captureLabels:Vector.<ShadowLabel>; // 驻留飞船兵力文本
-        public var conflictLabels:Vector.<ShadowLabel>; // 战争飞船兵力文本
+        public var captureLabels:Vector.<TextField>; // 驻留飞船兵力文本
+        public var conflictLabels:Vector.<TextField>; // 战争飞船兵力文本
         public var labelDist:Number; // 文本圈大小
         public var glowing:Boolean; // 是否正在发光（天体改变势力时的特效
 
@@ -48,8 +48,8 @@ package core.node.states {
             image.color = halo.color = color;
             halo.alpha = 0.75;
             glowing = false;
-            captureLabels = new Vector.<ShadowLabel>;
-            conflictLabels = new Vector.<ShadowLabel>;
+            captureLabels = new Vector.<TextField>;
+            conflictLabels = new Vector.<TextField>;
         }
 
         public function init():void {
@@ -58,7 +58,7 @@ package core.node.states {
                 orbitNode = EntityContainer.nodes[nodeData.orbitNode] as Node
             captureLabels.length = 0;
             conflictLabels.length = 0;
-            var textField:ShadowLabel;
+            var textField:TextField;
             for (var i:int = 0; i < Globals.teamCount; i++) {
                 addTextField(captureLabels, i);
                 addTextField(conflictLabels, i);
@@ -80,8 +80,8 @@ package core.node.states {
             startEaseY = 57.1894889582 - EASE_OUT_FUNC(1 / SaveManager.maxMarginTeam) * 122.8105110418;
         }
 
-        private function addTextField(vec:Vector.<ShadowLabel>, team:int):void {
-            var textField:ShadowLabel = new ShadowLabel(60, 48, "00", new TextFormat("downlink", 12, Globals.teamColors[team]));
+        private function addTextField(vec:Vector.<TextField>, team:int):void {
+            var textField:TextField = new TextField(60, 48, "00", new TextFormat("Downlink12", -1, Globals.teamColors[team]));
             textField.pivotX = 30;
             textField.pivotY = 24;
             vec.push(textField);
@@ -180,7 +180,7 @@ package core.node.states {
         }
 
         private function updateConflictLabel(teamId:int, labelAngle:Number, shipCount:int):void {
-            var teamLabel:ShadowLabel = conflictLabels[teamId];
+            var teamLabel:TextField = conflictLabels[teamId];
             teamLabel.x = nodeData.x + Math.cos(labelAngle) * labelDist;
             teamLabel.y = nodeData.y + Math.sin(labelAngle) * labelDist;
             var lastCount:int = lastShipCounts[teamLabel] || 0;
@@ -216,7 +216,7 @@ package core.node.states {
         }
 
         private function updateCooperateLabel(teamId:int, labelAngle:Number, shipCount:int, teamCount:int):void {
-            var teamLabel:ShadowLabel = captureLabels[teamId];
+            var teamLabel:TextField = captureLabels[teamId];
             if (teamCount == 2)
                 teamCount = 2.2;
             var easeX:Number = Math.min(180, EASE_OUT_FUNC(teamCount / SaveManager.maxMarginTeam) * 118.196601125 + startEaseX);

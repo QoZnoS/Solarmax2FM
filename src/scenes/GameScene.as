@@ -66,8 +66,8 @@
             gameOver = true;
             popLabels = new Vector.<ShadowLabel>(3, true);
             var color:Number = 0xFFAAAA;
-            popLabels[0] = new ShadowLabel(600, 40, I18n._("game.population"), new TextFormat("downlink", 12, color));
-            popLabels[1] = new ShadowLabel(600, 40, I18n._("game.population"), new TextFormat("downlink", 12, color));
+            popLabels[0] = new ShadowLabel(600, 40, I18n._("game.population"), new TextFormat("downlink", 12, color), 0, 1);
+            popLabels[1] = new ShadowLabel(600, 40, I18n._("game.population"), new TextFormat("downlink", 12, color), 0, 1);
             popLabels[2] = new ShadowLabel(200, 40, "+ 30", new TextFormat("downlink", 12, color));
             for (var i:int = 0; i < 3; i++) {
                 var label:ShadowLabel = popLabels[i];

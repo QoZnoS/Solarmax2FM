@@ -32,20 +32,26 @@ package core.node {
             switch (SaveManager.textSize) {
                 case 0:
                     for (i = 0; i < Globals.teamCount; i++) { // 设定战斗状态下每个势力的文本
-                        node.moveState.captureLabels[i].format.size = 10;
-                        node.moveState.conflictLabels[i].format.size = 10;
+                        node.moveState.captureLabels[i].format.font = "Downlink10";
+                        node.moveState.captureLabels[i].format.size = -1;
+                        node.moveState.conflictLabels[i].format.font = "Downlink10";
+                        node.moveState.conflictLabels[i].format.size = -1;
                     }
                     break;
                 case 1:
                     for (i = 0; i < Globals.teamCount; i++) {
-                        node.moveState.captureLabels[i].format.size = 12;
-                        node.moveState.conflictLabels[i].format.size = 12;
+                        node.moveState.captureLabels[i].format.font = "Downlink12";
+                        node.moveState.captureLabels[i].format.size = -1;
+                        node.moveState.conflictLabels[i].format.font = "Downlink12";
+                        node.moveState.conflictLabels[i].format.size = -1;
                     }
                     break;
                 case 2:
                     for (i = 0; i < Globals.teamCount; i++) {
-                        node.moveState.captureLabels[i].format.size = 18;
-                        node.moveState.conflictLabels[i].format.size = 18;
+                        node.moveState.captureLabels[i].format.font = "Downlink18";
+                        node.moveState.captureLabels[i].format.size = -1;
+                        node.moveState.conflictLabels[i].format.font = "Downlink18";
+                        node.moveState.conflictLabels[i].format.size = -1;
                     }
                     return;
             }
