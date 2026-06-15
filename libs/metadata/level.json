@@ -3258,12 +3258,16 @@
         },
         {
             "name": "Dark Empire Revival",
-            "mapper": "Thirdsister",
+            "name.zh_cn": "黑暗帝国的复仇",
+            "mapper.en": "Thirdsister",
             "mapper.zh_cn": "三妹",
-            "describe1": "  This version is based on the abandoned version and adds a new and ",
-            "describe2": "stronger AI version (with difficulty levels referring to hard). As the commander ",
-            "describe3": "of the Dark Empire, you carry all the hopes of the Dark Empire and are ready ",
-            "describe4": "to face powerful enemies, break through the dead end, and defeat them!",
+            "describe1.en": "  This revised edition features brand-new combat gameplay centered around a ",
+            "describe2.en": "dark-themed perspective, built upon the original work. It includes two versions: ",
+            "describe3.en": "an abandoned version and an official version, tailored for normal and hard ",
+            "describe4.en": "difficulty modes respectively. The abandoned version offers more challenging stages, while the official version pits players against stronger, more intelligent enemy. With the flames of war rekindled, will you vanquish every adversary and forge an empire of your own?",
+            "describe1.zh_cn": "    该改版是基于原版上，进行以黑色为主视角的全新战斗！囊括了废弃与正式两",
+            "describe2.zh_cn": "个版本，分别适配于普通与困难两个难度，前者关卡更难，而后者，将要面对的是",
+            "describe3.zh_cn": "更强、更聪明的敌人。在战火重燃中，你能击败所有对手，建立一个属于你自己的帝国吗？",
             "icon": "blackVer",
             "team": [
                 {},
@@ -11056,15 +11060,15 @@
             ]
         },
         {
-            "name.en": "New World",
+            "name": "New World",
             "name.zh_cn": "新世界",
             "mapper": "鸠鸠爱摆烂",
             "describe1.en": "You have discovered a brand-new area. While exploring this area, you have ",
             "describe2.en": "found many devices that you have never seen before, but they also make you",
-            "describe3.en": "feel strangely familiar. Your enemies have also discovered this area. It seems that ",
-            "describe4.en": "a new battle is about to begin...",
-            "describe1.zh_cn":"你发现了一片全新的区域，在探索的过程中，你发现了许多你从未见过的装置，",
-            "describe2.zh_cn":"但它们又莫名让你感到熟系，你的敌人也发现了这片区域，看来一场新的战斗要开始了......",
+            "describe3.en": "feel strangely familiar. Your enemies have also discovered this area. It seems ",
+            "describe4.en": "that a new battle is about to begin...",
+            "describe1.zh_cn":"你发现了一片全新的区域，在探索的过程中，你发现了许多你从未见过的装置，但",
+            "describe2.zh_cn":"它们又莫名让你感到熟系，你的敌人也发现了这片区域，看来一场新的战斗要开始了......",
             "icon": "solarmax3",
             "team": [
                 {

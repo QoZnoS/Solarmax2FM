@@ -17,6 +17,7 @@ package core.node {
     import managers.SaveManager;
     import core.node.states.NodeMoveState;
     import flash.geom.Point;
+    import utils.Rng;
 
     /** 静态类，函数均与dt无关 */
     public class NodeStaticLogic {
@@ -120,10 +121,7 @@ package core.node {
             node.moveState.image.rotation = node.moveState.halo.rotation = node.moveState.glow.rotation = 0;
             node.nodeData.type = type;
             if (type == NodeType.PLANET) {
-                var imageID:String = node.rng.nextRange(1, 16).toString();
-                if (imageID.length == 1)
-                    imageID = "0" + imageID; // 随机取一个星球贴图的编号
-                node.moveState.image.texture = Root.assets.getTexture("planet" + imageID); // 更换星球贴图
+                node.moveState.image.texture = Root.assets.getTexture(getRandomPlanetImage(node.rng)); // 更换星球贴图
                 node.moveState.halo.texture = Root.assets.getTexture("halo"); // 更换光圈
                 node.moveState.glow.texture = Root.assets.getTexture("planet_shape"); // 更换星球光效
             } else {
@@ -322,13 +320,25 @@ package core.node {
             var ms:NodeMoveState = node.moveState;
             ms.image.alpha = ms.halo.alpha = ms.glow.alpha = alpha;
         }
+
         /** 重置天体位置 scale=1 alpha=1 */
         public static function resetImage(node:Node):void {
             node.moveState.updateImagePositions();
             setImageScale(node, 1);
             setImageAlpha(node, 1);
         }
+
         // #endregion
 
+        public static function getRandomPlanetImage(rng:Rng = null):String {
+            var imageID:String
+            if (!rng)
+                imageID = (Math.floor(Math.random() * 16) + 1).toString();
+            else
+                imageID = rng.nextRange(1, 16).toString();
+            if (imageID.length == 1)
+                imageID = "0" + imageID;
+            return NodeType.PLANET + imageID;
+        }
     }
 }

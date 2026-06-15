@@ -28,7 +28,14 @@ package scenes.menus {
         private var title:TitleMenu;
 
         private var _ready:Boolean = false;
-
+        // TODO: 管理器升级
+        /** 两种显示模式：4*4网格与1*4列表
+         * ref: 优先使用滚轮查看更多图集而非翻页，单个页面最多显示十行图集
+         * 列表模式：单击icon按钮切换图集，点击其他处展开图集描述
+         * 网格模式：双击快速切换，单击展开，icon做文字背景，显示元数据与简要描述
+         * 展开：类似列表，icon下方显示更多元数据，icon右侧提供滚轮，返回按钮......暂时不知道放哪
+         */
+        // TODO: 重命名为Mappack
         public function MapackMenu(title:TitleMenu):void {
             this.title = title;
             components = [];
@@ -183,6 +190,7 @@ package scenes.menus {
 
         private function on_languageChanged(e:Event):void {
             on_refresh();
+            components[0].text = I18n._("mappack.title");
         }
     }
 }

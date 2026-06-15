@@ -30,6 +30,7 @@ package scenes.menus {
 
         public function ReplayMenu(title:TitleMenu) {
             this.title = title;
+            I18n.addEventListener(Event.CHANGE, on_languageChanged);
             init();
         }
 
@@ -84,12 +85,16 @@ package scenes.menus {
             var rep:ReplayData;
             var repBtn:OptionButton;
             var quad:Quad;
+            var rd:Object;
             var j:int = 0;
             for (var i:int = 0; i < len; i++) {
                 rep = repList[i];
+                rd = _findRawDataByName(rep.level[0]);
+                if (!rd)
+                    continue;
                 if (rep.level[0] != LevelData.rawData[SaveManager.currentData].name)
                     continue;
-                repBtn = new OptionButton(rep.level[0], COLOR);
+                repBtn = new OptionButton(LevelData.getLocalizedField(rd, "name"), COLOR);
                 repBtn.label.height = 20;
                 repBtn.quad.color = 0x000000;
                 repBtn.quad.alpha = 0.4;
@@ -227,6 +232,19 @@ package scenes.menus {
             } catch (error:Error) {
                 file.requestPermission();
             }
+        }
+
+        private function on_languageChanged(e:Event):void {
+            btn.label.text = I18n._("replay.refresh");
+            clearBtn.label.text = I18n._("replay.clearFile");
+        }
+
+        /** 根据原始 name 字段查找 LevelData.rawData 中的条目 */
+        private function _findRawDataByName(name:String):Object {
+            for each (var item:Object in LevelData.rawData)
+                if (item.name == name)
+                    return item;
+            return null;
         }
     }
 }

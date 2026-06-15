@@ -35,6 +35,7 @@
     import utils.GeneralFunctions;
     import utils.Rng;
     import scenes.EditorScene;
+    import ui.layers.EditorCtrlLayer;
 
     public class Debug extends Sprite {
         private static var debug:Boolean; // debug 开启状态
@@ -42,8 +43,9 @@
         private static var title:TitleMenu; // TitleMenu 接口
         private static var replay:ReplayScene; // ReplayScene 接口
         private static var editor:EditorScene; // EditorScene 接口
+        private static var editorCL:EditorCtrlLayer;
         private static var scene:SceneController;
-        private static var THIS:Debug;
+        public static var THIS:Debug;
 
         private var dt:Number; // 帧时间
         private var debugLables:Array; // 调试显示文本
@@ -51,9 +53,6 @@
         private var tagLayer:Sprite;
 
         private var seed:uint;
-        // 仅在编辑器模式下可用的鼠标坐标
-        private var touchX:Number;
-        private var touchY:Number;
 
         // #region 初始化
         public function Debug(scene:SceneController) {
@@ -117,6 +116,8 @@
             updateDebugLabel();
             if (game.visible)
                 updateTag();
+            else if (editor.visible)
+                updateEditorLabel();
             else
                 clear_tag();
             // if (game.visible || replay.visible)
@@ -127,6 +128,8 @@
 
         public static function on_key_down(keyCode:int):void {
             if (!debug)
+                return;
+            if (editor.visible && keyCode != Keyboard.Q)
                 return;
             switch (keyCode) {
                 case Keyboard.Q: // Q 启用 Debug 模式，已移至 Root.as 中
@@ -141,7 +144,7 @@
                     test();
                     break;
                 case Keyboard.Z:
-                    scene.applyFilter()
+                    scene.applyFilter();
                     break;
                 case Keyboard.P:
                     THIS.pause = !THIS.pause;
@@ -268,6 +271,17 @@
 
         private var nodeTagLables:Array; // 显示天体tag和战争占据状态
 
+        private static function updateEditorLabel():void {
+            if (!editorCL)
+                return
+            THIS.debugLables[1].text = "current face: " + editorCL.faceName;
+            if (editor.hoverNode)
+                THIS.debugLables[2].text = "editor hover node tag: " + editor.hoverNode.tag;
+            THIS.debugLables[3].text = "";
+            THIS.debugLables[4].text = "";
+            THIS.debugLables[5].text = "";
+        }
+
         private static function updateTag():void {
             if (EntityContainer.nodes.length != THIS.nodeTagLables[0].length)
                 init_tag(); // 重置tag
@@ -351,11 +365,6 @@
                 data.ships.push(ships.toJSON());
             gameData.push(data);
         }
-
-        public static function updateTouch(x:Number, y:Number):void {
-            THIS.touchX = x;
-            THIS.touchY = y;
-        } 
 
         // #endregion
         // #region 调试函数，手动触发
@@ -496,6 +505,12 @@
 
         // #endregion
         public static function test():void {
+            trace(editorCL);
+            trace(game.visible);
+        }
+
+        public function set editorCtrlLayer(ecl:EditorCtrlLayer):void {
+            editorCL = ecl;
         }
     }
 }

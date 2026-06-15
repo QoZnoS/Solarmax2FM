@@ -157,6 +157,8 @@ package ui {
                     "transition": "easeInOut"});
             Starling.juggler.tween(_btnL, SaveManager.transitionSpeed, {"alpha": 1,
                     "transition": "easeInOut"});
+
+            Debug.THIS.editorCtrlLayer = _editorCL;
         }
 
         public function deinitEditor():void {

@@ -15,13 +15,18 @@ package ui.layers {
     import starling.display.MeshBatch;
     import core.node.NodeStaticLogic;
     import core.node.NodeData;
+    import starling.display.Image;
+    import core.node.NodeType;
 
     public class EditorCtrlLayer extends Sprite {
+        private const COLOR:uint = 0xFFAAAA;
+
         private var convertQuad:Quad; // 转换触点坐标用
         private var touchQuad:Quad;
         private var displayBatch:MeshBatch;
         private var touches:Vector.<Touch>;
         private var editor:EditorScene;
+        private var novaBar:Sprite; // 仅用于显示，坐标计算使用全局坐标系
 
         // #region 初始化逻辑
         public function EditorCtrlLayer(_ui:UIContainer) {
@@ -35,6 +40,7 @@ package ui.layers {
         public function init():void {
             this.displayBatch = LayerFactory.getLayer(LayerFactory.BEHAVIOR) as MeshBatch;
             touchQuad.addEventListener("touch", on_touch);
+            initNovaBar();
         }
 
         public function deinit():void {
@@ -83,8 +89,94 @@ package ui.layers {
         }
 
         private function drawNode():void {
+            if (!editor.hoverNode)
+                return;
+            var nd:NodeData = editor.hoverNode.nodeData
+            var nodeX:Number = nd.x;
+            var nodeY:Number = nd.y;
+            // Drawer.drawCircle(displayBatch, nodeX, nodeY, Globals.teamColors[nd.team], nd.lineDist - 4, nd.size * 25 * 2, true, 0.5);
+            Drawer.drawLine(displayBatch, 0, nodeY + novaBarLine, 1024, nodeY + novaBarLine, COLOR);
+            Drawer.drawLine(displayBatch, 0, nodeY - novaBarLine, 1024, nodeY - novaBarLine, COLOR);
+            Drawer.drawLine(displayBatch, nodeX + novaBarLine, 0, nodeX + novaBarLine, 768, COLOR);
+            Drawer.drawLine(displayBatch, nodeX - novaBarLine, 0, nodeX - novaBarLine, 768, COLOR);
+        }
+        // #region NovaBar
+        private const novaBarLine:Number = 36;
+        private const novaPreviewSpace:Number = 120;
+        private const novaPreviewCount:int = 21;
+        private var novaNodeData:NodeData;
+        private var novaTypeSprite:Vector.<Image>;
+        private var novaTeamSprite:Vector.<Image>;
+
+        private function initNovaBar():void {
+            novaBar = new Sprite();
+            novaBar.visible = false;
+            addChild(novaBar);
+            novaNodeData = new NodeData();
+            novaTypeSprite = new Vector.<Image>(true, novaPreviewCount);
+            novaTeamSprite = new Vector.<Image>(true, novaPreviewCount);
+            for (var i:int = 0; i < novaPreviewCount; i++) {
+                novaTypeSprite[i] = new Image(Root.assets.getTexture(NodeStaticLogic.getRandomPlanetImage()));
+                novaTypeSprite[i].visible = false;
+                novaTeamSprite[i] = new Image(Root.assets.getTexture(NodeStaticLogic.getRandomPlanetImage()));
+                novaTeamSprite[i].visible = false;
+            }
+        }
+
+        private function updateNovaBar():void {
+            if (!novaBar)
+                return;
+            if (faceType != NODE_FACE || !editor.hoverNode) {
+                novaBar.visible = false;
+                return;
+            }
+            var nd:NodeData = editor.hoverNode.nodeData;
+            if (novaBar.visible == false) {
+                novaBar.visible = true;
+                novaBar.x = nd.x;
+                novaBar.y = nd.y;
+                syncNovaNodeData(nd);
+            }
 
         }
+
+        private function updateNovaPreview():void {
+            // 以 NovaNodeData 为锚点先确定所有预览的类型和位置
+            var startIndex:int = -Math.floor(novaPreviewCount / 2);
+            var itype:int = scrollInt(NodeType.typeStr2Int(novaNodeData.type), startIndex, NodeType.getTypeCount());
+            for each(var preview:Image in novaTypeSprite)
+            {
+                preview.x = startIndex * novaPreviewSpace;
+                preview.texture = Root.assets.getTexture(NodeType.typeInt2Str(itype));
+            }
+
+        }
+
+        private function scrollInt(start:int, add:int, max:int, min:int = 0):int {
+            start += add;
+            if (start >= max)
+                start -= max;
+            else if (start <= min)
+                start += max;
+            return start;
+        }
+
+        private function syncNovaNodeData(nd:NodeData):void {
+            for each (var key:String in nd)
+                novaNodeData[key] = nd[key];
+        }
+
+        private function isTouchInNovaBar(touch:Touch):Boolean {
+            if (!editor.hoverNode)
+                return false;
+            var p:Point = EntityContainer.getPoint();
+            touch.getLocation(convertQuad, p);
+            var nd:NodeData = editor.hoverNode.nodeData;
+            var inBar:Boolean = Math.abs(p.x - nd.x) <= novaBarLine || Math.abs(p.y - nd.y) <= novaBarLine;
+            EntityContainer.returnPoint(p);
+            return inBar;
+        }
+        // #endregion
 
         // #endregion
 
@@ -103,6 +195,7 @@ package ui.layers {
 
         public function update(dt:Number):void {
             draw();
+            updateNovaBar();
         }
 
         private function on_touch(touchEvent:TouchEvent):void {
@@ -111,17 +204,22 @@ package ui.layers {
             touches = touchEvent.getTouches(touchQuad);
             if (touches.length == 0)
                 return;
-            Debug.updateTouch(touches[0].globalX, touches[0].globalY);
             switch (faceType) {
                 case START_FACE:
                     startHover(touchEvent);
                     startBegan(touchEvent);
                     startMoved(touchEvent);
+                    startEnded(touchEvent);
                     break;
                 case MOVE_FACE:
                     moveBegan(touchEvent);
                     moveMoved(touchEvent);
                     moveEnded(touchEvent);
+                    break;
+                case NODE_FACE:
+                    nodeBegan(touchEvent);
+                    nodeMoved(touchEvent);
+                    nodeEnded(touchEvent);
                     break;
                 default:
                     break;
@@ -164,11 +262,20 @@ package ui.layers {
             var touchArray:Vector.<Touch> = touchEvent.getTouches(touchQuad, TouchPhase.MOVED);
             if (!touchArray)
                 return;
-            for each (var touch:Touch in touchArray) {
+            for each (var touch:Touch in touchArray)
                 if (touch.hoverNode)
                     if (getMovedDistance(touch) > 10 || touch.duration > 1)
                         faceType = MOVE_FACE;
-            }
+        }
+
+        private function startEnded(touchEvent:TouchEvent):void {
+            var touchArray:Vector.<Touch> = touchEvent.getTouches(touchQuad, TouchPhase.ENDED);
+            if (!touchArray)
+                return;
+            for each (var touch:Touch in touchArray)
+                if (touch.hoverNode)
+                    if (getMovedDistance(touch) < 10 && touch.duration < 1)
+                        faceType = NODE_FACE;
         }
 
         // #endregion
@@ -236,8 +343,13 @@ package ui.layers {
 
         private function nodeEnded(touchEvent:TouchEvent):void {
             var touchArray:Vector.<Touch> = touchEvent.getTouches(touchQuad, TouchPhase.ENDED);
-        }
+            // var p:Point = EntityContainer.getPoint();
 
+            // 退出到 start face
+            if (touchArray.length == 1)
+                if (!isTouchInNovaBar(touchArray[0]))
+                    faceType = START_FACE;
+        }
 
         // #endregion
 
@@ -294,7 +406,20 @@ package ui.layers {
             TEMP_ARR.length = 0;
             return TEMP_ARR;
         }
+
         // #endregion
+        public function get faceName():String {
+            switch (faceType) {
+                case MOVE_FACE:
+                    return "move";
+                case NODE_FACE:
+                    return "node";
+                case START_FACE:
+                    return "start";
+                default:
+                    return "unknow";
+            }
+        }
 
     }
 }

@@ -11,6 +11,7 @@ package scenes.menus {
     import starling.display.Quad;
     import utils.ShadowLabel;
     import starling.text.TextFormat;
+    import core.node.NodeStaticLogic;
 
     public class TeamEditorMenu extends Sprite implements IMenu {
         
@@ -88,8 +89,6 @@ package scenes.menus {
         
         // ==================== 索引常量 ====================
         private static const DATA_COLOR_INDEX:int = 0;
-        private static const MIN_PLANET_TEXTURE_ID:int = 1;
-        private static const MAX_PLANET_TEXTURE_ID:int = 16;
         private static const PLANET_TEXTURE_PADDING_DIGITS:int = 2;
         
         // ==================== 缩放常量 ====================
@@ -208,10 +207,7 @@ package scenes.menus {
             dataList.length = 1; // 保留标题行，清空数据行
             for (i = 0; i < Globals.teamCount; i++) {
                 previewImages.push([]);
-                var imageID:String = (Math.random() * MAX_PLANET_TEXTURE_ID + MIN_PLANET_TEXTURE_ID >> 0) + "";
-                if (imageID.length == 1)
-                    imageID = "0" + imageID; // 随机取一个星球贴图的编号
-                previewImages[i].push(new Image(Root.assets.getTexture("planet" + imageID)));
+                previewImages[i].push(new Image(Root.assets.getTexture(NodeStaticLogic.getRandomPlanetImage())));
                 previewImages[i].push(new Image(Root.assets.getTexture("halo")));
                 for (j = 0; j < previewImages[i].length; j++) {
                     previewImages[i][j].pivotX = previewImages[i][j].pivotY = previewImages[i][j].width / 2;

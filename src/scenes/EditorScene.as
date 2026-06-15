@@ -171,6 +171,7 @@ package scenes {
                     params.push(hoverNode.tag, temp);
                     result = exeCode(CTEAM, params);
                     break;
+                // case Keyboard.R: // 重置编辑器状态
                 default:
                     break;
             }
@@ -213,6 +214,7 @@ package scenes {
             EntityContainer.entityPool[EntityContainer.INDEX_NODES].updateActive();
             for (var i:int = 0; i < EntityContainer.nodes.length; i++)
                 (EntityContainer.nodes[i] as Node).tag = i;
+            Debug.update(dt);
         }
         // #endregion
 
