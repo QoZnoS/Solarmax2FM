@@ -5,6 +5,7 @@ package ui.components {
     import managers.SaveManager;
     import utils.ShadowLabel;
     import starling.text.TextFormat;
+    import starling.display.DisplayObject;
 
     public class LevelButtons extends Sprite {
         private var buttons:Vector.<Vector.<ShadowLabel>>;
@@ -57,6 +58,10 @@ package ui.components {
                 for (var j:int = buttons[i].length - 1; j >= 0; j--)
                     buttons[i].pop();
                 buttons.pop();
+            }
+            for (i = 1; i < this.numChildren; i++) {
+                var child:DisplayObject = this.getChildAt(i);
+                if (child is ShadowLabel) (child as ShadowLabel).dispose();
             }
             removeChildren(1);
             var levelData:Array = LevelData.level;
