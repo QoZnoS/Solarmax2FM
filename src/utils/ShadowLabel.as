@@ -2,12 +2,15 @@ package utils {
     import starling.text.TextField;
     import starling.display.Sprite;
     import starling.text.TextFormat;
+    import starling.text.TextOptions;
+    import starling.core.Starling;
+    import starling.rendering.Painter;
     import flash.geom.Rectangle;
     import starling.events.Event;
 
     public class ShadowLabel extends Sprite {
-        private var _shadow:TextField;
-        private var _label:TextField;
+        private var _shadow:ScaleAwareTextField;
+        private var _label:ScaleAwareTextField;
         private var _autoSync:Boolean = true;
 
         /**
@@ -29,7 +32,7 @@ package utils {
             // 阴影层：用 clone() 分离引用，再覆写颜色
             var shadowFmt:TextFormat = format.clone();
             shadowFmt.color = shadowColor;
-            _shadow = new TextField(width, height, text, shadowFmt);
+            _shadow = new ScaleAwareTextField(width, height, text, shadowFmt);
             _shadow.x = shadowOffsetX;
             _shadow.y = shadowOffsetY;
             _shadow.alpha = shadowAlpha;
@@ -37,7 +40,7 @@ package utils {
             addChild(_shadow);
 
             // 主文字层（独立 format，不共享引用）
-            _label = new TextField(width, height, text, format.clone());
+            _label = new ScaleAwareTextField(width, height, text, format.clone());
             _label.touchable = false;
             addChild(_label);
 
@@ -117,5 +120,43 @@ package utils {
             _label.format.removeEventListener(Event.CHANGE, onFormatChange);
             super.dispose();
         }
+    }
+}
+
+// =================================================================================================
+//
+//	内部类：感知 contentScaleFactor 变化的 TextField
+//
+//	Starling 原生的 TextField 在构造时按当前 contentScaleFactor 生成纹理，
+//	之后即使 viewport 变化（导致 contentScaleFactor 增大）也不会自动重绘，
+//	造成画面模糊。此类在每帧 render() 时检测 scale 变化并自动触发重合成。
+//
+// =================================================================================================
+
+import starling.text.TextField;
+import starling.text.TextFormat;
+import starling.text.TextOptions;
+import starling.core.Starling;
+import starling.rendering.Painter;
+
+class ScaleAwareTextField extends TextField {
+
+    private var _lastContentScale:Number = 0;
+
+    public function ScaleAwareTextField(width:int, height:int, text:String,
+                                        format:TextFormat = null,
+                                        options:TextOptions = null) {
+        super(width, height, text, format, options);
+        _lastContentScale = Starling.contentScaleFactor;
+    }
+
+    /** @inheritDoc */
+    public override function render(painter:Painter):void {
+        var currentScale:Number = Starling.contentScaleFactor;
+        if (_lastContentScale != currentScale) {
+            _lastContentScale = currentScale;
+            setRequiresRecomposition();
+        }
+        super.render(painter);
     }
 }
